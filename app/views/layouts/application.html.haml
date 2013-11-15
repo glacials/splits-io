@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title splitsdump
+    %title splitsbin
     = stylesheet_link_tag    "application", media: :all, "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
@@ -21,14 +21,14 @@
           %span
         #menu
           .pure-menu.pure-menu-open
-            %a.pure-menu-heading{href: root_path} splitsdump
+            %a.pure-menu-heading{href: root_path} splitsbin
             %ul
               %li{class: action_name == "popular" ? "pure-menu-selected" : ""}
                 %a{href: popular_path} Popular
               %li{class: action_name == "upload"  ? "pure-menu-selected" : ""}
                 %a{href: upload_path} Upload
               %li.menu-item-divided
-                %a{href: "http://github.com/skoh-fley/splitsdump", target: :_blank} GitHub
+                %a{href: "http://github.com/skoh-fley/splitsbin", target: :_blank} GitHub
         #dropzone-overlay.header{style: "border: none;"}
           %h1#droplabel.inverted drop anywhere
           #file-list.inverted
