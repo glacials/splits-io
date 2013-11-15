@@ -12,6 +12,14 @@
  *= require_tree .
  */
 
+#dropzone {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
 #dropzone-overlay {
   display: none;
   background-color: #333;
