@@ -1,4 +1,6 @@
 class RunsController < ApplicationController
-  def new
+  def upload
+  end
+  def popular
   end
 end

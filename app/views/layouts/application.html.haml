@@ -5,10 +5,27 @@
     = stylesheet_link_tag    "application", media: :all, "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
-    %link{href: "http://yui.yahooapis.com/pure/0.3.0/pure-min.css", rel: "stylesheet"}/
+    %link{href: "http://yui.yahooapis.com/pure/0.3.0/pure-min.css", rel: :stylesheet}/
+    %link{href: "http://purecss.io/css/layouts/side-menu.css", rel: :stylesheet}/
   %body
     .notice
       = notice
     .alert
       = alert
-    = yield
+    #layout
+      / Menu toggle
+      %a#menuLink.pure-menu-link{href: "#menu"}
+        / Hamburger icon
+        %span
+      #menu
+        .pure-menu.pure-menu-open
+          %a.pure-menu-heading{href: root_path} splitsdump
+          %ul
+            %li{class: action_name == "popular" ? "pure-menu-selected" : ""}
+              %a{href: popular_path} Popular
+            %li{class: action_name == "upload"  ? "pure-menu-selected" : ""}
+              %a{href: upload_path} Upload
+            %li.menu-item-divided
+              %a{href: "http://github.com/skoh-fley/splitsdump", target: :_blank} GitHub
+      = yield
+    %script{src: "http://purecss.io/combo/1.7.7?/js/ui.js"}
