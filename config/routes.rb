@@ -3,5 +3,5 @@ Splitsdump::Application.routes.draw do
   get  "/upload"  => "runs#upload",      as: :upload
   post "/upload"  => "runs#upload_post", as: :upload_post
   get  "/popular" => "runs#popular",     as: :popular
-  root to: "runs#new"
+  root to: "runs#front"
 end

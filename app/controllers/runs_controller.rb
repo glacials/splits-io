@@ -7,4 +7,6 @@ class RunsController < ApplicationController
   end
   def popular
   end
+  def front
+  end
 end
