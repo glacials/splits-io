@@ -1,7 +1,7 @@
 class RunsController < ApplicationController
-  def upload
+  def new
   end
-  def upload_post
+  def create
     splits = params[:file]
     # todo: do things with the file
   end
