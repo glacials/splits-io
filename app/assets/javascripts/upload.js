@@ -32,34 +32,23 @@
       reader.readAsDataURL(file);
     }
 
-    // Uploading - for Firefox, Google Chrome and Safari
-    xhr = new XMLHttpRequest();
+    var formData = new FormData(),
+        xhr      = new XMLHttpRequest();
 
-    // Update progress bar
-    xhr.upload.addEventListener("progress", function (evt) {
-      if (evt.lengthComputable) {
-        progressBar.style.width = (evt.loaded / evt.total) * 100 + "%";
+    formData.append('authenticity_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('file', file);
+
+    xhr.open('POST', '/upload', true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        console.log('all done: ' + xhr.status);
+      } else {
+        console.log('Something went wrong...');
       }
-      else {
-        // No data to calculate on
-      }
-    }, false);
+    };
 
-    // File uploaded
-    xhr.addEventListener("load", function () {
-      progressBarContainer.className += " uploaded";
-    }, false);
-
-    xhr.open("post", "/upload", true);
-
-    // Set appropriate headers
-    xhr.setRequestHeader("Content-Type", "multipart/form-data");
-    xhr.setRequestHeader("X-File-Name", file.name);
-    xhr.setRequestHeader("X-File-Size", file.size);
-    xhr.setRequestHeader("X-File-Type", file.type);
-
-    // Send the file (doh)
-    xhr.send(file);
+    xhr.setRequestHeader('accept', '*/*;q=0.5, text/javascript');
+    xhr.send(formData);
 
     // Present file info and append it to the list of files
     $("#droplabel").html("uploaded!");

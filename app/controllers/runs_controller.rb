@@ -2,8 +2,8 @@ class RunsController < ApplicationController
   def upload
   end
   def upload_post
-    uploaded_io = params[:data]
-    redirect_to root_path, notice: "Test notice."
+    splits = params[:file]
+    # todo: do things with the file
   end
   def popular
   end
