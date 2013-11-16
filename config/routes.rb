@@ -4,4 +4,6 @@ Splitsbin::Application.routes.draw do
   post "/upload"  => "runs#create"
   get  "/popular" => "runs#popular", as: :popular
   root to: "runs#front"
+
+  get "/:nick" => "runs#show", as: :run
 end

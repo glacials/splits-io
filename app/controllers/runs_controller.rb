@@ -7,11 +7,14 @@ class RunsController < ApplicationController
     File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
       file.write(splits.read)
     end
-    # todo: do things with the file
+    render text: run.nick
   end
   def popular
   end
   def front
+  end
+  def show
+    @run = Run.find_by nick: params[:nick]
   end
 
   def new_nick
