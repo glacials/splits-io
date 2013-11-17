@@ -1,5 +1,22 @@
 #main
   .header
-    %h1
-      = @run.nick
-    %h2 by anonymous
+    %h2 anonymous / #{@run.nick}
+  .content
+    %table.pure-table{style: "margin: auto;"}
+      %thead
+        %tr
+          %th #
+          %th Title
+          %th Duration
+          %th Finished at
+      %tbody
+        %tr
+          %td 1
+          %td Blah
+          %td 013412
+          %td 510251
+        %tr
+          %td 2
+          %td Blah
+          %td 013412
+          %td 510251
