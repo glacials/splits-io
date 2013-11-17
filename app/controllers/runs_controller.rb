@@ -1,3 +1,5 @@
+require 'wsplit_parser'
+
 class RunsController < ApplicationController
   def create
     splits = params[:file]
@@ -8,7 +10,13 @@ class RunsController < ApplicationController
     render text: run.nick
   end
   def show
-    @run = Run.find_by nick: params[:nick]
+    run = Run.find_by nick: params[:nick]
+    file = Rails.root.join "private", "runs", run.nick
+    wsplit_data = WsplitParser.new.parse File.read(file)
+    if wsplit_data.present?
+      @run = wsplit_data
+      render :wsplit
+    end
   end
 
   def new_nick
