@@ -1,4 +1,6 @@
 class WsplitParser < BabelBridge::Parser
+  # Babel-Bridge's format is:
+  #rule :rule_name, <list of strings, regex, or other rules to match in order>
   rule :wsplit_file, :title_line, :attempts_line, :offset_line, :size_line, :splits_lines, :icons_line
   rule :title_line,    "Title=",    :title,    :newline
   rule :attempts_line, "Attempts=", :attempts, :newline
