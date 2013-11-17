@@ -1,6 +1,4 @@
 class RunsController < ApplicationController
-  def new
-  end
   def create
     splits = params[:file]
     run = Run.create(nick: new_nick, user: nil)
@@ -8,10 +6,6 @@ class RunsController < ApplicationController
       file.write(splits.read)
     end
     render text: run.nick
-  end
-  def popular
-  end
-  def front
   end
   def show
     @run = Run.find_by nick: params[:nick]
