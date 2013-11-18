@@ -10,13 +10,14 @@
           %th Duration
           %th Finished at
       %tbody
-        %tr
-          %td 1
-          %td Blah
-          %td 013412
-          %td 510251
-        %tr
-          %td 2
-          %td Blah
-          %td 013412
-          %td 510251
+        - i = 0
+        - @run.splits_lines.splits_line.each do |s|
+          %tr
+            %td
+              = i +=1
+            %td
+              = s.split_title
+            %td
+              = s.bestrun_time
+            %td
+              = s.bestsplit_time
