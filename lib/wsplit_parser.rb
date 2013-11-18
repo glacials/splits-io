@@ -20,8 +20,8 @@ class WsplitParser < BabelBridge::Parser
 
   rule :split_title,     /(([^,\r\n](?!Icons=))*)/
   rule :zero,            "0"
-  rule :bestrun_time,    /(\d+)/
-  rule :bestsplit_time,  /(\d+)/
+  rule :bestrun_time,    /([\d.]+)/
+  rule :bestsplit_time,  /([\d.]+)/
 
   rule :newline,         :windows_newline
   rule :newline,         :unix_newline
