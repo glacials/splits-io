@@ -19,6 +19,6 @@ splitsbin is in development. The general bucket list is:
 * Allow users to log in using their Twitch account (done, just in another
   project for now)
 * Supply short-ish permalinks to every uploaded set of splits (done)
-* Supply timeline charts for each set of splits (done, also in another project)
+* Supply timeline charts for each set of splits (done)
 
 [1]: https://github.com/skoh-fley/splitsbin/blob/master/lib/wsplit_parser.rb
