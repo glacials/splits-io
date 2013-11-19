@@ -12,6 +12,19 @@
  *= require_tree .
  */
 
+#logo {
+  background-color: #777;
+  color: #fff;
+  letter-spacing: -1px;
+  padding: 10px;
+  margin-top: -10px;
+  margin-left: -10px;
+  text-transform: uppercase;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
 #dropzone {
   position: fixed;
   left: 0;
@@ -24,7 +37,7 @@
   display: none;
   background-color: #333;
   position: fixed;
-  left: 45px;
+  left: 0;
   top: 0;
   width: 100%;
   min-height: 100%;
