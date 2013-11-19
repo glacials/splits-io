@@ -40,5 +40,6 @@
     %a{href: download_run_path(@run_record.nick)} download
     &bull;
     %a{href: "https://github.com/skoh-fley/splits.io", target: :_blank} github
-:javascript
-  $('#permalink-indicator').fadeIn().delay(4000).fadeOut();
+- if @run_record.hits < 2
+  :javascript
+    $('#permalink-indicator').fadeIn().delay(4000).fadeOut();
