@@ -1,11 +1,11 @@
-## splitsbin
+## splits.io
 
-splitsbin is a website similar to Pastebin or GitHub Gist, but for splits
+splits.io is a website similar to Pastebin or GitHub Gist, but for splits
 generated from speedruns rather than text or code.
 
 ### Development
 
-splitsbin is in development. The general bucket list is:
+splits.io is in development. The general bucket list is:
 
 * Be able to parse splits from all popular splits programs (WSplit, Llanfair,
   Time Split Tracker, SplitterZ, etc.)
@@ -21,4 +21,4 @@ splitsbin is in development. The general bucket list is:
 * Supply short-ish permalinks to every uploaded set of splits (done)
 * Supply timeline charts for each set of splits (done)
 
-[1]: https://github.com/skoh-fley/splitsbin/blob/master/lib/wsplit_parser.rb
+[1]: https://github.com/skoh-fley/splits.io/blob/master/lib/wsplit_parser.rb
