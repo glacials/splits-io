@@ -47,3 +47,4 @@ end
 gem 'haml-rails'
 gem 'devise'
 gem 'babel_bridge'
+gem 'google-analytics-rails'

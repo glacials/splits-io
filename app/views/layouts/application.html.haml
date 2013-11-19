@@ -25,3 +25,4 @@
     %script{src: "http://codeorigin.jquery.com/jquery-1.10.2.min.js"}
     %script{src: "http://purecss.io/combo/1.7.7?/js/ui.js"}
     %script{src: "/assets/upload.js"}
+    - analytics_init if Rails.env.production?
