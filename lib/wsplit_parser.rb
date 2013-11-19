@@ -16,12 +16,12 @@ class WsplitParser < BabelBridge::Parser
   rule :attempts,        /(\d+)/
   rule :offset,          /(\d+)/
   rule :size,            /([^\r\n]*)/
-  rule :splits_line,     :split_title, ",", :zero, ",", :bestrun_time, ",", :bestsplit_time
+  rule :splits_line,     :split_title, ",", :zero, ",", :run_time, ",", :split_time
 
   rule :split_title,     /(([^,\r\n](?!Icons=))*)/
   rule :zero,            "0"
-  rule :bestrun_time,    /([\d.]+)/
-  rule :bestsplit_time,  /([\d.]+)/
+  rule :run_time,        /([\d.]+)/
+  rule :split_time,      /([\d.]+)/
 
   rule :newline,         :windows_newline
   rule :newline,         :unix_newline
