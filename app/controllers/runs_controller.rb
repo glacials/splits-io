@@ -18,6 +18,16 @@ class RunsController < ApplicationController
     if wsplit_data.present?
       @run = wsplit_data
       render :wsplit
+    else
+      if @run_record.hits > 1
+        # If the run has already been viewed (and thus successfully parsed in
+        # the past), we don't want to delete it
+        render "runs/cant_parse"
+      else
+        # If not, we do
+        @run_record.destroy
+        redirect_to cant_parse_path
+      end
     end
   end
   def download
