@@ -1,7 +1,8 @@
 #main
   .header
-    .permalink-indicator
-      &uarr; That's your permalink!
+    - if @run_record.hits < 2
+      .permalink-indicator
+        &uarr; That's your permalink!
     %h2 anonymous / #{@run.title}
   - run_time = @run.splits_lines.splits_line.last.run_time.to_s.to_f
   - colors = [:blue, :purple, :green, :red, :orange, :yellow]

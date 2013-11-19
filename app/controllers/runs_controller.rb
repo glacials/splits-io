@@ -10,8 +10,10 @@ class RunsController < ApplicationController
     render text: run.nick
   end
   def show
-    run = Run.find_by nick: params[:nick]
-    file = Rails.root.join "private", "runs", run.nick
+    @run_record = Run.find_by nick: params[:nick]
+    @run_record.hits += 1
+    @run_record.save
+    file = Rails.root.join "private", "runs", @run_record.nick
     wsplit_data = WsplitParser.new.parse File.read(file)
     if wsplit_data.present?
       @run = wsplit_data
