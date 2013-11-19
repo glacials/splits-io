@@ -1,6 +1,6 @@
 .header
   - if @run_record.hits < 2
-    .permalink-indicator
+    #permalink-indicator
       &uarr; That's your permalink!
   %h2 #{@run.title}
 - run_time = @run.splits_lines.splits_line.last.run_time.to_s.to_f
@@ -40,3 +40,5 @@
     %a{href: download_run_path(@run_record.nick)} download
     &bull;
     %a{href: "https://github.com/skoh-fley/splits.io", target: :_blank} github
+:javascript
+  $('#permalink-indicator').fadeIn().delay(4000).fadeOut();
