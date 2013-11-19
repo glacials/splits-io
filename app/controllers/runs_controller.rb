@@ -20,6 +20,11 @@ class RunsController < ApplicationController
       render :wsplit
     end
   end
+  def download
+    run = Run.find_by nick: params[:nick]
+    file = Rails.root.join "private", "runs", run.nick
+    send_file file, type: "application/text"
+  end
 
   def new_nick
     nick = SecureRandom.urlsafe_base64(4)

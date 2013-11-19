@@ -38,6 +38,21 @@
   text-align: right;
 }
 
+.run-footer {
+  font-size: 12px;
+  margin: auto;
+  text-align: center;
+}
+
+.run-footer a {
+  color: #777;
+  text-decoration: none;
+}
+
+.run-footer a:hover {
+  text-decoration: underline;
+}
+
 .permalink-indicator {
   font-size: 20px;
   white-space: nowrap;

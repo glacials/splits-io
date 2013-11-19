@@ -35,3 +35,6 @@
               = Time.at(s.split_time.to_s.to_f).utc.strftime("%H:%M:%S")
             %td.align-right
               = Time.at(s.run_time.to_s.to_f).utc.strftime("%H:%M:%S")
+    .run-footer
+      %a{href: download_run_path(@run_record.nick)}
+        download
