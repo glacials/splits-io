@@ -52,7 +52,7 @@
     xhr.send(formData);
 
     // Present file info and append it to the list of files
-    $("#droplabel").html("uploaded!");
+    $("#droplabel").html("parsing...");
 
     fileList.appendChild(li);
   }
