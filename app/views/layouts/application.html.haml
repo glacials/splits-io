@@ -3,6 +3,7 @@
   %head
     %title splits.io
     = stylesheet_link_tag    "application", media: :all
+    = javascript_include_tag "application"
     = csrf_meta_tags
     %link{href: "http://yui.yahooapis.com/pure/0.3.0/pure-min.css", rel: :stylesheet}/
     %link{href: "/assets/pure-side-menu.css", rel: :stylesheet}/
@@ -22,7 +23,6 @@
           splits.io
       = yield
     %script{src: "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
-    = javascript_include_tag "application"
   - if Rails.env.production?
     :javascript
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
