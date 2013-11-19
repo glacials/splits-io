@@ -33,3 +33,81 @@
 .inverted {
   color: white;
 }
+
+.align-right {
+  text-align: right;
+}
+
+.permalink-indicator {
+  font-size: 20px;
+  white-space: nowrap;
+  position: fixed;
+  left: 180px;
+  top: 10px;
+}
+
+.size-chart {
+  width: 100%;
+}
+
+    .size-chart-item {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .size-chart-blue {
+        background: #0e90d2;
+    }
+        .size-chart-blue span {
+            color: rgb(103, 194, 240);
+        }
+
+    .size-chart-purple {
+        background: rgb(128, 88, 165);
+    }
+        .size-chart-purple span {
+            color: rgb(200, 131, 255);
+        }
+    .size-chart-green {
+        background: #5eb95e;
+    }
+
+        .size-chart-green span {
+            color: rgb(161, 240, 137);
+        }
+
+    .size-chart-red {
+        background: #dd514c;
+    }
+
+        .size-chart-red span {
+            color: rgb(236, 164, 154);
+        }
+
+    .size-chart-orange {
+        background: rgb(250, 210, 50);
+    }
+        .size-chart-orange span {
+            color: rgb(255, 240, 134);
+        }
+    .size-chart-yellow {
+        background: rgb(243, 123, 29);
+    }
+        .size-chart-yellow span {
+            color: rgb(255, 190, 129);
+        }
+
+    .size-chart-label {
+        display: block;
+        color: #fff;
+        padding: 0.5em;
+        text-decoration: none;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .size-chart-size {
+        display: block;
+    }
