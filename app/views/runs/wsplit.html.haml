@@ -18,6 +18,6 @@
             %td
               = s.split_title
             %td
-              = s.bestrun_time
+              = Time.at(s.split_time.to_s.to_f).utc.strftime("%H:%M:%S")
             %td
-              = s.bestsplit_time
+              = Time.at(s.run_time.to_s.to_f).utc.strftime("%H:%M:%S")
