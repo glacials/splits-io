@@ -26,7 +26,8 @@
 }
 
 #dropzone {
-  position: fixed;
+  position: absolute;
+  overflow-x: hidden;
   left: 0;
   top: 0;
   width: 100%;
