@@ -1,4 +1,4 @@
-Splitsbin::Application.routes.draw do
+SplitsIo::Application.routes.draw do
   #devise_for :users
   get  "/upload"  => "runs#new",     as: :upload
   post "/upload"  => "runs#create"
