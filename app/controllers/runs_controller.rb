@@ -13,11 +13,15 @@ class RunsController < ApplicationController
     @run_record = Run.find_by nick: params[:nick]
     @run_record.hits += 1
     @run_record.save
-    file = Rails.root.join "private", "runs", @run_record.nick
-    wsplit_data = WsplitParser.new.parse File.read(file)
+    splits = File.read Rails.root.join "private", "runs", @run_record.nick
+    wsplit_data           = WsplitParser.new.parse splits
+    timesplittracker_data = TimesplittrackerParser.new.parse splits
     if wsplit_data.present?
       @run = wsplit_data
       render :wsplit
+    elsif timesplittracker_data.present?
+      @run = timesplittracker_data
+      render :timesplittracker
     else
       if @run_record.hits > 1
         # If the run has already been viewed (and thus successfully parsed in
