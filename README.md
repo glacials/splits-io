@@ -79,7 +79,7 @@ separated by newlines.
 
 Let's pretend we already have a rule somewhat like
 
-    SplitLines -> Split Splitlines
+    SplitLines -> Split SplitLines
                 | Split
 
 which reads "a `SplitLines` item should consist of a `Split` followed by another
