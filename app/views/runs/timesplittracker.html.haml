@@ -29,6 +29,7 @@
         %th Finished at
     %tbody
       - i = 0
+      - runtime = 0
       - @run.splits.each do |split|
         %tr
           %td.align-right
@@ -38,7 +39,8 @@
           %td.align-right
             = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
           %td.align-right
-            = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
+            - runtime += split.time.to_s.to_f
+            = Time.at(runtime).utc.strftime("%H:%M:%S")
 - if @run_record.hits < 2
   :javascript
     $('#permalink-indicator').fadeIn().delay(4000).fadeOut();
