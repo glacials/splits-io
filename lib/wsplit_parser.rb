@@ -18,8 +18,8 @@ class WsplitParser < BabelBridge::Parser
   rule :size,     /([^\r\n]*)/
 
   rule :zero,    "0"
-  rule :runtime, /([\d.]+)/
-  rule :time,    /([\d.]+)/
+  rule :runtime, /([\d\.]+)/
+  rule :time,    /([\d\.]+)/
 
   rule :newline,         :windows_newline
   rule :newline,         :unix_newline
