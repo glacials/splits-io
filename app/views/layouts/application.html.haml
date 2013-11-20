@@ -23,6 +23,13 @@
         #logo
           splits.io
       = yield
+      %footer{style: "position: absolute; right: 10px; bottom: 10px;"}
+        - if @run_record.present?
+          %a{href: upload_path} upload
+          &bull;
+          %a{href: download_run_path(@run_record.nick)} download
+          &bull;
+        %a{href: "https://github.com/skoh-fley/splits.io", target: :_blank} github
     %script{src: "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
     %script{src: "/assets/upload.js"}
   - if Rails.env.production?

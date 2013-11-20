@@ -39,12 +39,6 @@
             = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
           %td.align-right
             = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
-  .run-footer
-    %a{href: upload_path} upload
-    &bull;
-    %a{href: download_run_path(@run_record.nick)} download
-    &bull;
-    %a{href: "https://github.com/skoh-fley/splits.io", target: :_blank} github
 - if @run_record.hits < 2
   :javascript
     $('#permalink-indicator').fadeIn().delay(4000).fadeOut();

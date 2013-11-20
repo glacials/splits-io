@@ -56,18 +56,18 @@ body, h1, h2, h3, h4, h5, h6 {
   text-align: right;
 }
 
-.run-footer {
+footer {
   font-size: 12px;
   margin: auto;
   text-align: center;
 }
 
-.run-footer a {
+footer a {
   color: #777;
   text-decoration: none;
 }
 
-.run-footer a:hover {
+footer a:hover {
   text-decoration: underline;
 }
 
