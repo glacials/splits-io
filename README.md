@@ -1,7 +1,8 @@
 # splits.io
 
 splits.io is a website similar to Pastebin or GitHub Gist, but for splits
-generated from speedruns rather than text or code.
+generated from speedruns rather than text or code. It's written in Ruby on
+Rails.
 
 ## Development
 
