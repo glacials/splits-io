@@ -3,19 +3,19 @@
     #permalink-indicator
       &uarr; That's your permalink!
   %h2 #{@run.title}
-- run_time = @run.splits_lines.splits_line.last.run_time.to_s.to_f
+- run_time = @run.splits.last.runtime.to_s.to_f
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0
 .size-chart.l-vbox.pure-g{style: "margin-bottom: 30px;"}
-  - @run.splits_lines.splits_line.each do |s|
-    - percentage += s.split_time.to_s.to_f/run_time*100
-  - @run.splits_lines.splits_line.each do |s|
-    .size-chart-item.pure-u{class: "size-chart-" + colors[c].to_s, style: "width: #{s.split_time.to_s.to_f/run_time*100 + (100 - percentage)/@run.splits_lines.splits_line.length}%;"}
+  - @run.splits.each do |split|
+    - percentage += split.time.to_s.to_f/run_time*100
+  - @run.splits.each do |split|
+    .size-chart-item.pure-u{class: "size-chart-" + colors[c].to_s, style: "width: #{split.time.to_s.to_f/run_time*100 + (100 - percentage)/@run.splits.length}%;"}
       .size-chart-label{href: "/base/", style: "white-space: nowrap;"}
-        = s.split_title
+        = split.title
         %span.size-chart-size
-          = Time.at(s.split_time.to_s.to_f).utc.strftime("%H:%M:%S")
+          = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
     - c = (c + 1) % colors.length
 .content
   %table.pure-table{style: "margin: auto;"}
@@ -27,16 +27,16 @@
         %th Finished at
     %tbody
       - i = 0
-      - @run.splits_lines.splits_line.each do |s|
+      - @run.splits.each do |split|
         %tr
           %td.align-right
             = i +=1
           %td
-            = s.split_title
+            = split.title
           %td.align-right
-            = Time.at(s.split_time.to_s.to_f).utc.strftime("%H:%M:%S")
+            = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
           %td.align-right
-            = Time.at(s.run_time.to_s.to_f).utc.strftime("%H:%M:%S")
+            = Time.at(split.runtime.to_s.to_f).utc.strftime("%H:%M:%S")
   .run-footer
     %a{href: upload_path} upload
     &bull;
