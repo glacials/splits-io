@@ -43,9 +43,9 @@ class RunsController < ApplicationController
   end
 
   def new_nick
-    nick = SecureRandom.urlsafe_base64(4)
+    nick = SecureRandom.urlsafe_base64(3)
     while Run.find_by(nick: nick).present?
-      nick = SecureRandom.urlsafe_base64(4)
+      nick = SecureRandom.urlsafe_base64(3)
     end
     nick
   end
