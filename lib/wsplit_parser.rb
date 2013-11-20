@@ -17,7 +17,6 @@ class WsplitParser < BabelBridge::Parser
   rule :offset,   /(\d+)/
   rule :size,     /([^\r\n]*)/
 
-  rule :title,   /([^,\r\n]*)/
   rule :zero,    "0"
   rule :runtime, /([\d.]+)/
   rule :time,    /([\d.]+)/
