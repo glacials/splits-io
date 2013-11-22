@@ -15,25 +15,34 @@ class RunsController < ApplicationController
       @run_record.hits += 1
       @run_record.save
       splits = File.read Rails.root.join "private", "runs", @run_record.nick
-      wsplit_data           =           WsplitParser.new.parse splits
-      timesplittracker_data = TimesplittrackerParser.new.parse splits
-      splitterz_data        =        SplitterzParser.new.parse splits
-      if wsplit_data.present?
-        @run = wsplit_data
-        render :wsplit
-      elsif timesplittracker_data.present?
-        @run = timesplittracker_data
-        render :timesplittracker
-      elsif splitterz_data.present?
-        @run = splitterz_data
-        render :splitterz
-      else
-        if @run_record.hits > 1
+      begin
+        wsplit_data           =           WsplitParser.new.parse splits
+        timesplittracker_data = TimesplittrackerParser.new.parse splits
+        splitterz_data        =        SplitterzParser.new.parse splits
+        if wsplit_data.present?
+          @run = wsplit_data
+          render :wsplit
+        elsif timesplittracker_data.present?
+          @run = timesplittracker_data
+          render :timesplittracker
+        elsif splitterz_data.present?
+          @run = splitterz_data
+          render :splitterz
+        else
+          if @run_record.hits > 1
           # If the run has already been viewed (and thus successfully parsed in
           # the past), we don't want to delete it
+            render "runs/cant_parse"
+          else
+          # If not, we do
+            @run_record.destroy
+            redirect_to cant_parse_path
+          end
+        end
+      rescue
+        if @run_record.hits > 1
           render "runs/cant_parse"
         else
-          # If not, we do
           @run_record.destroy
           redirect_to cant_parse_path
         end
