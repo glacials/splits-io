@@ -80,10 +80,9 @@ class RunsController < ApplicationController
     return nil
   end
   def new_nick
-    nick = SecureRandom.urlsafe_base64(3)
-    while Run.find_by(nick: nick).present?
+    loop do
       nick = SecureRandom.urlsafe_base64(3)
+      return nick if Run.find_by(nick: nick).nil?
     end
-    nick
   end
 end
