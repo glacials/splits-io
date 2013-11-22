@@ -96,7 +96,7 @@ object in return that we can call things like `split.title` and `split.time` on.
 
 To accomplish all this, we use the parser generator [Babel-Bridge][3], which is
 available in a neat little gem. Check out the actual implementations of all this
-stuff in the `lib/<name-of-splitting-program>Parser.rb` files.
+stuff in the `lib/<name-of-splitting-program>_parser.rb` files.
 
 [1]: https://github.com/skoh-fley/splits.io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser
