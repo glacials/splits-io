@@ -14,34 +14,12 @@ class RunsController < ApplicationController
     else
       @run_record.hits += 1
       @run_record.save
-      splits = File.read Rails.root.join "private", "runs", @run_record.nick
-      begin
-        wsplit_data           =           WsplitParser.new.parse splits
-        timesplittracker_data = TimesplittrackerParser.new.parse splits
-        splitterz_data        =        SplitterzParser.new.parse splits
-        if wsplit_data.present?
-          @run = wsplit_data
-          render :wsplit
-        elsif timesplittracker_data.present?
-          @run = timesplittracker_data
-          render :timesplittracker
-        elsif splitterz_data.present?
-          @run = splitterz_data
-          render :splitterz
-        else
-          if @run_record.hits > 1
-          # If the run has already been viewed (and thus successfully parsed in
-          # the past), we don't want to delete it
-            render "runs/cant_parse"
-          else
-          # If not, we do
-            @run_record.destroy
-            redirect_to cant_parse_path
-          end
-        end
-      rescue
+      @run = parse @run_record
+      if @run.present?
+        render @run.parser
+      else
         if @run_record.hits > 1
-          render "runs/cant_parse"
+          render :cant_parse
         else
           @run_record.destroy
           redirect_to cant_parse_path
@@ -55,9 +33,44 @@ class RunsController < ApplicationController
     send_file file, type: "application/text"
   end
   def random
-    redirect_to run_path Run.order("RANDOM()").first.nick
+    # Find a random run. If we can't parse it, find another, and so on.
+    run = nil
+    loop do
+      run = Run.all.sample(1).first
+      if parse(run).present?
+        break
+      end
+    end
+    redirect_to run_path run.nick
   end
 
+  def parse(run)
+    splits = File.read Rails.root.join "private", "runs", run.nick
+
+    begin
+      result = WsplitParser.new.parse splits
+      if result.present?
+        result.parser = :wsplit
+        return result
+      end
+
+      result = TimesplittrackerParser.new.parse splits
+      if result.present?
+        result.parser = :timesplittracker
+        return result
+      end
+
+      result = SplitterzParser.new.parse splits
+      if result.present?
+        result.parser = :splitterz
+        return result
+      end
+    rescue ArgumentError # comes from non UTF-8 files
+      return nil
+    end
+
+    return nil
+  end
   def new_nick
     nick = SecureRandom.urlsafe_base64(3)
     while Run.find_by(nick: nick).present?
