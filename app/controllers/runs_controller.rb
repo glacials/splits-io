@@ -54,6 +54,9 @@ class RunsController < ApplicationController
     file = Rails.root.join "private", "runs", run.nick
     send_file file, type: "application/text"
   end
+  def random
+    redirect_to run_path Run.order("RANDOM()").first.nick
+  end
 
   def new_nick
     nick = SecureRandom.urlsafe_base64(3)
