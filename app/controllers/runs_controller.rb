@@ -37,9 +37,7 @@ class RunsController < ApplicationController
     run = nil
     loop do
       run = Run.all.sample(1).first
-      if parse(run).present?
-        break
-      end
+      break if parse(run).present?
     end
     redirect_to run_path run.nick
   end
