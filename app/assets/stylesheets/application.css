@@ -23,10 +23,17 @@ body, h1, h2, h3, h4, h5, h6 {
   padding: 10px;
   margin-top: -10px;
   margin-left: -10px;
-  text-transform: uppercase;
   position: absolute;
   top: 10px;
+}
+
+#logo {
   left: 10px;
+  text-transform: uppercase;
+}
+
+#random {
+  text-align: center;
 }
 
 #dropzone {

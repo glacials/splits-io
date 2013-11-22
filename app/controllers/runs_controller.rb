@@ -8,6 +8,8 @@ class RunsController < ApplicationController
     render text: run.nick
   end
   def show
+    @random = true if session[:random]
+    session[:random] = false
     @run_record = Run.find_by nick: params[:nick]
     if @run_record.nil?
       render :bad_url
@@ -39,6 +41,7 @@ class RunsController < ApplicationController
       run = Run.all.sample(1).first
       break if parse(run).present?
     end
+    session[:random] = true
     redirect_to run_path run.nick
   end
 
