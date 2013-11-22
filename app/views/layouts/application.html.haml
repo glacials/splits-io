@@ -4,11 +4,10 @@
     %title splits.io
     = stylesheet_link_tag    "application", media: :all
     = javascript_include_tag "application"
-    = csrf_meta_tags
+    = csrf_meta_tag
     %link{href: "http://yui.yahooapis.com/pure/0.3.0/pure-min.css", rel: :stylesheet}/
     %link{href: "/assets/pure-side-menu.css", rel: :stylesheet}/
     %link{href: "http://fonts.googleapis.com/css?family=Open+Sans", rel: "stylesheet", type: "text/css"}/
-    = csrf_meta_tag
   %body
     #dropzone
       .notice
