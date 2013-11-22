@@ -37,8 +37,15 @@ class RunsController < ApplicationController
   def random
     # Find a random run. If we can't parse it, find another, and so on.
     run = nil
+    if request.env["HTTP_REFERER"].present?
+      # Don't use a run that we just came from (e.g we're spam clicking random)
+      last_run = URI.parse(URI.encode request.env["HTTP_REFERER"].strip).path
+      last_run.slice! 0 # Remove initial '/'
+    else
+      last_run = nil
+    end
     loop do
-      run = Run.all.sample(1).first
+      run = Run.where.not(nick: last_run).sample(1).first
       break if parse(run).present?
     end
     session[:random] = true
