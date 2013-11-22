@@ -32,7 +32,7 @@ class RunsController < ApplicationController
   def download
     run = Run.find_by nick: params[:nick]
     file = Rails.root.join "private", "runs", run.nick
-    send_file file, type: "application/text"
+    send_file file, type: "application/text", filename: run.nick + "." + parse(run).parser.to_s
   end
   def random
     # Find a random run. If we can't parse it, find another, and so on.
