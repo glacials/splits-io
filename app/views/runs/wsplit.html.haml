@@ -17,6 +17,7 @@
         %span.size-chart-size
           = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
     - c = (c + 1) % colors.length
+#split-inspector
 .content
   %table.pure-table{style: "margin: auto;"}
     %thead
