@@ -1,0 +1,10 @@
+#main
+  .header
+    %h1 fallback upload
+    %h2 no javascript? no file manager? no problem
+  .content
+    %h2 Upload splits
+    %form.pure-form{action: "/upload", method: :post, style: "text-align: center;", enctype: "multipart/form-data"}
+      %input{type: :hidden, name: :authenticity_token, value: form_authenticity_token}
+      %input{type: :file, name: :file}
+      %input.pure-button.pure-button-primary{type: :submit, value: :upload}

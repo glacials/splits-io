@@ -3,9 +3,12 @@ class RunsController < ApplicationController
     splits = params[:file]
     run = Run.create(nick: new_nick, user: nil)
     File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
-      file.write(splits.read)
+      file.write splits.read
     end
-    render text: run.nick
+    respond_to do |format|
+      format.json { render text: run.nick }
+      format.html { redirect_to run_path run.nick }
+    end
   end
   def show
     @random = true if session[:random]
