@@ -26,9 +26,9 @@
             Another random?
       = yield
       %footer{style: "position: absolute; right: 10px; bottom: 10px;"}
+        %a{href: upload_path} upload
+        &bull;
         - if @run_record.present?
-          %a{href: upload_path} upload
-          &bull;
           %a{href: download_run_path(@run_record.nick)} download
           &bull;
         %a{href: "mailto:qhiiyr@gmail.com"} feedback
