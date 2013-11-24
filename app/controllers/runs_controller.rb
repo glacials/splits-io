@@ -21,7 +21,7 @@ class RunsController < ApplicationController
       @run_record.save
       @run = parse @run_record
       if @run.present?
-        render @run.parser
+        render :show
       else
         if @run_record.hits > 1
           render :cant_parse
@@ -59,23 +59,22 @@ class RunsController < ApplicationController
     splits = File.read Rails.root.join "private", "runs", run.nick
 
     begin
-      result = WsplitParser.new.parse splits
-      if result.present?
-        result.parser = :wsplit
-        return result
+      result = nil
+      parsers = [WsplitParser.new, TimesplittrackerParser.new, SplitterzParser.new]
+      parsers.each do |p|
+        result = p.parse splits
+        break if result.present?
       end
-
-      result = TimesplittrackerParser.new.parse splits
-      if result.present?
-        result.parser = :timesplittracker
-        return result
+      return nil if result.nil?
+      # Set a `time` method for splits that converts best_time objects to floats
+      result.splits.first.class.send(:define_method, :time) { self.best_time.to_s.to_f }
+      # Set a `time` method for the run that returns the total run time
+      def result.time
+        self.splits.inject(0) { |sum, split| sum += split.time }
       end
-
-      result = SplitterzParser.new.parse splits
-      if result.present?
-        result.parser = :splitterz
-        return result
-      end
+      # Set a `finish_time` method for splits that returns the run time when the split finished
+      result.splits.first.class.send(:define_method, :finish_time) { self.parent.splits.first(self.parent.splits.index(self)+1).inject(0) { |sum, split| sum += split.time.to_s.to_f } }
+      return result
     rescue ArgumentError # comes from non UTF-8 files
       return nil
     end

@@ -3,21 +3,20 @@
     #permalink-indicator
       &uarr; That's your permalink!
   %h2 #{@run.title}
-- run_time = 0
-- @run.splits.each do |split|
-  - run_time += split.time.to_s.to_f
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0
 .size-chart.l-vbox.pure-g{style: "margin-bottom: 30px;"}
-  - @run.splits.each do |s|
-    - percentage += s.time.to_s.to_f/run_time*100
   - @run.splits.each do |split|
-    .size-chart-item.pure-u{class: "size-chart-" + colors[c].to_s, style: "width: #{split.time.to_s.to_f/run_time*100 + (100 - percentage)/@run.splits.length}%;"}
+    - percentage += split.time/@run.time*100
+  - @run.splits.each do |split|
+    .size-chart-item.pure-u{class: "size-chart-" + colors[c].to_s, style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
       .size-chart-label{href: "/base/", style: "white-space: nowrap;"}
         = split.title
         %span.size-chart-size
-          = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
+          = Time.at(split.time).utc.strftime("%k:%M:%S")
+          - if @run.time < 20*60
+            %small>= Time.at(split.time).utc.strftime(".%2N")
     - c = (c + 1) % colors.length
 .content
   %table.pure-table{style: "margin: auto;"}
@@ -29,7 +28,6 @@
         %th Finished at
     %tbody
       - i = 0
-      - runtime = 0
       - @run.splits.each do |split|
         %tr
           %td.align-right
@@ -37,10 +35,13 @@
           %td
             = split.title
           %td.align-right
-            = Time.at(split.time.to_s.to_f).utc.strftime("%H:%M:%S")
+            = Time.at(split.time).utc.strftime("%k:%M:%S")
+            - if @run.time < 20*60
+              %small>= Time.at(split.time).utc.strftime(".%2N")
           %td.align-right
-            - runtime += split.time.to_s.to_f
-            = Time.at(runtime).utc.strftime("%H:%M:%S")
+            = Time.at(split.finish_time).utc.strftime("%k:%M:%S")
+            - if @run.time < 20*60
+              %small>= Time.at(split.finish_time).utc.strftime(".%2N")
 - if @run_record.hits < 2
   :javascript
     $('#permalink-indicator').fadeIn().delay(4000).fadeOut();

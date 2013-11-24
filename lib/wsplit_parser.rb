@@ -9,7 +9,7 @@ class WsplitParser < BabelBridge::Parser
   rule :attempts_line, "Attempts=",  :attempts, :newline
   rule :offset_line,   "Offset=",    :offset,   :newline
   rule :size_line,     "Size=",      :size,     :newline
-  rule :splits,        :title, ",", :zero, ",", :runtime, ",", :time, :newline
+  rule :splits,        :title,       ",",       :old_time, ",", :run_time, ",", :best_time, :newline
   rule :icons_line,    "Icons=",     /(.*)/,    :newline?
 
   rule :title,    /([^,\r\n]*)/
@@ -17,8 +17,10 @@ class WsplitParser < BabelBridge::Parser
   rule :offset,   /(\d+)/
   rule :size,     /([^\r\n]*)/
 
-  rule :zero,    "0"
-  rule :runtime, /([\d\.]+)/
+  rule :old_time,  :time
+  rule :run_time,  :time
+  rule :best_time, :time
+
   rule :time,    /([\d\.]+)/
 
   rule :newline,         :windows_newline

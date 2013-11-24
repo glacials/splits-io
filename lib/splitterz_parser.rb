@@ -6,12 +6,14 @@ class SplitterzParser < BabelBridge::Parser
   rule :splitterz_file, :title_line, many?(:splits)
 
   rule :title_line, :title, ",", :attempts
-  rule :splits,     :title, ",", :runtime, ",", :time, :newline
+  rule :splits,     :title, ",", :run_time, ",", :best_time, :newline
 
-  rule :title,    /([^,]*)/
-  rule :runtime,  /([\d]*:[\d]*:[\d]*\.[\d]*)/
-  rule :time,     /([\d]*.[\d]*)/
-  rule :attempts, /(\d*)/
+  rule :title,     /([^,]*)/
+  rule :attempts,  /(\d*)/
+  rule :run_time,  :time
+  rule :best_time, :time
+
+  rule :time, /(\d*:?\d*:?\d*.\d*)/
 
   rule :newline,         :windows_newline
   rule :newline,         :unix_newline

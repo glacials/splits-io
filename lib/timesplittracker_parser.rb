@@ -7,11 +7,13 @@ class TimesplittrackerParser < BabelBridge::Parser
 
   rule :first_line, /([^\t\r\n]*)/, :tab, /([^\t\r\n]*)/, :tab, :newline
   rule :title_line, /([^\t\r\n]*)/, :tab, /([^\t\r\n]*)/, :newline
-  rule :splits,      :title, :tab, :time, :newline, :image_path, :tab, :newline
+  rule :splits,      :title, :tab, :best_time, :newline, :image_path, :tab, :newline
 
   rule :title,      /([^\t]*)/
-  rule :time,       /(\d*\.\d*)/
+  rule :best_time,  :time
   rule :image_path, /([^\t\r\n]*)/
+
+  rule :time,       /(\d*\.\d*)/
 
   rule :newline,         :windows_newline
   rule :newline,         :unix_newline
