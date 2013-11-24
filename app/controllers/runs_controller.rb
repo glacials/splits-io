@@ -63,7 +63,10 @@ class RunsController < ApplicationController
       parsers = [WsplitParser.new, TimesplittrackerParser.new, SplitterzParser.new]
       parsers.each do |p|
         result = p.parse splits
-        break if result.present?
+        if result.present?
+          result.parser = p.class.to_s.chomp("Parser").downcase
+          break
+        end
       end
       return nil if result.nil?
       # Set a `time` method for splits that converts best_time objects to floats
