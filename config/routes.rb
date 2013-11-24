@@ -8,6 +8,5 @@ SplitsIo::Application.routes.draw do
   root to: "runs#front"
 
   get "/:nick"                  => "runs#show",     as: :run
-  #get "/:nick/download"         => "runs#download", as: :download_run
   get "/:nick/download/:format" => "runs#download", as: :download_run
 end
