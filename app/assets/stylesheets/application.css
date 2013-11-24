@@ -16,6 +16,16 @@ body, h1, h2, h3, h4, h5, h6 {
   font-family: "Open Sans", sans-serif;
 }
 
+footer {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;"
+}
+
+#download-menu {
+  display: none;
+}
+
 #split-inspector {
   position: absolute;
   left: 20px;

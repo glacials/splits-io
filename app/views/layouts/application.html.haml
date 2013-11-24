@@ -26,15 +26,24 @@
             Another random?
       #split-inspector
       = yield
-      %footer{style: "position: absolute; right: 10px; bottom: 10px;"}
+      %footer#footer
         %a{href: upload_path} upload
         &bull;
         - if @run_record.present?
-          %a{href: download_run_path(@run_record.nick)} download
+          %a{href: "#", onclick: "show_download_menu()"} download
           &bull;
         %a{href: "mailto:qhiiyr@gmail.com"} feedback
         &bull;
         %a{href: "https://github.com/skoh-fley/splits.io", target: :_blank} github
+      %footer#download-menu
+        %div{style: "text-align: left;"}
+          What format?
+          %a{href: "#", onclick: "hide_download_menu()"}
+        %a{href: download_run_path(@run_record, :wsplit), onclick: "hide_download_menu()"} WSplit
+        &bull;
+        %a{href: download_run_path(@run_record, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
+        &bull;
+        %a{href: download_run_path(@run_record, :splitterz), onclick: "hide_download_menu()"} SplitterZ
     %script{src: "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
     %script{src: "/assets/upload.js"}
   - if Rails.env.production?
