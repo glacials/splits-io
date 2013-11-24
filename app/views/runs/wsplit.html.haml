@@ -1,0 +1,10 @@
+Title=#{@run.title}
+Attempts=#{@run.attempts.present? ? @run.attempts : 0}
+Offset=#{@run.offset.present? ? @run.offset : 0}
+Size=#{@run.size.present? ? @run.size : "152,25"}
+- @run.splits.each do |split|
+  #{split.title},0,#{split.finish_time},#{split.time}
+- icons = ""
+- @run.splits.length.times do
+  - icons += '"",'
+Icons=#{icons[0..-2].html_safe}

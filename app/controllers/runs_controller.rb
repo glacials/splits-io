@@ -33,9 +33,26 @@ class RunsController < ApplicationController
     end
   end
   def download
-    run = Run.find_by nick: params[:nick]
-    file = Rails.root.join "private", "runs", run.nick
-    send_file file, type: "application/text", filename: run.nick + "." + parse(run).parser.to_s
+    @run_record = Run.find_by nick: params[:nick]
+    if @run_record.nil?
+      render :bad_url
+    else
+      @run_record.hits += 1
+      @run_record.save
+      @run = parse @run_record
+      if @run.present?
+        send_data(render_to_string(params[:format], layout: false), filename: @run_record.nick + "." + params[:format], content_type: "text/plain")
+      else
+        if @run_record.hits > 1
+          render :cant_parse
+        else
+          @run_record.destroy
+          redirect_to cant_parse_path
+        end
+      end
+    end
+    #file = Rails.root.join "private", "runs", run.nick
+    #send_file file, type: "application/text", filename: run.nick + "." + parse(run).parser.to_s
   end
   def random
     # Find a random run. If we can't parse it, find another, and so on.
