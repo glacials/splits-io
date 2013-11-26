@@ -35,15 +35,16 @@
         %a{href: "mailto:qhiiyr@gmail.com"} feedback
         &bull;
         %a{href: "https://github.com/skoh-fley/splits.io", target: :_blank} github
-      %footer#download-menu
-        %div{style: "text-align: left;"}
-          What format?
-          %a{href: "#", onclick: "hide_download_menu()"}
-        %a{href: download_run_path(@run_record.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
-        &bull;
-        %a{href: download_run_path(@run_record.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
-        &bull;
-        %a{href: download_run_path(@run_record.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
+      - if @run_record.present?
+        %footer#download-menu
+          %div{style: "text-align: left;"}
+            What format?
+            %a{href: "#", onclick: "hide_download_menu()"}
+          %a{href: download_run_path(@run_record.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
+          &bull;
+          %a{href: download_run_path(@run_record.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
+          &bull;
+          %a{href: download_run_path(@run_record.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
     %script{src: "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
     %script{src: "/assets/upload.js"}
   - if Rails.env.production?
