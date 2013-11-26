@@ -41,7 +41,7 @@ class RunsController < ApplicationController
       @run_record.save
       @run = parse @run_record
       if @run.present?
-        send_data(render_to_string(params[:format], layout: false), filename: @run_record.nick + "." + params[:format], content_type: "text/plain")
+        send_data(render_to_string(params[:format], layout: false), filename: @run_record.nick + "." + params[:format], content_type: "text/html", layout: false)
       else
         if @run_record.hits > 1
           render :cant_parse

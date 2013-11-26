@@ -5,10 +5,11 @@ class TimesplittrackerParser < BabelBridge::Parser
   # A question mark after a rule means "optional"
   rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
 
-  rule :first_line, /([^\t\r\n]*)/, :tab, /([^\t\r\n]*)/, :tab, :newline
-  rule :title_line, /([^\t\r\n]*)/, :tab, /([^\t\r\n]*)/, :newline
+  rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :tab, :newline
+  rule :title_line,  :title, :tab, /([^\t\r\n]*)/, :newline
   rule :splits,      :title, :tab, :best_time, :newline, :image_path, :tab, :newline
 
+  rule :attempts,   /([^\t\r\n]*)/
   rule :title,      /([^\t]*)/
   rule :best_time,  :time
   rule :image_path, /([^\t\r\n]*)/
