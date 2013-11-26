@@ -30,7 +30,7 @@
         %a{href: upload_path} upload
         &bull;
         - if @run_record.present?
-          %a{href: "#", onclick: "show_download_menu()"} download
+          %a.fake-link{onclick: "show_download_menu()"} download
           &bull;
         %a{href: "mailto:qhiiyr@gmail.com"} feedback
         &bull;
@@ -39,7 +39,6 @@
         %footer#download-menu
           %div{style: "text-align: left;"}
             What format?
-            %a{href: "#", onclick: "hide_download_menu()"}
           %a{href: download_run_path(@run_record.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
           &bull;
           %a{href: download_run_path(@run_record.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
