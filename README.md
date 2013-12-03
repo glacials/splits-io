@@ -1,4 +1,4 @@
-# splits.io
+## splits.io
 
 splits.io is a website similar to Pastebin or GitHub Gist, but for splits
 generated from speedruns rather than text or code. It's written in Ruby on
@@ -7,7 +7,7 @@ Rails.
 splits.io currently supports splits from WSplit (both 1.4.x and Nitrofski's
 1.5.x fork), Time Split Tracker, and SpliterZ. Llanfair is in the works.
 
-## Uploading
+### Uploading
 
 We have drag-anywhere-on-any-page uploading, in a fashion similar to Imgur. The
 entire page lives in a `dropzone` div that listens for mouse drag events (for
@@ -20,9 +20,7 @@ page, which we then have JavaScript direct the browser to.
 
 Alternatively, there is a manual upload form at `/upload/fallback`.
 
-## Parsers
-
-### Explanation
+### Parsing
 
 Each file format reader is implemented as an [LL parser][2], which means that
 we actually treat each format as its own context-free grammar. This means we
@@ -31,11 +29,13 @@ simple to implement a new format (i.e. support a new splitting program). And as
 icing on top, it becomes super easy to tell one splits format apart from
 another when we need to parse.
 
-As a simple example, we may have a rule that says something like
+#### Example
+
+Let's say we have a rule that says something like
 
     TitleLine -> "Title=" Title Newline
 
-which can be read as "a title line consists of the string 'Title=' followed by
+which can be read as "a title line consists of the string `Title=` followed by
 a title (which we will define later), followed by a newline. So later on, we can
 complete our definition by doing
 
@@ -105,7 +105,7 @@ worse, forgetting to check) the values later down the line.
 When we perform this parse on a split from Time Split Tracker, we should get an
 object in return that we can call things like `split.title` and `split.time` on.
 
-### In the code
+#### In the code
 
 To accomplish all this, we use the parser generator [Babel-Bridge][3], which is
 available in a neat little gem. Check out the actual implementations of all this
