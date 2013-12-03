@@ -6,8 +6,8 @@ class RunsController < ApplicationController
       file.write splits.read
     end
     respond_to do |format|
-      format.json { render text: run.nick }
       format.html { redirect_to run_path run.nick }
+      format.json { render text: run.nick }
     end
   end
   def show
@@ -21,7 +21,10 @@ class RunsController < ApplicationController
       @run_record.save
       @run = parse @run_record
       if @run.present?
-        render :show
+        respond_to do |format|
+          format.html { render :show }
+          format.json { render @run_record }
+        end
       else
         if @run_record.hits > 1
           render :cant_parse
