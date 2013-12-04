@@ -10,7 +10,7 @@ splits.io currently supports splits from WSplit (both 1.4.x and Nitrofski's
 ### Uploading
 
 We have drag-anywhere-on-any-page uploading, in a fashion similar to Imgur. The
-entire page lives in a `dropzone` div that listens for mouse drag events (for
+entire page lives in a `#dropzone` div that listens for mouse drag events (for
 page dimming) and mouse drop events (for file handling).
 
 If we receive a file drop, we construct an in-page POST request containing the
