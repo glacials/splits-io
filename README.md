@@ -53,11 +53,11 @@ Unix-style newline (`\n`). The parser will match whichever one it sees.
 
 So if we have a line like
 
-    Title=Sonic Colors
+    Title=Sonic Colors\n
 
 the `TitleLine` will match successfully, as it can see all three required
-elements (assuming there is indeed a newline character afterwards). Let's try
-out some splits. We'll look at the Time Split Tracker format now.
+elements. Let's try out some splits. We'll look at the Time Split Tracker
+format now.
 
     Death Egg Robot	33.74
     /Users/glacials/split_images/sonic/death_egg_robot.png
