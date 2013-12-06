@@ -90,7 +90,18 @@ class RunsController < ApplicationController
       end
       return nil if result.nil?
       # Set a `time` method for splits that converts best_time objects to floats
-      result.splits.first.class.send(:define_method, :time) { self.best_time.to_s.to_f }
+      if result.parser == "wsplit"
+        result.splits.first.class.send(:define_method, :time) {
+          self_index = self.parent.splits.index(self)
+          if self_index == 0
+            self.run_time.to_s.to_f
+          else
+            self.run_time.to_s.to_f - self.parent.splits.at(self_index - 1).run_time.to_s.to_f
+          end
+        }
+      else
+        result.splits.first.class.send(:define_method, :time) { self.best_time.to_s.to_f }
+      end
       # Set a `time` method for the run that returns the total run time
       def result.time
         self.splits.inject(0) { |sum, split| sum += split.time }
