@@ -38,7 +38,7 @@
     formData.append('authenticity_token', $('meta[name="csrf-token"]').attr('content'));
     formData.append('file', file);
 
-    xhr.open('POST', '/upload', true);
+    xhr.open('POST', '/upload.json', true);
     xhr.onload = function() {
       if (xhr.status === 200) {
         console.log('all done: ' + xhr.status);
