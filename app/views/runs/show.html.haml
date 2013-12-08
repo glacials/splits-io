@@ -44,4 +44,4 @@
               %small>= Time.at(split.finish_time).utc.strftime(".%2N")
 - if @run_record.hits < 2
   :javascript
-    $('#permalink-indicator').fadeIn().delay(4000).fadeOut();
+    window.onload = function() {$('#permalink-indicator').fadeIn().delay(4000).fadeOut(); }

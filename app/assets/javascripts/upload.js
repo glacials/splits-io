@@ -1,4 +1,4 @@
-(function () {
+$(function () {
   var dropArea = document.getElementById("dropzone"),
       fileList = document.getElementById("file-list");
 
@@ -114,4 +114,4 @@
     evt.preventDefault();
     evt.stopPropagation();
   }, false);
-})();
+});

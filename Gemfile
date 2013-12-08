@@ -18,9 +18,6 @@ gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
@@ -44,3 +41,5 @@ end
 gem 'haml-rails'
 gem 'devise'
 gem 'babel_bridge'
+gem 'purecss-rails'
+gem 'jquery-rails'

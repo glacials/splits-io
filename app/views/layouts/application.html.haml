@@ -2,12 +2,9 @@
 %html
   %head
     %title splits.io
-    = stylesheet_link_tag    "application", media: :all
-    = javascript_include_tag "application"
-    = csrf_meta_tag
-    %link{href: "http://yui.yahooapis.com/pure/0.3.0/pure-min.css", rel: :stylesheet}/
-    %link{href: "/assets/pure-side-menu.css", rel: :stylesheet}/
     %link{href: "http://fonts.googleapis.com/css?family=Open+Sans", rel: "stylesheet", type: "text/css"}/
+    = stylesheet_link_tag    "application", media: :all
+    = csrf_meta_tag
   %body
     #dropzone
       .notice
@@ -44,8 +41,7 @@
           %a{href: download_run_path(@run_record.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
           &bull;
           %a{href: download_run_path(@run_record.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
-    %script{src: "http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
-    %script{src: "/assets/upload.js"}
+  = javascript_include_tag "application"
   - if Rails.env.production?
     :javascript
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
