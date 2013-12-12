@@ -2,12 +2,18 @@ class RunsController < ApplicationController
   def create
     splits = params[:file]
     run = Run.create(nick: new_nick, user: nil)
-    File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
-      file.write splits.read
-    end
-    respond_to do |format|
-      format.html { redirect_to run_path run.nick }
-      format.json { render text: run.nick }
+    if splits.present?
+      File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
+        file.write splits.read
+      end
+      respond_to do |format|
+        format.html { redirect_to run_path run.nick }
+        format.json { render text: run.nick }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to fallback_upload_path, alert: "Didn't receive any uploaded file, try again." }
+      end
     end
   end
   def show

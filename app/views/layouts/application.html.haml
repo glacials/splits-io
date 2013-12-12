@@ -3,25 +3,27 @@
   %head
     %title splits.io
     %link{href: "http://fonts.googleapis.com/css?family=Open+Sans", rel: "stylesheet", type: "text/css"}/
-    = stylesheet_link_tag    "application", media: :all
+    = stylesheet_link_tag "application", media: :all
     = csrf_meta_tag
   %body
     #dropzone
-      .notice
-        = notice
-      .alert
-        = alert
       #dropzone-overlay.header{style: "border: none;"}
         %h1#droplabel.inverted drop anywhere
         #file-list.inverted
       %a{href: root_path}
         #logo
           splits.io
-      - if @random
+      #split-inspector
+      - if alert
+        .alert
+          = alert
+      - elsif notice
+        .notice
+          = notice
+      - elsif @random
         #random
           %a.pure-button.pure-button{href: random_path, style: "font-size: 70%; border-radius: 0 0 2px 2px;"}
             Another random?
-      #split-inspector
       = yield
       %footer#footer
         %a{href: upload_path} upload

@@ -10,15 +10,25 @@
  *
  *= require_self
  *= require purecss/base
+ *= require purecss/buttons
  *= require purecss/grids
  *= require purecss/menus
  *= require purecss/tables
- *= require purecss/buttons
  *= require headings
  */
 
 body, h1, h2, h3, h4, h5, h6 {
   font-family: "Open Sans", sans-serif;
+}
+
+.alert {
+  box-sizing: border-box;
+  color: #a94442;
+  padding: 15px;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  top: 0;
 }
 
 .fake-link {
