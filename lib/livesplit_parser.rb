@@ -31,30 +31,4 @@ class LivesplitParser
   def duration_in_seconds_of(time)
     Time.parse(time).seconds_since_midnight
   end
-
-  def game
-    Hash.from_xml(xml.to_s)['Run']['GameName']
-  end
-  def title
-    Hash.from_xml(xml.to_s)['Run']['CategoryName']
-  end
-  #def offset
-    #Hash.from_xml(xml.to_s)['Run']['Offset']
-  #end
-  def attempts
-    Hash.from_xml(xml.to_s)['Run']['AttemptCount']
-  end
-  def splits
-    splits = Hash.from_xml(xml.to_s)['Run']['Segments'].first.second
-    splits.map!{ |s| OpenStruct.new(Hash[s.map{ |k, v| [k.downcase, v] }]) }
-    splits.each do |s|
-      s.run_time  = s.personalbestsplittime
-      s.best_time = s.bestsegmenttime
-      s.delete_field('icon')
-      s.delete_field('personalbestsplittime')
-      s.delete_field('bestsegmenttime')
-    end
-    splits
-  end
-
 end
