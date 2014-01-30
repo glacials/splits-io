@@ -19,6 +19,7 @@ class RunsController < ApplicationController
   def show
     @random = session[:random] or false
     session[:random] = false
+
     @run_record = Run.find_by nick: params[:nick]
     render :bad_url and return if @run_record.nil?
 
@@ -30,31 +31,22 @@ class RunsController < ApplicationController
         format.json { render @run_record }
       end
     else
-      render :cant_parse if @run_record.hits > 1
-      @run_record.destroy and redirect_to cant_parse_path if @run_record.hits <= 1
+      if @run_record.hits > 1 then render :cant_parse
+      else @run_record.destroy and redirect_to cant_parse_path end
     end
   end
   def download
     @run_record = Run.find_by nick: params[:nick]
-    if @run_record.nil?
-      render :bad_url
+    render :bad_url and return if @run_record.nil?
+
+    @run_record.hits += 1 and @run_record.save
+    @run = parse @run_record
+    if @run.present?
+      send_data(render_to_string(params[:format], layout: false), filename: @run_record.nick + "." + params[:format], content_type: "text/html", layout: false)
     else
-      @run_record.hits += 1
-      @run_record.save
-      @run = parse @run_record
-      if @run.present?
-        send_data(render_to_string(params[:format], layout: false), filename: @run_record.nick + "." + params[:format], content_type: "text/html", layout: false)
-      else
-        if @run_record.hits > 1
-          render :cant_parse
-        else
-          @run_record.destroy
-          redirect_to cant_parse_path
-        end
-      end
+      if @run_record.hits > 1 then render :cant_parse
+      else @run_record.destroy and redirect_to cant_parse_path end
     end
-    #file = Rails.root.join "private", "runs", run.nick
-    #send_file file, type: "application/text", filename: run.nick + "." + parse(run).parser.to_s
   end
   def random
     # Find a random run. If we can't parse it, find another, and so on.
