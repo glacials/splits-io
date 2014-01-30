@@ -17,28 +17,21 @@ class RunsController < ApplicationController
     end
   end
   def show
-    @random = true if session[:random]
+    @random = session[:random] or false
     session[:random] = false
     @run_record = Run.find_by nick: params[:nick]
-    if @run_record.nil?
-      render :bad_url
-    else
-      @run_record.hits += 1
-      @run_record.save
-      @run = parse @run_record
-      if @run.present?
-        respond_to do |format|
-          format.html { render :show }
-          format.json { render @run_record }
-        end
-      else
-        if @run_record.hits > 1
-          render :cant_parse
-        else
-          @run_record.destroy
-          redirect_to cant_parse_path
-        end
+    render :bad_url and return if @run_record.nil?
+
+    @run_record.hits += 1 and @run_record.save
+    @run = parse @run_record
+    if @run.present?
+      respond_to do |format|
+        format.html { render :show }
+        format.json { render @run_record }
       end
+    else
+      render :cant_parse if @run_record.hits > 1
+      @run_record.destroy and redirect_to cant_parse_path if @run_record.hits <= 1
     end
   end
   def download
@@ -67,7 +60,7 @@ class RunsController < ApplicationController
     # Find a random run. If we can't parse it, find another, and so on.
     run = nil
     if request.env["HTTP_REFERER"].present?
-      # Don't use a run that we just came from (e.g we're spam clicking random)
+      # Don't use the run that we just came from (i.e. we're spam clicking random)
       last_run = URI.parse(URI.encode request.env["HTTP_REFERER"].strip).path
       last_run.slice! 0 # Remove initial '/'
     else
@@ -78,7 +71,7 @@ class RunsController < ApplicationController
       break if parse(run).present?
     end
     session[:random] = true
-    redirect_to run_path run.nick
+    redirect_to run_path(run.nick)
   end
 
   def parse(run)
