@@ -86,7 +86,7 @@ class RunsController < ApplicationController
 
     begin
       result = nil
-      parsers = [WsplitParser.new, TimesplittrackerParser.new, SplitterzParser.new]
+      parsers = [WsplitParser.new, TimesplittrackerParser.new, SplitterzParser.new, LivesplitParser.new]
       parsers.each do |p|
         result = p.parse splits
         if result.present?
