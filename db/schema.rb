@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131204000639) do
+ActiveRecord::Schema.define(version: 20131119034232) do
 
   create_table "runs", force: true do |t|
     t.integer  "user_id"
