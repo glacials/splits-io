@@ -5,7 +5,8 @@ generated from speedruns rather than text or code. It's written in Ruby on
 Rails.
 
 splits.io currently supports splits from WSplit (both 1.4.x and Nitrofski's
-1.5.x fork), Time Split Tracker, and SpliterZ. Llanfair is in the works.
+1.5.x fork), Time Split Tracker, SplitterZ, and LiveSplit. Llanfair is in the
+works.
 
 ### Uploading
 
