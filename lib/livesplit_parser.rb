@@ -16,8 +16,8 @@ class LivesplitParser
       splits['Run']['Segments'].first.second.each do |segment|
         split = OpenStruct.new
         split.title = segment['Name']
-        split.best_time = duration_in_seconds_of segment['PersonalBestSplitTime']
-        split.run_time  = duration_in_seconds_of segment['BestSegmentTime']
+        split.run_time = duration_in_seconds_of segment['PersonalBestSplitTime']
+        split.best_time  = duration_in_seconds_of segment['BestSegmentTime']
         split.parent = run
         run_time += split.best_time
         run.splits << split
