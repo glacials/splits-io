@@ -210,6 +210,7 @@ footer a:hover {
 
 #time {
   margin-bottom: .3em;
+  opacity: 0;
 }
 
 #time:before, #time:after, .split-time:before, .split-time:after {
