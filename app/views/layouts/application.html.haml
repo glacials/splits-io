@@ -13,7 +13,6 @@
       %a{href: root_path}
         #logo
           splits.io
-      #split-inspector
       - if alert
         .alert
           = alert
@@ -22,7 +21,7 @@
           = notice
       - elsif @random
         #random
-          %a.pure-button.pure-button{href: random_path, style: "font-size: 70%; border-radius: 0 0 2px 2px;"}
+          %a.pure-button{href: random_path, style: "font-size: 70%; border-radius: 0 0 2px 2px;"}
             Another random?
       = yield
       %footer#footer

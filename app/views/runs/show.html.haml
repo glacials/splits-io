@@ -1,4 +1,4 @@
-.header
+.header{style: 'border: none;'}
   - if @run_record.hits < 2
     #permalink-indicator
       &uarr; That's your permalink!
@@ -6,18 +6,40 @@
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0
-.size-chart.l-vbox.pure-g{style: "margin-bottom: 30px;"}
+#time
+  &nbsp;
+  = Time.at(@run.time).utc.strftime("%k:%M:%S")
+  - if @run.time < 20*60
+    %small>= Time.at(@run.time).utc.strftime(".%2N")
+  &nbsp;
+.size-chart.l-vbox.pure-g{style: "margin-bottom: 1em;"}
   - @run.splits.each do |split|
     - percentage += split.time/@run.time*100
+  - i = 0
   - @run.splits.each do |split|
-    .size-chart-item.pure-u{class: "size-chart-" + colors[c].to_s, style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
+    .size-chart-item.pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
       .size-chart-label{href: "/base/", style: "white-space: nowrap;"}
         = split.title
         %span.size-chart-size
           = Time.at(split.time).utc.strftime("%k:%M:%S")
           - if @run.time < 20*60
             %small>= Time.at(split.time).utc.strftime(".%2N")
+    - i += 1
     - c = (c + 1) % colors.length
+- i = 0
+.size-chart.l-vbox.pure-g{style: "margin-bottom: 1em;"}
+  - @run.splits.each do |split|
+    .size-chart-item.pure-u.inspect{id: 'inspector-' + i.to_s, class: "size-chart-invisible", style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
+      .size-chart-label{href: "/base/", style: "white-space: nowrap;"}
+        .split-time
+          %p
+        = split.title
+        %span.size-chart-size
+          = Time.at(split.time).utc.strftime("%k:%M:%S")
+          - if @run.time < 20*60
+            %small>= Time.at(split.time).utc.strftime(".%2N")
+    - i += 1
+#split-inspector
 .content
   %table.pure-table{style: "margin: auto;"}
     %thead

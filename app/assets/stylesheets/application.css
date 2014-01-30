@@ -45,12 +45,6 @@ footer {
   display: none;
 }
 
-#split-inspector {
-  position: absolute;
-  left: 20px;
-  top: 150px;
-}
-
 #split-inspector > .size-chart-label {
   color: #777;
 }
@@ -178,8 +172,14 @@ footer a:hover {
         .size-chart-yellow span {
             color: rgb(255, 190, 129);
         }
+    .size-chart-invisible, .size-chart-invisible .size-chart-size {
+      color: #aaa;
+    }
+        .size-chart-invisible span {
+            color: #aaa;
+        }
 
-    .size-chart-label {
+    .split {
         display: block;
         color: #fff;
         padding: 0.5em;
@@ -192,3 +192,37 @@ footer a:hover {
     .size-chart-size {
         display: block;
     }
+    .inspect {
+      color: #aaa;
+      opacity: 0;
+    }
+
+#time, .split-time {
+  color: #aaa;
+  border-color: #aaa;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  text-align: center;
+}
+
+#time {
+  margin-bottom: .3em;
+}
+
+#time:before, #time:after, .split-time:before, .split-time:after {
+  position: absolute;
+  top: 51%;
+  overflow: hidden;
+  width: 50%;
+  height: 1px;
+  content: '\a0';
+  background-color: #aaa;
+}
+
+#time:before, .split-time:before {
+  margin-left: -50%;
+  text-align: right;
+}

@@ -1,10 +1,12 @@
 $(function() {
-  $(".size-chart-item").hover(
+  $('.split').hover(
     function() {
-      $("#split-inspector").html($(this).html());
+      $('#inspector-' + this.id.split('-')[1]).fadeTo(0, 1);
+      $('#time').fadeTo(0, 1);
     },
     function() {
-      $("#split-inspector").html("");
+      $('#inspector-' + this.id.split('-')[1]).fadeTo(0, 0);
+      $('#time').fadeTo(0, 0);
     }
   );
 });
