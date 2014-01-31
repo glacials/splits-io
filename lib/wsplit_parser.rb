@@ -14,7 +14,7 @@ class WsplitParser < BabelBridge::Parser
 
   rule :title,    /([^,\r\n]*)/
   rule :attempts, /(\d+)/
-  rule :offset,   /(\d+)/
+  rule :offset,   /(\d*\.?\d*)/
   rule :size,     /([^\r\n]*)/
 
   rule :old_time,  :time
@@ -27,4 +27,28 @@ class WsplitParser < BabelBridge::Parser
   rule :newline,         :unix_newline
   rule :windows_newline, "\r\n"
   rule :unix_newline,    "\n"
+
+  def parse(file)
+    splits = super(file) or return nil
+    run = OpenStruct.new
+    run.game = nil
+    run.title = splits.title.to_s
+    run.attempts = splits.attempts.to_s.to_i
+    run.offset = splits.offset.to_f
+    run.splits = Array.new
+    run.time = 0
+    splits.splits.each do |segment|
+      split = OpenStruct.new
+      split.old = OpenStruct.new
+      split.best = OpenStruct.new
+      split.title = segment.title
+      split.duration = segment.run_time.to_s.to_f - run.time
+      split.finish_time = segment.run_time.to_s.to_f
+      split.best.duration = segment.best_time.to_s.to_f
+      split.parent = run
+      run.time += split.duration
+      run.splits << split
+    end
+    run
+  end
 end

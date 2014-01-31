@@ -13,7 +13,7 @@
       <Icon />
       <Name><%= split.title %></Name>
       <PersonalBestSplitTime><%= Time.at(split.finish_time || 0).utc.strftime("%k:%M:%S.%N") %></PersonalBestSplitTime>
-      <BestSegmentTime><%= Time.at(split.run_time || 0).utc.strftime("%k:%M:%S.%N") %></BestSegmentTime>
+      <BestSegmentTime><%= Time.at(split.best.duration || 0).utc.strftime("%k:%M:%S.%N") %></BestSegmentTime>
       <SegmentHistory />
     </Segment>
   <% end %>

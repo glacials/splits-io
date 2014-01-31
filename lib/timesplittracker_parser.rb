@@ -21,4 +21,27 @@ class TimesplittrackerParser < BabelBridge::Parser
   rule :tab,             "\t"
   rule :windows_newline, "\r\n"
   rule :unix_newline,    "\n"
+
+  def parse(file)
+    splits = super(file) or return nil
+    run = OpenStruct.new
+    run.game = nil
+    run.title = splits.title.to_s
+    run.attempts = splits.attempts.to_s.to_i
+    run.offset = splits.offset.to_f
+    run.splits = Array.new
+    run.time = 0
+    splits.splits.each do |segment|
+      split = OpenStruct.new
+      split.old = OpenStruct.new
+      split.best = OpenStruct.new
+      split.title = segment.title
+      split.duration = segment.best_time.to_s.to_f
+      split.finish_time = run.time + segment.best_time.to_s.to_f
+      split.parent = run
+      run.time += split.duration
+      run.splits << split
+    end
+    run
+  end
 end

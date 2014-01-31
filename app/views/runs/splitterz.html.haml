@@ -1,3 +1,0 @@
-#{@run.title},#{@run.attempts.present? ? @run.attempts : 0}
-- @run.splits.each do |split|
-  #{split.title},#{Time.at(split.finish_time).utc.strftime("%k:%M:%S.%2N")},#{Time.at(split.time).utc.strftime("%k:%M:%S.%2N")}

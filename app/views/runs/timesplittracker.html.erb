@@ -1,6 +1,6 @@
 <%= @run.attempts %><%= "\t" %>0.00<%= "\t" %>
 <%= @run.title %><%= "\t" %>Best Splits
 <% @run.splits.each do |split| %>
-<%= split.title %><%= "\t" %><%= split.time%>
+<%= split.title %><%= "\t" %><%= split.duration %>
 <%= "\t" %>
 <% end %>
