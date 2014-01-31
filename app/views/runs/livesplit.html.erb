@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Run>
+  <GameIcon />
+  <GameName>
+  </GameName>
+  <CategoryName><%= @run.title %></CategoryName>
+  <Offset><%= Time.at(@run.offset || 0).utc.strftime("%k:%M:%S.%N") %></Offset>
+  <AttemptCount><%= @run.attempts || 0 %></AttemptCount>
+  <RunHistory />
+  <Segments>
+  <% @run.splits.each do |split| %>
+    <Segment>
+      <Icon />
+      <Name><%= split.title %></Name>
+      <PersonalBestSplitTime><%= Time.at(split.finish_time || 0).utc.strftime("%k:%M:%S.%N") %></PersonalBestSplitTime>
+      <BestSegmentTime><%= Time.at(split.run_time || 0).utc.strftime("%k:%M:%S.%N") %></BestSegmentTime>
+      <SegmentHistory />
+    </Segment>
+  <% end %>
+  </Segments>
+</Run>

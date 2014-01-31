@@ -42,6 +42,8 @@
           %a{href: download_run_path(@run_record.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
           &bull;
           %a{href: download_run_path(@run_record.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
+          &bull;
+          %a{href: download_run_path(@run_record.nick, :livesplit), onclick: "hide_download_menu()"} LiveSplit
   = javascript_include_tag "application"
   - if Rails.env.production?
     :javascript

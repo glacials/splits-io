@@ -10,14 +10,15 @@ class LivesplitParser
       run.game = splits['Run']['GameName']
       run.title = splits['Run']['CategoryName']
       run.attempts = splits['Run']['AttemptCount']
-      run.offset = splits['Run']['Offset']
+      run.offset = duration_in_seconds_of splits['Run']['Offset']
       run.splits = Array.new
       run_duration_so_far = 0
       splits['Run']['Segments'].first.second.each do |segment|
         split = OpenStruct.new
         split.title = segment['Name']
         split.best_time = duration_in_seconds_of(segment['PersonalBestSplitTime']) - run_duration_so_far
-        split.run_time  = duration_in_seconds_of(segment['BestSegmentTime'])
+        split.finish_time = segment['PersonalBestSplitTime']
+        split.run_time  = duration_in_seconds_of segment['BestSegmentTime']
         split.parent = run
         run_duration_so_far += split.best_time
         run.splits << split
