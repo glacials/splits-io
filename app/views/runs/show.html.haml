@@ -6,40 +6,39 @@
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0
-#time
+#time{style: 'opacity: 0;'}
   &nbsp;
   = Time.at(@run.time).utc.strftime("%k:%M:%S")
   - if @run.time < 20*60
     %small>= Time.at(@run.time).utc.strftime(".%2N")
   &nbsp;
-.size-chart.l-vbox.pure-g{style: "margin-bottom: 1em;"}
+- i = 1
+.timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
   - @run.splits.each do |split|
     - percentage += split.time/@run.time*100
-  - i = 0
   - @run.splits.each do |split|
-    .size-chart-item.pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
-      .size-chart-label{href: "/base/", style: "white-space: nowrap;"}
-        = split.title
-        %span.size-chart-size
-          = Time.at(split.time).utc.strftime("%k:%M:%S")
-          - if @run.time < 20*60
-            %small>= Time.at(split.time).utc.strftime(".%2N")
+    .pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
+      .title= split.title
+      .time
+        = Time.at(split.time).utc.strftime("%k:%M:%S")
+        - if @run.time < 20*60
+          %small>= Time.at(split.time).utc.strftime(".%2N")
     - i += 1
     - c = (c + 1) % colors.length
-- i = 0
-.size-chart.l-vbox.pure-g{style: "margin-bottom: 1em;"}
+- i = 1
+- percentage_so_far = 0
+.timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
   - @run.splits.each do |split|
-    .size-chart-item.pure-u.inspect{id: 'inspector-' + i.to_s, class: "size-chart-invisible", style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
-      .size-chart-label{href: "/base/", style: "white-space: nowrap;"}
-        .split-time
-          %p
-        = split.title
-        %span.size-chart-size
-          = Time.at(split.time).utc.strftime("%k:%M:%S")
-          - if @run.time < 20*60
-            %small>= Time.at(split.time).utc.strftime(".%2N")
+    .pure-u.inspect{id: 'inspect-' + i.to_s, style: "width: #{split.time/@run.time*100 + (100 - percentage)/@run.splits.length}%; opacity: 0;"}
+      .bar
+        %p
+      .title= split.title
+      .time
+        = Time.at(split.time).utc.strftime("%k:%M:%S")
+        - if @run.time < 20*60
+          %small>= Time.at(split.time).utc.strftime(".%2N")
     - i += 1
-#split-inspector
+    - percentage_so_far += split.time/@run.time + (1 - percentage/100)/@run.splits.length
 .content
   %table.pure-table{style: "margin: auto;"}
     %thead
