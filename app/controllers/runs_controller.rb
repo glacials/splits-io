@@ -45,7 +45,7 @@ class RunsController < ApplicationController
     @run = parse @run_record
     if @run.present?
       file_extension = params[:format] == 'livesplit' ? '.lss' : params[:format]
-      send_data(HTMLEntities.new.decode(render_to_string(params[:format], layout: false)), filename: @run_record.nick + "." + params[:format], content_type: "text/html", layout: false)
+      send_data(HTMLEntities.new.decode(render_to_string(params[:format], layout: false)), filename: @run_record.nick + file_extension, content_type: "text/html", layout: false)
     else
       if @run_record.hits > 1 then render :cant_parse
       else @run_record.destroy and redirect_to cant_parse_path end
