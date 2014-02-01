@@ -4,7 +4,7 @@
   <GameName>
   </GameName>
   <CategoryName><%= @run.title %></CategoryName>
-  <Offset><%= Time.at(@run.offset || 0).utc.strftime("%k:%M:%S.%N") %></Offset>
+  <Offset><%= Time.at(@run.offset || 0).utc.strftime("%H:%M:%S").strip %></Offset>
   <AttemptCount><%= @run.attempts || 0 %></AttemptCount>
   <RunHistory />
   <Segments>
@@ -12,8 +12,8 @@
     <Segment>
       <Icon />
       <Name><%= split.title %></Name>
-      <PersonalBestSplitTime><%= Time.at(split.finish_time || 0).utc.strftime("%k:%M:%S.%N") %></PersonalBestSplitTime>
-      <BestSegmentTime><%= Time.at(split.best.duration || 0).utc.strftime("%k:%M:%S.%N") %></BestSegmentTime>
+      <PersonalBestSplitTime><%= Time.at(split.finish_time || 0).utc.strftime("%H:%M:%S.%N").strip %></PersonalBestSplitTime>
+      <BestSegmentTime><%= Time.at(split.best.duration || 0).utc.strftime("%H:%M:%S.%N").strip %></BestSegmentTime>
       <SegmentHistory />
     </Segment>
   <% end %>
