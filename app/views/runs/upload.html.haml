@@ -1,10 +1,8 @@
-#main
-  .header
-    %h1 fallback upload
-    %h2 no JavaScript? no file manager? no problem
-  .content
-    %h2 Upload splits
-    %form.pure-form{action: "/upload", method: :post, style: "text-align: center;", enctype: "multipart/form-data"}
-      %input{type: :hidden, name: :authenticity_token, value: form_authenticity_token}
-      %input{type: :file, name: :file}
-      %input.pure-button.pure-button-primary{type: :submit, value: :upload}
+.header
+  %h1 drop it like it's hot
+  %h2 drag your splits onto this page, or any page
+.content
+  %form.pure-form{action: upload_path, method: :post, enctype: "multipart/form-data"}
+    %input{type: :hidden, name: :authenticity_token, value: form_authenticity_token}
+    %input{type: :file, name: :file}
+    %input.pure-button.pure-button-primary{type: :submit, value: :upload}

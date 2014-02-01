@@ -14,7 +14,7 @@ class RunsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to fallback_upload_path, alert: "Didn't receive any uploaded file, try again." }
+        format.html { redirect_to upload_path, alert: "Didn't receive any uploaded file, try again." }
       end
     end
   end
@@ -44,11 +44,19 @@ class RunsController < ApplicationController
     @run_record.hits += 1 and @run_record.save
     @run = parse @run_record
     if @run.present?
+      file_extension = params[:format] == 'livesplit' ? '.lss' : params[:format]
       send_data(HTMLEntities.new.decode(render_to_string(params[:format], layout: false)), filename: @run_record.nick + "." + params[:format], content_type: "text/html", layout: false)
     else
       if @run_record.hits > 1 then render :cant_parse
       else @run_record.destroy and redirect_to cant_parse_path end
     end
+  end
+  def download_original
+    @run_record = Run.find_by nick: params[:nick]
+    render :bad_url and return if @run_record.nil?
+
+    @run_record.hits += 1 and @run_record.save
+    
   end
   def random
     # Find a random run. If we can't parse it, find another, and so on.

@@ -35,10 +35,15 @@ body, h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
 }
 
+.pure-form {
+  margin-top: 2em;
+  text-align: center;
+}
+
 footer {
   position: absolute;
   right: 10px;
-  bottom: 10px;"
+  bottom: 10px;
 }
 
 #download-menu {
