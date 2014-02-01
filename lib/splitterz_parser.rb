@@ -24,7 +24,7 @@ class SplitterzParser < BabelBridge::Parser
     splits = super(file) or return nil
     run = OpenStruct.new
     run.game = nil
-    run.title = splits.title.to_s
+    run.name = splits.title.to_s
     run.attempts = splits.attempts.to_s.to_i
     run.splits = Array.new
     run.time = 0
@@ -32,7 +32,7 @@ class SplitterzParser < BabelBridge::Parser
       split = OpenStruct.new
       split.old = OpenStruct.new
       split.best = OpenStruct.new
-      split.title = segment.title
+      split.name = segment.title
       split.duration = duration_in_seconds_of(segment.run_time.to_s) - run.time
       split.finish_time = duration_in_seconds_of segment.run_time.to_s
       split.best.duration = duration_in_seconds_of segment.best_time.to_s

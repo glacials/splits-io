@@ -1,8 +1,8 @@
 .header{style: 'border: none;'}
-  - if @run_record.hits < 2
+  - if @run.hits < 2
     #permalink-indicator
       &uarr; That's your permalink!
-  %h2 #{@run.title}
+  %h2 #{@run.name}
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0
@@ -18,7 +18,7 @@
     - percentage += split.duration/@run.time*100
   - @run.splits.each do |split|
     .pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.duration/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
-      .title= split.title
+      .title= split.name
       .time
         = Time.at(split.duration).utc.strftime("%k:%M:%S")
         - if @run.time < 20*60
@@ -32,7 +32,7 @@
     .pure-u.inspect{id: 'inspect-' + i.to_s, style: "width: #{split.duration/@run.time*100 + (100 - percentage)/@run.splits.length}%; opacity: 0;"}
       .bar
         %p
-      .title= split.title
+      .title= split.name
       .time
         = Time.at(split.duration).utc.strftime("%k:%M:%S")
         - if @run.time < 20*60
@@ -44,7 +44,7 @@
     %thead
       %tr
         %th #
-        %th Title
+        %th Name
         %th Duration
         %th Finished at
     %tbody
@@ -54,7 +54,7 @@
           %td.align-right
             = i +=1
           %td
-            = split.title
+            = split.name
           %td.align-right
             = Time.at(split.duration).utc.strftime("%k:%M:%S")
             - if @run.time < 20*60
@@ -63,6 +63,6 @@
             = Time.at(split.finish_time).utc.strftime("%k:%M:%S")
             - if @run.time < 20*60
               %small>= Time.at(split.finish_time).utc.strftime(".%2N")
-- if @run_record.hits < 2
+- if @run.hits < 2
   :javascript
     window.onload = function() {$('#permalink-indicator').fadeIn().delay(4000).fadeOut(); }

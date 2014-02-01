@@ -22,42 +22,40 @@ class RunsController < ApplicationController
     @random = session[:random] or false
     session[:random] = false
 
-    @run_record = Run.find_by nick: params[:nick]
-    render :bad_url and return if @run_record.nil?
+    @run = Run.find_by nick: params[:nick]
+    render :bad_url and return if @run.nil?
 
-    @run_record.hits += 1 and @run_record.save
-    @run = parse @run_record
+    @run.hits += 1 and @run.save
     if @run.present?
       respond_to do |format|
         format.html { render :show }
-        format.json { render @run_record }
+        format.json { render @run }
       end
     else
-      if @run_record.hits > 1 then render :cant_parse
-      else @run_record.destroy and redirect_to cant_parse_path end
+      if @run.hits > 1 then render :cant_parse
+      else @run.destroy and redirect_to cant_parse_path end
     end
   end
   def download
-    @run_record = Run.find_by nick: params[:nick]
-    render :bad_url and return if @run_record.nil?
+    @run = Run.find_by nick: params[:nick]
+    render :bad_url and return if @run.nil?
 
-    @run_record.hits += 1 and @run_record.save
-    @run = parse @run_record
+    @run.hits += 1 and @run.save
     if @run.present?
       file_extension = params[:format] == 'livesplit' ? '.lss' : params[:format]
-      send_data(HTMLEntities.new.decode(render_to_string(params[:format], layout: false)), filename: @run_record.nick + file_extension, content_type: "text/html", layout: false)
+      send_data(HTMLEntities.new.decode(render_to_string(params[:format], layout: false)), filename: @run.nick + file_extension, content_type: "text/html", layout: false)
     else
-      if @run_record.hits > 1 then render :cant_parse
-      else @run_record.destroy and redirect_to cant_parse_path end
+      if @run.hits > 1 then render :cant_parse
+      else @run.destroy and redirect_to cant_parse_path end
     end
   end
   def download_original
-    @run_record = Run.find_by nick: params[:nick]
-    render :bad_url and return if @run_record.nil?
+    @run = Run.find_by nick: params[:nick]
+    render :bad_url and return if @run.nil?
 
-    @run_record.hits += 1 and @run_record.save
-    
+    @run.hits += 1 and @run.save
   end
+
   def random
     # Find a random run. If we can't parse it, find another, and so on.
     run = nil
@@ -70,25 +68,15 @@ class RunsController < ApplicationController
     end
     loop do
       run = Run.where.not(nick: last_run).sample(1).first
-      break if parse(run).present?
+      if run.nil?
+        redirect_to root_path, alert: 'There are no runs yet!' and return
+      end
+      break if run.parse.present?
     end
     session[:random] = true
     redirect_to run_path(run.nick)
   end
 
-  def parse(run)
-    splits = File.read Rails.root.join "private", "runs", run.nick
-
-    begin
-      [WsplitParser.new, TimesplittrackerParser.new, SplitterzParser.new, LivesplitParser.new].each do |p|
-        result = p.parse(splits) and return result
-      end
-    rescue ArgumentError # comes from non UTF-8 files
-      return nil
-    end
-
-    return nil
-  end
   def new_nick
     loop do
       nick = SecureRandom.urlsafe_base64(3)
