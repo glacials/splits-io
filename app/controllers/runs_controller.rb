@@ -1,16 +1,17 @@
 require 'htmlentities'
 
 class RunsController < ApplicationController
+
   def create
     splits = params[:file]
-    run = Run.create(nick: new_nick, user: nil)
+    run = Run.create
     if splits.present?
       File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
         file.write splits.read
       end
       respond_to do |format|
         format.html { redirect_to run_path run.nick }
-        format.json { render text: run.nick }
+        format.json { render text: run_path(run.nick) }
       end
     else
       respond_to do |format|
@@ -18,6 +19,7 @@ class RunsController < ApplicationController
       end
     end
   end
+
   def show
     @random = session[:random] or false
     session[:random] = false
@@ -26,7 +28,7 @@ class RunsController < ApplicationController
     render :bad_url and return if @run.nil?
 
     @run.hits += 1 and @run.save
-    if @run.present?
+    if @run.parse
       respond_to do |format|
         format.html { render :show }
         format.json { render @run }
@@ -36,6 +38,7 @@ class RunsController < ApplicationController
       else @run.destroy and redirect_to cant_parse_path end
     end
   end
+
   def download
     @run = Run.find_by nick: params[:nick]
     render :bad_url and return if @run.nil?
@@ -49,6 +52,7 @@ class RunsController < ApplicationController
       else @run.destroy and redirect_to cant_parse_path end
     end
   end
+
   def download_original
     @run = Run.find_by nick: params[:nick]
     render :bad_url and return if @run.nil?
@@ -77,10 +81,4 @@ class RunsController < ApplicationController
     redirect_to run_path(run.nick)
   end
 
-  def new_nick
-    loop do
-      nick = SecureRandom.urlsafe_base64(3)
-      return nick if Run.find_by(nick: nick).nil?
-    end
-  end
 end

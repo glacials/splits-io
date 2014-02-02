@@ -27,23 +27,23 @@
       %footer#footer
         %a{href: upload_path} upload
         &bull;
-        - if @run_record.present?
+        - if @run.present?
           %a.fake-link{onclick: "show_download_menu()"} download
           &bull;
         %a{href: "mailto:qhiiyr@gmail.com"} feedback
         &bull;
         %a{href: "https://github.com/glacials/splits.io", target: :_blank} github
-      - if @run_record.present?
+      - if @run.present?
         %footer#download-menu
           %div{style: "text-align: left;"}
             What format?
-          %a{href: download_run_path(@run_record.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
+          %a{href: download_path(@run.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
           &bull;
-          %a{href: download_run_path(@run_record.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
+          %a{href: download_path(@run.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
           &bull;
-          %a{href: download_run_path(@run_record.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
+          %a{href: download_path(@run.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
           &bull;
-          %a{href: download_run_path(@run_record.nick, :livesplit), onclick: "hide_download_menu()"} LiveSplit
+          %a{href: download_path(@run.nick, :livesplit), onclick: "hide_download_menu()"} LiveSplit
   = javascript_include_tag "application"
   - if Rails.env.production?
     :javascript

@@ -6,8 +6,8 @@ SplitsIo::Application.routes.draw do
   get  '/random'     => 'runs#random',     as: :random
 
   get '/:nick'                  => 'runs#show',              as: :run
-  get '/:nick/download'         => 'runs#download_original', as: :download_original_run
-  get '/:nick/download/:format' => 'runs#download',          as: :download_run
+  get '/:nick/download'         => 'runs#download_original', as: :download_original
+  get '/:nick/download/:format' => 'runs#download',          as: :download
 
   root to: 'runs#front'
 end

@@ -1,12 +1,20 @@
 class Run < ActiveRecord::Base
   belongs_to :user
-  after_destroy :delete_source_file
+  before_create :generate_nick
+  before_destroy :delete_source_file
 
   @@parsers = [WsplitParser, TimesplittrackerParser, SplitterzParser, LivesplitParser]
   @parse_cache = nil
 
+  def generate_nick
+    loop do
+      self.nick = SecureRandom.urlsafe_base64(3)
+      return if Run.find_by(nick: self.nick).nil?
+    end
+  end
+
   def delete_source_file
-    File.delete('private/runs/' + nick)
+    File.delete('private/runs/' + self.nick)
   end
 
   def name
