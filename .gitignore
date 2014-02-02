@@ -17,3 +17,6 @@
 
 # Ignore uploaded runs
 /private/runs/*
+
+# Ignore testing config
+.rspec
