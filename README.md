@@ -19,7 +19,7 @@ file and send it off to the server behind the scenes. The server parses the
 file and, if successful, responds with a random base 64 ID for the new run's
 page, which we then have JavaScript direct the browser to.
 
-Alternatively, there is a manual upload form at `/upload/fallback`.
+Alternatively, there is a manual upload form at `/upload`.
 
 ### Parsing
 
