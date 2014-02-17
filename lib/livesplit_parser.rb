@@ -17,11 +17,12 @@ class LivesplitParser
         split = OpenStruct.new
         split.best = OpenStruct.new
         split.name = segment['Name']
-        split.duration = duration_in_seconds_of(segment['PersonalBestSplitTime']) - run.time
         split.finish_time = duration_in_seconds_of(segment['PersonalBestSplitTime'])
+        split.duration = split.finish_time - run.time
+        split.duration = 0 if split.duration < 0
         split.best.duration = duration_in_seconds_of segment['BestSegmentTime']
         split.parent = run
-        run.time += split.duration
+        run.time += split.duration if split.duration.present?
         run.splits << split
       end
       run
@@ -31,6 +32,7 @@ class LivesplitParser
   end
 
   def duration_in_seconds_of(time)
+    return 0 if time.blank?
     Time.parse(time).seconds_since_midnight
   end
 end

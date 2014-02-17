@@ -152,14 +152,21 @@ footer a:hover {
     background: rgb(243, 123, 29);
 }
 
-.split {
+.split, .inspect {
     display: block;
     color: #fff;
-    padding: 0.5em;
     text-decoration: none;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.split .title, .inspect .title {
+  padding: 0.5em 0 0 0.5em;
+}
+
+.split .time, .inspect .time {
+  padding: 0 0 0.5em 0.5em;
 }
 
 .split .time {

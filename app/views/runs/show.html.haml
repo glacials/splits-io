@@ -14,29 +14,30 @@
   &nbsp;
 - i = 1
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
+  - percentage = @run.splits.sum(&:duration) / @run.time
   - @run.splits.each do |split|
-    - percentage += split.duration/@run.time*100
-  - @run.splits.each do |split|
-    .pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.duration/@run.time*100 + (100 - percentage)/@run.splits.length}%;"}
-      .title= split.name
-      .time
-        = Time.at(split.duration).utc.strftime("%k:%M:%S")
-        - if @run.time < 20*60
-          %small>= Time.at(split.duration).utc.strftime(".%2N")
+    - unless split.duration == 0
+      .pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.duration / @run.time * 100}%;"}
+        .title= split.name
+        .time
+          = Time.at(split.duration).utc.strftime("%k:%M:%S")
+          - if @run.time < 20*60
+            %small>= Time.at(split.duration).utc.strftime(".%2N")
+      - c = (c + 1) % colors.length
     - i += 1
-    - c = (c + 1) % colors.length
 - i = 1
 - percentage_so_far = 0
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
   - @run.splits.each do |split|
-    .pure-u.inspect{id: 'inspect-' + i.to_s, style: "width: #{split.duration/@run.time*100 + (100 - percentage)/@run.splits.length}%; opacity: 0;"}
-      .bar
-        %p
-      .title= split.name
-      .time
-        = Time.at(split.duration).utc.strftime("%k:%M:%S")
-        - if @run.time < 20*60
-          %small>= Time.at(split.duration).utc.strftime(".%2N")
+    - unless split.duration == 0
+      .pure-u.inspect{id: 'inspect-' + i.to_s, style: "width: #{split.duration / @run.time * 100}%; opacity: 0;"}
+        .bar
+          %p
+        .title= split.name
+        .time
+          = Time.at(split.duration).utc.strftime("%k:%M:%S")
+          - if @run.time < 20*60
+            %small>= Time.at(split.duration).utc.strftime(".%2N")
     - i += 1
     - percentage_so_far += split.duration/@run.time + (1 - percentage/100)/@run.splits.length
 .content
