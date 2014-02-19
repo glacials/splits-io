@@ -1,9 +1,14 @@
+require 'livesplit_parser'
+require 'splitterz_parser'
+require 'time_split_tracker_parser'
+require 'wsplit_parser'
+
 class Run < ActiveRecord::Base
   belongs_to :user
   before_create :generate_nick
   before_destroy :delete_source_file
 
-  @@parsers = [WsplitParser, TimesplittrackerParser, SplitterzParser, LivesplitParser]
+  @@parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
 
   def generate_nick
@@ -39,6 +44,10 @@ class Run < ActiveRecord::Base
 
   def game
     self.parse.game
+  end
+
+  def category
+    self.parse.category
   end
 
   def parse

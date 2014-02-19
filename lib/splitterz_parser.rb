@@ -1,4 +1,4 @@
-class SplitterzParser < BabelBridge::Parser
+class SplitterZParser < BabelBridge::Parser
   # Babel-Bridge's format is:
   #rule :rule_name, <list of tokens to match in order>
   # A token can be a string/regex (terminal), or another rule (nonterminal)

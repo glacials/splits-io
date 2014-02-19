@@ -1,7 +1,7 @@
 require 'active_support'
 require 'ostruct'
 
-class LivesplitParser
+class LiveSplitParser
 
   def parse(splits)
     begin
