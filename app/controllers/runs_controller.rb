@@ -10,7 +10,7 @@ class RunsController < ApplicationController
         file.write splits.read
       end
       respond_to do |format|
-        format.html { redirect_to run_path run.nick }
+        format.html { redirect_to run_path(run.nick) }
         format.json { render text: run_path(run.nick) }
       end
     else

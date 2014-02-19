@@ -59,7 +59,10 @@ class Run < ActiveRecord::Base
 
     begin
       @@parsers.each do |p|
-        result = p.new.parse(splits) and @parse_cache = result and return result
+        result = p.new.parse(splits)
+        if result.present?
+          @parse_cache = result and return result
+        end
       end
     rescue ArgumentError # comes from non UTF-8 files
       return nil
