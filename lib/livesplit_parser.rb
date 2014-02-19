@@ -8,7 +8,8 @@ class LivesplitParser
       splits = Hash.from_xml(splits)
       run = OpenStruct.new
       run.game = splits['Run']['GameName']
-      run.name = splits['Run']['CategoryName']
+      run.category = splits['Run']['CategoryName']
+      run.name = run.game + " " + run.category
       run.attempts = splits['Run']['AttemptCount']
       run.offset = duration_in_seconds_of splits['Run']['Offset']
       run.splits = Array.new
