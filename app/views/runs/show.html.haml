@@ -57,13 +57,19 @@
           %td
             = split.name
           %td.align-right
-            = Time.at(split.duration).utc.strftime("%k:%M:%S")
-            - if @run.time < 20*60
-              %small>= Time.at(split.duration).utc.strftime(".%2N")
+            - unless split.duration == 0
+              = Time.at(split.duration).utc.strftime("%k:%M:%S")
+              - if @run.time < 20*60
+                %small>= Time.at(split.duration).utc.strftime(".%2N")
+            - else
+              \-
           %td.align-right
-            = Time.at(split.finish_time).utc.strftime("%k:%M:%S")
-            - if @run.time < 20*60
-              %small>= Time.at(split.finish_time).utc.strftime(".%2N")
+            - unless split.duration == 0
+              = Time.at(split.finish_time).utc.strftime("%k:%M:%S")
+              - if @run.time < 20*60
+                %small>= Time.at(split.finish_time).utc.strftime(".%2N")
+            - else
+              \-
 - if @run.hits < 2
   :javascript
     window.onload = function() {$('#permalink-indicator').fadeIn().delay(4000).fadeOut(); }

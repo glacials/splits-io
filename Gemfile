@@ -38,10 +38,12 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'haml-rails'
-gem 'devise'
-gem 'babel_bridge'
-gem 'purecss-rails'
-gem 'jquery-rails'
-gem 'htmlentities'
-gem 'rspec-rails'
+gem 'haml-rails', '0.4'
+gem 'devise', '3.1.1'
+gem 'babel_bridge', '0.5.3'
+gem 'purecss-rails', '0.3.0'
+gem 'jquery-rails', '3.0.4'
+gem 'htmlentities', '4.3.1'
+gem 'rspec-rails', '2.13.0'
+gem 'versionomy', '0.4.4'
+gem 'xml-simple', '1.1.3'
