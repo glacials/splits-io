@@ -4,7 +4,9 @@ class RunsController < ApplicationController
 
   def create
     splits = params[:file]
-    run = Run.create
+    run = Run.new
+    run.user = current_user
+    run.save
     if splits.present?
       File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
         file.write splits.read
@@ -35,29 +37,34 @@ class RunsController < ApplicationController
       end
     else
       if @run.hits > 1 then render :cant_parse
-      else @run.destroy and redirect_to cant_parse_path end
+      else @run.destroy and redirect_to(cant_parse_path) end
     end
   end
 
   def download
     @run = Run.find_by nick: params[:nick]
-    render :bad_url and return if @run.nil?
+    if @run.nil?
+      render(:bad_url) and return
+    end
 
     @run.hits += 1 and @run.save
     if @run.present?
       file_extension = params[:format] == 'livesplit' ? '.lss' : params[:format]
       send_data(HTMLEntities.new.decode(render_to_string(params[:format], layout: false)), filename: @run.nick + file_extension, content_type: "text/html", layout: false)
     else
-      if @run.hits > 1 then render :cant_parse
-      else @run.destroy and redirect_to cant_parse_path end
+      if @run.hits > 1 then render(:cant_parse)
+      else @run.destroy and redirect_to(cant_parse_path) end
     end
   end
 
   def download_original
-    @run = Run.find_by nick: params[:nick]
-    render :bad_url and return if @run.nil?
+    @run = Run.find_by(nick: params[:nick])
+    if @run.nil?
+      render(:bad_url) and return
+    end
 
     @run.hits += 1 and @run.save
+    #todo
   end
 
   def random
@@ -79,6 +86,27 @@ class RunsController < ApplicationController
     end
     session[:random] = true
     redirect_to run_path(run.nick)
+  end
+
+  def disown
+    @run = Run.find_by(nick: params[:nick])
+
+    if @run.user.present? && current_user == @run.user
+      @run.user = nil
+      @run.save and redirect_to(root_path)
+    else
+      redirect_to(run_path(@run.nick))
+    end
+  end
+
+  def delete
+    @run = Run.find_by(nick: params[:nick])
+
+    if @run.user.present? && current_user == @run.user
+      @run.destroy and redirect_to(root_path)
+    else
+      redirect_to(run_path(@run.nick))
+    end
   end
 
 end

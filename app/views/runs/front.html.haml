@@ -6,7 +6,32 @@
       %u all
       the splits
   .content
-    %h2.content-subhead How to use splits.io
-    %p
-      Save your splits to a file using your favorite splitting program, then
-      drag that file anywhere on this page.
+    - if user_signed_in? && current_user.runs.present?
+      %h2.content-subhead Hey, #{current_user.name}. Here are your uploaded splits.
+      %table.pure-table{style: "margin: auto;"}
+        %thead
+          %tr
+            %th Name
+            %th Time
+            %th Uploaded
+            %th Actions
+        %tbody
+          - current_user.runs.each do |run|
+            %tr
+              %td
+                %a{href: run_path(run.nick)}= run.name
+              %td.align-right
+                = Time.at(run.time).utc.strftime("%k:%M:%S")
+                - if run.time < 20*60
+                  %small>= Time.at(run.time).utc.strftime(".%2N")
+              %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
+              %td
+                %small
+                  = link_to('Disown', disown_path(run.nick), confirm: 'Disowning leaves the run in place, but marks it as anonyously uploaded. If you want to save the link, do it before continuing. Continue?')
+                  \/
+                  = link_to('Delete', delete_path(run.nick), confirm: 'Really delete this run?')
+    - else
+      %h2.content-subhead How to use splits.io
+      %p
+        Save your splits to a file using your favorite splitting program, then
+        drag that file anywhere on this page.

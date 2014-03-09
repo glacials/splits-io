@@ -13,37 +13,46 @@
       %a{href: root_path}
         #logo
           splits.io
-      - if alert
-        .alert
-          = alert
-      - elsif notice
-        .notice
-          = notice
-      - elsif @random
+      - if alert.present?
+        #alert= alert
+      - elsif notice.present?
+        #notice= notice
+      - elsif @random.present?
         #random
           %a.pure-button{href: random_path, style: "font-size: 70%; border-radius: 0 0 2px 2px;"}
             Another random?
+      .account
       = yield
       %footer#footer
-        %a{href: upload_path} upload
-        &bull;
+        #footer-links
+          - if user_signed_in?
+            signed in as #{current_user.name}
+            &bull;
+            %a{href: logout_path} sign out
+          - else
+            %a.fake-link#signin-link{onclick: 'toggle_signin_menu()'} sign in
+          %br
+          - if @run.present?
+            %a.fake-link#download-link{onclick: "toggle_download_menu()"} download
+            &bull;
+          %a{href: upload_path} upload
+          &bull;
+          %a{href: "mailto:qhiiyr@gmail.com"} feedback
+          &bull;
+          %a{href: "https://github.com/glacials/splits.io", target: :_blank} github
         - if @run.present?
-          %a.fake-link{onclick: "show_download_menu()"} download
-          &bull;
-        %a{href: "mailto:qhiiyr@gmail.com"} feedback
-        &bull;
-        %a{href: "https://github.com/glacials/splits.io", target: :_blank} github
-      - if @run.present?
-        %footer#download-menu
-          %div{style: "text-align: left;"}
-            What format?
-          %a{href: download_path(@run.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
-          &bull;
-          %a{href: download_path(@run.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
-          &bull;
-          %a{href: download_path(@run.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
-          &bull;
-          %a{href: download_path(@run.nick, :livesplit), onclick: "hide_download_menu()"} LiveSplit
+          #download-menu
+            %a{href: download_path(@run.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
+            &bull;
+            %a{href: download_path(@run.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
+            &bull;
+            %a{href: download_path(@run.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
+            &bull;
+            %a{href: download_path(@run.nick, :livesplit), onclick: "hide_download_menu()"} LiveSplit
+        %a{href: twitch_out_path}
+          #signin-menu
+            Sign in with
+            %img{src: 'http://s.jtvnw.net/jtv_user_pictures/hosted_images/Twitch_Logo_White.png', style: 'vertical-align: middle; margin: 5px; height: 25px;'}
   = javascript_include_tag "application"
   - if Rails.env.production?
     :javascript

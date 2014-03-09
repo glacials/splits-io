@@ -2,7 +2,11 @@
   - if @run.hits < 2
     #permalink-indicator
       &uarr; That's your permalink!
-  %h2 #{@run.name}
+  %h2
+    #{@run.name}
+    - if @run.user.present?
+      %br
+      %small= @run.user.name
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0

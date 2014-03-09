@@ -18,6 +18,10 @@ class Run < ActiveRecord::Base
     end
   end
 
+  def disown
+    self.user = nil
+  end
+
   def delete_source_file
     File.delete('private/runs/' + self.nick)
   end
