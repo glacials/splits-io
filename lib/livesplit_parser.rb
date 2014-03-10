@@ -46,10 +46,10 @@ class LiveSplitParser
   end
 
   def v1_2(run, xml)
-    run.game     ||= xml['GameName'].first
-    run.category ||= xml['CategoryName'].first
+    run.game     ||= xml['GameName'].first.present?     ? xml['GameName'].first     : ''
+    run.category ||= xml['CategoryName'].first.present? ? xml['CategoryName'].first : ''
     run.name     ||= run.game + " " + run.category
-    run.attempts ||= xml['AttemptCount'].first
+    run.attempts ||= xml['AttemptCount'].first.present? ? xml['AttemptCount'].first : ''
     run.offset   ||= duration_in_seconds_of(xml['Offset'].first)
     run.splits   ||= Array.new
     run.time     ||= 0
