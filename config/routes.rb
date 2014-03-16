@@ -14,7 +14,6 @@ SplitsIo::Application.routes.draw do
   end
 
   get '/:nick'                  => 'runs#show',              as: :run
-  get '/:nick/download'         => 'runs#download_original', as: :download_original
   get '/:nick/download/:format' => 'runs#download',          as: :download
   get '/:nick/delete'           => 'runs#delete',            as: :delete
   get '/:nick/disown'           => 'runs#disown',            as: :disown
