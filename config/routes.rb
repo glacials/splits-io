@@ -5,8 +5,8 @@ SplitsIo::Application.routes.draw do
   get  '/cant-parse' => 'runs#cant_parse', as: :cant_parse
   get  '/random'     => 'runs#random',     as: :random
 
-  get '/login/twitch'      => 'twitch#out', as: :twitch_out
-  get '/login/twitch/auth' => 'twitch#in',  as: :twitch_in
+  get '/signin/twitch'      => 'twitch#out', as: :twitch_out
+  get '/signin/twitch/auth' => 'twitch#in',  as: :twitch_in
 
   devise_for :users
   devise_scope :user do

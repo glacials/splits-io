@@ -43,7 +43,7 @@ class TwitchController < ApplicationController
   end
 
   def redirect_uri
-    "http://#{request.host_with_port}/login/twitch/auth"
+    "http://#{request.host_with_port}/signin/twitch/auth"
   end
 
 end
