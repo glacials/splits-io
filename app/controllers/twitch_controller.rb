@@ -23,7 +23,13 @@ class TwitchController < ApplicationController
     user.save
 
     sign_in(:user, user)
-    redirect_to root_path
+
+    if cookies[:return_to]
+      redirect_to(cookies[:return_to])
+      cookies.delete(:return_to)
+    else
+      redirect_to root_path
+    end
   end
 
   private

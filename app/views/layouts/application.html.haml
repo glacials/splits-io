@@ -28,9 +28,9 @@
           - if user_signed_in?
             signed in as #{current_user.name}
             &bull;
-            %a{href: logout_path} sign out
+            %a{href: signout_path} sign out
           - else
-            %a.twitch-signin{href: twitch_out_path}
+            %a.twitch-signin{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'}
               %img{src: 'http://www.twitch.tv/favicon.ico', width: 12, height: 12}
               sign in
           %br

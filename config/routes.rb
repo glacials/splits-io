@@ -10,7 +10,7 @@ SplitsIo::Application.routes.draw do
 
   devise_for :users
   devise_scope :user do
-    get 'logout', to: 'devise/sessions#destroy'
+    get 'signout', to: 'devise/sessions#destroy'
   end
 
   get '/:nick'                  => 'runs#show',              as: :run
