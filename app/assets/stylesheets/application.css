@@ -30,27 +30,18 @@ a {
   padding: 0 1em 1em 0;
 }
 
-#signin-menu {
-  background-color: #6441A5;
-  color: #f1f1f1;
+a:link.twitch-signin img {
   display: none;
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
-  z-index: 10;
+  vertical-align: text-bottom;
 }
 
-a #signin-menu {
-  color: #f1f1f1;
+a:hover.twitch-signin {
+  color: #6441a5;
   text-decoration: none;
 }
 
-a:hover #signin-menu {
-  text-decoration: none;
-}
-
-#signin-menu a:hover {
-  text-decoration: none;
+a:hover.twitch-signin img {
+  display: inline;
 }
 
 .alert {

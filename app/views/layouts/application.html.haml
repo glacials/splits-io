@@ -2,12 +2,12 @@
 %html
   %head
     %title splits.io
-    %link{href: "http://fonts.googleapis.com/css?family=Open+Sans", rel: "stylesheet", type: "text/css"}/
-    = stylesheet_link_tag "application", media: :all
+    %link{href: 'http://fonts.googleapis.com/css?family=Open+Sans', rel: 'stylesheet', type: 'text/css'}/
+    = stylesheet_link_tag 'application', media: :all
     = csrf_meta_tag
   %body
     #dropzone
-      #dropzone-overlay.header{style: "border: none;"}
+      #dropzone-overlay.header{style: 'border: none;'}
         %h1#droplabel.inverted drop anywhere
         #file-list.inverted
       %a{href: root_path}
@@ -19,7 +19,7 @@
         #notice= notice
       - elsif @random.present?
         #random
-          %a.pure-button{href: random_path, style: "font-size: 70%; border-radius: 0 0 2px 2px;"}
+          %a.pure-button{href: random_path, style: 'font-size: 70%; border-radius: 0 0 2px 2px;'}
             Another random?
       .account
       = yield
@@ -30,30 +30,28 @@
             &bull;
             %a{href: logout_path} sign out
           - else
-            %a.fake-link#signin-link{onclick: 'toggle_signin_menu()'} sign in
+            %a.twitch-signin{href: twitch_out_path}
+              %img{src: 'http://www.twitch.tv/favicon.ico', width: 12, height: 12}
+              sign in
           %br
           - if @run.present?
-            %a.fake-link#download-link{onclick: "toggle_download_menu()"} download
+            %a.fake-link#download-link{onclick: 'toggle_download_menu()'} download
             &bull;
           %a{href: upload_path} upload
           &bull;
-          %a{href: "mailto:qhiiyr@gmail.com"} feedback
+          %a{href: 'mailto:qhiiyr@gmail.com'} feedback
           &bull;
-          %a{href: "https://github.com/glacials/splits.io", target: :_blank} github
+          %a{href: 'https://github.com/glacials/splits.io', target: '_blank'} github
         - if @run.present?
           #download-menu
-            %a{href: download_path(@run.nick, :wsplit), onclick: "hide_download_menu()"} WSplit
+            %a{href: download_path(@run.nick, :wsplit), onclick: 'hide_download_menu()'} WSplit
             &bull;
-            %a{href: download_path(@run.nick, :timesplittracker), onclick: "hide_download_menu()"} Time Split Tracker
+            %a{href: download_path(@run.nick, :timesplittracker), onclick: 'hide_download_menu()'} Time Split Tracker
             &bull;
-            %a{href: download_path(@run.nick, :splitterz), onclick: "hide_download_menu()"} SplitterZ
+            %a{href: download_path(@run.nick, :splitterz), onclick: 'hide_download_menu()'} SplitterZ
             &bull;
-            %a{href: download_path(@run.nick, :livesplit), onclick: "hide_download_menu()"} LiveSplit
-        %a{href: twitch_out_path}
-          #signin-menu
-            Sign in with
-            %img{src: 'http://s.jtvnw.net/jtv_user_pictures/hosted_images/Twitch_Logo_White.png', style: 'vertical-align: middle; margin: 5px; height: 25px;'}
-  = javascript_include_tag "application"
+            %a{href: download_path(@run.nick, :livesplit), onclick: 'hide_download_menu()'} LiveSplit
+  = javascript_include_tag 'application'
   - if Rails.env.production?
     :javascript
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

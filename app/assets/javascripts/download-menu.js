@@ -1,5 +1,4 @@
 function show_download_menu() {
-  hide_signin_menu();
   $('#download-menu').slideDown();
   setTimeout(hide_download_menu, 20000);
   $('#download-link').html('cancel');
