@@ -22,7 +22,7 @@ class TwitchController < ApplicationController
     user.load_from_twitch(response)
     user.save
 
-    sign_in(:user, user)
+    sign_in(:user, user, remember_for: 100.years)
 
     if cookies[:return_to]
       redirect_to(cookies[:return_to])
