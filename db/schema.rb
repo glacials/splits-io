@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140309165653) do
+ActiveRecord::Schema.define(version: 20140323203756) do
 
   create_table "runs", force: true do |t|
     t.integer  "user_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140309165653) do
     t.datetime "updated_at"
     t.string   "nick"
     t.integer  "hits",       default: 0, null: false
+    t.string   "image_url"
   end
 
   add_index "runs", ["user_id"], name: "index_runs_on_user_id"

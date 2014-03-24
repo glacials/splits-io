@@ -6,6 +6,7 @@ class RunsController < ApplicationController
     splits = params[:file]
     run = Run.new
     run.user = current_user
+    run.image_url = params[:image_url]
     run.save
     if splits.present?
       File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
