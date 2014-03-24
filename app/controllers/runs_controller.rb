@@ -14,7 +14,7 @@ class RunsController < ApplicationController
       end
       respond_to do |format|
         format.html { redirect_to run_path(run.nick) }
-        format.json { render text: run_path(run.nick) }
+        format.json { render json: {url: request.protocol + request.host_with_port + run_path(run.nick)} }
       end
     else
       respond_to do |format|
