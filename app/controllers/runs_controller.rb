@@ -30,7 +30,9 @@ class RunsController < ApplicationController
     @run = Run.find_by nick: params[:nick]
     render :bad_url and return if @run.nil?
 
-    @run.hits += 1 and @run.save
+    @run.user = current_user if @run.hits == 0 && user_signed_in?
+    @run.hits += 1
+    @run.save
     if @run.parse
       respond_to do |format|
         format.html { render :show }
