@@ -1,3 +1,9 @@
+- content_for :head do
+  %meta{name: 'twitter:card', content: 'summary_large_image'}
+  %meta{name: 'twitter:title', content: @run.name}
+  %meta{name: 'twitter:description', content: 'Uploaded with LiveSplit'}
+  - if @run.image_url.present?
+    %meta{name: 'twitter:image:src', content: @run.image_url}
 .header{style: 'border: none;'}
   - if @run.hits < 2
     #permalink-indicator
