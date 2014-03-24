@@ -36,7 +36,7 @@ class RunsController < ApplicationController
     if @run.parse
       respond_to do |format|
         format.html { render :show }
-        format.json { render @run }
+        format.json { render json: @run }
       end
     else
       if @run.hits > 1 then render :cant_parse
