@@ -42,7 +42,7 @@ $(function () {
     xhr.onload = function() {
       if (xhr.status === 200) {
         console.log('all done: ' + xhr.status);
-        window.location = xhr.responseText;
+        window.location = JSON.parse(xhr.responseText).url;
       } else {
         console.log('Something went wrong...');
       }
