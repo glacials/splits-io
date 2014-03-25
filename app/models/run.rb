@@ -58,6 +58,10 @@ class Run < ActiveRecord::Base
     self.parse.category
   end
 
+  def run_history
+    self.parse.run_history
+  end
+
   def parse
     if @parse_cache.present?
       return @parse_cache
