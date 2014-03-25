@@ -27,7 +27,7 @@ class RunsController < ApplicationController
     @random = session[:random] or false
     session[:random] = false
 
-    @run = Run.find_by nick: params[:nick]
+    @run = Run.find_by nick: params[:run]
     render :bad_url and return if @run.nil?
 
     @run.user = current_user if @run.hits == 0 && user_signed_in?
@@ -45,7 +45,7 @@ class RunsController < ApplicationController
   end
 
   def download
-    @run = Run.find_by nick: params[:nick]
+    @run = Run.find_by nick: params[:run]
     if @run.nil?
       render(:bad_url) and return
     end
@@ -86,7 +86,7 @@ class RunsController < ApplicationController
   end
 
   def disown
-    @run = Run.find_by(nick: params[:nick])
+    @run = Run.find_by(nick: params[:run])
 
     if @run.user.present? && current_user == @run.user
       @run.user = nil
@@ -97,7 +97,7 @@ class RunsController < ApplicationController
   end
 
   def delete
-    @run = Run.find_by(nick: params[:nick])
+    @run = Run.find_by(nick: params[:run])
 
     if @run.user.present? && current_user == @run.user
       @run.destroy and redirect_to(root_path)

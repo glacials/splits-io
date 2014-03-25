@@ -13,10 +13,10 @@ SplitsIo::Application.routes.draw do
     get 'signout', to: 'devise/sessions#destroy'
   end
 
-  get '/:nick'                  => 'runs#show',              as: :run
-  get '/:nick/download/:format' => 'runs#download',          as: :download
-  get '/:nick/delete'           => 'runs#delete',            as: :delete
-  get '/:nick/disown'           => 'runs#disown',            as: :disown
+  get '/:run'                  => 'runs#show',     as: :run
+  get '/:run/download/:format' => 'runs#download', as: :download
+  get '/:run/delete'           => 'runs#delete',   as: :delete
+  get '/:run/disown'           => 'runs#disown',   as: :disown
 
   root to: 'runs#front'
 end
