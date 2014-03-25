@@ -1,10 +1,5 @@
-- content_for :head do
-  %meta{name: 'twitter:card', content: 'summary_large_image'}
-  %meta{name: 'twitter:title', content: @run.game}
-  %meta{name: 'twitter:description', content: @run.category}
-  %meta{name: 'twitter:domain', content: request.host_with_port}
-  - if @run.image_url.present?
-    %meta{name: 'twitter:image:src', content: @run.image_url}
+= render partial: 'twitter_card'
+
 .header{style: 'border: none;'}
   - if @run.hits < 2
     #permalink-indicator
