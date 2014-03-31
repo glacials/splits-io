@@ -14,9 +14,7 @@
 - percentage = 0
 #time{style: 'opacity: 0;'}
   &nbsp;
-  = Time.at(@run.time).utc.strftime("%k:%M:%S")
-  - if @run.time < 20*60
-    %small>= Time.at(@run.time).utc.strftime(".%2N")
+  = render partial: 'shared/time', locals: {run: @run, time: @run.time}
   &nbsp;
 - i = 1
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
@@ -25,10 +23,7 @@
     - unless split.duration == 0
       .pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.duration / @run.time * 100}%;"}
         .title= split.name
-        .time
-          = Time.at(split.duration).utc.strftime("%k:%M:%S")
-          - if @run.time < 20*60
-            %small>= Time.at(split.duration).utc.strftime(".%2N")
+        .time= render partial: 'shared/time', locals: {run: @run, time: split.duration}
       - c = (c + 1) % colors.length
     - i += 1
 - i = 1
@@ -40,10 +35,7 @@
         .bar
           %p
         .title= split.name
-        .time
-          = Time.at(split.duration).utc.strftime("%k:%M:%S")
-          - if @run.time < 20*60
-            %small>= Time.at(split.duration).utc.strftime(".%2N")
+        .time= render partial: 'shared/time', locals: {run: @run, time: split.duration}
     - i += 1
     - percentage_so_far += split.duration/@run.time + (1 - percentage/100)/@run.splits.length
 .content
@@ -64,16 +56,12 @@
             = split.name
           %td.align-right
             - unless split.duration == 0
-              = Time.at(split.duration).utc.strftime("%k:%M:%S")
-              - if @run.time < 20*60
-                %small>= Time.at(split.duration).utc.strftime(".%2N")
+              = render partial: 'shared/time', locals: {run: @run, time: split.duration}
             - else
               \-
           %td.align-right
             - unless split.duration == 0
-              = Time.at(split.finish_time).utc.strftime("%k:%M:%S")
-              - if @run.time < 20*60
-                %small>= Time.at(split.finish_time).utc.strftime(".%2N")
+              = render partial: 'shared/time', locals: {run: @run, time: split.finish_time}
             - else
               \-
 - if @run.hits < 2

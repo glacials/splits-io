@@ -20,10 +20,7 @@
             %tr
               %td
                 %a{href: run_path(run.nick)}= run.name
-              %td.align-right
-                = Time.at(run.time).utc.strftime("%k:%M:%S")
-                - if run.time < 20*60
-                  %small>= Time.at(run.time).utc.strftime(".%2N")
+              %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
               %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
               %td
                 %small
