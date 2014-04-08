@@ -1,5 +1,4 @@
 SplitsIo::Application.routes.draw do
-  #devise_for :users
   get  '/upload'     => 'runs#upload',     as: :upload
   post '/upload'     => 'runs#create'
   get  '/cant-parse' => 'runs#cant_parse', as: :cant_parse
