@@ -26,6 +26,19 @@ a {
   text-decoration: none;
 }
 
+h2 small {
+  font-size: 0.5em;
+  display: block;
+}
+
+.twitch {
+  color: #ccc;
+}
+
+.twitch:hover {
+  color: #b9a3e3;
+}
+
 #footer-links, #download-menu {
   padding: 0 1em 1em 0;
 }
