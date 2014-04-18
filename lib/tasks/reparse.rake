@@ -4,6 +4,7 @@ task reparse: [:environment] do
     if run.parse.present?
       game = Game.find_by(name: run.parsed.game) || Game.create(name: run.parsed.game)
       run.category = Category.find_by(game: game, name: run.parsed.category) || game.categories.new(game: game, name: run.parsed.category)
+      run.time = run.parsed.time
       run.save
     end
   end

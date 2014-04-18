@@ -5,4 +5,8 @@ class Category < ActiveRecord::Base
   def self.search(term)
     self.where('name LIKE ?', "%#{term}%")
   end
+
+  def best_known_run
+    runs.order(:time).first
+  end
 end
