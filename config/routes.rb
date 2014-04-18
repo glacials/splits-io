@@ -14,9 +14,9 @@ SplitsIo::Application.routes.draw do
     get 'signout', to: 'devise/sessions#destroy'
   end
 
-  get  '/search',       to: 'runs#search',                                    as: :search
-  post '/search',       to: redirect { |params| "/search/#{params[:term]}" }, as: :results
-  get  '/search/:term', to: 'runs#results'
+  get  '/search',       to: 'runs#search',  as: :search
+  post '/search',       to: 'runs#search'
+  get  '/search/:term', to: 'runs#results', as: :results
 
   get '/:run'                  => 'runs#show',     as: :run
   get '/:run/download/:format' => 'runs#download', as: :download

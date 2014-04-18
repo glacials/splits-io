@@ -2,6 +2,12 @@ require 'htmlentities'
 
 class RunsController < ApplicationController
 
+  def search
+    if params[:term].present?
+      redirect_to "/search/#{params[:term]}"
+    end
+  end
+
   def results
     @term = params[:term]
     @runs = (Game.search(@term).map(&:categories).flatten.map(&:runs).flatten | Category.search(@term).map(&:runs).flatten).sort_by(&:hits)

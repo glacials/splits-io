@@ -3,7 +3,7 @@
   %h2
     find your soulmate splits
 .content
-  %form.pure-form{action: results_path, method: :post}
+  %form.pure-form{action: search_path, method: :post}
     %input{type: :hidden, name: 'authenticity_token', value: form_authenticity_token}
     %input{type: :text, name: 'term'}
     %input.pure-button.pure-button-primary{type: :submit, value: 'search'}
