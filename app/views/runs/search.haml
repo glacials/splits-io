@@ -5,5 +5,5 @@
 .content
   %form.pure-form{action: search_path, method: :post}
     %input{type: :hidden, name: 'authenticity_token', value: form_authenticity_token}
-    %input{type: :text, name: 'term'}
+    %input{type: :text, name: 'term', autofocus: true}
     %input.pure-button.pure-button-primary{type: :submit, value: 'search'}
