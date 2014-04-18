@@ -4,22 +4,22 @@ class RunsController < ApplicationController
 
   def create
     splits = params[:file]
-    run = Run.new
-    run.user = current_user
-    run.image_url = params[:image_url]
-    run.save
-    if splits.present?
-      File.open(Rails.root.join('private', 'runs', run.nick), 'wb') do |file|
-        file.write splits.read
-      end
+    @run = Run.create
+    File.open(Rails.root.join('private', 'runs', @run.nick), 'wb') do |file|
+      file.write splits.read
+    end
+    if @run.parses
+      @run.user = current_user
+      @run.image_url = params[:image_url]
+      game = Game.find_by(name: @run.parsed.game) || Game.create(name: @run.parsed.game)
+      @run.category = Category.find_by(game: game, name: @run.parsed.category) || game.categories.new(game: game, name: @run.parsed.category)
+      @run.save
       respond_to do |format|
-        format.html { redirect_to run_path(run.nick) }
-        format.json { render json: {url: request.protocol + request.host_with_port + run_path(run.nick)} }
+        format.html { redirect_to run_path(@run.nick) }
+        format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run.nick)} }
       end
     else
-      respond_to do |format|
-        format.html { redirect_to upload_path, alert: "Didn't receive any uploaded file, try again." }
-      end
+      @run.destroy and redirect_to cant_parse_path
     end
   end
 
@@ -33,7 +33,7 @@ class RunsController < ApplicationController
     @run.user = current_user if @run.hits == 0 && user_signed_in?
     @run.hits += 1
     @run.save
-    if @run.parse
+    if @run.parses
       respond_to do |format|
         format.html { render :show }
         format.json { render json: @run }

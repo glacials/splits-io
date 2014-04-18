@@ -5,6 +5,9 @@ require 'wsplit_parser'
 
 class Run < ActiveRecord::Base
   belongs_to :user
+  belongs_to :category
+  delegate :game, to: :category
+
   before_create :generate_nick
   before_destroy :delete_source_file
 
@@ -50,16 +53,16 @@ class Run < ActiveRecord::Base
     self.parse.attempts
   end
 
-  def game
-    self.parse.game
-  end
-
-  def category
-    self.parse.category
-  end
-
   def run_history
     self.parse.run_history
+  end
+
+  def parses
+    self.parse
+  end
+
+  def parsed
+    self.parse
   end
 
   def parse
