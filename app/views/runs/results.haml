@@ -1,0 +1,18 @@
+.header
+  %h1 search splits
+  %h2
+    results for '#{@term}'
+.content
+  %table.pure-table{style: "margin: auto;"}
+    %thead
+      %tr
+        %th Name
+        %th Time
+        %th Uploaded
+    %tbody
+      - @runs.each do |run|
+        %tr
+          %td
+            %a{href: run_path(run.nick)}= run.name
+          %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
+          %td.align-right= "#{time_ago_in_words(run.created_at)} ago"

@@ -2,6 +2,11 @@ require 'htmlentities'
 
 class RunsController < ApplicationController
 
+  def results
+    @term = params[:term]
+    @runs = (Game.search(@term).map(&:categories).flatten.map(&:runs).flatten | Category.search(@term).map(&:runs).flatten).sort_by(&:hits)
+  end
+
   def create
     splits = params[:file]
     @run = Run.create

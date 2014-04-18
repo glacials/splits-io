@@ -21,6 +21,14 @@ class Run < ActiveRecord::Base
     end
   end
 
+  def game
+    read_attribute(:game) || self.parse.game
+  end
+
+  def category
+    read_attribute(:category) || self.parse.category
+  end
+
   def disown
     self.user = nil
   end
