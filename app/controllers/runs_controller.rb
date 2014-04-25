@@ -63,11 +63,11 @@ class RunsController < ApplicationController
 
     @run.hits += 1 and @run.save
     if @run.present?
-      file_extension = params[:format] == 'livesplit' ? 'lss' : params[:format]
-      if params[:format] == @run.format.downcase # If the original format was requested, serve the original file
+      file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
+      if params[:program] == @run.program.downcase # If the original program was requested, serve the original file
         send_data(HTMLEntities.new.decode(File.read("private/runs/#{@run.nick}")), filename: "#{@run.nick}.#{file_extension}", layout: false)
       else
-        send_data(HTMLEntities.new.decode(render_to_string(params[:format], layout: false)), filename: "#{@run.nick}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run.nick}.#{file_extension}", layout: false)
       end
     else
       if @run.hits > 1 then render(:cant_parse)

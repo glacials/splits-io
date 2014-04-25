@@ -18,9 +18,9 @@ SplitsIo::Application.routes.draw do
   post '/search',       to: 'runs#search'
   get  '/search/:term', to: 'runs#results', as: :results
 
-  get '/:run'                  => 'runs#show',     as: :run
-  get '/:run/download/:format' => 'runs#download', as: :download
-  get '/:run/delete'           => 'runs#delete',   as: :delete
-  get '/:run/disown'           => 'runs#disown',   as: :disown
+  get '/:run'                   => 'runs#show',     as: :run
+  get '/:run/download/:program' => 'runs#download', as: :download
+  get '/:run/delete'            => 'runs#delete',   as: :delete
+  get '/:run/disown'            => 'runs#disown',   as: :disown
 
 end

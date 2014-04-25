@@ -45,13 +45,10 @@
           %a{href: 'https://github.com/glacials/splits.io', target: '_blank'} github
         - if @run.present?
           #download-menu
-            %a{href: download_path(@run.nick, :wsplit), onclick: 'hide_download_menu()'} WSplit
-            &bull;
-            %a{href: download_path(@run.nick, :timesplittracker), onclick: 'hide_download_menu()'} Time Split Tracker
-            &bull;
-            %a{href: download_path(@run.nick, :splitterz), onclick: 'hide_download_menu()'} SplitterZ
-            &bull;
-            %a{href: download_path(@run.nick, :livesplit), onclick: 'hide_download_menu()'} LiveSplit
+            - ([:wsplit, :timesplittracker, :splitterz, :livesplit] - [@run.program]).each do |program|
+              %a{href: download_path(@run.nick, program), onclick: 'hide_download_menu()'}= program
+              &bull;
+            %a{href: download_path(@run.nick, @run.program), onclick: 'hide_download_menu()'}= @run.program
   = javascript_include_tag 'application'
   - if Rails.env.production?
     :javascript

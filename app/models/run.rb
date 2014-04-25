@@ -37,8 +37,8 @@ class Run < ActiveRecord::Base
     File.delete('private/runs/' + self.nick)
   end
 
-  def format
-    self.parse.format
+  def program
+    self.parse.program
   end
 
   def name
@@ -84,7 +84,7 @@ class Run < ActiveRecord::Base
       @@parsers.each do |p|
         result = p.new.parse(splits)
         if result.present?
-          result.format = p.name.sub('Parser', '')
+          result.program = p.name.sub('Parser', '').downcase.to_sym
           @parse_cache = result and return result
         end
       end
