@@ -18,6 +18,9 @@
 # uploaded runs, Twitch oauth credentials, etc.
 /private
 
+# precompiled assets
+/public/assets
+
 # testing config
 .rspec
 
