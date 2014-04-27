@@ -87,12 +87,9 @@ class RunsController < ApplicationController
     else
       last_run = nil
     end
-    loop do
-      run = Run.where.not(nick: last_run).sample(1).first
-      if run.nil?
-        redirect_to root_path, alert: 'There are no runs yet!' and return
-      end
-      break if run.parse.present?
+    run = Run.all.sample(1).first
+    if run.nil?
+      redirect_to root_path, alert: 'There are no runs yet!' and return
     end
     session[:random] = true
     redirect_to run_path(run.nick)
