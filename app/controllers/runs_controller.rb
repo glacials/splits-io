@@ -41,7 +41,7 @@ class RunsController < ApplicationController
     session[:random] = false
 
     @run = Run.find_by nick: params[:run]
-    render :bad_url and return if @run.nil?
+    render :bad_url and return if @run.try(:file).nil?
 
     @run.user = current_user if @run.hits == 0 && user_signed_in?
     @run.hits += 1
