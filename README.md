@@ -113,6 +113,15 @@ To accomplish all this, we use the parser generator [Babel-Bridge][3], which is
 available in a neat little gem. Check out the actual implementations of all
 this stuff in the `lib/<name-of-splitting-program>_parser.rb` files.
 
+### Running locally
+
+To get Twitch authentication working, you'll need two environment variables set:
+
+  TWITCH_CLIENT_ID
+  TWITCH_CLIENT_SECRET
+
+You can create and manage these from http://www.twitch.tv/settings/connections.
+
 [1]: https://github.com/skoh-fley/splits.io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser
 [3]: https://github.com/shanebdavis/Babel-Bridge

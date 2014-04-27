@@ -36,11 +36,11 @@ class TwitchController < ApplicationController
   private
 
   def client_id
-    File.read('private/twitch/client_id').strip
+    ENV['TWITCH_CLIENT_ID']
   end
 
   def client_secret
-    File.read('private/twitch/client_secret').strip
+    ENV['TWITCH_CLIENT_SECRET']
   end
 
   def redirect_uri
