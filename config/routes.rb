@@ -22,5 +22,4 @@ SplitsIo::Application.routes.draw do
   get '/:run/download/:program' => 'runs#download', as: :download
   get '/:run/delete'            => 'runs#delete',   as: :delete
   get '/:run/disown'            => 'runs#disown',   as: :disown
-
 end

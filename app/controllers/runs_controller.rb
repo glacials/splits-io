@@ -16,9 +16,7 @@ class RunsController < ApplicationController
   def create
     splits = params[:file]
     @run = Run.create
-    File.open(Rails.root.join('private', 'runs', @run.nick), 'wb') do |file|
-      file.write splits.read
-    end
+    @run.file = splits.read
     if @run.parses
       @run.user = current_user
       @run.image_url = params[:image_url]
@@ -30,7 +28,11 @@ class RunsController < ApplicationController
         format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run.nick)} }
       end
     else
-      @run.destroy and redirect_to cant_parse_path
+      @run.destroy
+      respond_to do |format|
+        format.html { redirect_to cant_parse_path }
+        format.json { render json: {url: cant_parse_path } }
+      end
     end
   end
 
@@ -65,7 +67,7 @@ class RunsController < ApplicationController
     if @run.present?
       file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
       if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
-        send_data(HTMLEntities.new.decode(File.read("private/runs/#{@run.nick}")), filename: "#{@run.nick}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(@run.file), filename: "#{@run.nick}.#{file_extension}", layout: false)
       else
         send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run.nick}.#{file_extension}", layout: false)
       end

@@ -9,7 +9,6 @@ class Run < ActiveRecord::Base
   delegate :game, to: :category
 
   before_create :generate_nick
-  before_destroy :delete_source_file
 
   @@parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
@@ -31,10 +30,6 @@ class Run < ActiveRecord::Base
 
   def disown
     self.user = nil
-  end
-
-  def delete_source_file
-    File.delete('private/runs/' + self.nick)
   end
 
   def program
@@ -78,11 +73,9 @@ class Run < ActiveRecord::Base
       return @parse_cache
     end
 
-    splits = File.read(Rails.root.join('private', 'runs', self.nick))
-
     begin
       @@parsers.each do |p|
-        result = p.new.parse(splits)
+        result = p.new.parse(file)
         if result.present?
           result.program = p.name.sub('Parser', '').downcase.to_sym
           @parse_cache = result and return result
