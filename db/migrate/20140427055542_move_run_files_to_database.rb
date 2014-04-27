@@ -1,10 +1,9 @@
 class MoveRunFilesToDatabase < ActiveRecord::Migration
   def up
     Run.all.each do |run|
-      if File.exist? Rails.root.join('private', 'runs', run.nick)
-        run.file = File.read Rails.root.join('private', 'runs', run.nick)
+      if File.exist?(Rails.root.join('private', 'runs', run.nick))
+        run.file = File.read(Rails.root.join('private', 'runs', run.nick))
         run.save
-        File.delete Rails.root.join('private', 'runs', run.nick)
       end
     end
   end

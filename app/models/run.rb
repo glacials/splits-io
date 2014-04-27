@@ -45,7 +45,7 @@ class Run < ActiveRecord::Base
   end
 
   def time
-    self.parse.time
+    self.splits.map(&:duration).sum
   end
 
   def offset
