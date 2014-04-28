@@ -20,7 +20,7 @@ test:
 
 production:
   adapter: postgresql
-  database: production
+  database: <%= ENV['SPLITSIO_DB_NAME'] %>
   host: <%= ENV['SPLITSIO_DB_HOST'] %>
   port: <%= ENV['SPLITSIO_DB_POST'] %>
   username: <%= ENV['SPLITSIO_DB_USERNAME'] %>
