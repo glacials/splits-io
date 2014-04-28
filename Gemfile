@@ -1,8 +1,12 @@
 source 'https://rubygems.org'
-ruby '2.0.0'
+ruby '1.9.3'
 
-group :doc do
-  gem 'sdoc', require: false
+group :development do
+  gem 'sqlite3', '>= 1.3.9'
+end
+
+group :production do
+  gem 'pg', '>= 0.17.1'
 end
 
 gem 'babel_bridge', '~> 0.5.3'
@@ -13,7 +17,6 @@ gem 'htmlentities', '~> 4.3.1'
 gem 'httparty', '~> 0.13.0'
 gem 'jbuilder', '~> 1.2'
 gem 'jquery-rails', '~> 3.0.4'
-gem 'pg', '>= 0.17.1'
 gem 'purecss-rails', '~> 0.3.0'
 gem 'rails', '>= 4.0.0'
 gem 'rspec-rails', '>= 2.13.0'
