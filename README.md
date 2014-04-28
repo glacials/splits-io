@@ -146,6 +146,7 @@ you'll need to set these self-explanatory environemt variables:
 
     SPLITSIO_DB_HOST
     SPLITSIO_DB_PORT
+    SPLITSIO_DB_NAME
     SPLITSIO_DB_USERNAME
     SPLITSIO_DB_PASSWORD
 
