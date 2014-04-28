@@ -87,7 +87,7 @@ class RunsController < ApplicationController
     else
       last_run = nil
     end
-    run = Run.all.sample(1).first
+    run = Run.offset(rand(Run.count)).first
     if run.nil?
       redirect_to root_path, alert: 'There are no runs yet!' and return
     end
