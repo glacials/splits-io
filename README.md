@@ -1,3 +1,4 @@
+
 ## splits.io
 
 splits.io is a website similar to Pastebin or GitHub Gist, but for splits
@@ -115,12 +116,38 @@ this stuff in the `lib/<name-of-splitting-program>_parser.rb` files.
 
 ### Running locally
 
-To get Twitch authentication working, you'll need two environment variables set:
+#### First run
 
-  TWITCH_CLIENT_ID
-  TWITCH_CLIENT_SECRET
+With Ruby and Bundler installed, you should be able to
 
-You can create and manage these from http://www.twitch.tv/settings/connections.
+  git clone git://github.com/glacials/splits.io
+  cd splits.io
+  bundle install
+  rails server
+
+#### Logging in
+
+To get Twitch authentication working locally, you'll need to register a developer application at
+http://www.twitch.tv/settings/connections. When you do, assign your client ID and client secret to the
+`TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET` environment variables, respectively. Like this:
+
+```bash
+export TWITCH_CLIENT_ID=your_client_id_here
+export TWITCH_CLIENT_SECRET=your_client_secret_here
+```
+
+Then you should be able to `rails server` and have login working.
+
+#### Databases
+
+Running in development mode (which should be the default when using `rails server`) should use SQLite (at
+`db/development.sqlite3`). If you want to run in production mode, splits.io is set up to use PostgreSQL, and to use it
+you'll need to set these self-explanatory environemt variables:
+
+    SPLITSIO_DB_HOST
+    SPLITSIO_DB_PORT
+    SPLITSIO_DB_USERNAME
+    SPLITSIO_DB_PASSWORD
 
 [1]: https://github.com/skoh-fley/splits.io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser

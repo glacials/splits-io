@@ -19,7 +19,11 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: postgresql
+  database: production
+  host: <%= ENV['SPLITSIO_DB_HOST'] %>
+  port: <%= ENV['SPLITSIO_DB_POST'] %>
+  username: <%= ENV['SPLITSIO_DB_USERNAME'] %>
+  password: <%= ENV['SPLITSIO_DB_PASSWORD'] %>
   pool: 5
   timeout: 5000
