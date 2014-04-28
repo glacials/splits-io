@@ -37,12 +37,16 @@ class LiveSplitParser
                                                 .select{ |k, v| k['name'] == "Personal Best" }.first['content'].strip)
       split.duration = split.finish_time - run.time
       split.duration = 0 if split.duration < 0
-      split.best.duration = duration_in_seconds_of(segment['BestSegmentTime'].first.strip)
+      best_segment = segment['BestSegmentTime'].first
+      best_segment = best_segment.first if best_segment.is_a?(Hash)
+      split.best.duration = duration_in_seconds_of(best_segment)
       split.parent = run
       run.time += split.duration if split.duration.present?
       run.splits << split
     end
     return v1_2(run, xml)
+  rescue
+    nil
   end
 
   def v1_2(run, xml)
@@ -69,6 +73,8 @@ class LiveSplitParser
       end
     end
     return run
+  rescue
+    nil
   end
 
   def duration_in_seconds_of(time)

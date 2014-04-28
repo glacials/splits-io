@@ -50,5 +50,7 @@ class WSplitParser < BabelBridge::Parser
       run.splits << split
     end
     run
+  rescue
+    nil
   end
 end

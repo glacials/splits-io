@@ -41,6 +41,8 @@ class SplitterZParser < BabelBridge::Parser
       run.splits << split
     end
     run
+  rescue
+    nil
   end
 
   def duration_in_seconds_of(time)
