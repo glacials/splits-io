@@ -36,11 +36,11 @@ class TwitchController < ApplicationController
   private
 
   def client_id
-    ENV['TWITCH_CLIENT_ID']
+    ENV['splitsio_twitch_id']
   end
 
   def client_secret
-    ENV['TWITCH_CLIENT_SECRET']
+    ENV['splitsio_twitch_secret']
   end
 
   def redirect_uri

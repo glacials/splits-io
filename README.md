@@ -129,11 +129,11 @@ With Ruby and Bundler installed, you should be able to
 
 To get Twitch authentication working locally, you'll need to register a developer application at
 http://www.twitch.tv/settings/connections. When you do, assign your client ID and client secret to the
-`TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET` environment variables, respectively. Like this:
+`splitsio_twitch_id` and `splitsio_twitch_secret` environment variables, respectively. Like this:
 
 ```bash
-export TWITCH_CLIENT_ID=your_client_id_here
-export TWITCH_CLIENT_SECRET=your_client_secret_here
+export splitsio_twitch_id=your_client_id_here
+export splitsio_twitch_secret=your_client_secret_here
 ```
 
 Then you should be able to `rails server` and have login working.
@@ -144,11 +144,11 @@ Running in development mode (which should be the default when using `rails serve
 `db/development.sqlite3`). If you want to run in production mode, splits i/o is set up to use PostgreSQL, and to use it
 you'll need to set these self-explanatory environemt variables:
 
-    SPLITSIO_DB_HOST
-    SPLITSIO_DB_PORT
-    SPLITSIO_DB_NAME
-    SPLITSIO_DB_USERNAME
-    SPLITSIO_DB_PASSWORD
+    splitsio_db_host
+    splitsio_db_port
+    splitsio_db_name
+    splitsio_db_username
+    splitsio_db_password
 
 [1]: https://github.com/skoh-fley/splits-io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser
