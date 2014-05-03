@@ -21,6 +21,10 @@ class Run < ActiveRecord::Base
     end
   end
 
+  def is_new
+    self.hits <= 1
+  end
+
   def game
     read_attribute(:game) || self.parse.game
   end

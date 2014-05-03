@@ -1,7 +1,7 @@
 = render partial: 'twitter_card'
 
 .header{style: 'border: none;'}
-  - if @run.hits < 2
+  - if @run.is_new
     #permalink-indicator
       &uarr; That's your permalink!
   %h2
@@ -64,6 +64,6 @@
               = render partial: 'shared/time', locals: {run: @run, time: split.finish_time}
             - else
               \-
-- if @run.hits < 2
+- if @run.is_new
   :javascript
     window.onload = function() {$('#permalink-indicator').fadeIn().delay(4000).fadeOut(); }
