@@ -20,10 +20,10 @@ test:
 
 production:
   adapter: postgresql
-  database: <%= ENV['SPLITSIO_DB_NAME'] %>
-  host: <%= ENV['SPLITSIO_DB_HOST'] %>
-  port: <%= ENV['SPLITSIO_DB_POST'] %>
-  username: <%= ENV['SPLITSIO_DB_USERNAME'] %>
-  password: <%= ENV['SPLITSIO_DB_PASSWORD'] %>
+  database: <%= ENV['splitsio_db_name'] %>
+  host: <%= ENV['splitsio_db_host'] %>
+  port: <%= ENV['splitsio_db_post'] %>
+  username: <%= ENV['splitsio_db_username'] %>
+  password: <%= ENV['splitsio_db_password'] %>
   pool: 5
   timeout: 5000
