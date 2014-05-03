@@ -3,7 +3,7 @@ class Category < ActiveRecord::Base
   has_many :runs
 
   def self.search(term)
-    self.where('name LIKE ?', "%#{term}%")
+    self.where(Category.arel_table[:name].matches "%#{term}%")
   end
 
   def best_known_run
