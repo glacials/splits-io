@@ -1,11 +1,11 @@
 
-## splits.io
+## splits i/o
 
-splits.io is a website similar to Pastebin or GitHub Gist, but for splits
+splits i/o is a website similar to Pastebin or GitHub Gist, but for splits
 generated from speedruns rather than text or code. It's written in Ruby on
 Rails.
 
-splits.io currently supports splits from WSplit (both 1.4.x and Nitrofski's
+splits i/o currently supports splits from WSplit (both 1.4.x and Nitrofski's
 1.5.x fork), Time Split Tracker, SplitterZ, and LiveSplit. Llanfair is in the
 works.
 
@@ -120,8 +120,8 @@ this stuff in the `lib/<name-of-splitting-program>_parser.rb` files.
 
 With Ruby and Bundler installed, you should be able to
 
-  git clone git://github.com/glacials/splits.io
-  cd splits.io
+  git clone git://github.com/glacials/splits-io
+  cd splits-io
   bundle install
   rails server
 
@@ -141,7 +141,7 @@ Then you should be able to `rails server` and have login working.
 #### Databases
 
 Running in development mode (which should be the default when using `rails server`) should use SQLite (at
-`db/development.sqlite3`). If you want to run in production mode, splits.io is set up to use PostgreSQL, and to use it
+`db/development.sqlite3`). If you want to run in production mode, splits i/o is set up to use PostgreSQL, and to use it
 you'll need to set these self-explanatory environemt variables:
 
     SPLITSIO_DB_HOST
@@ -150,6 +150,6 @@ you'll need to set these self-explanatory environemt variables:
     SPLITSIO_DB_USERNAME
     SPLITSIO_DB_PASSWORD
 
-[1]: https://github.com/skoh-fley/splits.io/blob/master/lib/wsplit_parser.rb
+[1]: https://github.com/skoh-fley/splits-io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser
 [3]: https://github.com/shanebdavis/Babel-Bridge

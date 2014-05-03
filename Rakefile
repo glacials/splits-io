@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-SplitsIo::Application.load_tasks
+SplitsIO::Application.load_tasks

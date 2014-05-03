@@ -1,4 +1,4 @@
-SplitsIo::Application.routes.draw do
+SplitsIO::Application.routes.draw do
   root 'runs#front'
 
   get  '/upload',     to: 'runs#upload',     as: :upload
