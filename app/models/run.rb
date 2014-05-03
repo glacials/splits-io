@@ -7,6 +7,7 @@ class Run < ActiveRecord::Base
   belongs_to :user
   belongs_to :category
   delegate :game, to: :category
+  default_scope { order('created_at DESC') }
 
   before_create :generate_nick
 
