@@ -1,0 +1,194 @@
+@import purecss/base
+@import purecss/buttons
+@import purecss/grids
+@import purecss/menus
+@import purecss/tables
+@import headings
+
+body, h1, h2, h3, h4, h5, h6
+  font-family: "Open Sans", sans-serif
+
+a
+  color: #0074D9
+  text-decoration: none
+
+h2 small
+  font-size: 0.5em
+  display: block
+
+.twitch
+  color: #ccc
+  &:hover
+    color: #b9a3e3
+
+#footer-links, #download-menu
+  padding: 0 1em 1em 0
+
+a
+  &:link.twitch-signin img
+    display: none
+    vertical-align: text-bottom
+  &:hover.twitch-signin
+    color: #6441a5
+    text-decoration: none
+    img
+      display: inline
+
+.alert
+  box-sizing: border-box
+  color: #a94442
+  padding: 15px
+  text-align: center
+  width: 100%
+  position: absolute
+  top: 0
+
+.fake-link
+  cursor: pointer
+
+.pure-form
+  margin-top: 2em
+  text-align: center
+
+#download-menu
+  display: none
+
+#logo
+  background-color: #777
+  color: #fff
+  letter-spacing: -1px
+  padding: 10px
+  margin-top: -10px
+  margin-left: -10px
+  position: absolute
+  top: 10px
+  left: 10px
+  text-transform: uppercase
+
+#random, #notice, #alert
+  text-align: center
+  margin-bottom: -26px
+
+#dropzone
+  position: absolute
+  overflow-x: hidden
+  left: 0
+  top: 0
+  width: 100%
+  min-height: 100%
+
+#dropzone-overlay
+  display: none
+  background-color: #333
+  position: fixed
+  left: 0
+  top: 0
+  width: 100%
+  min-height: 100%
+
+.inverted
+  color: white
+
+.align-right
+  text-align: right
+
+footer
+  position: absolute
+  bottom: 0
+  font-size: .7em
+  margin: auto
+  text-align: right
+  width: 100%
+  a
+    color: #777
+    text-decoration: none
+    &:hover
+      text-decoration: underline
+
+#permalink-indicator
+  display: none
+  font-size: 20px
+  white-space: nowrap
+  position: fixed
+  left: 180px
+  top: 10px
+
+.timeline
+  width: 100%
+
+.split, .inspect
+  display: block
+  color: #fff
+  text-decoration: none
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  white-space: nowrap
+
+.size-chart-blue
+  background: #0e90d2
+
+.size-chart-purple
+  background: rgb(128, 88, 165)
+
+.size-chart-green
+  background: #5eb95e
+
+.size-chart-red
+  background: #dd514c
+
+.size-chart-orange
+  background: rgb(250, 210, 50)
+
+.size-chart-yellow
+  background: rgb(243, 123, 29)
+
+.split .title, .inspect .title
+  padding: 0.5em 0 0 0.5em
+
+.split .time, .inspect .time
+  padding: 0 0 0.5em 0.5em
+
+.split .time
+  color: rgba(255, 255, 255, 0.5)
+
+.inspect
+  .title, .time
+    margin-left: .3em
+
+.split .time
+  display: block
+
+.inspect
+  .time
+    display: block
+  color: #aaa
+
+#time
+  border-right: 1px solid
+  color: #aaa
+  text-align: center
+  margin-bottom: .3em
+
+.bar
+  border-color: #aaa
+  border-left: 1px solid
+  border-right: 1px solid
+  color: #aaa
+  overflow: hidden
+  position: relative
+  text-align: center
+  &:before, &:after
+    position: absolute
+    top: 51%
+    overflow: hidden
+    width: 50%
+    height: 1px
+    content: '\a0'
+    background-color: #aaa
+  &:before
+    margin-left: -50%
+    text-align: right
