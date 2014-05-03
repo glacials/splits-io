@@ -5,12 +5,19 @@
 @import purecss/tables
 @import headings
 
+input
+  &[type="submit"]
+    @extend .pure-button
+    @extend .pure-button-primary
+
 body, h1, h2, h3, h4, h5, h6
   font-family: "Open Sans", sans-serif
 
 a
   color: #0074D9
   text-decoration: none
+  &:hover
+    text-decoration: underline
 
 h2 small
   font-size: 0.5em

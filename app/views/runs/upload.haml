@@ -5,4 +5,4 @@
   %form.pure-form{action: upload_path, method: :post, enctype: "multipart/form-data"}
     %input{type: :hidden, name: :authenticity_token, value: form_authenticity_token}
     %input{type: :file, name: :file}
-    %input.pure-button.pure-button-primary{type: :submit, value: :upload}
+    %input{type: :submit, value: :upload}

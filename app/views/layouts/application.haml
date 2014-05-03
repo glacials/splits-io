@@ -23,8 +23,9 @@
         #notice= notice
       - elsif @random.present?
         #random
-          %a.pure-button{href: random_path, style: 'font-size: 70%; border-radius: 0 0 2px 2px;'}
-            Another random?
+          %small
+            %a{href: random_path}
+              Another random?
       .account
       = yield
       %footer#footer
