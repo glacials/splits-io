@@ -2,5 +2,62 @@
 %html
   %head
     %title splits i/o - down for maintenance
+    %link{href: 'http://fonts.googleapis.com/css?family=Open+Sans', rel: 'stylesheet', type: 'text/css'}/
+    = stylesheet_link_tag 'application', media: :all
+    = csrf_meta_tag
+    = content_for(:head)
   %body
-    splits i/o is currently down for maintenance! We'll be back shortly, with a brand new server!
+    #dropzone
+      #dropzone-overlay.header{style: 'border: none;'}
+        %h1#droplabel.inverted drop anywhere
+        #file-list.inverted
+      %a{href: root_path}
+        #logo
+          splits i/o
+      %small
+        %a{target: '_blank', href: 'http://pastebin.com/aJ0FCpi0', style: 'position: absolute; top: 0; marign-top: -10px; right: 0; padding: 1em; background-color: #ffdc00; color: black; font-weight: bold;' }
+          !
+      - if alert.present?
+        #alert= alert
+      - elsif notice.present?
+        #notice= notice
+      - elsif @random.present?
+        #random
+          %a.pure-button{href: random_path, style: 'font-size: 70%; border-radius: 0 0 2px 2px;'}
+            Another random?
+      .account
+      = yield
+      %footer#footer
+        #footer-links
+          - if user_signed_in?
+            signed in as #{current_user.name}
+            &bull;
+            %a{href: signout_path} sign out
+          - else
+            %a.twitch-signin{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'}
+              %img{src: 'http://www.twitch.tv/favicon.ico', width: 12, height: 12}
+              sign in
+          %br
+          - if @run.present?
+            %a.fake-link#download-link{onclick: 'toggle_download_menu()'} download
+            &bull;
+          %a{href: upload_path} upload
+          &bull;
+          %a{href: 'mailto:qhiiyr@gmail.com'} feedback
+          &bull;
+          %a{href: 'https://github.com/glacials/splits-io', target: '_blank'} github
+        - if @run.present?
+          #download-menu
+            - ([:wsplit, :timesplittracker, :splitterz, :livesplit] - [@run.program]).each do |program|
+              %a{href: download_path(@run.nick, program), onclick: 'hide_download_menu()'}= program
+              &bull;
+            %a{href: download_path(@run.nick, @run.program), onclick: 'hide_download_menu()'}= @run.program
+  = javascript_include_tag 'application'
+  - if Rails.env.production?
+    :javascript
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-2876079-8', 'splits-io');
+      ga('send', 'pageview');
