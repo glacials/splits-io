@@ -18,6 +18,16 @@ test:
   pool: 5
   timeout: 5000
 
+hot:
+  adapter: postgresql
+  database: <%= ENV['splitsio_db_name'] %>
+  host: <%= ENV['splitsio_db_host'] %>
+  port: <%= ENV['splitsio_db_post'] %>
+  username: <%= ENV['splitsio_db_username'] %>
+  password: <%= ENV['splitsio_db_password'] %>
+  pool: 5
+  timeout: 5000
+
 production:
   adapter: postgresql
   database: <%= ENV['splitsio_db_name'] %>
