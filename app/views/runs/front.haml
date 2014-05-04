@@ -1,14 +1,15 @@
 #main
   .header
     %h1 splits i/o
-    %h2
+    %h4
       upload
       %u all
       the splits
   .content
     - if user_signed_in? && current_user.runs.present?
-      %h2.content-subhead Hey, #{current_user.name}. Here are your uploaded splits.
-      %table.pure-table{style: "margin: auto;"}
+      %h3 Hey, #{current_user.name}. Check out the new splits page design!
+      %h4 Let me know what you think from 'feedback' in the footer :)
+      %table.hover
         %thead
           %tr
             %th Name
@@ -17,7 +18,7 @@
             %th Actions
         %tbody
           - current_user.runs.each do |run|
-            %tr
+            %tr{href: run_path(run.nick)}
               %td
                 %a{href: run_path(run.nick)}= run.name
               %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}

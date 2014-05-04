@@ -4,11 +4,26 @@
 @import purecss/menus
 @import purecss/tables
 @import headings
+@import bootstrap
+
+form
+  text-align: center
+  margin-top: 4em
+
+tr[href]
+  cursor: pointer
+
+table
+  @extend .table
+  @extend .table-striped
+
+.hover
+  @extend .table-hover
 
 input
   &[type="submit"]
-    @extend .pure-button
-    @extend .pure-button-primary
+    @extend .btn
+    @extend .btn-default
 
 body, h1, h2, h3, h4, h5, h6
   font-family: "Open Sans", sans-serif
@@ -17,16 +32,17 @@ a
   color: #0074D9
   text-decoration: none
   &:hover
-    text-decoration: underline
+    text-decoration: none
 
 h2 small
   font-size: 0.5em
   display: block
 
 .twitch
-  color: #ccc
+  color: #777
   &:hover
     color: #b9a3e3
+
 
 #footer-links, #download-menu
   padding: 0 1em 1em 0
@@ -52,10 +68,6 @@ a
 
 .fake-link
   cursor: pointer
-
-.pure-form
-  margin-top: 2em
-  text-align: center
 
 #download-menu
   display: none
@@ -83,6 +95,7 @@ a
   top: 0
   width: 100%
   min-height: 100%
+  padding-bottom: 4em
 
 #dropzone-overlay
   display: none
@@ -100,6 +113,7 @@ a
   text-align: right
 
 footer
+  color: #777
   position: absolute
   bottom: 0
   font-size: .7em
@@ -114,7 +128,7 @@ footer
 
 #permalink-indicator
   display: none
-  font-size: 20px
+  color: #777
   white-space: nowrap
   position: fixed
   left: 180px
@@ -173,11 +187,6 @@ footer
   .time
     display: block
   color: #aaa
-
-#time
-  color: #aaa
-  text-align: center
-  margin-bottom: .3em
 
 .bar
   border-color: #aaa

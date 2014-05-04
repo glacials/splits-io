@@ -4,18 +4,16 @@
   - if @run.is_new
     #permalink-indicator
       &uarr; That's your permalink!
+.container
   %h2
     #{@run.name}
-    - if @run.user.present?
-      %small
-        %a.twitch{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
+  %h5= render partial: 'shared/time', locals: {run: @run, time: @run.time}
+  - if @run.user.present?
+    %h6
+      %a.twitch{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0
-#time
-  &nbsp;
-  = render partial: 'shared/time', locals: {run: @run, time: @run.time}
-  &nbsp;
 - i = 1
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
   - percentage = @run.splits.sum(&:duration) / @run.time
@@ -38,14 +36,14 @@
         .time= render partial: 'shared/time', locals: {run: @run, time: split.duration}
     - i += 1
     - percentage_so_far += split.duration/@run.time + (1 - percentage/100)/@run.splits.length
-.content
-  %table.pure-table{style: "margin: auto;"}
+.container
+  %table
     %thead
       %tr
-        %th #
+        %th.align-right #
         %th Name
-        %th Duration
-        %th Finished at
+        %th.align-right Duration
+        %th.align-right Finished at
     %tbody
       - i = 0
       - @run.splits.each do |split|
@@ -65,5 +63,5 @@
             - else
               \-
 - if @run.is_new
-  :javascript
-    window.onload = function() {$('#permalink-indicator').fadeIn().delay(4000).fadeOut(); }
+  :coffee
+    window.onload = -> $('#permalink-indicator').fadeIn().delay(4000).fadeOut();

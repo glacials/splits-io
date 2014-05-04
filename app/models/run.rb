@@ -4,6 +4,7 @@ require 'time_split_tracker_parser'
 require 'wsplit_parser'
 
 class Run < ActiveRecord::Base
+  include ActionView::Helpers::DateHelper
   belongs_to :user
   belongs_to :category
   delegate :game, to: :category
@@ -19,6 +20,10 @@ class Run < ActiveRecord::Base
       self.nick = SecureRandom.urlsafe_base64(3)
       return if Run.find_by(nick: self.nick).nil?
     end
+  end
+
+  def time_since_upload
+    time_ago_in_words(self.created_at).sub('about ', '')
   end
 
   def is_new

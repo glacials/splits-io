@@ -1,10 +1,11 @@
 require 'htmlentities'
+require 'uri'
 
 class RunsController < ApplicationController
 
   def search
     if params[:term].present?
-      redirect_to "/search/#{params[:term]}"
+      redirect_to "/search/#{URI.escape(params[:term])}"
     end
   end
 

@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title splits i/o!!!
+    %title splits i/o
     %link{href: 'http://fonts.googleapis.com/css?family=Open+Sans', rel: 'stylesheet', type: 'text/css'}/
     = stylesheet_link_tag 'application', media: :all
     = csrf_meta_tag
@@ -28,7 +28,7 @@
               Another random?
       .account
       = yield
-      %footer#footer
+      %footer
         #footer-links
           - if user_signed_in?
             signed in as #{current_user.name}

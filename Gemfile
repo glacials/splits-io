@@ -10,6 +10,7 @@ group :production do
 end
 
 gem 'babel_bridge', '~> 0.5.3'
+gem 'bootstrap-sass', '>= 3.1.1.1'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'devise', '~> 3.1.1'
 gem 'haml-rails', '~> 0.4'

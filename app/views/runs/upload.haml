@@ -1,8 +1,10 @@
 .header
   %h1 drop it like it's hot
-  %h2 drag your splits onto this page, or any page
-.content
-  %form.pure-form{action: upload_path, method: :post, enctype: "multipart/form-data"}
-    %input{type: :hidden, name: :authenticity_token, value: form_authenticity_token}
-    %input{type: :file, name: :file}
-    %input{type: :submit, value: :upload}
+  %h4 drag your splits onto this page, or any page
+.container
+  %form.form-inline{action: upload_path, method: :post, enctype: "multipart/form-data"}
+    %input{type: :hidden, name: 'authenticity_token', value: form_authenticity_token}
+    .form-group
+      %input{type: :file, name: 'file'}
+    .form-group
+      %input{type: :submit, value: 'upload'}
