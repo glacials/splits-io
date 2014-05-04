@@ -120,10 +120,12 @@ this stuff in the `lib/<name-of-splitting-program>_parser.rb` files.
 
 With Ruby and Bundler installed, you should be able to
 
-  git clone git://github.com/glacials/splits-io
-  cd splits-io
-  bundle install
-  rails server
+```bash
+git clone git://github.com/glacials/splits-io
+cd splits-io
+bundle install
+rails server
+```
 
 #### Logging in
 
