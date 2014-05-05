@@ -6,21 +6,20 @@ SplitsIO::Application.routes.draw do
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
-  get '/signin/twitch'      => 'twitch#out', as: :twitch_out
-  get '/signin/twitch/auth' => 'twitch#in',  as: :twitch_in
+  get '/signin/twitch',      to: 'twitch#out', as: :twitch_out
+  get '/signin/twitch/auth', to: 'twitch#in',  as: :twitch_in
 
-  devise_for :users
   devise_scope :user do
-    get 'signout', to: 'devise/sessions#destroy'
+    get 'signout', to: 'devise/sessions#destroy', as: :signout
   end
 
   get  '/search',       to: 'runs#search',  as: :search
   post '/search',       to: 'runs#search'
   get  '/search/:term', to: 'runs#results', as: :results
 
-  get '/:run'                   => 'runs#show',     as: :run
-  get '/:run/download/:program' => 'runs#download', as: :download
+  get '/:run',                   to: 'runs#show',     as: :run
+  get '/:run/download/:program', to: 'runs#download', as: :download
 
-  delete '/:run'        => 'runs#delete', as: :delete
-  post   '/:run/disown' => 'runs#disown', as: :disown
+  delete '/:run',        to: 'runs#delete', as: :delete
+  post   '/:run/disown', to: 'runs#disown', as: :disown
 end

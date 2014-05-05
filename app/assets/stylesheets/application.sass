@@ -1,10 +1,20 @@
 @import purecss/base
-@import purecss/buttons
 @import purecss/grids
 @import purecss/menus
-@import purecss/tables
 @import headings
 @import bootstrap
+
+.alert-danger, .alert-success
+  @extend .alert
+
+.alert
+  background-color: #f1f1f1
+  border: none
+  border-radius: 0
+  color: #404040
+  margin: auto
+  text-align: center
+  vertical-align: top
 
 form
   text-align: center
@@ -41,7 +51,7 @@ h2 small
 .twitch
   color: #777
   &:hover
-    color: #b9a3e3
+    color: #6441a5
 
 
 #footer-links, #download-menu
@@ -56,15 +66,6 @@ a
     text-decoration: none
     img
       display: inline
-
-.alert
-  box-sizing: border-box
-  color: #a94442
-  padding: 15px
-  text-align: center
-  width: 100%
-  position: absolute
-  top: 0
 
 .fake-link
   cursor: pointer
@@ -83,10 +84,6 @@ a
   top: 10px
   left: 10px
   text-transform: uppercase
-
-#random, #notice, #alert
-  text-align: center
-  margin-bottom: -26px
 
 #dropzone
   position: absolute

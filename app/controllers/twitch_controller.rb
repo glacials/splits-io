@@ -26,10 +26,10 @@ class TwitchController < ApplicationController
     user.remember_me!(100.years)
 
     if cookies[:return_to]
-      redirect_to(cookies[:return_to])
+      redirect_to(cookies[:return_to], notice: "Signed in as #{current_user.name} :D")
       cookies.delete(:return_to)
     else
-      redirect_to root_path
+      redirect_to root_path, notice: "Signed in as #{current_user.name} :D"
     end
   end
 

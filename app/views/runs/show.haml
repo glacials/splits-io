@@ -4,6 +4,7 @@
   - if @run.is_new
     #permalink-indicator
       &uarr; That's your permalink!
+= render partial: 'shared/alerts'
 .container
   %h2
     #{@run.name}
@@ -11,6 +12,10 @@
   - if @run.user.present?
     %h6
       %a.twitch{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
+  - if @random.present?
+    %h6
+      %a{href: random_path}
+        Another random?
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 - c = 0
 - percentage = 0

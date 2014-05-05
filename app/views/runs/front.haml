@@ -5,6 +5,7 @@
       upload
       %u all
       the splits
+  = render partial: 'shared/alerts'
   .content
     - if user_signed_in? && current_user.runs.present?
       %h3 Hey, #{current_user.name}. Check out the new splits page design!
