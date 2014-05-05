@@ -17,30 +17,20 @@
       %a{href: random_path}
         Another random?
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
-- c = 0
-- percentage = 0
-- i = 1
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
-  - percentage = @run.splits.sum(&:duration) / @run.time
-  - @run.splits.each do |split|
+  - @run.splits.each_with_index do |split, index|
     - unless split.duration == 0
-      .pure-u.split{id: 'split-' + i.to_s, class: "size-chart-" + colors[c].to_s, style: "width: #{split.duration / @run.time * 100}%;"}
+      .pure-u.split{id: 'split-' + index.to_s, class: "size-chart-" + colors[(index) % colors.length].to_s, style: "width: #{split.duration / @run.time * 100}%;"}
         .title= split.name
         .time= render partial: 'shared/time', locals: {run: @run, time: split.duration}
-      - c = (c + 1) % colors.length
-    - i += 1
-- i = 1
-- percentage_so_far = 0
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
-  - @run.splits.each do |split|
+  - @run.splits.each_with_index do |split, index|
     - unless split.duration == 0
-      .pure-u.inspect{id: 'inspect-' + i.to_s, style: "width: #{split.duration / @run.time * 100}%; opacity: 0;"}
+      .pure-u.inspect{id: 'inspect-' + index.to_s, style: "width: #{split.duration / @run.time * 100}%; opacity: 0;"}
         .bar
           %p
         .title= split.name
         .time= render partial: 'shared/time', locals: {run: @run, time: split.duration}
-    - i += 1
-    - percentage_so_far += split.duration/@run.time + (1 - percentage/100)/@run.splits.length
 .container
   %table
     %thead
@@ -50,11 +40,10 @@
         %th.align-right Duration
         %th.align-right Finished at
     %tbody
-      - i = 0
-      - @run.splits.each do |split|
+      - @run.splits.each_with_index do |split, index|
         %tr
           %td.align-right
-            = i +=1
+            = index + 1
           %td
             = split.name
           %td.align-right
