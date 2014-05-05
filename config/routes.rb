@@ -9,6 +9,7 @@ SplitsIO::Application.routes.draw do
   get '/signin/twitch',      to: 'twitch#out', as: :twitch_out
   get '/signin/twitch/auth', to: 'twitch#in',  as: :twitch_in
 
+  devise_for :users
   devise_scope :user do
     get 'signout', to: 'devise/sessions#destroy', as: :signout
   end
