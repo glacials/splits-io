@@ -4,6 +4,8 @@
   - if @run.is_new
     #permalink-indicator
       &uarr; That's your permalink!
+    :coffee
+      window.onload = -> $('#permalink-indicator').fadeIn().delay(4000).fadeOut({ complete: -> $(this).remove()});
 = render partial: 'shared/alerts'
 .container
   %h2
@@ -56,6 +58,3 @@
               = render partial: 'shared/time', locals: {run: @run, time: split.finish_time}
             - else
               \-
-- if @run.is_new
-  :coffee
-    window.onload = -> $('#permalink-indicator').fadeIn().delay(4000).fadeOut();
