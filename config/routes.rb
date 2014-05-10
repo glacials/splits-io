@@ -1,8 +1,8 @@
 SplitsIO::Application.routes.draw do
   root 'runs#front'
 
-  get  '/upload',     to: 'runs#upload',     as: :upload
-  post '/upload',     to: 'runs#create'
+  get  '/upload',     to: 'runs#new',        as: :upload
+  post '/upload',     to: 'runs#upload'
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 

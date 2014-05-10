@@ -3,6 +3,10 @@ require 'uri'
 
 class RunsController < ApplicationController
 
+  before_filter only: [:show, :upload, :download, :random, :disown, :delete] do |controller|
+    StatsMix.track(controller.action_name)
+  end
+
   def search
     if params[:term].present?
       redirect_to "/search/#{URI.escape(params[:term])}"
@@ -12,29 +16,6 @@ class RunsController < ApplicationController
   def results
     @term = params[:term]
     @runs = (Game.search(@term).map(&:categories).flatten.map(&:runs).flatten | Category.search(@term).map(&:runs).flatten).sort_by(&:hits)
-  end
-
-  def create
-    splits = params[:file]
-    @run = Run.create
-    @run.file = splits.read
-    if @run.parses
-      @run.user = current_user
-      @run.image_url = params[:image_url]
-      game = Game.find_by(name: @run.parsed.game) || Game.create(name: @run.parsed.game)
-      @run.category = Category.find_by(game: game, name: @run.parsed.category) || game.categories.new(game: game, name: @run.parsed.category)
-      @run.save
-      respond_to do |format|
-        format.html { redirect_to run_path(@run.nick) }
-        format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run.nick)} }
-      end
-    else
-      @run.destroy
-      respond_to do |format|
-        format.html { redirect_to cant_parse_path }
-        format.json { render json: {url: cant_parse_path } }
-      end
-    end
   end
 
   def show
@@ -55,6 +36,29 @@ class RunsController < ApplicationController
     else
       if @run.hits > 1 then render :cant_parse
       else @run.destroy and redirect_to(cant_parse_path) end
+    end
+  end
+
+  def upload
+    splits = params[:file]
+    @run = Run.create
+    @run.file = splits.read
+    if @run.parses
+      @run.user = current_user
+      @run.image_url = params[:image_url]
+      game = Game.find_by(name: @run.parsed.game) || Game.create(name: @run.parsed.game)
+      @run.category = Category.find_by(game: game, name: @run.parsed.category) || game.categories.new(game: game, name: @run.parsed.category)
+      @run.save
+      respond_to do |format|
+        format.html { redirect_to run_path(@run.nick) }
+        format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run.nick)} }
+      end
+    else
+      @run.destroy
+      respond_to do |format|
+        format.html { redirect_to cant_parse_path }
+        format.json { render json: {url: cant_parse_path } }
+      end
     end
   end
 
