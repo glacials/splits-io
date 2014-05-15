@@ -1,12 +1,8 @@
 class SplitterZParser < BabelBridge::Parser
-  # Babel-Bridge's format is:
-  #rule :rule_name, <list of tokens to match in order>
-  # A token can be a string/regex (terminal), or another rule (nonterminal)
-  # A question mark after a rule means "optional"
   rule :splitterz_file, :title_line, many?(:splits)
 
-  rule :title_line, :title, ",", :attempts, :newline
-  rule :splits,     :title, ",", :run_time, ",", :best_time, :newline
+  rule :title_line, :title, ',', :attempts, :newline
+  rule :splits,     :title, ',', :run_time, ',', :best_time, :newline
 
   rule :title,     /([^,\r\n]*)/
   rule :attempts,  /(\d*)/
@@ -26,7 +22,7 @@ class SplitterZParser < BabelBridge::Parser
     run.game = nil
     run.name = splits.title.to_s
     run.attempts = splits.attempts.to_s.to_i
-    run.splits = Array.new
+    run.splits = []
     run.time = 0
     splits.splits.each do |segment|
       split = OpenStruct.new

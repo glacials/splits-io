@@ -2,10 +2,9 @@ require 'htmlentities'
 require 'uri'
 
 class RunsController < ApplicationController
-
   before_filter :set_run, only: [:show, :download, :disown, :delete]
   after_filter only: [:show, :upload, :download, :random, :disown, :delete] do |controller|
-    StatsMix.track(controller.action_name, 1, {meta: {game: @run.game, user_signed_in: user_signed_in?}})
+    StatsMix.track(controller.action_name, 1, meta: { game: @run.game, user_signed_in: user_signed_in? })
   end
 
   def search
@@ -20,10 +19,10 @@ class RunsController < ApplicationController
   end
 
   def show
-    @random = session[:random] or false
+    @random = session[:random] || false
     session[:random] = false
 
-    render :bad_url and return if @run.try(:file).nil?
+    render :bad_url if @run.try(:file).nil?
 
     @run.user = current_user if @run.hits == 0 && user_signed_in?
     @run.hits += 1
@@ -34,8 +33,12 @@ class RunsController < ApplicationController
         format.json { render json: @run }
       end
     else
-      if @run.hits > 1 then render :cant_parse
-      else @run.destroy and redirect_to(cant_parse_path) end
+      if @run.hits > 1
+        render :cant_parse
+      else
+        @run.destroy
+        redirect_to(cant_parse_path)
+      end
     end
   end
 
@@ -51,23 +54,25 @@ class RunsController < ApplicationController
       @run.save
       respond_to do |format|
         format.html { redirect_to run_path(@run.nick) }
-        format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run.nick)} }
+        format.json { render json: { url: request.protocol + request.host_with_port + run_path(@run.nick) } }
       end
     else
       @run.destroy
       respond_to do |format|
         format.html { redirect_to cant_parse_path }
-        format.json { render json: {url: cant_parse_path } }
+        format.json { render json: { url: cant_parse_path } }
       end
     end
   end
 
   def download
     if @run.nil?
-      render(:bad_url) and return
+      render(:bad_url)
+      return
     end
 
-    @run.hits += 1 and @run.save
+    @run.hits += 1
+    @run.save
     if @run.present?
       file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
       if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
@@ -76,25 +81,30 @@ class RunsController < ApplicationController
         send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run.nick}.#{file_extension}", layout: false)
       end
     else
-      if @run.hits > 1 then render(:cant_parse)
-      else @run.destroy and redirect_to(cant_parse_path) end
+      if @run.hits > 1
+        render(:cant_parse)
+      else
+        @run.destroy
+        redirect_to(cant_parse_path)
+      end
     end
   end
 
   def random
-    # Find a random run. If we can't parse it, find another, and so on.
     @run = Run.offset(rand(Run.count)).first
     if @run.nil?
-      redirect_to root_path, alert: 'There are no runs yet!' and return
+      redirect_to root_path, alert: 'There are no runs yet!'
+    else
+      session[:random] = true
+      redirect_to(run_path(@run.nick))
     end
-    session[:random] = true
-    redirect_to run_path(@run.nick)
   end
 
   def disown
     if @run.user.present? && current_user == @run.user
       @run.user = nil
-      @run.save and redirect_to(root_path)
+      @run.save
+      redirect_to(root_path)
     else
       redirect_to(run_path(@run.nick))
     end
@@ -102,7 +112,8 @@ class RunsController < ApplicationController
 
   def delete
     if @run.user.present? && current_user == @run.user
-      @run.destroy and redirect_to(root_path)
+      @run.destroy
+      redirect_to(root_path)
     else
       redirect_to(run_path(@run.nick))
     end

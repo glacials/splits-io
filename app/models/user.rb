@@ -11,6 +11,6 @@ class User < ActiveRecord::Base
     self.twitch_id = response['_id']
     self.email     = response['email']
     self.name      = response['name']
-    self.save
+    save
   end
 end

@@ -1,5 +1,4 @@
 class TwitchController < ApplicationController
-
   def out
     redirect_to "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=user_read"
   end
@@ -46,5 +45,4 @@ class TwitchController < ApplicationController
   def redirect_uri
     "http://#{request.host_with_port}/signin/twitch/auth"
   end
-
 end

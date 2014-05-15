@@ -17,85 +17,83 @@ class Run < ActiveRecord::Base
 
   def generate_nick
     loop do
-      self.nick = SecureRandom.urlsafe_base64(3)
-      return if Run.find_by(nick: self.nick).nil?
+      nick = SecureRandom.urlsafe_base64(3)
+      return if Run.find_by(nick: nick).nil?
     end
   end
 
   def time_since_upload
-    time_ago_in_words(self.created_at).sub('about ', '')
+    time_ago_in_words(created_at).sub('about ', '')
   end
 
-  def is_new
-    self.hits <= 1
+  def new?
+    hits <= 1
   end
 
   def game
-    read_attribute(:game) || self.parse.game
+    self[:game] || parse.game
   end
 
   def category
-    read_attribute(:category) || self.parse.category
+    self[:category] || parse.category
   end
 
   def disown
-    self.user = nil
+    user = nil
   end
 
   def program
-    self.parse.program
+    parse.program
   end
 
   def name
-    self.parse.name
+    parse.name
   end
 
   def splits
-    self.parse.splits
+    parse.splits
   end
 
   def time
-    self.splits.map(&:duration).sum
+    splits.map(&:duration).sum
   end
 
   def offset
-    self.parse.offset
+    parse.offset
   end
 
   def attempts
-    self.parse.attempts
+    parse.attempts
   end
 
   def run_history
-    self.parse.run_history
+    parse.run_history
   end
 
   def parses
-    self.parse
+    parse
   end
 
   def parsed
-    self.parse
+    parse
   end
 
   def parse
-    if @parse_cache.present?
-      return @parse_cache
-    end
+    return @parse_cache if @parse_cache.present?
 
     begin
       @@parsers.each do |p|
         result = p.new.parse(file)
         if result.present?
           result.program = p.name.sub('Parser', '').downcase.to_sym
-          @parse_cache = result and return result
+          @parse_cache = result
+          return result
         end
       end
     rescue ArgumentError # comes from non UTF-8 files
       return nil
     end
 
-    return nil
+    nil
   end
-
 end

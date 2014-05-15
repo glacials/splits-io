@@ -6,12 +6,10 @@ class ApplicationController < ActionController::Base
   before_filter :remove_www
 
   def remove_www
-    if request.subdomain == 'www'
-      redirect_to subdomain: nil
-    end
+    redirect_to(subdomain: nil) if request.subdomain == 'www'
   end
 
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(_resource_or_scope)
     request.referrer
   end
 end

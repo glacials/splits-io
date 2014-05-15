@@ -1,7 +1,7 @@
 = render partial: 'twitter_card'
 
 .header{style: 'border: none;'}
-  - if @run.is_new
+  - if @run.new?
     #permalink-indicator
       &uarr; That's your permalink!
     :coffee

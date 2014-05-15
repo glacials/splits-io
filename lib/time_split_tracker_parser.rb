@@ -1,8 +1,4 @@
 class TimeSplitTrackerParser < BabelBridge::Parser
-  # Babel-Bridge's format is:
-  #rule :rule_name, <list of tokens to match in order>
-  # A token can be a string/regex (terminal), or another rule (nonterminal)
-  # A question mark after a rule means "optional"
   rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
 
   rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :tab, :newline
@@ -29,7 +25,7 @@ class TimeSplitTrackerParser < BabelBridge::Parser
     run.name = splits.title.to_s
     run.attempts = splits.attempts.to_s.to_i
     run.offset = splits.offset.to_f
-    run.splits = Array.new
+    run.splits = []
     run.time = 0
     splits.splits.each do |segment|
       split = OpenStruct.new
