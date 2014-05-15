@@ -3,8 +3,9 @@ require 'uri'
 
 class RunsController < ApplicationController
 
-  before_filter only: [:show, :upload, :download, :random, :disown, :delete] do |controller|
-    StatsMix.track(controller.action_name)
+  before_filter :set_run, only: [:show, :download, :disown, :delete]
+  after_filter only: [:show, :upload, :download, :random, :disown, :delete] do |controller|
+    StatsMix.track(controller.action_name, 1, {meta: {game: @run.game, user_signed_in: user_signed_in?}})
   end
 
   def search
@@ -22,7 +23,6 @@ class RunsController < ApplicationController
     @random = session[:random] or false
     session[:random] = false
 
-    @run = Run.find_by nick: params[:run]
     render :bad_url and return if @run.try(:file).nil?
 
     @run.user = current_user if @run.hits == 0 && user_signed_in?
@@ -63,7 +63,6 @@ class RunsController < ApplicationController
   end
 
   def download
-    @run = Run.find_by nick: params[:run]
     if @run.nil?
       render(:bad_url) and return
     end
@@ -84,25 +83,15 @@ class RunsController < ApplicationController
 
   def random
     # Find a random run. If we can't parse it, find another, and so on.
-    run = nil
-    if request.env["HTTP_REFERER"].present?
-      # Don't use the run that we just came from (i.e. we're spam clicking random)
-      last_run = URI.parse(URI.encode request.env["HTTP_REFERER"].strip).path
-      last_run.slice! 0 # Remove initial '/'
-    else
-      last_run = nil
-    end
-    run = Run.offset(rand(Run.count)).first
-    if run.nil?
+    @run = Run.offset(rand(Run.count)).first
+    if @run.nil?
       redirect_to root_path, alert: 'There are no runs yet!' and return
     end
     session[:random] = true
-    redirect_to run_path(run.nick)
+    redirect_to run_path(@run.nick)
   end
 
   def disown
-    @run = Run.find_by(nick: params[:run])
-
     if @run.user.present? && current_user == @run.user
       @run.user = nil
       @run.save and redirect_to(root_path)
@@ -112,13 +101,17 @@ class RunsController < ApplicationController
   end
 
   def delete
-    @run = Run.find_by(nick: params[:run])
-
     if @run.user.present? && current_user == @run.user
       @run.destroy and redirect_to(root_path)
     else
       redirect_to(run_path(@run.nick))
     end
+  end
+
+  protected
+
+  def set_run
+    @run = Run.find_by(nick: params[:run])
   end
 
 end

@@ -45,7 +45,6 @@ class TwitchController < ApplicationController
 
   def redirect_uri
     "http://#{request.host_with_port}/signin/twitch/auth"
-    #"http://www.splits.io/signin/twitch/auth"
   end
 
 end
