@@ -17,7 +17,8 @@ class SplitterZParser < BabelBridge::Parser
   rule :unix_newline,    "\n"
 
   def parse(file)
-    splits = super(file) or return nil
+    splits = super(file)
+    return nil unless splits
     run = OpenStruct.new
     run.game = nil
     run.name = splits.title.to_s

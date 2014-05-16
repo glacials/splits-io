@@ -8,3 +8,5 @@ AllCops:
     - db/**/*
     - config/**/*
     - script/**/*
+Documentation:
+  Enabled: false

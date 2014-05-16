@@ -7,12 +7,15 @@ class Run < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
   belongs_to :user
   belongs_to :category
-  delegate :game, to: :category
   default_scope { order('created_at DESC') }
 
   before_create :generate_nick
 
-  @@parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
+  delegate :game, to: :category
+  delegate :program, :name, :splits, :offset, :attempts, :run_history, to: :parse
+
+  class << self; attr_accessor :parsers end
+  @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
 
   def generate_nick
@@ -39,35 +42,11 @@ class Run < ActiveRecord::Base
   end
 
   def disown
-    user = nil
-  end
-
-  def program
-    parse.program
-  end
-
-  def name
-    parse.name
-  end
-
-  def splits
-    parse.splits
+    self.user = nil
   end
 
   def time
     splits.map(&:duration).sum
-  end
-
-  def offset
-    parse.offset
-  end
-
-  def attempts
-    parse.attempts
-  end
-
-  def run_history
-    parse.run_history
   end
 
   def parses
@@ -81,19 +60,17 @@ class Run < ActiveRecord::Base
   def parse
     return @parse_cache if @parse_cache.present?
 
-    begin
-      @@parsers.each do |p|
-        result = p.new.parse(file)
-        if result.present?
-          result.program = p.name.sub('Parser', '').downcase.to_sym
-          @parse_cache = result
-          return result
-        end
+    Run.parsers.each do |p|
+      result = p.new.parse(file)
+      if result.present?
+        result.program = p.name.sub('Parser', '').downcase.to_sym
+        @parse_cache = result
+        return result
       end
-    rescue ArgumentError # comes from non UTF-8 files
-      return nil
     end
 
+    nil
+  rescue ArgumentError # comes from non UTF-8 files
     nil
   end
 end
