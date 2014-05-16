@@ -21,9 +21,10 @@ gem 'jquery-rails',   '>= 3.0.4'
 gem 'purecss-rails',  '>= 0.3.0'
 gem 'rails',          '>= 4.0.0'
 gem 'rspec-rails',    '>= 2.13.0'
-gem 'rubocop',        '>= 0.21.0'
 gem 'sass-rails',     '>= 4.0.0'
 gem 'statsmix',       '>= 1.0.0'
 gem 'uglifier',       '>= 1.3.0'
 gem 'versionomy',     '>= 0.4.4'
 gem 'xml-simple',     '>= 1.1.3'
+
+gem 'rubocop',        '>= 0.21.0', require: false
