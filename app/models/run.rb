@@ -20,7 +20,7 @@ class Run < ActiveRecord::Base
 
   def generate_nick
     loop do
-      nick = SecureRandom.urlsafe_base64(3)
+      self.nick = SecureRandom.urlsafe_base64(3)
       return if Run.find_by(nick: nick).nil?
     end
   end

@@ -34,9 +34,11 @@ class LiveSplitParser
                                                 .select { |k, _| k['name'] == 'Personal Best' }.first['content'].strip)
       split.duration = split.finish_time - run.time
       split.duration = 0 if split.duration < 0
+
       best_segment = segment['BestSegmentTime'].first
       best_segment = best_segment.first if best_segment.is_a?(Hash)
       split.best.duration = duration_in_seconds_of(best_segment)
+
       split.parent = run
       run.time += split.duration if split.duration.present?
       run.splits << split
@@ -47,12 +49,13 @@ class LiveSplitParser
   end
 
   def v1_2(run, xml)
-    run.game     ||= xml['GameName'].first.present?     ? xml['GameName'].first     : ''
-    run.category ||= xml['CategoryName'].first.present? ? xml['CategoryName'].first : ''
-    run.name     ||= run.game + ' ' + run.category
-    run.attempts ||= xml['AttemptCount'].first.present? ? xml['AttemptCount'].first : ''
-    run.offset   ||= duration_in_seconds_of(xml['Offset'].first)
+    run.game     ||= xml['GameName'].first.try(:strip)
+    run.category ||= xml['CategoryName'].first.try(:strip)
+    run.attempts ||= xml['AttemptCount'].first.try(:strip)
+    run.offset   ||= duration_in_seconds_of(xml['Offset'].first.strip)
     run.history  ||= xml['RunHistory'].first['Time'].present? ? xml['RunHistory'].first['Time'].map { |t| duration_in_seconds_of(t['content']) }.reject { |t| t == 0 } : []
+
+    run.name     ||= run.game + ' ' + run.category
     run.splits   ||= []
     run.time     ||= 0
     if run.splits.empty?
@@ -61,9 +64,11 @@ class LiveSplitParser
         split.best = OpenStruct.new
         split.name = segment['Name'].first
         split.finish_time = duration_in_seconds_of(segment['PersonalBestSplitTime'].first)
+
         split.duration = split.finish_time - run.time
         split.duration = 0 if split.duration < 0
         split.best.duration = duration_in_seconds_of(segment['BestSegmentTime'].first)
+
         split.parent = run
         run.time += split.duration if split.duration.present?
         run.splits << split
