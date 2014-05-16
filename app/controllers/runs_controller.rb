@@ -4,7 +4,7 @@ require 'uri'
 class RunsController < ApplicationController
   before_filter :set_run, only: [:show, :download, :disown, :delete]
   after_filter only: [:show, :upload, :download, :random, :disown, :delete] do |controller|
-    StatsMix.track(controller.action_name, 1, meta: { game: @run.game.name, user_signed_in: user_signed_in? })
+    StatsMix.track(controller.action_name, 1, meta: { game: @run.game.try(:name), user_signed_in: user_signed_in? })
   end
 
   def search
