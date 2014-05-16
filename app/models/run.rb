@@ -25,12 +25,26 @@ class Run < ActiveRecord::Base
     end
   end
 
+  def belongs_to?(user)
+    user.present? && self.user == user
+  end
+
   def time_since_upload
     time_ago_in_words(created_at).sub('about ', '')
   end
 
   def new?
     hits <= 1
+  end
+
+  def disown
+    self.user = nil
+    self.save
+  end
+
+  def hit
+    self.hits += 1
+    self.save
   end
 
   def game

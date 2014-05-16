@@ -3,6 +3,7 @@ require 'uri'
 
 class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :disown, :delete]
+  before_action :increment_hits, only: [:show, :download]
   after_action only: [:show, :upload, :download, :random, :disown, :delete] do |controller|
     StatsMix.track(controller.action_name, 1, meta: { game: @run.game.try(:name), user_signed_in: user_signed_in? })
   end
@@ -23,19 +24,17 @@ class RunsController < ApplicationController
     session[:random] = false
 
     @run.user = current_user if @run.hits == 0 && user_signed_in?
-    @run.hits += 1
-    @run.save
     if @run.parses
       respond_to do |format|
         format.html { render :show }
         format.json { render json: @run }
       end
     else
-      if @run.hits > 1
-        render :cant_parse
-      else
+      if @run.new?
         @run.destroy
         redirect_to(cant_parse_path)
+      else
+        render(:cant_parse)
       end
     end
   end
@@ -48,7 +47,7 @@ class RunsController < ApplicationController
       @run.user = current_user
       @run.image_url = params[:image_url]
       game = Game.find_by(name: @run.parsed.game) || Game.create(name: @run.parsed.game)
-      @run.category = Category.find_by(game: game, name: @run.parsed.category) || game.categories.new(game: game, name: @run.parsed.category)
+      @run.category = Category.find_by(game: game, name: @run.parsed.category) || game.categories.new(name: @run.parsed.category)
       @run.save
       respond_to do |format|
         format.html { redirect_to run_path(@run.nick) }
@@ -64,8 +63,6 @@ class RunsController < ApplicationController
   end
 
   def download
-    @run.hits += 1
-    @run.save
     if @run.present?
       file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
       if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
@@ -74,11 +71,11 @@ class RunsController < ApplicationController
         send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run.nick}.#{file_extension}", layout: false)
       end
     else
-      if @run.hits > 1
-        render(:cant_parse)
-      else
+      if @run.new?
         @run.destroy
         redirect_to(cant_parse_path)
+      else
+        render(:cant_parse)
       end
     end
   end
@@ -94,9 +91,8 @@ class RunsController < ApplicationController
   end
 
   def disown
-    if @run.user.present? && current_user == @run.user
-      @run.user = nil
-      @run.save
+    if @run.belongs_to?(current_user)
+      @run.disown
       redirect_to(root_path)
     else
       redirect_to(run_path(@run.nick))
@@ -104,7 +100,7 @@ class RunsController < ApplicationController
   end
 
   def delete
-    if @run.user.present? && current_user == @run.user
+    if @run.belongs_to?(current_user)
       @run.destroy
       redirect_to(root_path)
     else
@@ -122,4 +118,8 @@ class RunsController < ApplicationController
     end
   end
 
+  def increment_hits
+    @run.hits += 1
+    @run.save
+  end
 end
