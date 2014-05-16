@@ -22,8 +22,6 @@ class RunsController < ApplicationController
     @random = session[:random] || false
     session[:random] = false
 
-    render :bad_url if @run.try(:file).nil?
-
     @run.user = current_user if @run.hits == 0 && user_signed_in?
     @run.hits += 1
     @run.save
@@ -66,11 +64,6 @@ class RunsController < ApplicationController
   end
 
   def download
-    if @run.nil?
-      render(:bad_url)
-      return
-    end
-
     @run.hits += 1
     @run.save
     if @run.present?
@@ -91,11 +84,11 @@ class RunsController < ApplicationController
   end
 
   def random
-    @run = Run.offset(rand(Run.count)).first
-    if @run.nil?
+    if Run.count == 0
       redirect_to root_path, alert: 'There are no runs yet!'
     else
       session[:random] = true
+      @run = Run.offset(rand(Run.count)).first
       redirect_to(run_path(@run.nick))
     end
   end
@@ -123,6 +116,10 @@ class RunsController < ApplicationController
 
   def set_run
     @run = Run.find_by(nick: params[:run])
+    if @run.try(:file).nil?
+      render :bad_url
+      return false
+    end
   end
 
 end
