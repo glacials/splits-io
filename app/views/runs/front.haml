@@ -1,36 +1,30 @@
-#main
-  .header
-    %h1 splits i/o
-    %h4
-      upload
-      %u all
-      the splits
-  = render partial: 'shared/alerts'
-  .content
-    - if user_signed_in? && current_user.runs.present?
-      %h3 Hey, #{current_user.name}. Check out the new splits page design!
-      %h4 Let me know what you think from 'feedback' in the footer :)
-      %table.hover
-        %thead
-          %tr
-            %th Name
-            %th Time
-            %th Uploaded
-            %th Actions
-        %tbody
-          - current_user.runs.each do |run|
-            %tr{href: run_path(run.nick)}
-              %td
-                %a{href: run_path(run.nick)}= run.name
-              %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
-              %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
-              %td
-                %small
-                  = link_to('Disown', disown_path(run.nick), method: :post, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
-                  \/
-                  = link_to('Delete', run_path(run.nick), method: :delete, data: {confirm: 'Really delete this run?'})
-    - else
-      %h2.content-subhead How to use splits i/o
-      %p
-        Save your splits to a file using your favorite splitting program, then
-        drag that file anywhere on this page.
+= render partial: 'shared/alerts'
+.container
+  %h2 splits i/o
+  %h5
+    upload
+    %u all
+    the splits
+  - if user_signed_in? && current_user.runs.present?
+    %table.hover
+      %thead
+        %tr
+          %th Name
+          %th Time
+          %th Uploaded
+          %th Actions
+      %tbody
+        - current_user.runs.each do |run|
+          %tr{href: run_path(run.nick)}
+            %td
+              %a{href: run_path(run.nick)}= run.name
+            %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
+            %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
+            %td
+              %small
+                = link_to('Disown', disown_path(run.nick), method: :post, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
+                \/
+                = link_to('Delete', run_path(run.nick), method: :delete, data: {confirm: 'Really delete this run?'})
+  - else
+    Save your splits to a file using your favorite splitting program, then
+    drag that file anywhere on this page.
