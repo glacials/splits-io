@@ -37,9 +37,7 @@
           - if @run.present?
             %a.fake-link#download-link{onclick: 'toggle_download_menu()'} download
             &bull;
-          %a{href: 'mailto:qhiiyr@gmail.com'} feedback
-          &bull;
-          %a{href: 'https://github.com/glacials/splits-io', target: '_blank'} github
+          %a{href: faq_path} faq
         - if @run.present?
           #download-menu
             - ([:wsplit, :timesplittracker, :splitterz, :livesplit] - [@run.program]).each do |program|

@@ -1,6 +1,8 @@
 SplitsIO::Application.routes.draw do
   root 'runs#front'
 
+  get '/faq', to: 'pages#faq', as: :faq
+
   get  '/upload',     to: 'runs#new',        as: :upload
   post '/upload',     to: 'runs#upload'
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
