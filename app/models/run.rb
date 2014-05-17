@@ -48,7 +48,7 @@ class Run < ActiveRecord::Base
   end
 
   def game
-    self[:game] || parse.game
+    self[:game] || parse.try(:game)
   end
 
   def category
