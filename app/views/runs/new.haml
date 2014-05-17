@@ -1,8 +1,8 @@
-.header
-  %h1 drop it like it's hot
-  %h4 drag your splits onto this page, or any page
+= render partial: 'shared/alerts'
 .container
-  %form.form-inline{action: upload_path, method: :post, enctype: "multipart/form-data"}
+  %h2 drop it like it's hot
+  %h5 drag your splits onto this page, or any page
+  %form{action: upload_path, method: :post, enctype: "multipart/form-data"}
     %input{type: :hidden, name: 'authenticity_token', value: form_authenticity_token}
     .form-group
       %input{type: :file, name: 'file'}
