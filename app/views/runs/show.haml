@@ -48,12 +48,12 @@
           %td
             = split.name
           %td.align-right
-            - unless split.duration == 0
+            - if split.duration == 0
+              \-
+            - else
               = render partial: 'shared/time', locals: {run: @run, time: split.duration}
-            - else
-              \-
           %td.align-right
-            - unless split.duration == 0
-              = render partial: 'shared/time', locals: {run: @run, time: split.finish_time}
-            - else
+            - if split.duration == 0
               \-
+            - else
+              = render partial: 'shared/time', locals: {run: @run, time: split.finish_time}

@@ -18,6 +18,15 @@ class Run < ActiveRecord::Base
   @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
 
+  # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method doesn't do anything.
+  # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped. This also works when
+  # several splits in a row are skipped.
+  def combined_splits
+    splits.reduce([]) do |splits, split|
+      (splits.drop_while{ |split| split.duration == 0 } + (splits.take_while{ |split| split.duration == 0 } + [split])).extend(Split)
+    end
+  end
+
   def generate_nick
     loop do
       self.nick = SecureRandom.urlsafe_base64(3)
