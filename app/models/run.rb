@@ -21,9 +21,9 @@ class Run < ActiveRecord::Base
   # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method doesn't do anything.
   # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped. This also works when
   # several splits in a row are skipped.
-  def combined_splits
+  def reduced_splits
     splits.reduce([]) do |splits, split|
-      (splits.drop_while{ |split| split.duration == 0 } + (splits.take_while{ |split| split.duration == 0 } + [split])).extend(Split)
+      splits + [((splits.last.try(:duration) == 0 ? splits.last : []) + [split]).extend(Split)]
     end
   end
 
@@ -48,20 +48,10 @@ class Run < ActiveRecord::Base
 
   def disown
     self.user = nil
-    self.save
   end
 
   def hit
     self.hits += 1
-    self.save
-  end
-
-  def game
-    self[:game] || parse.try(:game)
-  end
-
-  def category
-    self[:category] || parse.category
   end
 
   def disown

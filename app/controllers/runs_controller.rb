@@ -32,9 +32,9 @@ class RunsController < ApplicationController
     else
       if @run.new?
         @run.destroy
-        redirect_to(cant_parse_path)
+        redirect_to cant_parse_path
       else
-        render(:cant_parse)
+        render :cant_parse
       end
     end
   end
@@ -73,9 +73,9 @@ class RunsController < ApplicationController
     else
       if @run.new?
         @run.destroy
-        redirect_to(cant_parse_path)
+        redirect_to cant_parse_path
       else
-        render(:cant_parse)
+        render :cant_parse
       end
     end
   end
@@ -93,18 +93,19 @@ class RunsController < ApplicationController
   def disown
     if @run.belongs_to?(current_user)
       @run.disown
-      redirect_to(root_path)
+      @run.save
+      redirect_to root_path
     else
-      redirect_to(run_path(@run.nick))
+      redirect_to run_path(@run.nick)
     end
   end
 
   def delete
     if @run.belongs_to?(current_user)
       @run.destroy
-      redirect_to(root_path)
+      redirect_to root_path
     else
-      redirect_to(run_path(@run.nick))
+      redirect_to run_path(@run.nick)
     end
   end
 
@@ -119,7 +120,7 @@ class RunsController < ApplicationController
   end
 
   def increment_hits
-    @run.hits += 1
+    @run.hit
     @run.save
   end
 end

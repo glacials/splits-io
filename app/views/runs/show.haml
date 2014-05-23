@@ -19,13 +19,13 @@
         Another random?
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
-  - @run.splits.each_with_index do |split, index|
+  - @run.reduced_splits.each_with_index do |split, index|
     - unless split.duration == 0
       .pure-u.split{id: 'split-' + index.to_s, class: "size-chart-" + colors[(index) % colors.length].to_s, style: "width: #{split.duration / @run.time * 100}%;"}
         .title= split.name
         .time= render partial: 'shared/time', locals: {run: @run, time: split.duration}
 .timeline.l-vbox.pure-g{style: "margin-bottom: 1em;"}
-  - @run.splits.each_with_index do |split, index|
+  - @run.reduced_splits.each_with_index do |split, index|
     - unless split.duration == 0
       .pure-u.inspect{id: 'inspect-' + index.to_s, style: "width: #{split.duration / @run.time * 100}%; opacity: 0;"}
         .bar
