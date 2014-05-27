@@ -5,8 +5,6 @@
 
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-# You can use `rake secret` to generate a secure secret key.
 
-# Make sure your secret_key_base is kept private
-# if you're sharing your code publicly.
-SplitsIO::Application.config.secret_key_base = '030e7581babb6909afff71d4293475829a897946476e04390abb51cc1dea08c92cb564a6342d6d46c55381a0035581d992c4f2ef4a718c0d35508fb5f0734586'
+SplitsIO::Application.config.secret_key_base =
+  (Rails.env.development? || Rails.env.test?) ?  ('x' * 30) : ENV['splitsio_secret_key_base']

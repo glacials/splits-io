@@ -140,17 +140,24 @@ export splitsio_twitch_secret=your_client_secret_here
 
 Then you should be able to `rails server` and have login working.
 
-#### Databases
+#### Production
 
-Running in development mode (which should be the default when using `rails server`) should use SQLite (at
-`db/development.sqlite3`). If you want to run in production mode, splits i/o is set up to use PostgreSQL, and to use it
-you'll need to set these self-explanatory environemt variables:
+Development mode (the default when using `rails server`) should work just fine at this point. To run in production mode,
+you will need some additional environment variables set.
+
+Production expects a PostgreSQL database server, so you'll want to set the following environment variables to use one:
 
     splitsio_db_host
     splitsio_db_port
     splitsio_db_name
     splitsio_db_username
     splitsio_db_password
+
+You will also need to set a 30+ character secret key base, which is used to sign cookies:
+
+    splitsio_secret_key_base
+
+You can generate a secure key for this with `rake secret`.
 
 [1]: https://github.com/skoh-fley/splits-io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser
