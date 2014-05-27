@@ -10,7 +10,7 @@ class LiveSplitParser
     return v1_3(run, xml) if version >= Versionomy.parse('1.3')
     return v1_2(run, xml) if version >= Versionomy.parse('1.2')
     return nil
-  rescue REXML::ParseException
+  rescue
     nil
   end
 
