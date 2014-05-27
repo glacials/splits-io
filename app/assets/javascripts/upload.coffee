@@ -12,20 +12,8 @@ $ ->
     progressBarContainer.appendChild progressBar
     li.appendChild progressBarContainer
 
-    # If the file is an image and the web browser supports FileReader, # present a preview in the file list
-    if typeof FileReader isnt "undefined" and (/image/i).test(file.type)
-      img = document.createElement("img")
-      li.appendChild img
-      reader = new FileReader()
-      reader.onload = ((theImg) ->
-        (evt) ->
-          theImg.src = evt.target.result
-          return
-      (img))
-      reader.readAsDataURL file
     formData = new FormData()
     xhr = new XMLHttpRequest()
-    formData.append "authenticity_token", $("meta[name=\"csrf-token\"]").attr("content")
     formData.append "file", file
     xhr.open "POST", "/upload.json", true
     xhr.onload = ->
