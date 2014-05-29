@@ -6,7 +6,7 @@
     %u all
     the splits
   - if user_signed_in? && current_user.runs.present?
-    %table.hover
+    %table
       %thead
         %tr
           %th Name
@@ -15,7 +15,7 @@
           %th Actions
       %tbody
         - current_user.runs.each do |run|
-          %tr{href: run_path(run.nick)}
+          %tr
             %td
               %a{href: run_path(run.nick)}= run.name
             %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
