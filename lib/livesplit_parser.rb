@@ -55,7 +55,7 @@ class LiveSplitParser
     run.offset   ||= duration_in_seconds_of(xml['Offset'].first.strip)
     run.history  ||= xml['RunHistory'].first['Time'].present? ? xml['RunHistory'].first['Time'].map { |t| duration_in_seconds_of(t['content']) }.reject { |t| t == 0 } : []
 
-    run.name     ||= run.game + ' ' + run.category
+    run.name     ||= "#{run.game} #{run.category}"
     run.splits   ||= []
     run.time     ||= 0
     if run.splits.empty?
