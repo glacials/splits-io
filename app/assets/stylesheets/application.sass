@@ -4,6 +4,27 @@
 @import headings
 @import bootstrap
 
+nav
+  @extend .pull-right
+
+.nav
+  background-color: #f1f1f1
+  color: #777
+  display: inline-block
+  letter-spacing: -1px
+  margin-left: -.3em
+  padding: 10px
+  &:hover
+    background-color: #777
+    color: #fff
+
+.logo
+  color: #f1f1f1
+  display: inline-block
+  letter-spacing: 0
+  margin-left: -.3em
+  padding: 10px
+
 th
   white-space: nowrap
 
@@ -56,8 +77,15 @@ h2 small
     color: #6441a5
 
 
-#footer-links, #download-menu
+#download-menu
+  display: none
+  float: left
   padding: 0 1em 1em 0
+  white-space: nowrap
+  width: 0
+
+#download-link
+  width: 50%
 
 a
   &:link.twitch-signin img
@@ -71,18 +99,6 @@ a
 
 .fake-link
   cursor: pointer
-
-#download-menu
-  display: none
-
-#logo
-  background-color: #777
-  color: #fff
-  display: inline-block
-  float: left
-  letter-spacing: -1px
-  padding: 10px
-  text-transform: uppercase
 
 #dropzone
   position: absolute
@@ -146,23 +162,56 @@ footer
   box-sizing: border-box
   white-space: nowrap
 
-.size-chart-blue
+.blue
   background: #0e90d2
+  nav &
+    &:hover
+      background: #0e90d2
+      color: #f1f1f1
+    &.logo
+      &:hover
+        background: #f1f1f1
+        color: #0e90d2
 
-.size-chart-purple
+.purple
   background: rgb(128, 88, 165)
+  nav &
+    background: #f1f1f1
+    &:hover
+      background: rgb(128, 88, 165)
+      color: #f1f1f1
 
-.size-chart-green
+.green
   background: #5eb95e
+  nav &
+    background: #f1f1f1
+    &:hover
+      background: #5eb95e
+      color: #f1f1f1
 
-.size-chart-red
+.red
   background: #dd514c
+  nav &
+    background: #f1f1f1
+    &:hover
+      background: #dd514c
+      color: #f1f1f1
 
-.size-chart-orange
+.yellow
   background: rgb(250, 210, 50)
+  nav &
+    background: #f1f1f1
+    &:hover
+      background: rgb(250, 210, 50)
+      color: #f1f1f1
 
-.size-chart-yellow
+.orange
   background: rgb(243, 123, 29)
+  nav &
+    background: #f1f1f1
+    &:hover
+      background: rgb(243, 123, 29)
+      color: #f1f1f1
 
 .split .title, .inspect .title
   padding: 0.5em 0 0 0.5em

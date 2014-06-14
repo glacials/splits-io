@@ -13,6 +13,15 @@
   - if @run.user.present?
     %h6
       %a.twitch{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
+  %h6
+    %span#download-menu
+      %a{href: download_path(@run.nick, @run.program), onclick: 'hide_download_menu()'}= @run.program
+      - ([:wsplit, :timesplittracker, :splitterz, :livesplit] - [@run.program]).each do |program|
+        &bull;
+        %a{href: download_path(@run.nick, program), onclick: 'hide_download_menu()'}= program
+    .glyphicon.glyphicon-download-alt
+    %a.fake-link#download-link{onclick: 'toggle_download_menu()'}
+      download
   - if @random.present?
     %h6
       %a{href: random_path}
