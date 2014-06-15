@@ -5,7 +5,7 @@ class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :disown, :delete]
   before_action :increment_hits, only: [:show, :download]
   after_action only: [:show, :upload, :download, :random, :disown, :delete] do |controller|
-    unless @run.destroyed?
+    if @run.present? && !@run.destroyed?
       StatsMix.track(controller.action_name, 1, meta: { game: @run.game.try(:name), user_signed_in: user_signed_in? })
     end
   end
