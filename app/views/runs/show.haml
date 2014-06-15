@@ -5,7 +5,6 @@
     &uarr; That's your permalink!
   :coffee
     window.onload = -> $('#permalink-indicator').fadeIn().delay(4000).fadeOut({ complete: -> $(this).remove()});
-= render partial: 'shared/alerts'
 .container
   %h2
     #{@run.name}

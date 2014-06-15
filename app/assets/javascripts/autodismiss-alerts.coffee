@@ -1,3 +1,4 @@
 window.setTimeout (->
-  $('.alert-success').slideUp(500, -> $(this).remove())
-), 3000
+  $('.alert-success').animate width: '0%', 400, ->
+    $(this).remove()
+), 2500

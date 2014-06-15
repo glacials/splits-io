@@ -15,13 +15,14 @@
       - color = [:blue, :purple, :green, :red, :orange].sample(1).first
       %nav
         %a.logo.blue{href: root_path} splits i/o
-        %a.nav.purple{href: upload_path} upload
-        %a.nav.green{href: search_path} search
-        %a.nav.red{href: faq_path} faq
+        %a.purple{href: upload_path} upload
+        %a.green{href: search_path} search
+        %a.red{href: faq_path} faq
         - if user_signed_in?
-          %a.nav.orange{href: signout_path} sign out
+          %a.orange{href: signout_path} sign out
         - else
-          %a.nav.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
+          %a.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
+      = render partial: 'shared/alerts'
       = yield
   = javascript_include_tag 'application'
   - if Rails.env.production?

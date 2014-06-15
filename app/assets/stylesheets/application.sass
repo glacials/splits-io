@@ -4,10 +4,23 @@
 @import headings
 @import bootstrap
 
+.alert-danger, .alert-success
+  @extend .pull-right
+  color: #fff
+  margin-left: auto
+  padding: 10px 2em
+  white-space: nowrap
+
+.alert-success
+  background: #5eb95e
+
+.alert-danger
+  background: #dd514c
+
 nav
   @extend .pull-right
 
-.nav
+nav a
   background-color: #f1f1f1
   color: #777
   display: inline-block
@@ -27,18 +40,6 @@ nav
 
 th
   white-space: nowrap
-
-.alert-danger, .alert-success
-  @extend .alert
-
-.alert
-  background-color: #f1f1f1
-  border: none
-  border-radius: 0
-  color: #404040
-  margin: auto
-  text-align: center
-  vertical-align: top
 
 form
   margin-top: 2em
