@@ -25,7 +25,7 @@ class RunsController < ApplicationController
     @random = session[:random] || false
     session[:random] = false
 
-    @run.user = current_user if @run.hits == 0 && user_signed_in?
+    @run.user = current_user if @run.hits == 1 && user_signed_in?
     if @run.parses
       respond_to do |format|
         format.html { render :show }
