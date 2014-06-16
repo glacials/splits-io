@@ -1,4 +1,6 @@
 .container
+  // We don't need this, but LiveSplit does. CryZe107 knows, so hopefully we can remove it next time LiveSplit updates.
+  <meta content="" name="csrf-token" />
   %h2 drop it like it's hot
   %h5 drag your splits onto this page, or any page
   %form{action: upload_path, method: :post, enctype: "multipart/form-data"}
