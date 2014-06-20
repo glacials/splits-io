@@ -17,4 +17,3 @@ cancel_text   = 'cancel'
     hide_download_menu()
   else
     show_download_menu()
-  return
