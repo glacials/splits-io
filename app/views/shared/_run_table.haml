@@ -1,0 +1,21 @@
+%table
+  %thead
+    %tr
+      %th Name
+      %th Time
+      %th Uploaded
+      - if runs.any? { |run| run.belongs_to?(current_user) }
+        %th Actions
+  %tbody
+    - runs.each do |run|
+      %tr
+        %td
+          %a{href: run_path(run.nick)}= run.name
+        %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
+        %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
+        - if run.belongs_to?(current_user)
+          %td
+            %small
+              = link_to('Disown', disown_path(run.nick), method: :post, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
+              \/
+              = link_to('Delete', run_path(run.nick), method: :delete, data: {confirm: 'Really delete this run?'})

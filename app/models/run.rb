@@ -7,16 +7,24 @@ class Run < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
   belongs_to :user
   belongs_to :category
+  has_one :game, through: :category
   default_scope { order('created_at DESC') }
 
   before_create :generate_nick
 
-  delegate :game, to: :category
   delegate :program, :name, :splits, :offset, :attempts, :run_history, to: :parse
 
   class << self; attr_accessor :parsers end
   @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
+
+  def self.by_category(category)
+    where(category: category)
+  end
+
+  def self.by_game(game)
+    joins(:category).where('categories.game_id = %d' % game.id)
+  end
 
   # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method doesn't do anything.
   # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped. This also works when
