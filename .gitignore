@@ -23,6 +23,3 @@
 
 # testing config
 .rspec
-
-# eb stuff
-.elasticbeanstalk/
