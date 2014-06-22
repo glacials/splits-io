@@ -2,7 +2,6 @@
   %h2 search
   %h5 find your soulmate splits
   %form.form-inline{action: search_path, method: :post}
-    %input{type: :hidden, name: 'authenticity_token', value: form_authenticity_token}
     .form-group
       %input{type: :text, name: 'term', autofocus: true, placeholder: 'search...'}
     .form-group
