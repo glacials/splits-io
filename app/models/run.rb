@@ -70,11 +70,7 @@ class Run < ActiveRecord::Base
     splits.map(&:duration).sum
   end
 
-  def parses
-    parse
-  end
-
-  def parsed
+  def parses?
     parse
   end
 
