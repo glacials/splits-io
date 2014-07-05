@@ -12,7 +12,7 @@ class Run < ActiveRecord::Base
 
   before_create :generate_nick
 
-  delegate :program, :name, :splits, :offset, :attempts, :run_history, to: :parse
+  delegate :program, :splits, :offset, :attempts, :run_history, to: :parse
 
   class << self; attr_accessor :parsers end
   @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
@@ -67,7 +67,11 @@ class Run < ActiveRecord::Base
   end
 
   def time
-    splits.map(&:duration).sum
+    read_attribute(:time) || update_attribute(:time, splits.map(&:duration).sum) && read_attribute(:time)
+  end
+
+  def name
+    read_attribute(:name) || update_attribute(:name, parse.name) && read_attribute(:name)
   end
 
   def parses?
