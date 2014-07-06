@@ -26,6 +26,7 @@ gem 'sass-rails',     '>= 4.0.0'
 gem 'uglifier',       '>= 1.3.0'
 gem 'unicorn',        '>= 4.8.3'
 gem 'versionomy',     '>= 0.4.4'
+gem 'will_paginate',  '>= 3.0.7'
 gem 'xml-simple',     '>= 1.1.3'
 
 gem 'rubocop',        '>= 0.21.0', require: false

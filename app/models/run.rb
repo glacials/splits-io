@@ -26,6 +26,10 @@ class Run < ActiveRecord::Base
     joins(:category).where('categories.game_id = %d' % game.id)
   end
 
+  def self.search(term)
+    where(Run.arel_table[:name].matches "%#{term}%").order(:name)
+  end
+
   # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method doesn't do anything.
   # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped. This also works when
   # several splits in a row are skipped.

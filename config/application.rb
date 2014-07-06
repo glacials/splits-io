@@ -10,3 +10,5 @@ module SplitsIO
     config.action_controller.allow_forgery_protection = false
   end
 end
+
+WillPaginate.per_page = 15

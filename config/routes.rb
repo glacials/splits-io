@@ -16,9 +16,7 @@ SplitsIO::Application.routes.draw do
     get 'signout', to: 'devise/sessions#destroy', as: :signout
   end
 
-  get  '/search',       to: 'runs#search',  as: :search
-  post '/search',       to: 'runs#search'
-  get  '/search/:term', to: 'runs#results', as: :results
+  get  '/search(/:term)', to: 'search#index', as: :search
 
   get '/:run',                   to: 'runs#show',     as: :run
   get '/:run/download/:program', to: 'runs#download', as: :download

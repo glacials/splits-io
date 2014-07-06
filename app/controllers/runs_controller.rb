@@ -5,17 +5,6 @@ class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :disown, :delete]
   before_action :increment_hits, only: [:show, :download]
 
-  def search
-    if params[:term].present?
-      redirect_to "/search/#{URI.escape(params[:term].strip)}"
-    end
-  end
-
-  def results
-    @term = params[:term]
-    @runs = (Game.search(@term).map(&:categories).flatten.map(&:runs).flatten | Category.search(@term).map(&:runs).flatten).sort_by(&:hits)
-  end
-
   def show
     @random = session[:random] || false
     session[:random] = false
