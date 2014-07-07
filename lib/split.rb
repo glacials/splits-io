@@ -5,7 +5,4 @@ module Split
   def duration
     map(&:duration).sum
   end
-  def amalgam?
-    count > 1
-  end
 end
