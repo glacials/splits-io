@@ -5,7 +5,7 @@
     %u all
     the splits
   - if user_signed_in? && current_user.runs.present?
-    = render partial: 'shared/run_table', locals: {runs: current_user.runs}
+    = render partial: 'shared/run_table', locals: {runs: current_user.runs.order('created_at desc')}
   - else
     Save your splits to a file using your favorite splitting program, then
     drag that file anywhere on this page.
