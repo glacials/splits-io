@@ -1,2 +1,7 @@
-:javascript
-  mixpanel.track("page viewed", { "URL": "#{request.fullpath}" })
+:coffee
+  mixpanel.track "page viewed", {
+    'URL': window.location.pathname
+  }
+  mixpanel.track_forms '#upload', 'run uploaded', {
+    'Client': 'form'
+  }
