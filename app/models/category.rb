@@ -5,4 +5,8 @@ class Category < ActiveRecord::Base
   def best_known_run
     runs.order(:time).first
   end
+
+  def to_s
+    name
+  end
 end

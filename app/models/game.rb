@@ -5,4 +5,8 @@ class Game < ActiveRecord::Base
   def self.search(term)
     where(Game.arel_table[:name].matches "%#{term}%").order(:name)
   end
+
+  def to_s
+    name
+  end
 end
