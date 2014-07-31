@@ -19,8 +19,10 @@ $ ->
     xhr.onload = ->
       if xhr.status is 200
         console.log "all done: " + xhr.status
+        mixpanel.track "run uploaded", { "Client": "drag and drop", "Success": true }
         window.location = JSON.parse(xhr.responseText).url
       else
+        mixpanel.track "run uploaded", { "Client": "drag and drop", "Success": false }
         console.log "Something went wrong..."
       return
 
