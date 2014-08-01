@@ -46,14 +46,15 @@ class RunsController < ApplicationController
         format.json { render json: { url: cant_parse_path } }
       end
     end
+    params = {}
     if request.xhr?
-      client = 'drag and drop'
+      params['Client'] = 'drag and drop'
     elsif request.env['HTTP_USER_AGENT'] =~ /LiveSplit/i
-      client = request.env['HTTP_USER_AGENT']
+      params['Client'] = request.env['HTTP_USER_AGENT']
     elsif request.referer =~ /\/upload/i
-      client = 'form'
+      params['Client'] = 'form'
     end
-    mixpanel.track(current_user.try(:id), 'run uploaded', @run.tracking_info.merge({'Client' => client}))
+    mixpanel.track(current_user.try(:id), 'run uploaded', @run.tracking_info.merge(params))
   end
 
   def download
