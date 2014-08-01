@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 ruby '2.1.0'
 
 group :development do
-  gem 'sqlite3', '>= 1.3.9'
+  gem 'debugger', '>= 1.6.8'
+  gem 'sqlite3',  '>= 1.3.9'
 end
 
 group :production do
@@ -18,6 +19,7 @@ gem 'htmlentities',   '>= 4.3.1'
 gem 'httparty',       '>= 0.13.0'
 gem 'jbuilder',       '>= 1.2'
 gem 'jquery-rails',   '>= 3.0.4'
+gem 'mixpanel-ruby',  '>= 1.4.0'
 gem 'purecss-rails',  '>= 0.3.0'
 gem 'rails',          '>= 4.0.0'
 gem 'rails_12factor', '>= 0.0.2'

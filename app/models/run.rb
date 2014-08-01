@@ -70,7 +70,7 @@ class Run < ActiveRecord::Base
   end
 
   def time
-    read_attribute(:time) || update_attribute(:time, splits.map(&:duration).sum) && read_attribute(:time)
+    (read_attribute(:time) || update_attribute(:time, splits.map(&:duration).sum) && read_attribute(:time)).to_f
   end
 
   def name
@@ -78,7 +78,7 @@ class Run < ActiveRecord::Base
   end
 
   def parses?
-    parse
+    !!parse
   end
 
   def parse
@@ -96,5 +96,16 @@ class Run < ActiveRecord::Base
     nil
   rescue ArgumentError # comes from non UTF-8 files
     nil
+  end
+
+  def tracking_info
+    {
+      'Parses?'     => parses?,
+      'Game'        => game.name,
+      'Category'    => category.name,
+      'Screenshot?' => image_url.present?,
+      'Program'     => program,
+      'Offset'      => offset
+    }
   end
 end

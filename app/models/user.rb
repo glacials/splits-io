@@ -14,4 +14,12 @@ class User < ActiveRecord::Base
     self.name      = response['name']
     save
   end
+
+  def just_signed_up?
+    Time.now - 3.seconds < self.created_at
+  end
+
+  def just_signed_in?
+    Time.now - 3.seconds < self.current_sign_in_at
+  end
 end

@@ -12,4 +12,8 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(_resource_or_scope)
     request.referrer
   end
+
+  def mixpanel
+    mixpanel ||= Mixpanel::Tracker.new(ENV['splitsio_mixpanel_token'])
+  end
 end

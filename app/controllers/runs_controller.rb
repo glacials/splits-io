@@ -46,6 +46,7 @@ class RunsController < ApplicationController
         format.json { render json: { url: cant_parse_path } }
       end
     end
+    mixpanel.track(current_user.try(:id), 'run uploaded', @run.tracking_info.merge({'Client' => 'drag and drop'}))
   end
 
   def download
