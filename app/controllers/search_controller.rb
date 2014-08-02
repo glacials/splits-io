@@ -1,7 +1,7 @@
 class SearchController < ApplicationController
   def index
     if params[:q]
-      redirect_to search_path(URI.escape(params[:q].strip))
+      redirect_to search_path(params[:q].strip)
     elsif params[:term].present?
       @term = params[:term].strip
       puts "hi #{@term}"
