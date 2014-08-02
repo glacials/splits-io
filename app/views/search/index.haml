@@ -17,7 +17,7 @@
             - @result[:games].each do |game|
               %tr
                 %td
-                  %a{href: search_path(URI.escape(game.name))}= game.name
+                  %a{href: search_path(game.name)}= game.name
       - else
         Sorry! No games were found matching "#{@term}".
       %h4 Runs
