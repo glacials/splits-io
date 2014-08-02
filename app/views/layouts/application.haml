@@ -7,6 +7,7 @@
     = stylesheet_link_tag 'application', media: :all
     = csrf_meta_tag
     = content_for(:head)
+    = include_gon
   %body
     #dropzone
       #dropzone-overlay.header{style: 'border: none;'}

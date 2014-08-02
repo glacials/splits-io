@@ -58,6 +58,11 @@ GEM
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.1.0)
+    gon (5.1.2)
+      actionpack (>= 2.3.0)
+      json
+      multi_json
+      request_store (>= 1.0.5)
     haml (4.0.5)
       tilt
     haml-rails (0.5.3)
@@ -122,6 +127,7 @@ GEM
     rainbow (2.0.0)
     raindrops (0.13.0)
     rake (10.3.2)
+    request_store (1.0.8)
     rspec-core (3.0.0)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.0)
@@ -193,6 +199,7 @@ DEPENDENCIES
   coffee-rails (>= 4.0.0)
   debugger (>= 1.6.8)
   devise (>= 3.1.1)
+  gon (>= 5.1.2)
   haml-rails (>= 0.4)
   htmlentities (>= 4.3.1)
   httparty (>= 0.13.0)

@@ -6,6 +6,7 @@ class RunsController < ApplicationController
   before_action :increment_hits, only: [:show, :download]
 
   def show
+    gon.run = {tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?')}
     @random = session[:random] || false
     session[:random] = false
 

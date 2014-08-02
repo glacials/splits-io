@@ -6,6 +6,8 @@
     mixpanel.identify "#{current_user.id}"
 
 :coffee
-  mixpanel.track "page viewed", {
-    'URL': window.location.pathname
-  }
+  mixpanel.track "page viewed", {'URL': window.location.pathname}
+- if @run.present?
+  :coffee
+    mixpanel.track_links "#download-menu a", "run downloaded", (el) ->
+      $.extend gon.run.tracking_info, { 'Desired Program': el.innerHTML }
