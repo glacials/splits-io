@@ -2,7 +2,7 @@
   %meta{name: 'twitter:card',        content: 'summary_large_image'}
   %meta{name: 'twitter:domain',      content: request.host_with_port}
   - if @run.present?
-    %meta{name: 'twitter:title',       content: @run.game.name}
-    %meta{name: 'twitter:description', content: @run.category.name}
+    %meta{name: 'twitter:title',       content: @run.game.to_s}
+    %meta{name: 'twitter:description', content: @run.category}
     - if @run.image_url.present?
       %meta{name: 'twitter:image:src', content: @run.image_url}
