@@ -23,4 +23,6 @@ SplitsIO::Application.routes.draw do
 
   delete '/:run',        to: 'runs#delete', as: :delete
   post   '/:run/disown', to: 'runs#disown', as: :disown
+
+  get '/games/:game', to: 'games#show'
 end
