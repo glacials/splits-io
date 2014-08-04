@@ -22,6 +22,6 @@
         Sorry! No games were found matching "#{@term}".
       %h4 Runs
       - if @result[:runs].present?
-        = render partial: 'shared/run_table', locals: {runs: @result[:runs], columns: [:runner, :time, :name, :uploaded]}
+        = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
       - else
         Woops! No runs were found matching the term "#{@term}"!
