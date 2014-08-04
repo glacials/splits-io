@@ -7,7 +7,7 @@ class SearchController < ApplicationController
       puts "hi #{@term}"
       @result = {}
       @result[:games] = Game.search(@term)
-      @result[:runs]  = Run.search(@term).paginate(page: params[:page])
+      @result[:runs]  = Run.search(@term).page(params[:page])
     end
   end
 end

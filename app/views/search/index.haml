@@ -22,21 +22,6 @@
         Sorry! No games were found matching "#{@term}".
       %h4 Runs
       - if @result[:runs].present?
-        %table
-          %thead
-            %tr
-              %th Runner
-              %th Time
-              %th Name
-              %th Uploaded
-          %tbody
-            - @result[:runs].each do |run|
-              %tr
-                %td.align-right= run.user.try(:name) || '-'
-                %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
-                %td
-                  %a{href: run_path(run.nick)}= run.name
-                %td.align-right= "#{run.time_since_upload} ago"
-        .center= will_paginate @result[:runs]
+        = render partial: 'shared/run_table', locals: {runs: @result[:runs], columns: [:runner, :time, :name, :uploaded]}
       - else
         Woops! No runs were found matching the term "#{@term}"!

@@ -1,21 +1,34 @@
+- runs ||= []
+- columns ||= []
 %table
   %thead
     %tr
-      %th Name
-      %th Time
-      %th Uploaded
-      - if runs.any? { |run| run.belongs_to?(current_user) }
+      - if columns.include?(:runner)
+        %th Runner
+      - if columns.include?(:time)
+        %th.align-right Time
+      - if columns.include?(:name)
+        %th Name
+      - if columns.include?(:uploaded)
+        %th.align-right Uploaded
+      - if columns.include?(:actions) && runs.any? { |run| run.belongs_to?(current_user) }
         %th Actions
   %tbody
     - runs.each do |run|
       %tr
-        %td
-          %a{href: run_path(run.nick)}= run.name
-        %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
-        %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
-        - if run.belongs_to?(current_user)
+        - if columns.include?(:runner)
+          %td.align-right= run.user.try(:name) || '-'
+        - if columns.include?(:time)
+          %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
+        - if columns.include?(:name)
+          %td
+            %a{href: run_path(run.nick)}= run.name
+        - if columns.include?(:uploaded)
+          %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
+        - if columns.include?(:actions) && run.belongs_to?(current_user)
           %td
             %small
               = link_to('Disown', disown_path(run.nick), method: :post, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
               \/
               = link_to('Delete', run_path(run.nick), method: :delete, data: {confirm: 'Really delete this run?'})
+.center= will_paginate runs

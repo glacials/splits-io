@@ -11,4 +11,4 @@ module SplitsIO
   end
 end
 
-WillPaginate.per_page = 15
+WillPaginate.per_page = 20
