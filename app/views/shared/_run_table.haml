@@ -6,7 +6,7 @@
   %table
     %thead
       %tr
-        - if runs.any? { |run| !run.belongs_to?(current_user) }
+        - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
           %th.align-right Runner
         %th.align-right Time
         %th Name
@@ -16,7 +16,7 @@
     %tbody
       - runs.page(params[:page]).each do |run|
         %tr
-          - if runs.any? { |run| !run.belongs_to?(current_user) }
+          - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
             %td.align-right= run.user.try(:name) || '-'
           %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
           %td
