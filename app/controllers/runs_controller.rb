@@ -14,7 +14,7 @@ class RunsController < ApplicationController
     if @run.parses?
       respond_to do |format|
         format.html { render :show }
-        format.json { render json: @run }
+        format.json { render json: @run.to_json(except: :file) }
       end
     else
       if @run.new?
@@ -90,7 +90,7 @@ class RunsController < ApplicationController
     if @run.belongs_to?(current_user)
       @run.disown
       @run.save
-      redirect_to root_path
+      redirect_to :back
     else
       redirect_to run_path(@run.nick)
     end
