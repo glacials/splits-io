@@ -1,9 +1,11 @@
 - if current_user.try(:just_signed_up?)
   :coffee
     mixpanel.alias "#{current_user.id}"
+    mixpanel.track "user signed up"
 - if current_user.try(:just_signed_in?)
   :coffee
     mixpanel.identify "#{current_user.id}"
+    mixpanel.track "user signed in"
 
 :coffee
   mixpanel.track "page viewed", {'URL': window.location.pathname}
