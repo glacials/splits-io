@@ -13,3 +13,5 @@
   :coffee
     mixpanel.track_links "#download-menu a", "run downloaded", (el) ->
       $.extend gon.run.tracking_info, { 'Desired Program': el.innerHTML }
+    mixpanel.track_links "#disown", "run disowned"
+    mixpanel.track_links "#delete", "run deleted"
