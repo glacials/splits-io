@@ -23,4 +23,6 @@ SplitsIO::Application.routes.draw do
 
   delete '/:run',      to: 'runs#delete', as: :delete
   delete '/:run/user', to: 'runs#disown',  as: :disown
+
+  get '/u/:user', to: 'users#show', as: :user
 end

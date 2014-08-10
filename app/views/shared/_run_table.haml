@@ -1,27 +1,31 @@
 - runs = runs.page(params[:page])
-%table
-  %thead
-    %tr
-      - if runs.any? { |run| !run.belongs_to?(current_user) }
-        %th.align-right Runner
-      %th.align-right Time
-      %th Name
-      %th.align-right Uploaded
-      - if runs.any? { |run| run.belongs_to?(current_user) }
-        %th Actions
-  %tbody
-    - runs.page(params[:page]).each do |run|
+- if runs.empty?
+  %center
+    %i Woops! No runs here, #{['boss', 'friend', 'pal', 'buddy', 'speedfriend', 'friend', 'unfortunately'].sample}!
+- else
+  %table
+    %thead
       %tr
         - if runs.any? { |run| !run.belongs_to?(current_user) }
-          %td.align-right= run.user.try(:name) || '-'
-        %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
-        %td
-          %a{href: run_path(run.nick)}= run.name
-        %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
-        %td
-          - if run.belongs_to?(current_user)
-            %small
-              = link_to('Disown', disown_path(run.nick), id: :disown, method: :delete, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
-              \/
-              = link_to('Delete', run_path(run.nick), id: :delete, method: :delete, data: {confirm: 'Really delete this run?'})
-.center= will_paginate runs
+          %th.align-right Runner
+        %th.align-right Time
+        %th Name
+        %th.align-right Uploaded
+        - if runs.any? { |run| run.belongs_to?(current_user) }
+          %th Actions
+    %tbody
+      - runs.page(params[:page]).each do |run|
+        %tr
+          - if runs.any? { |run| !run.belongs_to?(current_user) }
+            %td.align-right= run.user.try(:name) || '-'
+          %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
+          %td
+            %a{href: run_path(run.nick)}= run.name
+          %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
+          %td
+            - if run.belongs_to?(current_user)
+              %small
+                = link_to('Disown', disown_path(run.nick), id: :disown, method: :delete, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
+                \/
+                = link_to('Delete', run_path(run.nick), id: :delete, method: :delete, data: {confirm: 'Really delete this run?'})
+  .center= will_paginate runs

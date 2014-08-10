@@ -1,0 +1,4 @@
+.container
+  %h2= @user.name
+  %h5 on splits.io
+  = render partial: 'shared/run_table', locals: {runs: @user.runs.order('created_at desc')}
