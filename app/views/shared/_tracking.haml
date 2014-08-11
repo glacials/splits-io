@@ -5,7 +5,6 @@
 - if current_user.try(:just_signed_in?)
   :coffee
     mixpanel.identify "#{current_user.id}"
-    mixpanel.track "user signed in"
 
 :coffee
   mixpanel.track "page viewed", {'URL': window.location.pathname}
@@ -15,3 +14,5 @@
       $.extend gon.run.tracking_info, { 'Desired Program': el.innerHTML }
     mixpanel.track_links "#disown", "run disowned"
     mixpanel.track_links "#delete", "run deleted"
+    mixpanel.track_links "#sign_in",  "user signed in"
+    mixpanel.track_links "#sign_out", "user signed out"
