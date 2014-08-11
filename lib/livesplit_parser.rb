@@ -7,11 +7,10 @@ class LiveSplitParser
     xml = XmlSimple.xml_in(xml)
     version = Versionomy.parse(xml['version'] || '1.2')
     run = OpenStruct.new
+    return v1_4(run, xml) if version >= Versionomy.parse('1.4')
     return v1_3(run, xml) if version >= Versionomy.parse('1.3')
     return v1_2(run, xml) if version >= Versionomy.parse('1.2')
     return nil
-  rescue
-    nil
   end
 
   private
@@ -20,32 +19,57 @@ class LiveSplitParser
   # identically except for a minor difference in positioning of split times. So the 1.3 function parses only splits,
   # then hands the rest of the XML off to the 1.2 function, which parses the rest as if it were 1.2 content.
 
+  def v1_4(run, xml)
+    run.splits ||= []
+    run.time   ||= 0
+    if run.splits.empty?
+      xml['Segments'].first.first.second.each do |segment|
+        split = OpenStruct.new
+        split.best = OpenStruct.new
+        split.name = segment['Name'].first
+
+        split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select { |k,_| k['name'] == 'Personal Best' }[0]['RealTime'].try(:[], 0) || '00:00:00.00')
+        split.duration = split.finish_time - run.time
+        split.duration = 0 if split.duration < 0
+
+        best_segment = segment['BestSegmentTime'][0]['RealTime'].try(:[], 0)
+        best_segment = best_segment.first if best_segment.is_a?(Hash)
+        split.best.duration = duration_in_seconds_of(best_segment)
+
+        split.parent = run
+        run.time += split.duration if split.duration.present?
+        run.splits << split
+      end
+    end
+    return v1_3(run, xml)
+  end
+
   def v1_3(run, xml)
     run.splits ||= []
     run.time   ||= 0
-    xml['Segments'].first.first.second.each do |segment|
-      split = OpenStruct.new
-      split.best = OpenStruct.new
-      split.name = segment['Name'].first
+    if run.splits.empty?
+      xml['Segments'].first.first.second.each do |segment|
+        split = OpenStruct.new
+        split.best = OpenStruct.new
+        split.name = segment['Name'].first
 
-      # Okay what the hell. There's no way XML parsing is this crazy.
-      # Somebody please enlighten me. Maybe I should switch this to Nokogiri.
-      split.finish_time = duration_in_seconds_of(segment['SplitTimes'].first.first.second
-                                                .select { |k, _| k['name'] == 'Personal Best' }.first['content'].strip)
-      split.duration = split.finish_time - run.time
-      split.duration = 0 if split.duration < 0
+        # Okay what the hell. There's no way XML parsing is this crazy.
+        # Somebody please enlighten me. Maybe I should switch this to Nokogiri.
+        split.finish_time = duration_in_seconds_of(segment['SplitTimes'].first.first.second
+                                                  .select { |k, _| k['name'] == 'Personal Best' }.first['content'].strip)
+        split.duration = split.finish_time - run.time
+        split.duration = 0 if split.duration < 0
 
-      best_segment = segment['BestSegmentTime'].first
-      best_segment = best_segment.first if best_segment.is_a?(Hash)
-      split.best.duration = duration_in_seconds_of(best_segment)
+        best_segment = segment['BestSegmentTime'].first
+        best_segment = best_segment.first if best_segment.is_a?(Hash)
+        split.best.duration = duration_in_seconds_of(best_segment)
 
-      split.parent = run
-      run.time += split.duration if split.duration.present?
-      run.splits << split
+        split.parent = run
+        run.time += split.duration if split.duration.present?
+        run.splits << split
+      end
     end
     return v1_2(run, xml)
-  rescue
-    nil
   end
 
   def v1_2(run, xml)
@@ -75,8 +99,6 @@ class LiveSplitParser
       end
     end
     return run
-  rescue
-    nil
   end
 
   def duration_in_seconds_of(time)

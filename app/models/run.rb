@@ -99,13 +99,13 @@ class Run < ActiveRecord::Base
   end
 
   def tracking_info
-    {
-      'Parses?'     => parses?,
+    { 'Parses?'     => parses?,
+      'Screenshot?' => image_url.present?
+    }.merge(parses? ? {
       'Game'        => game.name,
       'Category'    => category.name,
-      'Screenshot?' => image_url.present?,
       'Program'     => program,
       'Offset'      => offset
-    }
+    } : {})
   end
 end
