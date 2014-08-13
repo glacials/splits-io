@@ -104,6 +104,10 @@ class Run < ActiveRecord::Base
     parse[:history]
   end
 
+  def as_json(options)
+    super(except: 'file')
+  end
+
   def parses?
     !!parse
   end
