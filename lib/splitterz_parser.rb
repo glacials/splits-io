@@ -18,6 +18,7 @@ class SplitterZParser < BabelBridge::Parser
 
   def parse(file)
     splits = super(file)
+    return nil unless splits
     run = {}
     run[:game] = nil
     run[:name] = splits.title.to_s
@@ -36,6 +37,8 @@ class SplitterZParser < BabelBridge::Parser
       run[:splits] << split
     end
     run
+  rescue
+    nil
   end
 
   def duration_in_seconds_of(time)
