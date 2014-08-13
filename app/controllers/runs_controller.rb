@@ -62,9 +62,9 @@ class RunsController < ApplicationController
     if @run.present?
       file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
       if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
-        send_data(HTMLEntities.new.decode(@run.file), filename: "#{@run}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(@run.file), filename: "#{@run.to_param}.#{file_extension}", layout: false)
       else
-        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run.to_param}.#{file_extension}", layout: false)
       end
     else
       if @run.new?
