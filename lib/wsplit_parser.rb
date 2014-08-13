@@ -37,7 +37,7 @@ class WSplitParser < BabelBridge::Parser
     splits.splits.each do |segment|
       split = {}
       split[:best] = {}
-      split[:name] = segment.title
+      split[:name] = segment.title.to_s
       split[:duration] = segment.run_time.to_s.to_f - run[:time]
       split[:finish_time] = segment.run_time.to_s.to_f
       split[:best][:duration] = segment.best_time.to_s.to_f
