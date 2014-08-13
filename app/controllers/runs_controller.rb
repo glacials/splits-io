@@ -14,7 +14,7 @@ class RunsController < ApplicationController
     if @run.parses?
       respond_to do |format|
         format.html { render :show }
-        format.json { render json: @run.to_json(except: :file) }
+        format.json { render json: @run.attributes.merge(splits: @run.splits).to_json(except: 'file') }
       end
     else
       if @run.new?
@@ -82,7 +82,10 @@ class RunsController < ApplicationController
     else
       session[:random] = true
       @run = Run.offset(rand(Run.count)).first
-      redirect_to(run_path(@run.nick))
+      respond_to do |format|
+        format.html { redirect_to(run_path(@run.nick)) }
+        format.json { render json: {redirect: run_path(@run.nick)} }
+      end
     end
   end
 
