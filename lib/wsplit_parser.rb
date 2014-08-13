@@ -27,24 +27,22 @@ class WSplitParser < BabelBridge::Parser
   def parse(file)
     splits = super(file)
     return nil unless splits
-    run = OpenStruct.new
-    run.game = nil
-    run.name = splits.title.to_s
-    run.attempts = splits.attempts.to_s.to_i
-    run.offset = splits.offset.to_f
-    run.splits = []
-    run.time = 0
+    run = {}
+    run[:game] = nil
+    run[:name] = splits.title.to_s
+    run[:attempts] = splits.attempts.to_s.to_i
+    run[:offset] = splits.offset.to_f
+    run[:splits] = []
+    run[:time] = 0
     splits.splits.each do |segment|
-      split = OpenStruct.new
-      split.old = OpenStruct.new
-      split.best = OpenStruct.new
-      split.name = segment.title
-      split.duration = segment.run_time.to_s.to_f - run.time
-      split.finish_time = segment.run_time.to_s.to_f
-      split.best.duration = segment.best_time.to_s.to_f
-      split.parent = run
-      run.time += split.duration
-      run.splits << split
+      split = {}
+      split[:best] = {}
+      split[:name] = segment.title
+      split[:duration] = segment.run_time.to_s.to_f - run[:time]
+      split[:finish_time] = segment.run_time.to_s.to_f
+      split[:best][:duration] = segment.best_time.to_s.to_f
+      run[:time] += split[:duration]
+      run[:splits] << split
     end
     run
   rescue

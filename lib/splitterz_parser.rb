@@ -18,28 +18,24 @@ class SplitterZParser < BabelBridge::Parser
 
   def parse(file)
     splits = super(file)
-    return nil unless splits
-    run = OpenStruct.new
-    run.game = nil
-    run.name = splits.title.to_s
-    run.attempts = splits.attempts.to_s.to_i
-    run.splits = []
-    run.time = 0
+    run = {}
+    run[:game] = nil
+    run[:name] = splits.title.to_s
+    run[:attempts] = splits.attempts.to_s.to_i
+    run[:splits] = []
+    run[:time] = 0
     splits.splits.each do |segment|
-      split = OpenStruct.new
-      split.old = OpenStruct.new
-      split.best = OpenStruct.new
-      split.name = segment.title
-      split.duration = duration_in_seconds_of(segment.run_time.to_s) - run.time
-      split.finish_time = duration_in_seconds_of segment.run_time.to_s
-      split.best.duration = duration_in_seconds_of segment.best_time.to_s
-      split.parent = run
-      run.time += split.duration
-      run.splits << split
+      split = {}
+      split[:best] = {}
+      split[:name] = segment.title
+      split[:duration] = duration_in_seconds_of(segment.run_time.to_s) - run[:time]
+      split[:finish_time] = duration_in_seconds_of(segment.run_time.to_s)
+      split[:best][:duration] = duration_in_seconds_of(segment.best_time.to_s)
+      split[:parent] = run
+      run[:time] += split[:duration]
+      run[:splits] << split
     end
     run
-  rescue
-    nil
   end
 
   def duration_in_seconds_of(time)

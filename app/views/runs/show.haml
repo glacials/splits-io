@@ -40,8 +40,8 @@
           %td.align-right
             = index + 1
           %td
-            = split.name
+            = split[:name].present? ? split[:name] : '-'
           %td.align-right
-            = render partial: 'shared/time', locals: {run: @run, time: split.duration}
+            = render partial: 'shared/time', locals: {run: @run, time: split[:duration]}
           %td.align-right
-            = render partial: 'shared/time', locals: {run: @run, time: split.finish_time}
+            = render partial: 'shared/time', locals: {run: @run, time: split[:finish_time]}

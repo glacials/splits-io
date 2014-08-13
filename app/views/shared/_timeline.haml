@@ -1,15 +1,13 @@
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 .timeline{style: "margin-bottom: 1em;"}
   - run.reduced_splits.each_with_index do |split, index|
-    - unless split.duration == 0
-      .pure-u.split{id: "split-#{index.to_s}", class: colors[index % colors.length], style: "width: #{split.duration / run.time * 100}%;"}
-        .title= split.name
-        .time= render partial: 'shared/time', locals: {run: run, time: split.duration}
+    .pure-u.split{id: "split-#{index.to_s}", class: colors[index % colors.length], style: "width: #{split[:duration] / run.time * 100}%;"}
+      .title= split[:name]
+      .time= render partial: 'shared/time', locals: {run: run, time: split[:duration]}
 .timeline{style: "margin-bottom: 1em;"}
   - run.reduced_splits.each_with_index do |split, index|
-    - unless split.duration == 0
-      .pure-u.inspect{id: "inspect-#{index.to_s}", style: "width: #{split.duration / run.time * 100}%; opacity: 0;"}
-        .bar
-          %p
-        .title= split.name
-        .time= render partial: 'shared/time', locals: {run: run, time: split.duration}
+    .pure-u.inspect{id: "inspect-#{index.to_s}", style: "width: #{split[:duration] / run.time * 100}%; opacity: 0;"}
+      .bar
+        %p
+      .title= split[:name]
+      .time= render partial: 'shared/time', locals: {run: run, time: split[:duration]}

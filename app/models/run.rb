@@ -11,8 +11,6 @@ class Run < ActiveRecord::Base
 
   before_create :generate_nick
 
-  delegate :program, :splits, :offset, :attempts, :run_history, to: :parse
-
   class << self; attr_accessor :parsers end
   @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
@@ -29,12 +27,21 @@ class Run < ActiveRecord::Base
     where(Run.arel_table[:name].matches "%#{term}%").order(:name)
   end
 
-  # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method doesn't do anything.
-  # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped. This also works when
-  # several splits in a row are skipped.
+  # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method just returns `splits`.
+  # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped.
   def reduced_splits
     splits.reduce([]) do |splits, split|
-      splits + [((splits.last.try(:duration) == 0 ? splits.last : []) + [split]).extend(Split)]
+      if splits.last.try(:[], :duration) == 0
+        skipped_split = splits.last
+        splits + [splits.pop.merge({
+            duration:    split[:duration],
+            name:        "#{skipped_split[:name]} + #{split[:name]}",
+            finish_time: split[:finish_time]
+          }
+        )]
+      else
+        splits + [split]
+      end
     end
   end
 
@@ -70,11 +77,31 @@ class Run < ActiveRecord::Base
   end
 
   def time
-    (read_attribute(:time) || update_attribute(:time, splits.map(&:duration).sum) && read_attribute(:time)).to_f
+    (read_attribute(:time) || update_attribute(:time, splits.map { |s| s[:duration] }.sum) && read_attribute(:time)).to_f
   end
 
   def name
-    read_attribute(:name) || update_attribute(:name, parse.name) && read_attribute(:name)
+    read_attribute(:name) || update_attribute(:name, parse[:name]) && read_attribute(:name)
+  end
+
+  def splits
+    parse[:splits]
+  end
+
+  def program
+    parse[:program]
+  end
+
+  def offset
+    parse[:offset]
+  end
+
+  def attempts
+    parse[:attempts]
+  end
+
+  def history
+    parse[:history]
   end
 
   def parses?
@@ -87,7 +114,7 @@ class Run < ActiveRecord::Base
     Run.parsers.each do |p|
       result = p.new.parse(file)
       if result.present?
-        result.program = p.name.sub('Parser', '').downcase.to_sym
+        result[:program] = p.name.sub('Parser', '').downcase.to_sym
         @parse_cache = result
         return result
       end

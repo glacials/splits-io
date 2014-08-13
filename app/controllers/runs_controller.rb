@@ -33,8 +33,8 @@ class RunsController < ApplicationController
     if @run.parses?
       @run.user = current_user
       @run.image_url = params[:image_url]
-      game = Game.find_by(name: @run.parse.game) || Game.create(name: @run.parse.game)
-      @run.category = Category.find_by(game: game, name: @run.parse.category) || game.categories.new(name: @run.parse.category)
+      game = Game.find_by(name: @run.parse[:game]) || Game.create(name: @run.parse[:game])
+      @run.category = Category.find_by(game: game, name: @run.parse[:category]) || game.categories.new(name: @run.parse[:category])
       @run.save
       respond_to do |format|
         format.html { redirect_to run_path(@run.nick) }
