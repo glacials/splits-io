@@ -37,8 +37,8 @@ class RunsController < ApplicationController
       @run.category = Category.find_by(game: game, name: @run.parse[:category]) || game.categories.new(name: @run.parse[:category])
       @run.save
       respond_to do |format|
-        format.html { redirect_to run_path(@run.nick) }
-        format.json { render json: { url: request.protocol + request.host_with_port + run_path(@run.nick) } }
+        format.html { redirect_to run_path(@run) }
+        format.json { render json: { url: request.protocol + request.host_with_port + run_path(@run) } }
       end
     else
       @run.destroy
@@ -62,9 +62,9 @@ class RunsController < ApplicationController
     if @run.present?
       file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
       if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
-        send_data(HTMLEntities.new.decode(@run.file), filename: "#{@run.nick}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(@run.file), filename: "#{@run}.#{file_extension}", layout: false)
       else
-        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run.nick}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run}.#{file_extension}", layout: false)
       end
     else
       if @run.new?
@@ -83,8 +83,8 @@ class RunsController < ApplicationController
       session[:random] = true
       @run = Run.offset(rand(Run.count)).first
       respond_to do |format|
-        format.html { redirect_to(run_path(@run.nick)) }
-        format.json { render json: {redirect: run_path(@run.nick)} }
+        format.html { redirect_to(run_path(@run)) }
+        format.json { render json: {redirect: run_path(@run)} }
       end
     end
   end
@@ -95,7 +95,7 @@ class RunsController < ApplicationController
       @run.save
       redirect_to :back
     else
-      redirect_to run_path(@run.nick)
+      redirect_to run_path(@run)
     end
   end
 
@@ -104,7 +104,7 @@ class RunsController < ApplicationController
       @run.destroy
       redirect_to root_path
     else
-      redirect_to run_path(@run.nick)
+      redirect_to run_path(@run)
     end
   end
 

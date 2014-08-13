@@ -20,12 +20,12 @@
             %td.align-right= run.user.try(:name) || '-'
           %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
           %td
-            %a{href: run_path(run.nick)}= run.name
+            %a{href: run_path(run)}= run.name
           %td.align-right= "#{time_ago_in_words(run.created_at)} ago"
           %td
             - if run.belongs_to?(current_user)
               %small
-                = link_to('Disown', disown_path(run.nick), id: :disown, method: :delete, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
+                = link_to('Disown', disown_path(run), id: :disown, method: :delete, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
                 \/
-                = link_to('Delete', run_path(run.nick), id: :delete, method: :delete, data: {confirm: 'Really delete this run?'})
+                = link_to('Delete', run_path(run), id: :delete, method: :delete, data: {confirm: 'Really delete this run?'})
   .center= will_paginate runs

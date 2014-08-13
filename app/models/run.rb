@@ -15,6 +15,14 @@ class Run < ActiveRecord::Base
   @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
 
+  def self.find(id)
+    if id.is_a? Integer
+      super(id)
+    else
+      find_by(nick: id) || super(id.to_i(36))
+    end
+  end
+
   def self.by_category(category)
     where(category: category)
   end
@@ -62,6 +70,10 @@ class Run < ActiveRecord::Base
 
   def new?
     hits <= 1
+  end
+
+  def to_param
+    nick.present? ? nick : read_attribute(:id).to_s(36)
   end
 
   def disown
