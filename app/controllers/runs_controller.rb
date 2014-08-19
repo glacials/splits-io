@@ -14,7 +14,7 @@ class RunsController < ApplicationController
     if @run.parses?
       respond_to do |format|
         format.html { render :show }
-        format.json { render json: @run.attributes.merge(splits: @run.splits).to_json(except: 'file') }
+        format.json { render json: @run.to_json }
       end
     else
       if @run.new?

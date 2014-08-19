@@ -22,4 +22,8 @@ class User < ActiveRecord::Base
   def just_signed_in?
     Time.now - 3.seconds < self.current_sign_in_at
   end
+
+  def as_json
+    super({only: [:id, :name]})
+  end
 end

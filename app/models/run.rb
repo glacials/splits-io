@@ -117,7 +117,7 @@ class Run < ActiveRecord::Base
   end
 
   def as_json(options)
-    super(except: 'file')
+    super({except: [:file, :category_id, :user_id], methods: [:category, :game, :user, :splits]}.merge(options))
   end
 
   def parses?
