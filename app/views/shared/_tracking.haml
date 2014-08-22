@@ -8,11 +8,11 @@
 
 :coffee
   mixpanel.track "page viewed", {'URL': window.location.pathname}
+  mixpanel.track_links "#sign_in",  "user signed in"
+  mixpanel.track_links "#sign_out", "user signed out"
 - if @run.present?
   :coffee
     mixpanel.track_links "#download-menu a", "run downloaded", (el) ->
       $.extend gon.run.tracking_info, { 'Desired Program': el.innerHTML }
     mixpanel.track_links "#disown", "run disowned"
     mixpanel.track_links "#delete", "run deleted"
-    mixpanel.track_links "#sign_in",  "user signed in"
-    mixpanel.track_links "#sign_out", "user signed out"
