@@ -1,18 +1,17 @@
 - if current_user.try(:just_signed_up?)
   :coffee
     mixpanel.alias "#{current_user.id}"
-    mixpanel.track "user signed up"
+    mixpanel.track "signed up"
 - if current_user.try(:just_signed_in?)
   :coffee
     mixpanel.identify "#{current_user.id}"
 
 :coffee
-  mixpanel.track "page viewed", {'URL': window.location.pathname}
-  mixpanel.track_links "#sign_in",  "user signed in"
-  mixpanel.track_links "#sign_out", "user signed out"
-- if @run.present?
-  :coffee
-    mixpanel.track_links "#download-menu a", "run downloaded", (el) ->
+  mixpanel.track "viewed a page", {'URL': window.location.pathname}
+  mixpanel.track_links "#sign_in",  "signed in"
+  mixpanel.track_links "#sign_out", "signed out"
+  - if @run.present?
+    mixpanel.track_links "#download-menu a", "downloaded a run", (el) ->
       $.extend gon.run.tracking_info, { 'Desired Program': el.innerHTML }
-    mixpanel.track_links "#disown", "run disowned"
-    mixpanel.track_links "#delete", "run deleted"
+    mixpanel.track_links "#disown", "disowned a run"
+    mixpanel.track_links "#delete", "deleted a run"
