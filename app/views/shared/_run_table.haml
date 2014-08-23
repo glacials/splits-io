@@ -1,4 +1,4 @@
-- runs = runs.page(params[:page])
+- runs = order_runs runs.page(params[:page])
 - if runs.empty?
   %center
     %i Woops! No runs here, #{['boss', 'friend', 'pal', 'buddy', 'speedfriend', 'friend', 'unfortunately'].sample}!
@@ -7,10 +7,13 @@
     %thead
       %tr
         - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
-          %th.align-right Runner
-        %th.align-right Time
+          %th.align-right
+            %a{href: "?by=user_id&order=#{params[:by] == 'user_id' && params[:order] == 'asc' ? 'desc' : 'asc'}"} Runner
+        %th.align-right
+          %a{href: "?by=time&order=#{params[:by] == 'time' && params[:order] == 'asc' ? 'desc' : 'asc'}"} Time
         %th Name
-        %th.align-right Uploaded
+        %th.align-right
+          %a{href: "?by=created_at&order=#{params[:by] == 'created_at' && params[:order] == 'desc' ? 'asc' : 'desc'}"} Uploaded
         - if runs.any? { |run| run.belongs_to?(current_user) }
           %th Actions
     %tbody

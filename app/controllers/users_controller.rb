@@ -14,5 +14,4 @@ class UsersController < ApplicationController
     @user = User.find_by(name: params[:user])
     render :bad_url if @user.nil?
   end
-
 end

@@ -32,7 +32,7 @@ class Run < ActiveRecord::Base
   end
 
   def self.search(term)
-    where(Run.arel_table[:name].matches "%#{term}%").order(:name)
+    where(Run.arel_table[:name].matches "%#{term}%")
   end
 
   # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method just returns `splits`.
