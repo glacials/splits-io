@@ -1,5 +1,6 @@
+- title "search"
 .container
-  %h2 search
+  %h2= content_for(:title)
   %h5 find your soulmate splits
   %form.form-inline{action: search_path, method: :get}
     .form-group

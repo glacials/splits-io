@@ -1,7 +1,9 @@
 !!!
 %html
   %head
-    %title Splits I/O
+    %title
+      splits.io:
+      = content_for(:title) || "splits i/o"
     %link{href: 'http://fonts.googleapis.com/css?family=Open+Sans', rel: 'stylesheet', type: 'text/css'}/
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
     = stylesheet_link_tag 'application', media: :all
@@ -13,7 +15,6 @@
       #dropzone-overlay.header{style: 'border: none;'}
         %h1#droplabel.inverted drop anywhere
         #file-list.inverted
-      - color = [:blue, :purple, :green, :red, :orange].sample(1).first
       %nav
         %a.logo.blue{href: root_path} splits i/o
         %a.purple{href: upload_path} upload

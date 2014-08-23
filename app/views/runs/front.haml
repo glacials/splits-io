@@ -1,8 +1,12 @@
+- title "hello"
 .container
   %h2 splits i/o
   %h5
     upload
-    %u all
+    - if user_signed_in?
+      %a{href: user_path(current_user)} all
+    - else
+      %u all
     the splits
   - if user_signed_in? && current_user.runs.present?
     = render partial: 'shared/run_table', locals: {runs: current_user.runs.order('created_at desc')}

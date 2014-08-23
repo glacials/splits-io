@@ -26,4 +26,8 @@ class User < ActiveRecord::Base
   def as_json
     super({only: [:id, :name]})
   end
+
+  def to_param
+    name
+  end
 end
