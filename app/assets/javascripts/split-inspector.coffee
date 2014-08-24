@@ -1,10 +1,10 @@
 $ ->
   $(".split").hover (->
-    $("#inspect-" + @id.split("-")[1]).fadeTo 0, 1
+    $("#" + @id.split("-")[0] + "-inspect-" + @id.split("-")[2]).fadeTo 0, 1
     $("#time").addClass "bar"
     return
   ), ->
-    $("#inspect-" + @id.split("-")[1]).fadeTo 0, 0
+    $("#" + @id.split("-")[0] + "-inspect-" + @id.split("-")[2]).fadeTo 0, 0
     $("#time").removeClass "bar"
     return
 

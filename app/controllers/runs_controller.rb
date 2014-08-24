@@ -2,7 +2,8 @@ require 'htmlentities'
 require 'uri'
 
 class RunsController < ApplicationController
-  before_action :set_run, only: [:show, :download, :disown, :delete]
+  before_action :set_run, only: [:show, :download, :disown, :delete, :compare]
+  before_action :set_comparison, only: :compare
   before_action :increment_hits, only: [:show, :download]
 
   def show
@@ -113,6 +114,15 @@ class RunsController < ApplicationController
   def set_run
     @run = Run.find_by(nick: params[:run])
     if @run.try(:file).nil?
+      render :bad_url
+      return false
+    end
+  end
+
+  def set_comparison
+    return if params[:comparison_run].blank?
+    @comparison_run = Run.find_by(nick: params[:comparison_run])
+    if @comparison_run.try(:file).nil?
       render :bad_url
       return false
     end

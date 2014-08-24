@@ -1,13 +1,9 @@
+- scale_to ||= run.time
 - colors = [:blue, :purple, :green, :red, :orange, :yellow]
 .timeline{style: "margin-bottom: 1em;"}
   - run.reduced_splits.each_with_index do |split, index|
-    .pure-u.split{id: "split-#{index.to_s}", class: colors[index % colors.length], style: "width: #{split[:duration] / run.time * 100}%;"}
+    .pure-u.split{id: "#{run.nick}-split-#{index}", class: colors[index % colors.length], style: "width: #{split[:duration] / scale_to * 100}%;"}
       .title= split[:name]
-      .time= render partial: 'shared/time', locals: {run: run, time: split[:duration]}
-.timeline{style: "margin-bottom: 1em;"}
-  - run.reduced_splits.each_with_index do |split, index|
-    .pure-u.inspect{id: "inspect-#{index.to_s}", style: "width: #{split[:duration] / run.time * 100}%; opacity: 0;"}
-      .bar
-        %p
-      .title= split[:name]
-      .time= render partial: 'shared/time', locals: {run: run, time: split[:duration]}
+      .time= render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: run.short?}
+  - if run.time < scale_to
+    .pure-u.split.disabled{style: "width: #{(scale_to - run.time) / scale_to * 100}%;"}

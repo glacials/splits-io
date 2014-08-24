@@ -1,0 +1,9 @@
+- scale_to ||= run.time
+- overlap ||= false
+.timeline{style: "margin-bottom: 1em;", class: overlap ? 'absolute' : ''}
+  - run.reduced_splits.each_with_index do |split, index|
+    .pure-u.inspect{id: "#{run.nick}-inspect-#{index}", style: "width: #{split[:duration] / scale_to * 100}%; opacity: 0;"}
+      .bar
+        %p
+      .title= split[:name]
+      .time= render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: run.short?}

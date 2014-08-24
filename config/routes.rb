@@ -18,8 +18,9 @@ SplitsIO::Application.routes.draw do
 
   get  '/search(/:term)', to: 'search#index', as: :search
 
-  get '/:run',                   to: 'runs#show',     as: :run
-  get '/:run/download/:program', to: 'runs#download', as: :download
+  get '/:run',                         to: 'runs#show',     as: :run
+  get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
+  get '/:run/download/:program',       to: 'runs#download', as: :download
 
   delete '/:run',      to: 'runs#delete', as: :delete
   delete '/:run/user', to: 'runs#disown',  as: :disown

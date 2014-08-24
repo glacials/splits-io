@@ -25,7 +25,7 @@
                 %a{href: user_path(run.user)}= run.user.try(:name)
               - else
                 = "-"
-          %td.align-right= render partial: 'shared/time', locals: {run: run, time: run.time}
+          %td.align-right= render partial: 'shared/time', locals: {time: run.time, show_milliseconds: run.short?}
           %td
             %a{href: run_path(run)}= run.name
           %td.align-right= "#{time_ago_in_words(run.created_at)} ago"

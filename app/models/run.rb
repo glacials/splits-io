@@ -112,6 +112,10 @@ class Run < ActiveRecord::Base
     parse[:attempts]
   end
 
+  def short?
+    time < 20.minutes
+  end
+
   def history
     parse[:history]
   end
