@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :remove_www
+  before_action :set_mixpanel
 
   def remove_www
     redirect_to(subdomain: nil) if request.subdomain == 'www'
@@ -13,7 +14,7 @@ class ApplicationController < ActionController::Base
     request.referrer
   end
 
-  def mixpanel
-    mixpanel ||= Mixpanel::Tracker.new(ENV['splitsio_mixpanel_token'])
+  def set_mixpanel
+    @mixpanel = Mixpanel::Tracker.new(ENV['splitsio_mixpanel_token'])
   end
 end

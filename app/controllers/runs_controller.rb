@@ -62,7 +62,7 @@ class RunsController < ApplicationController
     elsif request.referer =~ /\/upload/i
       tracking_params['Client'] = 'form'
     end
-    mixpanel.track(current_user.try(:id), 'uploaded a run', @run.tracking_info.merge(tracking_params))
+    @mixpanel.track(current_user.try(:id), 'uploaded a run', @run.tracking_info.merge(tracking_params))
   end
 
   def download
