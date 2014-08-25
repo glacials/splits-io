@@ -19,12 +19,10 @@
         &bull;
         %a{href: download_path(@run, program), onclick: 'hide_download_menu()'}= program
     .glyphicon.glyphicon-download-alt
-    %a.fake-link#download-link{onclick: 'toggle_download_menu()'}
-      download
+    %a.fake-link#download-link{onclick: 'toggle_download_menu()'} download
   - if @random.present?
     %h6
-      %a{href: random_path}
-        Another random?
+      %a{href: random_path} Another random?
 
 = render partial: 'shared/timeline', locals: {run: @run}
 = render partial: 'shared/timeline_inspector', locals: {run: @run}
