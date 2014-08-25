@@ -14,7 +14,7 @@ class RunsController < ApplicationController
       return
     end
 
-    gon.run = {tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?')}
+    gon.run = { tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?') }
     @random = session[:random] || false
     session[:random] = false
 
@@ -41,7 +41,8 @@ class RunsController < ApplicationController
       @run.user = current_user
       @run.image_url = params[:image_url]
       game = Game.find_by(name: @run.parse[:game]) || Game.create(name: @run.parse[:game])
-      @run.category = Category.find_by(game: game, name: @run.parse[:category]) || game.categories.new(name: @run.parse[:category])
+      @run.category = Category.find_by(game: game, name: @run.parse[:category]) ||
+                      game.categories.new(name: @run.parse[:category])
       @run.save
       respond_to do |format|
         format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!"}
@@ -69,9 +70,13 @@ class RunsController < ApplicationController
     if @run.present?
       file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
       if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
-        send_data(HTMLEntities.new.decode(@run.file), filename: "#{@run.to_param}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(@run.file),
+                  filename: "#{@run.to_param}.#{file_extension}",
+                  layout: false)
       else
-        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)), filename: "#{@run.to_param}.#{file_extension}", layout: false)
+        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)),
+                  filename: "#{@run.to_param}.#{file_extension}",
+                  layout: false)
       end
     else
       if @run.new?
@@ -91,7 +96,7 @@ class RunsController < ApplicationController
       @run = Run.offset(rand(Run.count)).first
       respond_to do |format|
         format.html { redirect_to(run_path(@run)) }
-        format.json { render json: {redirect: run_path(@run)} }
+        format.json { render json: { redirect: run_path(@run) } }
       end
     end
   end
@@ -119,19 +124,13 @@ class RunsController < ApplicationController
 
   def set_run
     @run = Run.find_by_id(params[:run].to_i(36)) || Run.find_by(nick: params[:run])
-    if @run.try(:file).nil?
-      render :bad_url
-      return false
-    end
+    render :bad_url and return false if @run.try(:file).nil?
   end
 
   def set_comparison
     return if params[:comparison_run].blank?
     @comparison_run = Run.find params[:comparison_run].to_i(36)
-    if @comparison_run.try(:file).nil?
-      render :bad_url
-      return false
-    end
+    render :bad_url and return false if @comparison_run.try(:file).nil?
   end
 
   def increment_hits

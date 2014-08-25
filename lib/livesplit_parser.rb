@@ -30,7 +30,7 @@ class LiveSplitParser
         split[:name] = segment['Name'][0].present? ? segment['Name'][0] : ''
 
         split[:finish_time] = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime']
-                                                     .select { |k,_| k['name'] == 'Personal Best' }[0]['RealTime'].try(:[], 0) || '00:00:00.00')
+                                                     .select { |k, _| k['name'] == 'Personal Best' }[0]['RealTime'].try(:[], 0) || '00:00:00.00')
         split[:duration] = split[:finish_time] - run[:time]
         split[:duration] = 0 if split[:duration] < 0
 
@@ -42,7 +42,7 @@ class LiveSplitParser
         run[:splits] << split
       end
     end
-    return v1_3(run, xml)
+    v1_3(run, xml)
   end
 
   def v1_3(run, xml)
@@ -69,7 +69,7 @@ class LiveSplitParser
         run[:splits] << split
       end
     end
-    return v1_2(run, xml)
+    v1_2(run, xml)
   end
 
   def v1_2(run, xml)
@@ -97,7 +97,7 @@ class LiveSplitParser
         run[:splits] << split
       end
     end
-    return run
+    run
   end
 
   def duration_in_seconds_of(time)

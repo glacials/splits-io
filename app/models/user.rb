@@ -15,15 +15,15 @@ class User < ActiveRecord::Base
   end
 
   def just_signed_up?
-    Time.now - 3.seconds < self.created_at
+    Time.now - 3.seconds < created_at
   end
 
   def just_signed_in?
-    Time.now - 3.seconds < self.current_sign_in_at
+    Time.now - 3.seconds < current_sign_in_at
   end
 
   def as_json
-    super({only: [:id, :name]})
+    super(only: [:id, :name])
   end
 
   def to_param

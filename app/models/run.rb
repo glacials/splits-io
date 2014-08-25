@@ -18,7 +18,7 @@ class Run < ActiveRecord::Base
   end
 
   def self.by_game(game)
-    joins(:category).where('categories.game_id = %d' % game.id)
+    joins(:category).where(format('categories.game_id = %game_id', game_id: game.id))
   end
 
   def self.search(term)
@@ -31,11 +31,10 @@ class Run < ActiveRecord::Base
     splits.reduce([]) do |splits, split|
       if splits.last.try(:[], :duration) == 0
         skipped_split = splits.last
-        splits + [splits.pop.merge({
-            duration:    split[:duration],
-            name:        "#{skipped_split[:name]} + #{split[:name]}",
-            finish_time: split[:finish_time]
-          }
+        splits + [splits.pop.merge(
+          duration:    split[:duration],
+          name:        "#{skipped_split[:name]} + #{split[:name]}",
+          finish_time: split[:finish_time]
         )]
       else
         splits + [split]
@@ -68,7 +67,9 @@ class Run < ActiveRecord::Base
   end
 
   def time
-    (read_attribute(:time) || update_attribute(:time, splits.map { |s| s[:duration] }.sum) && read_attribute(:time)).to_f
+    return read_attribute(:time) if read_attribute(:time).present?
+    update_attribute(:time, splits.map { |s| s[:duration] }.sum.to_f)
+    read_attribute(:time).to_f
   end
 
   def name
@@ -100,7 +101,7 @@ class Run < ActiveRecord::Base
   end
 
   def as_json(options)
-    super({except: [:file, :category_id, :user_id], methods: [:category, :game, :user, :splits]}.merge(options))
+    super({ except: [:file, :category_id, :user_id], methods: [:category, :game, :user, :splits] }.merge(options))
   end
 
   def parses?
@@ -109,16 +110,13 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-
     Run.parsers.each do |p|
       result = p.new.parse(file)
-      if result.present?
-        result[:program] = p.name.sub('Parser', '').downcase.to_sym
-        @parse_cache = result
-        return result
-      end
+      next if result.blank?
+      result[:program] = p.name.sub('Parser', '').downcase.to_sym
+      @parse_cache = result
+      return result
     end
-
     nil
   rescue ArgumentError # comes from non UTF-8 files
     nil
@@ -127,12 +125,12 @@ class Run < ActiveRecord::Base
   def tracking_info
     { 'Parses?'     => parses?,
       'Screenshot?' => image_url.present?
-    }.merge(parses? ? {
-      'Game'        => game.name,
-      'Category'    => category.name,
-      'Program'     => program,
-      'Offset'      => offset
-    } : {})
+    }.merge(!parses? ? {} : {
+      'Game'     => game.name,
+      'Category' => category.name,
+      'Program'  => program,
+      'Offset'   => offset
+    })
   end
 
   def to_param
