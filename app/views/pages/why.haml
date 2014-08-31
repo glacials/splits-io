@@ -1,0 +1,56 @@
+- title "why"
+.container
+  %h2= content_for(:title)
+  .question
+    %h4 Run permalinks
+    %p
+      Permalinks for your all of your runs have been changed.
+    %p
+      Old permalinks will continue to work for some time. The site is automatically collecting data about how often old
+      permalinks are used, and once this number drops off to a sufficiently low amount (ideally zero), I'll remove the
+      logic and the database column that support the old-style permalinks.
+    %p
+      Old-style permalinks were randomly-generated base 64 4-character strings. There are
+      %code 64^4 = 16 777 216
+      permutations of this pattern, so yeah, it's probably safe to say we weren't going to hit that cap any time soon
+      (we're currently at #{Run.count}).
+    %p
+      Despite this, there are some reasons I grew to not like this style:
+      %ol
+        %li Even if the limit is really really high, it's still there, and that irks me.
+        %li
+          As more runs get uploaded, the chance of generating a URL that's already in use rises. When one that's in use
+          gets generated, we just try again until one works. So the expected time it takes to generate one sort of rises
+          with every run uploaded. Again this is pretty negligible, especially this early on, but again with the irking.
+        %li
+          URLs are longer than they need to be. We're not taking advantage of the
+          %code (64^1) + (64^2) + (64^3) = 266 304
+          URLs that we can get from one-, two-, and three-character URLs.
+        %li
+          Having just one form of identification for a run, like a not-crazy person would do, makes some API stuff that
+          I've been wanting to do a bit simpler. That API stuff will in turn let programs access splits.io in a less
+          volatile fashion than they have to right now.
+        %li In general, complexity where there doesn't need to be any is bad.
+      The new style isn't actually base 64, it's base 36 (so, lowercase alphabet and 0-9). But it's translated to base
+      36 from the base 10 IDs that runs already have, which is how it probably should be.
+      - if Run.count < 47_988
+        So we're actually getting
+        %code (36^1) + (36^2) + (36^3) = 47 988
+        1-3 character URLs. We've still got #{47_988 - Run.count} uploads before we hit the point when the fourth
+        character starts kicking in!
+    %p
+      I realize that changing stuff around like this contradicts the very idea of a permalink. My hope is that with this
+      cleaner system, permalink fetching/generation will be more efficient and will be sludging up
+      %a{href: 'https://github.com/glacials/splits-io', target: :_blank} the code base
+      no longer. Sometimes you have to get dirty to clean stuff up.
+    %p
+      If you have any thoughts about any of this, or you have a run that you strongly feel should not have its URL
+      changed, let me know and we can talk it out.
+  %hr
+  %h4 My door is always open
+  %h5
+    because that dang top hinge fell off last week and the bottom one was too rusted to pick up the slack and the
+    landlord won't acknowledge and just ugh
+  If you ever have any questions about why stuff is or isn't the way that it is or (respectively) isn't, you can always
+  drop me a line, or a square or a circle. No triangles please though, I have too many of those.
+  %h5 qhiiyr@gmail.com

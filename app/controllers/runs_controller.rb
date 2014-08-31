@@ -7,6 +7,13 @@ class RunsController < ApplicationController
   before_action :increment_hits, only: [:show, :download]
 
   def show
+    if request.fullpath != "/#{@run.id.to_s(36)}"
+      mixpanel.track(current_user.try(:id), 'received an alert', {type: 'Permalink change', level: 'Warning'})
+      redirect_to @run, alert: "This run's permalink has changed. You have been redirected to the newer one. \
+                                <a href='#{why_path}'>More info</a>.".html_safe
+      return
+    end
+
     gon.run = {tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?')}
     @random = session[:random] || false
     session[:random] = false
@@ -28,9 +35,8 @@ class RunsController < ApplicationController
   end
 
   def upload
-    splits = params[:file]
-    @run = Run.create
-    @run.file = splits.read
+    @run = Run.new
+    @run.file = params[:file].read
     if @run.parses?
       @run.user = current_user
       @run.image_url = params[:image_url]
@@ -38,14 +44,14 @@ class RunsController < ApplicationController
       @run.category = Category.find_by(game: game, name: @run.parse[:category]) || game.categories.new(name: @run.parse[:category])
       @run.save
       respond_to do |format|
-        format.html { redirect_to run_path(@run) }
+        format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!"}
         format.json { render json: { url: request.protocol + request.host_with_port + run_path(@run) } }
       end
     else
       @run.destroy
       respond_to do |format|
         format.html { redirect_to cant_parse_path }
-        format.json { render json: { url: cant_parse_path } }
+        format.json { render json: { url: request.protocol + request.host_with_port + cant_parse_path } }
       end
     end
     tracking_params = {}
@@ -112,7 +118,7 @@ class RunsController < ApplicationController
   protected
 
   def set_run
-    @run = Run.find_by(nick: params[:run])
+    @run = Run.find_by_id(params[:run].to_i(36)) || Run.find_by(nick: params[:run])
     if @run.try(:file).nil?
       render :bad_url
       return false
@@ -121,7 +127,7 @@ class RunsController < ApplicationController
 
   def set_comparison
     return if params[:comparison_run].blank?
-    @comparison_run = Run.find_by(nick: params[:comparison_run])
+    @comparison_run = Run.find params[:comparison_run].to_i(36)
     if @comparison_run.try(:file).nil?
       render :bad_url
       return false

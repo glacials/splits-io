@@ -24,7 +24,6 @@
           %a#sign_out.orange{href: signout_path} sign out
         - else
           %a#sign_in.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
-      = render partial: 'shared/alerts'
       = yield
   = javascript_include_tag 'application'
   = render partial: 'shared/tracking'

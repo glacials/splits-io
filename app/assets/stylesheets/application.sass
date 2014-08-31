@@ -4,6 +4,10 @@
 @import headings
 @import bootstrap
 
+code
+  background-color: #f1f1f1
+  color: #303030
+
 .disabled
   background: repeating-linear-gradient(-45deg, #fff, #fff 6px, #f1f1f1 6px, #f1f1f1 12px)
 
@@ -48,7 +52,7 @@
   .previous_page, .next_page
     border: none
 
-.alert-danger, .alert-success
+.alert-success
   @extend .pull-right
   color: #fff
   margin-left: auto
@@ -60,6 +64,21 @@
 
 .alert-danger
   background: #dd514c
+  a
+    color: #fdd
+    &:hover
+      color: #fff
+
+.alert-warning
+  background: #feefb3
+  color: #9f6000
+  a
+    &:hover
+      text-decoration: none
+
+.alert-danger, .alert-warning
+  display: inline-block
+  padding: .5em
 
 nav
   @extend .pull-right

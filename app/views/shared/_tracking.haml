@@ -1,8 +1,8 @@
-- if current_user.try(:just_signed_up?)
+- if flash[:user_just_signed_up]
   :coffee
     mixpanel.alias "#{current_user.id}"
     mixpanel.track "signed up"
-- if current_user.try(:just_signed_in?)
+- if flash[:user_just_signed_in]
   :coffee
     mixpanel.identify "#{current_user.id}"
 

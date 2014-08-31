@@ -9,19 +9,9 @@ class Run < ActiveRecord::Base
   belongs_to :category
   has_one :game, through: :category
 
-  before_create :generate_nick
-
   class << self; attr_accessor :parsers end
   @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
   @parse_cache = nil
-
-  def self.find(id)
-    if id.is_a? Integer
-      super(id)
-    else
-      find_by(nick: id) || super(id.to_i(36))
-    end
-  end
 
   def self.by_category(category)
     where(category: category)
@@ -53,13 +43,6 @@ class Run < ActiveRecord::Base
     end
   end
 
-  def generate_nick
-    loop do
-      self.nick = SecureRandom.urlsafe_base64(3)
-      return if Run.find_by(nick: nick).nil?
-    end
-  end
-
   def belongs_to?(user)
     user.present? && self.user == user
   end
@@ -70,10 +53,6 @@ class Run < ActiveRecord::Base
 
   def new?
     hits <= 1
-  end
-
-  def to_param
-    nick.present? ? nick : read_attribute(:id).to_s(36)
   end
 
   def disown
@@ -125,7 +104,7 @@ class Run < ActiveRecord::Base
   end
 
   def parses?
-    !!parse
+    parse.present?
   end
 
   def parse
@@ -154,5 +133,9 @@ class Run < ActiveRecord::Base
       'Program'     => program,
       'Offset'      => offset
     } : {})
+  end
+
+  def to_param
+    id.to_s(36)
   end
 end

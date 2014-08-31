@@ -12,7 +12,6 @@ class User < ActiveRecord::Base
     self.twitch_id = response['_id']
     self.email     = response['email']
     self.name      = response['name']
-    save
   end
 
   def just_signed_up?

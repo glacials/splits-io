@@ -2,6 +2,7 @@ SplitsIO::Application.routes.draw do
   root 'runs#front'
 
   get '/faq', to: 'pages#faq', as: :faq
+  get '/why', to: 'pages#why', as: :why
 
   get  '/upload',     to: 'runs#new',        as: :upload
   post '/upload',     to: 'runs#upload'
