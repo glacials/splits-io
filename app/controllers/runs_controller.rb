@@ -8,7 +8,7 @@ class RunsController < ApplicationController
 
   def show
     if request.fullpath != "/#{@run.id.to_s(36)}"
-      @mixpanel.track(current_user.try(:id), 'received an alert', {type: 'Permalink change', level: 'Warning'})
+      @mixpanel.track(current_user.try(:id), 'received an alert', type: 'Permalink change', level: 'Warning')
       redirect_to @run, alert: "This run's permalink has changed. You have been redirected to the newer one. \
                                 <a href='#{why_path}'>More info</a>.".html_safe
       return
@@ -45,7 +45,7 @@ class RunsController < ApplicationController
                       game.categories.new(name: @run.parse[:category])
       @run.save
       respond_to do |format|
-        format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!"}
+        format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!" }
         format.json { render json: { url: request.protocol + request.host_with_port + run_path(@run) } }
       end
     else
@@ -67,24 +67,15 @@ class RunsController < ApplicationController
   end
 
   def download
-    if @run.present?
-      file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
-      if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
-        send_data(HTMLEntities.new.decode(@run.file),
-                  filename: "#{@run.to_param}.#{file_extension}",
-                  layout: false)
-      else
-        send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)),
-                  filename: "#{@run.to_param}.#{file_extension}",
-                  layout: false)
-      end
+    file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
+    if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
+      send_data(HTMLEntities.new.decode(@run.file),
+                filename: "#{@run.to_param}.#{file_extension}",
+                layout: false)
     else
-      if @run.new?
-        @run.destroy
-        redirect_to cant_parse_path
-      else
-        render :cant_parse
-      end
+      send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)),
+                filename: "#{@run.to_param}.#{file_extension}",
+                layout: false)
     end
   end
 
@@ -120,21 +111,22 @@ class RunsController < ApplicationController
     end
   end
 
-  protected
+  private
 
   def set_run
-    @run = Run.find_by_id(params[:run].to_i(36)) || Run.find_by(nick: params[:run])
-    render :bad_url and return false if @run.try(:file).nil?
+    @run = Run.find_by_id(params[:run].to_i(36)) ||
+           Run.find_by(nick: params[:run])       ||
+           render(:bad_url) && false
   end
 
   def set_comparison
     return if params[:comparison_run].blank?
-    @comparison_run = Run.find params[:comparison_run].to_i(36)
-    render :bad_url and return false if @comparison_run.try(:file).nil?
+    @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) ||
+                      Run.find_by(nick: params[:comparison_run])       ||
+                      render(:bad_url) && false
   end
 
   def increment_hits
-    @run.hit
-    @run.save
+    @run.hit && @run.save
   end
 end

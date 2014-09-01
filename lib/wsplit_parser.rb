@@ -25,27 +25,26 @@ class WSplitParser < BabelBridge::Parser
   rule :unix_newline,    "\n"
 
   def parse(file)
-    splits = super(file)
-    return nil unless splits
-    run = {}
-    run[:game] = nil
-    run[:name] = splits.title.to_s
-    run[:attempts] = splits.attempts.to_s.to_i
-    run[:offset] = splits.offset.to_f
-    run[:splits] = []
-    run[:time] = 0
-    splits.splits.each do |segment|
-      split = {}
-      split[:best] = {}
-      split[:name] = segment.title.to_s
-      split[:duration] = segment.run_time.to_s.to_f - run[:time]
-      split[:finish_time] = segment.run_time.to_s.to_f
-      split[:best][:duration] = segment.best_time.to_s.to_f
-      run[:time] += split[:duration]
-      run[:splits] << split
-    end
-    run
-  rescue
-    nil
+    run = super(file)
+    {
+      game: nil,
+      name: run.title.to_s,
+      attempts: run.attempts.to_s.to_i,
+      offset: run.offset.to_f,
+      splits: run.splits.map.with_index do |segment, index|
+        parse_one_split(segment, index == 0 ? 0 : run.splits[index - 1].run_time.to_s.to_f)
+      end
+    }
+  end
+
+  private
+
+  def parse_one_split(segment, last_segment_time)
+    {
+      best: { duration: segment.best_time.to_s.to_f },
+      name: segment.title.to_s,
+      duration: segment.run_time.to_s.to_f - last_segment_time,
+      finish_time: segment.run_time.to_s.to_f
+    }
   end
 end

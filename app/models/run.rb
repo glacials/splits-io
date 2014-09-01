@@ -31,11 +31,9 @@ class Run < ActiveRecord::Base
     splits.reduce([]) do |splits, split|
       if splits.last.try(:[], :duration) == 0
         skipped_split = splits.last
-        splits + [splits.pop.merge(
-          duration:    split[:duration],
-          name:        "#{skipped_split[:name]} + #{split[:name]}",
-          finish_time: split[:finish_time]
-        )]
+        splits + [splits.pop.merge(duration:    split[:duration],
+                                   name:        "#{skipped_split[:name]} + #{split[:name]}",
+                                   finish_time: split[:finish_time])]
       else
         splits + [split]
       end
@@ -125,12 +123,10 @@ class Run < ActiveRecord::Base
   def tracking_info
     { 'Parses?'     => parses?,
       'Screenshot?' => image_url.present?
-    }.merge(!parses? ? {} : {
-      'Game'     => game.name,
-      'Category' => category.name,
-      'Program'  => program,
-      'Offset'   => offset
-    })
+    }.merge(!parses? ? {} : { 'Game'     => game.name,
+                              'Category' => category.name,
+                              'Program'  => program,
+                              'Offset'   => offset })
   end
 
   def to_param
