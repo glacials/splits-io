@@ -12,8 +12,3 @@
   mixpanel.track_links "#sign_out", "signed out"
   mixpanel.track_links "#disown", "disowned a run"
   mixpanel.track_links "#delete", "deleted a run"
-- if @run.present?
-  :coffee
-    mixpanel.track_links "#download-menu", "opened the download menu", gon.run.tracking_info
-    mixpanel.track_links "#download-menu a", "downloaded a run", (el) ->
-      $.extend gon.run.tracking_info, { 'Desired Program': el.innerHTML }
