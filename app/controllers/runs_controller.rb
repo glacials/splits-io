@@ -115,8 +115,8 @@ class RunsController < ApplicationController
 
   def set_run
     @run = Run.find_by_id(params[:run].to_i(36)) ||
-           Run.find_by(nick: params[:run])       ||
-           render(:bad_url) && false
+           Run.find_by(nick: params[:run])
+   render :bad_url if @run.blank?
   end
 
   def set_comparison
