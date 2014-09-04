@@ -14,7 +14,6 @@ class RunsController < ApplicationController
       return
     end
 
-    gon.run = { tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?') }
     @random = session[:random] || false
     session[:random] = false
 
@@ -114,16 +113,21 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.find_by_id(params[:run].to_i(36)) ||
-           Run.find_by(nick: params[:run])
-   render :bad_url if @run.blank?
+    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by(nick: params[:run])
+    if @run.blank?
+      render :bad_url
+      return false
+    end
+    gon.run = { tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?') }
   end
 
   def set_comparison
     return if params[:comparison_run].blank?
-    @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) ||
-                      Run.find_by(nick: params[:comparison_run])       ||
-                      render(:bad_url) && false
+    @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) || Run.find_by(nick: params[:comparison_run])
+    if @run.blank? || @comparison_run.blank?
+      render :bad_url
+      return false
+    end
   end
 
   def increment_hits
