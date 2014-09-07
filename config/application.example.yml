@@ -1,0 +1,36 @@
+# Set up all your desired environment variables here. Figaro will take care of making sure they're visible to the
+# splits-io.
+
+production:
+  splitsio_db_host:
+  splitsio_db_name:
+  splitsio_db_username:
+  splitsio_db_port:
+  splitsio_db_password:
+  NEW_RELIC_LICENSE_KEY:
+  splitsio_mixpanel_token:
+  # set up twitch stuff at twitch.tv/settings/connections
+  splitsio_twitch_id:
+  splitsio_twitch_secret:
+
+development:
+  # you probably want to set up a separate mixpanel project for testing tracking
+  splitsio_mixpanel_token:
+  # for login in development, you'll want a separate client on twitch with a localhost redirect uri
+  splitsio_twitch_id:
+  splitsio_twitch_secret:
+
+splitsio_secret_key_base:
+
+# hot is development mode hitting the production database. so db info below should be prod; everything else below, dev.
+hot:
+  splitsio_db_host:
+  splitsio_db_name:
+  splitsio_db_username:
+  splitsio_db_port:
+  splitsio_db_password:
+
+  splitsio_mixpanel_token:
+
+  splitsio_twitch_id:
+  splitsio_twitch_secret:

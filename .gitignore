@@ -23,3 +23,6 @@
 
 # testing config
 .rspec
+
+# Ignore application configuration
+/config/application.yml
