@@ -4,8 +4,8 @@ class SearchController < ApplicationController
       redirect_to search_path(params[:q].strip)
     elsif params[:term].present?
       @term = params[:term].strip
-      puts "hi #{@term}"
       @result = {}
+      @result[:users] = User.search(@term).page(params[:page])
       @result[:games] = Game.search(@term)
       @result[:runs]  = Run.search(@term).page(params[:page])
     end

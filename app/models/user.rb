@@ -6,6 +6,10 @@ class User < ActiveRecord::Base
   has_many :runs
   has_many :games, -> { uniq }, through: :runs
 
+  def self.search(term)
+    where(User.arel_table[:name].matches "%#{term}%").joins(:runs).uniq.order(:name)
+  end
+
   def load_from_twitch(response = nil)
     response ||= HTTParty.get(URI.parse("https://api.twitch.tv/kraken/user?oauth_token=#{twitch_token}").to_s)
 

@@ -8,9 +8,19 @@
     .form-group
       %input{type: :submit, value: 'search'}
   - if @term.present?
-    - if @result[:games].empty? && @result[:runs].empty?
-      No dice! No games or runs were found matching the term "#{@term}".
+    - if [@result[:users], @result[:games], @result[:runs]].all?(&:empty?)
+      No dice! No users, games, or runs were found matching the term "#{@term}".
     - else
+      %h4 Users
+      - if @result[:users].present?
+        %table
+          %tbody
+            - @result[:users].each do |user|
+              %tr
+                %td
+                  %a{href: user_path(user)}= user.name
+      - else
+        %i (none found)
       %h4 Games
       - if @result[:games].present?
         %table
@@ -20,9 +30,9 @@
                 %td
                   %a{href: search_path(game.name)}= game.name
       - else
-        Sorry! No games were found matching "#{@term}".
+        %i (none found)
       %h4 Runs
       - if @result[:runs].present?
         = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
       - else
-        Woops! No runs were found matching the term "#{@term}"!
+        %i (none found)
