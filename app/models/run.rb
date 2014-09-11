@@ -10,7 +10,12 @@ class Run < ActiveRecord::Base
   has_one :game, through: :category
 
   class << self; attr_accessor :parsers end
-  @parsers = [WSplitParser, TimeSplitTrackerParser, SplitterZParser, LiveSplitParser]
+  @parsers = {
+    wsplit:           WSplitParser,
+    timesplittracker: TimeSplitTrackerParser,
+    splitterz:        SplitterZParser,
+    livesplit:        LiveSplitParser
+  }
   @parse_cache = nil
 
   def self.by_category(category)
@@ -64,22 +69,12 @@ class Run < ActiveRecord::Base
     self.user = nil
   end
 
-  def time
-    return read_attribute(:time) if read_attribute(:time).present?
-    update_attribute(:time, splits.map { |s| s[:duration] }.sum.to_f)
-    read_attribute(:time).to_f
-  end
-
-  def name
-    read_attribute(:name) || update_attribute(:name, parse[:name]) && read_attribute(:name)
-  end
-
   def splits
     parse[:splits]
   end
 
   def program
-    parse[:program]
+    (read_attribute(:program) || parse[:program]).to_sym
   end
 
   def offset
@@ -108,10 +103,17 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    Run.parsers.each do |p|
+    (Run.parsers[read_attribute(:program)].present? ? [Run.parsers[read_attribute(:program)]] : Run.parsers.values).each do |p|
       result = p.new.parse(file)
       next if result.blank?
       result[:program] = p.name.sub('Parser', '').downcase.to_sym
+
+      # Set some db fields
+      assign_attributes(program: result[:program])                                  if read_attribute(:program).blank?
+      assign_attributes(time:    result[:splits].map { |s| s[:duration] }.sum.to_f) if read_attribute(:time).blank?
+      assign_attributes(name:    result[:name])                                     if read_attribute(:name).blank?
+      save
+
       @parse_cache = result
       return result
     end
