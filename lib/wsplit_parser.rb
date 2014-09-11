@@ -35,6 +35,8 @@ class WSplitParser < BabelBridge::Parser
         parse_one_split(segment, index == 0 ? 0 : run.splits[index - 1].run_time.to_s.to_f)
       end
     }
+  rescue
+    nil
   end
 
   private
