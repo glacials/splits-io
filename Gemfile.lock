@@ -201,7 +201,7 @@ DEPENDENCIES
   babel_bridge (>= 0.5.3)
   bootstrap-sass (>= 3.1.1.1)
   coffee-rails (>= 4.0.0)
-  debugger (>= 1.6.8)
+  debugger
   devise (>= 3.1.1)
   figaro (>= 1.0.0.rc1)
   gon (>= 5.1.2)
@@ -217,9 +217,9 @@ DEPENDENCIES
   rails (>= 4.0.0)
   rails_12factor (>= 0.0.2)
   rspec-rails (>= 2.13.0)
-  rubocop (>= 0.21.0)
+  rubocop
   sass-rails (>= 4.0.0)
-  sqlite3 (>= 1.3.9)
+  sqlite3
   uglifier (>= 1.3.0)
   unicorn (>= 4.8.3)
   versionomy (>= 0.4.4)

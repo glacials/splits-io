@@ -25,7 +25,8 @@ class WSplitParser < BabelBridge::Parser
   rule :unix_newline,    "\n"
 
   def parse(file)
-    run = super(file) && {
+    run = super(file)
+    {
       game: nil,
       name: run.title.to_s,
       attempts: run.attempts.to_s.to_i,
@@ -34,8 +35,6 @@ class WSplitParser < BabelBridge::Parser
         parse_one_split(segment, index == 0 ? 0 : run.splits[index - 1].run_time.to_s.to_f)
       end
     }
-  rescue
-    nil
   end
 
   private
