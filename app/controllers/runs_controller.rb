@@ -48,13 +48,13 @@ class RunsController < ApplicationController
                       game.categories.new(name: @run.parse[:category])
       @run.save
       respond_to do |format|
-        format.json { render json: { url: request.protocol + request.host_with_port + run_path(@run) } }
+        format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }
         format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!" }
       end
     else
       @run.destroy
       respond_to do |format|
-        format.json { render json: { url: request.protocol + request.host_with_port + cant_parse_path } }
+        format.json { render json: {url: request.protocol + request.host_with_port + cant_parse_path} }
         format.html { redirect_to cant_parse_path }
       end
     end
@@ -92,7 +92,7 @@ class RunsController < ApplicationController
       session[:random] = true
       @run = Run.offset(rand(Run.count)).first
       respond_to do |format|
-        format.html { redirect_to(run_path(@run)) }
+        format.html { redirect_to run_path(@run) }
         format.json { render json: @run }
       end
     end
@@ -117,41 +117,41 @@ class RunsController < ApplicationController
 
   private
 
-    def set_run
-      @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by(nick: params[:run])
-      if @run.blank?
-        respond_to do |format|
-          format.json { head 404 }
-          format.html { render :not_found, status: 404 }
-        end
-        return false
+  def set_run
+    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by(nick: params[:run])
+    if @run.blank?
+      respond_to do |format|
+        format.json { head 404 }
+        format.html { render :not_found, status: 404 }
       end
-      gon.run = { tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?') }
+      return false
     end
+    gon.run = {tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?')}
+  end
 
-    def set_comparison
-      return if params[:comparison_run].blank?
-      @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) || Run.find_by(nick: params[:comparison_run])
-      if @run.blank? || @comparison_run.blank?
-        respond_to do |format|
-          format.json { head 404 }
-          format.html { render :not_found, status: 404 }
-        end
-        return false
+  def set_comparison
+    return if params[:comparison_run].blank?
+    @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) || Run.find_by(nick: params[:comparison_run])
+    if @run.blank? || @comparison_run.blank?
+      respond_to do |format|
+        format.json { head 404 }
+        format.html { render :not_found, status: 404 }
       end
+      return false
     end
+  end
 
-    def verify_ownership
-      unless @run.belongs_to?(current_user)
-        respond_to do |format|
-          format.json { head 401 }
-          format.html { render :unauthorized, status: 401 }
-        end
-        return false
+  def verify_ownership
+    unless @run.belongs_to?(current_user)
+      respond_to do |format|
+        format.json { head 401 }
+        format.html { render :unauthorized, status: 401 }
       end
+      return false
     end
+  end
 
-    def increment_hits
-      @run.hit && @run.save
-    end
+  def increment_hits
+    @run.hit && @run.save
+  end
 end

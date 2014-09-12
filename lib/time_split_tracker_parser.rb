@@ -3,11 +3,11 @@ class TimeSplitTrackerParser < BabelBridge::Parser
 
   rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :tab, :newline
   rule :title_line,  :title, :tab, /([^\t\r\n]*)/, :newline
-  rule :splits,      :title, :tab, :best_time, :newline, :image_path, :tab, :newline
+  rule :splits,      :title, :tab, :duration, :newline, :image_path, :tab, :newline
 
   rule :attempts,   /([^\t\r\n]*)/
   rule :title,      /([^\t]*)/
-  rule :best_time,  :time
+  rule :duration,   :time
   rule :image_path, /([^\t\r\n]*)/
 
   rule :time,       /(\d*\.\d*)/
@@ -19,26 +19,30 @@ class TimeSplitTrackerParser < BabelBridge::Parser
   rule :unix_newline,    "\n"
 
   def parse(file)
-    splits = super(file)
-    return nil unless splits
-    run = {}
-    run[:game] = nil
-    run[:name] = splits.title.to_s
-    run[:attempts] = splits.attempts.to_s.to_i
-    run[:offset] = splits.offset.to_f
-    run[:splits] = []
-    run[:time] = 0
-    splits.splits.each do |segment|
-      split = {}
-      split[:best] = {}
-      split[:name] = segment.title
-      split[:duration] = segment.best_time.to_s.to_f
-      split[:finish_time] = run[:time] + segment.best_time.to_s.to_f
-      run[:time] += split[:duration]
-      run[:splits] << split
+    run = super(file)
+    return nil if run.nil?
+    {
+      name: run.title.to_s,
+      attempts: run.attempts.to_s.to_i,
+      offset: run.offset.to_f,
+      splits: parse_splits(run.splits)
+    }
+  end
+
+  private
+
+  def parse_splits(splits)
+    splits.map.with_index do |split, index|
+      parse_split(split, index == 0 ? 0 : splits.slice(0, index).map { |s| s.duration.to_s.to_f }.sum)
     end
-    run
-  rescue
-    nil
+  end
+
+  def parse_split(split, run_duration_so_far)
+    {
+      best: {},
+      name: split.title,
+      duration: split.duration.to_s.to_f,
+      finish_time: run_duration_so_far + split.duration.to_s.to_f
+    }
   end
 end

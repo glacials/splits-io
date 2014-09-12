@@ -10,3 +10,6 @@ AllCops:
     - script/**/*
 Documentation:
   Enabled: false
+
+Style/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
