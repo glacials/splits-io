@@ -57,16 +57,8 @@ class Run < ActiveRecord::Base
     hits <= 1
   end
 
-  def disown
-    self.user = nil
-  end
-
   def hit
     self.hits += 1
-  end
-
-  def disown
-    self.user = nil
   end
 
   def splits

@@ -4,6 +4,7 @@ require 'uri'
 class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :disown, :delete, :compare]
   before_action :set_comparison, only: :compare
+  before_action :verify_ownership, only: [:disown, :delete]
   before_action :increment_hits, only: [:show, :download]
 
   def show
@@ -28,7 +29,10 @@ class RunsController < ApplicationController
         @run.destroy
         redirect_to cant_parse_path
       else
-        render :cant_parse
+        respond_to do |format|
+          format.json { render status: 400, json: {message: 'Unable to parse that file.'} }
+          format.html { render :cant_parse, status: 400 }
+        end
       end
     end
   end
@@ -44,14 +48,14 @@ class RunsController < ApplicationController
                       game.categories.new(name: @run.parse[:category])
       @run.save
       respond_to do |format|
-        format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!" }
         format.json { render json: { url: request.protocol + request.host_with_port + run_path(@run) } }
+        format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!" }
       end
     else
       @run.destroy
       respond_to do |format|
-        format.html { redirect_to cant_parse_path }
         format.json { render json: { url: request.protocol + request.host_with_port + cant_parse_path } }
+        format.html { redirect_to cant_parse_path }
       end
     end
     tracking_params = {}
@@ -80,57 +84,74 @@ class RunsController < ApplicationController
 
   def random
     if Run.count == 0
-      redirect_to root_path, alert: 'There are no runs yet!'
+      respond_to do |format|
+        format.json { render status: 503, json: {message: 'No runs exist yet!'} }
+        format.html { redirect_to root_path, alert: 'No runs exist yet!' }
+      end
     else
       session[:random] = true
       @run = Run.offset(rand(Run.count)).first
       respond_to do |format|
         format.html { redirect_to(run_path(@run)) }
-        format.json { render json: { redirect: run_path(@run) } }
+        format.json { render json: @run }
       end
     end
   end
 
   def disown
-    if @run.belongs_to?(current_user)
-      @run.disown
-      @run.save
-      redirect_to :back
-    else
-      redirect_to run_path(@run)
+    @run.user = nil
+    @run.save
+    respond_to do |format|
+      format.json { head 200 }
+      format.html { redirect_to :back }
     end
   end
 
   def delete
-    if @run.belongs_to?(current_user)
-      @run.destroy
-      redirect_to root_path
-    else
-      redirect_to run_path(@run)
+    @run.destroy
+    respond_to do |format|
+      format.json { head 200 }
+      format.html { redirect_to :back, notice: 'Run deleted!' }
     end
   end
 
   private
 
-  def set_run
-    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by(nick: params[:run])
-    if @run.blank?
-      render :bad_url
-      return false
+    def set_run
+      @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by(nick: params[:run])
+      if @run.blank?
+        respond_to do |format|
+          format.json { head 404 }
+          format.html { render :not_found, status: 404 }
+        end
+        return false
+      end
+      gon.run = { tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?') }
     end
-    gon.run = { tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?') }
-  end
 
-  def set_comparison
-    return if params[:comparison_run].blank?
-    @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) || Run.find_by(nick: params[:comparison_run])
-    if @run.blank? || @comparison_run.blank?
-      render :bad_url
-      return false
+    def set_comparison
+      return if params[:comparison_run].blank?
+      @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) || Run.find_by(nick: params[:comparison_run])
+      if @run.blank? || @comparison_run.blank?
+        respond_to do |format|
+          format.json { head 404 }
+          format.html { render :not_found, status: 404 }
+        end
+        return false
+      end
     end
-  end
 
-  def increment_hits
-    @run.hit && @run.save
-  end
+    def verify_ownership
+      unless @run.belongs_to?(current_user)
+        respond_to do |format|
+          format.json { head 401 }
+          format.html { render :unauthorized, status: 401 }
+        end
+        return false
+      end
+    end
+
+    def increment_hits
+      @run.hit && @run.save
+    end
 end
