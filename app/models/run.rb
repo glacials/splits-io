@@ -57,10 +57,6 @@ class Run < ActiveRecord::Base
     hits <= 1
   end
 
-  def hit
-    self.hits += 1
-  end
-
   def splits
     parse[:splits]
   end

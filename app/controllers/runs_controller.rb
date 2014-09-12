@@ -152,6 +152,7 @@ class RunsController < ApplicationController
   end
 
   def increment_hits
-    @run.hit && @run.save
+    @run.hits += 1
+    @run.save
   end
 end
