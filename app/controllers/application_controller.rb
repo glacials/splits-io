@@ -15,6 +15,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_mixpanel
-    @mixpanel = Mixpanel::Tracker.new(ENV['splitsio_mixpanel_token'])
+    @mixpanel = Mixpanel::Tracker.new(ENV['MIXPANEL_TOKEN'])
   end
 end

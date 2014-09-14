@@ -127,20 +127,22 @@ bundle install
 rails server
 ```
 
-#### Logging in
+#### Environment variables
 
-To get Twitch authentication working locally, you'll need to register a developer application at
-http://www.twitch.tv/settings/connections. When you do, assign your client ID and client secret to the
-`splitsio_twitch_id` and `splitsio_twitch_secret` environment variables, respectively. Like this:
+We use [Figaro][4] to manage environment variables. This means that instead of setting them yourself, you can just go
+copy `config/application.example.yml` to `config/application.yml` and fill them out there. You can also opt to set them
+manually if you prefer to do that.
 
-```bash
-export splitsio_twitch_id=your_client_id_here
-export splitsio_twitch_secret=your_client_secret_here
-```
+If you're using Heroku for production, use `figaro heroku:set -e production` to push all the appropriate environment
+variables there.
 
-Then you should be able to `rails server` and have login working.
+##### Logging in
 
-#### Production
+To get Twitch authentication working, you'll need to register a developer application at
+http://www.twitch.tv/settings/connections. When you do, fill out the `TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`
+environment variables with the appropriate information.
+
+##### Production database
 
 Development mode (the default when using `rails server`) should work just fine at this point. To run in production mode,
 you will need some additional environment variables set.
@@ -162,3 +164,4 @@ You can generate a secure key for this with `rake secret`.
 [1]: https://github.com/skoh-fley/splits-io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser
 [3]: https://github.com/shanebdavis/Babel-Bridge
+[4]: https://github.com/laserlemon/figaro

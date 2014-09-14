@@ -1,14 +1,14 @@
 - if flash[:user_just_signed_up]
-  :coffee
-    mixpanel.alias "#{current_user.id}"
-    mixpanel.track "signed up"
+  :javascript
+    mixpanel.alias("#{current_user.id}");
+    mixpanel.track("signed up");
 - if flash[:user_just_signed_in]
-  :coffee
-    mixpanel.identify "#{current_user.id}"
+  :javascript
+    mixpanel.identify("#{current_user.id}");
 
-:coffee
-  mixpanel.track "viewed a page", {'URL': window.location.pathname}
-  mixpanel.track_links "#sign_in",  "signed in"
-  mixpanel.track_links "#sign_out", "signed out"
-  mixpanel.track_links "#disown", "disowned a run"
-  mixpanel.track_links "#delete", "deleted a run"
+:javascript
+  mixpanel.track("viewed a page", {"URL": window.location.pathname});
+  mixpanel.track_links("#sign_in",  "signed in");
+  mixpanel.track_links("#sign_out", "signed out");
+  mixpanel.track_links("#disown", "disowned a run");
+  mixpanel.track_links("#delete", "deleted a run");
