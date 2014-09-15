@@ -7,7 +7,7 @@
       %input{type: :text, name: 'q', autofocus: true, placeholder: 'search...', value: @query}
     .form-group
       %input{type: :submit, value: 'search'}
-  - if @query.present?
+  - if @query || @result
     - if [@result[:users], @result[:games], @result[:runs]].all?(&:blank?)
       No dice! No users or games were found matching the term "#{@query}" (sorry, category searches returning soon!).
     - else
@@ -31,7 +31,7 @@
                   %a{href: game_path(game)}= game.name
                   %small.pull-right
                     Categories:
-                    = game.categories.map(&:name).join(', ')
+                    = game.categories.pluck(:name).join(', ')
       - else
         %i (none found)
       %h4 Runs

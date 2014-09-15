@@ -8,12 +8,12 @@
       %tr
         - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
           %th.align-right
-            %a{href: "?by=user_id&order=#{params[:by] == 'user_id' && params[:order] == 'asc' ? 'desc' : 'asc'}"} Runner
+            %a{href: "?#{params.except(:controller, :action).merge(by: :user_id, order: params[:by] == 'user_id' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Runner
         %th.align-right
-          %a{href: "?by=time&order=#{params[:by] == 'time' && params[:order] == 'asc' ? 'desc' : 'asc'}"} Time
+          %a{href: "?#{params.except(:controller, :action).merge(by: :time, order: params[:by] == 'time' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Time
         %th Name
         %th.align-right
-          %a{href: "?by=created_at&order=#{params[:by] == 'created_at' && params[:order] == 'desc' ? 'asc' : 'desc'}"} Uploaded
+          %a{href: "?#{params.except(:controller, :action).merge(by: :created_at, order: params[:by] == 'created_at' && params[:order] == 'desc' ? :asc : :desc).to_param}"} Uploaded
         - if runs.any? { |run| run.belongs_to?(current_user) }
           %th Actions
     %tbody
