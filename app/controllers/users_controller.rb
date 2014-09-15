@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by(name: params[:user])
+    @user = User.find_by(name: params[:user_name])
     if @user.nil?
       respond_to do |format|
         format.json { render status: 404, json: {message: 'No such user exists.'} }

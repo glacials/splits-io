@@ -3,10 +3,11 @@ class Game < ActiveRecord::Base
   has_many :runs, through: :categories
 
   def self.search(term)
-    where(Game.arel_table[:name].matches "%#{term}%").order(:name)
+    t = Game.arel_table
+    where(t[:name].matches("%#{term}%").or(t[:shortname].eq(term))).order(:name)
   end
 
-  def to_s
-    name
+  def to_param
+    shortname || name.downcase.gsub(' ', '+')
   end
 end

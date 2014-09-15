@@ -1,0 +1,4 @@
+- title @game.name
+.container
+  %h2= content_for(:title)
+  = render partial: 'shared/run_table', locals: {runs: @game.runs.page(params[:page])}

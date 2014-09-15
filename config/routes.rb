@@ -17,14 +17,17 @@ SplitsIO::Application.routes.draw do
     get 'signout', to: 'devise/sessions#destroy', as: :signout
   end
 
-  get  '/search(/:term)', to: 'search#index', as: :search
+  get '/search(/:q)',              to: 'search#index' # deprecated
+  get '/search(?q=:q)',            to: 'search#index', as: :search
+  get '/search?q=:game_shortname', to: 'search#show',  as: :game
 
   get '/:run',                         to: 'runs#show',     as: :run
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:run/download/:program',       to: 'runs#download', as: :download
 
   delete '/:run',      to: 'runs#delete', as: :delete
-  delete '/:run/user', to: 'runs#disown',  as: :disown
+  delete '/:run/user', to: 'runs#disown', as: :disown
 
-  get '/u/:user', to: 'users#show', as: :user
+  get '/u/:user_name', to: 'users#show' # deprecated
+  get '/users/:user_name', to: 'users#show', as: :user
 end

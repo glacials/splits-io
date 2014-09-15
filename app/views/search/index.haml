@@ -4,12 +4,12 @@
   %h5 find your soulmate splits
   %form.form-inline{action: search_path, method: :get}
     .form-group
-      %input{type: :text, name: 'q', autofocus: true, placeholder: 'search...', value: @term}
+      %input{type: :text, name: 'q', autofocus: true, placeholder: 'search...', value: @query}
     .form-group
       %input{type: :submit, value: 'search'}
-  - if @term.present?
+  - if @query.present?
     - if [@result[:users], @result[:games], @result[:runs]].all?(&:empty?)
-      No dice! No users, games, or runs were found matching the term "#{@term}".
+      No dice! No users, games, or runs were found matching the term "#{@query}".
     - else
       %h4 Users
       - if @result[:users].present?
@@ -28,7 +28,10 @@
             - @result[:games].each do |game|
               %tr
                 %td
-                  %a{href: search_path(game.name)}= game.name
+                  %a{href: game_path(game)}= game.name
+                  %small.pull-right
+                    Categories:
+                    = game.categories.map(&:name).join(', ')
       - else
         %i (none found)
       %h4 Runs
