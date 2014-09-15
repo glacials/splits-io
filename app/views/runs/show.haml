@@ -4,7 +4,7 @@
 - if flash[:notice].present?
   #permalink-indicator= flash[:notice]
   :coffee
-    window.onload = -> $('#permalink-indicator').fadeIn().delay(4000).fadeOut({ complete: -> $(this).remove()});
+    window.onload = -> $('#permalink-indicator').fadeIn().delay(4000).fadeOut({ complete: -> $(this).remove()})
 .container
   %h2= yield(:title)
   %h5= render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
