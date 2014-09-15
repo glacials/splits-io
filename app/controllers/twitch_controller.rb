@@ -10,12 +10,7 @@ class TwitchController < ApplicationController
     uri      = URI.parse("https://api.twitch.tv/kraken/user?oauth_token=#{token}")
     response = HTTParty.get(uri.to_s)
 
-    user = User.find_by(twitch_id: response['_id'])
-    flash = {}
-    if user.nil?
-      user = User.new
-      flash[:user_just_signed_up] = true
-    end
+    user = User.find_by(twitch_id: response['_id']) || User.new
     user.twitch_token = token
     user.load_from_twitch(response)
     user.save
@@ -23,7 +18,7 @@ class TwitchController < ApplicationController
     sign_in(:user, user)
     user.remember_me!(100.years)
 
-    flash = flash.merge(notice: "Signed in as #{current_user.name} :D", user_just_signed_in: true)
+    flash = {notice: "Signed in as #{current_user.name} :D"}
     if cookies[:return_to]
       redirect_to cookies[:return_to], flash: flash
       cookies.delete(:return_to)
@@ -51,10 +46,12 @@ class TwitchController < ApplicationController
   end
 
   def post_params
-    { client_id:     client_id,
+    {
+      client_id:     client_id,
       client_secret: client_secret,
       grant_type:    'authorization_code',
       redirect_uri:  redirect_uri,
-      code:          params[:code] }
+      code:          params[:code]
+    }
   end
 end

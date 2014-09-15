@@ -1,11 +1,3 @@
-- if flash[:user_just_signed_up]
-  :javascript
-    mixpanel.alias("#{current_user.id}");
-    mixpanel.track("signed up");
-- if flash[:user_just_signed_in]
-  :javascript
-    mixpanel.identify("#{current_user.id}");
-
 :javascript
   mixpanel.track("viewed a page", {"URL": window.location.pathname});
   mixpanel.track_links("#sign_in",  "signed in");
