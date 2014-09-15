@@ -8,7 +8,7 @@
     .form-group
       %input{type: :submit, value: 'search'}
   - if @query.present?
-    - if [@result[:users], @result[:games], @result[:runs]].all?(&:empty?)
+    - if [@result[:users], @result[:games], @result[:runs]].all?(&:blank?)
       No dice! No users, games, or runs were found matching the term "#{@query}".
     - else
       %h4 Users
