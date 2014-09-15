@@ -38,4 +38,14 @@
       - if @result[:runs].present?
         = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
       - else
-        %i (none found)
+        - if @result[:games].length > 1
+          %p
+            Due to search being overloaded, runs temporarily aren't being returned for search queries that match > 1
+            game.  Please refine your search by clicking one of the above games.
+          %p
+            If you can't do this because your search string always matches > 1 game (e.g. "Super Mario Galaxy"), please
+            %a{href: 'mailto:qhiiyr@gmail.com'} email me
+            \-- I'm in the process of setting up game shortnames to solve this whole search issue, and I can set one up
+            for your game in a jiffy until I build a more automated process.
+        - else
+          %i (none found)

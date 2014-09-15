@@ -19,7 +19,7 @@ SplitsIO::Application.routes.draw do
 
   get '/search(/:q)',              to: 'search#index' # deprecated
   get '/search(?q=:q)',            to: 'search#index', as: :search
-  get '/search?q=:game_shortname', to: 'search#show',  as: :game
+  get '/search?q=:game_shortname', to: 'search#index', as: :game
 
   get '/:run',                         to: 'runs#show',     as: :run
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare

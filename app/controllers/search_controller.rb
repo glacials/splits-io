@@ -4,9 +4,11 @@ class SearchController < ApplicationController
       @query = params[:q].strip
       @result = {
         users: User.search(@query),
-        games: Game.search(@query),
-        runs: Run.joins(:category).where(categories: {game_id: Game.search(@query)})
+        games: Game.search(@query)
       }
+      if @result[:games].length == 1
+        @result[:runs] = Run.joins(:category).where(categories: {game_id: @result[:games]})
+      end
     end
   end
 end
