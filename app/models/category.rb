@@ -6,6 +6,12 @@ class Category < ActiveRecord::Base
     runs.order(:time).first
   end
 
+  def as_json(options = {})
+    super({
+      only: [:id, :name, :created_at, :updated_at]
+    }.merge(options))
+  end
+
   def to_s
     name
   end

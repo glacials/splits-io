@@ -26,8 +26,10 @@ class User < ActiveRecord::Base
     Time.now - 3.seconds < current_sign_in_at
   end
 
-  def as_json
-    super(only: [:id, :name])
+  def as_json(options = {})
+    super({
+      only: [:id, :twitch_id, :name, :created_at, :updated_at]
+    }.merge(options))
   end
 
   def to_param

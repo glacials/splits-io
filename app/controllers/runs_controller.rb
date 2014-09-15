@@ -126,7 +126,9 @@ class RunsController < ApplicationController
       end
       return false
     end
-    gon.run = {tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?')}
+    gon.run = @run.as_json.merge({
+      tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?')
+    })
   end
 
   def set_comparison

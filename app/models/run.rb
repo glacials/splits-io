@@ -81,8 +81,11 @@ class Run < ActiveRecord::Base
     parse[:history]
   end
 
-  def as_json(options)
-    super({ except: [:file, :category_id, :user_id], methods: [:category, :game, :user, :splits] }.merge(options))
+  def as_json(options = {})
+    super({
+      only: [:id, :created_at, :updated_at, :nick, :hits, :image_url, :name, :time, :program],
+      methods: [:game, :category, :user, :splits]
+    }.merge(options))
   end
 
   def parses?

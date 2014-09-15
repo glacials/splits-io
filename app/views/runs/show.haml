@@ -10,7 +10,7 @@
   %h5= render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
   - if @run.user.present?
     %h6
-      %a.twitch{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
+      %a#twitch-channel{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
   %h6
     - if flash[:alert].present?
       .alert-warning
