@@ -9,7 +9,7 @@
       %input{type: :submit, value: 'search'}
   - if @query.present?
     - if [@result[:users], @result[:games], @result[:runs]].all?(&:blank?)
-      No dice! No users, games, or runs were found matching the term "#{@query}".
+      No dice! No users or games were found matching the term "#{@query}" (sorry, category searches returning soon!).
     - else
       %h4 Users
       - if @result[:users].present?
