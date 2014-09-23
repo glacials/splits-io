@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   def index
-    if params[:q]
+    if params[:q].present?
       @query = params[:q].strip
       @result = {games: [Game.find_by(shortname: @query)]}
       if @result[:games][0].present?
