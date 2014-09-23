@@ -1,14 +1,11 @@
 class TwitchController < ApplicationController
   def out
-    redirect_to "#{auth_uri}?response_type=code&client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=user_read"
+    redirect_to "#{auth_uri}?response_type=code&client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scopes}"
   end
 
   def in
-    uri   = URI.parse('https://api.twitch.tv/kraken/oauth2/token')
-    token = HTTParty.post(uri.to_s, query: post_params)['access_token']
-
-    uri      = URI.parse("https://api.twitch.tv/kraken/user?oauth_token=#{token}")
-    response = HTTParty.get(uri.to_s)
+    token = HTTParty.post("#{api_base_uri}/oauth2/token', query: post_params)['access_token']
+    response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token-#{token}")
 
     user = User.find_by(twitch_id: response['_id']) || User.new
     user.twitch_token = token
@@ -41,8 +38,15 @@ class TwitchController < ApplicationController
     "http://#{request.host_with_port}/signin/twitch/auth"
   end
 
+  def api_base_uri
+    'https://api.twitch.tv/kraken'
+
   def auth_uri
-    'https://api.twitch.tv/kraken/oauth2/authorize'
+    "#{api_base_uri}/oauth2/authorize"
+  end
+
+  def scopes
+    'user_read'
   end
 
   def post_params
