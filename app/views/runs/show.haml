@@ -1,21 +1,13 @@
 - title @run.name
 = render partial: 'twitter_card'
 
-- if flash[:notice].present?
-  #permalink-indicator= flash[:notice]
-  :coffee
-    window.onload = -> $('#permalink-indicator').fadeIn().delay(4000).fadeOut({ complete: -> $(this).remove()})
 .container
   %h2= yield(:title)
   %h5= render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
   - if @run.user.present?
     %h6
       %a#twitch-channel{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
-  %h6
-    - if flash[:alert].present?
-      .alert-warning
-        .glyphicon.glyphicon-warning-sign
-        = flash[:alert]
+  = render partial: 'shared/alerts'
   %h6
     %span#download-menu
       %a{href: download_path(@run, @run.program), onclick: 'hide_download_menu()'}= @run.program

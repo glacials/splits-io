@@ -2,6 +2,7 @@
 .container
   %h2= content_for(:title)
   %h5 find your soulmate splits
+  = render partial: 'shared/alerts'
   %form.form-inline{action: search_path, method: :get}
     .form-group
       %input{type: :text, name: 'q', autofocus: true, placeholder: 'search...', value: @query}

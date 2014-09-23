@@ -10,8 +10,11 @@ class RunsController < ApplicationController
   def show
     if request.fullpath != "/#{@run.id.to_s(36)}"
       @mixpanel.track(current_user.try(:id), 'received an alert', type: 'Permalink change', level: 'Warning')
-      redirect_to @run, alert: "This run's permalink has changed. You have been redirected to the newer one. \
-                                <a href='#{why_path}'>More info</a>.".html_safe
+      redirect_to @run, flash: {
+        icon: 'warning-sign',
+        alert: "This run's permalink has changed. You have been redirected to the newer one. \
+                <a href='#{why_path}'>More info</a>.".html_safe
+      }
       return
     end
 
@@ -86,7 +89,7 @@ class RunsController < ApplicationController
     if Run.count == 0
       respond_to do |format|
         format.json { render status: 503, json: {message: 'No runs exist yet!'} }
-        format.html { redirect_to root_path, alert: 'No runs exist yet!' }
+        format.html { redirect_to root_path, flash: {icon: 'exclamation-sign', alert: 'No runs exist yet!'} }
       end
     else
       session[:random] = true

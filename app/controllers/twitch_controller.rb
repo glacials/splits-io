@@ -4,7 +4,15 @@ class TwitchController < ApplicationController
   end
 
   def in
-    token = HTTParty.post("#{api_base_uri}/oauth2/token', query: post_params)['access_token']
+    if params['error'] == 'access_denied'
+      redirect_to root_path, flash: {
+        icon: 'remove',
+        notice: 'Woops, you denied access. That\'s okay, you can still upload runs anonymously.'
+      }
+      return
+    end
+
+    token = HTTParty.post("#{api_base_uri}/oauth2/token", query: post_params)['access_token']
     response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token-#{token}")
 
     user = User.find_by(twitch_id: response['_id']) || User.new
@@ -40,6 +48,7 @@ class TwitchController < ApplicationController
 
   def api_base_uri
     'https://api.twitch.tv/kraken'
+  end
 
   def auth_uri
     "#{api_base_uri}/oauth2/authorize"

@@ -52,33 +52,43 @@ code
   .previous_page, .next_page
     border: none
 
-.alert-success
-  @extend .pull-right
-  color: #fff
-  margin-left: auto
-  padding: 10px 2em
-  white-space: nowrap
-
-.alert-success
-  background: #5eb95e
+.alert
+  display: inline-block
+  padding: .5em
 
 .alert-danger
+  @extend .alert
   background: #dd514c
   a
     color: #fdd
     &:hover
       color: #fff
 
+.alert-success
+  @extend .alert
+  background-color: #dff2bf
+  color: #4f8a10
+  a
+    &:hover
+      text-decoration: none
+
+.alert-primary
+  @extend .alert
+  background-color: #bde5f8
+  color: #00529b
+
+.alert-default
+  @extend .alert
+  background-color: #ddd
+  color: #666
+
 .alert-warning
+  @extend .alert
   background: #feefb3
   color: #9f6000
   a
     &:hover
       text-decoration: none
-
-.alert-danger, .alert-warning
-  display: inline-block
-  padding: .5em
 
 nav
   @extend .pull-right
@@ -210,14 +220,6 @@ footer
     &:hover
       color: #777
       text-decoration: underline
-
-#permalink-indicator
-  display: none
-  color: #777
-  white-space: nowrap
-  position: fixed
-  left: 180px
-  top: 10px
 
 .timeline
   @extend .pure-g
