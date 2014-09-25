@@ -41,11 +41,8 @@ class RunsController < ApplicationController
   end
 
   def upload
-    @run = Run.new
-    @run.file = params[:file].read
+    @run = Run.new(file: params[:file].read, user: current_user, image_url: params[:image_url])
     if @run.parses?
-      @run.user = current_user
-      @run.image_url = params[:image_url]
       game = Game.find_by(name: @run.parse[:game]) || Game.create(name: @run.parse[:game])
       @run.category = Category.find_by(game: game, name: @run.parse[:category]) ||
                       game.categories.new(name: @run.parse[:category])
@@ -63,7 +60,7 @@ class RunsController < ApplicationController
     end
     tracking_params = {}
     if request.xhr?
-      tracking_params['Client'] = 'drag and drop'
+      tracking_params['Client'] = 'JavaScript'
     elsif request.env['HTTP_USER_AGENT'] =~ /LiveSplit/i
       tracking_params['Client'] = request.env['HTTP_USER_AGENT']
     elsif request.referer =~ /\/upload/i

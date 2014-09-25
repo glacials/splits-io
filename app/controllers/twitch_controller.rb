@@ -1,6 +1,13 @@
 class TwitchController < ApplicationController
   def out
-    redirect_to "#{auth_uri}?response_type=code&client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scopes}"
+    auth_uri = URI::parse('https://api.twitch.tv/kraken/oauth2/authorize')
+    auth_uri.query = {
+      response_type: 'code',
+      client_id: ENV['TWITCH_CLIENT_ID'],
+      redirect_uri: redirect_uri,
+      scope: 'user_read'
+    }.to_query
+    redirect_to auth_uri.to_s
   end
 
   def in
@@ -12,12 +19,12 @@ class TwitchController < ApplicationController
       return
     end
 
-    token = HTTParty.post("#{api_base_uri}/oauth2/token", query: post_params)['access_token']
-    response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token-#{token}")
+    token = HTTParty.post("https://api.twitch.tv/kraken/oauth2/token", query: post_params)['access_token']
+    response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{token}")
 
     user = User.find_by(twitch_id: response['_id']) || User.new
     user.twitch_token = token
-    user.load_from_twitch(response)
+    user.load_from_twitch
     user.save
 
     sign_in(:user, user)
@@ -34,37 +41,17 @@ class TwitchController < ApplicationController
 
   private
 
-  def client_id
-    ENV['TWITCH_CLIENT_ID']
-  end
-
-  def client_secret
-    ENV['TWITCH_CLIENT_SECRET']
-  end
-
   def redirect_uri
     "http://#{request.host_with_port}/signin/twitch/auth"
   end
 
-  def api_base_uri
-    'https://api.twitch.tv/kraken'
-  end
-
-  def auth_uri
-    "#{api_base_uri}/oauth2/authorize"
-  end
-
-  def scopes
-    'user_read'
-  end
-
   def post_params
     {
-      client_id:     client_id,
-      client_secret: client_secret,
-      grant_type:    'authorization_code',
-      redirect_uri:  redirect_uri,
-      code:          params[:code]
+      client_id: ENV['TWITCH_CLIENT_ID'],
+      client_secret: ENV['TWITCH_CLIENT_SECRET'],
+      grant_type: 'authorization_code',
+      redirect_uri: redirect_uri,
+      code: params[:code]
     }
   end
 end

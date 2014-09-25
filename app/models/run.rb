@@ -11,10 +11,10 @@ class Run < ActiveRecord::Base
 
   class << self; attr_accessor :parsers end
   @parsers = {
-    wsplit:           WSplitParser,
+    wsplit: WSplitParser,
     timesplittracker: TimeSplitTrackerParser,
-    splitterz:        SplitterZParser,
-    livesplit:        LiveSplitParser
+    splitterz: SplitterZParser,
+    livesplit: LiveSplitParser
   }
   @parse_cache = nil
 
@@ -23,7 +23,7 @@ class Run < ActiveRecord::Base
   end
 
   def self.by_game(game)
-    joins(:category).where(format('categories.game_id = %game_id', game_id: game.id))
+    joins(:category).where(categories: {game_id: game})
   end
 
   def self.search(term)

@@ -10,8 +10,8 @@ class User < ActiveRecord::Base
     where(User.arel_table[:name].matches "%#{term}%").joins(:runs).uniq.order(:name)
   end
 
-  def load_from_twitch(response = nil)
-    response ||= HTTParty.get(URI.parse("https://api.twitch.tv/kraken/user?oauth_token=#{twitch_token}").to_s)
+  def load_from_twitch
+    response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{twitch_token}")
 
     self.twitch_id = response['_id']
     self.email     = response['email']
@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
 
   def just_signed_in?
     Time.now - 3.seconds < current_sign_in_at
+  end
+
+  def uri
+    URI::parse("http://www.twitch.tv/#{name}")
   end
 
   def as_json(options = {})
