@@ -6,7 +6,7 @@
   %h5= render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
   - if @run.user
     %h6
-      %a#twitch-channel{href: @run.user.uri, target: :_blank}= @run.user.uri
+      %a#twitch-channel{href: @run.user.uri, target: :_blank}= @run.user.uri.to_s.gsub('http://www.', '')
   = render partial: 'shared/alerts'
   %h6
     %span#download-menu
