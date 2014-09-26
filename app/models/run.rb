@@ -18,17 +18,9 @@ class Run < ActiveRecord::Base
   }
   @parse_cache = nil
 
-  def self.by_category(category)
-    where(category: category)
-  end
-
-  def self.by_game(game)
-    joins(:category).where(categories: {game_id: game})
-  end
-
-  def self.search(term)
-    where(Run.arel_table[:name].matches "%#{term}%")
-  end
+  scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
+  scope :by_category, ->(category) { where(category: category) }
+  scope :without, ->(*columns) { select(column_names - columns.map(&:to_s)) }
 
   # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method just returns `splits`.
   # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped.

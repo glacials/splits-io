@@ -1,0 +1,52 @@
+# Logfile created on 2014-09-25 16:10:32 -0700 by logger.rb/44203
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Starting the New Relic agent in "development" environment.
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : To prevent agent startup add a NEWRELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Reading configuration from /Users/ben/pj/splits-io/config/newrelic.yml (/Users/ben/pj/splits-io/db/migrate)
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : New Relic Agent Developer Mode enabled.
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Environment: development
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : No known dispatcher detected.
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Application: development
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'.
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing ActiveRecord 4 instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing Net instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing deferred Rack instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing Rack::Builder middleware instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing Rails 3+ middleware instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing Rails 4 Controller instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing Rails 4 view instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Installing Rails 4 Error instrumentation
+[09/25/14 16:10:32 -0700 crashdown.local (1783)] INFO : Finished instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Starting the New Relic agent in "development" environment.
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : To prevent agent startup add a NEWRELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Reading configuration from /Users/ben/pj/splits-io/config/newrelic.yml (/Users/ben/pj/splits-io/db/migrate)
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : New Relic Agent Developer Mode enabled.
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Environment: development
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : No known dispatcher detected.
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Application: development
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'.
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing ActiveRecord 4 instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing Net instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing deferred Rack instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing Rack::Builder middleware instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing Rails 3+ middleware instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing Rails 4 Controller instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing Rails 4 view instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Installing Rails 4 Error instrumentation
+[09/25/14 16:13:11 -0700 crashdown.local (2208)] INFO : Finished instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Starting the New Relic agent in "development" environment.
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : To prevent agent startup add a NEWRELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Reading configuration from /Users/ben/pj/splits-io/config/newrelic.yml (/Users/ben/pj/splits-io/db/migrate)
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : New Relic Agent Developer Mode enabled.
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Environment: development
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : No known dispatcher detected.
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Application: development
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'.
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing ActiveRecord 4 instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing Net instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing deferred Rack instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing Rack::Builder middleware instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing Rails 3+ middleware instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing Rails 4 Controller instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing Rails 4 view instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Installing Rails 4 Error instrumentation
+[09/25/14 16:13:19 -0700 crashdown.local (2332)] INFO : Finished instrumentation

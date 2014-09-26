@@ -1,4 +1,4 @@
-- runs = order_runs runs.page(params[:page])
+- runs = order_runs(runs).without(:file).page(params[:page])
 - if runs.empty?
   %center
     %i Woops! No runs here, #{['boss', 'friend', 'pal', 'buddy', 'speedfriend', 'friend', 'unfortunately'].sample}!
@@ -17,7 +17,7 @@
         - if runs.any? { |run| run.belongs_to?(current_user) }
           %th Actions
     %tbody
-      - runs.page(params[:page]).find_each do |run|
+      - runs.find_each do |run|
         %tr
           - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
             %td.align-right
@@ -35,4 +35,4 @@
                 = link_to('Disown', disown_path(run), id: :disown, method: :delete, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
                 \/
                 = link_to('Delete', run_path(run), id: :delete, method: :delete, data: {confirm: 'Really delete this run?'})
-  .center= will_paginate runs
+  .center= will_paginate(runs)

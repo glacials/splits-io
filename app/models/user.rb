@@ -18,14 +18,6 @@ class User < ActiveRecord::Base
     self.name      = response['name']
   end
 
-  def just_signed_up?
-    Time.now - 3.seconds < created_at
-  end
-
-  def just_signed_in?
-    Time.now - 3.seconds < current_sign_in_at
-  end
-
   def uri
     URI::parse("http://www.twitch.tv/#{name}")
   end
