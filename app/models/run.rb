@@ -73,11 +73,11 @@ class Run < ActiveRecord::Base
     parse[:history]
   end
 
-  def as_json(options = {})
+  def as_json(options = {methods: {}})
     super({
       only: [:id, :created_at, :updated_at, :nick, :hits, :image_url, :name, :time, :program],
-      methods: [:game, :category, :user, :splits]
-    }.merge(options))
+      methods: [:game, :category, :user, :splits] + options[:methods]
+    }.merge(options.except(:methods)))
   end
 
   def parses?
@@ -105,7 +105,7 @@ class Run < ActiveRecord::Base
     nil
   end
 
-  def tracking_info
+  def to_tracking_properties
     { 'Parses?'     => parses?,
       'Screenshot?' => image_url.present?
     }.merge(!parses? ? {} : { 'Game'     => game.name,

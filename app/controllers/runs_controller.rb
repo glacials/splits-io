@@ -58,15 +58,15 @@ class RunsController < ApplicationController
         format.html { redirect_to cant_parse_path }
       end
     end
-    tracking_params = {}
+    tracking_properties = {}
     if request.xhr?
-      tracking_params['Client'] = 'JavaScript'
+      tracking_properties['Client'] = 'JavaScript'
     elsif request.env['HTTP_USER_AGENT'] =~ /LiveSplit/i
-      tracking_params['Client'] = request.env['HTTP_USER_AGENT']
+      tracking_properties['Client'] = request.env['HTTP_USER_AGENT']
     elsif request.referer =~ /\/upload/i
-      tracking_params['Client'] = 'form'
+      tracking_properties['Client'] = 'form'
     end
-    @mixpanel.track(current_user.try(:id), 'uploaded a run', @run.tracking_info.merge(tracking_params))
+    @mixpanel.track(current_user.try(:id), 'uploaded a run', @run.to_tracking_properties.merge(tracking_properties))
   end
 
   def download
@@ -126,9 +126,7 @@ class RunsController < ApplicationController
       end
       return false
     end
-    gon.run = @run.as_json.merge({
-      tracking_info: @run.tracking_info.except('Parses?', 'Screenshot?')
-    })
+    gon.run = @run.as_json(methods: [:to_tracking_properties])
   end
 
   def set_comparison

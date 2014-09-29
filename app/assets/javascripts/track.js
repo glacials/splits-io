@@ -9,3 +9,4 @@ mixpanel.track_links("#twitch-channel", "visited a twitch channel", {
   category: gon.run.category.name,
   program: gon.run.program
 });
+mixpanel.track_forms("#search", "searched");

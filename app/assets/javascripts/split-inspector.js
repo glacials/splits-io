@@ -9,7 +9,7 @@ $(function() {
       "run time": gon.run.time,
       "game": gon.run.game.name,
       "category": gon.run.category.name,
-      "runner": gon.run.user.name,
+      "runner": (gon.run.user || {}).name,
       "number of splits": gon.run.splits.length
     });
   }, function() {
