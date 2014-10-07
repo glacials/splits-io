@@ -17,7 +17,7 @@
         - if runs.any? { |run| run.belongs_to?(current_user) }
           %th Actions
     %tbody
-      - runs.find_each do |run|
+      - runs.each do |run|
         %tr
           - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
             %td.align-right

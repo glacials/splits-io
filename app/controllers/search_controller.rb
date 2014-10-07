@@ -10,9 +10,7 @@ class SearchController < ApplicationController
         users: User.search(@query),
         games: Game.search(@query)
       }
-      @result[:runs] = if @result[:games].length == 1
-        Run.joins(:category).where(categories: {game_id: @result[:games]})
-      end
+      @result[:runs] = Run.joins(:category).where(categories: {game_id: @result[:games]}).page(params[:page])
     end
   end
 end

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :remove_www
   before_action :set_mixpanel
+  before_action :set_gon
 
   def remove_www
     redirect_to(subdomain: nil) if request.subdomain == 'www'
@@ -14,7 +15,14 @@ class ApplicationController < ActionController::Base
     request.referrer
   end
 
+  private
+
   def set_mixpanel
     @mixpanel = Mixpanel::Tracker.new(ENV['MIXPANEL_TOKEN'])
+  end
+
+  def set_gon
+    gon.current_user = current_user
+    gon.request = {path: request.path}
   end
 end

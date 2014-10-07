@@ -32,6 +32,5 @@
                   = game.categories.pluck(:name).join(', ')
     - else
       %i (none found)
-    - if @result[:games].length == 1
-      %h4 Runs
-      = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
+    %h4 Runs
+    = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
