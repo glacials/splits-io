@@ -18,9 +18,6 @@ class RunsController < ApplicationController
       return
     end
 
-    @random = session[:random] || false
-    session[:random] = false
-
     @run.user = current_user if @run.hits == 1 && user_signed_in?
     if @run.parses?
       respond_to do |format|
@@ -89,7 +86,6 @@ class RunsController < ApplicationController
         format.html { redirect_to root_path, flash: {icon: 'exclamation-sign', alert: 'No runs exist yet!'} }
       end
     else
-      session[:random] = true
       @run = Run.offset(rand(Run.count)).first
       respond_to do |format|
         format.html { redirect_to run_path(@run) }

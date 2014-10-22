@@ -11,14 +11,12 @@ works.
 
 ### Uploading
 
-We have drag-anywhere-on-any-page uploading, in a fashion similar to Imgur. The
-entire page lives in a `#dropzone` div that listens for mouse drag events (for
-page dimming) and mouse drop events (for file handling).
+We have drag-anywhere-on-any-page uploading, in a fashion similar to Imgur. The entire page lives in a `#dropzone` div
+that listens for mouse drag events (for page dimming) and mouse drop events (for file handling).
 
-If we receive a file drop, we construct an in-page POST request containing the
-file and send it off to the server behind the scenes. The server parses the
-file and, if successful, responds with a random base 64 ID for the new run's
-page, which we then have JavaScript direct the browser to.
+If we receive a file drop, we construct an in-page POST request containing the file and send it off to the server behind
+the scenes. The server parses the file and, if successful, responds with an ID for the new run's page, which we then
+have JavaScript direct the browser to.
 
 Alternatively, there is a manual upload form at `/upload`.
 

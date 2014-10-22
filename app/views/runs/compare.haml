@@ -35,10 +35,6 @@
     = succeed ',' do
       %a{href: run_path(@run)} top
     %a{href: run_path(@comparison_run)} bottom
-  - if @random.present?
-    %h6
-      %a{href: random_path}
-        Another random?
 
 - time_scale = [@run.time, @comparison_run.time].max
 = render partial: 'shared/timeline', locals: {run: @run, scale_to: time_scale}
