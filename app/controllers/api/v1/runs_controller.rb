@@ -14,7 +14,7 @@ class Api::V1::RunsController < ApplicationController
   end
 
   def show
-    render json: @run
+    render json: {url: run_url(@run)}.merge(@run.as_json)
   end
 
   private
