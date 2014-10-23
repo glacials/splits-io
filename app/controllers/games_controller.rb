@@ -2,7 +2,10 @@ class GamesController < ApplicationController
 
   def show
     @result = {games: [@game]}
-    render template: 'search/index'
+    respond_to do |format|
+      format.json { render json: @game }
+      format.html { render template: 'search/index' }
+    end
   end
 
   private

@@ -12,5 +12,9 @@ class SearchController < ApplicationController
       }
       @result[:runs] = Run.joins(:category).where(categories: {game_id: @result[:games]}).page(params[:page])
     end
+    respond_to do |format|
+      format.json { render json: @result }
+      format.html { render :index }
+    end
   end
 end
