@@ -324,10 +324,10 @@ curl splits.io/api/v1/runs/1952
 ##### Example response
 
     {
+      "url": "http://splits.io/1i8",
       "id": 1952,
       "created_at": "2014-08-11T07:36:54.922Z",
       "updated_at": "2014-10-06T06:13:13.448Z",
-      "nick": "TbqK",
       "hits": 18,
       "image_url": "http://i.imgur.com/8fLqgSl.png",
       "name": "The Legend of Zelda: The Wind Waker Any% No Tuner",
