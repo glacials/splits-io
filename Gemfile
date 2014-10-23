@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
-ruby '2.1.0'
+ruby '2.1.3'
 
 group :development do
   gem 'awesome_print'
-  gem 'debugger'
+  #gem 'debugger'
   gem 'rubocop', require: false
   gem 'sqlite3'
 end
