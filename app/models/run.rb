@@ -76,7 +76,7 @@ class Run < ActiveRecord::Base
   def as_json(options = {methods: {}})
     super({
       only: [:id, :created_at, :updated_at, :nick, :hits, :image_url, :name, :time, :program],
-      methods: [:game, :category, :user, :splits] + options[:methods]
+      methods: [:game, :category, :user, :splits] + (options[:methods] || [])
     }.merge(options.except(:methods)))
   end
 

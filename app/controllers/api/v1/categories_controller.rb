@@ -21,6 +21,14 @@ class Api::V1::CategoriesController < ApplicationController
 
   def set_category
     @category = Category.find params[:id]
+  rescue ActiveRecord::RecordNotFound
+    render({
+      status: 404,
+      json: {
+        status: 404,
+        message: "Category with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric ID, first use GET /api/v1/categories"
+      }
+    })
   end
 
   def search_params
