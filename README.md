@@ -1,4 +1,4 @@
-## splits i/o
+# splits i/o
 
 splits i/o is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
 code. It's written in Ruby on Rails.
@@ -6,7 +6,7 @@ code. It's written in Ruby on Rails.
 splits i/o currently supports splits from WSplit (both 1.4.x and Nitrofski's 1.5.x fork), Time Split Tracker, SplitterZ,
 and LiveSplit. Llanfair is in the works.
 
-### Uploading
+## Uploading
 
 We have drag-anywhere-on-any-page uploading, in a fashion similar to Imgur. The entire page lives in a `#dropzone` div
 that listens for mouse drag events (for page dimming) and mouse drop events (for file handling).
@@ -17,14 +17,14 @@ have JavaScript direct the browser to.
 
 Alternatively, there is a manual upload form at `/upload`.
 
-### Parsing
+## Parsing
 
 Each file format reader is implemented as an [LL parser][2], which means that we actually treat each format as its own
 context-free grammar. This means we get to validate the data as we are reading it. It also means that it's pretty simple
 to implement a new format (i.e. support a new splitting program). And as icing on top, it becomes super easy to tell one
 splits format apart from another when we need to parse.
 
-#### Example
+### Example
 
 Let's say we have a rule that says something like
 
@@ -93,14 +93,14 @@ not expecting, instead of checking (or worse, forgetting to check) the values la
 When we perform this parse on a split from Time Split Tracker, we should get an object in return that we can call things
 like `split.title` and `split.time` on.
 
-#### In the code
+### In the code
 
 To accomplish all this, we use the parser generator [Babel-Bridge][3], which is available in a neat little gem. Check
 out the actual implementations of all this stuff in the `lib/<name-of-splitting-program>_parser.rb` files.
 
-### Running locally
+## Running locally
 
-#### First run
+### First run
 
 With Ruby and Bundler installed, you should be able to
 
@@ -111,7 +111,7 @@ bundle install
 rails server
 ```
 
-#### Environment variables
+### Environment variables
 
 We use [Figaro][4] to manage environment variables. This means that instead of setting them yourself, you can just go
 copy `config/application.example.yml` to `config/application.yml` and fill them out there. You can also opt to set them
@@ -120,13 +120,13 @@ manually if you prefer to do that.
 If you're using Heroku for production, use `figaro heroku:set -e production` to push all the appropriate environment
 variables there.
 
-##### Logging in
+#### Logging in
 
 To get Twitch authentication working, you'll need to register a developer application at
 http://www.twitch.tv/settings/connections. When you do, fill out the `TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`
 environment variables with the appropriate information.
 
-##### Production database
+#### Production database
 
 Development mode (the default when using `rails server`) should work just fine at this point. To run in production mode,
 you will need some additional environment variables set.
@@ -145,41 +145,96 @@ You will also need to set a 30+ character secret key base, which is used to sign
 
 You can generate a secure key for this with `rake secret`.
 
-### API
+## API
 
 splits-io has an API consisting of lookup routes and retrieval routes at `/api/v1/:resource` and `/api/v1/:resource/:id`,
 respectively. Here's how to get information.
 
-#### Lookup routes
+### Lookup routes
 These routes will accept one or more URL parameters to allow you to look up resources by something that's not a unique
 ID. However, they'll only return the ID of the thing you're looking for, so you'll have to use the classic retrieval
 routes (documented below) to get any actual information.
 
-| Route                                          | Accepted parameters      | Example request                              |
-|:-----------------------------------------------|:-------------------------|:---------------------------------------------|
-| GET [/api/v1/games][api-games-index]           | `name`, `shortname`      | `curl splits.io/api/v1/games?shortname=tww`  |
-| GET [/api/v1/categories][api-categories-index] | `game_id`                | `curl splits.io/api/v1/categories?game_id=4` |
-| GET [/api/v1/runs][api-runs-index]             | `category_id`, `user_id` | `curl splits.io/api/v1/runs?user_id=1`      |
-| GET [/api/v1/users][api-users-index]           | `name`, `twitch_id`      | `curl splits.io/api/v1/users?name=glacials`  |
+#### GET [/api/v1/games][api-games-index]
+
+##### Parameters accepted
+`name`, `shortname`
+
+##### Example request
+```bash
+curl splits.io/api/v1/games?shortname=tww
+```
+##### Example response
+```json
+[4]
+```
 
 [api-games-index]: http://splits.io/api/v1/games
+
+#### GET [/api/v1/categories][api-categories-index]
+
+##### Parameters accepted
+`game_id`
+
+##### Example request
+```bash
+curl splits.io/api/v1/categories?game_id=4
+```
+
+##### Example response
+```json
+[4,37,127,372,394,406,405,426]
+```
+
 [api-categories-index]: http://splits.io/api/v1/categories
+
+#### GET [/api/v1/runs][api-runs-index]
+
+##### Parameters accepted
+`category_id`, `user_id`
+
+##### Example request
+```bash
+curl splits.io/api/v1/runs?user_id=1
+```
+
+##### Example response
+```json
+[437,438,1329,1127,1957,1193,1262,1686]
+```
+
 [api-runs-index]: http://splits.io/api/v1/runs
+
+#### GET [/api/v1/users][api-users-index]
+
+##### Parameters accepted
+`name`, `twitch_id`
+
+##### Example request
+```bash
+curl splits.io/api/v1/users?name=glacials
+```
+
+##### Example response
+```json
+[1]
+```
+
 [api-users-index]: http://splits.io/api/v1/users
 
-#### Retrieval routes
+### Retrieval routes
 These are the routes that will actually give you information about resources. These routes will only accept numeric ids
 for resources.
 
-##### GET [/api/v1/games/:id][api-games-show]
+#### GET [/api/v1/games/:id][api-games-show]
 
-###### Exaple request
+##### Example request
 
 ```bash
 curl splits.io/api/v1/games/4
 ```
 
-###### Example response
+##### Example response
 
     {
       "id": 4,
@@ -239,15 +294,15 @@ curl splits.io/api/v1/games/4
       ]
     }
 
-##### GET [/api/v1/categories/:id][api-categories-show]
+#### GET [/api/v1/categories/:id][api-categories-show]
 
-###### Example request
+##### Example request
 
 ```bash
 curl splits.io/api/v1/categories/4
 ```
 
-###### Example response
+##### Example response
 
     {
       "id": 4,
@@ -256,15 +311,15 @@ curl splits.io/api/v1/categories/4
       "updated_at": "2014-04-18T06:28:54.295Z"
     }
 
-##### GET [/api/v1/runs/:id][api-runs-show]
+#### GET [/api/v1/runs/:id][api-runs-show]
 
-###### Example request
+##### Example request
 
 ```bash
 curl splits.io/api/v1/runs/1952
 ```
 
-###### Example response
+##### Example response
 
     {
       "id": 1952,
@@ -550,15 +605,15 @@ curl splits.io/api/v1/runs/1952
       ]
     }
 
-##### GET [/api/v1/users/:id][api-users-show]
+#### GET [/api/v1/users/:id][api-users-show]
 
-###### Example request
+##### Example request
 
 ```bash
 curl splits.io/api/v1/users/1
 ```
 
-###### Example response
+##### Example response
 
     {
       "id": 1,
