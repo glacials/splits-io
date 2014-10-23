@@ -294,6 +294,8 @@ curl splits.io/api/v1/games/4
       ]
     }
 
+[api-games-show]: http://splits.io/api/v1/games/4
+
 #### GET [/api/v1/categories/:id][api-categories-show]
 
 ##### Example request
@@ -623,7 +625,6 @@ curl splits.io/api/v1/users/1
       "name": "glacials"
     }
 
-[api-games-show]: http://splits.io/api/v1/games/1
 [api-categories-show]: http://splits.io/api/v1/categories/1
 [api-runs-show]: http://splits.io/api/v1/runs/1
 [api-users-show]: http://splits.io/api/v1/users/1

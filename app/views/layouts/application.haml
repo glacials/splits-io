@@ -16,10 +16,11 @@
         %h1#droplabel.inverted drop anywhere
         #file-list.inverted
       %nav
-        %a.logo.blue{href: root_path} splits i/o
-        %a.purple{href: upload_path} upload
-        %a.green{href: search_path} search
-        %a.red{href: faq_path} faq
+        - page = {upload: request.path == upload_path, search: request.path.match(search_path), faq: request.path == faq_path}
+        %a.blue{href: root_path, class: page.values.all? { |p| !p } ? 'logo' : ''} splits i/o
+        %a.purple{href: upload_path, class: page[:upload] ? 'logo' : ''} upload
+        %a.green{href: search_path, class: page[:search] ? 'logo' : ''} search
+        %a.red{href: faq_path, class: page[:faq] ? 'logo' : ''} faq
         - if user_signed_in?
           %a#sign-out.orange{href: signout_path} sign out
         - else
