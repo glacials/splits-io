@@ -1,15 +1,17 @@
 class Api::V1::GamesController < ApplicationController
   before_action :set_game, only: [:show]
 
+  SAFE_PARAMS = [:name, :shortname]
+
   def index
-    unless search_params.any? { |param| params.key?(param) }
+    if search_params.empty?
       render status: 400, json: {
         status: 400,
-        message: "You must supply one of the following parameters: #{search_params.join(", ")}"
+        message: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
       }
       return
     end
-    @games = Game.where params.permit(search_params)
+    @games = Game.where search_params
     render json: @games.pluck(:id)
   end
 
@@ -32,6 +34,6 @@ class Api::V1::GamesController < ApplicationController
   end
 
   def search_params
-    [:name, :shortname]
+    params.permit SAFE_PARAMS
   end
 end

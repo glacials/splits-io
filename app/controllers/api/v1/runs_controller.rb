@@ -1,15 +1,17 @@
 class Api::V1::RunsController < ApplicationController
   before_action :set_run, only: [:show]
 
+  SAFE_PARAMS = [:category_id, :user_id]
+
   def index
-    unless search_params.any? { |param| params.key?(param) }
+    if search_params.empty?
       render status: 400, json: {
         status: 400,
-        message: "You must supply one of the following parameters: #{search_params.join(", ")}"
+        message: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
       }
       return
     end
-    @runs = Run.where params.permit(search_params)
+    @runs = Run.where search_params
     render json: @runs.pluck(:id)
   end
 
@@ -32,6 +34,6 @@ class Api::V1::RunsController < ApplicationController
   end
 
   def search_params
-    [:category_id, :user_id]
+    params.permit SAFE_PARAMS
   end
 end

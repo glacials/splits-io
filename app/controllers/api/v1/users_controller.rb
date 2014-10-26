@@ -1,15 +1,17 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
+  SAFE_PARAMS = [:name, :twitch_id]
+
   def index
-    unless search_params.any? { |param| params.key?(param) }
+    if search_params.empty?
       render status: 400, json: {
         status: 400,
-        message: "You must supply one of the following parameters: #{search_params.join(", ")}"
+        message: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
       }
       return
     end
-    @users = User.where params.permit(search_params)
+    @users = User.where search_params
     render json: @users.pluck(:id)
   end
 
@@ -24,6 +26,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def search_params
-    [:name, :twitch_id]
+    params.permit SAFE_PARAMS
   end
 end
