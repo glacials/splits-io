@@ -1,17 +1,6 @@
 - title @run.name
 = render partial: 'twitter_card'
 
-- if @run.new?
-  #permalink-indicator
-    &uarr; That's your permalink!
-  :javascript
-    window.onload = function() {
-      $('#permalink-indicator').fadeIn().delay(4000).fadeOut({
-        complete: function() {
-          $(this).remove();
-        }
-      });
-    };
 .container
   %h2= yield(:title)
   %h5

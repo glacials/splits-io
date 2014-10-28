@@ -46,7 +46,7 @@ class RunsController < ApplicationController
       @run.save
       respond_to do |format|
         format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }
-        format.html { redirect_to run_path(@run), notice: "↑ That's your permalink!" }
+        format.html { redirect_to run_path(@run) }
       end
     else
       @run.destroy
