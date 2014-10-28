@@ -12,6 +12,7 @@ production:
   # set up twitch stuff at twitch.tv/settings/connections
   TWITCH_CLIENT_ID:
   TWITCH_CLIENT_SECRET:
+  ROLLBAR_ACCESS_TOKEN:
 
 development:
   # you probably want to set up a separate mixpanel project for testing tracking
