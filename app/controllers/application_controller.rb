@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   private
 
   def set_mixpanel
-    @mixpanel = Mixpanel::Tracker.new(ENV['MIXPANEL_TOKEN'])
+    @mixpanel = Mixpanel::Tracker.new(ENV['MIXPANEL_TOKEN']).delay
   end
 
   def set_gon
