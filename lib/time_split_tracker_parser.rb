@@ -40,7 +40,7 @@ class TimeSplitTrackerParser < BabelBridge::Parser
   def parse_split(split, run_duration_so_far)
     {
       best: {},
-      name: split.title,
+      name: split.title.to_s,
       duration: split.duration.to_s.to_f,
       finish_time: run_duration_so_far + split.duration.to_s.to_f
     }
