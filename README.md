@@ -264,7 +264,7 @@ curl splits.io/api/v1/runs?user_id=1
 [
   {
     "id": 437,
-    "url": "/c5",
+    "url": "http://splits.io/c5",
     "name": "Transformers: Fall of Cybertron Any% (New Game+)",
     "time": 9053.47,
     "user_id": 1,
@@ -305,7 +305,7 @@ curl splits.io/api/v1/runs?user_id=1
   },
   {
     "id": 438,
-    "url": "/c6",
+    "url": "http://splits.io/c6",
     "name": "Sonic Colors",
     "time": 5083.74,
     "user_id": 1,
@@ -347,7 +347,7 @@ curl splits.io/api/v1/runs?user_id=1
   ...
   {
     "id": 1686,
-    "url": "/1au",
+    "url": "http://splits.io/1au",
     "name": "Super Mario Sunshine Any%",
     "time": 5772.156,
     "user_id": 1,

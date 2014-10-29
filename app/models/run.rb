@@ -76,7 +76,7 @@ class Run < ActiveRecord::Base
   def as_json(options = {})
     {
       id:          id,
-      url:         Rails.application.routes.url_helpers.run_path(self),
+      url:         "http://splits.io#{Rails.application.routes.url_helpers.run_path(self)}",
       name:        name,
       time:        time.to_f,
       user_id:     user_id,
