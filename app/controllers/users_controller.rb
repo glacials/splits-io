@@ -14,9 +14,11 @@ class UsersController < ApplicationController
     @user = User.find_by(name: params[:user_name])
     if @user.nil?
       respond_to do |format|
-        format.json { render status: 404, json: {message: 'No such user exists.'} }
+        format.json { render status: 404, json: {status: 404, error: "Run not found"} }
         format.html { render :not_found, status: 404 }
       end
     end
+  rescue ActionController::UnknownFormat
+    render status: 404, text: "404 User not found"
   end
 end

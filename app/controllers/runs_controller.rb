@@ -116,12 +116,14 @@ class RunsController < ApplicationController
     @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by(nick: params[:run])
     if @run.blank?
       respond_to do |format|
-        format.json { head 404 }
+        format.json { render status: 404, json: {status: 404, error: "Run not found"} }
         format.html { render :not_found, status: 404 }
       end
       return false
     end
     gon.run = @run.as_json(methods: [:to_tracking_properties])
+  rescue ActionController::UnknownFormat
+    render status: 404, text: "404 Run not found"
   end
 
   def set_comparison
@@ -139,7 +141,7 @@ class RunsController < ApplicationController
   def verify_ownership
     unless @run.belongs_to?(current_user)
       respond_to do |format|
-        format.json { head 401 }
+        format.json { render status: 401, json: {status: 401, error: "Unauthorized"} }
         format.html { render :unauthorized, status: 401 }
       end
       return false
