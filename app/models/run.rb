@@ -73,11 +73,22 @@ class Run < ActiveRecord::Base
     parse[:history]
   end
 
-  def as_json(options = {methods: []})
-    super({
-      only: [:id, :created_at, :updated_at, :hits, :image_url, :name, :time, :program],
-      methods: [:game, :category, :user, :splits] + (options[:methods] || [])
-    }.merge(options.except(:methods)))
+  def as_json(options = {})
+    {
+      id:          id,
+      url:         Rails.application.routes.url_helpers.run_path(self),
+      name:        name,
+      time:        time.to_f,
+      user_id:     user_id,
+      game_id:     category.game_id,
+      category_id: category_id,
+      hits:        hits,
+      program:     program,
+      image_url:   image_url,
+      created_at:  created_at,
+      updated_at:  updated_at,
+      splits:      splits
+    }
   end
 
   def parses?

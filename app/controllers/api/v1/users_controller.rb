@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
       return
     end
     @users = User.where search_params
-    render json: @users.pluck(:id)
+    render json: @users
   end
 
   def show

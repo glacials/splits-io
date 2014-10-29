@@ -23,9 +23,13 @@ class User < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({
-      only: [:id, :twitch_id, :name, :created_at, :updated_at]
-    }.merge(options))
+    {
+      id:         id,
+      twitch_id:  twitch_id,
+      name:       name,
+      created_at: created_at,
+      updated_at: updated_at
+    }
   end
 
   def to_param

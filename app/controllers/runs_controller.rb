@@ -40,9 +40,8 @@ class RunsController < ApplicationController
   def upload
     @run = Run.new(file: params[:file].read, user: current_user, image_url: params[:image_url])
     if @run.parses?
-      game = Game.find_by(name: @run.parse[:game]) || Game.create(name: @run.parse[:game])
-      @run.category = Category.find_by(game: game, name: @run.parse[:category]) ||
-                      game.categories.new(name: @run.parse[:category])
+      game = Game.where(name: @run.parse[:game]).first_or_create
+      @run.category = game.categories.where(name: @run.parse[:category]).first_or_create
       @run.save
       respond_to do |format|
         format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }

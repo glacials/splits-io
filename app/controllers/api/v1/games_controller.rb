@@ -12,7 +12,7 @@ class Api::V1::GamesController < ApplicationController
       return
     end
     @games = Game.where search_params
-    render json: @games.pluck(:id)
+    render json: @games
   end
 
   def show

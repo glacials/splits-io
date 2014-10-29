@@ -8,9 +8,14 @@ class Game < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({
-      only: [:id, :name, :created_at, :updated_at, :shortname]
-    }.merge(options))
+    {
+      id:         id,
+      name:       name,
+      shortname:  shortname,
+      created_at: created_at,
+      updated_at: updated_at,
+      categories: categories
+    }
   end
 
   def to_param

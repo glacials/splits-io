@@ -12,11 +12,11 @@ class Api::V1::RunsController < ApplicationController
       return
     end
     @runs = Run.where search_params
-    render json: @runs.pluck(:id)
+    render json: @runs
   end
 
   def show
-    render json: {url: run_url(@run)}.merge(@run.as_json)
+    render json: @run.as_json.merge(url: run_url(@run))
   end
 
   private

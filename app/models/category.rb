@@ -7,9 +7,14 @@ class Category < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({
-      only: [:id, :name, :created_at, :updated_at]
-    }.merge(options))
+    {
+      id:             id,
+      name:           name,
+      game_id:        game_id,
+      created_at:     created_at,
+      updated_at:     updated_at,
+      best_known_run: best_known_run.try(:id)
+    }
   end
 
   def to_s

@@ -12,7 +12,7 @@ class Api::V1::CategoriesController < ApplicationController
       return
     end
     @categories = Category.where search_params
-    render json: @categories.pluck(:id)
+    render json: @categories
   end
 
   def show

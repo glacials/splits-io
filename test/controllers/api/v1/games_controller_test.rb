@@ -29,7 +29,7 @@ class Api::V1::GamesControllerTest < ActionController::TestCase
 
     assert_response  200
     assert_equal     1,               JSON.parse(@response.body).length
-    assert_equal     visible_game.id, JSON.parse(@response.body)[0]
-    assert_not_equal hidden_game.id,  JSON.parse(@response.body)[0]
+    assert_equal     visible_game.id, JSON.parse(@response.body)[0]["id"]
+    assert_not_equal hidden_game.id,  JSON.parse(@response.body)[0]["id"]
   end
 end
