@@ -28,7 +28,7 @@ class Api::V1::CategoriesController < ApplicationController
       status: 404,
       json: {
         status: 404,
-        message: "Category with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric ID, first use GET /api/v1/categories"
+        message: "Category with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric ID, first use GET #{api_v1_categories_url}"
       }
     })
   end

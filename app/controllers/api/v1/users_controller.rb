@@ -23,6 +23,14 @@ class Api::V1::UsersController < ApplicationController
 
   def set_user
     @user = User.find params[:id]
+  rescue ActiveRecord::RecordNotFound
+    render({
+      status: 404,
+      json: {
+        status: 404,
+        message: "User with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_users_url}"
+      }
+    })
   end
 
   def search_params

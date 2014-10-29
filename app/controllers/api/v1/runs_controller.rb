@@ -28,7 +28,7 @@ class Api::V1::RunsController < ApplicationController
       status: 404,
       json: {
         status: 404,
-        message: "Run with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET /api/v1/runs"
+        message: "Run with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_runs_url}"
       }
     })
   end

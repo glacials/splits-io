@@ -28,7 +28,7 @@ class Api::V1::GamesController < ApplicationController
       status: 404,
       json: {
         status: 404,
-        message: "Game with id '#{params[:id]}' not found. If '#{params[:id]}' is a shortname, try GET /api/v1/games?shortname=#{params[:id]}"
+        message: "Game with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_games_url}"
       }
     })
   end
