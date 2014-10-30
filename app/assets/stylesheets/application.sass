@@ -4,6 +4,13 @@
 @import headings
 @import bootstrap
 
+.spinner
+  -webkit-animation: spin 4s linear infinite
+  -moz-animation: spin 4s linear infinite
+  animation: spin 4s linear infinite
+
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
+
 code
   background-color: #f1f1f1
   color: #303030

@@ -38,6 +38,10 @@ class RunsController < ApplicationController
   end
 
   def upload
+    unless params[:file].present?
+      render :cant_parse
+      return
+    end
     @run = Run.new(file: params[:file].read, user: current_user, image_url: params[:image_url])
     if @run.parses?
       game = Game.where(name: @run.parse[:game]).first_or_create
