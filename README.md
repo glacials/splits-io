@@ -584,7 +584,7 @@ HTTP/1.1 201 Created
 X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
-Location: http://splits.io/4s
+Location: http://splits.io/api/v1/runs/177
 Content-Type: text/html
 ETag: "7215ee9c7d9dc229d2921a40e899ec5f"
 Cache-Control: max-age=0, private, must-revalidate
