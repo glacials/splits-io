@@ -1,4 +1,4 @@
-class Api::V1::CategoriesController < ApplicationController
+class Api::V1::CategoriesController < ApiController
   before_action :set_category, only: [:show]
 
   SAFE_PARAMS = [:game_id]
@@ -7,7 +7,7 @@ class Api::V1::CategoriesController < ApplicationController
     if search_params.empty?
       render status: 400, json: {
         status: 400,
-        message: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
+        error: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
       }
       return
     end
@@ -24,13 +24,10 @@ class Api::V1::CategoriesController < ApplicationController
   def set_category
     @category = Category.find params[:id]
   rescue ActiveRecord::RecordNotFound
-    render({
+    render status: 404, json: {
       status: 404,
-      json: {
-        status: 404,
-        message: "Category with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric ID, first use GET #{api_v1_categories_url}"
-      }
-    })
+      error: "Category with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric ID, first use GET #{api_v1_categories_url}"
+    }
   end
 
   def search_params

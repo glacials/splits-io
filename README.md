@@ -148,7 +148,7 @@ You can generate a secure key for this with `rake secret`.
 ## API
 
 splits-io has an API consisting of lookup routes and retrieval routes at `/api/v1/:resource` and `/api/v1/:resource/:id`,
-respectively. Here's how to get information.
+respectively. You can also POST to `/api/v1/runs`.
 
 ### Lookup routes
 These routes will accept one or more URL parameters to allow you to look up resources by something that's not a unique
@@ -561,6 +561,40 @@ curl splits.io/api/v1/users/1
 ```
 
 [api-users-show]: http://splits.io/api/v1/users/1
+
+### Uploading runs
+
+#### POST [/api/v1/runs][api-runs-create]
+
+
+##### Example request
+```bash
+curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v1/runs
+```
+
+##### Example response
+When successful this endpoint doesn't return a body, just headers. You should get a 201 back and the `Location` field of
+the headers should hold the location of the new run according to this API (`splits.io/api/v1/:id`).
+
+If you want the user-accessible URL (`splits.io/:alphanumeric_id`) without having to perform another request, you can
+just convert the numeric id into base 36 to get the alphanumeric id.
+
+```
+HTTP/1.1 201 Created
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+Location: http://splits.io/4s
+Content-Type: text/html
+ETag: "7215ee9c7d9dc229d2921a40e899ec5f"
+Cache-Control: max-age=0, private, must-revalidate
+X-Request-Id: bf53156c-6e71-48b8-9cb0-501878a7f0f5
+X-Runtime: 1.054199
+Connection: close
+Server: thin
+```
+
+[api-runs-create]: http://splits.io/api/v1/runs
 
 [1]: https://github.com/skoh-fley/splits-io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser

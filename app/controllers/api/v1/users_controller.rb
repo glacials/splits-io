@@ -1,4 +1,4 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < ApiController
   before_action :set_user, only: [:show]
 
   SAFE_PARAMS = [:name, :twitch_id]
@@ -7,7 +7,7 @@ class Api::V1::UsersController < ApplicationController
     if search_params.empty?
       render status: 400, json: {
         status: 400,
-        message: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
+        error: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
       }
       return
     end
@@ -24,13 +24,10 @@ class Api::V1::UsersController < ApplicationController
   def set_user
     @user = User.find params[:id]
   rescue ActiveRecord::RecordNotFound
-    render({
+    render status: 404, json: {
       status: 404,
-      json: {
-        status: 404,
-        message: "User with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_users_url}"
-      }
-    })
+      error: "User with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_users_url}"
+    }
   end
 
   def search_params

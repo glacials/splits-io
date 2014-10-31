@@ -8,7 +8,7 @@ class RunsController < ApplicationController
   before_action :increment_hits, only: [:show, :download]
 
   def show
-    if request.fullpath != "/#{@run.id.to_s(36)}"
+    if request.fullpath != run_path(@run)
       @mixpanel.track(current_user.try(:id), 'received an alert', type: 'Permalink change', level: 'Warning')
       redirect_to @run, flash: {
         icon: 'warning-sign',
@@ -20,19 +20,13 @@ class RunsController < ApplicationController
 
     @run.user = current_user if @run.hits == 1 && user_signed_in?
     if @run.parses?
-      respond_to do |format|
-        format.html { render :show }
-        format.json { render json: @run.to_json }
-      end
+      render :show
     else
       if @run.new?
         @run.destroy
         redirect_to cant_parse_path
       else
-        respond_to do |format|
-          format.json { render status: 400, json: {message: 'Unable to parse that file.'} }
-          format.html { render :cant_parse, status: 400 }
-        end
+        render :cant_parse, status: 400
       end
     end
   end

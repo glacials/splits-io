@@ -22,14 +22,14 @@ class Api::V1::GamesControllerTest < ActionController::TestCase
     assert_response 400
   end
 
-  test "should filter mixed params correctly" do
-    hidden_game = Game.create
-    visible_game = Game.create(shortname: 'visible')
-    get :index, id: hidden_game.id, shortname: visible_game.shortname
+  test "should filter disallowed params correctly" do
+    game_1 = Game.create(shortname: "game_1")
+    game_2 = Game.create(shortname: "game_2")
+    get :index, id: game_1.id, shortname: game_2.shortname
 
     assert_response  200
-    assert_equal     1,               JSON.parse(@response.body).length
-    assert_equal     visible_game.id, JSON.parse(@response.body)[0]["id"]
-    assert_not_equal hidden_game.id,  JSON.parse(@response.body)[0]["id"]
+    assert_equal     1,         JSON.parse(@response.body).length
+    assert_not_equal game_1.id, JSON.parse(@response.body)[0]["id"]
+    assert_equal     game_2.id, JSON.parse(@response.body)[0]["id"]
   end
 end

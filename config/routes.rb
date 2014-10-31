@@ -33,10 +33,10 @@ SplitsIO::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :games,      only: [:show, :index]
-      resources :categories, only: [:show, :index]
-      resources :users,      only: [:show, :index]
-      resources :runs,       only: [:show, :index]
+      resources :games,      only: [:index, :show]
+      resources :categories, only: [:index, :show]
+      resources :users,      only: [:index, :show]
+      resources :runs,       only: [:index, :show, :create]
     end
   end
 end
