@@ -15,7 +15,7 @@ $ ->
     formData = new FormData()
     xhr = new XMLHttpRequest()
     formData.append "file", file
-    xhr.open "POST", "/api/v1/runs", true
+    xhr.open "POST", "/upload", true
     xhr.onload = ->
       if xhr.status is 200
         console.log "all done: " + xhr.status
