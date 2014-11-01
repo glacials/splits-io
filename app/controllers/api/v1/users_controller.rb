@@ -1,4 +1,4 @@
-class Api::V1::UsersController < ApiController
+class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
   SAFE_PARAMS = [:name, :twitch_id]

@@ -76,7 +76,7 @@ class Run < ActiveRecord::Base
   def as_json(options = {})
     {
       id:          id,
-      url:         "http://splits.io#{Rails.application.routes.url_helpers.run_path(self)}",
+      url:         options[:run_url_helper].call(self),
       name:        name,
       time:        time.to_f,
       user_id:     user_id,
@@ -89,6 +89,9 @@ class Run < ActiveRecord::Base
       updated_at:  updated_at,
       splits:      splits
     }
+  rescue NoMethodError => e
+    raise $!, "When rendering a run as json, you need to pass a `run_url_helper` Proc to the `as_json` method (via the \
+    `options` Hash). It should take a run and return the user-facing URL for that run. #{$!}", $!.backtrace
   end
 
   def parses?

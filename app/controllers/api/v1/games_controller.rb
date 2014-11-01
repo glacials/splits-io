@@ -1,4 +1,4 @@
-class Api::V1::GamesController < ApiController
+class Api::V1::GamesController < ApplicationController
   before_action :set_game, only: [:show]
 
   SAFE_PARAMS = [:name, :shortname]

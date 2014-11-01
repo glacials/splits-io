@@ -119,7 +119,6 @@ class RunsController < ApplicationController
       end
       return false
     end
-    gon.run = @run.as_json(methods: [:to_tracking_properties])
   rescue ActionController::UnknownFormat
     render status: 404, text: "404 Run not found"
   end

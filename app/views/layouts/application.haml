@@ -14,7 +14,6 @@
     #dropzone
       #dropzone-overlay.header{style: 'border: none;'}
         %h1#droplabel.inverted drop anywhere
-        #file-list.inverted
       %nav
         - page = {upload: request.path == upload_path, search: request.path.match(search_path), faq: request.path == faq_path}
         %a.blue{href: root_path, class: page.values.all? { |p| !p } ? 'logo' : ''} splits i/o
