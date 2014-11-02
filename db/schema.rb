@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141029211010) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20141102230315) do
 
   create_table "categories", force: true do |t|
     t.integer  "game_id"
@@ -23,8 +20,8 @@ ActiveRecord::Schema.define(version: 20141029211010) do
     t.datetime "updated_at"
   end
 
-  add_index "categories", ["game_id"], name: "index_categories_on_game_id", using: :btree
-  add_index "categories", ["name"], name: "index_categories_on_name", using: :btree
+  add_index "categories", ["game_id"], name: "index_categories_on_game_id"
+  add_index "categories", ["name"], name: "index_categories_on_name"
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -40,7 +37,7 @@ ActiveRecord::Schema.define(version: 20141029211010) do
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "games", force: true do |t|
     t.string   "name"
@@ -49,8 +46,8 @@ ActiveRecord::Schema.define(version: 20141029211010) do
     t.string   "shortname"
   end
 
-  add_index "games", ["name"], name: "index_games_on_name", using: :btree
-  add_index "games", ["shortname"], name: "index_games_on_shortname", using: :btree
+  add_index "games", ["name"], name: "index_games_on_name"
+  add_index "games", ["shortname"], name: "index_games_on_shortname"
 
   create_table "runs", force: true do |t|
     t.integer  "user_id"
@@ -66,8 +63,8 @@ ActiveRecord::Schema.define(version: 20141029211010) do
     t.string   "program"
   end
 
-  add_index "runs", ["category_id"], name: "index_runs_on_category_id", using: :btree
-  add_index "runs", ["user_id"], name: "index_runs_on_user_id", using: :btree
+  add_index "runs", ["category_id"], name: "index_runs_on_category_id"
+  add_index "runs", ["user_id"], name: "index_runs_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: ""
@@ -87,7 +84,7 @@ ActiveRecord::Schema.define(version: 20141029211010) do
     t.string   "name"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email"
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end
