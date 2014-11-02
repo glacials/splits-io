@@ -11,5 +11,8 @@
         %tr
           %td.align-right= index + 1
           %td.align-left= split[:name].present? ? split[:name] : '-'
-          %td.align-right= render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: @run.short?}
+          %td.align-right
+            - if split[:duration] == split[:best][:duration]
+              .gold-split{title: "Gold"}
+            = render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: @run.short?}
           %td.align-right= render partial: 'shared/time', locals: {time: split[:finish_time], show_milliseconds: @run.short?}

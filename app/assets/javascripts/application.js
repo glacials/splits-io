@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require spin
 //= require jquery.spin
+//= require tipsy
 //= require_tree .
