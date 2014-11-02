@@ -1,0 +1,12 @@
+- title @game.name
+.container
+  %h2= content_for(:title)
+  %h5 a game
+  = render partial: 'shared/alerts'
+  %form#search.form-inline{action: search_path, method: :get}
+    .form-group
+      %input{type: :text, name: 'q', placeholder: 'search...', value: @game.shortname}
+    .form-group
+      %input{type: :submit, value: 'search'}
+.container
+  = render partial: 'shared/run_table', locals: {runs: @game.runs}

@@ -19,7 +19,7 @@ SplitsIO::Application.routes.draw do
 
   get '/search(/:q)',              to: 'search#index' # deprecated
   get '/search(?q=:q)',            to: 'search#index', as: :search
-  get '/search?q=:game_shortname', to: 'search#index', as: :game
+  get '/search?q=:game_shortname', to: 'search#index'
 
   get '/:run',                         to: 'runs#show',     as: :run
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
@@ -30,6 +30,8 @@ SplitsIO::Application.routes.draw do
 
   get '/u/:user_name', to: 'users#show' # deprecated
   get '/users/:user_name', to: 'users#show', as: :user
+
+  get '/games/:game_shortname', to: 'games#show', as: :game
 
   namespace :api do
     namespace :v1 do

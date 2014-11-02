@@ -21,6 +21,7 @@ class Run < ActiveRecord::Base
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
   scope :without, ->(*columns) { select(column_names - columns.map(&:to_s)) }
+  scope :nonempty, -> { where("time != 0") }
 
   # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method just returns `splits`.
   # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped.
