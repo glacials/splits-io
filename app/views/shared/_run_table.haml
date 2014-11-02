@@ -28,7 +28,7 @@
           %td.align-right= render partial: 'shared/time', locals: {time: run.time, show_milliseconds: run.short?}
           %td
             %a{href: run_path(run)}= run.name
-          %td.align-right= "#{run.time_since_upload} ago"
+          %td.align-right{title: run.created_at}= "#{run.time_since_upload} ago"
           %td
             - if run.belongs_to?(current_user)
               %small
