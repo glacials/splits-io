@@ -3,7 +3,7 @@
   %h2 splits i/o
   %h5
     upload
-    - if user_signed_in?
+    - if user_signed_in? && current_user.name.present?
       %a{href: user_path(current_user)} all
     - else
       %u all
