@@ -1,1 +1,3 @@
-$(".gold-split").tipsy({gravity: 'e'});
+$(function () {
+  $(".gold-split").tipsy({gravity: 'e'});
+});
