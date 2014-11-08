@@ -1,0 +1,18 @@
+development:
+  adapter: redis
+  host: <%= ENV['REDIS_HOST'] %>
+  port: <%= ENV['REDIS_PORT'] %>
+  password: <%= ENV['REDIS_PASSWORD'] %>
+  database: 0
+hot:
+  adapter: redis
+  host: <%= ENV['REDIS_HOST'] %>
+  port: <%= ENV['REDIS_PORT'] %>
+  password: <%= ENV['REDIS_PASSWORD'] %>
+  database: 0
+production:
+  adapter: redis
+  host: <%= ENV['REDIS_HOST'] %>
+  port: <%= ENV['REDIS_PORT'] %>
+  password: <%= ENV['REDIS_PASSWORD'] %>
+  database: 0

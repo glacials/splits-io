@@ -9,7 +9,6 @@ class RunsController < ApplicationController
 
   def show
     if request.fullpath != run_path(@run)
-      @mixpanel.track(current_user.try(:id), 'received an alert', type: 'Permalink change', level: 'Warning')
       redirect_to @run, flash: {
         icon: 'warning-sign',
         alert: "This run's permalink has changed. You have been redirected to the newer one. \
@@ -29,6 +28,7 @@ class RunsController < ApplicationController
         render :cant_parse, status: 400
       end
     end
+    track! :run_view
   end
 
   def upload
@@ -60,7 +60,7 @@ class RunsController < ApplicationController
     elsif request.referer =~ /\/upload/i
       tracking_properties['Client'] = 'form'
     end
-    @mixpanel.track(current_user.try(:id), 'uploaded a run', @run.to_tracking_properties.merge(tracking_properties))
+    track! :upload
   end
 
   def download

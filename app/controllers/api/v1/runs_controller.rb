@@ -35,6 +35,7 @@ class Api::V1::RunsController < ApplicationController
       run.save
     end
     head 201, location: api_v1_run_url(@run)
+    track! :upload
   rescue ActionController::ParameterMissing
     render status: 400, json: {
       status: 400,
@@ -55,14 +56,6 @@ class Api::V1::RunsController < ApplicationController
 
   def search_params
     params.permit SAFE_PARAMS
-  end
-
-  def track
-    @mixpanel.track(
-      current_user.try(:id),
-      [controller_path, action_name].join("#"),
-      @run.try(:to_tracking_properties) || {}
-    )
   end
 
   def run_url_helper
