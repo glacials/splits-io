@@ -28,7 +28,7 @@ class RunsController < ApplicationController
         render :cant_parse, status: 400
       end
     end
-    track! :run_view
+    track! :run_views
   end
 
   def upload
