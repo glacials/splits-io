@@ -21,7 +21,7 @@
         %tr
           - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
             %td.align-right
-              - if run.user
+              - if run.user && run.user.name
                 %a{href: user_path(run.user)}= run.user.try(:name)
               - else
                 = "-"
