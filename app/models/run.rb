@@ -120,15 +120,6 @@ class Run < ActiveRecord::Base
     nil
   end
 
-  def to_tracking_properties
-    { 'Parses?'     => parses?,
-      'Screenshot?' => image_url.present?
-    }.merge(!parses? ? {} : { 'Game'     => game.name,
-                              'Category' => category.name,
-                              'Program'  => program,
-                              'Offset'   => offset })
-  end
-
   def to_param
     id.to_s(36)
   end

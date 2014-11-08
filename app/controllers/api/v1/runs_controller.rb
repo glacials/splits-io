@@ -1,6 +1,5 @@
 class Api::V1::RunsController < ApplicationController
   before_action :set_run, only: [:show]
-  after_action :track
 
   SAFE_PARAMS = [:category_id, :user_id]
 
