@@ -9,7 +9,6 @@ class UsersController < ApplicationController
   end
 
   def follows
-    expires_in 1.day, public: true
     render partial: "shared/follows"
   end
 
