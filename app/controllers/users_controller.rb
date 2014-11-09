@@ -8,10 +8,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def follows
+    render partial: "shared/follows"
+  end
+
   private
 
   def set_user
-    @user = User.find_by(name: params[:user_name])
+    @user = User.find_by(name: params[:id])
     if @user.nil?
       respond_to do |format|
         format.json { render status: 404, json: {status: 404, error: "Run not found"} }

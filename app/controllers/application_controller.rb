@@ -25,5 +25,6 @@ class ApplicationController < ActionController::Base
 
   def set_gon
     gon.request = {path: request.path}
+    gon.user = current_user
   end
 end

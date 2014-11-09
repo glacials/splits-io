@@ -30,8 +30,13 @@ SplitsIO::Application.routes.draw do
   delete '/:run',      to: 'runs#delete', as: :delete
   delete '/:run/user', to: 'runs#disown', as: :disown
 
-  get '/u/:user_name', to: 'users#show' # deprecated
-  get '/users/:user_name', to: 'users#show', as: :user
+  get '/u/:id', to: 'users#show' # deprecated
+
+  resources :users, only: [:show] do
+    member do
+      get :follows
+    end
+  end
 
   get '/games/:game_shortname', to: 'games#show', as: :game
 
