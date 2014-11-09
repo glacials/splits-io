@@ -33,5 +33,4 @@
     - else
       %i (none found)
     %h4 Runs
-    - cache [:run_table, :v1, {search: @query}]
-      = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
+    = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
