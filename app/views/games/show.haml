@@ -1,7 +1,7 @@
 - title @game.name
 .container
   %h2= content_for(:title)
-  %h5 a game
+  %h5 a speedgame
   = render partial: 'shared/alerts'
   %form#search.form-inline{action: search_path, method: :get}
     .form-group
