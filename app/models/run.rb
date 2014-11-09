@@ -46,10 +46,6 @@ class Run < ActiveRecord::Base
     time_ago_in_words(created_at).sub('about ', '')
   end
 
-  def new?
-    hits <= 1
-  end
-
   def splits
     parse[:splits]
   end
@@ -83,7 +79,6 @@ class Run < ActiveRecord::Base
       user_id:     user_id,
       game_id:     category.game_id,
       category_id: category_id,
-      hits:        hits,
       program:     program,
       image_url:   image_url,
       created_at:  created_at,

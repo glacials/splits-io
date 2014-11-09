@@ -5,7 +5,7 @@ class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :disown, :delete, :compare]
   before_action :set_comparison, only: :compare
   before_action :verify_ownership, only: [:disown, :delete]
-  before_action :increment_hits, only: [:show, :download]
+  before_action :mark_visited, only: [:show]
 
   def show
     if request.fullpath != run_path(@run)
@@ -17,11 +17,11 @@ class RunsController < ApplicationController
       return
     end
 
-    @run.user = current_user if @run.hits == 1 && user_signed_in?
+    @run.user = current_user if !@run.visited? && user_signed_in?
     if @run.parses?
       render :show
     else
-      if @run.new?
+      unless @run.visited?
         @run.destroy
         redirect_to cant_parse_path
       else
@@ -145,8 +145,10 @@ class RunsController < ApplicationController
     end
   end
 
-  def increment_hits
-    @run.hits += 1
-    @run.save
+  def mark_visited
+    unless @run.visited?
+      @run.visited = true
+      @run.save
+    end
   end
 end
