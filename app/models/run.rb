@@ -5,8 +5,8 @@ require 'wsplit_parser'
 
 class Run < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
-  belongs_to :user
-  belongs_to :category
+  belongs_to :user, touch: true
+  belongs_to :category, touch: true
   has_one :game, through: :category
 
   class << self; attr_accessor :parsers end

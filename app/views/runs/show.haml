@@ -17,7 +17,10 @@
     .glyphicon.glyphicon-download-alt
     %a.fake-link#download-link{onclick: 'toggle_download_menu()'} download
 
-= render partial: 'shared/timeline', locals: {run: @run}
-= render partial: 'shared/timeline_inspector', locals: {run: @run}
+- cache [:timeline, :v1, @run] do
+  = render partial: 'shared/timeline', locals: {run: @run}
+- cache [:timeline_inspector, :v1, @run] do
+  = render partial: 'shared/timeline_inspector', locals: {run: @run}
 
-= render partial: 'shared/split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}
+- cache [:splits, :v1, @run] do
+  = render partial: 'shared/split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}

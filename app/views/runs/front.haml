@@ -10,7 +10,8 @@
     the splits
   = render partial: 'shared/alerts'
   - if user_signed_in? && current_user.runs.present?
-    = render partial: 'shared/run_table', locals: {runs: current_user.runs}
+    - cache [:run_table, :v1, @user] do
+      = render partial: 'shared/run_table', locals: {runs: current_user.runs}
     %div{id: ab_test(:show_follows) ? "follows" : ""}
   - else
     Save your splits to a file using your favorite splitting program, then
