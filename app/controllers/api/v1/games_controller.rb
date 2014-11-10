@@ -1,36 +1,19 @@
-class Api::V1::GamesController < ApplicationController
-  before_action :set_game, only: [:show]
-
-  SAFE_PARAMS = [:name, :shortname]
-
+class Api::V1::GamesController < Api::V1::ApplicationController
   def index
-    if search_params.empty?
-      render status: 400, json: {
-        status: 400,
-        error: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
-      }
-      return
-    end
-    @games = Game.where search_params
-    render json: @games
+    render json: @records
   end
 
   def show
-    render json: @game
+    render json: @record
   end
 
   private
 
-  def set_game
-    @game = Game.find params[:id]
-  rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {
-      status: 404,
-      error: "Game with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_games_url}"
-    }
+  def safe_params
+    [:name, :shortname]
   end
 
-  def search_params
-    params.permit SAFE_PARAMS
+  def model
+    Game
   end
 end

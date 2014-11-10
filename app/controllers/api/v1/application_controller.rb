@@ -5,6 +5,8 @@ class Api::V1::ApplicationController < ApplicationController
   before_action :set_records, only: [:index]
   before_action :set_record, only: [:show]
 
+  skip_before_action :set_gon
+
   private
 
   def check_params

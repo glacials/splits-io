@@ -152,8 +152,9 @@ respectively. You can also POST to `/api/v1/runs`.
 
 ### Lookup routes
 These routes will accept one or more URL parameters to allow you to look up resources by something that's not a unique
-ID. However, they'll only return the ID of the thing you're looking for, so you'll have to use the classic retrieval
-routes (documented below) to get any actual information.
+ID. However, if you know the ID of the thing you're looking for, you should instead use a classic retrieval routes
+(documented below) to get your information. It is not recommended to use lookup routes for anything other than run
+discovery.
 
 #### GET [/api/v1/games][api-games-index]
 

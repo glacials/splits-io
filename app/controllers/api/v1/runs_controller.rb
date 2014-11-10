@@ -1,23 +1,15 @@
-class Api::V1::RunsController < ApplicationController
+class Api::V1::RunsController < Api::V1::ApplicationController
   before_action :set_run, only: [:show, :destroy, :disown]
   before_action :verify_ownership!, only: [:destroy, :disown]
 
   SAFE_PARAMS = [:category_id, :user_id]
 
   def index
-    if search_params.empty?
-      render status: 400, json: {
-        status: 400,
-        message: "You must supply one of the following parameters: #{SAFE_PARAMS.join(", ")}"
-      }
-      return
-    end
-    @runs = Run.where search_params
-    render json: @runs.map { |run| run.as_json(run_url_helper: run_url_helper) }
+    render json: @records.map { |run| run.as_json(run_url_helper: run_url_helper) }
   end
 
   def show
-    render json: @run.as_json(run_url_helper: run_url_helper)
+    render json: @record.as_json(run_url_helper: run_url_helper)
   end
 
   def create
@@ -58,15 +50,6 @@ class Api::V1::RunsController < ApplicationController
 
   private
 
-  def set_run
-    @run = Run.find params[:id]
-  rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {
-      status: 404,
-      error: "Run with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_runs_url}"
-    }
-  end
-
   def verify_ownership!
     unless @run.belongs_to?(current_user)
       render status: 401, json: {
@@ -77,11 +60,15 @@ class Api::V1::RunsController < ApplicationController
     end
   end
 
-  def search_params
-    params.permit SAFE_PARAMS
-  end
-
   def run_url_helper
     Proc.new { |run| run_url(run) }
+  end
+
+  def safe_params
+    [:category_id, :user_id]
+  end
+
+  def model
+    Run
   end
 end
