@@ -3,7 +3,7 @@ class Api::V1::ApplicationController < ApplicationController
 
   before_action :check_params, only: [:index]
   before_action :set_records, only: [:index]
-  before_action :set_record, only: [:show]
+  before_action :set_record, only: [:show, :destroy, :disown]
 
   skip_before_action :set_gon
 
