@@ -1,35 +1,35 @@
 - title @run.name
+- short_run = @run.short? || @comparison_run.short?
 = render partial: 'twitter_card'
 
-.container
+.container{style: "margin-bottom: .1em;"}
   %h2= yield(:title)
   %h5
-    = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
-    (top) vs.
-    = render partial: 'shared/time', locals: {time: @comparison_run.time, show_milliseconds: @run.short?}
-    (bottom)
-  - if [@run.user, @comparison_run.user].any?(&:present?)
-    %h6
-      - if @run.user.present?
-        %a.twitch{href: "http://twitch.tv/#{@run.user.name}", target: :_blank}= "twitch.tv/#{@run.user.name}"
-      - else
-        unknown
-      vs.
-      - if @comparison_run.user.present?
-        %a.twitch{href: "http://twitch.tv/#{@comparison_run.user.name}", target: :_blank}= "twitch.tv/#{@comparison_run.user.name}"
-      - else
-        unknown
-  %h6
-    individual runs:
-    = succeed ',' do
-      %a{href: run_path(@run)} top
-    %a{href: run_path(@comparison_run)} bottom
+    %big
+      %a.stealth-link{href: run_path(@run)}
+        = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: short_run}
+    by
+    - if @run.user
+      %a.stealth-link{href: user_path(@run.user)}
+        #{@run.user.try(:name)}
+    - else
+      unknown
 
 - time_scale = [@run.time, @comparison_run.time].max
 = render partial: 'shared/timeline', locals: {run: @run, scale_to: time_scale}
 = render partial: 'shared/timeline', locals: {run: @comparison_run, scale_to: time_scale}
+
+.container{style: "margin-top: -.9em;"}
+  %h5
+    %big
+      %a.stealth-link{href: run_path(@comparison_run)}
+        = render partial: 'shared/time', locals: {time: @comparison_run.time, show_milliseconds: short_run}
+    by
+    - if @comparison_run.user
+      %a.stealth-link{href: user_path(@comparison_run.user)}
+        #{@comparison_run.user.try(:name)}
+    - else
+      unknown
+
 = render partial: 'shared/timeline_inspector', locals: {run: @run, scale_to: time_scale, overlap: true}
 = render partial: 'shared/timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale}
-
-.container
-  %i (tables of splits aren't yet being compared between runs, check back later! ^_^)

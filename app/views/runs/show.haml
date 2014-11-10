@@ -16,11 +16,15 @@
         %a{href: download_path(@run, program), onclick: 'hide_download_menu()'}= program
     .glyphicon.glyphicon-download-alt
     %a.fake-link#download-link{onclick: 'toggle_download_menu()'} download
+    - if @run.belongs_to?(current_user) && !@run.best_known?
+      |
+      %a{href: compare_path(@run, @run.category.best_known_run)} compare to best on record
+    - elsif user_signed_in? && current_user.pb_for(@run.category).present? && !@run.belongs_to?(current_user)
+      |
+      %a{href: compare_path(@run, current_user.pb_for(@run.category))} compare to mine
 
-- cache [:timeline, :v1, @run] do
-  = render partial: 'shared/timeline', locals: {run: @run}
-- cache [:timeline_inspector, :v1, @run] do
-  = render partial: 'shared/timeline_inspector', locals: {run: @run}
+= render partial: 'shared/timeline', locals: {run: @run}
+= render partial: 'shared/timeline_inspector', locals: {run: @run}
 
 .container
   - cache [:splits, :v1, @run] do

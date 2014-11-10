@@ -118,4 +118,8 @@ class Run < ActiveRecord::Base
   def to_param
     id.to_s(36)
   end
+
+  def best_known?
+    category.best_known_run.nil? || category.best_known_run == self
+  end
 end

@@ -3,7 +3,8 @@ class Category < ActiveRecord::Base
   has_many :runs
 
   def best_known_run
-    runs.order(:time).first
+    return nil if name.nil?
+    runs.where("time != 0").order(:time).first
   end
 
   def as_json(options = {})
