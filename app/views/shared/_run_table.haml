@@ -1,4 +1,7 @@
-- cols = [:runner, :time, :name, :uploaded] - (defined?(without_cols) ? without_cols : [])
+- cols ||= {}
+- cols[:with] ||= []
+- cols[:without] ||= []
+- cols = [:runner, :time, :name, :uploaded] + cols[:with] - cols[:without]
 - runs = order_runs(runs).without(:file).page(params[:page])
 - if runs.empty?
   %center
@@ -7,6 +10,8 @@
   %table
     %thead
       %tr
+        - if cols.include?(:owner_controls)
+          %th.align-right
         - if cols.include?(:runner)
           %th.align-right
             %a{href: "?#{params.except(:controller, :action).merge(by: :user_id, order: params[:by] == 'user_id' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Runner
@@ -20,7 +25,15 @@
             %a{href: "?#{params.except(:controller, :action).merge(by: :created_at, order: params[:by] == 'created_at' && params[:order] == 'desc' ? :asc : :desc).to_param}"} Uploaded
     %tbody
       - runs.each do |run|
-        %tr
+        %tr{id: [:run, run.id]}
+          - if cols.include?(:owner_controls)
+            %td.align-right
+              .dropdown
+                .glyphicon.glyphicon-cog.dropdown-toggle{id: [:dropdown, run.id], style: "cursor: pointer;", data: {toggle: :dropdown}}
+                %ul.dropdown-menu{role: :menu, aria: {labelledby: "dropdown_#{run.id}"}}
+                  %li{role: :presentation}
+                    %a.dropdown-header{role: :menuitem, tabindex: -1, href: "#", onclick: "window.disown_run({id: #{run.id}});"} Disown
+                    %a.dropdown-header{role: :menuitem, tabindex: -1, href: "#", onclick: "window.delete_run({id: #{run.id}});"} Delete
           - if cols.include?(:runner)
             %td.align-right
               - if run.user && run.user.name

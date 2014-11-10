@@ -1,5 +1,6 @@
 class Api::V1::RunsController < ApplicationController
-  before_action :set_run, only: [:show]
+  before_action :set_run, only: [:show, :destroy, :disown]
+  before_action :verify_ownership!, only: [:destroy, :disown]
 
   SAFE_PARAMS = [:category_id, :user_id]
 
@@ -42,6 +43,19 @@ class Api::V1::RunsController < ApplicationController
     }
   end
 
+  # TODO: This method is not documented and thus is not officially supported by the API. It uses cookie authentication,
+  # but the official release of it into the API should use token authentication.
+  def destroy
+    @run.destroy
+    head 200
+  end
+
+  def disown
+    @run.user = nil
+    @run.save
+    head 200
+  end
+
   private
 
   def set_run
@@ -51,6 +65,16 @@ class Api::V1::RunsController < ApplicationController
       status: 404,
       error: "Run with id '#{params[:id]}' not found. If '#{params[:id]}' isn't a numeric id, first use GET #{api_v1_runs_url}"
     }
+  end
+
+  def verify_ownership!
+    unless @run.belongs_to?(current_user)
+      render status: 401, json: {
+        status: 401,
+        error: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to delete it."
+      }
+      return false
+    end
   end
 
   def search_params

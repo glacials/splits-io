@@ -9,5 +9,5 @@
     .form-group
       %input{type: :submit, value: 'search'}
 .container
-  - cache [:run_table, :v2, {game: @game}] do
+  - cache [:run_table, :v2, {game: @game, page: params[:page] || 1}] do
     = render partial: 'shared/run_table', locals: {runs: @game.runs}
