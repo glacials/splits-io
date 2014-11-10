@@ -3,4 +3,4 @@
   %h2= content_for(:title)
   %h5 on splits.io
   - cache [:run_table, :v2, {user: @user}] do
-    = render partial: 'shared/run_table', locals: {runs: @user.runs}
+    = render partial: 'shared/run_table', locals: {runs: @user.runs, without_cols: [:runner]}

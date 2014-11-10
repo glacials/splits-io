@@ -10,7 +10,7 @@
     the splits
   = render partial: 'shared/alerts'
   - if user_signed_in? && current_user.runs.present?
-    - cache [:run_table_personal, :v1, {user: @user}] do
+    - cache [:run_table, :v1, {user: @user, with_controls: true}] do
       = render partial: 'shared/run_table', locals: {runs: current_user.runs, without_cols: [:runner]}
     %div{id: ab_test(:show_follows) ? "follows" : ""}
   - else
