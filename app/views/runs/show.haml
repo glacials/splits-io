@@ -22,5 +22,6 @@
 - cache [:timeline_inspector, :v1, @run] do
   = render partial: 'shared/timeline_inspector', locals: {run: @run}
 
-- cache [:splits, :v1, @run] do
-  = render partial: 'shared/split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}
+.container
+  - cache [:splits, :v1, @run] do
+    = render partial: 'shared/split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}

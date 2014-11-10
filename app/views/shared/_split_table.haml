@@ -1,18 +1,17 @@
-.container
-  %table
-    %thead
+%table
+  %thead
+    %tr
+      %th.align-right #
+      %th.align-left Name
+      %th.align-right Duration
+      %th.align-right Finished at
+  %tbody
+    - splits.each_with_index do |split, index|
       %tr
-        %th.align-right #
-        %th.align-left Name
-        %th.align-right Duration
-        %th.align-right Finished at
-    %tbody
-      - splits.each_with_index do |split, index|
-        %tr
-          %td.align-right= index + 1
-          %td.align-left= split[:name].present? ? split[:name] : '-'
-          %td.align-right
-            - if split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
-              .gold-split{title: "Gold"}
-            = render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: @run.short?}
-          %td.align-right= render partial: 'shared/time', locals: {time: split[:finish_time], show_milliseconds: @run.short?}
+        %td.align-right= index + 1
+        %td.align-left= split[:name].present? ? split[:name] : '-'
+        %td.align-right
+          - if split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
+            .gold-split{title: "Gold"}
+          = render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: @run.short?}
+        %td.align-right= render partial: 'shared/time', locals: {time: split[:finish_time], show_milliseconds: @run.short?}

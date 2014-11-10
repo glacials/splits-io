@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :runs
   has_many :games, -> { uniq }, through: :runs
 
+  scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}) }
+
   def self.search(term)
     where(User.arel_table[:name].matches "%#{term}%").joins(:runs).uniq.order(:name)
   end
@@ -27,5 +29,9 @@ class User < ActiveRecord::Base
 
   def to_param
     name
+  end
+
+  def pb_for(category)
+    runs.where(category: category).order(:time).first
   end
 end
