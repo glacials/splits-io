@@ -1,5 +1,4 @@
 class Api::V1::RunsController < Api::V1::ApplicationController
-  before_action :set_run, only: [:show, :destroy, :disown]
   before_action :verify_ownership!, only: [:destroy, :disown]
 
   SAFE_PARAMS = [:category_id, :user_id]
