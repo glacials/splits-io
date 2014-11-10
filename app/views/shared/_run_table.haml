@@ -1,3 +1,4 @@
+- cols = [:runner, :time, :name, :uploaded] - (defined?(without_cols) ? without_cols : [])
 - runs = order_runs(runs).without(:file).page(params[:page])
 - if runs.empty?
   %center
@@ -6,33 +7,31 @@
   %table
     %thead
       %tr
-        - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
+        - if cols.include?(:runner)
           %th.align-right
             %a{href: "?#{params.except(:controller, :action).merge(by: :user_id, order: params[:by] == 'user_id' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Runner
-        %th.align-right
-          %a{href: "?#{params.except(:controller, :action).merge(by: :time, order: params[:by] == 'time' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Time
-        %th Name
-        %th.align-right
-          %a{href: "?#{params.except(:controller, :action).merge(by: :created_at, order: params[:by] == 'created_at' && params[:order] == 'desc' ? :asc : :desc).to_param}"} Uploaded
-        - if runs.any? { |run| run.belongs_to?(current_user) }
-          %th Actions
+        - if cols.include?(:time)
+          %th.align-right
+            %a{href: "?#{params.except(:controller, :action).merge(by: :time, order: params[:by] == 'time' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Time
+        - if cols.include?(:name)
+          %th Name
+        - if cols.include?(:uploaded)
+          %th.align-right
+            %a{href: "?#{params.except(:controller, :action).merge(by: :created_at, order: params[:by] == 'created_at' && params[:order] == 'desc' ? :asc : :desc).to_param}"} Uploaded
     %tbody
       - runs.each do |run|
         %tr
-          - if runs.any? { |run| !run.belongs_to?(current_user) } && params[:controller] != 'users'
+          - if cols.include?(:runner)
             %td.align-right
               - if run.user && run.user.name
                 %a{href: user_path(run.user)}= run.user.try(:name)
               - else
                 = "-"
-          %td.align-right= render partial: 'shared/time', locals: {time: run.time, show_milliseconds: run.short?}
-          %td
-            %a{href: run_path(run)}= run.name
-          %td.align-right{title: run.created_at}= "#{run.time_since_upload} ago"
-          %td
-            - if run.belongs_to?(current_user)
-              %small
-                = link_to('Disown', disown_path(run), id: :disown, method: :delete, data: {confirm: 'Disowning leaves the run in place, but marks it as anonymously uploaded. If you want to save the link, do it before continuing. Continue?'})
-                \/
-                = link_to('Delete', run_path(run), id: :delete, method: :delete, data: {confirm: 'Really delete this run?'})
+          - if cols.include?(:time)
+            %td.align-right= render partial: 'shared/time', locals: {time: run.time, show_milliseconds: run.short?}
+          - if cols.include?(:name)
+            %td
+              %a{href: run_path(run)}= run.name
+          - if cols.include?(:uploaded)
+            %td.align-right{title: run.created_at}= "#{run.time_since_upload} ago"
   .center= will_paginate(runs)
