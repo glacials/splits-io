@@ -10,5 +10,5 @@
         a href=category_path(@game, category)
           h4 = category.name
         small
-          = render partial: 'shared/time', locals: {time: category.best_known_run.time, show_milliseconds: category.best_known_run.short?}
+          = render partial: 'shared/time', locals: {time: category.best_known_run.time, show_milliseconds: false}
           | best on record
