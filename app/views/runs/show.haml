@@ -16,7 +16,7 @@
         %a{href: download_path(@run, program), onclick: 'hide_download_menu()'}= program
     %a.fake-link#download-link{onclick: 'toggle_download_menu()'} ↓ download
     - if @run.best_known?
-      - if !@run.belongs_to?(current_user) && current_user.runs?(@run.category)
+      - if !@run.belongs_to?(current_user) && current_user.try(:runs?, @run.category)
         |
         %a{href: compare_path(@run, current_user.pb_for(@run.category))} compare to my pb
       | ✓ best on record
