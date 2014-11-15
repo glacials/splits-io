@@ -1,4 +1,4 @@
-- cache do
+- cache [:follows, :v1, {user: current_user}] do
   - if current_user.follows.present?
     %br
     .panel.panel-info
