@@ -1,4 +1,4 @@
-download_text = 'download'
+download_text = '↓ download'
 cancel_text   = 'cancel'
 
 @show_download_menu = ->

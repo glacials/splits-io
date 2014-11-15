@@ -7,7 +7,7 @@
   %center
     %i Woops! No runs here, #{['boss', 'friend', 'pal', 'buddy', 'speedfriend', 'friend', 'unfortunately'].sample}!
 - else
-  %table
+  %table.table.table-striped
     %thead
       %tr
         - if cols.include?(:owner_controls)
@@ -29,7 +29,7 @@
           - if cols.include?(:owner_controls)
             %td.align-right
               .dropdown
-                .glyphicon.glyphicon-cog.dropdown-toggle{id: [:dropdown, run.id], style: "cursor: pointer;", data: {toggle: :dropdown}}
+                .dropdown-toggle{id: [:dropdown, run.id], style: "cursor: pointer;", data: {toggle: :dropdown}} ⚙
                 %ul.dropdown-menu{role: :menu, aria: {labelledby: "dropdown_#{run.id}"}}
                   %li{role: :presentation}
                     %a.dropdown-header{role: :menuitem, tabindex: -1, href: "#", onclick: "window.disown_run({id: #{run.id}});"} Disown

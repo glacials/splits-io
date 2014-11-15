@@ -11,8 +11,8 @@
 // about supported directives.
 //
 //= require jquery
-//= require bootstrap
 //= require jquery_ujs
+//= require bootstrap
 //= require spin
 //= require jquery.spin
 //= require tipsy

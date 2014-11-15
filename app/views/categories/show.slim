@@ -1,0 +1,8 @@
+- title "#{@category.game.name} #{@category.name}"
+.container
+  h2 = content_for(:title)
+  small
+    a href=game_path(@category.game) 
+      | &larr;
+      | back to #{@category.game.shortname}
+  = render partial: 'shared/run_table', locals: {runs: @category.runs}

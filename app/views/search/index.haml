@@ -3,15 +3,18 @@
   %h2= content_for(:title)
   %h5 find your soulmate splits
   = render partial: 'shared/alerts'
-  %form#search.form-inline{action: search_path, method: :get}
-    .form-group
-      %input{type: :text, name: 'q', autofocus: true, placeholder: 'search...', value: @query}
-    .form-group
-      %input{type: :submit, value: 'search'}
+  .row
+    .col-md-6
+      %form#search.form-search{action: search_path, method: :get}
+        .input-group
+          - placeholder = Game.where.not(shortname: nil).offset(rand(Game.where.not(shortname: nil).count)).first
+          %input.form-control{type: :text, name: :q, autofocus: true, placeholder: "e.g. #{placeholder.name}, or #{placeholder.shortname}", value: @query}
+          %span.input-group-btn
+            %button.btn.btn-default{type: :submit} search
   - if @query || @result
     %h4 Users
     - if @result[:users].present?
-      %table
+      %table.table.table-striped
         %tbody
           - @result[:users].find_each do |user|
             %tr
@@ -21,7 +24,7 @@
       %i (none found)
     %h4 Games
     - if @result[:games].present?
-      %table
+      %table.table.table-striped
         %tbody
           - @result[:games].each do |game|
             %tr

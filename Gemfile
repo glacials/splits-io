@@ -3,7 +3,6 @@ ruby '2.1.3'
 
 group :development do
   gem 'awesome_print'
-  #gem 'debugger'
   gem 'rubocop', require: false
   gem 'sqlite3'
 end
@@ -13,13 +12,11 @@ group :production do
 end
 
 gem 'babel_bridge',              '>= 0.5.3'
-gem 'bootstrap-sass',            '>= 3.1.1.1'
 gem 'coffee-rails',              '>= 4.0.0'
 gem 'delayed_job_active_record', '>= 4.0.2'
 gem 'devise',                    '>= 3.1.1'
 gem 'figaro',                    '>= 1.0.0.rc1'
 gem 'gon',                       '>= 5.1.2'
-gem 'haml-rails',                '>= 0.4'
 gem 'htmlentities',              '>= 4.3.1'
 gem 'httparty',                  '>= 0.13.0'
 gem 'jbuilder',                  '>= 1.2'
@@ -41,3 +38,7 @@ gem 'workless',                  '>= 1.2.3'
 gem 'xml-simple',                '>= 1.1.3'
 gem 'redis-rails'
 gem 'redis-namespace'
+gem 'flat-ui-rails'
+gem 'bootstrap-sass'
+gem 'slim-rails'
+gem 'haml-rails'

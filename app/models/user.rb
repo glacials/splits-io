@@ -34,4 +34,8 @@ class User < ActiveRecord::Base
   def pb_for(category)
     runs.where(category: category).order(:time).first
   end
+
+  def runs?(category)
+    runs.where(category: category).present?
+  end
 end

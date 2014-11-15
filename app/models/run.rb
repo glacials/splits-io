@@ -105,7 +105,7 @@ class Run < ActiveRecord::Base
       assign_attributes(program: result[:program])                                  if read_attribute(:program).blank?
       assign_attributes(time:    result[:splits].map { |s| s[:duration] }.sum.to_f) if read_attribute(:time).blank?
       assign_attributes(name:    result[:name])                                     if read_attribute(:name).blank?
-      save
+      save if changed?
 
       @parse_cache = result
       return result
@@ -120,6 +120,10 @@ class Run < ActiveRecord::Base
   end
 
   def best_known?
-    category.best_known_run.nil? || category.best_known_run == self
+    category.best_known_run.nil? || time == category.best_known_run.time
+  end
+
+  def pb?
+    user.present? && time == user.pb_for(category).time
   end
 end

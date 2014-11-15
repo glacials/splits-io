@@ -39,6 +39,7 @@ SplitsIO::Application.routes.draw do
   end
 
   get '/games/:game_shortname', to: 'games#show', as: :game
+  get '/games/:game_shortname/:category_shortname', to: 'categories#show', as: :category
 
   namespace :api do
     namespace :v1 do
