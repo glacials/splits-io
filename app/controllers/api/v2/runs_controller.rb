@@ -1,40 +1,12 @@
-class Api::V1::RunsController < Api::V1::ApplicationController
+class Api::V2::RunsController < Api::V2::ApplicationController
   before_action :verify_ownership!, only: [:destroy, :disown]
 
   def index
-    render json: (@records.map do |record|
-      {
-        id:          record.id,
-        url:         "http://splits.io/#{record.id.to_s(36)}",
-        name:        record.name,
-        time:        record.time.to_f,
-        user_id:     record.user_id,
-        game_id:     record.category.game_id,
-        category_id: record.category_id,
-        program:     record.program,
-        image_url:   record.image_url,
-        created_at:  record.created_at,
-        updated_at:  record.updated_at,
-        splits:      record.splits
-      }
-    end), serializer: nil
+    render json: @records, each_serializer: Api::V2::RunSerializer
   end
 
   def show
-    render json: {
-      id:          @record.id,
-      url:         "http://splits.io/#{@record.id.to_s(36)}",
-      name:        @record.name,
-      time:        @record.time.to_f,
-      user_id:     @record.user_id,
-      game_id:     @record.category.game_id,
-      category_id: @record.category_id,
-      program:     @record.program,
-      image_url:   @record.image_url,
-      created_at:  @record.created_at,
-      updated_at:  @record.updated_at,
-      splits:      @record.splits
-    }, serializer: nil
+    render json: @record, serializer: Api::V2::RunSerializer
   end
 
   def create
@@ -90,7 +62,7 @@ class Api::V1::RunsController < Api::V1::ApplicationController
   end
 
   def safe_params
-    [:category_id, :user_id]
+    [:id, :category_id, :user_id]
   end
 
   def model

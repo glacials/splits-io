@@ -147,431 +147,345 @@ You can generate a secure key for this with `rake secret`.
 
 ## API
 
-splits-io has an API consisting of lookup routes and retrieval routes at `/api/v1/:resource` and `/api/v1/:resource/:id`,
-respectively. You can also POST to `/api/v1/runs`.
+splits-io has an API consisting of lookup routes and retrieval routes at `/api/v2/:resource` and `/api/v2/:resource/:id`,
+respectively. You can also POST to `/api/v2/runs`.
 
 ### Lookup routes
-These routes will accept one or more URL parameters to allow you to look up resources by something that's not a unique
-ID. However, if you know the ID of the thing you're looking for, you should instead use a classic retrieval routes
-(documented below) to get your information. It is not recommended to use lookup routes for anything other than run
-discovery.
+These routes will accept one or more URL parameters to allow you to look up resources by human-friendly things like
+names and relationships. However, each one of these routes returns an array; if you know the ID of the thing you're
+looking for, you should instead use a classic retrieval route, documented below, to get your information. It is not
+recommended to use lookup routes to discover the same set of resources twice.
 
-#### GET [/api/v1/games][api-games-index]
+#### GET [/api/v2/games][api-games-index]
 
 ##### Parameters accepted
-`name`, `shortname`
+`id`, `name`, `shortname`
 
 ##### Example request
 ```bash
-curl splits.io/api/v1/games?shortname=tww
+curl splits.io/api/v2/games?shortname=tww
 ```
 ##### Example response
 ```json
-[
-  {
-    "id": 4,
-    "name": "The Legend of Zelda: The Wind Waker",
-    "shortname": "tww",
-    "created_at": "2014-04-18T06:28:54.258Z",
-    "updated_at": "2014-09-23T09:51:57.195Z",
-    "categories": [
-      {
-        "id": 4,
-        "name": "Any% No Tuner",
-        "game_id": 4,
-        "created_at": "2014-04-18T06:28:54.295Z",
-        "updated_at": "2014-04-18T06:28:54.295Z",
-        "best_known_run": 2792
-      },
-      {
-        "id": 37,
-        "name": "Any% (English, No Tuner)",
-        "game_id": 4,
-        "created_at": "2014-04-18T06:29:26.810Z",
-        "updated_at": "2014-04-18T06:29:26.810Z",
-        "best_known_run": 1966
-      },
-      ...
-      {
-        "id": 426,
-        "name": "100%",
-        "game_id": 4,
-        "created_at": "2014-08-13T13:07:15.339Z",
-        "updated_at": "2014-08-13T13:07:15.339Z",
-        "best_known_run": 2005
-      }
-    ]
-  }
-]
+{
+  "games": [
+    {
+      "id": 4,
+      "name": "The Legend of Zelda: The Wind Waker",
+      "shortname": "tww",
+      "created_at": "2014-04-18T06:28:54.258Z",
+      "updated_at": "2014-12-02T03:12:10.341Z",
+      "categories": [
+        {
+          "id": 4,
+          "name": "Any% No Tuner",
+          "created_at": "2014-04-18T06:28:54.295Z",
+          "updated_at": "2014-11-11T02:42:02.827Z"
+        },
+        ...
+        {
+          "id": 736,
+          "name": "any% Glitchless No S+Q",
+          "created_at": "2014-12-01T18:02:52.545Z",
+          "updated_at": "2014-12-01T18:02:53.000Z"
+        }
+      ]
+    }
+  ]
+}
 ```
 
-[api-games-index]: http://splits.io/api/v1/games
+[api-games-index]: http://splits.io/api/v2/games
 
-#### GET [/api/v1/categories][api-categories-index]
+#### GET [/api/v2/categories][api-categories-index]
 
 ##### Parameters accepted
-`game_id`
+`id`, `game_id`
 
 ##### Example request
 ```bash
-curl splits.io/api/v1/categories?game_id=4
-```
-
-##### Example response
-```json
-[
-  {
-    "id": 4,
-    "name": "Any% No Tuner",
-    "game_id": 4,
-    "created_at": "2014-04-18T06:28:54.295Z",
-    "updated_at": "2014-04-18T06:28:54.295Z",
-    "best_known_run": 2792
-  },
-  {
-    "id": 37,
-    "name": "Any% (English, No Tuner)",
-    "game_id": 4,
-    "created_at": "2014-04-18T06:29:26.810Z",
-    "updated_at": "2014-04-18T06:29:26.810Z",
-    "best_known_run": 1966
-  },
-  ...
-  {
-    "id": 426,
-    "name": "100%",
-    "game_id": 4,
-    "created_at": "2014-08-13T13:07:15.339Z",
-    "updated_at": "2014-08-13T13:07:15.339Z",
-    "best_known_run": 2005
-  }
-]
-```
-
-[api-categories-index]: http://splits.io/api/v1/categories
-
-#### GET [/api/v1/runs][api-runs-index]
-
-##### Parameters accepted
-`category_id`, `user_id`
-
-##### Example request
-```bash
-curl splits.io/api/v1/runs?user_id=1
-```
-
-##### Example response
-```json
-[
-  {
-    "id": 437,
-    "url": "http://splits.io/c5",
-    "name": "Transformers: Fall of Cybertron Any% (New Game+)",
-    "time": 9053.47,
-    "user_id": 1,
-    "game_id": 31,
-    "category_id": 40,
-    "program": "livesplit",
-    "image_url": null,
-    "created_at": "2014-03-09T19:07:38.809Z",
-    "updated_at": "2014-10-28T04:18:41.436Z",
-    "splits": [
-      {
-        "best": {
-          "duration": 447.71
-        },
-        "name": "The Exodus",
-        "finish_time": 447.71,
-        "duration": 447.71
-      },
-      {
-        "best": {
-          "duration": 1193.8
-        },
-        "name": "Defend the Ark",
-        "finish_time": 1651.53,
-        "duration": 1203.82
-      },
-      ...
-      {
-        "best": {
-          "duration": 483.810506
-        },
-        "name": "Till All Are One",
-        "finish_time": 9053.47,
-        "duration": 504.28999999999905
-      }
-    ]
-  },
-  {
-    "id": 438,
-    "url": "http://splits.io/c6",
-    "name": "Sonic Colors",
-    "time": 5083.74,
-    "user_id": 1,
-    "game_id": 1,
-    "category_id": 1,
-    "program": "wsplit",
-    "image_url": null,
-    "created_at": "2014-03-09T19:07:46.483Z",
-    "updated_at": "2014-10-23T06:50:06.870Z",
-    "splits": [
-      {
-        "best": {
-          "duration": 462.85
-        },
-        "name": "Rotatatron",
-        "duration": 501.7,
-        "finish_time": 501.7
-      },
-      {
-        "best": {
-          "duration": 719.44
-        },
-        "name": "Captain Jelly",
-        "duration": 754.9099999999999,
-        "finish_time": 1256.61
-      },
-      ...
-      {
-        "best": {
-          "duration": 44.7199999999993
-        },
-        "name": "Epilogue",
-        "duration": 44.719999999999345,
-        "finish_time": 5083.74
-      }
-    ]
-  },
-  ...
-  {
-    "id": 1686,
-    "url": "http://splits.io/1au",
-    "name": "Super Mario Sunshine Any%",
-    "time": 5772.156,
-    "user_id": 1,
-    "game_id": 15,
-    "category_id": 21,
-    "program": "livesplit",
-    "image_url": null,
-    "created_at": "2014-07-19T17:35:06.327Z",
-    "updated_at": "2014-10-28T04:41:12.368Z",
-    "splits": [
-      {
-        "best": {
-          "duration": 206.634404
-        },
-        "name": "Airstrip",
-        "finish_time": 208.676429,
-        "duration": 208.676429
-      },
-      {
-        "best": {
-          "duration": 453.647702
-        },
-        "name": "Bianco 2",
-        "finish_time": 694.017941,
-        "duration": 485.34151199999997
-      },
-      ...
-      {
-        "best": {
-          "duration": 210.046238
-        },
-        "name": "Bowser",
-        "finish_time": 5772.156,
-        "duration": 1136.1422860000002
-      }
-    ]
-  }
-]
-```
-
-[api-runs-index]: http://splits.io/api/v1/runs
-
-#### GET [/api/v1/users][api-users-index]
-
-##### Parameters accepted
-`name`, `twitch_id`
-
-##### Example request
-```bash
-curl splits.io/api/v1/users?name=glacials
-```
-
-##### Example response
-```json
-[
-  {
-    "id": 1,
-    "twitch_id": 29798286,
-    "name": "glacials",
-    "created_at": "2014-03-09T19:00:43.640Z",
-    "updated_at": "2014-10-28T03:48:31.187Z"
-  }
-]
-```
-
-[api-users-index]: http://splits.io/api/v1/users
-
-### Retrieval routes
-These are the routes that will actually give you information about individual resources. They only accept numeric ids,
-which can be discovered through the above index routes.
-
-#### GET [/api/v1/games/:id][api-games-show]
-
-##### Example request
-```bash
-curl splits.io/api/v1/games/4
+curl splits.io/api/v2/categories?game_id=4
 ```
 
 ##### Example response
 ```json
 {
-  "id": 4,
-  "name": "The Legend of Zelda: The Wind Waker",
-  "shortname": "tww",
-  "created_at": "2014-04-18T06:28:54.258Z",
-  "updated_at": "2014-09-23T09:51:57.195Z",
   "categories": [
     {
       "id": 4,
       "name": "Any% No Tuner",
-      "game_id": 4,
       "created_at": "2014-04-18T06:28:54.295Z",
-      "updated_at": "2014-04-18T06:28:54.295Z",
-      "best_known_run": 2792
-    },
-    {
-      "id": 37,
-      "name": "Any% (English, No Tuner)",
-      "game_id": 4,
-      "created_at": "2014-04-18T06:29:26.810Z",
-      "updated_at": "2014-04-18T06:29:26.810Z",
-      "best_known_run": 1966
+      "updated_at": "2014-11-11T02:42:02.827Z"
     },
     ...
     {
-      "id": 426,
-      "name": "100%",
-      "game_id": 4,
-      "created_at": "2014-08-13T13:07:15.339Z",
-      "updated_at": "2014-08-13T13:07:15.339Z",
-      "best_known_run": 2005
+      "id": 736,
+      "name": "any% Glitchless No S+Q",
+      "created_at": "2014-12-01T18:02:52.545Z",
+      "updated_at": "2014-12-01T18:02:53.000Z"
     }
   ]
 }
 ```
 
-[api-games-show]: http://splits.io/api/v1/games/4
+[api-categories-index]: http://splits.io/api/v2/categories
 
-#### GET [/api/v1/categories/:id][api-categories-show]
+#### GET [/api/v2/runs][api-runs-index]
+
+##### Parameters accepted
+`id`, `category_id`, `user_id`
 
 ##### Example request
 ```bash
-curl splits.io/api/v1/categories/4
+curl splits.io/api/v2/runs?user_id=1
 ```
 
 ##### Example response
 ```json
 {
-  "id": 4,
-  "name": "Any% No Tuner",
-  "game_id": 4,
-  "created_at": "2014-04-18T06:28:54.295Z",
-  "updated_at": "2014-04-18T06:28:54.295Z",
-  "best_known_run": 2792
+  "runs": [
+    {
+      "id": 1329,
+      "name": "Portal 2 Co-op Any%",
+      "time": "4088.875111",
+      "program": "livesplit",
+      "image_url": null,
+      "created_at": "2014-06-12T07:07:46.175Z",
+      "updated_at": "2014-11-09T04:36:35.351Z",
+      "user": { ... },
+      "game": { ... },
+      "category": { ... },
+      "splits": [
+        {
+          "best": {
+            "duration": 158.57209
+          },
+          "name": "Calibration",
+          "finish_time": 167.895785,
+          "duration": 167.895785
+        },
+        ...
+        {
+          "best": {
+            "duration": 143.138543
+          },
+          "name": "Mobility Gels 8",
+          "finish_time": 4088.875111,
+          "duration": 143.13854300000003
+        }
+      ]
+    },
+    ...
+    {
+      "id": 1686,
+      "name": "Super Mario Sunshine Any%",
+      "time": "5772.156",
+      "program": "livesplit",
+      "image_url": null,
+      "created_at": "2014-07-19T17:35:06.327Z",
+      "updated_at": "2014-11-09T05:25:13.609Z",
+      "user": { ... },
+      "game": { ... },
+      "category": { ... },
+      "splits": [
+        {
+          "best": {
+            "duration": 206.634404
+          },
+          "name": "Airstrip",
+          "finish_time": 208.676429,
+          "duration": 208.676429
+        },
+        ...
+        {
+          "best": {
+            "duration": 210.046238
+          },
+          "name": "Bowser",
+          "finish_time": 5772.156,
+          "duration": 1136.1422860000002
+        }
+      ]
+    }
+  ]
 }
 ```
 
-[api-categories-show]: http://splits.io/api/v1/categories/1
+[api-runs-index]: http://splits.io/api/v2/runs
 
-#### GET [/api/v1/runs/:id][api-runs-show]
+#### GET [/api/v2/users][api-users-index]
+
+##### Parameters accepted
+`id`, `name`, `twitch_id`
 
 ##### Example request
 ```bash
-curl splits.io/api/v1/runs/1952
+curl splits.io/api/v2/users?name=glacials
 ```
 
 ##### Example response
 ```json
 {
-  "id": 1952,
-  "url": "http://splits.io/1i8",
-  "name": "The Legend of Zelda: The Wind Waker Any% No Tuner",
-  "time": 18445.61,
-  "user_id": null,
-  "game_id": 4,
-  "category_id": 4,
-  "program": "livesplit",
-  "image_url": "http://i.imgur.com/8fLqgSl.png",
-  "created_at": "2014-08-11T07:36:54.922Z",
-  "updated_at": "2014-10-28T08:08:11.285Z",
-  "splits": [
+  "users": [
     {
-      "best": {
+      "id": 1,
+      "twitch_id": 29798286,
+      "name": "glacials",
+      "avatar": "http://static-cdn.jtvnw.net/jtv_user_pictures/glacials-profile_image-d2e8f0eee0d458e3-300x300.jpeg",
+      "created_at": "2014-03-09T19:00:43.640Z",
+      "updated_at": "2014-12-02T18:49:30.608Z"
+    }
+  ]
+}
+```
+
+[api-users-index]: http://splits.io/api/v2/users
+
+### Retrieval routes
+These routes are the canonical sources of information for resources, and only accept numberic IDs as differentiators. If
+you have discovered a resource's ID once, it is strongly recommended that you shift to using the following routes to
+look up information about that resource in the future.
+
+#### GET [/api/v2/games/:id][api-games-show]
+
+##### Example request
+```bash
+curl splits.io/api/v2/games/4
+```
+
+##### Example response
+```json
+{
+  "game": {
+    "id": 4,
+    "name": "The Legend of Zelda: The Wind Waker",
+    "shortname": "tww",
+    "created_at": "2014-04-18T06:28:54.258Z",
+    "updated_at": "2014-12-02T03:12:10.341Z",
+    "categories": [
+      {
+        "id": 4,
+        "name": "Any% No Tuner",
+        "created_at": "2014-04-18T06:28:54.295Z",
+        "updated_at": "2014-11-11T02:42:02.827Z"
+      },
+      ...
+      {
+        "id": 736,
+        "name": "any% Glitchless No S+Q",
+        "created_at": "2014-12-01T18:02:52.545Z",
+        "updated_at": "2014-12-01T18:02:53.000Z"
+      }
+    ]
+  }
+}
+```
+
+[api-games-show]: http://splits.io/api/v2/games/4
+
+#### GET [/api/v2/categories/:id][api-categories-show]
+
+##### Example request
+```bash
+curl splits.io/api/v2/categories/4
+```
+
+##### Example response
+```json
+{
+  "category": {
+    "id": 4,
+    "name": "Any% No Tuner",
+    "created_at": "2014-04-18T06:28:54.295Z",
+    "updated_at": "2014-11-11T02:42:02.827Z"
+  }
+}
+```
+
+[api-categories-show]: http://splits.io/api/v2/categories/1
+
+#### GET [/api/v2/runs/:id][api-runs-show]
+
+##### Example request
+```bash
+curl splits.io/api/v2/runs/1952
+```
+
+##### Example response
+```json
+{
+  "run": {
+    "id": 1952,
+    "name": "The Legend of Zelda: The Wind Waker Any% No Tuner",
+    "time": "18445.61",
+    "program": "livesplit",
+    "image_url": "http://i.imgur.com/8fLqgSl.png",
+    "created_at": "2014-08-11T07:36:54.922Z",
+    "updated_at": "2014-11-09T05:27:15.002Z",
+    "user": null,
+    "game": { ... },
+    "category": { ... },
+    "splits": [
+      {
+        "best": {
+          "duration": 1163.24
+        },
+        "name": "Spoils Bag",
+        "finish_time": 1163.24,
         "duration": 1163.24
       },
-      "name": "Spoils Bag",
-      "finish_time": 1163.24,
-      "duration": 1163.24
-    },
-    {
-      "best": {
-        "duration": 388.39
-      },
-      "name": "Forsaken Fortress 1",
-      "finish_time": 1560.32,
-      "duration": 397.0799999999999
-    },
-    ...
-    {
-      "best": {
-        "duration": 417.93
-      },
-      "name": "Ganon",
-      "finish_time": 18445.61,
-      "duration": 417.9300000000003
-    }
-  ]
+      ...
+      {
+        "best": {
+          "duration": 417.93
+        },
+        "name": "Ganon",
+        "finish_time": 18445.61,
+        "duration": 417.9300000000003
+      }
+    ]
+  }
 }
 ```
 
-[api-runs-show]: http://splits.io/api/v1/runs/1952
+[api-runs-show]: http://splits.io/api/v2/runs/1952
 
-#### GET [/api/v1/users/:id][api-users-show]
+#### GET [/api/v2/users/:id][api-users-show]
 
 ##### Example request
 ```bash
-curl splits.io/api/v1/users/1
+curl splits.io/api/v2/users/1
 ```
 
 ##### Example response
 ```json
 {
-  "id": 1,
-  "twitch_id": 29798286,
-  "name": "glacials",
-  "created_at": "2014-05-03T07:18:54.033Z",
-  "updated_at": "2014-10-28T03:45:53.968Z"
+  "user": {
+    "id": 1,
+    "twitch_id": 29798286,
+    "name": "glacials",
+    "avatar": "http://static-cdn.jtvnw.net/jtv_user_pictures/glacials-profile_image-d2e8f0eee0d458e3-300x300.jpeg",
+    "created_at": "2014-03-09T19:00:43.640Z",
+    "updated_at": "2014-12-02T18:49:30.608Z"
+  }
 }
 ```
 
-[api-users-show]: http://splits.io/api/v1/users/1
+[api-users-show]: http://splits.io/api/v2/users/1
 
 ### Uploading runs
 
-#### POST [/api/v1/runs][api-runs-create]
+#### POST [/api/v2/runs][api-runs-create]
 
 
 ##### Example request
 ```bash
-curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v1/runs
+curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v2/runs
 ```
 
 ##### Example response
 When successful this endpoint doesn't return a body, just headers. You should get a 201 back and the `Location` field of
-the headers should hold the location of the new run according to this API (`splits.io/api/v1/:id`).
+the headers should hold the location of the new run according to this API (`splits.io/api/v2/:id`).
 
 If you want the user-accessible URL (`splits.io/:alphanumeric_id`) without having to perform another request, you can
 just convert the numeric id into base 36 to get the alphanumeric id.
@@ -581,7 +495,7 @@ HTTP/1.1 201 Created
 X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
-Location: http://splits.io/api/v1/runs/177
+Location: http://splits.io/api/v2/runs/177
 Content-Type: text/html
 ETag: "7215ee9c7d9dc229d2921a40e899ec5f"
 Cache-Control: max-age=0, private, must-revalidate
@@ -591,7 +505,7 @@ Connection: close
 Server: thin
 ```
 
-[api-runs-create]: http://splits.io/api/v1/runs
+[api-runs-create]: http://splits.io/api/v2/runs
 
 [1]: https://github.com/skoh-fley/splits-io/blob/master/lib/wsplit_parser.rb
 [2]: http://en.wikipedia.org/wiki/LL_parser

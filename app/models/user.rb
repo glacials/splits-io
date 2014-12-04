@@ -17,16 +17,6 @@ class User < ActiveRecord::Base
     URI::parse("http://www.twitch.tv/#{name}")
   end
 
-  def as_json(options = {})
-    {
-      id:         id,
-      twitch_id:  twitch_id,
-      name:       name,
-      created_at: created_at,
-      updated_at: updated_at
-    }
-  end
-
   def to_param
     name
   end

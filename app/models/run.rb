@@ -70,26 +70,6 @@ class Run < ActiveRecord::Base
     parse[:history]
   end
 
-  def as_json(options = {})
-    {
-      id:          id,
-      url:         options[:run_url_helper].call(self),
-      name:        name,
-      time:        time.to_f,
-      user_id:     user_id,
-      game_id:     category.game_id,
-      category_id: category_id,
-      program:     program,
-      image_url:   image_url,
-      created_at:  created_at,
-      updated_at:  updated_at,
-      splits:      splits
-    }
-  rescue NoMethodError => e
-    raise $!, "When rendering a run as json, you need to pass a `run_url_helper` Proc to the `as_json` method (via the \
-    `options` Hash). It should take a run and return the user-facing URL for that run. #{$!}", $!.backtrace
-  end
-
   def parses?
     parse.present?
   end
