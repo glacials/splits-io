@@ -2,10 +2,6 @@ class UsersController < ApplicationController
   before_action :set_user, only: :show
 
   def show
-    respond_to do |format|
-      format.html { render :show }
-      format.json { render json: @user.runs }
-    end
   end
 
   def follows
