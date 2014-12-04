@@ -30,7 +30,7 @@ SplitsIO::Application.routes.draw do
   delete '/:run',      to: 'runs#delete', as: :delete
   delete '/:run/user', to: 'runs#disown', as: :disown
 
-  get '/u/:id', to: 'users#show' # deprecated
+  get '/u/:id', to: redirect('/users/%{id}') # deprecated
 
   resources :users, only: [:show] do
     member do
