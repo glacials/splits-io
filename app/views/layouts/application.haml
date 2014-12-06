@@ -15,9 +15,9 @@
       #dropzone-overlay.header{style: 'border: none;'}
         %h1#droplabel.inverted drop anywhere
       %nav
-        - page = {upload: request.path == upload_path, search: request.path.match(search_path), faq: request.path == faq_path}
+        - page = {upload: request.path == new_run_path, search: request.path.match(search_path), faq: request.path == faq_path}
         %a.blue{href: root_path, class: page.values.all? { |p| !p } ? 'logo' : ''} splits i/o
-        %a.purple{href: upload_path, class: page[:upload] ? 'logo' : ''} upload
+        %a.purple{href: new_run_path, class: page[:upload] ? 'logo' : ''} upload
         %a.green{href: search_path, class: page[:search] ? 'logo' : ''} search
         %a.red{href: faq_path, class: page[:faq] ? 'logo' : ''} faq
         - if user_signed_in?

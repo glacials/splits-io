@@ -3,31 +3,25 @@ $(function () {
     var data = new FormData();
     data.append("file", file);
     $.ajax({
-      url: "/api/v1/runs",
+      url: "/api/v2/runs",
       type: "POST",
       data: data,
       cache: false,
       processData: false,
       contentType: false,
-      success: function (data, textStatus, jqXHR) {
-        console.log(jqXHR.getAllResponseHeaders());
+      success: function (data, textStatus, xhr) {
         $.ajax({
-          url: jqXHR.getResponseHeader("Location"),
+          url: xhr.getResponseHeader("Location"),
           type: "GET",
-          success: function (data, textStatus, jqXHR) {
-            window.location = data.url;
-          },
-          error: function (jqXHR, textStatus, error) {
-            console.log(jqXHR.responseText);
-            console.log(textStatus);
-            console.log(error);
+          success: function (data, textStatus, xhr) {
+            window.location = data.run.id.toString(36);
           }
         });
       },
-      error: function (jqXHR, textStatus, error) {
-        console.log(jqXHR.responseText);
-        console.log(textStatus);
-        console.log(error);
+      error: function (xhr, textStatus) {
+        if (xhr.status == 400) {
+          window.location = '/cant-parse';
+        }
       }
     });
   };

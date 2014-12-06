@@ -12,11 +12,7 @@ class RunsController < ApplicationController
   before_action :verify_ownership, only: [:disown, :delete]
   before_action :track_run_view, only: :show
 
-  def show
-    render :show
-  end
-
-  def upload
+  def create
     unless params[:file].present?
       render :cant_parse
       return
@@ -37,14 +33,6 @@ class RunsController < ApplicationController
         format.html { redirect_to cant_parse_path }
       end
     end
-    tracking_properties = {}
-    if request.xhr?
-      tracking_properties['Client'] = 'JavaScript'
-    elsif request.env['HTTP_USER_AGENT'] =~ /LiveSplit/i
-      tracking_properties['Client'] = request.env['HTTP_USER_AGENT']
-    elsif request.referer =~ /\/upload/i
-      tracking_properties['Client'] = 'form'
-    end
     track! :upload
   end
 
@@ -63,40 +51,28 @@ class RunsController < ApplicationController
 
   def random
     if Run.count == 0
-      respond_to do |format|
-        format.json { render status: 503, json: {message: 'No runs exist yet!'} }
-        format.html { redirect_to root_path, flash: {icon: 'exclamation-sign', alert: 'No runs exist yet!'} }
-      end
+      redirect_to root_path, flash: {icon: 'exclamation-sign', alert: 'No runs exist yet!'}
     else
       @run = Run.offset(rand(Run.count)).first
-      respond_to do |format|
-        format.html { redirect_to run_path(@run) }
-        format.json { render json: @run }
-      end
+      redirect_to run_path(@run)
     end
   end
 
   def disown
     @run.user = nil
     @run.save
-    respond_to do |format|
-      format.json { head 200 }
-      format.html { redirect_to :back }
-    end
+    redirect_to :back
   end
 
   def delete
     @run.destroy
-    respond_to do |format|
-      format.json { head 200 }
-      format.html { redirect_to :back, notice: 'Run deleted!' }
-    end
+    redirect_to :back, notice: 'Run deleted!'
   end
 
   private
 
   def set_run
-    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by(nick: params[:run])
+    @run = Run.find_by(id: params[:id].to_i(36)) || Run.find_by(nick: params[:id])
     if @run.blank?
       respond_to do |format|
         format.json { render status: 404, json: {status: 404, error: "Run not found"} }

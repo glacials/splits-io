@@ -4,7 +4,7 @@
   <meta content="" name="csrf-token" />
   %h2 drop it like it's hot
   %h5 drag your splits onto this page, or any page
-  %form#upload{action: upload_path, method: :post, enctype: "multipart/form-data"}
+  %form#upload{action: runs_path, method: :post, enctype: "multipart/form-data"}
     .form-group
       %input{type: :file, name: "file"}
     %noscript

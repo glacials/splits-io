@@ -21,6 +21,14 @@ class ApplicationController < ActionController::Base
     super(run.id)
   end
 
+  def api_v2_run_url(run)
+    super(run.id)
+  end
+
+  def api_v2_run_path(run)
+    super(run.id)
+  end
+
   private
 
   def set_gon
