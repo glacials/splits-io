@@ -490,12 +490,6 @@ curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v2/runs
 When successful this endpoint doesn't return a body, just headers. You should get a 201 back and the `Location` field of
 the headers should hold the location of the new run according to this API (`splits.io/api/v2/:id`).
 
-If the run can't be parsed, you'll get a 400 back.
-
-To get a user-accessible URL (`splits.io/:alphanumeric_id`) you can use the `Location` field to do a
-[`GET splits.io/api/v2/:id`][5] and inspect `run.path` from the response body. Alternatively, if you don't want to
-perform another request, you can pull `:id` off the `Location` and convert it to base 36 to get `:alphanumeric_id`.
-
 ```
 HTTP/1.1 201 Created
 X-Frame-Options: SAMEORIGIN
@@ -510,6 +504,12 @@ X-Runtime: 1.054199
 Connection: close
 Server: thin
 ```
+
+If the run can't be parsed, you'll get a 400 instead.
+
+To get a user-accessible URL (`splits.io/:alphanumeric_id`) you can use the `Location` field to do a
+[`GET splits.io/api/v2/:id`][5] and inspect `run.path` from the response body. Alternatively, if you don't want to
+perform another request, you can pull `:id` off the `Location` and convert it to base 36 to get `:alphanumeric_id`.
 
 [api-runs-create]: http://splits.io/api/v2/runs
 
