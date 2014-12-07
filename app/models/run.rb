@@ -99,6 +99,10 @@ class Run < ActiveRecord::Base
     id.to_s(36)
   end
 
+  def path
+    "/#{to_param}"
+  end
+
   def best_known?
     category.best_known_run.nil? || time == category.best_known_run.time
   end

@@ -246,6 +246,7 @@ curl splits.io/api/v2/runs?user_id=1
   "runs": [
     {
       "id": 1329,
+      "path": "/10x",
       "name": "Portal 2 Co-op Any%",
       "time": "4088.875111",
       "program": "livesplit",
@@ -278,6 +279,7 @@ curl splits.io/api/v2/runs?user_id=1
     ...
     {
       "id": 1686,
+      "path": "/1au",
       "name": "Super Mario Sunshine Any%",
       "time": "5772.156",
       "program": "livesplit",
@@ -416,6 +418,7 @@ curl splits.io/api/v2/runs/1952
 {
   "run": {
     "id": 1952,
+    "path": "/1i8",
     "name": "The Legend of Zelda: The Wind Waker Any% No Tuner",
     "time": "18445.61",
     "program": "livesplit",
@@ -487,8 +490,9 @@ curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v2/runs
 When successful this endpoint doesn't return a body, just headers. You should get a 201 back and the `Location` field of
 the headers should hold the location of the new run according to this API (`splits.io/api/v2/:id`).
 
-If you want the user-accessible URL (`splits.io/:alphanumeric_id`) without having to perform another request, you can
-just convert the numeric id into base 36 to get the alphanumeric id.
+To get a user-accessible URL (`splits.io/:alphanumeric_id`) you can use the `Location` field to do a
+[`GET splits.io/api/v2/:id`][5] and inspect `run.path` from the response body. Alternatively, if you don't want to
+perform another request, you can pull `:id` off the `Location` and convert it to base 36 to get `:alphanumeric_id`.
 
 ```
 HTTP/1.1 201 Created
@@ -511,3 +515,4 @@ Server: thin
 [2]: http://en.wikipedia.org/wiki/LL_parser
 [3]: https://github.com/shanebdavis/Babel-Bridge
 [4]: https://github.com/laserlemon/figaro
+[5]: #get-apiv2runs
