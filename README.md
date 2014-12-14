@@ -157,9 +157,12 @@ looking for, you should instead use a classic retrieval route, documented below,
 recommended to use lookup routes to discover the same set of resources twice.
 
 #### GET [/api/v2/games][api-games-index]
+This endpoint has a special parameter `fuzzyname` which applies a string search to your query exactly like the one that
+happens at [splits.io/search][site-search]. The supplied string is surrounded with a wildcard on either side and that
+string is (case insensitively) searched for among game names. You cannot supply your own wildcards.
 
 ##### Parameters accepted
-`id`, `name`, `shortname`
+`id`, `name`, `shortname`, `fuzzyname`
 
 ##### Example request
 ```bash
@@ -196,6 +199,7 @@ curl splits.io/api/v2/games?shortname=tww
 ```
 
 [api-games-index]: http://splits.io/api/v2/games
+[site-search]: https://splits.io/search
 
 #### GET [/api/v2/categories][api-categories-index]
 
