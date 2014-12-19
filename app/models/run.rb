@@ -4,6 +4,7 @@ require 'time_split_tracker_parser'
 require 'wsplit_parser'
 
 class Run < ActiveRecord::Base
+  include PadawanRun
   include ActionView::Helpers::DateHelper
 
   belongs_to :user, touch: true
@@ -38,7 +39,8 @@ class Run < ActiveRecord::Base
         splits + [splits.pop.merge(
             duration: split[:duration],
             name: "#{skipped_split[:name]} + #{split[:name]}",
-            finish_time: split[:finish_time]
+            finish_time: split[:finish_time],
+            reduced: true
         )]
       else
         splits + [split]

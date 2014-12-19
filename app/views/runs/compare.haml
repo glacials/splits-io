@@ -1,26 +1,8 @@
-- title @run.name
 - short_run = @run.short? || @comparison_run.short?
 = render partial: 'twitter_card'
 
 %header
-  %h2= yield(:title)
-  %h5
-    %big
-      %a.stealth-link{href: run_path(@run)}
-        = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: short_run}
-    by
-    - if @run.user
-      %a.stealth-link{href: user_path(@run.user)}
-        #{@run.user.try(:name)}
-    - else
-      unknown
-
-- time_scale = [@run.time, @comparison_run.time].max
-= render partial: 'shared/timeline', locals: {run: @run, scale_to: time_scale}
-%hr{style: "margin: .5em"}
-= render partial: 'shared/timeline', locals: {run: @comparison_run, scale_to: time_scale}
-
-.container
+  %h3= @run.name
   %h5
     %big
       %a.stealth-link{href: run_path(@comparison_run)}
@@ -32,7 +14,46 @@
     - else
       unknown
 
-= render partial: 'shared/timeline_inspector', locals: {run: @run, scale_to: time_scale, overlap: true}
-= render partial: 'shared/timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale}
+- time_scale = [@run.time, @comparison_run.time].max
+= render partial: 'shared/timeline', locals: {run: @comparison_run, scale_to: time_scale}
+%hr{style: "margin: .5em; opacity: 0.25"}
+= render partial: 'shared/timeline', locals: {run: @run, scale_to: time_scale}
 
-%article &nbsp;
+.container
+  %h5
+    %big
+      %a.stealth-link{href: run_path(@run)}
+        = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: short_run}
+    by
+    - if @run.user
+      %a.stealth-link{href: user_path(@run.user)}
+        #{@run.user.try(:name)}
+    - else
+      unknown
+
+= render partial: 'shared/timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true}
+= render partial: 'shared/timeline_inspector', locals: {run: @run, scale_to: time_scale}
+
+%article
+  - if @run.belongs_to?(current_user) && @run.improvements_towards(@comparison_run)[:time_differences].present?
+    %h4 Next goals:
+    %ul.goals
+      - improvements = @run.improvements_towards(@comparison_run)[:time_differences].sort_by { |t| t[:time_difference] }.reverse[0..2]
+      - improvements.each do |improvement|
+        %li Shave #{pluralize(improvement[:time_difference]/2, "second")} off your #{improvement[:split][:name]}
+      - if @run.improvements_towards(@comparison_run)[:missed_splits].present?
+        %li Stop missing splits
+    %p
+      This will get you to a
+      = succeed(",") do
+        = render partial: 'shared/time', locals: {time: @run.time - improvements.sum { |i| i[:time_difference] / 2 }, show_milliseconds: false}
+      then we'll go from there.
+      - if @comparison_run.user.present?
+        %p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.uri.to_s, target: :_blank}!
+    %p
+      %small
+        Please note:
+        %ul
+          %li If these goals are too big, you may want to look at a rival more similar to yourself.
+          %li For these goals to make sense, you and your rival have to have similar splitting patterns.
+          %li While looking at these comparisons, please play #{link_to "this video", "https://www.youtube.com/watch?v=X-S_bSynIUY", target: :_blank} in the background for dramatic effect.

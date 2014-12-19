@@ -1,5 +1,5 @@
 - title "hello"
-.container
+%header
   %h2 splits i/o
   %h5
     upload
@@ -9,6 +9,7 @@
       %u all
     the splits
   = render partial: 'shared/alerts'
+.container
   - if user_signed_in? && current_user.runs.present?
     - cols = {with: [:owner_controls], without: [:runner]}
     - cache [:run_table, :v2, {user: current_user, cols: cols, page: params[:page] || 1}] do
