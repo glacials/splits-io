@@ -21,8 +21,11 @@ class LiveSplitParser < BabelBridge::Parser
   # then hands the rest of the XML off to the 1.2 function, which parses the rest as if it were 1.2 content.
 
   def v1_4(xml, run = {})
-    run[:splits] ||= []
-    run[:time]   ||= 0
+    run[:splits]  ||= []
+    run[:time]    ||= 0
+    run[:history] ||= xml['RunHistory'][0]['Time'].map do |t|
+      duration_in_seconds_of(t['RealTime'].try(:[], 0))
+    end.reject { |t| t == 0 }.uniq
     if run[:splits].empty?
       xml['Segments'][0]['Segment'].each do |segment|
         split = {}
