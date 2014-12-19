@@ -1,8 +1,8 @@
 - title(rand(100) == 0 ? @run.name.gsub("Star Fox Adventures", "Stair Fax Temperatures") : @run.name)
 = render partial: 'twitter_card'
 
-.container
-  %h2= yield(:title)
+%header
+  %h3= @run.name
   %h5= render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
   - if @run.user
     %h6
@@ -15,20 +15,21 @@
         &bull;
         %a{href: download_path(@run, program), onclick: 'hide_download_menu()'}= program
     %a.fake-link#download-link{onclick: 'toggle_download_menu()'} ↓ download
-    - if !@run.belongs_to?(current_user) && current_user.try(:runs?, @run.category)
-      |
-      %a{href: compare_path(@run, current_user.pb_for(@run.category))} compare to my pb
-    - if @run.best_known?
-      | ✓ best on record
-    - elsif @run.pb?
-      - if @run.belongs_to?(current_user)
+    - if @run.category
+      - if !@run.belongs_to?(current_user) && current_user.try(:runs?, @run.category)
         |
-        %a{href: compare_path(@run, @run.category.best_known_run)} compare to best on record
-      | ✓ pb
+        %a{href: compare_path(@run, current_user.pb_for(@run.category))} compare to my pb
+      - if @run.best_known?
+        | ✓ best on record
+      - elsif @run.pb?
+        - if @run.belongs_to?(current_user)
+          |
+          %a{href: compare_path(@run, @run.category.best_known_run)} compare to best on record
+        | ✓ pb
 
 = render partial: 'shared/timeline', locals: {run: @run}
 = render partial: 'shared/timeline_inspector', locals: {run: @run}
 
-.container
+%article
   - cache [:splits, :v1, @run] do
     = render partial: 'shared/split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}

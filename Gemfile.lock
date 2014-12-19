@@ -251,7 +251,7 @@ DEPENDENCIES
   rails_12factor (>= 0.0.2)
   redis-namespace
   redis-rails
-  rollbar (>= 1.2.6)
+  rollbar
   rubocop
   sass-rails (>= 4.0.0)
   slim-rails

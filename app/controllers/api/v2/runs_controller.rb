@@ -20,7 +20,6 @@ class Api::V2::RunsController < Api::V2::ApplicationController
         }
         return
       end
-      run.category = Game.where(name: run.parse[:game]).first_or_create.categories.where(name: run.parse[:category]).first_or_create
       run.save
     end
     head 201, location: api_v2_run_url(@record)

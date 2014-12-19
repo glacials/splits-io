@@ -1,7 +1,7 @@
 - scale_to ||= run.time
 - cache [:timeline, :v1, {run: run, scale_to: scale_to}] do
   - colors = [:blue, :purple, :green, :red, :orange, :yellow]
-  .timeline{style: "margin-bottom: 1em;"}
+  .timeline
     - run.reduced_splits.each_with_index do |split, index|
       .pure-u.split{id: "#{run.id}-split-#{index}", class: colors[index % colors.length], style: "width: #{split[:duration] / scale_to * 100}%;"}
         .title= split[:name]

@@ -5,7 +5,6 @@ class Category < ActiveRecord::Base
   before_create :autodetect_shortname
 
   def best_known_run
-    return nil if name.nil?
     runs.where("time != 0").order(:time).first
   end
 

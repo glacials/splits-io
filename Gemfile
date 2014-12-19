@@ -9,6 +9,7 @@ end
 
 group :production do
   gem 'pg', '>= 0.17.1'
+  gem 'rollbar'
 end
 
 gem 'babel_bridge',              '>= 0.5.3'
@@ -24,7 +25,6 @@ gem 'jquery-rails',              '>= 3.0.4'
 gem 'purecss-rails',             '>= 0.3.0'
 gem 'rails',                     '>= 4.0.0'
 gem 'rails_12factor',            '>= 0.0.2'
-gem 'rollbar',                   '>= 1.2.6'
 gem 'sass-rails',                '>= 4.0.0'
 gem 'spinjs-rails',              '>= 1.4'
 gem 'thin',                      '>= 1.6.3'

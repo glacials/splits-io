@@ -2,7 +2,7 @@
 - short_run = @run.short? || @comparison_run.short?
 = render partial: 'twitter_card'
 
-.container{style: "margin-bottom: .1em;"}
+%header
   %h2= yield(:title)
   %h5
     %big
@@ -17,9 +17,10 @@
 
 - time_scale = [@run.time, @comparison_run.time].max
 = render partial: 'shared/timeline', locals: {run: @run, scale_to: time_scale}
+%hr{style: "margin: .5em"}
 = render partial: 'shared/timeline', locals: {run: @comparison_run, scale_to: time_scale}
 
-.container{style: "margin-top: -.9em;"}
+.container
   %h5
     %big
       %a.stealth-link{href: run_path(@comparison_run)}
@@ -33,3 +34,5 @@
 
 = render partial: 'shared/timeline_inspector', locals: {run: @run, scale_to: time_scale, overlap: true}
 = render partial: 'shared/timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale}
+
+%article &nbsp;

@@ -1,7 +1,7 @@
 - scale_to ||= run.time
 - overlap ||= false
 - cache [:timeline_inspector, :v2, {run: run, scale_to: scale_to, overlap: overlap}] do
-  .timeline{style: "margin-bottom: 1em;", class: overlap ? 'absolute' : ''}
+  .timeline{style: "margin-top: 1em;", class: overlap ? 'absolute' : ''}
     - run.reduced_splits.each_with_index do |split, index|
       .pure-u.inspect{id: "#{run.id}-inspect-#{index}", style: "width: #{split[:duration] / scale_to * 100}%; opacity: 0;"}
         .bar

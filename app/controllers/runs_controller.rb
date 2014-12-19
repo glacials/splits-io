@@ -12,61 +12,32 @@ class RunsController < ApplicationController
   before_action :verify_ownership, only: [:disown, :delete]
   before_action :track_run_view, only: :show
 
+  def show
+  end
+
   def create
-    unless params[:file].present?
-      render :cant_parse
-      return
-    end
-    @run = Run.new(file: params[:file].read, user: current_user, image_url: params[:image_url])
-    if @run.parses?
-      game = Game.where(name: @run.parse[:game]).first_or_create
-      @run.category = game.categories.where(name: @run.parse[:category]).first_or_create
-      @run.save
-      respond_to do |format|
-        format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }
-        format.html { redirect_to run_path(@run) }
-      end
-    else
-      @run.destroy
-      respond_to do |format|
-        format.json { render json: {url: request.protocol + request.host_with_port + cant_parse_path} }
-        format.html { redirect_to cant_parse_path }
-      end
+    @run = Run.create(file: params[:file].read, user: current_user, image_url: params[:image_url])
+    respond_to do |format|
+      format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }
+      format.html { redirect_to run_path(@run) }
     end
     track! :upload
   end
 
   def download
-    file_extension = params[:program] == 'livesplit' ? 'lss' : params[:program]
-    if params[:program].to_sym == @run.program # If the original program was requested, serve the original file
-      send_data(HTMLEntities.new.decode(@run.file),
-                filename: "#{@run.to_param}.#{file_extension}",
-                layout: false)
-    else
-      send_data(HTMLEntities.new.decode(render_to_string(params[:program], layout: false)),
-                filename: "#{@run.to_param}.#{file_extension}",
-                layout: false)
-    end
+    send_data(
+      if params[:program] == @run.program.to_s
+        @run.file
+      else
+        render_to_string(params[:program], layout: false)
+      end,
+      filename: "#{@run.to_param}.#{params[:program] == 'livesplit' ? 'lss' : params[:program]}",
+      layout: false
+    )
   end
 
   def random
-    if Run.count == 0
-      redirect_to root_path, flash: {icon: 'exclamation-sign', alert: 'No runs exist yet!'}
-    else
-      @run = Run.offset(rand(Run.count)).first
-      redirect_to run_path(@run)
-    end
-  end
-
-  def disown
-    @run.user = nil
-    @run.save
-    redirect_to :back
-  end
-
-  def delete
-    @run.destroy
-    redirect_to :back, notice: 'Run deleted!'
+    redirect_to run_path(Run.offset(rand(Run.count)).first)
   end
 
   private
@@ -74,10 +45,7 @@ class RunsController < ApplicationController
   def set_run
     @run = Run.find_by(id: params[:id].to_i(36)) || Run.find_by(nick: params[:id])
     if @run.blank?
-      respond_to do |format|
-        format.json { render status: 404, json: {status: 404, error: "Run not found"} }
-        format.html { render :not_found, status: 404 }
-      end
+      render :not_found, status: 404
       return false
     end
   rescue ActionController::UnknownFormat
@@ -88,20 +56,14 @@ class RunsController < ApplicationController
     return if params[:comparison_run].blank?
     @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) || Run.find_by(nick: params[:comparison_run])
     if @run.blank? || @comparison_run.blank?
-      respond_to do |format|
-        format.json { head 404 }
-        format.html { render :not_found, status: 404 }
-      end
+      render :not_found, status: 404
       return false
     end
   end
 
   def verify_ownership
     unless @run.belongs_to?(current_user)
-      respond_to do |format|
-        format.json { render status: 401, json: {status: 401, error: "Unauthorized"} }
-        format.html { render :unauthorized, status: 401 }
-      end
+      render :unauthorized, status: 401
       return false
     end
   end

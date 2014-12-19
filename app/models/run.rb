@@ -5,6 +5,7 @@ require 'wsplit_parser'
 
 class Run < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
+
   belongs_to :user, touch: true
   belongs_to :category, touch: true
   has_one :game, through: :category
@@ -18,6 +19,11 @@ class Run < ActiveRecord::Base
   }
   @parse_cache = nil
 
+  validates :file, presence: true
+
+  before_create :populate_game
+  before_create :populate_category
+
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
   scope :without, ->(*columns) { select(column_names - columns.map(&:to_s)) }
@@ -29,9 +35,11 @@ class Run < ActiveRecord::Base
     splits.reduce([]) do |splits, split|
       if splits.last.try(:[], :duration) == 0
         skipped_split = splits.last
-        splits + [splits.pop.merge(duration:    split[:duration],
-                                   name:        "#{skipped_split[:name]} + #{split[:name]}",
-                                   finish_time: split[:finish_time])]
+        splits + [splits.pop.merge(
+            duration: split[:duration],
+            name: "#{skipped_split[:name]} + #{split[:name]}",
+            finish_time: split[:finish_time]
+        )]
       else
         splits + [split]
       end
@@ -76,23 +84,26 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    (Run.parsers[read_attribute(:program)].present? ? [Run.parsers[read_attribute(:program)]] : Run.parsers.values).each do |p|
-      result = p.new.parse(file)
+    if Run.parsers.keys.include?(read_attribute(:program))
+      [Run.parsers[read_attribute(:program)]]
+    else
+      Run.parsers.values
+    end.each do |parser|
+      result = parser.new.parse(file)
       next if result.blank?
-      result[:program] = p.name.sub('Parser', '').downcase.to_sym
+      result[:program] = parser.name.sub('Parser', '').downcase.to_sym
 
       # Set some db fields
       assign_attributes(program: result[:program])                                  if read_attribute(:program).blank?
       assign_attributes(time:    result[:splits].map { |s| s[:duration] }.sum.to_f) if read_attribute(:time).blank?
       assign_attributes(name:    result[:name])                                     if read_attribute(:name).blank?
-      save if changed?
 
       @parse_cache = result
       return result
     end
-    nil
+    {}
   rescue ArgumentError # comes from non UTF-8 files
-    nil
+    {}
   end
 
   def to_param
@@ -104,10 +115,24 @@ class Run < ActiveRecord::Base
   end
 
   def best_known?
-    category.best_known_run.nil? || time == category.best_known_run.time
+    category && time == category.best_known_run.time
   end
 
   def pb?
-    user.present? && time == user.pb_for(category).time
+    user && category && time == user.pb_for(category).time
+  end
+
+  private
+
+  def populate_game
+    if parse[:game].present?
+      Game.where(name: parse[:game]).first_or_create
+    end
+  end
+
+  def populate_category
+    if parse[:game].present? && parse[:category].present?
+      category = Game.find_by(name: parse[:game]).categories.where(name: parse[:category]).first_or_create
+    end
   end
 end
