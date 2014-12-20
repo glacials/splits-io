@@ -24,7 +24,7 @@
       - elsif @run.pb?
         - if @run.belongs_to?(current_user)
           |
-          %a{href: compare_path(@run.category.best_known_run, @run)} compare to best on record
+          %a{href: compare_path(@run, @run.category.best_known_run)} compare to best on record
         | ✓ pb
 
 = render partial: 'shared/timeline', locals: {run: @run}
