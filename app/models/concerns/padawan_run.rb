@@ -11,7 +11,7 @@ module PadawanRun
       return improvements if splits.size != better_run.splits.size
 
       reduced_splits.each.with_index do |split, i|
-        if better_run.reduced_splits[i][:duration] < split[:duration] - 2 && !split[:reduced]
+        if better_run.reduced_splits[i][:duration] < split[:duration] && !split[:reduced]
           improvements[:time_differences] << {split: split, time_difference: (split[:duration] - better_run.splits[i][:duration]).floor}
         elsif split[:reduced]
           improvements[:missed_splits] << {split: split}
