@@ -40,7 +40,7 @@ class Run < ActiveRecord::Base
             duration: split[:duration],
             name: "#{skipped_split[:name]} + #{split[:name]}",
             finish_time: split[:finish_time],
-            reduced: true
+            reduced?: true
         )]
       else
         splits + [split]
