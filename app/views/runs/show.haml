@@ -1,7 +1,7 @@
 - title(rand(100) == 0 ? @run.name.gsub("Star Fox Adventures", "Stair Fax Temperatures") : @run.name)
 = render partial: 'twitter_card'
 
-%header
+- content_for(:header) do
   %h3= @run.name
   %h5= render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
   - if @run.user

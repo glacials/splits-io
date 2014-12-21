@@ -1,5 +1,5 @@
 - title "hello"
-%header
+- content_for(:header) do
   %h2 splits i/o
   %h5
     upload
@@ -9,12 +9,14 @@
       %u all
     the splits
   = render partial: 'shared/alerts'
-.container
-  - if user_signed_in? && current_user.runs.present?
+- if user_signed_in? && current_user.runs.present?
+  %article
     - cols = {with: [:owner_controls], without: [:runner]}
     - cache [:run_table, :v2, {user: current_user, cols: cols, page: params[:page] || 1}] do
       = render partial: 'shared/run_table', locals: {runs: current_user.runs, cols: cols}
+- if user_signed_in?
+  %article
     %div{id: ab_test(:show_follows) ? "follows" : ""}
-  - else
-    Save your splits to a file using your favorite splitting program, then
-    drag that file anywhere on this page.
+- unless user_signed_in?
+  %article
+    Save your splits to a file using your favorite splitting program, then drag that file anywhere on this page.

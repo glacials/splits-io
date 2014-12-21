@@ -3,7 +3,7 @@
   %head
     %title
       splits.io:
-      = content_for(:title) || "splits i/o"
+      = yield(:title) || "a website"
     %link{href: '//fonts.googleapis.com/css?family=Open+Sans', rel: 'stylesheet', type: 'text/css'}/
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
     = stylesheet_link_tag 'application', media: :all
@@ -14,15 +14,27 @@
     #dropzone
       #dropzone-overlay.header{style: 'border: none;'}
         %h1#droplabel.inverted drop anywhere
-      %nav
-        - page = {upload: request.path == new_run_path, search: request.path.match(search_path), faq: request.path == faq_path}
-        %a.blue{href: root_path, class: page.values.all? { |p| !p } ? 'logo' : ''} splits i/o
-        %a.purple{href: new_run_path, class: page[:upload] ? 'logo' : ''} upload
-        %a.green{href: search_path, class: page[:search] ? 'logo' : ''} search
-        %a.red{href: faq_path, class: page[:faq] ? 'logo' : ''} faq
-        - if user_signed_in?
-          %a#sign-out.orange{href: signout_path} sign out
-        - else
-          %a#sign-in.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
+      %header
+        %nav
+          - page = {upload: request.path == new_run_path, search: request.path.match(search_path), faq: request.path == faq_path, profile: user_signed_in? && request.path == user_path(current_user)}
+          %a.blue{href: root_path, class: page.values.all? { |p| !p } ? 'logo' : ''} splits i/o
+          %a.purple{href: new_run_path, class: page[:upload] ? 'logo' : ''} upload
+          %a.green{href: search_path, class: page[:search] ? 'logo' : ''} search
+          %a.red{href: faq_path, class: page[:faq] ? 'logo' : ''} faq
+          - if user_signed_in?
+            .dropdown{href: "#"}
+              %a.orange.dropdown-toggle.fake-link{id: :user_nav, data: {toggle: :dropdown}, class: page[:profile] ? 'logo' : ''}
+                %small ∨
+                #{current_user.name}
+              %ul.dropdown-menu{role: :menu, aria: {labelledby: :user_nav}}
+                %li{role: :presentation}
+                  = link_to "profile", user_path(current_user)
+                  = link_to "sign out", signout_path
+          - else
+            %a#sign-in.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
+        = yield(:header)
       = yield
+      %footer
+        &nbsp;
+        = yield(:footer)
   = javascript_include_tag 'application'

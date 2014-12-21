@@ -1,10 +1,11 @@
 - title @user.name
-.container
-  %h2= content_for(:title)
+- content_for(:header) do
+  %h2= @user.name
   %h6
     %a#twitch-channel{href: @user.uri, target: :_blank}= @user.uri.to_s.gsub('http://www.', '')
   %h6
     = @user.games.reject { |game| game.name.blank? }.map { |game| game.shortname || game.name }.join(", ")
+%article
   - cols = {without: [:runner]}
   - cache [:run_table, :v3, {user: @user, cols: cols, page: params[:page] || 1}] do
     = render partial: 'shared/run_table', locals: {runs: @user.runs, cols: cols}

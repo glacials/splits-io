@@ -1,6 +1,7 @@
 - title "why"
-.container
-  %h2= content_for(:title)
+- content_for(:header) do
+  %h2 why
+%article
   .question
     %h4 Run permalinks
     %p
@@ -46,7 +47,7 @@
     %p
       If you have any thoughts about any of this, or you have a run that you strongly feel should not have its URL
       changed, let me know and we can talk it out.
-  %hr
+- content_for(:footer) do
   %h4 My door is always open
   %h5
     because that dang top hinge fell off last week and the bottom one was too rusted to pick up the slack and the

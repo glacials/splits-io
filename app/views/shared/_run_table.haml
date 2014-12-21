@@ -32,8 +32,8 @@
                 .dropdown-toggle{id: [:dropdown, run.id], style: "cursor: pointer; color: #a33;", data: {toggle: :dropdown}} x
                 %ul.dropdown-menu{role: :menu, aria: {labelledby: "dropdown_#{run.id}"}}
                   %li{role: :presentation}
-                    %a.dropdown-header{role: :menuitem, tabindex: -1, href: "#", onclick: "window.disown_run({id: #{run.id}});"} Disown
-                    %a.dropdown-header{role: :menuitem, tabindex: -1, href: "#", onclick: "window.delete_run({id: #{run.id}});"} Delete
+                    %a.red.dropdown-header{role: :menuitem, tabindex: -1, href: "#", onclick: "window.disown_run({id: #{run.id}});"} Disown
+                    %a.red.dropdown-header{role: :menuitem, tabindex: -1, href: "#", onclick: "window.delete_run({id: #{run.id}});"} Delete
           - if cols.include?(:runner)
             %td.align-right
               - if run.user && run.user.name

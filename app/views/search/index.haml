@@ -1,8 +1,9 @@
 - title "search"
-.container
-  %h2= content_for(:title)
+- content_for(:header) do
+  %h2 search
   %h5 find your soulmate splits
   = render partial: 'shared/alerts'
+%article
   .row
     .col-md-6
       %form#search.form-search{action: search_path, method: :get}
@@ -11,7 +12,8 @@
           %input.form-control{type: :text, name: :q, autofocus: true, placeholder: "e.g. #{placeholder.name}, or #{placeholder.shortname}", value: @query}
           %span.input-group-btn
             %button.btn.btn-default{type: :submit} search
-  - if @query || @result
+- if @query || @result
+  %article
     %h4 Users
     - if @result[:users].present?
       %table.table.table-striped
@@ -22,6 +24,7 @@
                 %a{href: user_path(user)}= user.name
     - else
       %i (none found)
+  %article
     %h4 Games
     - if @result[:games].present?
       %table.table.table-striped
@@ -35,5 +38,6 @@
                   = game.categories.pluck(:name).join(', ')
     - else
       %i (none found)
+  %article
     %h4 Runs
     = render partial: 'shared/run_table', locals: {runs: @result[:runs]}

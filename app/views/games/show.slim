@@ -1,9 +1,9 @@
 - title @game.name
-.container
+- content_for(:header) do
   h2 = content_for(:title)
   h5 a speedgame
   = render partial: 'shared/alerts'
-.container
+article
   - @game.categories.each do |category|
     - cache [:category_portrait, :v1, {category: category}] do
       - if category.best_known_run

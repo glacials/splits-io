@@ -5,20 +5,34 @@
 @import bootstrap
 @import tipsy
 
+@import dropdown
+@import navigation
+
+hr
+  border-top: 1px dashed #ddd
+  margin: none
+  width: 100%
+
 ul.goals
   list-style: none
-
-header
-  @extend .container
-  border-color: #ccc
-  border-style: dashed
-  border-width: 1px 1px 0 1px
-  margin-top: 1em
 
 article
   @extend .container
   border-color: #ccc
   border-style: dashed
+  border-width: 0 1px
+  margin: 1em auto 0
+  padding: 0 1em
+
+header
+  @extend .container
+  @extend article
+  border-width: 1px 1px 0 1px
+  padding-right: 0
+
+footer
+  @extend .container
+  @extend article
   border-width: 0 1px 1px 1px
 
 .stealth-link
@@ -127,20 +141,6 @@ code
     &:hover
       text-decoration: none
 
-nav
-  @extend .pull-right
-
-nav a
-  background-color: #f1f1f1
-  color: #777
-  display: inline-block
-  letter-spacing: -1px
-  margin-left: -.3em
-  padding: 10px
-  &:hover
-    background-color: #777
-    color: #fff
-
 .logo
   color: #f1f1f1
   display: inline-block
@@ -154,9 +154,6 @@ th a
   color: #333
   &:hover
     color: #0e90d2
-
-form
-  margin: 2em 0
 
 tr[href]
   cursor: pointer
@@ -229,21 +226,6 @@ a
 
 .align-left
   text-align: left
-
-footer
-  color: #777
-  position: absolute
-  bottom: 0
-  font-size: .7em
-  margin: auto
-  text-align: right
-  width: 100%
-  a
-    color: #777
-    text-decoration: none
-    &:hover
-      color: #777
-      text-decoration: underline
 
 .timeline
   @extend .pure-g
