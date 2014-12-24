@@ -1,7 +1,7 @@
 - short_run = @run.short? || @comparison_run.short?
 = render partial: 'twitter_card'
 
-%header
+- content_for(:header) do
   %h3= @run.name
   %h5
     %big
