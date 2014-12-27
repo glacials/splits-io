@@ -22,8 +22,7 @@ class Run < ActiveRecord::Base
 
   validates :file, presence: true
 
-  before_create :populate_game
-  before_create :populate_category
+  before_save :populate_category
 
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
@@ -124,17 +123,9 @@ class Run < ActiveRecord::Base
     user && category && time == user.pb_for(category).time
   end
 
-  private
-
-  def populate_game
-    if parse[:game].present?
-      Game.where(name: parse[:game]).first_or_create
-    end
-  end
-
   def populate_category
-    if parse[:game].present? && parse[:category].present?
-      category = Game.find_by(name: parse[:game]).categories.where(name: parse[:category]).first_or_create
+    if category.blank? && parse[:game].present?
+      self.category = Game.where(name: parse[:game]).first_or_create.categories.where(name: parse[:category]).first_or_create
     end
   end
 end
