@@ -123,6 +123,8 @@ class Run < ActiveRecord::Base
     user && category && time == user.pb_for(category).time
   end
 
+  private
+
   def populate_category
     if category.blank? && parse[:game].present?
       self.category = Game.where(name: parse[:game]).first_or_create.categories.where(name: parse[:category]).first_or_create
