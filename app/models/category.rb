@@ -3,6 +3,7 @@ class Category < ActiveRecord::Base
   has_many :runs
 
   before_create :autodetect_shortname
+  after_touch :destroy, if: Proc.new { |category| category.runs.count.zero? }
 
   def best_known_run
     runs.where("time != 0").order(:time).first
