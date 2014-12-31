@@ -116,7 +116,7 @@ class Run < ActiveRecord::Base
   end
 
   def best_known?
-    category && time == category.best_known_run.time
+    category && time == category.best_known_run.try(:time)
   end
 
   def pb?
