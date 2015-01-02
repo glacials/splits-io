@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   end
 
   def pbs
-    runs.where(id: runs.group(:category_id).map do |run|
+    runs.where(id: runs.select('distinct category_id').map do |run|
       pb_for(run.category)
     end.map(&:id))
   end
