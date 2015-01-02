@@ -12,10 +12,7 @@ class TwitchController < ApplicationController
 
   def in
     if params['error'] == 'access_denied'
-      redirect_to root_path, flash: {
-        icon: 'remove',
-        notice: 'Woops, you denied access. That\'s okay, you can still upload runs anonymously.'
-      }
+      redirect_to root_path, notice: 'Woops, you denied access. That\'s okay, you can still upload runs anonymously.'
       return
     end
 
@@ -24,7 +21,7 @@ class TwitchController < ApplicationController
 
     user = User.find_by(twitch_id: response['_id']) || User.new
     user.twitch_token = token
-    user.load_from_twitch
+    user.load_from_twitch(response)
     user.save
 
     sign_in(:user, user)
@@ -37,6 +34,9 @@ class TwitchController < ApplicationController
     else
       redirect_to root_path, flash: flash
     end
+  rescue HTTParty::ResponseError, SocketError => e
+    redirect_to root_path,
+      alert: "Couldn't communicate with Twitch to get your account info (#{e.class.to_s.demodulize}). Please try again."
   end
 
   private

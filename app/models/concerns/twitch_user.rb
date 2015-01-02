@@ -4,8 +4,10 @@ module TwitchUser
   extend ActiveSupport::Concern
 
   included do
-    def load_from_twitch
-      response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{twitch_token}")
+    def load_from_twitch(response = nil)
+      response ||= HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{twitch_token}")
+
+      raise HTTParty::ResponseError.new(response) unless response.success?
 
       self.twitch_id = response["_id"]
       self.email = response["email"]
