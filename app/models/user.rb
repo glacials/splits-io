@@ -25,6 +25,12 @@ class User < ActiveRecord::Base
     runs.where(category: category).order(:time).first
   end
 
+  def pbs
+    runs.where(id: runs.group(:category_id).map do |run|
+      pb_for(run.category)
+    end.map(&:id))
+  end
+
   def runs?(category)
     runs.where(category: category).present?
   end

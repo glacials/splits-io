@@ -12,8 +12,8 @@
 - if user_signed_in? && current_user.runs.present?
   %article
     - cols = {with: [:owner_controls], without: [:runner]}
-    - cache [:run_table, :v2, {user: current_user, cols: cols, page: params[:page] || 1}] do
-      = render partial: 'shared/run_table', locals: {runs: current_user.runs, cols: cols}
+    - cache [:run_table, :v3, {user: current_user, cols: cols, page: params[:page] || 1}, order: [params[:by], params[:order]]] do
+      = render partial: 'shared/run_table', locals: {runs: current_user.pbs, cols: cols}
 - if user_signed_in?
   %article
     %div{id: ab_test(:show_follows) ? "follows" : ""}

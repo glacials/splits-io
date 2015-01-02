@@ -7,5 +7,5 @@
     = @user.games.reject { |game| game.name.blank? }.map { |game| game.shortname || game.name }.join(", ")
 %article
   - cols = {without: [:runner]}
-  - cache [:run_table, :v3, {user: @user, cols: cols, page: params[:page] || 1}] do
-    = render partial: 'shared/run_table', locals: {runs: @user.runs, cols: cols}
+  - cache [:run_table, :v3, {user: @user, cols: cols, page: params[:page] || 1}, order: [params[:by], params[:order]]] do
+    = render partial: 'shared/run_table', locals: {runs: @user.pbs, cols: cols}
