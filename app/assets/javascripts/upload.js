@@ -14,7 +14,7 @@ $(function () {
           url: xhr.getResponseHeader("Location"),
           type: "GET",
           success: function (data, textStatus, xhr) {
-            window.location = data.run.id.toString(36);
+            window.location = "/" + data.run.id.toString(36);
           }
         });
       },
