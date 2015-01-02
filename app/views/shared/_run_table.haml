@@ -14,15 +14,15 @@
           %th.align-right
         - if cols.include?(:runner)
           %th.align-right
-            %a{href: "?#{params.except(:controller, :action).merge(by: :user_id, order: params[:by] == 'user_id' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Runner
+            %a{href: "?#{{by: :user_id, order: (params[:by] == 'user_id' && params[:order] == 'asc') ? :desc : :asc}.to_param}"} Runner
         - if cols.include?(:time)
           %th.align-right
-            %a{href: "?#{params.except(:controller, :action).merge(by: :time, order: params[:by] == 'time' && params[:order] == 'asc' ? :desc : :asc).to_param}"} Time
+            %a{href: "?#{{by: :time, order: (params[:by] == 'time' && params[:order] == 'asc') ? :desc : :asc}.to_param}"} Time
         - if cols.include?(:name)
           %th Name
         - if cols.include?(:uploaded)
           %th.align-right
-            %a{href: "?#{params.except(:controller, :action).merge(by: :created_at, order: params[:by] == 'created_at' && params[:order] == 'desc' ? :asc : :desc).to_param}"} Uploaded
+            %a{href: "?#{{by: :created_at, order: (params[:by] == 'created_at' && params[:order] == 'desc') ? :asc : :desc}.to_param}"} Uploaded
     %tbody
       - runs.each do |run|
         %tr{id: [:run, run.id]}
