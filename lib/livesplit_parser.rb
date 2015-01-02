@@ -23,7 +23,7 @@ class LiveSplitParser < BabelBridge::Parser
   def v1_4(xml, run = {})
     run[:splits]  ||= []
     run[:time]    ||= 0
-    run[:history] ||= xml['RunHistory'][0]['Time'].map do |t|
+    run[:history] ||= (xml['RunHistory'][0]['Time'] || []).map do |t|
       duration_in_seconds_of(t['RealTime'].try(:[], 0))
     end.reject { |t| t == 0 }.uniq
     if run[:splits].empty?
