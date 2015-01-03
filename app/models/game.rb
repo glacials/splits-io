@@ -10,6 +10,6 @@ class Game < ActiveRecord::Base
   end
 
   def to_param
-    shortname || name.downcase.gsub(' ', '+')
+    shortname || name.downcase.gsub(' ', '+').gsub(/\..*/, '')
   end
 end
