@@ -36,10 +36,10 @@ class Run < ActiveRecord::Base
       if splits.last.try(:[], :duration) == 0
         skipped_split = splits.last
         splits + [splits.pop.merge(
-            duration: split[:duration],
-            name: "#{skipped_split[:name]} + #{split[:name]}",
-            finish_time: split[:finish_time],
-            reduced?: true
+          duration: split[:duration],
+          name: "#{skipped_split[:name]} + #{split[:name]}",
+          finish_time: split[:finish_time],
+          reduced?: true
         )]
       else
         splits + [split]

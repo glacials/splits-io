@@ -44,11 +44,14 @@ class WSplitParser < BabelBridge::Parser
   end
 
   def parse_split(split, prev_split_finish_time)
-    {
+    split = {
       best: {duration: split.best_time.to_s.to_f},
       name: split.title.to_s,
       duration: split.finish_time.to_s.to_f - prev_split_finish_time,
       finish_time: split.finish_time.to_s.to_f
     }
+    split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best][:duration].try(:round, 5)
+    split[:skipped?] = split[:duration] == 0
+    split
   end
 end

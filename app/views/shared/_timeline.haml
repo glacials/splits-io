@@ -1,5 +1,5 @@
 - scale_to ||= run.time
-- cache [:timeline, :v1, {run: run, scale_to: scale_to}] do
+- cache [:timeline, :v3, {run: run, scale_to: scale_to}] do
   - colors = [:blue, :purple, :green, :red, :orange, :yellow]
   .timeline
     - run.reduced_splits.each_with_index do |split, index|

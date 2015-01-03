@@ -41,6 +41,8 @@ class LiveSplitParser < BabelBridge::Parser
         best_segment = segment['BestSegmentTime'][0]['RealTime'].try(:[], 0)
         best_segment = best_segment[0] if best_segment.is_a?(Hash)
         split[:best][:duration] = duration_in_seconds_of(best_segment)
+        split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
+        split[:skipped?] = split[:duration] == 0
 
         run[:time] += split[:duration] if split[:duration].present?
         run[:splits] << split
@@ -69,6 +71,8 @@ class LiveSplitParser < BabelBridge::Parser
         best_segment = segment['BestSegmentTime'][0]
         best_segment = best_segment[0] if best_segment.is_a?(Hash)
         split[:best][:duration] = duration_in_seconds_of(best_segment)
+        split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
+        split[:skipped?] = split[:duration] == 0
 
         run[:time] += split[:duration] if split[:duration].present?
         run[:splits] << split
@@ -97,6 +101,8 @@ class LiveSplitParser < BabelBridge::Parser
         split[:duration] = split[:finish_time] - run[:time]
         split[:duration] = 0 if split[:duration] < 0
         split[:best][:duration] = duration_in_seconds_of(segment['BestSegmentTime'][0])
+        split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
+        split[:skipped?] = split[:duration] == 0
 
         run[:time] += split[:duration] if split[:duration].present?
         run[:splits] << split

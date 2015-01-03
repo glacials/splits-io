@@ -1,0 +1,8 @@
+- scale_to ||= run.time
+- cache [:gold_timeline, :v3, {run: run, scale_to: scale_to}] do
+  .gold.timeline
+    - run.reduced_splits.each_with_index do |split, index|
+      .pure-u.split{style: "width: #{split[:duration] / scale_to * 100}%;"}
+        .gold-split{style: "width: #{split[:best][:duration] / split[:duration] * 100}%;", class: split[:gold?] ? :gold : :gray}
+    - if run.time < scale_to
+      .pure-u.split.disabled{style: "width: #{(scale_to - run.time) / scale_to * 100}%;"}
