@@ -5,6 +5,7 @@ require 'wsplit_parser'
 
 class Run < ActiveRecord::Base
   include PadawanRun
+  include ForgetfulPersonsRun
   include ActionView::Helpers::DateHelper
 
   belongs_to :user, touch: true
@@ -28,24 +29,6 @@ class Run < ActiveRecord::Base
   scope :by_category, ->(category) { where(category: category) }
   scope :without, ->(*columns) { select(column_names - columns.map(&:to_s)) }
   scope :nonempty, -> { where("time != 0") }
-
-  # Takes care of skipped (e.g. missed) splits. If a run has no skipped splits, this method just returns `splits`.
-  # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped.
-  def reduced_splits
-    splits.reduce([]) do |splits, split|
-      if splits.last.try(:[], :duration) == 0
-        skipped_split = splits.last
-        splits + [splits.pop.merge(
-          duration: split[:duration],
-          name: "#{skipped_split[:name]} + #{split[:name]}",
-          finish_time: split[:finish_time],
-          reduced?: true
-        )]
-      else
-        splits + [split]
-      end
-    end
-  end
 
   def belongs_to?(user)
     user.present? && self.user == user
