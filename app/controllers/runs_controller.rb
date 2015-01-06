@@ -16,7 +16,7 @@ class RunsController < ApplicationController
   end
 
   def create
-    @run = Run.create(file: params[:file].read, user: current_user, image_url: params[:image_url])
+    @run = Run.create(file: params[:file].try(:read), user: current_user, image_url: params[:image_url])
     respond_to do |format|
       format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }
       format.html { redirect_to run_path(@run) }
