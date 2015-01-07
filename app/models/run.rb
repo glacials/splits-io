@@ -110,7 +110,8 @@ class Run < ActiveRecord::Base
 
   def populate_category
     if category.blank? && parse[:game].present?
-      self.category = Game.where(name: parse[:game]).first_or_create.categories.where(name: parse[:category]).first_or_create
+      game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
+      self.category = game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
     end
   end
 end
