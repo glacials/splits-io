@@ -14,7 +14,7 @@ class Category < ActiveRecord::Base
   end
 
   def to_param
-    shortname || id.to_s
+    id.to_s
   end
 
   def autodetect_shortname
@@ -22,5 +22,9 @@ class Category < ActiveRecord::Base
       "any%" => "anypct",
       "100%" => "100pct",
     }[name.try(:downcase)]
+  end
+
+  def shortname
+    name.downcase.gsub(/ *%/, 'pct').gsub(/ +/, "-")
   end
 end

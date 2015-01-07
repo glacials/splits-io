@@ -4,13 +4,17 @@
   h5 a speedgame
   = render partial: 'shared/alerts'
 article
-  - @game.categories.each do |category|
-    - cache [:category_portrait, :v1, {category: category}] do
-      - if category.best_known_run
-        .well.col-xl-2.col-lg-3.col-md-4.col-sm-5 style="margin: .5em;"
-          a href=category_path(@game, category)
-            h4 = category.name
-          small
-            = render partial: 'shared/time', locals: {time: category.best_known_run.time, show_milliseconds: false}
-            | best on record
-
+  ul.nav.nav-tabs role='tablist'
+    - category = @game.categories.first
+    li.active
+      a href="##{category.shortname}" id="#{category.shortname}-tab" role='tab' aria-controls=category.shortname data-toggle='tab' = @game.categories[0]
+    - @game.categories[1..-1].each do |category|
+      li
+        a href="##{category.shortname}" id="#{category.shortname}-tab" role='tab' aria-controls=category.shortname data-toggle='tab' = category
+article
+  .tab-content
+    .tab-pane.active id=category.shortname role='tabpanel' aria-labelledby="#{category.shortname}-tab"
+      = render partial: 'shared/run_table', locals: {runs: category.runs}
+    - @game.categories[1..-1].each do |category|
+      .tab-pane id=category.shortname role='tabpanel' aria-labelledby="#{category.shortname}-tab"
+        = render partial: 'shared/run_table', locals: {runs: category.runs}
