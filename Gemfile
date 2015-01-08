@@ -14,7 +14,6 @@ end
 
 gem 'babel_bridge',              '>= 0.5.3'
 gem 'coffee-rails',              '>= 4.0.0'
-gem 'delayed_job_active_record', '>= 4.0.2'
 gem 'devise',                    '>= 3.1.1'
 gem 'figaro',                    '>= 1.0.0.rc1'
 gem 'gon',                       '>= 5.1.2'
@@ -43,3 +42,5 @@ gem 'slim-rails'
 gem 'haml-rails'
 gem 'active_model_serializers'
 gem 'httparty'
+gem 'delayed_job_active_record'
+gem 'foreman'

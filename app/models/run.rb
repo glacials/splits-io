@@ -84,7 +84,7 @@ class Run < ActiveRecord::Base
 
       # temporary; re-determine game/category from splits because of a db screwup i made
       if category.try(:name).try(:downcase) != result[:category].try(:downcase) || game.try(:name).try(:downcase) != result[:game].try(:downcase)
-        populate_category
+        populate_category(true)
         save
       end
 
@@ -114,8 +114,8 @@ class Run < ActiveRecord::Base
 
   private
 
-  def populate_category
-    if category.blank? && parse[:game].present?
+  def populate_category(force = false)
+    if force || (category.blank? && parse[:game].present?)
       game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
       self.category = game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
     end

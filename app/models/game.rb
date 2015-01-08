@@ -4,6 +4,8 @@ class Game < ActiveRecord::Base
   has_many :categories
   has_many :runs, through: :categories
 
+  before_save :sync_with_srl
+
   after_touch :destroy, if: Proc.new { |game| game.categories.count.zero? }
 
   def self.search(term)
@@ -15,12 +17,12 @@ class Game < ActiveRecord::Base
     shortname || name.downcase.gsub(' ', '+').gsub(/\..*/, '')
   end
 
-  def fetch_srl_info
+  def sync_with_srl
     return if srl_id.present? && shortname.present?
     game = ::SpeedRunsLive.game(name)
     return if game.nil?
 
     assign_attributes(srl_id: game['id'].to_i, shortname: game['abbrev'])
-  rescue SocketError
   end
+  handle_asynchronously :sync_with_srl
 end
