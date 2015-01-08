@@ -3,10 +3,11 @@
 
 - content_for(:header) do
   %h3= @run.name
-  %h5= render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
-  - if @run.user
-    %h6
-      %a#twitch-channel{href: @run.user.uri, target: :_blank}= @run.user.uri.to_s.gsub('http://www.', '')
+  %h5
+    = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
+    - if @run.user
+      %small
+        by #{link_to @run.user.name, user_path(@run.user), class: 'stealth-link user-link'}
   = render partial: 'shared/alerts'
   %h6
     %span#download-menu

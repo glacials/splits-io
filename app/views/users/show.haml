@@ -4,7 +4,8 @@
   %h6
     %a#twitch-channel{href: @user.uri, target: :_blank}= @user.uri.to_s.gsub('http://www.', '')
   %h6
-    = @user.games.reject { |game| game.name.blank? }.map { |game| game.shortname || game.name }.join(", ")
+    - @user.games.each do |game|
+      = link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
 %article
   - cols = {without: [:runner]}
   - cache [:run_table, :v3, {user: @user, cols: cols, page: params[:page] || 1}, order: [params[:by], params[:order]]] do

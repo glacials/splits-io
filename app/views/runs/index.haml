@@ -4,7 +4,7 @@
   %h5
     upload
     - if user_signed_in? && current_user.name.present?
-      %a{href: user_path(current_user)} all
+      = link_to 'all', user_path(current_user), class: 'user-link'
     - else
       %u all
     the splits

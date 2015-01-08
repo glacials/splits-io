@@ -5,9 +5,19 @@
 @import bootstrap
 @import tipsy
 
+$blue: #0e90d2
+$purple: #8057a5
+$green: #5eb95e
+$red: #dd514c
+$orange: #f37b1d
+$yellow: #fad232
+
+$gold: #ffd700
+
 @import dropdown
 @import navigation
 @import tabs
+@import links
 
 hr
   border-top: 1px dashed #ddd
@@ -38,11 +48,9 @@ footer
 
 .stealth-link
   color: #333
-  &:hover
-    color: #dd514c
 
 .gold-split
-  background: #ffd700
+  background: $gold
   cursor: default
   display: inline-block
   height: .9em
@@ -50,7 +58,7 @@ footer
   width: .45em
 
 .split > .gold-split.gold
-  background-color: #ffd700
+  background-color: $gold
   height: .35em
   margin: 0
   padding: 0
@@ -257,64 +265,64 @@ a
   white-space: nowrap
 
 .blue
-  background: #0e90d2
+  background: $blue
   nav &
     background: #f1f1f1
     &:hover
-      background: #0e90d2
+      background: $blue
       color: #f1f1f1
     &.logo
-      background: #0e90d2
+      background: $blue
 
 .purple
-  background: rgb(128, 88, 165)
+  background: $purple
   nav &
     background: #f1f1f1
     &:hover
-      background: rgb(128, 88, 165)
+      background: $purple
       color: #f1f1f1
     &.logo
-      background: rgb(128, 88, 165)
+      background: $purple
 
 .green
-  background: #5eb95e
+  background: $green
   nav &
     background: #f1f1f1
     &:hover
-      background: #5eb95e
+      background: $green
       color: #f1f1f1
     &.logo
-      background: #5eb95e
+      background: $green
 
 .red
-  background: #dd514c
+  background: $red
   nav &
     background: #f1f1f1
     &:hover
-      background: #dd514c
+      background: $red
       color: #f1f1f1
     &.logo
-      background: #dd514c
+      background: $red
 
 .yellow
-  background: rgb(250, 210, 50)
+  background: $yellow
   nav &
     background: #f1f1f1
     &:hover
-      background: rgb(250, 210, 50)
+      background: $yellow
       color: #f1f1f1
     &.logo
-      background: rgb(250, 210, 50)
+      background: $yellow
 
 .orange
-  background: rgb(243, 123, 29)
+  background: $orange
   nav &
     background: #f1f1f1
     &:hover
-      background: rgb(243, 123, 29)
+      background: $orange
       color: #f1f1f1
     &.logo
-      background: rgb(243, 123, 29)
+      background: $orange
 
 .blank
   background: rgba(255, 255, 255, 0)

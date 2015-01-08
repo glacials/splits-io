@@ -43,8 +43,7 @@
           - if cols.include?(:time)
             %td.align-right= render partial: 'shared/time', locals: {time: run.time, show_milliseconds: false}
           - if cols.include?(:name)
-            %td
-              %a{href: run_path(run)}= run.name
+            %td= link_to run.name, run_path(run), class: 'run-link'
           - if cols.include?(:uploaded)
             %td.align-right{title: run.created_at}= "#{run.time_since_upload} ago"
   .center= will_paginate(runs)
