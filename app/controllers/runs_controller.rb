@@ -19,7 +19,7 @@ class RunsController < ApplicationController
   def index
     # temporary
     if user_logged_in?
-      current_user.runs.each do |run|
+      current_user.runs.without(:file).each do |run|
         run.delay.refresh_from_file
       end
     end

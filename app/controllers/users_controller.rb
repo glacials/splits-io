@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   def show
     # temporary
-    @user.runs.each do |run|
+    @user.runs.without(:file).each do |run|
       run.delay.refresh_from_file
     end
   end

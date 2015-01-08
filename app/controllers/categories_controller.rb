@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
 
   def show
     # temporary
-    @category.runs.each do |run|
+    @category.runs.without(:file).each do |run|
       run.delay.refresh_from_file
     end
   end
