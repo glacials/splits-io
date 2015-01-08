@@ -2,6 +2,10 @@ class UsersController < ApplicationController
   before_action :set_user, only: :show
 
   def show
+    # temporary
+    @user.runs.each do |run|
+      run.delay.refresh_from_file
+    end
   end
 
   def follows

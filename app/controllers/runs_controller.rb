@@ -16,6 +16,15 @@ class RunsController < ApplicationController
     @run.delay.refresh_from_file
   end
 
+  def index
+    # temporary
+    if user_logged_in?
+      current_user.runs.each do |run|
+        run.delay.refresh_from_file
+      end
+    end
+  end
+
   def create
     @run = Run.create(file: params[:file].try(:read), user: current_user, image_url: params[:image_url])
     respond_to do |format|
