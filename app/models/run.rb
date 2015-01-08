@@ -84,8 +84,7 @@ class Run < ActiveRecord::Base
 
       # temporary; re-determine game/category from splits because of a db screwup i made
       if category.try(:name).try(:downcase) != result[:category].try(:downcase) || game.try(:name).try(:downcase) != result[:game].try(:downcase)
-        delay.populate_category(true)
-        save
+        delay.refresh_from_file
       end
 
       @parse_cache = result
@@ -112,10 +111,17 @@ class Run < ActiveRecord::Base
     user && category && time == user.pb_for(category).time
   end
 
-  def populate_category(force = false)
-    if force || (category.blank? && parse[:game].present?)
+  def populate_category()
+    if (category.blank? && parse[:game].present?)
       game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
       self.category = game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
     end
+  end
+
+  def refresh_from_file
+    game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
+    update_attributes(
+      category: game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
+    )
   end
 end
