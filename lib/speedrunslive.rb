@@ -4,5 +4,7 @@ class SpeedRunsLive
       uri.query = {search: name}.to_param
     end) || {'games' => []}
     )['games'].select { |game| game['name'] == name }[0]
+  rescue Errno::ETIMEDOUT
+    nil
   end
 end
