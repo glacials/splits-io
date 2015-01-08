@@ -4,8 +4,6 @@ class Game < ActiveRecord::Base
   has_many :categories
   has_many :runs, through: :categories
 
-  before_save :fetch_srl_info
-
   after_touch :destroy, if: Proc.new { |game| game.categories.count.zero? }
 
   def self.search(term)
