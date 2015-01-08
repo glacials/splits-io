@@ -21,7 +21,7 @@
           - @result[:users].find_each do |user|
             %tr
               %td
-                %a{href: user_path(user)}= user.name
+                = link_to user, user_path(user), class: 'user-link'
     - else
       %i (none found)
   %article
@@ -32,7 +32,7 @@
           - @result[:games].each do |game|
             %tr
               %td
-                %a{href: game_path(game)}= game.name
+                = link_to game, game_path(game), class: 'game-link'
                 %small.pull-right
                   Categories:
                   = game.categories.pluck(:name).join(', ')

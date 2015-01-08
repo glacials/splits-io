@@ -25,4 +25,8 @@ class Game < ActiveRecord::Base
     assign_attributes(srl_id: game['id'].to_i, shortname: game['abbrev'])
   end
   handle_asynchronously :sync_with_srl
+
+  def to_s
+    name
+  end
 end

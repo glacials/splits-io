@@ -34,4 +34,8 @@ class User < ActiveRecord::Base
   def runs?(category)
     runs.where(category: category).present?
   end
+
+  def to_s
+    name
+  end
 end

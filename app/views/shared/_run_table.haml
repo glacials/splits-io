@@ -37,7 +37,7 @@
           - if cols.include?(:runner)
             %td.align-right
               - if run.user && run.user.name
-                %a{href: user_path(run.user)}= run.user.try(:name)
+                = link_to run.user, user_path(run.user), class: 'user-link'
               - else
                 = "-"
           - if cols.include?(:time)
