@@ -41,7 +41,7 @@
               - else
                 = "-"
           - if cols.include?(:time)
-            %td.align-right= render partial: 'shared/time', locals: {time: run.time, show_milliseconds: run.short?}
+            %td.align-right= render partial: 'shared/time', locals: {time: run.time, show_milliseconds: false}
           - if cols.include?(:name)
             %td
               %a{href: run_path(run)}= run.name
