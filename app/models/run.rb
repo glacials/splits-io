@@ -82,6 +82,12 @@ class Run < ActiveRecord::Base
       assign_attributes(time:    result[:splits].map { |s| s[:duration] }.sum.to_f) if read_attribute(:time).blank?
       assign_attributes(name:    result[:name])                                     if read_attribute(:name).blank?
 
+      # temporary; re-determine game/category from splits because of a db screwup i made
+      if category.try(:name).try(:downcase) != result[:category].try(:downcase) || game.try(:name).try(:downcase) != result[:game].try(:downcase)
+        populate_category
+        save
+      end
+
       @parse_cache = result
       return result
     end
