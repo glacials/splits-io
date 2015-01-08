@@ -84,7 +84,7 @@ class Run < ActiveRecord::Base
 
       # temporary; re-determine game/category from splits because of a db screwup i made
       if category.try(:name).try(:downcase) != result[:category].try(:downcase) || game.try(:name).try(:downcase) != result[:game].try(:downcase)
-        populate_category(true)
+        delay.populate_category(true)
         save
       end
 
