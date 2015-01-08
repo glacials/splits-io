@@ -112,8 +112,6 @@ class Run < ActiveRecord::Base
     user && category && time == user.pb_for(category).time
   end
 
-  private
-
   def populate_category(force = false)
     if force || (category.blank? && parse[:game].present?)
       game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
