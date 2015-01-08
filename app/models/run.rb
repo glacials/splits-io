@@ -82,17 +82,23 @@ class Run < ActiveRecord::Base
       assign_attributes(time:    result[:splits].map { |s| s[:duration] }.sum.to_f) if read_attribute(:time).blank?
       assign_attributes(name:    result[:name])                                     if read_attribute(:name).blank?
 
+      @parse_cache = result
+
       # temporary; re-determine game/category from splits because of a db screwup i made
-      if category.try(:name).try(:downcase) != result[:category].try(:downcase) || game.try(:name).try(:downcase) != result[:game].try(:downcase)
+      if category.present? && (category.try(:name).try(:downcase) != result[:category].try(:downcase) || game.try(:name).try(:downcase) != result[:game].try(:downcase))
         delay.refresh_from_file
       end
 
-      @parse_cache = result
+      save
+
       return result
     end
     {}
   rescue ArgumentError # comes from non UTF-8 files
-    {}
+    {
+      error: "Your file wasn't UTF-8 encoded. Usually this means it didn't come straight from your program, but from some
+      other source. If the file was sent to you by a friend, make sure the file as a whole is sent, not just the text inside it."
+    }
   end
 
   def to_param

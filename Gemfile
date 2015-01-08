@@ -5,6 +5,7 @@ group :development do
   gem 'awesome_print'
   gem 'rubocop', require: false
   gem 'sqlite3'
+  gem 'byebug'
 end
 
 group :production do
