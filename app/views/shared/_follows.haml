@@ -9,4 +9,4 @@
             %img{src: user.avatar, height: 64, width: 64}
           .media-body
             %h4.media-heading= user.name
-            = user.games.reject { |game| game.name.blank? }.map { |game| game.shortname || game.name }.join(", ")
+            = user.games.reject { |game| game.name.blank? }.map { |game| game.shortname || game.name.downcase }.join(", ")
