@@ -5,14 +5,16 @@ module TwitchUser
 
   included do
     def load_from_twitch(response = nil)
-      response ||= HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{twitch_token}")
+      twitch_user = Twitch::User::find_by_oauth_token(twitch_token)
 
       raise HTTParty::ResponseError.new(response) unless response.success?
 
-      self.twitch_id = response["_id"]
-      self.email = response["email"]
-      self.name = response["name"]
-      self.avatar = response["logo"]
+      assign_attributes(
+        twitch_id: twitch_user['_id'],
+        email: twitch_user['email'],
+        name: twitch_user['name'],
+        avatar: twitch_user['logo']
+      )
     end
 
     def follows
