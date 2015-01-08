@@ -13,6 +13,7 @@ class RunsController < ApplicationController
   before_action :track_run_view, only: :show
 
   def show
+    @run.delay.refresh_from_file
   end
 
   def create

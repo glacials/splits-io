@@ -84,13 +84,6 @@ class Run < ActiveRecord::Base
 
       @parse_cache = result
 
-      # temporary; re-determine game/category from splits because of a db screwup i made
-      if category.present? && (category.try(:name).try(:downcase) != result[:category].try(:downcase) || game.try(:name).try(:downcase) != result[:game].try(:downcase))
-        delay.refresh_from_file
-      end
-
-      save
-
       return result
     end
     {}
