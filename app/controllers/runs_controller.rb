@@ -17,12 +17,6 @@ class RunsController < ApplicationController
   end
 
   def index
-    # temporary
-    if current_user.present?
-      current_user.runs.without(:file).each do |run|
-        run.delay.refresh_from_file
-      end
-    end
   end
 
   def create
