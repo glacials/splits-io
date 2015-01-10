@@ -29,13 +29,11 @@ $(function () {
   $("#dropzone").on("dragenter", function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    $("img").css("opacity", .05);
     $("#dropzone-overlay").fadeTo(125, .9);
   });
   $("#dropzone").on("dragleave", function (evt) {
     if (event.pageX < 10 || event.pageY < 10 || $(window).width() - event.pageX < 10 || $(window).height - event.pageY < 10) {
       $("#dropzone-overlay").fadeOut(125);
-      $("img").css("opacity", 1);
     }
   });
   $("#dropzone").on("dragover", function (evt) {
