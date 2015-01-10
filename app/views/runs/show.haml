@@ -2,7 +2,12 @@
 = render partial: 'twitter_card'
 
 - content_for(:header) do
-  %h3= @run.name
+  %h3
+    - if @run.game.present?
+      = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
+      = link_to @run.category, category_path(@run.game, @run.category), class: 'stealth-link category-link'
+    - else
+      = @run.name
   %h5
     = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
     - if @run.user
