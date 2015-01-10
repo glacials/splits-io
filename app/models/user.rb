@@ -36,6 +36,6 @@ class User < ActiveRecord::Base
   end
 
   def to_s
-    name
+    name || 'somebody'
   end
 end
