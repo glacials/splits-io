@@ -16,7 +16,7 @@
       = render partial: 'shared/run_table', locals: {runs: current_user.pbs, cols: cols}
 - if user_signed_in?
   %article
-    %div{id: ab_test(:show_follows) ? "follows" : ""}
+    #follows
 - unless user_signed_in?
   %article
     Save your splits to a file using your favorite splitting program, then drag that file anywhere on this page.
