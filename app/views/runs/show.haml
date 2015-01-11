@@ -3,7 +3,7 @@
 
 - content_for(:header) do
   %h3
-    - if @run.game.present?
+    - if @run.game.try(:name).present? && @run.category.try(:name).present?
       = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
       = link_to @run.category, category_path(@run.game, @run.category), class: 'stealth-link category-link'
     - else
