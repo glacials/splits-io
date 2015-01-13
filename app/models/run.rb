@@ -118,9 +118,9 @@ class Run < ActiveRecord::Base
   end
 
   def refresh_from_file
-    game = Game.where("lower(name) = ?", parse[:game].downcase).first || Game.create(name: parse[:game])
+    game = Game.where("lower(name) = ?", parse[:game].try(:downcase)).first || Game.create(name: parse[:game])
     update_attributes(
-      category: game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
+      category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category])
     )
   end
 end
