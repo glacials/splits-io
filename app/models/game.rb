@@ -1,10 +1,12 @@
 require 'speedrunslive'
 
 class Game < ActiveRecord::Base
+  validates :name, presence: true
+
   has_many :categories
   has_many :runs, through: :categories
 
-  before_save :sync_with_srl
+  after_save :sync_with_srl
 
   after_touch :destroy, if: Proc.new { |game| game.categories.count.zero? }
 
@@ -22,7 +24,7 @@ class Game < ActiveRecord::Base
     game = ::SpeedRunsLive.game(name)
     return if game.nil?
 
-    assign_attributes(srl_id: game['id'].to_i, shortname: game['abbrev'])
+    update_attributes(srl_id: game['id'].to_i, shortname: game['abbrev'])
   end
   handle_asynchronously :sync_with_srl
 
