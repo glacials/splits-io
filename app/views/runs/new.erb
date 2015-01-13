@@ -1,0 +1,19 @@
+<% title "upload" %>
+<% content_for(:header) do %>
+  <% # We don't need this, but LiveSplit does until their next release. Without it, sharing via LiveSplit breaks. %>
+  <meta content="" name='<meta content="" name="csrf-token" />' />
+  <h2>drop it like it's hot</h2>
+  <h5>drag your splits onto this page, or any page</h5>
+<% end %>
+<article>
+  <form id="upload" action="runs_path" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <input type="file" name="file" />
+    </div>
+    <noscript>
+      <div class="form-group">
+        <input type="submit" value="upload" style="display: none;" />
+      </div>
+    </noscript>
+  </form>
+</article>
