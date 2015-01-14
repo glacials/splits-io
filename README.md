@@ -267,6 +267,55 @@ curl splits.io/api/v2/users?name=glacials
 
 [api-users-index]: http://splits.io/api/v2/users
 
+#### GET [/api/v2/users/:id/pbs][api-users-pbs-index]
+
+##### Parameters accepted
+`game_id`, `category_id`
+
+##### Example request
+```bash
+curl splits.io/api/v2/users/1/pbs?game_id=15
+```
+
+##### Example response
+```json
+{
+  "pbs": [
+    {
+      "id": 1686,
+      "path": "/1au",
+      "name": "Super Mario Sunshine Any%",
+      "time": "5772.156",
+      "program": "livesplit",
+      "image_url": null,
+      "created_at": "2014-07-19T17:35:06.327Z",
+      "updated_at": "2015-01-08T05:37:05.467Z",
+      "user": { ... },
+      "game": { ... },
+      "category": { ... },
+      "splits": [ ... ]
+    },
+    ...
+    {
+      "id": 1127,
+      "path": "/vb",
+      "name": "Super Mario Sunshine Any% Hoverless",
+      "time": "7008.060087",
+      "program": "livesplit",
+      "image_url": null,
+      "created_at": "2014-05-09T07:36:21.688Z",
+      "updated_at": "2014-11-09T04:35:06.267Z",
+      "user": { ... },
+      "game": { ... },
+      "category": { ... },
+      "splits": [ ... ]
+    }
+  ]
+}
+```
+
+[api-users-pbs-index]: http://splits.io/api/v2/users/1/pbs
+
 ### Retrieval routes
 These routes are the canonical sources of information for resources, and only accept numberic IDs as differentiators. If
 you have discovered a resource's ID once, it is strongly recommended that you shift to using the following routes to
