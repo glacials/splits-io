@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
     super(run.id)
   end
 
+  def not_found
+    raise ActionController::RoutingError.new('Not found')
+  end
+
   private
 
   def set_gon

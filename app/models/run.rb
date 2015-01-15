@@ -29,6 +29,7 @@ class Run < ActiveRecord::Base
   scope :by_category, ->(category) { where(category: category) }
   scope :without, ->(*columns) { select(column_names - columns.map(&:to_s)) }
   scope :nonempty, -> { where("time != 0") }
+  scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
 
   def belongs_to?(user)
     user.present? && self.user == user

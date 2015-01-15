@@ -1,0 +1,9 @@
+<% longest = {} %>
+<% longest[:game_name] = @user.pbs.categorized.map { |run| run.game.name.length }.max %>
+<% longest[:category_name] = @user.pbs.categorized.map { |run| run.category.name.length }.max %>
+<% longest[:time] = @user.pbs.categorized.map { |run| "[#{time(run.time)}](#{link(run)})".length }.max %>
+| <%= right_pad('Game', longest[:game_name]) %>  |              | <%= right_pad('Category', longest[:category_name]) %>  |              | <%= right_pad('PB', longest[:time]) %>
+|:<%= right_pad('', longest[:game_name], '-') %>--|:------------:|:<%= right_pad('', longest[:category_name], '-') %>--|:------------:|:<%= right_pad('', longest[:time], '-') %>-|
+<% @user.pbs.categorized.each do |run| %>
+<%= "| #{right_pad(run.game.name, longest[:game_name])}  | &nbsp;&nbsp; | #{right_pad(run.category.name, longest[:category_name])}  | &nbsp;&nbsp; | #{left_pad("[#{time(run.time)}](#{link(run)})", longest[:time])}".html_safe %>
+<% end %>

@@ -29,10 +29,23 @@ SplitsIO::Application.routes.draw do
   get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:user_name
 
   resources :users, only: [:show] do
+    scope module: :users do
+      resources :pbs, only: [], module: :pbs do
+        collection do
+          resource :export, only: [], module: :export do
+            collection do
+              resources :panels, only: [:index]
+            end
+          end
+        end
+      end
+    end
     member do
       get :follows
     end
   end
+
+  resources :tools, only: [:index]
 
   get '/games/:game_shortname', to: 'games#show', as: :game
   get '/games/:game_shortname/:category_shortname', to: 'categories#show', as: :category
@@ -49,7 +62,7 @@ SplitsIO::Application.routes.draw do
       resources :games,      only: [:index, :show]
       resources :categories, only: [:index, :show]
       resources :users,      only: [:index, :show] do
-        resources :pbs, only: :index
+        resources :pbs, only: [:index]
       end
       resources :runs,       only: [:index, :show, :create, :destroy] do
         member do

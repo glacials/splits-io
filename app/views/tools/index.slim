@@ -1,0 +1,8 @@
+- title "tools"
+- content_for(:header)
+  h2 tools
+article
+  h4 Twitch panel builder
+  p This will assemble your PBs into a Markdown table for use in a Twitch panel (or elsewhere). You should be able to
+    copy+paste the output into a panel with no additional editing on your part.
+  p = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-primary', target: :_blank

@@ -29,6 +29,7 @@
               %ul.dropdown-menu{role: :menu, aria: {labelledby: :user_nav}}
                 %li{role: :presentation}
                   = link_to "profile", user_path(current_user)
+                  = link_to "tools", tools_path
                   = link_to "sign out", signout_path
           - else
             %a#sign-in.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in

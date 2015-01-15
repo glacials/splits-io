@@ -15,7 +15,6 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by(name: params[:id])
-    render :not_found, status: 404 if @user.nil?
+    @user = User.find_by(name: params[:id]) || not_found
   end
 end
