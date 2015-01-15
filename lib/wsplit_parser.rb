@@ -39,7 +39,7 @@ class WSplitParser < BabelBridge::Parser
 
   def parse_splits(splits)
     splits.map.with_index do |split, index|
-      parse_split(split, index == 0 ? 0 : splits[index - 1].finish_time.to_s.to_f)
+      parse_split(split, index == 0 ? 0 : preceding_unskipped_split(splits, index).finish_time.to_s.to_f)
     end
   end
 
@@ -47,11 +47,17 @@ class WSplitParser < BabelBridge::Parser
     split = {
       best: {duration: split.best_time.to_s.to_f},
       name: split.title.to_s,
-      duration: split.finish_time.to_s.to_f - prev_split_finish_time,
+      duration: [split.finish_time.to_s.to_f - prev_split_finish_time, 0].max,
       finish_time: split.finish_time.to_s.to_f
     }
     split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best][:duration].try(:round, 5)
     split[:skipped?] = split[:duration] == 0
     split
+  end
+
+  def preceding_unskipped_split(splits, i)
+    splits[0...i].reverse.map.with_index do |split, j|
+      return split if split.finish_time.to_s.to_f != 0
+    end.last
   end
 end
