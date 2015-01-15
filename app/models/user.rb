@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
   def pbs
     runs.where(
-      id: runs.select('distinct category_id').pluck(:category_id).map { |category_id| pb_for(Category.find(category_id)).id } | runs.where(category: nil).pluck(:id)
+      id: runs.select('distinct category_id').select(:category_id).map { |run| pb_for(run.category).id } | runs.where(category: nil).pluck(:id)
     )
   end
 
