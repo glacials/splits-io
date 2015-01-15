@@ -21,6 +21,9 @@ $(function () {
       error: function (xhr, textStatus) {
         if (xhr.status == 400) {
           window.location = '/cant-parse';
+        } else {
+          $("#droplabel").html("oops, got a " + xhr.status + " (" + xhr.statusText + ").<br />try again, or contact glacials.<br />");
+          window.spinner.stop();
         }
       }
     });

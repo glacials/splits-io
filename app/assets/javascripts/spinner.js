@@ -1,6 +1,6 @@
 $(function () {
   window.showSpinner = function(color) {
-    $("body").spin({
+    window.spinner = new Spinner({
       lines: 3,
       length: 15, // The length of each line
       width: 1, // The line thickness
@@ -15,6 +15,11 @@ $(function () {
       hwaccel: true, // Whether to use hardware acceleration
       className: 'spinner', // The CSS class to assign to the spinner
       zIndex: 2e9, // The z-index (defaults to 2000000000)
-    });
+    }).spin();
+    document.body.appendChild(window.spinner.el);
+  };
+
+  window.hideSpinner = function() {
+    window.spinner.stop();
   };
 });
