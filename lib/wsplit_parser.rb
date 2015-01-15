@@ -56,7 +56,7 @@ class WSplitParser < BabelBridge::Parser
   end
 
   def preceding_unskipped_split(splits, i)
-    splits[0...i].reverse.map.with_index do |split, j|
+    splits[0...i].reverse.map do |split, j|
       return split if split.finish_time.to_s.to_f != 0
     end.last
   end
