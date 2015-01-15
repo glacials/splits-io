@@ -7,8 +7,9 @@ class Game < ActiveRecord::Base
   has_many :runs, through: :categories
 
   after_save :sync_with_srl
-
   after_touch :destroy, if: Proc.new { |game| game.categories.count.zero? }
+
+  scope :named, -> { where.not(name: nil) }
 
   def self.search(term)
     t = self.arel_table

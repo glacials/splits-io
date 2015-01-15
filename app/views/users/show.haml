@@ -4,7 +4,7 @@
   %h6
     %a#twitch-channel{href: @user.uri, target: :_blank}= @user.uri.to_s.gsub('http://www.', '')
   %h6
-    - @user.games.each do |game|
+    - @user.games.named.each do |game|
       = link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
 %article
   - cols = {without: [:runner]}
