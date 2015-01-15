@@ -21,11 +21,17 @@ class RunsController < ApplicationController
 
   def create
     @run = Run.create(file: params[:file].try(:read), user: current_user, image_url: params[:image_url])
+    unless @run.persisted?
+      redirect_to :cant_parse
+      return
+    end
     respond_to do |format|
       format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }
       format.html { redirect_to run_path(@run) }
     end
     track! :upload
+  rescue ActiveRecord::StatementInvalid
+    redirect_to :cant_parse
   end
 
   def download
