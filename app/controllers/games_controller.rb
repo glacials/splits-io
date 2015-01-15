@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   before_action :set_game
 
   def show
-    redirect_to category_path(@game, @game.categories.first)
+    redirect_to game_category_path(@game, @game.categories.first)
   end
 
   private

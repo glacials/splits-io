@@ -1,13 +1,14 @@
 - title @game.name
 - content_for(:header) do
-  h2 = content_for(:title)
-  h4 = @category.name
+  h3
+    span> = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
+    span = link_to @category, game_category_path(@category.game, @category), class: 'stealth-link category-link'
   = render partial: 'shared/alerts'
 article
   ul.nav.nav-tabs role='tablist'
     - category = @game.categories.first
     - @game.categories.each do |category|
       li class="#{category == @category ? 'active' : ''}"
-        a href=category_path(@game, category) = category.name
+        a href=game_category_path(@game, category) = category.name
 article
   = render partial: 'shared/run_table', locals: {runs: @category.runs}

@@ -45,10 +45,11 @@ SplitsIO::Application.routes.draw do
     end
   end
 
-  resources :tools, only: [:index]
+  resources :games, only: [:show] do
+    resources :categories, only: [:show]
+  end
 
-  get '/games/:game_shortname', to: 'games#show', as: :game
-  get '/games/:game_shortname/:category_shortname', to: 'categories#show', as: :category
+  resources :tools, only: [:index]
 
   get    '/runs',     to: redirect('/'),       as: :runs
   get    '/runs/new', to: redirect('/upload')
