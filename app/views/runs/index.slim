@@ -1,0 +1,21 @@
+- title "hello"
+- content_for(:header) do
+  h2 splits i/o
+  h5
+    | upload
+    u<> all
+    | the splits
+  = render partial: 'shared/alerts'
+article
+  - if user_signed_in?
+    - if current_user.runs.present?
+      - cols = {with: [:owner_controls], without: [:runner]}
+      - cache [:run_table, :v3, {user: current_user, cols: cols, page: params[:page] || 1}, order: [params[:by], params[:order]]] do
+        = render partial: 'shared/run_table', locals: {runs: current_user.pbs, cols: cols}
+    - else
+      .jumbotron
+        h4 Drag and drop your favorite PB here
+  - else
+    p Save your splits to a file using your favorite splitting program, then drag that file anywhere on this page.
+- if user_signed_in?
+  article#follows
