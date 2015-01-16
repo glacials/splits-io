@@ -39,7 +39,7 @@ class WSplitParser < BabelBridge::Parser
 
   def parse_splits(splits)
     splits.map.with_index do |split, index|
-      parse_split(split, index == 0 ? 0 : preceding_unskipped_split(splits, index).finish_time.to_s.to_f)
+      parse_split(split, index == 0 ? 0 : preceding_unskipped_split(splits, index).try(:finish_time).to_s.to_f)
     end
   end
 
