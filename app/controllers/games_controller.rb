@@ -9,6 +9,6 @@ class GamesController < ApplicationController
 
   def set_game
     @game = Game.find_by(shortname: params[:id])
-    redirect_to search_path(params[:game_shortname]) if @game.nil?
+    redirect_to search_path(params[:id]) if @game.nil?
   end
 end
