@@ -40,4 +40,5 @@
       %i (none found)
   %article
     %h4 Runs
-    = render partial: 'shared/run_table', locals: {runs: @result[:runs]}
+    - @result[:games].each do |game|
+      = render partial: 'shared/run_table', locals: table_locals(:game, game: game)

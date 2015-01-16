@@ -1,17 +1,18 @@
 - title "hello"
 - content_for(:header) do
   h2 splits i/o
-  h5
-    | upload
-    u<> all
-    | the splits
+  - if user_signed_in? && current_user.runs.present?
+    h5 want some jelly with these PBs?
+  - else
+    h5
+      | upload
+      u<> all
+      | the splits
   = render partial: 'shared/alerts'
 article
   - if user_signed_in?
     - if current_user.runs.present?
-      - cols = {with: [:owner_controls], without: [:runner]}
-      - cache [:run_table, :v3, {user: current_user, cols: cols, page: params[:page] || 1}, order: [params[:by], params[:order]]] do
-        = render partial: 'shared/run_table', locals: {runs: current_user.pbs, cols: cols}
+      = render partial: 'shared/run_table', locals: table_locals(:pbs, user: current_user)
     - else
       .jumbotron
         h4 Drag and drop your favorite PB here

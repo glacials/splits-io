@@ -7,6 +7,4 @@
     - @user.games.named.each do |game|
       = link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
 %article
-  - cols = {without: [:runner]}
-  - cache [:run_table, :v3, {user: @user, cols: cols, page: params[:page] || 1}, order: [params[:by], params[:order]]] do
-    = render partial: 'shared/run_table', locals: {runs: @user.pbs, cols: cols}
+  = render partial: 'shared/run_table', locals: table_locals(:pbs, user: @user)

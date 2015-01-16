@@ -17,8 +17,8 @@ class CategoriesController < ApplicationController
   end
 
   def set_category
-    @category = @game.categories.find_by(shortname: params[:category_shortname]) ||
-                @game.categories.find_by(id: params[:category_shortname])
-    redirect_to search_path(params[:game_shortname]) if @category.nil?
+    @category = @game.categories.find_by(shortname: params[:id]) ||
+                @game.categories.find_by(id: params[:id])
+    redirect_to search_path(params[:game_id]) if @category.nil?
   end
 end
