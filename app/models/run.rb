@@ -124,4 +124,8 @@ class Run < ActiveRecord::Base
       category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category])
     )
   end
+
+  def time
+    read_attribute(:time).to_f
+  end
 end
