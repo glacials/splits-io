@@ -26,7 +26,7 @@ SplitsIO::Application.routes.draw do
   get '/:id/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:id/download/:program',       to: 'runs#download', as: :download
 
-  get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:user_name
+  get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:id
 
   resources :users, only: [:show] do
     scope module: :users do

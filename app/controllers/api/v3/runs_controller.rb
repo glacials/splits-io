@@ -19,7 +19,15 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       end
       run.save
     end
-    head 201, location: api_v3_run_url(@record)
+    render status: 201, location: api_v3_run_url(@run), json: {
+      status: 201,
+      message: "Run created.",
+      uris: {
+        api_uri: api_v3_run_url(@run),
+        public_uri: run_url(@run),
+        claim_uri: run_url(@run, claim_token: @run.claim_token)
+      }
+    }
     track! :upload
   rescue ActionController::ParameterMissing
     render status: 400, json: {

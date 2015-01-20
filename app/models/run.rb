@@ -12,6 +12,8 @@ class Run < ActiveRecord::Base
   belongs_to :category, touch: true
   has_one :game, through: :category
 
+  has_secure_token :claim_token
+
   class << self; attr_accessor :parsers end
   @parsers = {
     wsplit: WSplitParser,
