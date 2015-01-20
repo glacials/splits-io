@@ -14,7 +14,7 @@ class Api::V3::Games::Categories::RunsController < Api::V3::ApplicationControlle
       unless run.parses?
         render status: 400, json: {
           status: 400,
-          error: "Can't parse that file. We support WSplit 1.4.x, Nitrofski's WSplit 1.5.x fork, Time Split Tracker, SplitterZ, and LiveSplit >= 1.2."
+          message: "Can't parse that file. We support WSplit 1.4.x, Nitrofski's WSplit 1.5.x fork, Time Split Tracker, SplitterZ, and LiveSplit >= 1.2."
         }
         return
       end
@@ -25,7 +25,7 @@ class Api::V3::Games::Categories::RunsController < Api::V3::ApplicationControlle
   rescue ActionController::ParameterMissing
     render status: 400, json: {
       status: 400,
-      error: "No run file received. Make sure you're including a 'file' parameter in your request."
+      message: "No run file received. Make sure you're including a 'file' parameter in your request."
     }
   end
 

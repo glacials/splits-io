@@ -13,7 +13,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       unless run.parses?
         render status: 400, json: {
           status: 400,
-          error: "Can't parse that file. We support WSplit 1.4.x, Nitrofski's WSplit 1.5.x fork, Time Split Tracker, SplitterZ, and LiveSplit >= 1.2."
+          message: "Can't parse that file. We support WSplit 1.4.x, Nitrofski's WSplit 1.5.x fork, Time Split Tracker, SplitterZ, and LiveSplit >= 1.2."
         }
         return
       end
@@ -32,7 +32,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   rescue ActionController::ParameterMissing
     render status: 400, json: {
       status: 400,
-      error: "No run file received. Make sure you're including a 'file' parameter in your request."
+      message: "No run file received. Make sure you're including a 'file' parameter in your request."
     }
   end
 
@@ -59,7 +59,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
     unless @record.belongs_to?(current_user)
       render status: 401, json: {
         status: 401,
-        error: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to delete it."
+        message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."
       }
       return false
     end
