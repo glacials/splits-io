@@ -61,6 +61,19 @@ SplitsIO::Application.routes.draw do
   delete '/:id',      to: 'runs#destroy'
 
   namespace :api do
+    namespace :v3 do
+      resources :games, only: [:show], module: :games do
+        resources :runs, only: [:index]
+        resources :categories, only: [:show], module: :categories do
+          resources :runs, only: [:index]
+        end
+      end
+      resources :users, only: [:show], module: :users do
+        resources :runs, only: [:index]
+        resources :pbs, only: [:index]
+      end
+      resources :runs, only: [:show, :create, :destroy]
+    end
     namespace :v2 do
       resources :games,      only: [:index, :show]
       resources :categories, only: [:index, :show]
