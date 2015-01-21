@@ -1,5 +1,4 @@
 class Api::V2::PbsController < Api::V2::ApplicationController
-
   before_filter :set_user
   before_filter :set_pbs
   before_filter :translate_game_to_categories

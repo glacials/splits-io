@@ -6,10 +6,12 @@ class RunsController < ApplicationController
   before_action :set_comparison, only: :compare
 
   before_action :handle_first_visit, only: :show, unless: Proc.new { @run.visited? }
-  before_action :warn_about_deprecated_url, only: :show, unless: Proc.new { request.fullpath == run_path(@run) }
+  before_action :warn_about_deprecated_url, only: :show, unless: Proc.new { request.path == run_path(@run) }
   before_action :reject_as_unparsable, only: [:show, :download], unless: Proc.new { @run.parses? }
 
+  before_action :attempt_to_claim, only: [:show]
   before_action :verify_ownership, only: [:disown, :delete]
+
   before_action :track_run_view, only: :show
 
   def show
@@ -99,6 +101,13 @@ class RunsController < ApplicationController
     else
       @run.destroy
       redirect_to cant_parse_path
+    end
+  end
+
+  def attempt_to_claim
+    if @run.user == nil && @run.claim_token.present? && @run.claim_token == params[:claim_token]
+      @run.update_attributes(user: current_user)
+      redirect_to run_path(@run)
     end
   end
 

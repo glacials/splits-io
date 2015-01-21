@@ -26,7 +26,7 @@ SplitsIO::Application.routes.draw do
   get '/:id/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:id/download/:program',       to: 'runs#download', as: :download
 
-  get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:user_name
+  get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:id
 
   resources :users, only: [:show] do
     scope module: :users do
@@ -61,6 +61,19 @@ SplitsIO::Application.routes.draw do
   delete '/:id',      to: 'runs#destroy'
 
   namespace :api do
+    namespace :v3 do
+      resources :games, only: [:show], module: :games do
+        resources :runs, only: [:index]
+        resources :categories, only: [:show], module: :categories do
+          resources :runs, only: [:index]
+        end
+      end
+      resources :users, only: [:show], module: :users do
+        resources :runs, only: [:index]
+        resources :pbs, only: [:index]
+      end
+      resources :runs, only: [:show, :create, :destroy]
+    end
     namespace :v2 do
       resources :games,      only: [:index, :show]
       resources :categories, only: [:index, :show]

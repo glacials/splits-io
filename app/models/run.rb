@@ -12,6 +12,8 @@ class Run < ActiveRecord::Base
   belongs_to :category, touch: true
   has_one :game, through: :category
 
+  has_secure_token :claim_token
+
   class << self; attr_accessor :parsers end
   @parsers = {
     wsplit: WSplitParser,
@@ -123,5 +125,9 @@ class Run < ActiveRecord::Base
     update_attributes(
       category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category])
     )
+  end
+
+  def time
+    read_attribute(:time).to_f
   end
 end
