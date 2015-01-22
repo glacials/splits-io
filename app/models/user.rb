@@ -21,13 +21,17 @@ class User < ActiveRecord::Base
     name
   end
 
+  def categories_run
+    Run.unscoped.where(user: self).select('distinct category_id').where.not(category: nil).map(&:category)
+  end
+
   def pb_for(category)
     runs.where(category: category).order(:time).first
   end
 
   def pbs
     runs.where(
-      id: runs.select('distinct category_id').select(:category_id).map { |run| pb_for(run.category).id } | runs.where(category: nil).pluck(:id)
+      id: categories_run.map { |category| pb_for(category).id } | runs.where(category: nil).pluck(:id)
     )
   end
 

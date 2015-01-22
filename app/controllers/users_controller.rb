@@ -3,8 +3,8 @@ class UsersController < ApplicationController
 
   def show
     # temporary
-    @user.runs.without(:file).each do |run|
-      run.delay.refresh_from_file
+    @user.runs.each do |run|
+      run.delay.refresh_from_file if rand(100) == 0
     end
   end
 

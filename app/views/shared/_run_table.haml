@@ -1,6 +1,6 @@
 - description ||= nil
 - cols ||= [:runner, :time, :name, :uploaded]
-- runs = order_runs(runs).without(:file).page(params[:page])
+- runs = order_runs(runs).page(params[:page])
 - cache [type, source, page, order] do
   - if runs.empty?
     %center

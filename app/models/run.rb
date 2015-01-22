@@ -27,9 +27,9 @@ class Run < ActiveRecord::Base
 
   before_save :populate_category
 
+  default_scope { select(column_names - ['file']) }
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
-  scope :without, ->(*columns) { select(column_names - columns.map(&:to_s)) }
   scope :nonempty, -> { where("time != 0") }
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
 
@@ -129,5 +129,15 @@ class Run < ActiveRecord::Base
 
   def time
     read_attribute(:time).to_f
+  end
+
+  # Our default scope doesn't select file because it's potentially really, really big. This method lets us still access
+  # it normally, through a secondary query.
+  def file
+    if new_record?
+      read_attribute(:file)
+    else
+      Run.unscoped.find(self).read_attribute(:file)
+    end
   end
 end
