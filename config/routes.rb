@@ -69,6 +69,13 @@ SplitsIO::Application.routes.draw do
         end
       end
       resources :users, only: [:show] do
+        resources :games, only: [], module: :users do
+          resources :categories, only: [], module: :games do
+            resource :prediction, only: [:show], module: :categories
+            resource :pb, only: [:show], module: :categories
+            resources :runs, only: [:index], module: :categories
+          end
+        end
         resources :runs, only: [:index], module: :users
         resources :pbs, only: [:index], module: :users
       end
