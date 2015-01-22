@@ -30,6 +30,8 @@ class Api::V2::PbsController < Api::V2::ApplicationController
 
   def set_user
     @user = User.find(params[:user_id])
+  rescue ActiveRecord::RecordNotFound
+    render status: 404, json: {status: 404, error: "No user with id '#{params[:user_id]}' found."}
   end
 
   def run_url_helper
