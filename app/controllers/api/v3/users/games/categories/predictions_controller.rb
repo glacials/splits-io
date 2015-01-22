@@ -30,6 +30,8 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
       }
     end
     render json: @prediction
+  rescue MovingAverage::Errors::InvalidTailError
+    render status: 404, json: {status: 404, message: "Not enough data on #{@user.name} to make a prediction."}
   end
 
   private
