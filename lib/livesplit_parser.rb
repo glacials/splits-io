@@ -44,8 +44,8 @@ class LiveSplitParser < BabelBridge::Parser
         split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
         split[:skipped?] = split[:duration] == 0
 
-        split[:history] = segment['SegmentHistory'][0]['Time'].map do |time|
-          duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip))
+        split[:history] = segment['SegmentHistory'][0]['Time'].try do |times|
+          times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
         end
 
         run[:time] += split[:duration] if split[:duration].present?
@@ -78,8 +78,8 @@ class LiveSplitParser < BabelBridge::Parser
         split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
         split[:skipped?] = split[:duration] == 0
 
-        split[:history] = segment['SegmentHistory'][0]['Time'].map do |time|
-          duration_in_seconds_of(time['content'].strip)
+        split[:history] = segment['SegmentHistory'][0]['Time'].try do |times|
+          times.map { |time| duration_in_seconds_of(time['content'].strip) }
         end
 
         run[:time] += split[:duration] if split[:duration].present?
@@ -112,8 +112,8 @@ class LiveSplitParser < BabelBridge::Parser
         split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
         split[:skipped?] = split[:duration] == 0
 
-        split[:history] = segment['SegmentHistory'][0]['Time'].map do |time|
-          duration_in_seconds_of(time['content'].strip)
+        split[:history] = segment['SegmentHistory'][0]['Time'].try do |times|
+          times.map { |time| duration_in_seconds_of(time['content'].strip) }
         end
 
         run[:time] += split[:duration] if split[:duration].present?
