@@ -34,15 +34,18 @@ $(function () {
     evt.stopPropagation();
     $("#dropzone-overlay").fadeTo(125, .9);
   });
+
   $("#dropzone").on("dragleave", function (evt) {
     if (event.pageX < 10 || event.pageY < 10 || $(window).width() - event.pageX < 10 || $(window).height - event.pageY < 10) {
       $("#dropzone-overlay").fadeOut(125);
     }
   });
+
   $("#dropzone").on("dragover", function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
   });
+
   $("#dropzone").on("drop", function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
@@ -51,5 +54,15 @@ $(function () {
       window.showSpinner("#fff");
       window.upload(file);
     });
+  });
+
+  $("#dropzone").click(function (evt) {
+    $("#dropzone-overlay").fadeOut(125);
+  });
+
+  $(document).keyup(function (evt) {
+    if (evt.keyCode == 27) {
+      $("#dropzone-overlay").fadeOut(125);
+    }
   });
 });
