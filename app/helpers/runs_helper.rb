@@ -1,13 +1,21 @@
 module RunsHelper
   def table_locals(table_type, options = {})
     case table_type
+    when :my_pbs
+      {
+        type: :current_user,
+        source: options[:user],
+        runs: current_user.pbs,
+        cols: [:time, :name, :uploaded, :owner_controls],
+        description: "my personal bests"
+      }.merge(sorting_info)
     when :pbs
       {
         type: :user,
         source: options[:user],
         runs: options[:user].pbs,
-        cols: [:time, :name, :uploaded] + (options[:user] == current_user ? [:owner_controls] : []),
-        description: options[:user] == current_user ? "my personal bests" : "personal bests"
+        cols: [:time, :name, :uploaded],
+        description: "personal bests"
       }.merge(sorting_info)
     when :game
       {

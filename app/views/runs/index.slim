@@ -12,7 +12,7 @@
 article
   - if user_signed_in?
     - if current_user.runs.present?
-      = render partial: 'shared/run_table', locals: table_locals(:pbs, user: current_user)
+      = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
     - else
       .jumbotron
         h4 Drag and drop your favorite PB here
