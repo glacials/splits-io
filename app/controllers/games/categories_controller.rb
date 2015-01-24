@@ -5,7 +5,7 @@ class Games::CategoriesController < ApplicationController
   def show
     # temporary
     @category.runs.each do |run|
-      run.delay.refresh_from_file if rand(100) == 0
+      run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
     end
   end
 

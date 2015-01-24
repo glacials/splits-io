@@ -15,7 +15,7 @@ class RunsController < ApplicationController
   before_action :track_run_view, only: :show
 
   def show
-    @run.delay.refresh_from_file if rand(100) == 0
+    @run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
   end
 
   def index

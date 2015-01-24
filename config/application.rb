@@ -8,6 +8,9 @@ module SplitsIO
   class Application < Rails::Application
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.action_controller.allow_forgery_protection = false
+
+    # how often should encountering a run cause a background refresh-from-file job to be queued up for it?
+    config.run_refresh_chance = 0.1
   end
 end
 
