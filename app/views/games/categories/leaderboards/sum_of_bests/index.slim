@@ -1,0 +1,39 @@
+- title 'Sum of bests leaderboard'
+- content_for(:header) do
+  h2 Fastest sum of best
+  h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
+  = render partial: 'shared/alerts'
+article
+  ul.nav.nav-tabs role='tablist'
+    - category = @game.categories.first
+    - @game.categories.each do |category|
+      li class="#{category == @category ? 'active' : ''}"
+        = link_to category, game_category_sum_of_bests_path(@game, category)
+article
+  - if @category.runs.where.not(sum_of_best: nil).empty?
+    center
+      i No runs matched!
+  - else
+    table.table.table-striped
+      thead
+        tr
+          th.align-right Runner
+          th.align-right Actual time
+          th.align-right Sum of best
+          th.align-right
+      tbody
+        - @category.runs.where.not(sum_of_best: nil).order(:sum_of_best).each do |run|
+          tr id=[:run, run.id]
+            td.align-right
+              - if run.user && run.user.name
+                = link_to run.user, user_path(run.user), class: 'user-link'
+              - else
+                = '-'
+            td.align-right = render partial: 'shared/time', locals: {time: run.time, show_milliseconds: false}
+            td.align-right
+              big
+                b = render partial: 'shared/time', locals: {time: run.sum_of_best, show_milliseconds: false}
+            td.align-right
+              = link_to 'permalink &rarr;'.html_safe, run
+  center
+    small = link_to 'normal run list', game_category_path(@game, @category)

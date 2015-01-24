@@ -8,4 +8,7 @@ article
     - @game.categories.each do |category|
       li class="#{category == @category ? 'active' : ''}"
         a href=game_category_path(@game, category) = category.name
-article = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
+article
+  = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
+  center
+    small = link_to 'sum of bests leaderboard', game_category_sum_of_bests_path(@game, @category)

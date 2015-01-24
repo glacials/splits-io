@@ -1,4 +1,4 @@
-class CategoriesController < ApplicationController
+class Games::CategoriesController < ApplicationController
   before_action :set_game
   before_action :set_category
 

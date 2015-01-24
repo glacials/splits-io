@@ -48,7 +48,13 @@ SplitsIO::Application.routes.draw do
   get '/games/:game_id/:id', to: redirect('/games/%{game_id}/categories/%{id}')
 
   resources :games, only: [:show] do
-    resources :categories, only: [:show]
+    resources :categories, only: [:show], module: :games do
+      resources :leaderboards, only: [], module: :categories do
+        collection do
+          resources :sum_of_bests, only: [:index], module: :leaderboards
+        end
+      end
+    end
   end
 
   resources :tools, only: [:index]

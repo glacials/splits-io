@@ -80,10 +80,12 @@ class Run < ActiveRecord::Base
       next if result.blank?
       result[:program] = parser.name.sub('Parser', '').downcase.to_sym
 
-      # Set some db fields
-      assign_attributes(program: result[:program])                                  if read_attribute(:program).blank?
-      assign_attributes(time:    result[:splits].map { |s| s[:duration] }.sum.to_f) if read_attribute(:time).blank?
-      assign_attributes(name:    result[:name])                                     if read_attribute(:name).blank?
+      assign_attributes(
+        name: result[:name],
+        program: result[:program],
+        time: result[:splits].map { |split| split[:duration] }.sum.to_f,
+        sum_of_best: result[:splits].map { |split| split[:best][:duration] }.sum.to_f
+      )
 
       @parse_cache = result
 
