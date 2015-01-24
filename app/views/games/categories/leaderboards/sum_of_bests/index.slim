@@ -10,30 +10,31 @@ article
       li class="#{category == @category ? 'active' : ''}"
         = link_to category, game_category_sum_of_bests_path(@game, category)
 article
-  - if @category.runs.where.not(sum_of_best: nil).empty?
+  - if @category.runs.unarchived.owned.where.not(sum_of_best: nil).empty?
     center
-      i No runs matched!
+      i Still populating, come back tomorrow :)
   - else
     table.table.table-striped
       thead
         tr
-          th.align-right Runner
-          th.align-right Actual time
-          th.align-right Sum of best
-          th.align-right
+          th
+          th.align-left Runner
+          th.align-left Sum of best
+          th.align-left PB
       tbody
-        - @category.runs.where.not(sum_of_best: nil).order(:sum_of_best).each do |run|
+        - i = 0
+        - @category.runs.unarchived.owned.where.not(sum_of_best: nil).order(:sum_of_best).each do |run|
           tr id=[:run, run.id]
-            td.align-right
+            td.align-right = i += 1
+            td.align-left
               - if run.user && run.user.name
                 = link_to run.user, user_path(run.user), class: 'user-link'
               - else
                 = '-'
-            td.align-right = render partial: 'shared/time', locals: {time: run.time, show_milliseconds: false}
-            td.align-right
-              big
-                b = render partial: 'shared/time', locals: {time: run.sum_of_best, show_milliseconds: false}
-            td.align-right
-              = link_to 'permalink &rarr;'.html_safe, run
+            td.align-left style='border-left: 2px solid #ffd700;'
+              = render partial: 'shared/time', locals: {time: run.sum_of_best, show_milliseconds: false}
+            td.align-left
+              a.run-link href=run_path(run)
+                = render partial: 'shared/time', locals: {time: run.time, show_milliseconds: false}
   center
-    small = link_to 'normal run list', game_category_path(@game, @category)
+    small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'

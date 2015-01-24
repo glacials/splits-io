@@ -31,6 +31,8 @@ class Run < ActiveRecord::Base
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
   scope :nonempty, -> { where("time != 0") }
+  scope :owned, -> { where.not(user: nil) }
+  scope :unarchived, -> { where(archived: false) }
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
 
   def belongs_to?(user)
@@ -112,7 +114,7 @@ class Run < ActiveRecord::Base
   end
 
   def pb?
-    user && category && time == user.pb_for(category).time
+    user && category && self == user.pb_for(category)
   end
 
   def populate_category
@@ -125,7 +127,8 @@ class Run < ActiveRecord::Base
   def refresh_from_file
     game = Game.where("lower(name) = ?", parse[:game].try(:downcase)).first || Game.create(name: parse[:game])
     update_attributes(
-      category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category])
+      category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category]),
+      archived: !pb?
     )
   end
 

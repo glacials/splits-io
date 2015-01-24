@@ -11,4 +11,4 @@ article
 article
   = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
   center
-    small = link_to 'sum of bests leaderboard', game_category_sum_of_bests_path(@game, @category)
+    small = link_to 'sum of bests leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'
