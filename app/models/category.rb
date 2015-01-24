@@ -27,4 +27,8 @@ class Category < ActiveRecord::Base
   def shortname
     name.downcase.gsub(/ *%/, 'pct').gsub(/ +/, "-")
   end
+
+  def popular?
+    runs.unscoped.count * 10 >= game.runs.unscoped.count
+  end
 end

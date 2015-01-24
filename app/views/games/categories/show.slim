@@ -2,12 +2,7 @@
 - content_for(:header) do
   h3 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
   = render partial: 'shared/alerts'
-article
-  ul.nav.nav-tabs role='tablist'
-    - category = @game.categories.first
-    - @game.categories.each do |category|
-      li class="#{category == @category ? 'active' : ''}"
-        a href=game_category_path(@game, category) = category.name
+article = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category}
 article
   = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
   center

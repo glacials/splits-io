@@ -32,4 +32,12 @@ class Game < ActiveRecord::Base
   def to_s
     name
   end
+
+  def popular_categories
+    categories.joins(:runs).group('categories.id').having('count(runs.id) >= ' + (Run.unscoped.where(category: categories.pluck(:id)).count / 20).to_s).order('count(runs.id) desc')
+  end
+
+  def unpopular_categories
+    categories.joins(:runs).group('categories.id').having('count(runs.id) < ' + (Run.unscoped.where(category: categories.pluck(:id)).count / 20).to_s).order('count(runs.id) desc')
+  end
 end

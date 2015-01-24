@@ -1,0 +1,12 @@
+- cache [game, current_category] do
+  - category = game.categories.first
+  ul#popular-categories.nav.nav-tabs role='tablist'
+    - (game.popular_categories | [current_category]).each do |category|
+      li class="#{category == current_category ? 'active' : ''}"
+        = link_to category, game_category_sum_of_bests_path(game, category)
+    - if (game.unpopular_categories - [current_category]).present?
+      li = link_to 'more »', '#', id: 'show-unpopular-categories'
+    ul#unpopular-categories.nav.nav-tabs role='tablist'
+      - (game.unpopular_categories - [current_category]).each do |category|
+        li class="#{category == current_category ? 'active' : ''}"
+          = link_to category, game_category_sum_of_bests_path(game, category), class: 'unpopular-category'
