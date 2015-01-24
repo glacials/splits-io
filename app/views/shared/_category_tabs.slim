@@ -1,4 +1,4 @@
-- cache [game, current_category] do
+- cache [game, current_category, link_type] do
   - category = game.categories.first
   ul#popular-categories.nav.nav-tabs role='tablist'
     - (game.popular_categories | [current_category]).each do |category|
