@@ -4,7 +4,7 @@ module RunsHelper
     when :my_pbs
       {
         type: :current_user,
-        source: options[:user],
+        source: current_user,
         runs: current_user.pbs,
         cols: [:time, :name, :uploaded, :owner_controls],
         description: "my personal bests"
