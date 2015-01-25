@@ -3,6 +3,9 @@ require 'active_support/concern'
 module TwitchUser
   extend ActiveSupport::Concern
 
+  include HTTParty
+  ssl_version :SSLv3
+
   included do
     def load_from_twitch(response = nil)
       twitch_user = Twitch::User::find_by_oauth_token(twitch_token)
@@ -21,10 +24,7 @@ module TwitchUser
       User.where(
         twitch_id: HTTParty.get(
           URI::parse("https://api.twitch.tv/kraken/users/#{name}/follows/channels").tap do |uri|
-            uri.query = {
-              oauth_token: twitch_token,
-              limit: 500
-            }.to_query
+            uri.query = {oauth_token: twitch_token, limit: 500}.to_query
           end.to_s
         )["follows"].map { |follow| follow["channel"]["_id"] }
       ).joins(:runs).group("users.id")

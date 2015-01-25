@@ -1,4 +1,7 @@
 class TwitchController < ApplicationController
+  include HTTParty
+  ssl_version :SSLv3
+
   def out
     auth_uri = URI::parse('https://api.twitch.tv/kraken/oauth2/authorize')
     auth_uri.query = {
@@ -17,7 +20,7 @@ class TwitchController < ApplicationController
     end
 
     token = HTTParty.post("https://api.twitch.tv/kraken/oauth2/token", query: post_params)['access_token']
-    response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{token}", ssl_version: :SSLv3)
+    response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{token}")
 
     user = User.find_by(twitch_id: response['_id']) || User.new
     user.twitch_token = token
@@ -36,7 +39,7 @@ class TwitchController < ApplicationController
     end
   rescue HTTParty::ResponseError, SocketError, OpenSSL::SSL::SSLError => e
     redirect_to root_path,
-      alert: "Couldn't communicate with Twitch to get your account info (#{e.class.to_s.demodulize.titleize}). Please try again."
+      alert: "Couldn't communicate with Twitch to get your account info (#{e.class.to_s.demodulize}). Please try again."
   end
 
   private
