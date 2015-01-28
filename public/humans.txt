@@ -1,0 +1,28 @@
+this file proves authorship, not property.
+
+/* AUTHOR */
+
+  Ben "Glacials" Carlsson
+  Email: qhiiyr [at] gmail.com
+  Tweet: @glcls
+  Location: San Francisco, CA
+
+/* SOURCE */
+
+  github.com/glacials/splits-io
+
+/* THANKS */
+
+  CryZe107 and wooferzfg
+  for not using a proprietary format when making LiveSplit; also for open sourcing it when i complained enough
+  Twitter: @cryze107, @wooferzfg1
+
+  batedurgonnadie
+  for being the first major consumer of the api, and for being a far more effective error reporter than rollbar
+  Twitter: @batedurgonnadie
+
+  my senior project teacher from school
+  for understanding my dislike for my senior project (splitsdb) and letting me rebuild it for web class (into splits-io)
+
+  a lot of people
+  for seeing an error saying to email me then actually emailing me :)
