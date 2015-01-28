@@ -1,6 +1,7 @@
 class Api::V2::ApplicationController < ApplicationController
   respond_to :json
 
+  prepend_before_action :set_cors_headers
   before_action :check_params, only: [:index]
   before_action :set_records, only: [:index]
   before_action :set_record, only: [:show, :destroy, :disown]
@@ -37,5 +38,14 @@ class Api::V2::ApplicationController < ApplicationController
 
   def search_conditions
     params.permit(safe_params)
+  end
+
+  private
+
+  def set_cors_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   end
 end
