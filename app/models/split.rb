@@ -29,11 +29,23 @@ class Split
       name: name,
       duration: duration,
       finish_time: finish_time,
-      best?: best,
+      best: best,
       gold?: gold,
       skipped?: skipped,
       reduced?: reduced,
       history: history
-    }
+    }.compact
+  end
+
+  def serializable_hash
+    {
+      name: name,
+      duration: duration,
+      finish_time: finish_time,
+      best: best.try(:serializable_hash),
+      gold?: gold,
+      skipped?: skipped,
+      history: history
+    }.compact
   end
 end
