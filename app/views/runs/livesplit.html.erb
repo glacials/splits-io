@@ -11,9 +11,9 @@
   <% @run.splits.each do |split| %>
     <Segment>
       <Icon />
-      <Name><%= split[:name] %></Name>
-      <PersonalBestSplitTime><%= Time.at(split[:finish_time] || 0).utc.strftime("%H:%M:%S.%7N").strip %></PersonalBestSplitTime>
-      <BestSegmentTime><%= Time.at(split[:best][:duration] || 0).utc.strftime("%H:%M:%S.%7N").strip %></BestSegmentTime>
+      <Name><%= split.name %></Name>
+      <PersonalBestSplitTime><%= Time.at(split.finish_time || 0).utc.strftime("%H:%M:%S.%7N").strip %></PersonalBestSplitTime>
+      <BestSegmentTime><%= Time.at(split.best.duration || 0).utc.strftime("%H:%M:%S.%7N").strip %></BestSegmentTime>
       <SegmentHistory />
     </Segment>
   <% end %>

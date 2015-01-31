@@ -8,14 +8,14 @@ module ForgetfulPersonsRun
     # If it does, the skipped splits are rolled into the soonest future split that wasn't skipped.
     def reduced_splits
       splits.reduce([]) do |splits, split|
-        if splits.last.try(:[], :duration) == 0
+        if splits.last.try(:duration) == 0
           skipped_split = splits.last
-          splits + [splits.pop.merge(
-            duration: split[:duration],
-            name: "#{skipped_split[:name]} + #{split[:name]}",
-            finish_time: split[:finish_time],
+          splits + [Split.new(splits.pop.to_h.merge(
+            duration: split.duration,
+            name: "#{skipped_split.name} + #{split.name}",
+            finish_time: split.finish_time,
             reduced?: true
-          )]
+          ))]
         else
           splits + [split]
         end
@@ -23,7 +23,7 @@ module ForgetfulPersonsRun
     end
 
     def has_skipped_splits?
-      splits.any? { |split| split[:skipped?] }
+      splits.any? { |split| split.skipped? }
     end
   end
 end

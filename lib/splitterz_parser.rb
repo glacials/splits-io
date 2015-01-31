@@ -26,14 +26,13 @@ class SplitterZParser < BabelBridge::Parser
     run[:splits] = []
     run[:time] = 0
     splits.splits.each do |segment|
-      split = {}
-      split[:best] = {}
-      split[:name] = segment.title
-      split[:duration] = duration_in_seconds_of(segment.run_time.to_s) - run[:time]
-      split[:finish_time] = duration_in_seconds_of(segment.run_time.to_s)
-      split[:best][:duration] = duration_in_seconds_of(segment.best_time.to_s)
-      split[:parent] = run
-      run[:time] += split[:duration]
+      split = Split.new
+      split.best = {}
+      split.name = segment.title
+      split.duration = duration_in_seconds_of(segment.run_time.to_s) - run[:time]
+      split.finish_time = duration_in_seconds_of(segment.run_time.to_s)
+      split.best.duration = duration_in_seconds_of(segment.best_time.to_s)
+      run[:time] += split.duration
       run[:splits] << split
     end
     run

@@ -28,27 +28,27 @@ class LiveSplitParser < BabelBridge::Parser
     end.reject { |t| t == 0 }.uniq
     if run[:splits].empty?
       xml['Segments'][0]['Segment'].each do |segment|
-        split = {}
-        split[:best] = {}
-        split[:name] = segment['Name'][0].present? ? segment['Name'][0] : ''
+        split = Split.new
+        split.best = Split.new
+        split.name = segment['Name'][0].present? ? segment['Name'][0] : ''
 
-        split[:finish_time] = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+        split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
           k['name'] == 'Personal Best'
         end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
-        split[:duration] = split[:finish_time] - run[:time]
-        split[:duration] = 0 if split[:duration] < 0
+        split.duration = split.finish_time - run[:time]
+        split.duration = 0 if split.duration < 0
 
         best_segment = segment['BestSegmentTime'][0]['RealTime'].try(:[], 0)
         best_segment = best_segment[0] if best_segment.is_a?(Hash)
-        split[:best][:duration] = duration_in_seconds_of(best_segment)
-        split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
-        split[:skipped?] = split[:duration] == 0
+        split.best.duration = duration_in_seconds_of(best_segment)
+        split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:duration).try(:round, 5)
+        split.skipped = split.duration == 0
 
-        split[:history] = segment['SegmentHistory'][0]['Time'].try do |times|
+        split.history = segment['SegmentHistory'][0]['Time'].try do |times|
           times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
         end
 
-        run[:time] += split[:duration] if split[:duration].present?
+        run[:time] += split.duration if split.duration.present?
         run[:splits] << split
       end
     end
@@ -60,29 +60,29 @@ class LiveSplitParser < BabelBridge::Parser
     run[:time]   ||= 0
     if run[:splits].empty?
       xml['Segments'][0]['Segment'].each do |segment|
-        split = {}
-        split[:best] = {}
-        split[:name] = segment['Name'][0].present? ? segment['Name'][0] : ''
+        split = Split.new
+        split.best = Split.new
+        split.name = segment['Name'][0].present? ? segment['Name'][0] : ''
 
         # Okay what the hell. There's no way XML parsing is this crazy.
         # Somebody please enlighten me. Maybe I should switch this to Nokogiri.
-        split[:finish_time] = duration_in_seconds_of(segment['SplitTimes'].first.first.second.select do |k, _|
+        split.finish_time = duration_in_seconds_of(segment['SplitTimes'].first.first.second.select do |k, _|
           k['name'] == 'Personal Best'
         end.first['content'].strip)
-        split[:duration] = split[:finish_time] - run[:time]
-        split[:duration] = 0 if split[:duration] < 0
+        split.duration = split.finish_time - run[:time]
+        split.duration = 0 if split.duration < 0
 
         best_segment = segment['BestSegmentTime'][0]
         best_segment = best_segment[0] if best_segment.is_a?(Hash)
-        split[:best][:duration] = duration_in_seconds_of(best_segment)
-        split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
-        split[:skipped?] = split[:duration] == 0
+        split.best.duration = duration_in_seconds_of(best_segment)
+        split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:duration).try(:round, 5)
+        split.skipped = split.duration == 0
 
-        split[:history] = segment['SegmentHistory'][0]['Time'].try do |times|
+        split.history = segment['SegmentHistory'][0]['Time'].try do |times|
           times.map { |time| duration_in_seconds_of(time['content'].strip) }
         end
 
-        run[:time] += split[:duration] if split[:duration].present?
+        run[:time] += split.duration if split.duration.present?
         run[:splits] << split
       end
     end
@@ -101,22 +101,22 @@ class LiveSplitParser < BabelBridge::Parser
     run[:time]     ||= 0
     if run[:splits].empty?
       xml['Segments'][0]['Segment'].each do |segment|
-        split = {}
-        split[:best] = {}
-        split[:name] = segment['Name'][0].present? ? segment['Name'][0] : ''
-        split[:finish_time] = duration_in_seconds_of(segment['PersonalBestSplitTime'][0])
+        split = Split.new
+        split.best = Split.new
+        split.name = segment['Name'][0].present? ? segment['Name'][0] : ''
+        split.finish_time = duration_in_seconds_of(segment['PersonalBestSplitTime'][0])
 
-        split[:duration] = split[:finish_time] - run[:time]
-        split[:duration] = 0 if split[:duration] < 0
-        split[:best][:duration] = duration_in_seconds_of(segment['BestSegmentTime'][0])
-        split[:gold?] = split[:duration] > 0 && split[:duration].round(5) == split[:best].try(:[], :duration).try(:round, 5)
-        split[:skipped?] = split[:duration] == 0
+        split.duration = split.finish_time - run[:time]
+        split.duration = 0 if split.duration < 0
+        split.best.duration = duration_in_seconds_of(segment['BestSegmentTime'][0])
+        split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:duration).try(:round, 5)
+        split.skipped = split.duration == 0
 
-        split[:history] = segment['SegmentHistory'][0]['Time'].try do |times|
+        split.history = segment['SegmentHistory'][0]['Time'].try do |times|
           times.map { |time| duration_in_seconds_of(time['content'].strip) }
         end
 
-        run[:time] += split[:duration] if split[:duration].present?
+        run[:time] += split.duration if split.duration.present?
         run[:splits] << split
       end
     end

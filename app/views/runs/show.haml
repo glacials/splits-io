@@ -33,7 +33,7 @@
         | ✓ pb
 
 = render partial: 'shared/timeline', locals: {run: @run}
-- unless @run.splits.any? { |split| split[:skipped?] }
+- unless @run.splits.any? { |split| split.skipped? }
   = render partial: 'shared/gold_timeline', locals: {run: @run}
 = render partial: 'shared/timeline_inspector', locals: {run: @run}
 

@@ -85,8 +85,8 @@ class Run < ActiveRecord::Base
       assign_attributes(
         name: result[:name],
         program: result[:program],
-        time: result[:splits].map { |split| split[:duration] }.sum.to_f,
-        sum_of_best: result[:splits].map { |split| split[:best][:duration] }.sum.to_f
+        time: result[:splits].map { |split| split.duration }.sum.to_f,
+        sum_of_best: result[:splits].map { |split| split.best.duration }.sum.to_f
       )
 
       @parse_cache = result

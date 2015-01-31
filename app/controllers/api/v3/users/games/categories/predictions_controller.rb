@@ -20,14 +20,14 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
       time: 0
     )
     @prediction[:splits] = most_recent_run.splits.map do |split|
-      {
-        best: {duration: split[:best][:duration]},
-        name: split[:name],
-        finish_time: @prediction[:time] += (split[:history] + [split[:duration]]).reject { |duration| duration == 0 }.smma.round(6),
-        duration: (split[:history] + [split[:duration]]).reject { |duration| duration == 0 }.smma.round(6),
-        gold?: false,
-        skipped?: rand(0.99) < split[:history].map { |time| time.nil? ? 1 : 0 }.smma
-      }
+      Split.new(
+        best: Split.new(duration: split.best.duration)
+        name: split[:name]
+        finish_time: @prediction[:time] += (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6)
+        duration: (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6)
+        gold?: false
+        skipped?: rand(0.99) < split.history.map { |time| time.nil? ? 1 : 0 }.smma
+      )
     end
     render json: @prediction
   rescue MovingAverage::Errors::InvalidTailError

@@ -3,8 +3,8 @@
   - colors = [:blue, :purple, :green, :red, :orange, :yellow]
   .timeline
     - run.reduced_splits.each_with_index do |split, index|
-      .pure-u.split{id: "#{run.id}-split-#{index}", class: colors[index % colors.length], style: "width: #{split[:duration] / scale_to * 100}%;"}
-        .title= split[:name]
-        .time= render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: run.short?}
+      .pure-u.split{id: "#{run.id}-split-#{index}", class: colors[index % colors.length], style: "width: #{split.duration / scale_to * 100}%;"}
+        .title= split.name
+        .time= render partial: 'shared/time', locals: {time: split.duration, show_milliseconds: run.short?}
     - if run.time < scale_to
       .pure-u.split.disabled{style: "width: #{(scale_to - run.time) / scale_to * 100}%;"}

@@ -1,4 +1,4 @@
 <%= @run.name %>,<%= @run.attempts or 0 %>
 <% @run.splits.each do |split| %>
-<%= split[:name] %>,<%= Time.at(split[:finish_time]).utc.strftime("%H:%M:%S.%2N").strip %>,<%= Time.at(split[:duration]).utc.strftime("%H:%M:%S.%2N").strip %>
+<%= split.name %>,<%= Time.at(split.finish_time).utc.strftime("%H:%M:%S.%2N").strip %>,<%= Time.at(split.duration).utc.strftime("%H:%M:%S.%2N").strip %>
 <% end %>

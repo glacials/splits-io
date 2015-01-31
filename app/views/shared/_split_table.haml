@@ -9,9 +9,9 @@
     - splits.each_with_index do |split, index|
       %tr
         %td.align-right= index + 1
-        %td.align-left= split[:name].present? ? split[:name] : '-'
+        %td.align-left= split.name.present? ? split.name : '-'
         %td.align-right
-          - if split[:gold?]
+          - if split.gold?
             .gold-split{title: "Gold"}
-          = render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: @run.short?}
-        %td.align-right= render partial: 'shared/time', locals: {time: split[:finish_time], show_milliseconds: @run.short?}
+          = render partial: 'shared/time', locals: {time: split.duration, show_milliseconds: @run.short?}
+        %td.align-right= render partial: 'shared/time', locals: {time: split.finish_time, show_milliseconds: @run.short?}

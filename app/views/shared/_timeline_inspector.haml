@@ -3,12 +3,12 @@
 - cache [:timeline_inspector, :v5, {run: run, scale_to: scale_to, overlap: overlap}] do
   .timeline{style: "margin-top: .75em;", class: overlap ? 'absolute' : ''}
     - run.reduced_splits.each_with_index do |split, index|
-      .pure-u.inspect{id: "#{run.id}-inspect-#{index}", style: "width: #{split[:duration] / scale_to * 100}%; opacity: 0;"}
+      .pure-u.inspect{id: "#{run.id}-inspect-#{index}", style: "width: #{split.duration / scale_to * 100}%; opacity: 0;"}
         .bar
           %p
-        .title= split[:name]
+        .title= split.name
         .time
-          = render partial: 'shared/time', locals: {time: split[:duration], show_milliseconds: run.short?}
-          - unless split[:gold?] || run.has_skipped_splits? || split[:duration].round(2) == split[:best][:duration].round(2)
+          = render partial: 'shared/time', locals: {time: split.duration, show_milliseconds: run.short?}
+          - unless split.gold? || run.has_skipped_splits? || split.duration.round(2) == split.best.duration.round(2)
             %br
-            #{BigDecimal.new(split[:duration] - split[:best][:duration], 2)}s potential save
+            #{BigDecimal.new(split.duration - split.best.duration, 2)}s potential save
