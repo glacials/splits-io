@@ -1,4 +1,4 @@
-class Api::V2::RunSerializer < ActiveModel::Serializer
+class Api::V2::RunSerializer < Api::V2::ApplicationSerializer
   has_one :user, serializer: Api::V2::UserSerializer
   has_one :game, serializer: Api::V2::GameSerializer
   has_one :category, serializer: Api::V2::CategorySerializer
