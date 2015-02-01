@@ -5,6 +5,11 @@ class Twitch
     def self.find_by_oauth_token(oauth_token)
       HTTParty.get(uri(oauth_token: oauth_token)).parsed_response
     end
+
+    def self.uri(query) URI.parse('https://api.twitch.tv/kraken/user').tap do |uri|
+        uri.query = query.to_query
+      end
+    end
   end
 
   module Follows
@@ -16,14 +21,6 @@ class Twitch
           end.to_s
         )["follows"].map { |follow| follow["channel"]["_id"] }
       end
-    end
-  end
-
-  private
-
-  def self.uri(query)
-    URI.parse('https://api.twitch.tv/kraken/user').tap do |uri|
-      uri.query = query.to_query
     end
   end
 end
