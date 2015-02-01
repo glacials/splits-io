@@ -1,6 +1,5 @@
 class Api::V3::ApplicationController < ActionController::Base
   prepend_before_action :set_cors_headers
-  force_ssl if: :ssl_configured?
 
   private
 
