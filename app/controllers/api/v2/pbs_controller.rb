@@ -43,6 +43,6 @@ class Api::V2::PbsController < Api::V2::ApplicationController
   end
 
   def set_pbs
-    @pbs = @user.pbs.where(search_conditions.except(:game_id))
+    @pbs = @user.pbs.where(search_conditions.except(:game_id)).includes(:game).includes(:category)
   end
 end

@@ -15,6 +15,6 @@ class Api::V3::Users::PbsController < Api::V3::ApplicationController
   end
 
   def set_pbs
-    @pbs = @user.pbs
+    @pbs = @user.pbs.includes(:game).includes(:category)
   end
 end

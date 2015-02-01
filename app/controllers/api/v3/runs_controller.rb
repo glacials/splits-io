@@ -51,7 +51,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   private
 
   def set_run
-    @run = Run.find(params[:id].to_i(36))
+    @run = Run.includes(:game).includes(:category).includes(:user).find(params[:id].to_i(36))
   end
 
   def verify_ownership!
