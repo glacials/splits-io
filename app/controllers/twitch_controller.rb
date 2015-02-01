@@ -37,7 +37,7 @@ class TwitchController < ApplicationController
     else
       redirect_to root_path, flash: flash
     end
-  rescue HTTParty::ResponseError, SocketError, OpenSSL::SSL::SSLError => e
+  rescue HTTParty::ResponseError, SocketError, OpenSSL::SSL::SSLError, Errno::ECONNRESET => e
     redirect_to root_path,
       alert: "Couldn't communicate with Twitch to get your account info (#{e.class.to_s.demodulize}). Please try again."
   end
