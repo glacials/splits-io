@@ -40,7 +40,7 @@ Run ids are splits-io base 36 ids. These are the strings you see in user-friendl
 Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or splits-io base 10 `id`s (which you can discover in other
 routes).
 
-#### GET /games/:id
+#### `GET /games/:id`
 Returns information about this game.
 
 ##### Example request
@@ -62,7 +62,7 @@ curl https://splits.io/api/v3/games/sms
   }
 }
 ```
-#### GET /games/:game_id/runs
+#### `GET /games/:game_id/runs`
 Returns all runs for this game. This route is [paginated](#pagination).
 
 ##### Example request
@@ -78,7 +78,7 @@ curl https://splits.io/api/v3/games/sms/runs
 }
 ```
 
-#### GET /games/:game_id/categories/:id
+#### `GET /games/:game_id/categories/:id`
 Returns information about this category.
 
 ##### Example request
@@ -97,13 +97,13 @@ curl https://splits.io/api/v3/categories/852
 }
 ```
 
-#### GET /games/:game_id/categories/:category_id/runs
+#### `GET /games/:game_id/categories/:category_id/runs`
 Returns all runs for this category. This route is [paginated](#pagination).
 
 ### User-scoped
 User ids are Twitch usernames (which we call `name`) or splits-io base 10 `id`s.
 
-#### GET /users/:id
+#### `GET /users/:id`
 Returns information about this user.
 
 ##### Example request
@@ -125,7 +125,7 @@ curl https://splits.io/api/v3/users/glacials
 }
 ```
 
-#### GET /users/:user_id/runs
+#### `GET /users/:user_id/runs`
 Returns all of this user's runs. This route is [paginated](#pagination).
 
 ##### Example request
@@ -141,7 +141,7 @@ curl https://splits.io/api/v3/users/glacials/runs
 }
 ```
 
-#### GET /users/:user_id/pbs
+#### `GET /users/:user_id/pbs`
 Returns all of this user's PBs (one per category). This route is [paginated](#pagination).
 
 ##### Example request
@@ -156,7 +156,7 @@ curl https://splits.io/api/v3/users/glacials/pbs
   "pbs": [ ... ]
 }
 ```
-#### GET /users/:user_id/games/:game_id/categories/:category_id/runs
+#### `GET /users/:user_id/games/:game_id/categories/:category_id/runs`
 Returns all of this user's runs for this category. This route is [paginated](#pagination).
 
 ##### Example request
@@ -170,7 +170,7 @@ curl https://splits.io/api/v3/users/glacials/games/sms/categories/852/runs
 }
 ```
 
-#### GET /users/:user_id/games/:game_id/categories/:category_id/pb
+#### `GET /users/:user_id/games/:game_id/categories/:category_id/pb`
 Returns this user's PB for this category.
 
 ##### Example request
@@ -186,7 +186,7 @@ curl https://splits.io/api/v3/users/glacials/games/sms/categories/852/pb
 }
 ```
 
-#### GET /users/:user_id/games/:game_id/categories/:category_id/prediction
+#### `GET /users/:user_id/games/:game_id/categories/:category_id/prediction`
 Returns a prediction of this user's next run of this category. Predictions use per-split smoothed moving averages for
 on all recorded run history of the user for this category. The response for this endpoint looks like a response to a
 normal "get run" endpoint, but has a `null` id.
@@ -194,7 +194,7 @@ normal "get run" endpoint, but has a `null` id.
 ### Run-scoped
 Run ids are splits-io base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
 
-#### GET /runs/:id
+#### `GET /runs/:id`
 Returns this run.
 
 ##### Example request
@@ -256,10 +256,10 @@ curl https://splits.io/api/v3/runs/c6
 }
 ```
 
-#### DELETE /runs/:id
+#### `DELETE /runs/:id`
 Deletes this run (requires authentication).
 
-#### POST /runs
+#### `POST /runs`
 Upload a new run. If you want to allow an account to claim ownership this run, you should inspect the response for a
 `uris.claim_uri` and send the user who should own the run there. If they're logged in, their account will automatically
 claim ownership of the run and they'll be redirected to the standard run page URI.
