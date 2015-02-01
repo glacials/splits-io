@@ -21,7 +21,7 @@ module TwitchUser
     end
 
     def follows
-      User.where(twitch_id: Twitch::Follows.find_by_user(self)).joins(:runs).group('user_id')
+      User.where(twitch_id: Twitch::Follows.find_by_user(self)).joins(:runs).group('users.id')
     end
   end
 end
