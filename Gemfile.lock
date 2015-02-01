@@ -29,6 +29,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    api-pagination (4.1.0)
     arel (5.0.1.20140414130214)
     ast (2.0.0)
     awesome_print (1.2.0)
@@ -245,6 +246,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (= 0.8.3)
+  api-pagination
   awesome_print
   babel_bridge (>= 0.5.3)
   bootstrap-sass

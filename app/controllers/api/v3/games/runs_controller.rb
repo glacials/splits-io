@@ -3,8 +3,7 @@ class Api::V3::Games::RunsController < Api::V3::ApplicationController
   before_action :set_runs, only: [:index]
 
   def index
-    render json: @runs, each_serializer: Api::V3::RunSerializer
-    )
+    paginate json: @runs, each_serializer: Api::V3::RunSerializer
   end
 
   private
@@ -16,6 +15,6 @@ class Api::V3::Games::RunsController < Api::V3::ApplicationController
   end
 
   def set_runs
-    @runs = @game.runs.includes(:category).includes(:user)
+    @runs = @game.runs.includes(:game).includes(:category).includes(:user)
   end
 end

@@ -29,7 +29,7 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
         skipped?: rand(0.99) < split.history.map { |time| time.nil? ? 1 : 0 }.smma
       )
     end
-    render json: @prediction
+    render json: {prediction: @prediction}
   rescue MovingAverage::Errors::InvalidTailError
     render status: 404, json: {status: 404, message: "Not enough data on #{@user.name} to make a prediction."}
   end
