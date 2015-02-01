@@ -8,6 +8,6 @@ class Api::V3::GamesController < Api::V3::ApplicationController
   private
 
   def set_game
-    @game = Game.includes(:category).find_by(shortname: params[:id])
+    @game = Game.includes(:categories).find_by(shortname: params[:id])
   end
 end
