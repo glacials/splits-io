@@ -1,6 +1,6 @@
 class Api::V2::CategoriesController < Api::V2::ApplicationController
   def index
-    render json: @records.includes(:game), each_serializer: Api::V2::CategorySerializer
+    render json: @records, each_serializer: Api::V2::CategorySerializer
   end
 
   def show
