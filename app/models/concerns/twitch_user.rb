@@ -21,13 +21,7 @@ module TwitchUser
     end
 
     def follows
-      User.where(
-        twitch_id: HTTParty.get(
-          URI::parse("https://api.twitch.tv/kraken/users/#{name}/follows/channels").tap do |uri|
-            uri.query = {oauth_token: twitch_token, limit: 500}.to_query
-          end.to_s
-        )["follows"].map { |follow| follow["channel"]["_id"] }
-      ).joins(:runs).group("users.id")
+      User.where(twitch_id: Twitch.follows_for_user(self))
     end
   end
 end
