@@ -48,4 +48,9 @@ class Api::V2::ApplicationController < ApplicationController
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   end
+
+  def ssl_configured?
+    # API v2 can't handle SSL, so override this setting here
+    false
+  end
 end

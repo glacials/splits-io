@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   use_vanity :current_user
+  force_ssl if: :ssl_configured?
 
   before_action :remove_www
   before_action :set_gon
