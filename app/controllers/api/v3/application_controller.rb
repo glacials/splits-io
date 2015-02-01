@@ -1,6 +1,6 @@
 class Api::V3::ApplicationController < ActionController::Base
   prepend_before_action :set_cors_headers
-  force_ssl if: :ssl_configured?
+  before_action :force_ssl, if: :ssl_configured?
 
   private
 
@@ -12,6 +12,12 @@ class Api::V3::ApplicationController < ActionController::Base
   end
 
   private
+
+  def force_ssl
+    if !request.ssl?
+      render status: 301, json: {status: 301, message: "API v3 hits must be over HTTPS."}
+    end
+  end
 
   def ssl_configured?
     Rails.application.config.use_ssl
