@@ -22,7 +22,9 @@ class User < ActiveRecord::Base
   end
 
   def categories_run
-    Run.unscoped.where(user: self).select('distinct category_id').where.not(category: nil).map(&:category)
+    Category.where(
+      id: Run.unscoped.where(user: self).select('distinct category_id').where.not(category: nil).map(&:category_id)
+    )
   end
 
   def pb_for(category)

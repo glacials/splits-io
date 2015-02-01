@@ -21,7 +21,7 @@ module TwitchUser
     end
 
     def follows
-      User.where(twitch_id: Twitch.follows_for_user(self))
+      User.where(twitch_id: Twitch::Follows.find_by_user(self))
     end
   end
 end
