@@ -107,9 +107,12 @@ User ids are Twitch usernames (which we call `name`) or splits-io base 10 `id`s.
 Returns information about this user.
 
 ##### Example request
+```bash
 curl https://splits.io/api/v3/users/glacials
+```
 
 ##### Example response
+```json
 {
   "user": {
     "id": 1,
@@ -120,6 +123,7 @@ curl https://splits.io/api/v3/users/glacials
     "updated_at": "2015-02-01T18:53:03.397Z"
   }
 }
+```
 
 #### GET /users/:user_id/runs
 Returns all of this user's runs. This route is [paginated](#pagination).
@@ -141,7 +145,9 @@ curl https://splits.io/api/v3/users/glacials/runs
 Returns all of this user's PBs (one per category). This route is [paginated](#pagination).
 
 ##### Example request
+```bash
 curl https://splits.io/api/v3/users/glacials/pbs
+```
 
 ##### Example response
 *(see the `/runs/:id` endpoint for the run format)*

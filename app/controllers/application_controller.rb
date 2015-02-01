@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   use_vanity :current_user
+  force_ssl if: :ssl_configured?
 
-  before_action :enforce_ssl
   before_action :remove_www
   before_action :set_gon
 
@@ -41,9 +41,7 @@ class ApplicationController < ActionController::Base
     gon.user = current_user if user_signed_in?
   end
 
-  def enforce_ssl
-    if config.use_ssl && !request.ssl?
-      redirect_to protocol: :https
-    end
+  def ssl_configured?
+    Rails.application.config.use_ssl
   end
 end
