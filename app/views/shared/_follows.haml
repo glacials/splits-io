@@ -1,4 +1,4 @@
-- cache [:follows, :v1, {user: @user}] do
+- cache [:follows, @user] do
   - if @user.follows.present?
     %br
     %h5 Hey, you. Here are some people you follow.

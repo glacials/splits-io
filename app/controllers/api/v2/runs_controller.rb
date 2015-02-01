@@ -2,7 +2,7 @@ class Api::V2::RunsController < Api::V2::ApplicationController
   before_action :verify_ownership!, only: [:destroy, :disown]
 
   def index
-    render json: @records, each_serializer: Api::V2::RunSerializer
+    render json: @records.includes(:category).includes(:user), each_serializer: Api::V2::RunSerializer
   end
 
   def show
