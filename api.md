@@ -173,7 +173,9 @@ curl https://splits.io/api/v3/users/glacials/pbs
 Returns all of this user's runs for this category. This route is [paginated](#pagination).
 
 ##### Example request
+```bash
 curl https://splits.io/api/v3/users/glacials/games/sms/categories/852/runs
+```
 
 ##### Example response
 *(see the `/runs/:id` endpoint for the run format)*
