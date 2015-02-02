@@ -50,7 +50,7 @@ class Api::V2::ApplicationController < ApplicationController
   end
 
   def ssl_configured?
-    # API v2 can't handle SSL, so override this setting here
+    # API v2 can't handle SSL
     false
   end
 end

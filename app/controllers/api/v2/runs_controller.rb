@@ -3,7 +3,7 @@ class Api::V2::RunsController < Api::V2::ApplicationController
 
   def index
     paginate(
-      json: @records.includes(:game).includes(:category).includes(:user),
+      json: @records.unscoped.includes(:game).includes(:category).includes(:user),
       each_serializer: Api::V2::RunSerializer
     )
   end

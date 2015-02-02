@@ -139,10 +139,6 @@ class Run < ActiveRecord::Base
   # Our default scope doesn't select file because it's potentially really, really big. This method lets us still access
   # it normally, through a secondary query.
   def file
-    if new_record?
-      read_attribute(:file)
-    else
-      Run.unscoped.find(self).read_attribute(:file)
-    end
+    read_attribute(:file) || Run.unscoped.find(self).read_attribute(:file)
   end
 end
