@@ -3,7 +3,7 @@ class Api::V3::CategoriesController < Api::V3::ApplicationController
   before_action :set_category, only: [:show]
 
   def show
-    render json: @category, serializer: Api::V3::CategorySerializer
+    paginate json: @category, serializer: Api::V3::CategorySerializer
   end
 
   private

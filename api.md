@@ -100,6 +100,19 @@ curl https://splits.io/api/v3/categories/852
 #### `GET /games/:game_id/categories/:category_id/runs`
 Returns all runs for this category. This route is [paginated](#pagination).
 
+##### Example request
+```bash
+curl https://splits.io/api/v3/games/sms/categories/70/runs
+```
+
+##### Example response
+```json
+*(see the `/runs/:id` endpoint for the run format)*
+{
+  "runs": [ ... ]
+}
+```
+
 ### User-scoped
 User ids are Twitch usernames (which we call `name`) or splits-io base 10 `id`s.
 
