@@ -3,13 +3,13 @@ class Api::V2::RunsController < Api::V2::ApplicationController
 
   def index
     paginate(
-      json: @records.unscoped.includes(:game).includes(:category).includes(:user),
+      json: @records.includes(:game).includes(:category).includes(:user),
       each_serializer: Api::V2::RunSerializer
     )
   end
 
   def show
-    render json: @record, serializer: Api::V2::RunSerializer
+    render json: @record, serializer: Api::V2::RunWithSplitsSerializer, root: 'run'
   end
 
   def create
