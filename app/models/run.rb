@@ -86,7 +86,11 @@ class Run < ActiveRecord::Base
         name: result[:name],
         program: result[:program],
         time: result[:splits].map { |split| split.duration }.sum.to_f,
-        sum_of_best: result[:splits].map { |split| split.best.duration }.sum.to_f
+        sum_of_best: result[:splits].map.all? do |split|
+          split.best.duration.present?
+        end && result[:splits].map do |split|
+          split.best.duration
+        end.sum.to_f
       )
 
       @parse_cache = result
