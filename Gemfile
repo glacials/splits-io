@@ -6,6 +6,7 @@ group :development do
   gem 'rubocop', require: false
   gem 'sqlite3'
   gem 'byebug'
+  gem 'pry-rails'
 end
 
 group :production do
