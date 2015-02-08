@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable
   has_many :runs
   has_many :games, -> { uniq }, through: :runs
+  has_many :rivalries, foreign_key: :from_user_id
 
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}) }
 
