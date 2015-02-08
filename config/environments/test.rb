@@ -35,4 +35,6 @@ SplitsIO::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.use_ssl = false
+
+  Slim::Engine.set_options(pretty: true)
 end

@@ -78,4 +78,6 @@ SplitsIO::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.use_ssl = true
+
+  Slim::Engine.set_options(pretty: true)
 end
