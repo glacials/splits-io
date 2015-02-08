@@ -67,7 +67,7 @@ You can generate a secure key for this with `rake secret`.
 
 ## API
 
-See the full API documentation in the [api.md](./api.md) file.
+See the full API documentation in the [API.md](./API.md) file.
 
 ## How the parsing works
 
