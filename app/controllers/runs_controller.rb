@@ -2,15 +2,15 @@ require 'htmlentities'
 require 'uri'
 
 class RunsController < ApplicationController
-  before_action :set_run, only: [:show, :download, :disown, :delete, :compare]
+  before_action :set_run, only: [:show, :download, :disown, :delete, :compare, :edit, :update]
   before_action :set_comparison, only: :compare
 
-  before_action :handle_first_visit, only: :show, unless: Proc.new { @run.visited? }
-  before_action :warn_about_deprecated_url, only: :show, unless: Proc.new { request.path == run_path(@run) }
+  before_action :handle_first_visit, only: [:show, :edit, :update], unless: Proc.new { @run.visited? }
+  before_action :warn_about_deprecated_url, only: [:show], unless: Proc.new { request.path == run_path(@run) }
   before_action :reject_as_unparsable, only: [:show, :download], unless: Proc.new { @run.parses? }
 
   before_action :attempt_to_claim, only: [:show]
-  before_action :verify_ownership, only: [:disown, :delete]
+  before_action :verify_ownership, only: [:edit, :update, :disown, :delete]
 
   before_action :track_run_view, only: :show
 
@@ -19,6 +19,20 @@ class RunsController < ApplicationController
   end
 
   def index
+  end
+
+  def new
+  end
+
+  def edit
+  end
+
+  def update
+    if @run.update_attributes(video_url: params[:run][:video_url])
+      redirect_to run_path(@run)
+    else
+      redirect_to edit_run_path(@run)
+    end
   end
 
   def create

@@ -1,0 +1,50 @@
+- title(rand(100) == 0 ? @run.name.gsub("Star Fox Adventures", "Stair Fax Temperatures") : @run.name)
+= render partial: 'twitter_card'
+
+- content_for(:header) do
+  h3
+    - if @run.game.try(:name).present? && @run.category.try(:name).present?
+      = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
+      |  
+      = link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+    - else
+      = @run.name
+  h5
+    = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
+    - if @run.user.try(:name)
+      small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
+  = render partial: 'shared/alerts'
+  h6
+    span#download-menu
+      a href=download_path(@run, @run.program) onclick='hide_download_menu()' = @run.program
+      - ([:wsplit, :timesplittracker, :splitterz, :livesplit] - [@run.program]).each do |program|
+        |  &bull; 
+        a href=download_path(@run, program) onclick='hide_download_menu()' = program
+    ul.run-options
+      li
+        a.fake-link#download-link onclick='toggle_download_menu()' ↓ download
+        - if @run.category
+          - if !@run.belongs_to?(current_user) && current_user.try(:runs?, @run.category)
+            li
+              a href=compare_path(current_user.pb_for(@run.category), @run) compare to my pb
+          - if @run.best_known?
+            li ✓ best on record
+          - elsif @run.pb?
+            - if @run.belongs_to?(current_user) && @run.category.best_known_run.present?
+              li
+                a href=compare_path(@run, @run.category.best_known_run) compare to best on record
+            li ✓ pb
+      /- if @run.video_url.blank? && @run.belongs_to?(current_user)
+        li
+          a href=edit_run_path(@run) add proof
+      - if @run.video_url.present?
+        a href=@run.video_url proof
+
+= render partial: 'shared/timeline', locals: {run: @run}
+- unless @run.splits.any? { |split| split.skipped? }
+  = render partial: 'shared/gold_timeline', locals: {run: @run}
+= render partial: 'shared/timeline_inspector', locals: {run: @run}
+
+article
+  - cache [:splits, :v1, @run] do
+    = render partial: 'shared/split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}
