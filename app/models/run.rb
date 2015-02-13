@@ -14,6 +14,8 @@ class Run < ActiveRecord::Base
 
   has_secure_token :claim_token
 
+  after_create :refresh_game
+
   class << self; attr_accessor :parsers end
   @parsers = {
     wsplit: WSplitParser,
@@ -145,5 +147,10 @@ class Run < ActiveRecord::Base
   # it normally, through a secondary query.
   def file
     read_attribute(:file) || Run.unscoped.find(self).read_attribute(:file)
+  end
+
+  def refresh_game
+    return if game.blank?
+    game.delay.sync_with_srl
   end
 end
