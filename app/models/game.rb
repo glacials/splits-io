@@ -6,7 +6,6 @@ class Game < ActiveRecord::Base
   has_many :categories
   has_many :runs, through: :categories
 
-  after_save :sync_with_srl
   after_touch :destroy, if: Proc.new { |game| game.categories.count.zero? }
 
   scope :named, -> { where.not(name: nil) }
@@ -27,7 +26,6 @@ class Game < ActiveRecord::Base
 
     update_attributes(srl_id: game['id'].to_i, shortname: game['abbrev'])
   end
-  handle_asynchronously :sync_with_srl
 
   def to_s
     name
