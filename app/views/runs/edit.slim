@@ -13,7 +13,6 @@
     = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
     - if @run.user.try(:name)
       small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
-  = render partial: 'shared/alerts'
   h6
     span#download-menu
       a href=download_path(@run, @run.program) onclick='hide_download_menu()' = @run.program

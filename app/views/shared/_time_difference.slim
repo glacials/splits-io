@@ -1,0 +1,21 @@
+- show_milliseconds = show_milliseconds.nil? ? false : show_milliseconds
+- if time == 0
+  | -
+- else
+  - if time > 0
+    span.red
+      | +
+      = Time.at(time).utc.strftime("%k:%M:%S")
+      - if show_milliseconds
+        small = Time.at(time).utc.strftime(".%2N")
+  - if time < 0
+    span.green
+      | -
+      = Time.at(time).utc.strftime("%k:%M:%S")
+      - if show_milliseconds
+        small = Time.at(time.abs).utc.strftime(".%2N")
+  - if time == 0
+    span
+      = Time.at(time).utc.strftime("%k:%M:%S")
+      - if show_milliseconds
+        small = Time.at(time).utc.strftime(".%2N")

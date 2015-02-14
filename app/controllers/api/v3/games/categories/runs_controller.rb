@@ -44,6 +44,6 @@ class Api::V3::Games::Categories::RunsController < Api::V3::ApplicationControlle
   end
 
   def set_runs
-    @runs = @category.runs.includes(:game).includes(:category).includes(:user)
+    @runs = @category.runs.includes(:game, :category, :user)
   end
 end

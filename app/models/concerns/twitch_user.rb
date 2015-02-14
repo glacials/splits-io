@@ -21,7 +21,9 @@ module TwitchUser
     end
 
     def follows
-      User.where(twitch_id: Twitch::Follows.find_by_user(self)).joins(:runs).group('users.id')
+      Rails.cache.fetch([:db, :follows, self]) do
+        User.where(twitch_id: Twitch::Follows.find_by_user(self)).joins(:runs).group('users.id')
+      end
     end
   end
 end

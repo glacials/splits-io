@@ -34,6 +34,10 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not found')
   end
 
+  def unauthorized
+    raise ActionController::RoutingError.new('Unauthorized')
+  end
+
   private
 
   def set_gon

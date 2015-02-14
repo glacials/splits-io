@@ -30,6 +30,7 @@ SplitsIO::Application.routes.draw do
 
   resources :users, only: [:show] do
     scope module: :users do
+      resources :rivalries, only: [:new, :create, :destroy]
       resources :pbs, only: [], module: :pbs do
         collection do
           resource :export, only: [], module: :export do

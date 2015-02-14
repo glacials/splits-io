@@ -35,6 +35,7 @@
           - else
             %a#sign-in.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
         = yield(:header)
+        = render partial: 'shared/alerts'
       = yield
       %footer
         &nbsp;

@@ -2,7 +2,6 @@
 - content_for(:header) do
   h2 Fastest sum of best
   h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
-  = render partial: 'shared/alerts'
 article = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
 article
   - if @category.runs.unarchived.owned.where.not(sum_of_best: nil).empty?

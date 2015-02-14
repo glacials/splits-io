@@ -14,7 +14,7 @@ class Twitch
 
   module Follows
     def self.find_by_user(user)
-      Rails.cache.fetch([:follows, user]) do
+      Rails.cache.fetch([:twitch, :follows, user]) do
         HTTParty.get(
           URI::parse("https://api.twitch.tv/kraken/users/#{user.name}/follows/channels").tap do |uri|
             uri.query = {oauth_token: user.twitch_token, limit: 500}.to_query

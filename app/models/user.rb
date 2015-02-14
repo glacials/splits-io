@@ -1,10 +1,12 @@
 class User < ActiveRecord::Base
+  include RivalUser
   include TwitchUser
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable
   has_many :runs
+  has_many :categories, -> { uniq }, through: :runs
   has_many :games, -> { uniq }, through: :runs
   has_many :rivalries, foreign_key: :from_user_id
 
@@ -22,19 +24,13 @@ class User < ActiveRecord::Base
     name
   end
 
-  def categories_run
-    Category.where(
-      id: Run.unscoped.where(user: self).select('distinct category_id').where.not(category: nil).map(&:category_id)
-    )
-  end
-
   def pb_for(category)
     runs.where(category: category).order(:time).first
   end
 
   def pbs
     runs.where(
-      id: categories_run.map { |category| pb_for(category).id } | runs.where(category: nil).pluck(:id)
+      id: categories.map { |category| pb_for(category).id } | runs.where(category: nil).pluck(:id)
     )
   end
 

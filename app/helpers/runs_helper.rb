@@ -1,4 +1,14 @@
 module RunsHelper
+  def difference(run_a, run_b)
+    (run_a.time - run_b.time).tap do |difference|
+      if difference > 0
+        "+ #{difference}"
+      else
+        "#{difference}"
+      end
+    end
+  end
+
   def table_locals(table_type, options = {})
     case table_type
     when :my_pbs
@@ -6,7 +16,7 @@ module RunsHelper
         type: :current_user,
         source: current_user,
         runs: current_user.pbs,
-        cols: [:time, :name, :uploaded, :owner_controls],
+        cols: [:time, :name, :uploaded, :owner_controls, :rival],
         description: "my personal bests"
       }.merge(sorting_info)
     when :pbs
