@@ -25,7 +25,9 @@ class User < ActiveRecord::Base
   end
 
   def pb_for(category)
-    runs.where(category: category).order(:time).first
+    Rails.cache.fetch([:users, self, :categories, category, :pb]) do
+      runs.where(category: category).order(:time).first
+    end
   end
 
   def pbs

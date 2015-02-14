@@ -5,7 +5,9 @@ module RivalUser
 
   included do
     def rival_for(category)
-      rivalries.for_category(category).map(&:to_user)
+      Rails.cache.fetch([:users, self, :categories, category, :rival]) do
+        rivalries.for_category(category).map(&:to_user)
+      end
     end
   end
 end
