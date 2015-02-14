@@ -67,7 +67,7 @@ You can generate a secure key for this with `rake secret`.
 
 ## API
 
-See the full API documentation in the [API.md](./API.md) file.
+See the full API documentation in the [API readme](./docs/api.md) file.
 
 ## How the parsing works
 
@@ -154,4 +154,3 @@ out the actual implementations of all this stuff in the `lib/<name-of-splitting-
 [2]: http://en.wikipedia.org/wiki/LL_parser
 [3]: https://github.com/shanebdavis/Babel-Bridge
 [4]: https://github.com/laserlemon/figaro
-[5]: #get-apiv2runsid
