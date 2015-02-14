@@ -6,7 +6,7 @@ class RunsController < ApplicationController
   before_action :set_comparison, only: :compare
 
   before_action :handle_first_visit, only: [:show, :edit, :update], unless: Proc.new { @run.visited? }
-  before_action :warn_about_deprecated_url, only: [:show], unless: Proc.new { request.path == run_path(@run) }
+  before_action :warn_about_deprecated_url, only: [:show], if: Proc.new { request.path == "/#{@run.nick}" }
   before_action :reject_as_unparsable, only: [:show, :download], unless: Proc.new { @run.parses? }
 
   before_action :attempt_to_claim, only: [:show]
@@ -36,16 +36,13 @@ class RunsController < ApplicationController
   end
 
   def create
-    @run = Run.create(file: params[:file].try(:read), user: current_user, image_url: params[:image_url])
-    unless @run.persisted?
+    @run = Run.new(file: params[:file].try(:read), user: current_user, image_url: params[:image_url])
+    if @run.save
+      redirect_to run_path(@run)
+      track! :upload
+    else
       redirect_to :cant_parse
-      return
     end
-    respond_to do |format|
-      format.json { render json: {url: request.protocol + request.host_with_port + run_path(@run)} }
-      format.html { redirect_to run_path(@run) }
-    end
-    track! :upload
   rescue ActiveRecord::StatementInvalid
     redirect_to :cant_parse
   end
