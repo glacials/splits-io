@@ -1,6 +1,0 @@
-- if time == 0
-  = '-'
-- else
-  = Time.at(time).utc.strftime("%k:%M:%S")
-  - if show_milliseconds
-    %small>= Time.at(time).utc.strftime(".%2N")
