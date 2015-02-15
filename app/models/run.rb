@@ -10,6 +10,7 @@ class Run < ActiveRecord::Base
 
   belongs_to :user, touch: true
   belongs_to :category, touch: true
+  belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
   has_one :game, through: :category
 
   has_secure_token :claim_token
@@ -146,7 +147,7 @@ class Run < ActiveRecord::Base
   # Our default scope doesn't select file because it's potentially really, really big. This method lets us still access
   # it normally, through a secondary query.
   def file
-    read_attribute(:file) || Run.unscoped.find(self).read_attribute(:file)
+    run_file.try(:file) || read_attribute(:file) || Run.unscoped.find(self).read_attribute(:file)
   end
 
   def refresh_game

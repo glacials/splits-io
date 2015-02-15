@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150208090305) do
+ActiveRecord::Schema.define(version: 20150215012243) do
 
   create_table "categories", force: true do |t|
     t.integer  "game_id"
@@ -53,6 +53,13 @@ ActiveRecord::Schema.define(version: 20150208090305) do
   add_index "rivalries", ["from_user_id"], name: "index_rivalries_on_from_user_id"
   add_index "rivalries", ["to_user_id"], name: "index_rivalries_on_to_user_id"
 
+  create_table "run_files", force: true do |t|
+    t.string "digest"
+    t.text   "file"
+  end
+
+  add_index "run_files", ["digest"], name: "index_run_files_on_digest"
+
   create_table "runs", force: true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -64,11 +71,12 @@ ActiveRecord::Schema.define(version: 20150208090305) do
     t.string   "name"
     t.decimal  "time"
     t.string   "program"
-    t.boolean  "visited",     default: false, null: false
+    t.boolean  "visited",         default: false, null: false
     t.string   "claim_token"
     t.decimal  "sum_of_best"
     t.boolean  "archived"
     t.string   "video_url"
+    t.string   "run_file_digest"
   end
 
   add_index "runs", ["category_id"], name: "index_runs_on_category_id"
