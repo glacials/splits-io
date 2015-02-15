@@ -36,7 +36,8 @@ class RunsController < ApplicationController
   end
 
   def create
-    @run = Run.new(file: params[:file].try(:read), user: current_user, image_url: params[:image_url])
+    run_file = RunFile.create(file: params[:file].read)
+    @run = Run.new(run_file: run_file, user: current_user, image_url: params[:image_url])
     if @run.save
       redirect_to run_path(@run)
       track! :upload

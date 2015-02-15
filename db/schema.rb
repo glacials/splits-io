@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150215012243) do
+ActiveRecord::Schema.define(version: 20150215005207) do
 
   create_table "categories", force: true do |t|
     t.integer  "game_id"
@@ -40,8 +40,16 @@ ActiveRecord::Schema.define(version: 20150215012243) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
-# Could not dump table "games" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
+  create_table "games", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "shortname"
+    t.integer  "srl_id"
+  end
+
+  add_index "games", ["name"], name: "index_games_on_name"
+  add_index "games", ["shortname"], name: "index_games_on_shortname"
 
   create_table "rivalries", force: true do |t|
     t.integer "category_id"
