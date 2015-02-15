@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20150215005207) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "categories", force: true do |t|
     t.integer  "game_id"
     t.string   "name"
@@ -21,8 +24,8 @@ ActiveRecord::Schema.define(version: 20150215005207) do
     t.string   "shortname"
   end
 
-  add_index "categories", ["game_id"], name: "index_categories_on_game_id"
-  add_index "categories", ["name"], name: "index_categories_on_name"
+  add_index "categories", ["game_id"], name: "index_categories_on_game_id", using: :btree
+  add_index "categories", ["name"], name: "index_categories_on_name", using: :btree
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -38,7 +41,7 @@ ActiveRecord::Schema.define(version: 20150215005207) do
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "games", force: true do |t|
     t.string   "name"
@@ -48,8 +51,8 @@ ActiveRecord::Schema.define(version: 20150215005207) do
     t.integer  "srl_id"
   end
 
-  add_index "games", ["name"], name: "index_games_on_name"
-  add_index "games", ["shortname"], name: "index_games_on_shortname"
+  add_index "games", ["name"], name: "index_games_on_name", using: :btree
+  add_index "games", ["shortname"], name: "index_games_on_shortname", using: :btree
 
   create_table "rivalries", force: true do |t|
     t.integer "category_id"
@@ -57,16 +60,16 @@ ActiveRecord::Schema.define(version: 20150215005207) do
     t.integer "to_user_id"
   end
 
-  add_index "rivalries", ["category_id"], name: "index_rivalries_on_category_id"
-  add_index "rivalries", ["from_user_id"], name: "index_rivalries_on_from_user_id"
-  add_index "rivalries", ["to_user_id"], name: "index_rivalries_on_to_user_id"
+  add_index "rivalries", ["category_id"], name: "index_rivalries_on_category_id", using: :btree
+  add_index "rivalries", ["from_user_id"], name: "index_rivalries_on_from_user_id", using: :btree
+  add_index "rivalries", ["to_user_id"], name: "index_rivalries_on_to_user_id", using: :btree
 
   create_table "run_files", force: true do |t|
     t.string "digest"
     t.text   "file"
   end
 
-  add_index "run_files", ["digest"], name: "index_run_files_on_digest"
+  add_index "run_files", ["digest"], name: "index_run_files_on_digest", using: :btree
 
   create_table "runs", force: true do |t|
     t.integer  "user_id"
@@ -87,8 +90,8 @@ ActiveRecord::Schema.define(version: 20150215005207) do
     t.string   "run_file_digest"
   end
 
-  add_index "runs", ["category_id"], name: "index_runs_on_category_id"
-  add_index "runs", ["user_id"], name: "index_runs_on_user_id"
+  add_index "runs", ["category_id"], name: "index_runs_on_category_id", using: :btree
+  add_index "runs", ["user_id"], name: "index_runs_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: ""
@@ -109,7 +112,7 @@ ActiveRecord::Schema.define(version: 20150215005207) do
     t.string   "avatar"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email"
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

@@ -23,6 +23,8 @@ class Api::V3::RunsController < Api::V3::ApplicationController
     render status: 201, location: api_v3_run_url(@run), json: {
       status: 201,
       message: "Run created.",
+      id: @run.id.to_s(36),
+      claim_token: @run.claim_token,
       uris: {
         api_uri: api_v3_run_url(@run),
         public_uri: run_url(@run),

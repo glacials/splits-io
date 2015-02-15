@@ -3,20 +3,15 @@ $(function () {
     var data = new FormData();
     data.append("file", file);
     $.ajax({
-      url: "/api/v2/runs",
+      url: "/api/v3/runs",
       type: "POST",
       data: data,
       cache: false,
       processData: false,
       contentType: false,
       success: function (data, textStatus, xhr) {
-        $.ajax({
-          url: xhr.getResponseHeader("Location"),
-          type: "GET",
-          success: function (data, textStatus, xhr) {
-            window.location = "/" + data.run.id.toString(36);
-          }
-        });
+        localStorage.setItem("claim_tokens/" + data.id, data.claim_token);
+        window.location = data.uris.public_uri;
       },
       error: function (xhr, textStatus) {
         if (xhr.status == 400) {

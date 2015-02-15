@@ -281,7 +281,7 @@ claim ownership of the run and they'll be redirected to the standard run page UR
 
 ##### Example request
 ```bash
-curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v2/runs
+curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v3/runs
 ```
 
 ##### Example response

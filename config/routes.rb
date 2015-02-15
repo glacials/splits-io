@@ -7,7 +7,7 @@ SplitsIO::Application.routes.draw do
   get '/why', to: 'pages#why', as: :why
 
   get  '/upload',     to: 'runs#new', as: :new_run
-  post '/upload',     to: 'runs#create' # deprecated; use POST /runs or POST /api/v2/runs
+  post '/upload',     to: 'runs#create' # deprecated; use POST /runs or POST /api/v3/runs
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
