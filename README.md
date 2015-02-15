@@ -67,6 +67,8 @@ You can generate a secure key for this with `rake secret`.
 
 ## API
 
+**API v1 will be removed on March 4, 2015. API v2 is considered deprecated. Please use v3.**
+
 See the full API documentation in the [API readme](./docs/api.md) file.
 
 ## How the parsing works
