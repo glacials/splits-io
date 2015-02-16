@@ -99,7 +99,7 @@ class RunsController < ApplicationController
   end
 
   def warn_about_deprecated_url
-    redirect_to @run, flash: {
+    redirect_to run_path(@run), flash: {
       icon: 'warning-sign',
       alert: "This run's permalink has changed. You have been redirected to the newer one. \
               <a href='#{why_path}'>More info</a>.".html_safe
