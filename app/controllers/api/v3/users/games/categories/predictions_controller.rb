@@ -20,8 +20,8 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
       time: 0
     )
     @prediction[:splits] = most_recent_run.splits.map do |split|
-      Split.new(
-        best: Split.new(duration: split.best.duration),
+      Run::Split.new(
+        best: Run::Split.new(duration: split.best.duration),
         name: split.name,
         finish_time: @prediction[:time] += (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6),
         duration: (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6),

@@ -8,6 +8,16 @@ class Run < ActiveRecord::Base
   include ForgetfulPersonsRun
   include ActionView::Helpers::DateHelper
 
+  self.inheritance_column = :program
+  def self.find_sti_class(program)
+    {
+      'livesplit' => LiveSplit::Run,
+      'wsplit' => WSplit::Run,
+      'timesplittracker' => TimeSplitTracker::Run,
+      'splitterz' => SplitterZ::Run
+    }[program]
+  end
+
   belongs_to :user, touch: true
   belongs_to :category, touch: true
   belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
