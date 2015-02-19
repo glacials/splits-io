@@ -2,7 +2,8 @@ class GamesController < ApplicationController
   before_action :set_game
 
   def show
-    redirect_to game_category_path(@game, @game.categories.first)
+    @category = @game.categories.first
+    render template: 'games/categories/show'
   end
 
   private
