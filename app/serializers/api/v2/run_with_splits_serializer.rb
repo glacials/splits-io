@@ -4,4 +4,8 @@ class Api::V2::RunWithSplitsSerializer < Api::V2::ApplicationSerializer
   has_one :category, serializer: Api::V2::CategorySerializer
 
   attributes :id, :path, :name, :time, :program, :image_url, :created_at, :updated_at
+
+  def time
+    object.time.to_s
+  end
 end
