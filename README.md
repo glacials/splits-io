@@ -19,10 +19,9 @@ Alternatively, there is a manual upload form at `/upload`.
 ## Running locally
 
 ### Requirements
-* 
+* Ruby 2.1.5
 
 ### First run
-With Ruby and Bundler installed, you should be able to just
 
 ```bash
 bundle install

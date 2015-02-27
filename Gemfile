@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.3'
+ruby '2.1.5'
 
 group :development do
   gem 'awesome_print'
@@ -15,7 +15,6 @@ group :production do
 end
 
 gem 'babel_bridge',              '>= 0.5.3'
-gem 'coffee-rails',              '>= 4.0.0'
 gem 'devise',                    '>= 3.1.1'
 gem 'figaro',                    '>= 1.0.0.rc1'
 gem 'gon',                       '>= 5.1.2'
@@ -23,7 +22,6 @@ gem 'htmlentities',              '>= 4.3.1'
 gem 'jbuilder',                  '>= 1.2'
 gem 'jquery-rails',              '>= 3.0.4'
 gem 'purecss-rails',             '>= 0.3.0'
-gem 'rails',                     '>= 4.0.0'
 gem 'rails_12factor',            '>= 0.0.2'
 gem 'sass-rails',                '>= 4.0.0'
 gem 'spinjs-rails',              '>= 1.4'
@@ -53,3 +51,4 @@ gem 'api-pagination'
 gem 'slim'
 gem 'nilify_blanks'
 gem 'chronic_duration', git: 'https://github.com/glacials/chronic_duration', branch: 'pad_to_option'
+gem 'rails'
