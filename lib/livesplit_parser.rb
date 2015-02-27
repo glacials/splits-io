@@ -124,6 +124,8 @@ class LiveSplitParser < BabelBridge::Parser
 
   def duration_in_seconds_of(time)
     return 0 if time.blank?
-    Time.parse(time).seconds_since_midnight
+
+    time.sub!('.', ':') if time.count('.') == 2
+    ChronicDuration.parse(time, keep_zero: true)
   end
 end

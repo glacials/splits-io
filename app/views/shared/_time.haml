@@ -2,6 +2,6 @@
 - if time == 0
   = '-'
 - else
-  = Time.at(time).utc.strftime("%k:%M:%S")
+  = ChronicDuration.output(time.truncate, limit_to_hours: true, pad_to: :hours, format: :chrono)
   - if show_milliseconds
     %small>= Time.at(time).utc.strftime(".%2N")
