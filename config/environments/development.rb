@@ -15,12 +15,6 @@ SplitsIO::Application.configure do
   config.action_controller.perform_caching = false
   config.cache_store = :mem_cache_store
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
-
-  # Print deprecation notices to the Rails logger.
-  config.active_support.deprecation = :log
-
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
 
@@ -29,8 +23,11 @@ SplitsIO::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  # Default url
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default_url_options = {host: 'localhost:3000'}
+
+  config.active_record.raise_in_transactional_callbacks = true
+  config.active_support.deprecation = :log
 
   config.use_ssl = false
   config.read_only = false

@@ -98,7 +98,7 @@ SplitsIO::Application.routes.draw do
       end
       resources :runs,       only: [:index, :show, :create, :destroy] do
         member do
-          delete :user, to: :disown
+          delete :user, action: :disown
         end
       end
     end
@@ -108,7 +108,7 @@ SplitsIO::Application.routes.draw do
       resources :users,      only: [:index, :show]
       resources :runs,       only: [:index, :show, :create, :destroy] do
         member do
-          delete :user, to: :disown
+          delete :user, action: :disown
         end
       end
     end
