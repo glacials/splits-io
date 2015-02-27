@@ -33,6 +33,7 @@ SplitsIO::Application.configure do
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
   config.use_ssl = false
+  config.read_only = false
 
   Slim::Engine.set_options(pretty: true)
 end
