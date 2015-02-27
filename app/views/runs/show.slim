@@ -40,7 +40,7 @@
         a href=@run.video_url proof
 
 = render partial: 'shared/timeline', locals: {run: @run}
-- unless @run.splits.any? { |split| split.skipped? }
+- if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
   = render partial: 'shared/gold_timeline', locals: {run: @run}
 = render partial: 'shared/timeline_inspector', locals: {run: @run}
 

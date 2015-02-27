@@ -164,4 +164,8 @@ class Run < ActiveRecord::Base
     return if game.blank?
     game.delay.sync_with_srl
   end
+
+  def has_golds?
+    splits.all? { |split| split.best.duration.present? }
+  end
 end

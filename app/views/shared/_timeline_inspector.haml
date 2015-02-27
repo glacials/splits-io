@@ -9,6 +9,6 @@
         .title= split.name
         .time
           = render partial: 'shared/time', locals: {time: split.duration, show_milliseconds: run.short?}
-          - unless split.gold? || run.has_skipped_splits? || split.duration.round(2) == split.best.duration.round(2)
+          - unless split.gold? || run.has_skipped_splits? || !run.has_golds? || split.duration.round(2) == split.best.duration.round(2)
             %br
             #{BigDecimal.new(split.duration - split.best.duration, 2)}s potential save
