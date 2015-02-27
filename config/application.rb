@@ -11,7 +11,7 @@ module SplitsIO
     config.active_job.queue_adapter = :delayed_job
 
     # how often should encountering a run cause a background refresh-from-file job to be queued up for it?
-    config.run_refresh_chance = 0.1
+    config.run_refresh_chance = 0
   end
 end
 
