@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:glacials/chronic_duration
+  remote: https://github.com/glacials/chronic_duration
   revision: ac649be5d0feaba3a83df7b7ff20ed58bdefead5
   branch: pad_to_option
   specs:
