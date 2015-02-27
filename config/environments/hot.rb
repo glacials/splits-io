@@ -30,6 +30,8 @@ SplitsIO::Application.configure do
   config.action_mailer.default_url_options = {host: 'localhost:3000'}
   config.action_mailer.raise_delivery_errors = false
 
+  config.active_record.raise_in_transactional_callbacks = true
+
   config.use_ssl = false
   config.read_only = false
 
