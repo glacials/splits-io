@@ -1,5 +1,5 @@
 class Api::V3::RunsController < Api::V3::ApplicationController
-  before_action :set_run, only: [:show]
+  before_action :set_run, only: [:show, :destroy, :disown]
   before_action :verify_ownership!, only: [:destroy, :disown]
 
   def show
