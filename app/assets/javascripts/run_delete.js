@@ -5,7 +5,7 @@ $(function () {
       url: "/api/v3/runs/" + run.id,
       type: "DELETE",
       error: function (response) {
-        console.log("Run deletion failed with response: " + JSON.stringify(response));
+        console.log("Run deletion failed with response: " + JSON.stringify(response.responseJSON));
       }
     });
   };

@@ -54,11 +54,11 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   private
 
   def set_run
-    @run = Run.includes(:game, :category, :user).find(params[:id].to_i(36))
+    @run = Run.includes(:game, :category, :user).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render status: 404, json: {
       status: 404,
-      message: "Run with base 36 id '#{params[:id]}' not found."
+      message: "Run with id '#{params[:id]}' not found."
     }
   end
 
