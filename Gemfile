@@ -33,6 +33,7 @@ gem 'httparty'
 
 # heroku
 gem 'platform-api'
+gem 'rails_12factor'
 
 # logging
 gem 'newrelic_rpm'
