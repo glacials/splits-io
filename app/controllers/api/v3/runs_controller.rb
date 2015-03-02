@@ -8,7 +8,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
 
   def create
     # TODO: Tokens, not cookies
-    run_file = RunFile.create(file: params.require(:file).read)
+    run_file = RunFile.for_file(params.require(:file))
     @run = Run.new(run_file: run_file, user: current_user, image_url: params[:image_url]).tap do |run|
       # TODO: Move this error handling into a before_action or a rescue
       unless run.parses?

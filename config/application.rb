@@ -10,7 +10,7 @@ module SplitsIO
     config.action_controller.allow_forgery_protection = false
     config.active_job.queue_adapter = :delayed_job
 
-    # how often should encountering a run cause a background refresh-from-file job to be queued up for it?
+    # How often should encountering a run trigger a background refresh-from-file job?
     config.run_refresh_chance = 0.1
   end
 end
