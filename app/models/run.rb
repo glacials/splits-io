@@ -37,7 +37,6 @@ class Run < ActiveRecord::Base
   }
   @parse_cache = nil
 
-  validates :file, presence: true
   validates_with RunValidator
 
   before_save :populate_category
@@ -158,7 +157,7 @@ class Run < ActiveRecord::Base
   # Our default scope doesn't select file because it's potentially really, really big. This method lets us still access
   # it normally, through a secondary query.
   def file
-    run_file.try(:file) || read_attribute(:file) || Run.unscoped.find(self).read_attribute(:file)
+    run_file.try(:file) || read_attribute(:file) || Run.unscoped.find(id).read_attribute(:file)
   end
 
   def refresh_game

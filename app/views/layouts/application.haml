@@ -17,10 +17,10 @@
         %h1#droplabel.inverted drop anywhere
       %header
         %nav
-          - page = {upload: request.path == new_run_path, search: request.path.match(search_path), faq: request.path == faq_path, profile: user_signed_in? && request.path == user_path(current_user)}
+          - page = {upload: request.path == new_run_path, games: request.path.match(games_path), faq: request.path == faq_path, profile: user_signed_in? && request.path == user_path(current_user)}
           %a.blue{href: root_path, class: page.values.all? { |p| !p } ? 'logo' : ''} splits i/o
           %a.purple{href: new_run_path, class: page[:upload] ? 'logo' : ''} upload
-          %a.green{href: search_path, class: page[:search] ? 'logo' : ''} search
+          %a.green{href: games_path, class: page[:games] ? 'logo' : ''} games
           %a.red{href: faq_path, class: page[:faq] ? 'logo' : ''} faq
           - if user_signed_in?
             .dropdown{href: "#"}

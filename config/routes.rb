@@ -19,9 +19,9 @@ SplitsIO::Application.routes.draw do
     get 'signout', to: 'devise/sessions#destroy', as: :signout
   end
 
-  get '/search(/:q)',              to: 'search#index' # deprecated
-  get '/search(?q=:q)',            to: 'search#index', as: :search
-  get '/search?q=:game_shortname', to: 'search#index'
+  get '/search',        to: redirect('/games')
+  get '/search/:q',     to: redirect('/games?q=%{q}')
+  get '/search(?q=:q)', to: redirect('/games?q=%{q}')
 
   get '/:id/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:id/download/:program',       to: 'runs#download', as: :download
@@ -48,7 +48,7 @@ SplitsIO::Application.routes.draw do
 
   get '/games/:game_id/:id', to: redirect('/games/%{game_id}/categories/%{id}')
 
-  resources :games, only: [:show] do
+  resources :games, only: [:index, :show] do
     resources :categories, only: [:show], module: :games do
       resources :leaderboards, only: [], module: :categories do
         collection do

@@ -13,12 +13,12 @@ class Games::CategoriesController < ApplicationController
 
   def set_game
     @game = Game.find_by(shortname: params[:game_id])
-    redirect_to search_path(params[:game_id]) if @game.nil?
+    redirect_to game_path(params[:game_id]) if @game.nil?
   end
 
   def set_category
     @category = @game.categories.find_by(shortname: params[:id]) ||
                 @game.categories.find_by(id: params[:id])
-    redirect_to search_path(params[:game_id]) if @category.nil?
+    redirect_to game_path(params[:game_id]) if @category.nil?
   end
 end

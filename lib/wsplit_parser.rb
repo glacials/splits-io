@@ -25,9 +25,7 @@ class WSplitParser < BabelBridge::Parser
   rule :unix_newline,    "\n"
 
   def parse(file)
-    run = super(file)
-    return nil if run.nil?
-    {
+    (run = super(file)) && {
       name: run.title.to_s,
       attempts: run.attempts.to_s.to_i,
       offset: run.offset.to_f,

@@ -1,12 +1,18 @@
 source 'https://rubygems.org'
 ruby '2.1.5'
 
-group :development do
-  gem 'awesome_print'
+group :development, :hot do
+  # db stuff
+  gem 'sqlite3'
+
+  # debugging
   gem 'byebug'
   gem 'pry-rails'
+  gem 'web-console'
+
+  # pretty things
+  gem 'awesome_print'
   gem 'rubocop', require: false
-  gem 'sqlite3'
 end
 
 group :production do
@@ -39,9 +45,10 @@ gem 'rails_12factor'
 gem 'newrelic_rpm'
 gem 'rails_stdout_logging'
 
-# models
+# models/db
 gem 'has_secure_token'
 gem 'nilify_blanks'
+gem 'squeel'
 
 # parsing
 gem 'babel_bridge'
