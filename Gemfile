@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 ruby '2.1.5'
 
 group :development, :hot do
-  # db stuff
-  gem 'sqlite3'
-
   # debugging
   gem 'byebug'
   gem 'pry-rails'
@@ -16,7 +13,6 @@ group :development, :hot do
 end
 
 group :production do
-  gem 'pg'
   gem 'rollbar'
 end
 
@@ -33,6 +29,9 @@ gem 'devise'
 gem 'dalli'
 gem 'redis-rails'
 gem 'redis-namespace'
+
+# db
+gem 'pg'
 
 # external communication
 gem 'httparty'
