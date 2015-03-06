@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show]
-  before_action :set_games, only: [:index]
   before_action :set_query, only: [:index]
+  before_action :set_games, only: [:index]
 
   def index
   end
