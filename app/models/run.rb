@@ -26,7 +26,11 @@ class Run < ActiveRecord::Base
   has_secure_token :claim_token
 
   after_create :refresh_game
-  after_destroy { |run| run.run_file.destroy if run.run_file.runs.where.not(id: run).empty? }
+  after_destroy do |run|
+    if run.run_file.present? && run.run_file.runs.where.not(id: run).empty?
+      run.run_file.destroy
+    end
+  end
 
   class << self; attr_accessor :parsers end
   @parsers = {

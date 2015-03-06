@@ -5,13 +5,13 @@
 article
   .row
     .col-md-6
-      form#search.form-search action=search_path method=:get
+      form#search.form-search action=games_path method=:get
         .input-group
           - placeholder = Game.where.not(shortname: nil).offset(rand(Game.where.not(shortname: nil).count)).first
           input.form-control type=:text name=:q autofocus=true placeholder="e.g. #{placeholder.name}, or #{placeholder.shortname}" value=@query
           span.input-group-btn
             button.btn.btn-default type=:submit search
-- if @query || @games
+- if @query.present? || @games.present?
   article
     h4 Games
     table.table.table-striped
