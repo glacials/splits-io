@@ -4,9 +4,9 @@
   h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
 article = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
 article
-  - if @category.runs.unarchived.owned.where.not(sum_of_best: nil).empty?
+  - if @category.runs.unarchived.owned.where.not(sum_of_best: nil).where.not(sum_of_best: 0).empty?
     center
-      i Still populating, come back tomorrow :)
+      i Not enough data in this category to display sum of bests.
   - else
     table.table.table-striped
       thead
@@ -17,7 +17,7 @@ article
           th.align-left PB
       tbody
         - i = 0
-        - @category.runs.unarchived.owned.where.not(sum_of_best: nil).order(:sum_of_best).each do |run|
+        - @category.runs.unarchived.owned.where.not(sum_of_best: nil).where.not(sum_of_best: 0).order(:sum_of_best).each do |run|
           tr id=[:run, run.id]
             td.align-right = i += 1
             td.align-left
