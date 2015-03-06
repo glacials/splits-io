@@ -22,7 +22,7 @@ class GamesController < ApplicationController
   end
 
   def set_games
-    @games = Game.search(@query).includes(:categories, :runs)
+    @games = @query.present? ? Game.search(@query).includes(:categories, :runs) : []
   end
 
   def set_query
