@@ -8,7 +8,7 @@ under the `Link`, `Total`, and `Per-Page` fields.
 ## Overview of routes
 Base URL is **https://splits.io/api/v3**.
 
-### Game-scoped
+### Based on game
 Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or splits-io base 10 `id`s (which you can discover in other
 routes).
 
@@ -17,7 +17,7 @@ routes).
     GET /games/:game_id/categories/:id
     GET /games/:game_id/categories/:category_id/runs
 
-### User-scoped
+### Based on user
 User ids are Twitch usernames or splits-io base 10 `id`s.
 
     GET /users/:id
@@ -27,7 +27,7 @@ User ids are Twitch usernames or splits-io base 10 `id`s.
     GET /users/:user_id/games/:game_id/categories/:category_id/pb
     GET /users/:user_id/games/:game_id/categories/:category_id/prediction
 
-### Run-scoped
+### Based on run
 Run ids are splits-io base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
 
     GET /runs/:id
@@ -36,12 +36,12 @@ Run ids are splits-io base 36 ids. These are the strings you see in user-friendl
 
 ## Route details
 
-### Game-scoped
+### Based on game
 Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or splits-io base 10 `id`s (which you can discover in other
 routes).
 
 #### `GET /games/:id`
-Returns information about this game.
+Returns information about a game.
 
 ##### Example request
 ```bash
@@ -63,7 +63,7 @@ curl https://splits.io/api/v3/games/sms
 }
 ```
 #### `GET /games/:game_id/runs`
-Returns all runs for this game. This route is [paginated](#pagination).
+Returns all runs for a game. This route is [paginated](#pagination).
 
 ##### Example request
 ```bash
@@ -79,7 +79,7 @@ curl https://splits.io/api/v3/games/sms/runs
 ```
 
 #### `GET /games/:game_id/categories/:id`
-Returns information about this category.
+Returns information about a category.
 
 ##### Example request
 ```bash
@@ -98,7 +98,7 @@ curl https://splits.io/api/v3/categories/852
 ```
 
 #### `GET /games/:game_id/categories/:category_id/runs`
-Returns all runs for this category. This route is [paginated](#pagination).
+Returns all runs for a category. This route is [paginated](#pagination).
 
 ##### Example request
 ```bash
@@ -113,11 +113,11 @@ curl https://splits.io/api/v3/games/sms/categories/70/runs
 }
 ```
 
-### User-scoped
+### Based on user
 User ids are Twitch usernames (which we call `name`) or splits-io base 10 `id`s.
 
 #### `GET /users/:id`
-Returns information about this user.
+Returns information about a user.
 
 ##### Example request
 ```bash
@@ -139,7 +139,7 @@ curl https://splits.io/api/v3/users/glacials
 ```
 
 #### `GET /users/:user_id/runs`
-Returns all of this user's runs. This route is [paginated](#pagination).
+Returns all of a user's runs. This route is [paginated](#pagination).
 
 ##### Example request
 ```bash
@@ -155,7 +155,7 @@ curl https://splits.io/api/v3/users/glacials/runs
 ```
 
 #### `GET /users/:user_id/pbs`
-Returns all of this user's PBs (one per category). This route is [paginated](#pagination).
+Returns all of a user's PBs (one per category). Because of an unnoticed mistake and my desire to not change this endpoint without bumping version, this route is **not** paginated. You can expect it to be in v4, but v3 will remain unpaginated.
 
 ##### Example request
 ```bash
@@ -170,7 +170,7 @@ curl https://splits.io/api/v3/users/glacials/pbs
 }
 ```
 #### `GET /users/:user_id/games/:game_id/categories/:category_id/runs`
-Returns all of this user's runs for this category. This route is [paginated](#pagination).
+Returns all of a user's runs for a game/category. This route is [paginated](#pagination).
 
 ##### Example request
 ```bash
@@ -186,7 +186,7 @@ curl https://splits.io/api/v3/users/glacials/games/sms/categories/852/runs
 ```
 
 #### `GET /users/:user_id/games/:game_id/categories/:category_id/pb`
-Returns this user's PB for this category.
+Returns a user's PB for a game/category.
 
 ##### Example request
 ```bash
@@ -203,14 +203,14 @@ curl https://splits.io/api/v3/users/glacials/games/sms/categories/852/pb
 
 #### `GET /users/:user_id/games/:game_id/categories/:category_id/prediction`
 Returns a prediction of this user's next run of this category. Predictions use per-split smoothed moving averages for
-on all recorded run history of the user for this category. The response for this endpoint looks like a response to a
+all recorded run history of the user for this category. The response for this endpoint looks like a response to a
 normal "get run" endpoint, but has a `null` id.
 
-### Run-scoped
+### Based on run
 Run ids are splits-io base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
 
 #### `GET /runs/:id`
-Returns this run.
+Returns a run.
 
 ##### Example request
 ```bash
@@ -290,9 +290,9 @@ curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v3/runs
   "status": 201,
   "message": "Run created.",
   "uris": {
-    "api_uri": "http://localhost:3000/api/v3/runs/36y",
-    "public_uri": "http://localhost:3000/36y",
-    "claim_uri": "http://localhost:3000/36y?claim_token=03a1adb08ec85d5b00374a70"
+    "api_uri": "https://splits.io/api/v3/runs/36y",
+    "public_uri": "https://splits.io/36y",
+    "claim_uri": "https://splits.io/36y?claim_token=03a1adb08ec85d5b00374a70"
   }
 }
 ```
