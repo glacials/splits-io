@@ -83,7 +83,7 @@ Returns information about a category.
 
 ##### Example request
 ```bash
-curl https://splits.io/api/v3/categories/852
+curl https://splits.io/api/v3/games/sms/categories/852
 ```
 
 ##### Example response
