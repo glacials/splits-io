@@ -51,7 +51,6 @@ class Api::V1::RunsController < Api::V1::ApplicationController
       run.save
     end
     head 201, location: api_v1_run_url(@record)
-    track! :upload
   rescue ActionController::ParameterMissing
     render status: 400, json: {
       status: 400,

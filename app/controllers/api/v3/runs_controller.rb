@@ -31,7 +31,6 @@ class Api::V3::RunsController < Api::V3::ApplicationController
         claim_uri: run_url(@run, claim_token: @run.claim_token)
       }
     }
-    track! :upload
   rescue ActionController::ParameterMissing
     render status: 400, json: {
       status: 400,

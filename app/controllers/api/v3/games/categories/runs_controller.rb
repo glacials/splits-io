@@ -21,7 +21,6 @@ class Api::V3::Games::Categories::RunsController < Api::V3::ApplicationControlle
       run.save
     end
     head 201, location: api_v3_run_url(@record)
-    track! :upload
   rescue ActionController::ParameterMissing
     render status: 400, json: {
       status: 400,

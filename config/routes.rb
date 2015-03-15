@@ -1,8 +1,6 @@
 SplitsIO::Application.routes.draw do
   root 'runs#index'
 
-  match '/experiments(/:action(/:id(.:format)))', controller: :vanity, via: [:get, :post]
-
   get '/faq', to: 'pages#faq', as: :faq
   get '/why', to: 'pages#why', as: :why
 

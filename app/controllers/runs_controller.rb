@@ -12,8 +12,6 @@ class RunsController < ApplicationController
   before_action :attempt_to_claim, only: [:show]
   before_action :verify_ownership, only: [:edit, :update, :disown, :delete]
 
-  before_action :track_run_view, only: :show
-
   def show
     @run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
   end
@@ -40,7 +38,6 @@ class RunsController < ApplicationController
     @run = Run.new(run_file: run_file, user: current_user, image_url: params[:image_url])
     if @run.save
       redirect_to run_path(@run)
-      track! :upload
     else
       redirect_to :cant_parse
     end
@@ -121,10 +118,6 @@ class RunsController < ApplicationController
       @run.update_attributes(user: current_user)
       redirect_to run_path(@run)
     end
-  end
-
-  def track_run_view
-    track!(:run_views)
   end
 
   def handle_first_visit

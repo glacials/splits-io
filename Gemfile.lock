@@ -203,25 +203,6 @@ GEM
     rainbow (2.0.0)
     raindrops (0.13.0)
     rake (10.4.2)
-    redis (3.1.0)
-    redis-actionpack (4.0.0)
-      actionpack (~> 4)
-      redis-rack (~> 1.5.0)
-      redis-store (~> 1.1.0)
-    redis-activesupport (4.0.0)
-      activesupport (~> 4)
-      redis-store (~> 1.1.0)
-    redis-namespace (1.5.1)
-      redis (~> 3.0, >= 3.0.4)
-    redis-rack (1.5.0)
-      rack (~> 1.5)
-      redis-store (~> 1.1.0)
-    redis-rails (4.0.0)
-      redis-actionpack (~> 4)
-      redis-activesupport (~> 4)
-      redis-store (~> 1.1.0)
-    redis-store (1.1.4)
-      redis (>= 2.2)
     request_store (1.0.8)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
@@ -282,7 +263,6 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
-    vanity (1.9.1)
     versionomy (0.4.4)
       blockenspiel (>= 0.4.5)
     warden (1.2.3)
@@ -334,8 +314,6 @@ DEPENDENCIES
   rails
   rails_12factor
   rails_stdout_logging
-  redis-namespace
-  redis-rails
   rollbar
   rubocop
   sass-rails
@@ -346,7 +324,6 @@ DEPENDENCIES
   tipsy-rails
   uglifier
   unicorn
-  vanity
   versionomy
   web-console
   will_paginate

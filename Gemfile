@@ -27,8 +27,6 @@ gem 'devise'
 
 # caching
 gem 'dalli'
-gem 'redis-rails'
-gem 'redis-namespace'
 
 # db
 gem 'pg'
@@ -61,9 +59,6 @@ gem 'figaro'
 gem 'rails'
 gem 'thin'
 gem 'unicorn'
-
-# tracking/experimentation
-gem 'vanity'
 
 # views
 gem 'bootstrap-sass'
