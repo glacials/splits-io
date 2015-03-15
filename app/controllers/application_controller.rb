@@ -13,14 +13,6 @@ class ApplicationController < ActionController::Base
     request.referrer
   end
 
-  def api_v1_run_url(run)
-    super(run.id)
-  end
-
-  def api_v1_run_path(run)
-    super(run.id)
-  end
-
   def api_v2_run_url(run)
     super(run.id)
   end

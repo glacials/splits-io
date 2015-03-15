@@ -100,15 +100,5 @@ SplitsIO::Application.routes.draw do
         end
       end
     end
-    namespace :v1 do
-      resources :games,      only: [:index, :show]
-      resources :categories, only: [:index, :show]
-      resources :users,      only: [:index, :show]
-      resources :runs,       only: [:index, :show, :create, :destroy] do
-        member do
-          delete :user, action: :disown
-        end
-      end
-    end
   end
 end
