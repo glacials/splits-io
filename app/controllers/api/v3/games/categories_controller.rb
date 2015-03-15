@@ -1,9 +1,9 @@
-class Api::V3::CategoriesController < Api::V3::ApplicationController
+class Api::V3::Games::CategoriesController < Api::V3::ApplicationController
   before_action :set_game, only: [:show]
   before_action :set_category, only: [:show]
 
   def show
-    paginate json: @category, serializer: Api::V3::CategorySerializer
+    render json: @category, serializer: Api::V3::CategorySerializer
   end
 
   private
