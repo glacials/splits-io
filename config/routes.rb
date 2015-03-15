@@ -83,7 +83,9 @@ SplitsIO::Application.routes.draw do
             resources :runs, only: [:index], module: :categories
           end
         end
-        resources :runs, only: [:index], module: :users
+        resources :runs, only: [:index], module: :users do
+          resources :splits, only: [:index], module: :runs
+        end
         resources :pbs, only: [:index], module: :users
       end
       resources :runs, only: [:show, :create, :destroy]

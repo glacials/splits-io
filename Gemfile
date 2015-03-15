@@ -16,7 +16,6 @@ group :production do
   gem 'rollbar'
 end
 
-
 # api
 gem 'active_model_serializers'
 gem 'api-pagination'

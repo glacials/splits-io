@@ -2,7 +2,7 @@ class Api::V4::UsersController < Api::V4::ApplicationController
   before_action :set_user, only: [:show]
 
   def show
-    render json: @user, serializer: Api::V4::UserSerializer
+    render json: @user, serializer: class.parent::UserSerializer
   end
 
   private

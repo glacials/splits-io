@@ -11,8 +11,6 @@ class Api::V4::ApplicationController < ActionController::Base
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   end
 
-  private
-
   def force_ssl
     if !request.ssl?
       render status: 301, json: {status: 301, message: "Splits.IO API hits must be over HTTPS."}
@@ -28,7 +26,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_user
-    @user = User.find_by(name: params[:user_id]) || User.find(params[:user_id])
+    @user = User.find_by!(name: params[:user_id])
   rescue ActiveRecord::RecordNotFound
     render not_found(:user, params[:user_id])
   end
@@ -40,8 +38,14 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_category
-    @category = @game.categories.find(params[:category_id])
+    @category = (@game.try(:categories) || Category).find(params[:category_id])
   rescue ActiveRecord::RecordNotFound
     render not_found(:category, params[:category_id])
+  end
+
+  def set_run
+    @run = (@category.try(:runs) || Run).find36(params[:run_id])
+  rescue ActiveRecord::RecordNotFound
+    render not_found(:run, params[:run_id])
   end
 end

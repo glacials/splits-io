@@ -5,7 +5,7 @@ class Api::V4::Users::Games::Categories::PbsController < Api::V4::ApplicationCon
   before_action :set_pb, only: [:show]
 
   def show
-    render json: @pb, serializer: Api::V4::RunWithSplitsSerializer
+    render json: @pb, serializer: class.parent::RunWithSplitsSerializer
   end
 
   private
