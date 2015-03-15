@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 ruby '2.1.5'
 
+group :test, :development do
+  # tests
+  gem 'rspec-rails'
+end
+
 group :development, :hot do
   # debugging
   gem 'byebug'

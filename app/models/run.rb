@@ -41,6 +41,7 @@ class Run < ActiveRecord::Base
   }
   @parse_cache = nil
 
+  validates :run_file, presence: true
   validates_with RunValidator
 
   before_save :populate_category
