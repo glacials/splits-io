@@ -14,6 +14,7 @@ $(function () {
         window.location = data.uris.public_uri;
       },
       error: function (xhr, textStatus) {
+        window.isUploading = false;
         if (xhr.status == 400) {
           window.location = '/cant-parse';
         } else {
@@ -46,17 +47,20 @@ $(function () {
     evt.stopPropagation();
     $.each(evt.originalEvent.dataTransfer.files, function(filename, file) {
       $("#droplabel").html("parsing...");
+      window.isUploading = true;
       window.showSpinner("#fff");
       window.upload(file);
     });
   });
 
   $("#dropzone").click(function (evt) {
-    $("#dropzone-overlay").fadeOut(125);
+    if (!window.isUploading) {
+      $("#dropzone-overlay").fadeOut(125);
+    }
   });
 
   $(document).keyup(function (evt) {
-    if (evt.keyCode == 27) {
+    if (!window.isUploading && evt.keyCode == 27) {
       $("#dropzone-overlay").fadeOut(125);
     }
   });
