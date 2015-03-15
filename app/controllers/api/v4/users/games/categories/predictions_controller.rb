@@ -1,0 +1,45 @@
+class Api::V4::Users::Games::Categories::PredictionsController < Api::V4::ApplicationController
+  before_action :set_user, only: [:show]
+  before_action :set_game, only: [:show]
+  before_action :set_category, only: [:show]
+  before_action :set_prediction, only: [:show]
+
+  def show
+    most_recent_run = @user.runs.where(category: @category).order(:created_at).last
+    @prediction.merge!(
+      id: nil,
+      path: nil,
+      name: most_recent_run.name,
+      program: most_recent_run.program,
+      image_url: nil,
+      created_at: Time.now,
+      updated_at: Time.now,
+      user: Api::V4::UserSerializer.new(@user, root: false),
+      game: Api::V4::GameSerializer.new(@game, root: false),
+      category: Api::V4::CategorySerializer.new(@category, root: false),
+      time: 0
+    )
+    @prediction[:splits] = most_recent_run.splits.map do |split|
+      Run::Split.new(
+        best: Run::Split.new(duration: split.best.duration),
+        name: split.name,
+        finish_time: @prediction[:time] += (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6),
+        duration: (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6),
+        gold?: false,
+        skipped?: rand(0.99) < split.history.map { |time| time.nil? ? 1 : 0 }.smma
+      )
+    end
+    render json: {prediction: @prediction}
+  rescue MovingAverage::Errors::InvalidTailError
+    render status: 404, json: {status: 404, message: "Not enough data on #{@user.name} to make a prediction."}
+  end
+
+  private
+
+  def set_prediction
+    unless @user.runs?(@category)
+      render not_found(:run, :prediction)
+    end
+    @prediction = {}
+  end
+end
