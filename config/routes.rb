@@ -70,26 +70,27 @@ SplitsIO::Application.routes.draw do
   namespace :api do
     namespace :v4 do
       resources :games, only: [:show] do
-        resources :runs, only: [:index], module: :games
-        resources :categories, only: [:index, :show], module: :games do
-          resources :runs, only: [:index], module: :categories
-        end
-      end
-      resources :users, only: [:show] do
-        resources :games, only: [], module: :users do
-          resources :categories, only: [], module: :games do
-            resource :prediction, only: [:show], module: :categories
-            resource :pb, only: [:show], module: :categories
-            resources :runs, only: [:index], module: :categories
+        scope module: :games do
+          resources :runs, only: [:index]
+          resources :categories, only: [:index, :show] do
+            resources :runs, only: [:index]
           end
         end
-        resources :runs, only: [:index], module: :users do
-          resources :splits, only: [:index], module: :runs
-        end
-        resources :pbs, only: [:index], module: :users
       end
+
+      resources :users, only: [:show] do
+        scope module: :users do
+          resources :pbs, only: [:index]
+          resources :runs, only: [:index]
+          resources :predictions, only: [:show]
+          resources :games, only: [:index]
+          resources :categories, only: [:index]
+        end
+      end
+
       resources :runs, only: [:show, :create, :destroy]
     end
+
     namespace :v3 do
       resources :games, only: [:show] do
         resources :runs, only: [:index], module: :games
@@ -97,6 +98,7 @@ SplitsIO::Application.routes.draw do
           resources :runs, only: [:index], module: :categories
         end
       end
+
       resources :users, only: [:show] do
         resources :games, only: [], module: :users do
           resources :categories, only: [], module: :games do
@@ -105,17 +107,21 @@ SplitsIO::Application.routes.draw do
             resources :runs, only: [:index], module: :categories
           end
         end
+
         resources :runs, only: [:index], module: :users
         resources :pbs, only: [:index], module: :users
       end
+
       resources :runs, only: [:show, :create, :destroy]
     end
+
     namespace :v2 do
       resources :games,      only: [:index, :show]
       resources :categories, only: [:index, :show]
       resources :users,      only: [:index, :show] do
         resources :pbs, only: [:index]
       end
+
       resources :runs,       only: [:index, :show, :create, :destroy] do
         member do
           delete :user, action: :disown

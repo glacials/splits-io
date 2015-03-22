@@ -53,7 +53,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   private
 
   def set_run
-    @run = Run.includes(:game, :category, :user).find(params[:id])
+    @run = Run.includes(:game, :category, :user).find36(params[:id])
   rescue ActiveRecord::RecordNotFound
     render not_found(:run, params[:id])
   end
