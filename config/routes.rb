@@ -69,7 +69,7 @@ SplitsIO::Application.routes.draw do
 
   namespace :api do
     namespace :v4 do
-      resources :games, only: [:show] do
+      resources :games, only: [:index, :show] do
         scope module: :games do
           resources :runs, only: [:index]
           resources :categories, only: [:index, :show] do

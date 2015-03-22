@@ -3,6 +3,20 @@ require 'rails_helper'
 describe Api::V4::GamesController do
   let(:game) { FactoryGirl.create(:game) }
 
+  describe '#index' do
+    it 'returns a list of search results' do
+      get :index, search: 'mario'
+      expect(response).to have_http_status(200)
+    end
+
+    context 'when not given a search string' do
+      it 'returns a 400' do
+        get :index
+        expect(response).to have_http_status(400)
+      end
+    end
+  end
+
   describe '#show' do
     let(:game) { FactoryGirl.create(:game, :shortnamed) }
 
