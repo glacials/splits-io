@@ -14,9 +14,9 @@ class Api::V4::Users::Games::Categories::PredictionsController < Api::V4::Applic
       image_url: nil,
       created_at: Time.now,
       updated_at: Time.now,
-      user: class.parent::UserSerializer.new(@user, root: false),
-      game: class.parent::GameSerializer.new(@game, root: false),
-      category: class.parent::CategorySerializer.new(@category, root: false),
+      user: Api::V4::UserSerializer.new(@user, root: false),
+      game: Api::V4::GameSerializer.new(@game, root: false),
+      category: Api::V4::CategorySerializer.new(@category, root: false),
       time: 0
     )
     @prediction[:splits] = most_recent_run.splits.map do |split|

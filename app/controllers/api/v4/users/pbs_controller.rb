@@ -3,7 +3,7 @@ class Api::V4::Users::PbsController < Api::V4::ApplicationController
   before_action :set_pbs, only: [:index]
 
   def index
-    render json: @pbs, each_serializer: class.parent::RunSerializer
+    render json: @pbs, each_serializer: Api::V4::RunSerializer
   end
 
   private
