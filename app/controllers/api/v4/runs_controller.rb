@@ -3,7 +3,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   before_action :verify_ownership!, only: [:destroy, :disown]
 
   def show
-    render json: @run, serializer: class.parent::RunSerializer
+    render json: @run, serializer: Api::V4::RunSerializer
   end
 
   def create

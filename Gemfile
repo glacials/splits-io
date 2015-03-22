@@ -3,6 +3,7 @@ ruby '2.1.5'
 
 group :test, :development do
   # tests
+  gem 'factory_girl_rails'
   gem 'rspec-rails'
 end
 
@@ -11,6 +12,11 @@ group :development, :hot do
   gem 'byebug'
   gem 'pry-rails'
   gem 'web-console'
+
+  # general ease of development
+  gem 'guard'
+  gem 'guard-rails'
+  gem 'guard-rspec'
 
   # pretty things
   gem 'awesome_print'

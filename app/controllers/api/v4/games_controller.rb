@@ -2,7 +2,7 @@ class Api::V4::GamesController < Api::V4::ApplicationController
   before_action :set_game, only: [:show]
 
   def show
-    render json: @game, serializer: class.parent::GameSerializer
+    render json: @game, serializer: Api::V4::GameSerializer
   end
 
   private

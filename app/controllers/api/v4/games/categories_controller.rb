@@ -1,18 +1,16 @@
 class Api::V4::Games::CategoriesController < Api::V4::ApplicationController
-  before_action :set_game, only: [:show]
+  before_action :set_game, only: [:index, :show]
   before_action :set_category, only: [:show]
 
+  def index
+    render json: @game.categories, each_serializer: CategorySerializer
+  end
+
   def show
-    render json: @category, serializer: class.parent::CategorySerializer
+    render json: @category, serializer: CategorySerializer
   end
 
   private
-
-  def set_game
-    @game = Game.includes(:categories).find_by(shortname: params[:game_id]) || Game.includes(:categories).find(params[:game_id])
-  rescue ActiveRecord::RecordNotFound
-    render not_found(:game, params[:game_id])
-  end
 
   def set_category
     @category = Category.find(params[:id])

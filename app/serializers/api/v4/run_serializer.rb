@@ -1,7 +1,7 @@
 class Api::V4::RunSerializer < Api::V4::ApplicationSerializer
-  has_one :user, serializer: class.parent::UserSerializer
-  has_one :game, serializer: class.parent::GameSerializer
-  has_one :category, serializer: class.parent::CategorySerializer
+  has_one :user
+  has_one :game
+  has_one :category
   has_one :time
 
   attributes :id, :name, :program, :image_url, :created_at, :updated_at
