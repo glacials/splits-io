@@ -23,27 +23,6 @@
 #
 # and, you'll have to watch "config/Guardfile" instead of "Guardfile"
 
-# Guard-Rails supports a lot options with default values:
-# daemon: false                        # runs the server as a daemon.
-# debugger: false                      # enable ruby-debug gem.
-# environment: 'development'           # changes server environment.
-# force_run: false                     # kills any process that's holding the listen port before attempting to (re)start Rails.
-# pid_file: 'tmp/pids/[RAILS_ENV].pid' # specify your pid_file.
-# host: 'localhost'                    # server hostname.
-# port: 3000                           # server port number.
-# root: '/spec/dummy'                  # Rails' root path.
-# server: thin                         # webserver engine.
-# start_on_start: true                 # will start the server when starting Guard.
-# timeout: 30                          # waits untill restarting the Rails server, in seconds.
-# zeus_plan: server                    # custom plan in zeus, only works with `zeus: true`.
-# zeus: false                          # enables zeus gem.
-# CLI: 'rails server'                  # customizes runner command. Omits all options except `pid_file`!
-
-guard :rails do
-  watch('Gemfile.lock')
-  watch(%r{^(config|lib)/.*})
-end
-
 # Note: The cmd option is now required due to the increasing number of ways
 #       rspec may be run, below are examples of the most common uses.
 #  * bundler: 'bundle exec rspec'
@@ -64,6 +43,14 @@ guard :rspec, cmd: "bundle exec rspec" do
   watch(rspec.spec_helper) { rspec.spec_dir }
   watch(rspec.spec_support) { rspec.spec_dir }
   watch(rspec.spec_files)
+
+  # FactoryGirl factories
+  watch(%r{^spec/factories/(.+)_factory\.rb$}) do |match|
+    [
+      "app/models/#{match[1]}.rb",
+      "spec/models/#{match[1]}_spec.rb"
+    ]
+  end
 
   # Ruby files
   ruby = dsl.ruby

@@ -12,6 +12,13 @@ describe Api::V4::GamesController do
       expect(JSON.parse(response.body)['game']['name']).to eq(game.name)
     end
 
+    context 'when the game has categories' do
+      it 'includes a list of categories' do
+        get :show, id: game.id
+        expect(JSON.parse(response.body)['game']['categories']).to eq([])
+      end
+    end
+
     context 'when the game has a shortname' do
       let(:game) { FactoryGirl.create(:game, :shortnamed) }
 

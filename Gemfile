@@ -5,11 +5,13 @@ group :test, :development do
   # tests
   gem 'factory_girl_rails'
   gem 'rspec-rails'
+  gem 'simplecov', require: false
 end
 
 group :development, :hot do
   # debugging
   gem 'byebug'
+  gem 'meta_request'
   gem 'pry-rails'
   gem 'web-console'
 

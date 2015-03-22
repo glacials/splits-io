@@ -5,5 +5,9 @@ FactoryGirl.define do
     trait :shortnamed do
       shortname "tlommctxy4"
     end
+
+    trait :with_categories do
+      association :categories
+    end
   end
 end
