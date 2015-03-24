@@ -2,7 +2,7 @@ require 'htmlentities'
 require 'uri'
 
 class RunsController < ApplicationController
-  before_action :set_run, only: [:show, :download, :disown, :delete, :compare, :edit, :update]
+  before_action :set_run, only: [:show, :download, :destroy, :compare, :edit, :update]
   before_action :set_comparison, only: :compare
 
   before_action :handle_first_visit, only: [:show, :edit, :update], unless: Proc.new { @run.visited? }
@@ -10,7 +10,7 @@ class RunsController < ApplicationController
   before_action :reject_as_unparsable, only: [:show, :download], unless: Proc.new { @run.parses? }
 
   before_action :attempt_to_claim, only: [:show]
-  before_action :verify_ownership, only: [:edit, :update, :disown, :delete]
+  before_action :verify_ownership, only: [:edit, :update, :destroy]
 
   def show
     @run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
@@ -26,10 +26,16 @@ class RunsController < ApplicationController
   end
 
   def update
+    if params[:run][:disown]
+      @run.update_attributes(user: nil)
+      redirect_to run_path(@run), notice: 'Run disowned.'
+      return
+    end
+
     if @run.update_attributes(video_url: params[:run][:video_url])
-      redirect_to run_path(@run)
+      redirect_to edit_run_path(@run), notice: 'Proof saved.'
     else
-      redirect_to edit_run_path(@run)
+      redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
     end
   end
 
@@ -59,6 +65,14 @@ class RunsController < ApplicationController
 
   def random
     redirect_to run_path(Run.offset(rand(Run.unscoped.count)).first)
+  end
+
+  def destroy
+    if @run.destroy
+      redirect_to root_path, notice: 'Run deleted.'
+    else
+      redirect_to root_path, alert: 'There was an error deleting your run. Please try again.'
+    end
   end
 
   private

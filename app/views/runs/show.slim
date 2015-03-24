@@ -33,11 +33,12 @@
               li
                 a href=compare_path(@run, @run.category.best_known_run) compare to best on record
             li ✓ pb
-      /- if @run.video_url.blank? && @run.belongs_to?(current_user)
-        li
-          a href=edit_run_path(@run) add proof
       - if @run.video_url.present?
-        a href=@run.video_url proof
+        li
+          a href=@run.video_url proof
+      - if @run.belongs_to?(current_user)
+        li
+          a href=edit_run_path(@run) edit
 
 = render partial: 'shared/timeline', locals: {run: @run}
 - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
