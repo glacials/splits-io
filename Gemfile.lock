@@ -52,24 +52,22 @@ GEM
     awesome_print (1.2.0)
     babel_bridge (0.5.3)
     bcrypt (3.1.10)
+    better_errors (1.1.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     blockenspiel (0.4.5)
     bootstrap-sass (3.3.1.0)
       sass (~> 3.2)
     builder (3.2.2)
-    byebug (3.2.0)
-      columnize (~> 0.8)
-      debugger-linecache (~> 1.2)
     callsite (0.0.11)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     coderay (1.1.0)
-    columnize (0.9.0)
     daemons (1.1.9)
     dalli (2.7.2)
     debug_inspector (0.0.2)
-    debugger-linecache (1.2.0)
     delayed_job (4.0.6)
       activesupport (>= 3.0, < 5.0)
     delayed_job_active_record (4.0.3)
@@ -344,11 +342,6 @@ GEM
       blockenspiel (>= 0.4.5)
     warden (1.2.3)
       rack (>= 1.0)
-    web-console (2.1.0)
-      activemodel (>= 4.0)
-      binding_of_caller (>= 0.7.2)
-      railties (>= 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
     will_paginate (3.0.7)
     workless (1.2.3)
       delayed_job (>= 2.0.7)
@@ -365,8 +358,9 @@ DEPENDENCIES
   api-pagination
   awesome_print
   babel_bridge
+  better_errors
+  binding_of_caller
   bootstrap-sass
-  byebug
   chronic_duration!
   dalli
   delayed_job_active_record
@@ -409,7 +403,6 @@ DEPENDENCIES
   uglifier
   unicorn
   versionomy
-  web-console
   will_paginate
   workless
   xml-simple

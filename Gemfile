@@ -9,11 +9,13 @@ group :test, :development do
 end
 
 group :development, :hot do
-  # debugging
-  gem 'byebug'
+  # error pages
+  gem 'better_errors'
+  gem 'binding_of_caller'
+
+  # general debugging
   gem 'meta_request'
   gem 'pry-rails'
-  gem 'web-console'
 
   # general ease of development
   gem 'guard'
