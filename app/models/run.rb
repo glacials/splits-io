@@ -152,7 +152,7 @@ class Run < ActiveRecord::Base
 
   def refresh_from_file
     if run_file.nil?
-      update(run_file: RunFile.for_file(file))
+      update(run_file: RunFile.for_text(file))
     end
 
     game = Game.where("lower(name) = ?", parse[:game].try(:downcase)).first || Game.create(name: parse[:game])
