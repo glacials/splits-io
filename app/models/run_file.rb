@@ -5,7 +5,10 @@ class RunFile < ActiveRecord::Base
   validates :file, presence: true
 
   def self.for_file(file)
-    file_text = file.read
+    RunFile.for_text(file.read)
+  end
+
+  def self.for_text(file_text)
     digest = Digest::SHA256.hexdigest(file_text)
     where(digest: digest).first_or_create(file: file_text)
   end

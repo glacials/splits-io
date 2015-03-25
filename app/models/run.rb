@@ -151,6 +151,10 @@ class Run < ActiveRecord::Base
   end
 
   def refresh_from_file
+    if run_file.nil?
+      update(run_file: RunFile.for_file(file))
+    end
+
     game = Game.where("lower(name) = ?", parse[:game].try(:downcase)).first || Game.create(name: parse[:game])
     update_attributes(
       category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category]),
