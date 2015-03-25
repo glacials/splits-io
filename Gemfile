@@ -13,18 +13,17 @@ group :development, :hot do
   gem 'better_errors'
   gem 'binding_of_caller'
 
-  # general debugging
+  # debugging
   gem 'meta_request'
   gem 'pry-rails'
-
-  # general ease of development
-  gem 'guard'
-  gem 'guard-rails'
-  gem 'guard-rspec'
 
   # pretty things
   gem 'awesome_print'
   gem 'rubocop', require: false
+
+  # tests
+  gem 'guard'
+  gem 'guard-rspec'
 end
 
 group :production do
