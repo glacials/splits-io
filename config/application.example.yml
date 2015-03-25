@@ -1,36 +1,24 @@
-# Set up all your desired environment variables here. Figaro will take care of making sure they're visible to the
-# splits-io.
+development:
+  # required. default should be fine if your postgresql server is running locally.
+  DATABASE_URL: postgres://localhost
 
-production:
-  splitsio_db_host:
-  splitsio_db_name:
-  splitsio_db_username:
-  splitsio_db_port:
-  splitsio_db_password:
-  NEW_RELIC_LICENSE_KEY:
-
-  # set up twitch stuff at twitch.tv/settings/connections
+  # required for login to work. register an application @ twitch.tv/settings/connections.
   TWITCH_CLIENT_ID:
   TWITCH_CLIENT_SECRET:
 
+test:
+  # required to be able to run tests
+  DATABASE_URL: postgres://localhost
+
+# you don't need to fill out anything past here unless you're deploying this somewhere
+production:
+  DATABASE_URL:
+
+  TWITCH_CLIENT_ID:
+  TWITCH_CLIENT_SECRET:
+
+  NEW_RELIC_LICENSE_KEY:
   ROLLBAR_ACCESS_TOKEN:
 
-development:
-  # sqlite should work just fine for a development database
-
-  # for login in development, you'll want a separate client on twitch with a localhost redirect uri
-  TWITCH_CLIENT_ID:
-  TWITCH_CLIENT_SECRET:
-
-splitsio_secret_key_base:
-
-# hot is development mode hitting the production database. so db info below should be prod; everything else below, dev.
-hot:
-  splitsio_db_host:
-  splitsio_db_name:
-  splitsio_db_username:
-  splitsio_db_port:
-  splitsio_db_password:
-
-  TWITCH_CLIENT_ID:
-  TWITCH_CLIENT_SECRET:
+  # used for signing cookies. generate a secure one with `rake secret`
+  splitsio_secret_key_base:
