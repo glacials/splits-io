@@ -7,4 +7,7 @@
     - @user.games.named.each do |game|
       = link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
 %article
-  = render partial: 'shared/run_table', locals: table_locals(:pbs, user: @user)
+  - if user_signed_in? && current_user.name == @user.name
+    = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
+  - else
+    = render partial: 'shared/run_table', locals: table_locals(:pbs, user: @user)
