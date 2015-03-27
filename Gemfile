@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.1.5'
 
-group :test, :development do
+group :development, :test do
   # tests
   gem 'factory_girl_rails'
   gem 'rspec-rails'
@@ -19,6 +19,7 @@ group :development, :hot do
 
   # pretty things
   gem 'awesome_print'
+  gem 'rails-erd', require: false
   gem 'rubocop', require: false
 
   # tests
@@ -36,6 +37,7 @@ gem 'api-pagination'
 gem 'jbuilder'
 
 # authentication
+gem 'authie'
 gem 'devise'
 
 # caching
@@ -46,6 +48,7 @@ gem 'pg'
 
 # external communication
 gem 'httparty'
+gem 'rest-client'
 
 # heroku
 gem 'platform-api'

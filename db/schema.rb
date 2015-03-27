@@ -11,10 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150215005207) do
+ActiveRecord::Schema.define(version: 20150305135400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "authie_sessions", force: :cascade do |t|
+    t.string   "token"
+    t.string   "browser_id"
+    t.integer  "user_id"
+    t.boolean  "active",             default: true
+    t.text     "data"
+    t.datetime "expires_at"
+    t.datetime "login_at"
+    t.string   "login_ip"
+    t.datetime "last_activity_at"
+    t.string   "last_activity_ip"
+    t.string   "last_activity_path"
+    t.string   "user_agent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "user_type"
+    t.integer  "parent_id"
+    t.datetime "two_factored_at"
+    t.string   "two_factored_ip"
+    t.integer  "requests",           default: 0
+    t.datetime "password_seen_at"
+  end
+
+  add_index "authie_sessions", ["browser_id"], name: "index_authie_sessions_on_browser_id", using: :btree
+  add_index "authie_sessions", ["token"], name: "index_authie_sessions_on_token", using: :btree
+  add_index "authie_sessions", ["user_id"], name: "index_authie_sessions_on_user_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.integer  "game_id"

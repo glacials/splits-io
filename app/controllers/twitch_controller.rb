@@ -14,17 +14,17 @@ class TwitchController < ApplicationController
   end
 
   def in
-    if params['error'] == 'access_denied'
+    if params[:error] == 'access_denied'
       redirect_to root_path, notice: 'Woops, you denied access. That\'s okay, you can still upload runs anonymously.'
       return
     end
 
-    token = HTTParty.post("https://api.twitch.tv/kraken/oauth2/token", query: post_params)['access_token']
-    response = HTTParty.get("https://api.twitch.tv/kraken/user?oauth_token=#{token}")
+    oauth_token = Twitch::User::OauthToken.find_by_authorization_code(params[:code], redirect_uri)
+    twitch_user = Twitch::User.find_by_oauth_token(oauth_token)
 
-    user = User.find_by(twitch_id: response['_id']) || User.new
-    user.twitch_token = token
-    user.load_from_twitch(response)
+    user = User.where(twitch_id: twitch_user['_id']).first_or_create
+    user.load_from_twitch(twitch_user)
+    user.twitch_token = oauth_token
     user.save
 
     sign_in(:user, user)
@@ -39,22 +39,12 @@ class TwitchController < ApplicationController
     end
   rescue HTTParty::ResponseError, SocketError, OpenSSL::SSL::SSLError, Errno::ECONNRESET => e
     redirect_to root_path,
-      alert: "Couldn't communicate with Twitch to get your account info (#{e.class.to_s.demodulize}). Please try again."
+      alert: "Couldn't communicate with Twitch to get your account info (#{e.message}). Please try again."
   end
 
   private
 
   def redirect_uri
     "http://#{request.host_with_port}/signin/twitch/auth"
-  end
-
-  def post_params
-    {
-      client_id: ENV['TWITCH_CLIENT_ID'],
-      client_secret: ENV['TWITCH_CLIENT_SECRET'],
-      grant_type: 'authorization_code',
-      redirect_uri: redirect_uri,
-      code: params[:code]
-    }
   end
 end

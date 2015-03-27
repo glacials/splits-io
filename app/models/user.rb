@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include AuthenticatingUser
   include RivalUser
   include TwitchUser
   # Include default devise modules. Others available are:
