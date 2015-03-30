@@ -50,6 +50,12 @@ gem 'rest-client'
 gem 'platform-api'
 gem 'rails_12factor'
 
+# javascript libraries
+gem 'jquery-rails'
+gem 'momentjs-rails'
+gem 'spinjs-rails'
+gem 'tipsy-rails'
+
 # logging
 gem 'newrelic_rpm'
 gem 'rails_stdout_logging'
@@ -74,7 +80,7 @@ gem 'unicorn'
 
 # speediness
 gem 'dalli'
-gem 'turbolinks'
+gem 'turbolinks', git: 'https://github.com/rails/turbolinks', branch: 'master'
 
 # views
 gem 'bootstrap-sass'
@@ -82,12 +88,9 @@ gem 'flat-ui-rails'
 gem 'gon'
 gem 'haml-rails'
 gem 'htmlentities'
-gem 'jquery-rails'
 gem 'purecss-rails'
 gem 'sass-rails'
 gem 'slim'
-gem 'spinjs-rails'
-gem 'tipsy-rails'
 gem 'uglifier'
 gem 'will_paginate'
 
