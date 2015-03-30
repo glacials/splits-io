@@ -39,9 +39,6 @@ gem 'jbuilder'
 # authentication
 gem 'authie'
 
-# caching
-gem 'dalli'
-
 # db
 gem 'pg'
 
@@ -74,6 +71,10 @@ gem 'figaro'
 gem 'rails'
 gem 'thin'
 gem 'unicorn'
+
+# speediness
+gem 'dalli'
+gem 'turbolinks'
 
 # views
 gem 'bootstrap-sass'

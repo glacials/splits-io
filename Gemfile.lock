@@ -66,6 +66,13 @@ GEM
       timers (~> 4.0.0)
     choice (0.1.7)
     coderay (1.1.0)
+    coffee-rails (4.1.0)
+      coffee-script (>= 2.2.0)
+      railties (>= 4.0.0, < 5.0)
+    coffee-script (2.3.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.9.1)
     daemons (1.1.9)
     dalli (2.7.2)
     debug_inspector (0.0.2)
@@ -326,6 +333,8 @@ GEM
     tipsy-rails (1.0.5)
       railties (>= 3.0)
       sass-rails
+    turbolinks (2.5.3)
+      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.5.3)
@@ -396,6 +405,7 @@ DEPENDENCIES
   squeel
   thin
   tipsy-rails
+  turbolinks
   uglifier
   unicorn
   versionomy
