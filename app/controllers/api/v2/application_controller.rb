@@ -1,6 +1,4 @@
 class Api::V2::ApplicationController < ApplicationController
-  respond_to :json
-
   prepend_before_action :set_cors_headers
   before_action :check_params, only: [:index]
   before_action :set_records, only: [:index]
