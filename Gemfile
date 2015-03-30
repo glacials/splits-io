@@ -38,7 +38,6 @@ gem 'jbuilder'
 
 # authentication
 gem 'authie'
-gem 'devise'
 
 # caching
 gem 'dalli'

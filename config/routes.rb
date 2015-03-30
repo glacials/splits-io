@@ -9,14 +9,6 @@ SplitsIO::Application.routes.draw do
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
-  get '/signin/twitch',      to: 'twitch#out', as: :twitch_out
-  get '/signin/twitch/auth', to: 'twitch#in',  as: :twitch_in
-
-  devise_for :users
-  devise_scope :user do
-    get 'signout', to: 'devise/sessions#destroy', as: :signout
-  end
-
   get '/search',        to: redirect('/games')
   get '/search/:q',     to: redirect('/games?q=%{q}')
   get '/search(?q=:q)', to: redirect('/games?q=%{q}')
@@ -25,6 +17,10 @@ SplitsIO::Application.routes.draw do
   get '/:id/download/:program',       to: 'runs#download', as: :download
 
   get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:id
+
+  resources :sessions, only: [:new, :destroy] do
+    get '/create', to: :create, on: :collection # needs to be GET instead of POST because it is Twitch's redirect URI
+  end
 
   resources :users, only: [:show] do
     scope module: :users do

@@ -1,7 +1,7 @@
 - title "hello"
 - content_for(:header) do
   h2 splits i/o
-  - if user_signed_in? && current_user.runs.present?
+  - if logged_in? && current_user.runs.present?
     h5 want some jelly with these PBs?
   - else
     h5
@@ -9,7 +9,7 @@
       u<> all
       | the splits
 article
-  - if user_signed_in?
+  - if logged_in?
     - if current_user.runs.present?
       = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
     - else
@@ -17,5 +17,5 @@ article
         h4 Drag and drop your favorite PB here
   - else
     p Save your splits to a file using your favorite splitting program, then drag that file anywhere on this page.
-- if user_signed_in?
+- if logged_in?
   article#follows

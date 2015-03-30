@@ -17,12 +17,12 @@
         %h1#droplabel.inverted drop anywhere
       %header
         %nav
-          - page = {upload: request.path == new_run_path, games: request.path.match(games_path), faq: request.path == faq_path, profile: user_signed_in? && request.path == user_path(current_user)}
+          - page = {upload: request.path == new_run_path, games: request.path.match(games_path), faq: request.path == faq_path, profile: logged_in? && request.path == user_path(current_user)}
           %a.blue{href: root_path, class: page.values.all? { |p| !p } ? 'logo' : ''} splits i/o
           %a.purple{href: new_run_path, class: page[:upload] ? 'logo' : ''} upload
           %a.green{href: games_path, class: page[:games] ? 'logo' : ''} games
           %a.red{href: faq_path, class: page[:faq] ? 'logo' : ''} faq
-          - if user_signed_in?
+          - if logged_in?
             .dropdown{href: "#"}
               %a.orange.dropdown-toggle.fake-link{id: :user_nav, data: {toggle: :dropdown}, class: page[:profile] ? 'logo' : ''}
                 %small ∨
@@ -31,9 +31,9 @@
                 %li{role: :presentation}
                   = link_to "profile", user_path(current_user)
                   = link_to "tools", tools_path
-                  = link_to "sign out", signout_path
+                  = link_to "sign out", session_path(auth_session), method: :delete
           - else
-            %a#sign-in.orange{href: twitch_out_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
+            %a#sign-in.orange{href: new_session_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
         = yield(:header)
         = render partial: 'shared/alerts'
       = yield
