@@ -19,7 +19,7 @@ SplitsIO::Application.routes.draw do
   get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:id
 
   resources :sessions, only: [:new, :destroy] do
-    get '/create', to: :create, on: :collection # needs to be GET instead of POST because it is Twitch's redirect URI
+    get '/create', action: :create, on: :collection # needs to be GET, not POST, because it is Twitch's redirect URI
   end
 
   resources :users, only: [:show] do
