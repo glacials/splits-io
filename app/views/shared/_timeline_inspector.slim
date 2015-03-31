@@ -7,8 +7,7 @@
         .bar
           p
         .title = split.name
-        .duration
-          .time = split.duration
+        .time = split.duration
+        .save
           - unless split.gold? || run.has_skipped_splits? || !run.has_golds? || split.duration.round(2) == split.best.duration.round(2)
-            br
             | #{BigDecimal.new(split.duration - split.best.duration, 2)}s potential save

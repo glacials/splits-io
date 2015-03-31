@@ -10,7 +10,7 @@
   h5
     big
       a.stealth-link.run-link.time href=run_path(@comparison_run) = @comparison_run.time
-    => 'by'
+    => ' by'
     - if @comparison_run.user.present?
       = link_to @comparison_run.user, user_path(@comparison_run.user), class: 'stealth-link user-link'
     - else
@@ -25,7 +25,7 @@ hr style='margin: .5em; opacity: 0.25'
   h5
     big
       a.stealth-link.run-link.time href=run_path(@run) = @run.time
-    => 'by'
+    => ' by'
     - if @run.user
       = link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'
     - else
