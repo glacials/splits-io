@@ -13,7 +13,7 @@ class Api::V4::ApplicationController < ActionController::Base
 
   def force_ssl
     if !request.ssl?
-      render status: 301, json: {status: 301, message: "Splits.IO API hits must be over HTTPS."}
+      render status: 301, json: {status: 301, message: "API hits must be over HTTPS."}
     end
   end
 

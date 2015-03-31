@@ -8,7 +8,7 @@ class Api::V4::UsersController < Api::V4::ApplicationController
   private
 
   def set_user
-    @user = User.find_by(name: params[:id]) || User.find(params[:id])
+    @user = User.find_by!(name: params[:id])
   rescue ActiveRecord::RecordNotFound
     render not_found(:user, params[:id])
   end
