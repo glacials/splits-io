@@ -17,9 +17,9 @@
       | unknown
 
 - time_scale = [@run.time, @comparison_run.time].max
-= render partial: 'shared/timeline', locals: {run: @comparison_run, scale_to: time_scale}
+= render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale}
 hr style='margin: .5em; opacity: 0.25'
-= render partial: 'shared/timeline', locals: {run: @run, scale_to: time_scale}
+= render partial: 'timeline', locals: {run: @run, scale_to: time_scale}
 
 .container
   h5
@@ -31,8 +31,8 @@ hr style='margin: .5em; opacity: 0.25'
     - else
       | unknown
 
-= render partial: 'shared/timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true}
-= render partial: 'shared/timeline_inspector', locals: {run: @run, scale_to: time_scale}
+= render partial: 'timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true}
+= render partial: 'timeline_inspector', locals: {run: @run, scale_to: time_scale}
 
 - if @run.belongs_to?(current_user) && @run.improvements_towards(@comparison_run)[:time_differences].present?
   article

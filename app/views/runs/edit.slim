@@ -18,9 +18,9 @@
       li
         a href=run_path(@run) &larr; back to run
 
-= render partial: 'shared/timeline', locals: {run: @run}
+= render partial: 'timeline', locals: {run: @run}
 - unless @run.splits.any? { |split| split.skipped? }
-  = render partial: 'shared/gold_timeline', locals: {run: @run}
+  = render partial: 'gold_timeline', locals: {run: @run}
 
 article
   = form_for @run, as: :run, url: run_path(@run) do |f|

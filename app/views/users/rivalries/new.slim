@@ -10,8 +10,8 @@ article
           img src=user.avatar height=64 width=64
         .media-body
           h4.media-heading = user.name
-          = render partial: 'shared/time', locals: {time: user.pb_for(@category).time, show_milliseconds: false}
+          span.time = user.pb_for(@category).time
           small pb
           br
-          = render partial: 'shared/time', locals: {time: user.pb_for(@category).sum_of_best, show_milliseconds: false}
+          span.time = user.pb_for(@category).sum_of_best
           small sum of best
