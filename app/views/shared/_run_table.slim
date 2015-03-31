@@ -55,7 +55,7 @@
                   - if rival.present?
                     - rival_run = rival.pb_for(run.category)
                     = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
-                      .time = difference(run, rival_run)
+                      = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run)}
                       |  against 
                       = rival
                   /- elsif @relevant_follows.that_run(run.category).present?

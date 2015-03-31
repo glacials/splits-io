@@ -5,17 +5,10 @@
   - if time > 0
     span.red
       | +
-      = Time.at(time).utc.strftime("%k:%M:%S")
-      - if show_milliseconds
-        small = Time.at(time).utc.strftime(".%2N")
+      span.time = time
   - if time < 0
     span.green
       | -
-      = Time.at(time.abs).utc.strftime("%k:%M:%S")
-      - if show_milliseconds
-        small = Time.at(time.abs).utc.strftime(".%2N")
+      span.time = time
   - if time == 0
-    span
-      = Time.at(time).utc.strftime("%k:%M:%S")
-      - if show_milliseconds
-        small = Time.at(time).utc.strftime(".%2N")
+    span.time = time
