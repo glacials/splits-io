@@ -162,6 +162,9 @@ GEM
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-turbolinks (2.1.0)
+      railties (>= 3.1.0)
+      turbolinks
     json (1.8.2)
     kgio (2.9.2)
     listen (2.9.0)
@@ -390,6 +393,7 @@ DEPENDENCIES
   httparty
   jbuilder
   jquery-rails
+  jquery-turbolinks
   meta_request
   momentjs-rails
   moving_average

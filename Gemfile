@@ -80,6 +80,7 @@ gem 'unicorn'
 
 # speediness
 gem 'dalli'
+gem 'jquery-turbolinks'
 gem 'turbolinks', git: 'https://github.com/rails/turbolinks', branch: 'master'
 
 # views
