@@ -52,7 +52,7 @@ gem 'rails_12factor'
 
 # javascript libraries
 gem 'jquery-rails'
-gem 'momentjs-rails'
+gem 'numeraljs-rails'
 gem 'spinjs-rails'
 gem 'tipsy-rails'
 

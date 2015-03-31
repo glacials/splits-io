@@ -44,7 +44,7 @@
                 - else
                   | -
             - if cols.include?(:time)
-              td.align-right = render partial: 'shared/time', locals: {time: run.time, show_milliseconds: false}
+              td.align-right.time = run.time
             - if cols.include?(:name)
               td = link_to run.name, run_path(run), class: 'run-link'
             - if cols.include?(:rival)
@@ -55,7 +55,7 @@
                   - if rival.present?
                     - rival_run = rival.pb_for(run.category)
                     = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
-                      = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run)}
+                      .time = difference(run, rival_run)
                       |  against 
                       = rival
                   /- elsif @relevant_follows.that_run(run.category).present?

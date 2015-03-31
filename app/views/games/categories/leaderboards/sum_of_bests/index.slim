@@ -25,10 +25,8 @@ article
                 = link_to run.user, user_path(run.user), class: 'user-link'
               - else
                 = '-'
-            td.align-left style='border-left: 2px solid #ffd700;'
-              = render partial: 'shared/time', locals: {time: run.sum_of_best, show_milliseconds: false}
+            td.align-left.time style='border-left: 2px solid #ffd700;' = run.sum_of_best
             td.align-left
-              a.run-link href=run_path(run)
-                = render partial: 'shared/time', locals: {time: run.time, show_milliseconds: false}
+              a.run-link.time href=run_path(run) = run.time
   center
     small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'

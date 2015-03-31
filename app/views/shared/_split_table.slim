@@ -13,5 +13,5 @@ table.table.table-striped
         td.align-right
           - if split.gold?
             .gold-split title='Gold'
-          = render partial: 'shared/time', locals: {time: split.duration, show_milliseconds: @run.short?}
-        td.align-right= render partial: 'shared/time', locals: {time: split.finish_time, show_milliseconds: @run.short?}
+          span.time = split.duration
+        td.align-right.time = split.finish_time

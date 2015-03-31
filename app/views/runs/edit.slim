@@ -10,7 +10,7 @@
     - else
       = @run.name
   h5
-    = render partial: 'shared/time', locals: {time: @run.time, show_milliseconds: @run.short?}
+    .time = @run.time
     - if @run.user.try(:name)
       small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
   h6
@@ -50,10 +50,14 @@ article.danger
         = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run.name} run?"}, class: 'button btn btn-danger', style: 'margin: 1em;'
           div
             big Delete
-          small = "#{@run.name} in #{render partial: 'shared/time', locals: {time: @run.time}}"
+          small
+            = "#{@run.name} in "
+            span.time = @run.time
     .col-md-6
       center
         = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run.name} run?"}, params: {'run[disown]' => true}, class: 'button btn btn-danger-inverted', style: 'margin: 1em;'
           div
             big Disown
-          small = "#{@run.name} in #{render partial: 'shared/time', locals: {time: @run.time}}"
+          small
+            = "#{@run.name} in "
+            span.time = @run.time

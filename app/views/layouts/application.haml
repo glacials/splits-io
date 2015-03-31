@@ -6,6 +6,7 @@
       = yield(:title) || "a website"
     %link{href: '//fonts.googleapis.com/css?family=Open+Sans', rel: 'stylesheet', type: 'text/css'}/
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
+    = javascript_include_tag 'application'
     = stylesheet_link_tag 'application', media: :all
     = csrf_meta_tag
     = render partial: 'shared/favicons'
@@ -40,7 +41,6 @@
       %footer
         &nbsp;
         = yield(:footer)
-  = javascript_include_tag 'application'
 :javascript
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
