@@ -41,13 +41,9 @@ class RunsController < ApplicationController
 
   def create
     run_file = RunFile.for_file(params.require(:file))
-    @run = Run.new(run_file: run_file, user: current_user, image_url: params[:image_url])
-    if @run.save
-      redirect_to run_path(@run)
-    else
-      redirect_to :cant_parse
-    end
-  rescue ActiveRecord::StatementInvalid
+    @run = Run.create!(run_file: run_file, user: current_user, image_url: params[:image_url])
+    redirect_to run_path(@run)
+  rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordInvalid
     redirect_to :cant_parse
   end
 
@@ -78,13 +74,9 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.find_by(id: params[:id].to_i(36)) || Run.find_by(nick: params[:id])
-    if @run.blank?
-      render :not_found, status: 404
-      return false
-    end
-  rescue ActionController::UnknownFormat
-    render status: 404, text: "404 Run not found"
+    @run = Run.find_by(id: params[:id].to_i(36)) || Run.find_by!(nick: params[:id])
+  rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
+    render :not_found, status: 404
   end
 
   def set_comparison
@@ -92,21 +84,13 @@ class RunsController < ApplicationController
     @comparison_run = Run.find_by_id(params[:comparison_run].to_i(36)) || Run.find_by(nick: params[:comparison_run])
     if @run.blank? || @comparison_run.blank?
       render :not_found, status: 404
-      return false
     end
   end
 
   def verify_ownership
     unless @run.belongs_to?(current_user)
       render :unauthorized, status: 401
-      return false
     end
-  end
-
-  def mark_visited
-    return if @run.visited?
-    @run.visited = true
-    @run.save
   end
 
   def warn_about_deprecated_url
@@ -115,7 +99,6 @@ class RunsController < ApplicationController
       alert: "This run's permalink has changed. You have been redirected to the newer one. \
               <a href='#{why_path}'>More info</a>.".html_safe
     }
-    return false
   end
 
   def reject_as_unparsable
