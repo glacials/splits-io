@@ -3,7 +3,7 @@
   - colors = [:blue, :purple, :green, :red, :orange, :yellow]
   .timeline
     - run.reduced_splits.each_with_index do |split, index|
-      .pure-u.split id="#{run.id}-split-#{index}" class=(colors[index % colors.length]) style="width: #{split.duration / scale_to * 100}%; z-index: #{index};"
+      .pure-u.split id="#{run.id}-split-#{index}" class=(colors[index % colors.length]) style='width: 0;'
         .title = split.name
         .time = split.duration
     - if run.time < scale_to
