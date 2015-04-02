@@ -1,38 +1,64 @@
-- title "faq"
+- title 'about'
 - content_for(:header)
-  h2 = content_for(:title)
+  h2 faq + friends
 article
+  h3 faq
   .question
-    h4 Who writes splits i/o?
-    p
-      | Just me, glacials. You can check me over at
-      a<> target=:_blank href="http://www.twitch.tv/glacials" twitch.tv/glacials
-      | and at
-      a<> target=:_blank href="http://twitter.com/glcls" twitter.com/glcls
-      | if you want, it's up to you.
+    h4 Who made this?
+    p Mostly me, glacials. My thingies are over at #{link_to 'twitch.tv/glacials', 'http://www.twitch.t/glacials'} and
+      at #{link_to 'twitter.com/glcls', 'http://twitter.com/glcls'}. You can check them out if you want, it's up to you.
   .question
     h4 Which programs can I upload splits from?
-    p
-      | Right now it's LiveSplit, Time Split Tracker, SplitterZ, WSplit, and Nitrofski's 1.5.x WSplit fork. In
-        LiveSplit, you can upload from within the program with a right click -> Share.
+    p LiveSplit, Time Split Tracker, SplitterZ, and WSplit.
+    p In LiveSplit, you can upload from within the program with a right click -> Share.
+  .question
+    h4 Why no Llanfair?
+    p The way Llanfair saves files makes it very hard to read them if you're a program that's not Llanfair. Not
+      impossible, but too hard for the payoff to be worth the work on my end right now. Llanfair is currently undergoing
+      an open source rewrite; this will help to solve the problem, but I do not know when it will be ready.
+  .question
+    h4 Why no &lt;other program&gt;?
+    p Check here: #{link_to 'github.com/glacials/splits-io/labels/parsing', 'https://github.com/glacials/splits-io/parsing'}.
+      It's possible that your favorite program is on my radar but not a current priority. If that's the case, comment on
+      the issue to let me know, so I can be more informed about the demand. If it's not, make a GitHub issue for me! I
+      want to be as complete as reasonably possible with regards to program support.
   .question
     h4 How is 'splits i/o' supposed to be capitalized?
     p idk man.
   .question
-    h4 Is splits i/o open source?
+    h4 Is it open source?
     p
       | Yep:
       a< target=:_blank href="https://github.com/glacials/splits-io" github.com/glacials/splits-io
   .question
     h4 Is there an API?
     p
-      | Yeah, see the GitHub link above for full documentation, but in general the endpoints are at places like
-      code< splits.io/api/v3/games
-      | .
+      | Yeah, here are the docs: #{link_to 'github.com/glacials/splits-io/blob/master/docs/api.md', 'https://github.com/glacials/splits-io/blob/master/docs/api.md'}
   .question
-    h4 Help splits i/o kidnapped my sister!
+    h4 Help! splits.io kidnapped my sister.
     p
       | You can always email me at
       a<> href="mailto:qhiiyr@gmail.com" qhiiyr@gmail.com
       | with issues! Or if you'd prefer, you can post them at the GitHub issues page! But maybe you should call the
         police first!
+
+article
+  h3
+    | open source friends
+    small< <3
+
+  .project
+    h4 LiveSplit
+    small #{link_to 'source', 'https://github.com/LiveSplit/LiveSplit'}, #{link_to 'website', 'http://livesplit.org/'}
+    p LiveSplit is developed by two really cool people who decided to open source the whole thing around 1.4.
+
+  .project
+    h4 WSplit
+    small #{link_to 'source', 'https://github.com/nitrofski/wsplit'}
+    p Nitrofski is WSplit's maintainer and open sourced the program in 2014.
+
+  .project
+    h4 PB Tracker
+    small #{link_to 'source', 'https://github.com/rggibson/pb-tracker'}, #{link_to 'website', 'http://www.pbtracker.net/'}
+    p PB Tracker is splits.io's spiritual sister, preferring a you-curated, diary-style progress tracking system to
+      splits.io's more automated "give me all your splits" attitude.
