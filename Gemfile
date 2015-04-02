@@ -38,6 +38,8 @@ gem 'jbuilder'
 
 # authentication
 gem 'authie'
+gem 'omniauth'
+gem 'omniauth-twitch'
 
 # db
 gem 'pg'
@@ -67,7 +69,7 @@ gem 'squeel'
 
 # parsing
 gem 'babel_bridge'
-gem 'chronic_duration', git: 'https://github.com/glacials/chronic_duration', branch: 'pad_to_option'
+gem 'chronic_duration', github: 'glacials/chronic_duration', branch: 'pad_to_option'
 gem 'moving_average'
 gem 'versionomy'
 gem 'xml-simple'
@@ -81,7 +83,7 @@ gem 'unicorn'
 # speediness
 gem 'dalli'
 gem 'jquery-turbolinks'
-gem 'turbolinks', git: 'https://github.com/rails/turbolinks', branch: 'master'
+gem 'turbolinks', github: 'rails/turbolinks', branch: 'master'
 
 # views
 gem 'bootstrap-sass'

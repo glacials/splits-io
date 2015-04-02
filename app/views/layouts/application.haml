@@ -34,7 +34,7 @@
                   = link_to "tools", tools_path
                   = link_to "sign out", session_path(auth_session), method: :delete
           - else
-            %a#sign-in.orange{href: new_session_path, onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
+            %a#sign-in.orange{href: '/auth/twitch', onclick: 'document.cookie="return_to="+window.location.pathname;'} sign in
         = yield(:header)
         = render partial: 'shared/alerts'
       = yield

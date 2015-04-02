@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/glacials/chronic_duration
+  remote: git://github.com/glacials/chronic_duration.git
   revision: ac649be5d0feaba3a83df7b7ff20ed58bdefead5
   branch: pad_to_option
   specs:
@@ -7,7 +7,7 @@ GIT
       numerizer (~> 0.1.1)
 
 GIT
-  remote: https://github.com/rails/turbolinks
+  remote: git://github.com/rails/turbolinks.git
   revision: b8d43ac4822ece77361a8e7f3309fc3f3ab13e55
   branch: master
   specs:
@@ -101,6 +101,8 @@ GEM
     factory_girl_rails (4.4.1)
       factory_girl (~> 4.4.0)
       railties (>= 3.0.0)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.8)
     figaro (1.0.0.rc1)
       rails (>= 3, < 5)
@@ -140,6 +142,7 @@ GEM
       railties (>= 4.0.1)
     has_secure_token (0.0.2)
       activemodel
+    hashie (3.4.1)
     heroics (0.0.13)
       erubis (~> 2.7.0)
       excon
@@ -166,6 +169,7 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.2)
+    jwt (1.4.1)
     kgio (2.9.2)
     listen (2.9.0)
       celluloid (>= 0.15.2)
@@ -188,6 +192,7 @@ GEM
     moving_average (0.1.1)
     multi_json (1.11.0)
     multi_xml (0.5.5)
+    multipart-post (2.0.0)
     nenv (0.2.0)
     netrc (0.7.9)
     newrelic_rpm (3.10.0.279)
@@ -201,6 +206,22 @@ GEM
       shellany (~> 0.0)
     numeraljs-rails (1.4.5.0)
     numerizer (0.1.1)
+    oauth2 (1.0.0)
+      faraday (>= 0.8, < 0.10)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (~> 1.2)
+    omniauth (1.2.2)
+      hashie (>= 1.2, < 4)
+      rack (~> 1.0)
+    omniauth-oauth2 (1.2.0)
+      faraday (>= 0.8, < 0.10)
+      multi_json (~> 1.3)
+      oauth2 (~> 1.0)
+      omniauth (~> 1.2)
+    omniauth-twitch (0.1.2)
+      omniauth-oauth2 (~> 1.1)
     parser (2.1.9)
       ast (>= 1.1, < 3.0)
       slop (~> 3.4, >= 3.4.5)
@@ -398,6 +419,8 @@ DEPENDENCIES
   newrelic_rpm
   nilify_blanks
   numeraljs-rails
+  omniauth
+  omniauth-twitch
   pg
   platform-api
   pry-rails

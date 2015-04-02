@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   has_many :games, -> { uniq }, through: :runs
   has_many :rivalries, foreign_key: :from_user_id
 
+  validates :twitch_id, presence: true
+  validates :name, presence: true
+
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}) }
 
   def self.search(term)
