@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def create
-    user = User.where(twitch_id: request.env['omniauth.auth'].info.uid).first_or_create(
+    user = User.where(twitch_id: request.env['omniauth.auth'].uid).first_or_create(
       name: request.env['omniauth.auth'].info.name,
       email: request.env['omniauth.auth'].info.email,
       avatar: request.env['omniauth.auth'].info.logo
