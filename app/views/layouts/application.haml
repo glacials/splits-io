@@ -16,6 +16,13 @@
     #dropzone
       #dropzone-overlay.header{style: 'border: none;'}
         %h1#droplabel.inverted drop anywhere
+        #multiupload{style: 'display: none;'}
+          %h2
+            successes:
+            %span#successful-uploads
+          %h2
+            failures:
+            %span#failed-uploads
       %header
         %nav
           - page = {upload: request.path == new_run_path, games: request.path.match(games_path), faq: request.path == faq_path, profile: logged_in? && request.path == user_path(current_user)}

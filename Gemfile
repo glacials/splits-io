@@ -57,6 +57,7 @@ gem 'jquery-rails'
 gem 'numeraljs-rails'
 gem 'spinjs-rails'
 gem 'tipsy-rails'
+gem 'underscore-rails'
 
 # logging
 gem 'newrelic_rpm'

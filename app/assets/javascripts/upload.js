@@ -1,8 +1,9 @@
 $(function () {
-  window.upload = function (file) {
+  window.upload = function (file, options) {
+    options = options || {redirect: true}
     var data = new FormData();
     data.append("file", file);
-    $.ajax({
+    return $.ajax({
       url: "/api/v3/runs",
       type: "POST",
       data: data,
@@ -11,17 +12,39 @@ $(function () {
       contentType: false,
       success: function (data, textStatus, xhr) {
         localStorage.setItem("claim_tokens/" + data.id, data.claim_token);
-        window.location = data.uris.public_uri;
+        if (options.redirect) {
+          window.location = data.uris.public_uri;
+        }
       },
       error: function (xhr, textStatus) {
         window.isUploading = false;
-        if (xhr.status == 400) {
-          window.location = '/cant-parse';
+        if (xhr.status === 400) {
+          if (options.redirect === true) {
+            window.location = '/cant-parse';
+          }
         } else {
           $("#droplabel").html("oops, got a " + xhr.status + " (" + xhr.statusText + ").<br />try again, or contact glacials.<br />");
           window.spinner.stop();
         }
       }
+    });
+  };
+
+  window.uploadAll = function (files) {
+    $("#multiupload").show();
+
+    Promise.all(files.map(function (file) {
+      return new Promise(function (resolve, reject) {
+        window.upload(file, {redirect: false}).then(function () {
+          $("#successful-uploads").html(Number($("#successful-uploads").html()) + 1);
+          resolve();
+        }, function (err) {
+          $("#failed-uploads").html(Number($("#failed-uploads").html()) + 1);
+          resolve();
+        });
+      });
+    })).then(function () {
+      window.location = "/";
     });
   };
 
@@ -45,12 +68,20 @@ $(function () {
   $("#dropzone").on("drop", function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    $.each(evt.originalEvent.dataTransfer.files, function(filename, file) {
-      $("#droplabel").html("parsing...");
-      window.isUploading = true;
-      window.showSpinner("#fff");
-      window.upload(file);
-    });
+    files = evt.originalEvent.dataTransfer.files;
+
+    if (files.length > 1 && gon.user === null) {
+      $("#droplabel").html("to upload more than one file at a time, please sign in.");
+      return
+    }
+    $("#droplabel").html("parsing...");
+    window.isUploading = true;
+    window.showSpinner("#fff");
+    if (files.length > 1) {
+      window.uploadAll(_.toArray(files));
+    } else {
+      window.upload(files[0]);
+    }
   });
 
   $("#dropzone").click(function (evt) {
