@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
     end
 
     self.current_user = user
+    auth_session.persist!
     redirect_to cookies.delete(:return_to) || root_path, notice: "Signed in as #{current_user.name}. o/"
   end
 
