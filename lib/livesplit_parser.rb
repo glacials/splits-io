@@ -2,7 +2,11 @@ require 'active_support'
 require 'ostruct'
 require 'xmlsimple'
 
-class LiveSplitParser < BabelBridge::Parser
+class LiveSplitParser
+  def self.initialize(options = {})
+    @ignore_history = options[:ignore_history]
+  end
+
   def parse(xml)
     xml = XmlSimple.xml_in(xml)
     version = Versionomy.parse(xml['version'] || '1.2')
@@ -43,8 +47,12 @@ class LiveSplitParser < BabelBridge::Parser
         split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:duration).try(:round, 5)
         split.skipped = split.duration == 0
 
-        split.history = segment['SegmentHistory'][0]['Time'].try do |times|
-          times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
+        split.history = if @ignore_history
+          []
+        else
+          segment['SegmentHistory'][0]['Time'].try do |times|
+            times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
+          end
         end
 
         run[:time] += split.duration if split.duration.present?
