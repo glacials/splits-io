@@ -2,7 +2,7 @@
 
 ## Pagination
 Routes that return array resources are paginated to 20 items per page. To get a specific page of results, add `?page=N`
-to your API hit. The default page is page 1. You'll find pagination info in the headers of every paginated response
+to your API hit. The default page is page 1. You'll find pagination info in the HTTP headers of every paginated response
 under the `Link`, `Total`, and `Per-Page` fields.
 
 ## Overview of routes
