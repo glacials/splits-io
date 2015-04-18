@@ -6,7 +6,7 @@ class Api::V4::GamesController < Api::V4::ApplicationController
       render status: 400, json: {status: 400, message: 'You must supply a `search` term.'}
       return
     end
-    @games = Game.search(params[:search])
+    @games = Game.search(params[:search]).includes(:categories)
     render json: @games, each_serializer: Api::V4::GameSerializer
   end
 
