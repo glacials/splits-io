@@ -12,6 +12,7 @@ Base URL is **https://splits.io/api/v3**.
 Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or splits-io base 10 `id`s (which you can discover in other
 routes).
 
+    GET /games?search=:term
     GET /games/:id
     GET /games/:game_id/runs
     GET /games/:game_id/categories/:id
@@ -39,6 +40,42 @@ Run ids are splits-io base 36 ids. These are the strings you see in user-friendl
 ### Based on game
 Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or splits-io base 10 `id`s (which you can discover in other
 routes).
+
+#### `GET /games?search=:term`
+Returns games with names matching `.*:term.*` or shortnames exactly equaling `:term` (in no guaranteed order).
+
+##### Example request
+```bash
+curl https://splits.io/api/v3/games?search=sonic
+```
+
+##### Example response
+*(see the `/games/:id` endpoint for the game format)*
+```json
+{
+  "games": [
+  {
+    "id": 969,
+      "name": "Sonic 2006",
+      "shortname": null,
+      ...
+  },
+  {
+    "id": 172,
+    "name": "Sonic Adventure 2 Battle",
+    "shortname": "sa2b",
+    ...
+  },
+  ...
+  {
+    "id": 752,
+    "name": "Sonic Unleashed (360/PS3)",
+    "shortname": "su360",
+    ...
+  }
+  ]
+}
+```
 
 #### `GET /games/:id`
 Returns information about a game.
