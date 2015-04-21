@@ -3,7 +3,7 @@ $(function () {
     if ($.trim(el.innerHTML) === '0') {
       el.innerHTML = '-';
     } else {
-      el.innerHTML = numeral(el.innerHTML).format('00:00:00');
+      el.innerHTML = numeral(Math.floor(el.innerHTML)).format('00:00:00');
     }
   });
 });
