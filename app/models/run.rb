@@ -156,7 +156,7 @@ class Run < ActiveRecord::Base
     end
 
     game = Game.where("lower(name) = ?", parse[:game].try(:downcase)).first || Game.create(name: parse[:game])
-    update_attributes(
+    update(
       category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category]),
       archived: !pb?
     )
