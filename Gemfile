@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
-ruby '2.1.5'
+ruby '2.2.2'
 
 group :development, :test do
   # tests
   gem 'factory_girl_rails'
-  gem 'rspec-rails'
+  #gem 'rspec-rails' # removed until updated for rails 5
   gem 'simplecov', require: false
 end
 
@@ -42,6 +42,7 @@ gem 'omniauth'
 gem 'omniauth-twitch'
 
 # db
+gem 'arel', github: 'rails/arel'
 gem 'pg'
 
 # external communication
@@ -60,13 +61,12 @@ gem 'tipsy-rails'
 gem 'underscore-rails'
 
 # logging
-gem 'newrelic_rpm'
+# gem 'newrelic_rpm', github: 'newrelic/rpm' # no rails 5 support yet
 gem 'rails_stdout_logging'
 
 # models/db
 gem 'has_secure_token'
 gem 'nilify_blanks'
-gem 'squeel'
 
 # parsing
 gem 'babel_bridge'
@@ -77,14 +77,14 @@ gem 'xml-simple'
 
 # server/environment
 gem 'figaro'
-gem 'rails'
+gem 'rails', github: 'rails/rails'
 gem 'thin'
 gem 'unicorn'
 
 # speediness
 gem 'dalli'
 gem 'jquery-turbolinks'
-gem 'turbolinks', github: 'rails/turbolinks', branch: 'master'
+gem 'turbolinks', github: 'rails/turbolinks'
 
 # views
 gem 'bootstrap-sass'

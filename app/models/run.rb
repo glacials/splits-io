@@ -53,8 +53,16 @@ class Run < ActiveRecord::Base
   scope :unarchived, -> { where(archived: false) }
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
 
-  def self.find36(id36)
-    find(id36.to_i(36))
+  alias_method :find10, :find
+  # todo: rename this to `find` when APIv2 is removed
+  def self.find36(id)
+    find10(id.to_i(36))
+  end
+
+  alias_method :id10, :id
+  # todo: rename this to `id` when APIv2 is removed
+  def id36
+    id10.to_s(36)
   end
 
   def belongs_to?(user)
@@ -179,9 +187,5 @@ class Run < ActiveRecord::Base
 
   def has_golds?
     splits.all? { |split| split.best.duration.present? }
-  end
-
-  def id36
-    id.to_s(36)
   end
 end

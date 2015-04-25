@@ -19,7 +19,7 @@ Alternatively, there is a manual upload form at `/upload`.
 ## Running locally
 
 ### Requirements
-* Ruby 2.1.5
+* Ruby 2.2.2
 * PostgreSQL
 
 ### Configuration
