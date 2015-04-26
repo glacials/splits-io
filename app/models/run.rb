@@ -140,7 +140,7 @@ class Run < ActiveRecord::Base
   end
 
   def to_param
-    id.to_s(36)
+    id36
   end
 
   def path
@@ -167,11 +167,14 @@ class Run < ActiveRecord::Base
       update(run_file: RunFile.for_text(file), file: nil)
     end
 
-    game = Game.where("lower(name) = ?", parse[:game].try(:downcase)).first || Game.create(name: parse[:game])
-    update(
-      category: game.categories.where("lower(name) = ?", parse[:category].try(:downcase)).first_or_create(name: parse[:category]),
-      archived: !pb?
-    )
+    if [parse[:game], parse[:category]].all?(&:present?)
+      [parse[:game], parse[:category]].each(&:strip!)
+
+      game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
+      category = game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
+
+      update(category: category, archived: !pb?)
+    end
   end
 
   def time
