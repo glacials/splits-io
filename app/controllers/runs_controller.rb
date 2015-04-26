@@ -27,12 +27,12 @@ class RunsController < ApplicationController
 
   def update
     if params[:run][:disown]
-      @run.update_attributes(user: nil)
+      @run.update(user: nil)
       redirect_to run_path(@run), notice: 'Run disowned.'
       return
     end
 
-    if @run.update_attributes(video_url: params[:run][:video_url])
+    if @run.update(video_url: params[:run][:video_url])
       redirect_to edit_run_path(@run), notice: 'Proof saved.'
     else
       redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
@@ -115,7 +115,7 @@ class RunsController < ApplicationController
 
   def attempt_to_claim
     if @run.user == nil && @run.claim_token.present? && @run.claim_token == params[:claim_token]
-      @run.update_attributes(user: current_user)
+      @run.update(user: current_user)
       redirect_to run_path(@run)
     end
   end

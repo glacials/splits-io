@@ -46,7 +46,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   end
 
   def disown
-    @run.update_attributes(user: nil)
+    @run.update(user: nil)
     head 200
   end
 

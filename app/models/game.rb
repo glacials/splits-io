@@ -24,7 +24,7 @@ class Game < ActiveRecord::Base
     game = ::SpeedRunsLive.game(name)
     return if game.nil?
 
-    update_attributes(srl_id: game['id'].to_i, shortname: game['abbrev'])
+    update(srl_id: game['id'].to_i, shortname: game['abbrev'])
   end
 
   def to_s
