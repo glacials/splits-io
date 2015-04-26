@@ -11,6 +11,8 @@ class UrnParser < BabelBridge::Parser
     run[:time] = duration_in_seconds(json["splits"].last["time"])
     run[:splits] = parse_splits(json["splits"])
     run
+  rescue
+    nil
   end
 
   private
@@ -29,7 +31,7 @@ class UrnParser < BabelBridge::Parser
     ).tap do |split|
       split.duration = [split.finish_time - prev_split_finish_time, 0].max
       split.gold = split.duration > 0 && split.duration.round(5) == split.best.duration.try(:round, 5)
-      split.skipped = split.duration > 0
+      split.skipped = split.duration == 0
     end
   end
 
