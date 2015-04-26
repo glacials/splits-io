@@ -14,7 +14,8 @@ class Run < ActiveRecord::Base
       'livesplit' => LiveSplit::Run,
       'wsplit' => WSplit::Run,
       'timesplittracker' => TimeSplitTracker::Run,
-      'splitterz' => SplitterZ::Run
+      'splitterz' => SplitterZ::Run,
+      'urn' => Urn::Run
     }[program]
   end
 
@@ -37,7 +38,8 @@ class Run < ActiveRecord::Base
     wsplit: WSplitParser,
     timesplittracker: TimeSplitTrackerParser,
     splitterz: SplitterZParser,
-    livesplit: LiveSplitParser
+    livesplit: LiveSplitParser,
+    urn: UrnParser
   }
   @parse_cache = nil
 
