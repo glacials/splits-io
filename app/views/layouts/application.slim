@@ -31,7 +31,7 @@ html
           - if logged_in?
             .dropdown href='#'
               a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'logo' : '')
-                small ∨
+                small = '∨ '
                 = current_user.name
               ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
                 li role=:presentation
