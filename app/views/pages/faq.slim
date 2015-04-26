@@ -21,7 +21,19 @@ article
     p Check here: #{link_to 'github.com/glacials/splits-io/labels/parsing', 'https://github.com/glacials/splits-io/labels/parsing'}.
       It's possible that your favorite program is on my radar but not a current priority. If that's the case, comment on
       the issue to let me know, so I can be more informed about the demand. If it's not, make a GitHub issue for me! I
-      want to be as complete as reasonably possible with regards to program support.
+      want splits.io to be as complete as reasonably possible with regards to program support.
+  .question
+    h4 I get "Application Error" when accessing my splits!
+    p This error happens when the page request times out, which is typically a sign that your splits took too long to
+      load into memory and parse. This happens to LiveSplit files with a very large
+    code style='display: block; margin: 1em; white-space: nowrap;'
+      | (# attempts) * (# splits in the run)
+    p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like
+      #{link_to 'predictions', 'https://github.com/glacials/splits-io/blob/master/docs/api.md#get-usersuser_idgamesgame_idcategoriescategory_idprediction'}).
+    p It's my own fault that splits.io's handling of this is not as optimized as it should be, and I'm actively working
+      to solve it, but it's not a one-stop bug fix. To see how it's going and what specifically is being planned, you
+      can check splits.io's #{link_to 'speed', 'https://github.com/glacials/splits-io/labels/speed'} label on
+      GitHub.
   .question
     h4 How is 'splits i/o' supposed to be capitalized?
     p idk man.
