@@ -2,6 +2,7 @@ require 'livesplit_parser'
 require 'splitterz_parser'
 require 'time_split_tracker_parser'
 require 'wsplit_parser'
+require 'urn_parser'
 
 class Run < ActiveRecord::Base
   include PadawanRun

@@ -12,6 +12,8 @@ class RunsController < ApplicationController
   before_action :attempt_to_claim, only: [:show]
   before_action :verify_ownership, only: [:edit, :update, :destroy]
 
+  before_action :set_filetype, only: [:download]
+
   def show
     @run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
   end
@@ -54,7 +56,7 @@ class RunsController < ApplicationController
       else
         render_to_string(params[:program], layout: false)
       end,
-      filename: "#{@run.to_param}.#{params[:program] == 'livesplit' ? 'lss' : params[:program]}",
+      filename: "#{@run.to_param}.#{@filetype}",
       layout: false
     )
   end
@@ -127,5 +129,9 @@ class RunsController < ApplicationController
       @run.destroy
       redirect_to cant_parse_path
     end
+  end
+
+  def set_filetype
+    @filetype = {'livesplit' => 'lss', 'urn' => 'json'}.fetch(params[:program], params[:program])
   end
 end
