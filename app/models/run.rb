@@ -196,4 +196,9 @@ class Run < ActiveRecord::Base
   def has_golds?
     splits.all? { |split| split.best.duration.present? }
   end
+
+  def filename(download_program)
+    extension = {'livesplit' => 'lss', 'urn' => 'json'}[download_program] || download_program
+    "#{to_param}.#{extension}"
+  end
 end
