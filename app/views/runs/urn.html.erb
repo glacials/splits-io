@@ -6,7 +6,7 @@
         <% @run.splits.each_with_index do |split, index| %>
         {
             "title": "<%= split.name %>",
-            "time": "<%= Time.at(split.finish_time || 0).utc.strftime("%H:%M:%S.%6N").strip %>",
+            "time": "<%= split.skipped ? "0.000000" : Time.at(split.finish_time).utc.strftime("%H:%M:%S.%6N").strip %>",
             "best_time": "<%= Time.at(split.finish_time || 0).utc.strftime("%H:%M:%S.%6N").strip %>",
             "best_segment": "<%= Time.at(split.best.duration || split.duration).utc.strftime("%H:%M:%S.%6N").strip %>"
         }<%= ',' unless @run.splits.size - 1 == index %>
