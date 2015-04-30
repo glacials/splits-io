@@ -54,7 +54,7 @@ class RunsController < ApplicationController
       else
         render_to_string(params[:program], layout: false)
       end,
-      filename: "#{@run.to_param}.#{params[:program] == 'livesplit' ? 'lss' : params[:program]}",
+      filename: "#{@run.filename(params[:program])}",
       layout: false
     )
   end

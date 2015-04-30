@@ -2,6 +2,7 @@ require 'livesplit_parser'
 require 'splitterz_parser'
 require 'time_split_tracker_parser'
 require 'wsplit_parser'
+require 'urn_parser'
 
 class Run < ActiveRecord::Base
   include PadawanRun
@@ -194,5 +195,10 @@ class Run < ActiveRecord::Base
 
   def has_golds?
     splits.all? { |split| split.best.duration.present? }
+  end
+
+  def filename(download_program)
+    extension = {'livesplit' => 'lss', 'urn' => 'json'}[download_program] || download_program
+    "#{to_param}.#{extension}"
   end
 end

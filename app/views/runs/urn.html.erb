@@ -1,0 +1,15 @@
+{
+    "title": "<%= @run.respond_to?(:name) ? @run.name : "" %>",
+    "attempt_count": <%= @run.respond_to?(:attempts) ? @run.attempts : 0 %>,
+    "start_delay": "<%= Time.at(@run.offset || 0).utc.strftime("%-H:%-M:%S").strip %>",
+    "splits": [
+        <% @run.splits.each_with_index do |split, index| %>
+        {
+            "title": "<%= split.name %>",
+            "time": "<%= split.skipped ? "0.000000" : Time.at(split.finish_time).utc.strftime("%H:%M:%S.%6N").strip %>",
+            "best_time": "<%= Time.at(split.finish_time || 0).utc.strftime("%H:%M:%S.%6N").strip %>",
+            "best_segment": "<%= Time.at(split.best.duration || split.duration).utc.strftime("%H:%M:%S.%6N").strip %>"
+        }<%= ',' unless @run.splits.size - 1 == index %>
+        <% end %>
+    ]
+}
