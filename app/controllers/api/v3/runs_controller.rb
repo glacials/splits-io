@@ -14,7 +14,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       unless run.parses?
         render status: 400, json: {
           status: 400,
-          message: "Can't parse that file. We support WSplit 1.4.x, Nitrofski's WSplit 1.5.x fork, Time Split Tracker, SplitterZ, and LiveSplit >= 1.2."
+          message: "Can't parse that file. We support WSplit 1.4.x, Nitrofski's WSplit 1.5.x fork, Time Split Tracker, SplitterZ, Urn and LiveSplit >= 1.2."
         }
         return
       end
