@@ -38,7 +38,9 @@ class Run < ActiveRecord::Base
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
 
   class << self
-    attr_accessor :programs
+    def programs
+      @@programs
+    end
 
     @@programs = [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     @@parsers = {
