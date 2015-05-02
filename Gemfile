@@ -53,7 +53,8 @@ gem 'rest-client'
 gem 'platform-api'
 gem 'rails_12factor'
 
-# javascript libraries
+# javascript
+gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'numeraljs-rails'
 gem 'spinjs-rails'

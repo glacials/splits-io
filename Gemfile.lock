@@ -411,6 +411,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass
   chronic_duration!
+  coffee-rails
   dalli
   delayed_job_active_record
   factory_girl_rails
