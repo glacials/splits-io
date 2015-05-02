@@ -17,6 +17,12 @@ class User < ActiveRecord::Base
     where(User.arel_table[:name].matches "%#{term}%").joins(:runs).uniq.order(:name)
   end
 
+  def avatar
+    URI.parse(read_attribute(:avatar)).tap do |uri|
+      uri.scheme = 'https'
+    end
+  end
+
   def uri
     URI::parse("http://www.twitch.tv/#{name}")
   end

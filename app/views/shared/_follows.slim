@@ -1,0 +1,15 @@
+- cache [:follows, @user] do
+  - if @user.follows.present?
+    br
+    h5 Hey, you. Here are some people you follow.
+    = @user.follows.find_each do |user|
+      .col-xs-12.col-sm-6.col-md-4
+        .media style='margin: .5em 0;'
+          - if user.avatar
+            a.pull-left href=user_path(user)
+              img src=user.avatar height=64 width=64
+          .media-body
+            a href=user_path(user)
+              h4.media-heading = user.name
+            - user.games.reject { |game| game.name.blank? }.each do |game|
+              => link_to(game.shortname || game.name.downcase, game, class: 'stealth-link game-link')
