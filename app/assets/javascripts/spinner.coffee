@@ -15,7 +15,7 @@ $ ->
       hwaccel: true
       className: "spinner"
       zIndex: 2e9
-    ).spin
+    ).spin()
     document.body.appendChild window.spinner.el
 
   window.hideSpinner = -> window.spinner.stop
