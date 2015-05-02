@@ -3,7 +3,7 @@ splits i/o is a website similar to Pastebin or GitHub Gist, but for splits gener
 code. It's written in Ruby on Rails.
 
 splits i/o currently supports splits from WSplit (both 1.4.x and Nitrofski's 1.5.x fork), Time Split Tracker, SplitterZ,
-and LiveSplit. Llanfair is in the works.
+LiveSplit and Urn. Llanfair is in the works.
 
 ## Uploading
 We have drag-anywhere-on-any-page uploading, in a fashion similar to Imgur. The entire page lives in a `#dropzone` div
