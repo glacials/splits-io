@@ -9,17 +9,6 @@ class Run < ActiveRecord::Base
   include ForgetfulPersonsRun
   include ActionView::Helpers::DateHelper
 
-  self.inheritance_column = :program
-  def self.find_sti_class(program)
-    {
-      'livesplit' => LiveSplit::Run,
-      'wsplit' => WSplit::Run,
-      'timesplittracker' => TimeSplitTracker::Run,
-      'splitterz' => SplitterZ::Run,
-      'urn' => Urn::Run
-    }[program]
-  end
-
   belongs_to :user, touch: true
   belongs_to :category, touch: true
   belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
@@ -34,14 +23,6 @@ class Run < ActiveRecord::Base
     end
   end
 
-  class << self; attr_accessor :parsers end
-  @parsers = {
-    wsplit: WSplitParser,
-    timesplittracker: TimeSplitTrackerParser,
-    splitterz: SplitterZParser,
-    livesplit: LiveSplitParser,
-    urn: UrnParser
-  }
   @parse_cache = nil
 
   validates_with RunValidator
@@ -57,6 +38,22 @@ class Run < ActiveRecord::Base
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
 
   class << self
+    attr_accessor :programs
+
+    @@programs = [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+    @@parsers = {
+      wsplit: WSplitParser,
+      timesplittracker: TimeSplitTrackerParser,
+      splitterz: SplitterZParser,
+      livesplit: LiveSplitParser,
+      urn: UrnParser
+    }
+
+    inheritance_column = :program
+    def find_sti_class(program)
+      Hash[@@programs.map { |program| [program.to_s.downcase, program::Run] }][program]
+    end
+
     alias_method :find10, :find
     # todo: rename this to `find` when APIv2 is removed
     def find36(id)
@@ -108,10 +105,10 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    if Run.parsers.keys.include?(read_attribute(:program))
-      [Run.parsers[read_attribute(:program)]]
+    if @@parsers.keys.include?(read_attribute(:program))
+      [@@parsers[read_attribute(:program)]]
     else
-      Run.parsers.values
+      @@parsers.values
     end.each do |parser|
       result = parser.new.parse(file)
       next if result.blank?
