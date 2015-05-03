@@ -11,6 +11,7 @@ module ApplicationHelper
 
   def on_page
     {
+      index: request.path == root_path,
       upload: request.path == new_run_path,
       games: request.path.match(games_path),
       faq: request.path == faq_path,

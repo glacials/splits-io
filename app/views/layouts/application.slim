@@ -24,7 +24,7 @@ html
             span#failed-uploads
       header#header
         nav.dropdown
-          a.blue href=root_path class=(on_page.values.any? ? '' : 'logo') splits i/o
+          a.blue href=root_path class=(on_page[:index] ? 'logo' : '') splits i/o
           a.purple href=new_run_path class=(on_page[:upload] ? 'logo' : '') upload
           a.green href=games_path class=(on_page[:games] ? 'logo' : '') games
           a.red href=faq_path class=(on_page[:faq] ? 'logo' : '') faq
