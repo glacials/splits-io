@@ -3,7 +3,7 @@ ruby '2.2.2'
 
 group :development, :test do
   # tests
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', require: false
   #gem 'rspec-rails' # removed until updated for rails 5
   gem 'simplecov', require: false
 end
