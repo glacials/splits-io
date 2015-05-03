@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   end
 
   def avatar
-    URI.parse(read_attribute(:avatar)).tap do |uri|
+    URI.parse(read_attribute(:avatar) || '').tap do |uri|
       uri.scheme = 'https'
     end
   end
