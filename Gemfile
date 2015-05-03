@@ -9,7 +9,7 @@ group :development, :test do
 end
 
 group :development, :hot do
-  # error pages
+  # errors+logging
   gem 'better_errors'
   gem 'binding_of_caller'
 
@@ -28,7 +28,12 @@ group :development, :hot do
 end
 
 group :production do
+  # errors+logging
+  gem 'rails_stdout_logging'
   gem 'rollbar'
+
+  # heroku
+  gem 'rails_12factor'
 end
 
 # api
@@ -45,13 +50,15 @@ gem 'omniauth-twitch'
 gem 'arel', github: 'rails/arel'
 gem 'pg'
 
+# errors+logging
+# gem 'newrelic_rpm', github: 'newrelic/rpm' # no rails 5 support yet
+
 # external communication
 gem 'httparty'
 gem 'rest-client'
 
 # heroku
 gem 'platform-api'
-gem 'rails_12factor'
 
 # javascript
 gem 'coffee-rails'
@@ -60,10 +67,6 @@ gem 'numeraljs-rails'
 gem 'spinjs-rails'
 gem 'tipsy-rails'
 gem 'underscore-rails'
-
-# logging
-# gem 'newrelic_rpm', github: 'newrelic/rpm' # no rails 5 support yet
-gem 'rails_stdout_logging'
 
 # models/db
 gem 'has_secure_token'
