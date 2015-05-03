@@ -2,8 +2,9 @@
   meta name='twitter:card' content='summary_large_image'
   meta name='twitter:site' content='@splitsio'
   meta name='twitter:domain' content=request.host_with_port
-  - if @run.present?
-    meta name='twitter:title' content=@run.game.to_s
+  - if @run.game
+    meta name='twitter:title' content=@run.game
+  - if @run.category
     meta name='twitter:description' content=@run.category
-    - if @run.image_url.present?
-      meta name='twitter:image:src' content=@run.image_url
+  - if @run.image_url
+    meta name='twitter:image:src' content=@run.image_url
