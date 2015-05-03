@@ -14,7 +14,7 @@ module ApplicationHelper
       upload: request.path == new_run_path,
       games: request.path.match(games_path),
       faq: request.path == faq_path,
-      profile: logged_in? && request.path == user_path(current_user)
+      profile: logged_in? && [user_path(current_user), tools_path].include?(request.path)
     }
   end
 end

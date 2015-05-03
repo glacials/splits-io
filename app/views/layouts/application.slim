@@ -23,21 +23,20 @@ html
             | failures:
             span#failed-uploads
       header#header
-        nav
+        nav.dropdown
           a.blue href=root_path class=(on_page.values.any? ? '' : 'logo') splits i/o
           a.purple href=new_run_path class=(on_page[:upload] ? 'logo' : '') upload
           a.green href=games_path class=(on_page[:games] ? 'logo' : '') games
           a.red href=faq_path class=(on_page[:faq] ? 'logo' : '') faq
           - if logged_in?
-            .dropdown href='#'
-              a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'logo' : '')
-                small = '∨ '
-                = current_user.name
-              ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
-                li role=:presentation
-                  = link_to "profile", user_path(current_user)
-                  = link_to "tools", tools_path
-                  = link_to "sign out", session_path(auth_session), method: :delete
+            a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'logo' : '')
+              small = '∨ '
+              = current_user.name
+            ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
+              li role=:presentation
+                = link_to "profile", user_path(current_user)
+                = link_to "tools", tools_path
+                = link_to "sign out", session_path(auth_session), method: :delete
           - else
             a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname;' sign in
         = yield(:header)
