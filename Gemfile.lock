@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 5d6b54339bc454af5bf7614f7327af7625e9516c
+  revision: 76836ef7db8d0b1e40492c9a62f7c637718d813d
   specs:
     actionmailer (5.0.0.alpha)
       actionpack (= 5.0.0.alpha)
@@ -227,7 +227,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.5)
     mini_portile (0.6.2)
-    minitest (5.6.0)
+    minitest (5.6.1)
     moneta (0.8.0)
     moving_average (0.1.1)
     multi_json (1.11.0)
@@ -355,7 +355,7 @@ GEM
     slop (3.6.0)
     spinjs-rails (1.4)
       rails (>= 3.1)
-    sprockets (3.0.2)
+    sprockets (3.0.3)
       rack (~> 1.0)
     sprockets-rails (2.2.4)
       actionpack (>= 3.0)
