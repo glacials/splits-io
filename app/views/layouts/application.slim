@@ -18,10 +18,10 @@ html
         #multiupload style='display: none;'
           h2
             | successes:
-            span#successful-uploads
+            span#successful-uploads<
           h2
             | failures:
-            span#failed-uploads
+            span#failed-uploads<
       header#header
         nav.dropdown
           a.blue href=root_path class=(on_page[:index] ? 'logo' : '') splits i/o

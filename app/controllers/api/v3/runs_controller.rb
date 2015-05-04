@@ -31,7 +31,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
         claim_uri: run_url(@run, claim_token: @run.claim_token)
       }
     }
-  rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordInvalid, PG::CharacterNotInRepertoire
+  rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordInvalid, PG::CharacterNotInRepertoire, ArgumentError
     render status: 400, json: {
       status: 400,
       message: "Invalid run file received. Make sure you're including a 'file' parameter in your request."
