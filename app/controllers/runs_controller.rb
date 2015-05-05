@@ -60,7 +60,7 @@ class RunsController < ApplicationController
   end
 
   def random
-    redirect_to run_path(Run.offset(rand(Run.unscoped.count)).first)
+    redirect_to run_path(Run.offset(rand(Run.count)).first)
   end
 
   def destroy

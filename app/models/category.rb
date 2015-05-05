@@ -3,7 +3,7 @@ class Category < ActiveRecord::Base
   has_many :runs
 
   before_create :autodetect_shortname
-  after_touch :destroy, if: Proc.new { |category| category.runs.unscoped.count.zero? }
+  after_touch :destroy, if: Proc.new { |category| category.runs.count.zero? }
 
   def best_known_run
     runs.where("time != 0").order(:time).first
@@ -29,6 +29,6 @@ class Category < ActiveRecord::Base
   end
 
   def popular?
-    runs.unscoped.count * 10 >= game.runs.unscoped.count
+    runs.count * 10 >= game.runs.count
   end
 end

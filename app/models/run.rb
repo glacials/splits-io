@@ -29,7 +29,6 @@ class Run < ActiveRecord::Base
 
   before_save :populate_category
 
-  default_scope { select((column_names - ['file']).map { |column_name| "runs.#{column_name}" }) }
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
   scope :nonempty, -> { where("time != 0") }

@@ -12,7 +12,7 @@ article
       span> Old-style permalinks were randomly-generated base 64 4-character strings. There are
       code style='white-space: nowrap;' = '64^4 = 16 777 216'
       span< permutations of this pattern, so yeah, it's probably safe to say we weren't going to hit that cap any time soon
-            (we're currently at #{Run.unscoped.count}).
+            (we're currently at #{Run.count}).
     p Despite this, there are some reasons I grew to not like this style:
     ol
       li Even if the limit is really really high, it's still there, and that irks me.
@@ -32,8 +32,8 @@ article
             base 36 from the base 10 IDs that runs already have, which is how it probably should be. So we're actually
             getting
       code = '(36^1) + (36^2) + (36^3) = 47 988'
-      span< 1-3 character URLs. We've still got #{47_988 - Run.unscoped.count} uploads before we hit the point when the
-            fourth character starts kicking in!
+      span< 1-3 character URLs. We've still got #{47_988 - Run.count} uploads before we hit the point when the fourth
+            character starts kicking in!
     p
       span I realize that changing stuff around like this contradicts the very idea of a permalink. My hope is that with
            this cleaner system, permalink fetching/generation will be more efficient and will be sludging up
