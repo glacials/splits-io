@@ -163,10 +163,6 @@ class Run < ActiveRecord::Base
   end
 
   def refresh_from_file
-    if run_file.nil?
-      update(run_file: RunFile.for_text(file), file: nil)
-    end
-
     if [parse[:game], parse[:category]].all?(&:present?)
       [parse[:game], parse[:category]].each(&:strip!)
 
@@ -181,10 +177,8 @@ class Run < ActiveRecord::Base
     read_attribute(:time).to_f
   end
 
-  # Our default scope doesn't select file because it's potentially really, really big. This method lets us still access
-  # it normally, through a secondary query.
   def file
-    run_file.try(:file) || read_attribute(:file) || Run.unscoped.find(id).read_attribute(:file)
+    run_file.file
   end
 
   def refresh_game
