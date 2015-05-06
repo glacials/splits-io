@@ -38,21 +38,12 @@ class Run < ActiveRecord::Base
 
   class << self
     def programs
-      @@programs
+      [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     end
-
-    @@programs = [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
-    @@parsers = {
-      wsplit: WSplitParser,
-      timesplittracker: TimeSplitTrackerParser,
-      splitterz: SplitterZParser,
-      livesplit: LiveSplitParser,
-      urn: UrnParser
-    }
 
     inheritance_column = :program
     def find_sti_class(program)
-      Hash[@@programs.map { |program| [program.to_s.downcase, program::Run] }][program]
+      Hash[Run.programs.map { |program| [program::Run.sti_name, program::Run] }][program]
     end
 
     alias_method :find10, :find
@@ -106,10 +97,10 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    if @@parsers.keys.include?(read_attribute(:program))
-      [@@parsers[read_attribute(:program)]]
+    if Run.programs.map { |program| program::Run.sti_name }.include?(program)
+      [Run.programs[Run.programs.map { |program| program::Run.sti_name }.index(program)]::Parser]
     else
-      @@parsers.values
+      Run.programs.map { |program| program::Parser }
     end.each do |parser|
       result = parser.new.parse(file)
       next if result.blank?
