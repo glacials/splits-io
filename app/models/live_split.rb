@@ -1,3 +1,5 @@
+require 'xmlsimple'
+
 module LiveSplit
   class Run < Run
     def self.sti_name

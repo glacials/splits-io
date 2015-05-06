@@ -37,7 +37,7 @@ class Run < ActiveRecord::Base
 
     inheritance_column = :program
     def find_sti_class(program)
-      Hash[Run.programs.map { |program| [program::Run.sti_name, program::Run] }][program]
+      Hash[Run.programs.map { |program| [program::Run.sti_name, program::Run] }][read_attribute(:program)]
     end
 
     alias_method :find10, :find
@@ -91,8 +91,8 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    if Run.programs.map { |program| program::Run.sti_name }.include?(program)
-      [Run.programs[Run.programs.map { |program| program::Run.sti_name }.index(program)]::Parser]
+    if Run.programs.map { |program| program::Run.sti_name }.include?(read_attribute(:program))
+      [Run.programs[Run.programs.map { |program| program::Run.sti_name }.index(read_attribute(:program))]::Parser]
     else
       Run.programs.map { |program| program::Parser }
     end.each do |parser|
