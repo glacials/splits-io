@@ -98,7 +98,7 @@ class Run < ActiveRecord::Base
     end.each do |parser|
       result = parser.new.parse(file)
       next if result.blank?
-      result[:program] = parser.name.sub('Parser', '').downcase.to_sym
+      result[:program] = parser.name.sub('::Parser', '').downcase.to_sym
 
       assign_attributes(
         name: result[:name],
