@@ -1,0 +1,88 @@
+$blue: rgba(14, 144, 210, 1)
+$purple: rgba(128, 87, 165, 1)
+$green: rgba(94, 185, 94, 1)
+$red: rgba(221, 81, 76, 1)
+$orange: rgba(243, 123, 29, 1)
+$yellow: rgba(250, 210, 50, 1)
+
+$light-blue: rgba(14, 144, 210, .5)
+$light-purple: rgba(128, 87, 165, .5)
+$light-green: rgba(94, 185, 94, .5)
+$light-red: rgba(221, 81, 76, .5)
+$light-orange: rgba(243, 123, 29, .5)
+$light-yellow: rgba(250, 210, 50, .5)
+
+$gold: #ffd700
+
+body
+  background-color: #404040
+
+html, body, td, p, h1, h2, h3, h4, h5, h6, header > h3, th, th > a, h5 > small, .stealth-link
+  color: #ddd
+
+a
+  color: #acf
+  &:hover
+    color: #eef
+  &:active
+    color: #fff
+
+nav > a.blue, nav > a.purple, nav > a.green, nav > a.red, nav > a.orange, nav > a.yellow
+  background-color: #555
+  color: #eee
+
+.dropdown-menu, .dropdown-menu > li > a
+  background-color: #333
+
+table
+  border: none
+
+td
+  background-color: #333
+
+.badge
+  color: #ddd
+
+input[type=text], button[type=submit]
+  background-color: #555
+  color: #ddd
+
+code
+  background-color: #333
+  color: #ddd
+
+.split.disabled
+  background: repeating-linear-gradient(-45deg, #404040, #404040 6px, #4f4f4f 6px, #4f4f4f 12px)
+
+.user-link
+  &:hover
+    color: lighten($orange, 25%)
+
+.run-link
+  &:hover
+    color: lighten($purple, 25%)
+
+.game-link, .category-link
+  &:hover
+    color: lighten($green, 25%)
+
+.leaderboard-link
+  &:hover
+    color: lighten($green, 25%)
+
+.external-link
+  &:hover
+    color: #000
+
+.nav-tabs > li.active > a, .nav-tabs > li > a:hover, .nav-tabs > li.active > a:hover
+  background-color: #404040
+  color: #ddd
+
+a.tip:after
+  color: #bbb
+
+.split > .gold-split.gold, .gold-split
+  background-color: darken($gold, 10%)
+
+.split > .gold-split.gray
+  background-color: #666

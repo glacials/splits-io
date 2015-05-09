@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery.turbolinks
+//= require jquery.cookie
 //= require jquery_ujs
 //= require bootstrap
 //= require numeral

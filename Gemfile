@@ -63,6 +63,7 @@ gem 'platform-api'
 # javascript
 gem 'coffee-rails'
 gem 'jquery-rails'
+gem 'jquery-cookie-rails'
 gem 'numeraljs-rails'
 gem 'spinjs-rails'
 gem 'tipsy-rails'
