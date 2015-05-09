@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
 
   def destroy
     auth_session.invalidate!
-    redirect_to :back, notice: 'Logged out. (>-.-)>'
+    redirect_to :back, notice: 'Signed out. (>-.-)>'
   end
 
   def failure
