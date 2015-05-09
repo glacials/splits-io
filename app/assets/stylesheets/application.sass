@@ -5,9 +5,11 @@
 @import bootstrap
 @import tipsy
 
+@import colors
+
+@import alerts
 @import article
 @import badges
-@import colors
 @import dropdown
 @import faq
 @import forms
@@ -118,44 +120,6 @@ code
       padding: 0.1em 0.25em
   .previous_page, .next_page
     border: none
-
-.alert
-  display: inline-block
-  padding: .5em
-
-.alert-danger
-  @extend .alert
-  background: #dd514c
-  a
-    color: #fdd
-    &:hover
-      color: #fff
-
-.alert-success
-  @extend .alert
-  background-color: #dff2bf
-  color: #4f8a10
-  a
-    &:hover
-      text-decoration: none
-
-.alert-primary
-  @extend .alert
-  background-color: #bde5f8
-  color: #00529b
-
-.alert-default
-  @extend .alert
-  background-color: #ddd
-  color: #666
-
-.alert-warning
-  @extend .alert
-  background: #feefb3
-  color: #9f6000
-  a
-    &:hover
-      text-decoration: none
 
 th
   white-space: nowrap
