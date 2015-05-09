@@ -1,6 +1,6 @@
 $ ->
   window.upload = (file, options) ->
-    options = options or redirect: true
+    options = options or bulk: false
     data = new FormData()
     data.append "file", file
     $.ajax
@@ -12,13 +12,13 @@ $ ->
       contentType: false
       success: (data, textStatus, xhr) ->
         localStorage.setItem "claim_tokens/" + data.id, data.claim_token
-        window.location = data.uris.public_uri  if options.redirect
+        window.location = data.uris.public_uri unless options.bulk
 
       error: (xhr, textStatus) ->
-        window.isUploading = false
         if xhr.status is 400
-          window.location = "/cant-parse"  if options.redirect is true
+          window.location = "/cant-parse" unless options.bulk
         else
+          window.isUploading = false
           $("#droplabel").html "oops, got a " + xhr.status + " (" + xhr.statusText + ").<br />try again, or contact glacials.<br />"
           window.spinner.stop()
 
@@ -28,7 +28,7 @@ $ ->
     Promise.all(files.map((file) ->
       new Promise((resolve, reject) ->
         window.upload(file,
-          redirect: false
+          bulk: true
         ).then (->
           $("#successful-uploads").html Number($("#successful-uploads").html()) + 1
           resolve()
