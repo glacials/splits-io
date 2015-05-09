@@ -32,6 +32,4 @@ SplitsIO::Application.configure do
   config.use_ssl = false
   config.read_only = false
   config.log_level = :fatal
-
-  Slim::Engine.set_options(pretty: true)
 end

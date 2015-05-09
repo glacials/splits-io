@@ -69,6 +69,4 @@ SplitsIO::Application.configure do
 
   config.use_ssl = true
   config.read_only = false
-
-  Slim::Engine.set_options(pretty: true)
 end
