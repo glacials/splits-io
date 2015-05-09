@@ -1,4 +1,7 @@
 module RunsHelper
+
+  TIMELINE_COLORS = [:blue, :purple, :green, :red, :orange, :yellow]
+
   def difference(run_a, run_b)
     (run_a.time - run_b.time).tap do |difference|
       if difference > 0
@@ -44,6 +47,11 @@ module RunsHelper
     else
       raise Error
     end
+  end
+
+  def next_timeline_color
+    @next_index = ((@next_index || -1) + 1) % TIMELINE_COLORS.length
+    TIMELINE_COLORS[@next_index]
   end
 
   private
