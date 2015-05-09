@@ -12,6 +12,8 @@ module SplitsIO
 
     # How often should encountering a run trigger a background refresh-from-file job?
     config.run_refresh_chance = 0.1
+
+    config.assets.precompile += ['darkmode.css']
   end
 end
 
