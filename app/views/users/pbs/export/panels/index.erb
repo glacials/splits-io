@@ -2,8 +2,17 @@
 <% longest[:game_name] = (['game'.length] + @user.pbs.categorized.map { |run| run.game.name.length }).max || 'Game'.length %>
 <% longest[:category_name] = (['category'.length] + @user.pbs.categorized.map { |run| run.category.name.length }).max || 'Category'.length %>
 <% longest[:time] = (['pb'.length] + @user.pbs.categorized.map { |run| "[#{time(run.time)}](#{link(run)})".length }).max || 'PB'.length %>
+<% longest[:video_url] = (['video'.length] + @user.pbs.categorized.map { |run| "[Watch](#{run.video_url})".length }).max || 'Video'.length %>
+<% if @user.pbs.categorized.where.not(video_url: nil).count > 0 %>
+| <%= right_pad('Game', longest[:game_name]) %>  |              | <%= right_pad('Category', longest[:category_name]) %>  |              | <%= right_pad('PB', longest[:time]) %>  |              | <%= right_pad('Video', longest[:video_url]) %> |
+|:<%= right_pad('', longest[:game_name], '-') %>--|:------------:|:<%= right_pad('', longest[:category_name], '-') %>--|:------------:|:<%= right_pad('', longest[:time], '-') %>--|:------------:|:<%= right_pad('', longest[:video_url], '-') %>-|
+<% @user.pbs.categorized.each do |run| %>
+<%= "| #{right_pad(run.game.name, longest[:game_name])}  | &nbsp;&nbsp; | #{right_pad(run.category.name, longest[:category_name])}  | &nbsp;&nbsp; | #{left_pad("[#{time(run.time)}](#{link(run)})", longest[:time])}  | &nbsp;&nbsp; | #{right_pad( run.video_url ? "[Watch](#{run.video_url})" : "", longest[:video_url])}".html_safe %>
+<% end %>
+<% else %>
 | <%= right_pad('Game', longest[:game_name]) %>  |              | <%= right_pad('Category', longest[:category_name]) %>  |              | <%= right_pad('PB', longest[:time]) %>
 |:<%= right_pad('', longest[:game_name], '-') %>--|:------------:|:<%= right_pad('', longest[:category_name], '-') %>--|:------------:|:<%= right_pad('', longest[:time], '-') %>-|
 <% @user.pbs.categorized.each do |run| %>
 <%= "| #{right_pad(run.game.name, longest[:game_name])}  | &nbsp;&nbsp; | #{right_pad(run.category.name, longest[:category_name])}  | &nbsp;&nbsp; | #{left_pad("[#{time(run.time)}](#{link(run)})", longest[:time])}".html_safe %>
+<% end %>
 <% end %>
