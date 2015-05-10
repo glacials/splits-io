@@ -15,6 +15,11 @@ class Game < ActiveRecord::Base
     where(t[:name].matches("%#{term}%").or(t[:shortname].eq(term))).order(:name)
   end
 
+  def self.from_name(name)
+    return nil if name.nil?
+    where("lower(name) = ?", name.strip.downcase).first_or_create(name: name.strip)
+  end
+
   def to_param
     shortname || name.downcase.gsub(/\..*/, '')
   end

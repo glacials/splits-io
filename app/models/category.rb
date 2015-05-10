@@ -5,6 +5,11 @@ class Category < ActiveRecord::Base
   before_create :autodetect_shortname
   after_touch :destroy, if: Proc.new { |category| category.runs.count.zero? }
 
+  def self.from_name(name)
+    return nil if name.nil?
+    where("lower(name) = ?", name.strip.downcase).first_or_create(name: name.strip)
+  end
+
   def best_known_run
     runs.where("time != 0").order(:time).first
   end

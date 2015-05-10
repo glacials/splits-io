@@ -147,14 +147,9 @@ class Run < ActiveRecord::Base
   end
 
   def refresh_from_file
-    if [parse[:game], parse[:category]].all?(&:present?)
-      [parse[:game], parse[:category]].each(&:strip!)
-
-      game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
-      category = game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
-
-      update(category: category, archived: !pb?)
-    end
+    game = Game.from_name(parse[:game])
+    category = game ? game.categories.from_string(parse[:category]) : nil
+    update(category: category, archived: !pb?)
   end
 
   def time
