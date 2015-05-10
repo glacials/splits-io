@@ -11,7 +11,7 @@ module SplitsIO
     config.active_job.queue_adapter = :delayed_job
 
     # How often should encountering a run trigger a background refresh-from-file job?
-    config.run_refresh_chance = 0.1
+    config.run_refresh_chance = 1.0
 
     config.assets.precompile += ['darkmode.css']
   end
