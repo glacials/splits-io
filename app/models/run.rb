@@ -148,7 +148,7 @@ class Run < ActiveRecord::Base
 
   def refresh_from_file
     game = Game.from_name(parse[:game])
-    category = game ? game.categories.from_string(parse[:category]) : nil
+    category = game ? game.categories.from_name(parse[:category]) : nil
     update(category: category, archived: !pb?)
   end
 
