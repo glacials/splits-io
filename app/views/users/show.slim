@@ -5,6 +5,6 @@
     a#twitch-channel href=@user.uri target=:_blank = @user.uri.to_s.gsub('http://www.', '')
   h6
     - @user.games.named.each do |game|
-      = link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
+      => link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
 article
   = render partial: 'shared/run_table', locals: table_locals(:pbs, user: @user)
