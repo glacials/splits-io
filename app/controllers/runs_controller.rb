@@ -65,7 +65,7 @@ class RunsController < ApplicationController
   end
 
   def random
-    redirect_to run_path(Run.offset(rand(Run.count)).first)
+    redirect_to Run.find_by(run_file_digest: RunFile.random.digest)
   end
 
   def destroy

@@ -12,4 +12,8 @@ class RunFile < ActiveRecord::Base
     digest = Digest::SHA256.hexdigest(file_text)
     where(digest: digest).first_or_create(file: file_text)
   end
+
+  def self.random
+    RunFile.offset(rand(RunFile.count)).first
+  end
 end
