@@ -127,6 +127,12 @@ module LiveSplit
           run[:splits] << split
         end
       end
+
+      # it's possible to get here with valid xml without this actually being a livesplit file, so let's make sure
+      if [run[:attempts], run[:offset], run[:splits], run[:time]].any?(&:nil?)
+        raise "Not a proper LiveSplit run file"
+      end
+
       run
     end
 
