@@ -1,4 +1,4 @@
-class Split
+class Split < ActiveRecord::Base
   attr_accessor :name, :duration, :finish_time, :best, :history, :gold, :skipped, :reduced
 
   def initialize(h = {})

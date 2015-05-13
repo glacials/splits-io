@@ -7,6 +7,7 @@ class Run < ActiveRecord::Base
   belongs_to :category, touch: true
   belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
   has_one :game, through: :category
+  has_many :splits
 
   has_secure_token :claim_token
 
@@ -32,7 +33,7 @@ class Run < ActiveRecord::Base
 
   class << self
     def programs
-      [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+      [Urn, SplitterZ, TimeSplitTracker, WSplit]
     end
 
     inheritance_column = :program
@@ -59,10 +60,6 @@ class Run < ActiveRecord::Base
 
   def time_since_upload
     time_ago_in_words(created_at).sub('about ', '')
-  end
-
-  def splits
-    parse[:splits]
   end
 
   def program

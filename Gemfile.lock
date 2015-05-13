@@ -434,6 +434,7 @@ DEPENDENCIES
   meta_request
   moving_average
   nilify_blanks
+  nokogiri
   numeraljs-rails
   omniauth
   omniauth-twitch
