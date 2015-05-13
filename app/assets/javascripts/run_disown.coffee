@@ -3,7 +3,7 @@ $ ->
     $("#run_" + run.id).fadeOut 300, ->
       $(this).remove()
     $.ajax
-      url: "/api/v2/runs/" + run.id + "/user"
-      type: "DELETE"
+      url: "/api/v3/runs/" + run.id + "/disown"
+      type: "POST"
       error: (response) ->
         console.log "Run disown failed with response: " + JSON.stringify(response)
