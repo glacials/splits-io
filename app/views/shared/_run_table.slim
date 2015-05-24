@@ -28,15 +28,15 @@
               a href="?#{request.query_parameters.merge(by: :created_at, order: (params[:by] == 'created_at' && params[:order] == 'desc') ? :asc : :desc).to_param}" Uploaded
       tbody
         - runs.includes(:user).each do |run|
-          tr id="run_#{run.id}"
+          tr id="run_#{run.id36}"
             - if cols.include?(:owner_controls)
               td.align-right
                 .dropdown
-                  .dropdown-toggle id="dropdown_#{run.id}" style="cursor: pointer; color: #a33;" data={toggle: :dropdown} x
-                  ul.dropdown-menu role=:menu aria={labelledby: "dropdown_#{run.id}"}
+                  .dropdown-toggle id="dropdown_#{run.id36}" style="cursor: pointer; color: #a33;" data={toggle: :dropdown} x
+                  ul.dropdown-menu role=:menu aria={labelledby: "dropdown_#{run.id36}"}
                     li role=:presentation
-                      = link_to 'Disown', '#', onclick: "window.disown_run({id: #{run.id}});", class: 'red dropdown-header'
-                      = link_to 'Delete', '#', onclick: "window.delete_run({id: #{run.id}});", class: 'red dropdown-header'
+                      = link_to 'Disown', '#', onclick: "window.disown_run({id: '#{run.id36}'});", class: 'red dropdown-header'
+                      = link_to 'Delete', '#', onclick: "window.delete_run({id: '#{run.id36}'});", class: 'red dropdown-header'
             - if cols.include?(:runner)
               td.align-right
                 - if run.user && run.user.name

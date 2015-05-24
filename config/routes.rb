@@ -109,7 +109,11 @@ SplitsIO::Application.routes.draw do
         resources :pbs, only: [:index], module: :users
       end
 
-      resources :runs, only: [:show, :create, :destroy]
+      resources :runs, only: [:show, :create, :destroy] do
+        member do
+          post :disown
+        end
+      end
     end
 
     namespace :v2 do
