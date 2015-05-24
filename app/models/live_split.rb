@@ -25,7 +25,7 @@ module LiveSplit
 
     private
 
-    # file format 1.5 is used by LiveSplit 1.6.x
+    # lss file format 1.5 is used by LiveSplit 1.6.x
     def v1_5(xml)
       run = {
         game: xml['GameName'][0].try(:strip),
@@ -76,7 +76,7 @@ module LiveSplit
     # identically except for a minor difference in positioning of split times. So the 1.3 function parses only splits,
     # then hands the rest of the XML off to the 1.2 function, which parses the rest as if it were 1.2 content.
 
-    # file format 1.4 is used by LiveSplit 1.4.x and LiveSplit 1.5.x
+    # lss file format 1.4 is used by LiveSplit 1.4.x and LiveSplit 1.5.x
     def v1_4(xml, run = {})
       run[:splits]  ||= []
       run[:time]    ||= 0
