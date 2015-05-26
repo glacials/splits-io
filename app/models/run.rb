@@ -1,13 +1,12 @@
 class Run < ActiveRecord::Base
   include PadawanRun
-  include ForgetfulPersonsRun
   include ActionView::Helpers::DateHelper
 
   belongs_to :user, touch: true
   belongs_to :category, touch: true
   belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
   has_one :game, through: :category
-  has_many :splits
+  has_many :segments, through: :run_file
 
   has_secure_token :claim_token
 
@@ -60,10 +59,6 @@ class Run < ActiveRecord::Base
 
   def time_since_upload
     time_ago_in_words(created_at).sub('about ', '')
-  end
-
-  def program
-    (read_attribute(:program) || parse[:program]).to_sym
   end
 
   def offset
@@ -163,7 +158,7 @@ class Run < ActiveRecord::Base
   end
 
   def has_golds?
-    splits.all? { |split| split.best.duration.present? }
+    segments.any?(&:gold?)
   end
 
   def filename(download_program)

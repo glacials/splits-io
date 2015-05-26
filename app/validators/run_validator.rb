@@ -1,17 +1,22 @@
 class RunValidator < ActiveModel::Validator
-  def validate(record)
-    validate_video_url(record)
+  def validate(run)
+    validate_run_file(run)
+    validate_video_url(run)
   end
 
   private
 
-  def validate_video_url(record)
-    record.video_url = nil if record.video_url.try(:strip) == ''
-    return if record.video_url.nil?
+  def validate_run_file(run)
+    run.run_file.validate || run.errors[:base] << "Couldn't parse that file."
+  end
 
-    URI.parse(record.video_url).tap do |uri|
+  def validate_video_url(run)
+    run.video_url = nil if run.video_url.try(:strip) == ''
+    return if run.video_url.nil?
+
+    URI.parse(run.video_url).tap do |uri|
       unless uri.host =~ /^(www\.)?(twitch\.tv|hitbox\.tv|youtube\.com)$/
-        record.errors[:base] << 'Your video URL must be a link to a Twitch, Hitbox, or YouTube video.'
+        run.errors[:base] << 'Your video URL must be a link to a Twitch, Hitbox, or YouTube video.'
       end
     end
   end

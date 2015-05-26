@@ -42,10 +42,10 @@
 
 - if @run.time > 0
   = render partial: 'timeline', locals: {run: @run}
-  - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
+  - if @run.segments.all? { |split| !split.skipped? } && @run.has_golds?
     = render partial: 'gold_timeline', locals: {run: @run}
   = render partial: 'timeline_inspector', locals: {run: @run}
 
 article
-  - cache [:splits, :v1, @run] do
-    = render partial: 'split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}
+  - cache [:segments, :v1, @run] do
+    = render partial: 'split_table', locals: {segments: @run.segments, comparison_segments: @run.segments}

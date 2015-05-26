@@ -1,9 +1,9 @@
 - scale_to ||= run.time
 - cache [:timeline, :v3, {run: run, scale_to: scale_to}] do
   .timeline
-    - run.reduced_splits.each_with_index do |split, index|
-      .pure-u.split id="#{run.id}-split-#{index}" class=next_timeline_color style='width: 0;'
-        .title = split.name
-        .time = split.duration
+    - run.run_file.collapsed_segments.each_with_index do |segment, index|
+      .pure-u.segment id="run#{run.id36}-segment#{index}" class=next_timeline_color style='width: 0;'
+        .title = segment.name
+        .time = segment.real_duration
     - if run.time < scale_to
-      .pure-u.split.disabled style="width: #{(scale_to - run.time) / scale_to * 100}%; z-index: #{run.reduced_splits.count};"
+      .pure-u.segment.disabled style="width: #{(scale_to - run.time) / scale_to * 100}%; z-index: #{run.collapsed_segments.count};"

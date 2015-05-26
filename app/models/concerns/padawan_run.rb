@@ -8,9 +8,9 @@ module PadawanRun
       improvements = {time_differences: [], missed_splits: []}
 
       return improvements if category != better_run.category
-      return improvements if reduced_splits.size != better_run.reduced_splits.size
+      return improvements if collapsed_segments.size != better_run.collapsed_segments.size
 
-      reduced_splits.each.with_index do |split, i|
+      collapsed_segments.each.with_index do |split, i|
         if better_run.splits[i].duration < split.duration && !split.reduced?
           improvements[:time_differences] << {split: split, time_difference: (split.duration - better_run.splits[i].duration).floor}
         elsif split.reduced?

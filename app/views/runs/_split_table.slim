@@ -6,12 +6,12 @@ table.table.table-striped
       th.align-right Duration
       th.align-right Finished at
   tbody
-    - splits.each_with_index do |split, index|
+    - segments.each_with_index do |segment, index|
       tr
         td.align-right= index + 1
-        td.align-left= split.name.present? ? split.name : '-'
+        td.align-left= segment.name.present? ? segment.name : '-'
         td.align-right
-          - if split.gold?
-            .gold-split title='Gold'
-          span.time = split.duration
-        td.align-right.time = split.finish_time
+          - if segment.gold?
+            .gold-segment title='Gold'
+          span.time = segment.real_duration
+        td.align-right.time = segment.real_finish_time

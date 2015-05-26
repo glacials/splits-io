@@ -46,7 +46,7 @@ ul.goals
 .stealth-link
   color: #333
 
-.gold-split
+.gold-segment
   background: $gold
   cursor: default
   display: inline-block
@@ -54,13 +54,13 @@ ul.goals
   margin: 0 .5em
   width: .45em
 
-.split > .gold-split.gold
+.segment > .gold-segment.gold
   background-color: $gold
   height: .35em
   margin: 0
   padding: 0
 
-.split > .gold-split.gray
+.segment > .gold-segment.gray
   background-color: #ddd
   height: .35em
   margin: 0
@@ -208,7 +208,7 @@ a
   margin-bottom: .5em
   width: 100%
 
-.split, .inspect
+.segment, .inspect
   color: #fff
   text-decoration: none
   -webkit-box-sizing: border-box
@@ -222,13 +222,13 @@ a
 .blank
   background: rgba(255, 255, 255, 0)
 
-.timeline .split .title
+.timeline .segment .title
   padding: .5em 0 0 .5em
 
-.timeline .split .time
+.timeline .segment .time
   padding: 0 0 .5em .5em
 
-.split .time
+.segment .time
   color: rgba(255, 255, 255, 0.5)
 
 .timeline .inspect
@@ -237,7 +237,7 @@ a
   .title, .time, .save
     margin: 0 0 0 .5em
 
-.split .time
+.segment .time
   display: block
 
 .inspect

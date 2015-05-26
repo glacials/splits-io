@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150524205025) do
+ActiveRecord::Schema.define(version: 20150526012332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,16 +120,16 @@ ActiveRecord::Schema.define(version: 20150524205025) do
   add_index "runs", ["user_id"], name: "index_runs_on_user_id", using: :btree
 
   create_table "segments", force: :cascade do |t|
-    t.integer "run_id"
-    t.integer "position"
+    t.integer "order"
     t.string  "name"
     t.float   "real_duration"
     t.float   "best_real_duration"
     t.float   "game_duration"
     t.float   "best_game_duration"
+    t.integer "run_file_id"
   end
 
-  add_index "segments", ["run_id"], name: "index_segments_on_run_id", using: :btree
+  add_index "segments", ["run_file_id"], name: "index_segments_on_run_file_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",        default: ""
@@ -143,5 +143,4 @@ ActiveRecord::Schema.define(version: 20150524205025) do
 
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
 
-  add_foreign_key "segments", "runs"
 end
