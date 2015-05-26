@@ -10,7 +10,7 @@ class RunFile < ActiveRecord::Base
 
   class << self
     def programs
-      [LiveSplit]
+      [LiveSplit, WSplit]
     end
 
     def for_file(file)

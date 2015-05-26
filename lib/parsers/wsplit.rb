@@ -1,12 +1,25 @@
 module WSplit
-  class Run < Run
-    def self.sti_name
-      :wsplit
-    end
+  def self.read!(run_file)
+    run = Parser.new.parse(run_file.file)
+
+    (run[:segments].count - run_file.segments.count).times { run_file.segments << run_file.segments.new }
+
+    run[:segments].map.with_index do |segment, index|
+      run_file.segments[index].update(
+        order: index,
+        name: segment.name,
+        real_duration: segment.duration,
+        game_duration: 0
+      )
+    end.all? && run_file.runs.update_all(
+      program: :wsplit,
+      time: run[:segments].sum(&:duration),
+      name: run[:name],
+      category_id: nil
+    )
   end
 
-  class Split < Split
-  end
+  private
 
   class Parser < BabelBridge::Parser
     rule :wsplit_file, :title_line, :attempts_line, :offset_line, :size_line, many?(:splits), :icons_line
@@ -39,7 +52,7 @@ module WSplit
         name: run.title.to_s,
         attempts: run.attempts.to_s.to_i,
         offset: run.offset.to_f,
-        splits: parse_splits(run.splits)
+        segments: parse_splits(run.splits)
       }
     end
 

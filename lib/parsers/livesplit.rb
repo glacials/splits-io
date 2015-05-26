@@ -21,7 +21,7 @@ module LiveSplit
         best_real_duration: segment.at('BestSegmentTime RealTime').content,
         best_game_duration: segment.at('BestSegmentTime GameTime').content
       )
-    end && run_file.runs.update_all(
+    end.all? && run_file.runs.update_all(
       program: :livesplit,
       time: run_file.segments.sum(:real_duration),
       name: "#{xml.at('Run > GameName').content} #{xml.at('Run > CategoryName').content}",

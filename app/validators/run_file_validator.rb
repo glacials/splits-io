@@ -9,7 +9,11 @@ class RunFileValidator < ActiveModel::Validator
 
   def validate_file_format(run_file)
     RunFile.programs.any? do |program|
-      program.read!(run_file)
+      begin
+        program.read!(run_file)
+      rescue
+        next
+      end
     end || run_file.errors[:base] << "Couldn't parse that file."
   end
 end

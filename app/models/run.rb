@@ -32,7 +32,7 @@ class Run < ActiveRecord::Base
 
   class << self
     def programs
-      [Urn, SplitterZ, TimeSplitTracker, WSplit]
+      [Urn, SplitterZ, TimeSplitTracker]
     end
 
     inheritance_column = :program
