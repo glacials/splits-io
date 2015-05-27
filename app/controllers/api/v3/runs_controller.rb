@@ -7,9 +7,11 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   end
 
   def create
-    # TODO: Tokens, not cookies
-    run_file = RunFile.for_file(params.require(:file))
-    @run = Run.create!(run_file: run_file, user: current_user, image_url: params[:image_url])
+    @run = Run.create!(
+      run_file: RunFile.for_file(params.require(:file)),
+      user: current_user, # TODO: Tokens, not cookies
+      image_url: params[:image_url]
+    )
     render status: 201, location: api_v3_run_url(@run), json: {
       status: 201,
       message: "Run created.",

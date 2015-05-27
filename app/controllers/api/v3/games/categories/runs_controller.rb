@@ -15,7 +15,7 @@ class Api::V3::Games::Categories::RunsController < Api::V3::ApplicationControlle
       unless run.parses?
         render status: 400, json: {
           status: 400,
-          message: "Can't parse that file. We support #{Run.programs.to_sentence}."
+          message: "Can't parse that file. We support #{RunFile.programs.to_sentence}."
         }
         return
       end

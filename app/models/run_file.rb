@@ -19,7 +19,7 @@ class RunFile < ActiveRecord::Base
 
     def for_text(file_text)
       digest = Digest::SHA256.hexdigest(file_text)
-      where(digest: digest).first_or_create(file: file_text)
+      where(digest: digest).first_or_create!(file: file_text)
     end
 
     def random

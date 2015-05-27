@@ -21,8 +21,6 @@ class Run < ActiveRecord::Base
 
   validates_with RunValidator
 
-  before_save :populate_category
-
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
   scope :nonempty, -> { where("time != 0") }
@@ -37,7 +35,7 @@ class Run < ActiveRecord::Base
 
     inheritance_column = :program
     def find_sti_class(program)
-      Hash[Run.programs.map { |program| [program::Run.sti_name, program::Run] }][read_attribute(:program)]
+      Hash[RunFile.programs.map { |program| [program::Run.sti_name, program::Run] }][read_attribute(:program)]
     end
 
     alias_method :find10, :find
@@ -83,10 +81,10 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    if Run.programs.map { |program| program::Run.sti_name }.include?(read_attribute(:program))
-      [Run.programs[Run.programs.map { |program| program::Run.sti_name }.index(read_attribute(:program))]::Parser]
+    if RunFile.programs.map { |program| program::Run.sti_name }.include?(read_attribute(:program))
+      [RunFile.programs[RunFile.programs.map { |program| program::Run.sti_name }.index(read_attribute(:program))]::Parser]
     else
-      Run.programs.map { |program| program::Parser }
+      RunFile.programs.map { |program| program::Parser }
     end.each do |parser|
       result = parser.new.parse(file)
       next if result.blank?
@@ -129,19 +127,6 @@ class Run < ActiveRecord::Base
 
   def pb?
     user && category && self == user.pb_for(category)
-  end
-
-  def populate_category
-    if (category.blank? && parse[:game].present? && parse[:category].present?)
-      game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
-      self.category = game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
-    end
-  end
-
-  def refresh_from_file
-    game = Game.from_name(parse[:game])
-    category = game ? game.categories.from_name(parse[:category]) : nil
-    update(category: category, archived: !pb?)
   end
 
   def time

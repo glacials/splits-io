@@ -19,7 +19,7 @@ class Api::V2::RunsController < Api::V2::ApplicationController
       unless run.parses?
         render status: 400, json: {
           status: 400,
-          error: "Can't parse that file. We support #{Run.programs.to_sentence}."
+          error: "Can't parse that file. We support #{RunFile.programs.to_sentence}."
         }
         return
       end

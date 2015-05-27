@@ -13,7 +13,6 @@ class RunsController < ApplicationController
 
   def show
     @run.validate
-    @run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
   end
 
   def index
@@ -48,7 +47,7 @@ class RunsController < ApplicationController
   end
 
   def download
-    unless Run.programs.map { |program| program::Run.sti_name.to_s }.include?(params[:program])
+    unless RunFile.programs.map { |program| program::Run.sti_name.to_s }.include?(params[:program])
       redirect_to run_path(@run), alert: 'Unrecognized program.'
       return
     end
