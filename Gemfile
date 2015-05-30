@@ -37,7 +37,7 @@ group :production do
 end
 
 # api
-gem 'active_model_serializers'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
 gem 'api-pagination'
 gem 'jbuilder'
 
