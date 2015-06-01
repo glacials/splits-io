@@ -5,8 +5,4 @@ class Api::V3::RunSerializer < Api::V3::ApplicationSerializer
   has_one :time
 
   attributes :id, :path, :name, :program, :image_url, :created_at, :updated_at
-
-  def game
-    nil
-  end
 end
