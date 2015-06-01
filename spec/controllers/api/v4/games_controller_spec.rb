@@ -6,18 +6,14 @@ describe Api::V4::GamesController do
   describe '#index' do
     context 'when given a search term which yields results' do
       subject(:response) { get(:index, search: 'mario') }
-      subject(:body) { JSON.parse(response.body)['runs'] }
+      subject(:body) { JSON.parse(response.body) }
 
       it 'returns an expected response code' do
         expect(response).to have_http_status(200)
       end
 
-      it 'returns the expected number of results' do
-        expect(body.count).to eq 1
-      end
-
-      it 'contains the expected results' do
-        expect(body[0]['name']).to eq 'Mario is Missing!'
+      it 'returns with at least one result' do
+        expect(body.count).to be > 0
       end
     end
 
@@ -46,43 +42,67 @@ describe Api::V4::GamesController do
 
   describe '#show' do
     let(:game) { FactoryGirl.create(:game, :shortnamed) }
+    let(:returned_attributes) { [:id, :name, :shortname, :srl_id, :categories] }
 
-    it 'looks up the game by id' do
-      get :show, id: game.id
-      expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)['game']['name']).to eq(game.name)
-    end
+    context 'when given an id' do
+      context 'when the game exists' do
+        subject(:response) { get(:show, id: game.id) }
+        subject(:body) { JSON.parse(response.body) }
 
-    context 'when the game has categories' do
-      it 'includes a list of categories' do
-        get :show, id: game.id
-        expect(JSON.parse(response.body)['game']['categories']).to eq([])
+        it 'returns an expected response code' do
+          expect(response).to have_http_status(200)
+        end
+
+        it 'returns the game' do
+          returned_attributes.each do |attribute|
+            expect(body[attribute.to_s]).to eq(game.send(attribute))
+          end
+        end
+      end
+
+      context 'when the game does not exist' do
+        subject(:response) { get(:show, id: 'bleep bloop blop') }
+        subject(:body) { JSON.parse(response.body) }
+
+        it 'returns the correct response code' do
+          expect(response).to have_http_status(404)
+        end
+
+        it 'returns an error body' do
+          expect(body['status']).to be_truthy
+          expect(body['message']).to be_truthy
+        end
       end
     end
 
-    context 'when the game has a shortname' do
-      let(:game) { FactoryGirl.create(:game, :shortnamed) }
+    context 'when given a shortname' do
+      context 'when the game exists' do
+        subject(:response) { get(:show, id: game.id) }
+        subject(:body) { JSON.parse(response.body) }
 
-      it 'looks up the game by id' do
-        get :show, id: game.id
-        expect(response).to have_http_status(200)
+        it 'returns the correct response code' do
+          expect(response).to have_http_status(200)
+        end
+
+        it 'returns the game' do
+          returned_attributes.each do |attribute|
+            expect(body[attribute.to_s]).to eq(game.send(attribute))
+          end
+        end
       end
 
-      it 'looks up the game by shortname' do
-        get :show, id: game.shortname
-        expect(response).to have_http_status(200)
-      end
-    end
+      context 'when the game does not exist' do
+        subject(:response) { get(:show, id: 'bleep bloop blop') }
+        subject(:body) { JSON.parse(response.body) }
 
-    context 'when the game doesn\'t exist' do
-      it '404s for numeric ids' do
-        get :show, id: 99999
-        expect(response).to have_http_status(404)
-      end
+        it 'returns the correct response code' do
+          expect(response).to have_http_status(404)
+        end
 
-      it '404s for string ids' do
-        get :show, id: 'abc test id'
-        expect(response).to have_http_status(404)
+        it 'returns an error body' do
+          expect(body['status']).to be_truthy
+          expect(body['message']).to be_truthy
+        end
       end
     end
   end

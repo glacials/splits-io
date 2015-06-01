@@ -3,9 +3,9 @@ ruby '2.2.2'
 
 group :test do
   # tests
-  gem 'factory_girl_rails'
-  gem 'rspec-rails'
-  gem 'simplecov'
+  gem 'factory_girl_rails', require: false
+  gem 'rspec-rails', require: false
+  gem 'simplecov', require: false
 end
 
 group :development, :hot do
