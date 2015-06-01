@@ -11,7 +11,7 @@ describe Api::V4::RunsController do
 
     it 'returns the correct run' do
       get :show, id: run.id36
-      expect(JSON.parse(response.body)['run']['id']).to eq(run.id36)
+      expect(JSON.parse(response.body)['id']).to eq(run.id36)
     end
 
     context 'when given a bad id' do
