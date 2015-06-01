@@ -5,7 +5,7 @@ class Api::V3::Users::Games::Categories::RunsController < Api::V3::ApplicationCo
   before_action :set_runs, only: [:index]
 
   def index
-    paginate json: @runs, each_serializer: Api::V3::RunSerializer
+    paginate json: @runs, each_serializer: Api::V3::RunSerializer, root: :runs
   end
 
   private
