@@ -1,17 +1,44 @@
 require 'rails_helper'
 
 describe Api::V4::GamesController do
-  let(:game) { FactoryGirl.create(:game) }
+  let(:game) { FactoryGirl.create(:game, name: 'Mario is Missing!') }
 
   describe '#index' do
-    it 'returns a list of search results' do
-      get :index, search: 'mario'
-      expect(response).to have_http_status(200)
+    context 'when given a search term which yields results' do
+      subject(:response) { get(:index, search: 'mario') }
+      subject(:body) { JSON.parse(response.body)['runs'] }
+
+      it 'returns an expected response code' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns the expected number of results' do
+        expect(body.count).to eq 1
+      end
+
+      it 'contains the expected results' do
+        expect(body[0]['name']).to eq 'Mario is Missing!'
+      end
     end
 
-    context 'when not given a search string' do
-      it 'returns a 400' do
-        get :index
+    context 'when given a search term which does not yield results' do
+      subject(:response) { get(:index, search: 'fakegame123') }
+      subject(:body) { JSON.parse(response.body) }
+
+      it 'returns an expected response code' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns an empty array' do
+        expect(body).to eq []
+      end
+    end
+
+    context 'when not given a search term' do
+      subject(:response) { get :index }
+      subject(:body) { JSON.parse(response.body) }
+
+      it 'returns an expected response code' do
         expect(response).to have_http_status(400)
       end
     end

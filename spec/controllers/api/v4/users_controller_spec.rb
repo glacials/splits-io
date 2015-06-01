@@ -4,11 +4,6 @@ describe Api::V4::UsersController do
   let(:user) { FactoryGirl.create(:user) }
 
   describe '#show' do
-    it 'looks up the user by id' do
-      get :show, id: user.id
-      expect(response).to have_http_status(200)
-    end
-
     it 'looks up the user by name' do
       get :show, id: user.name
       expect(response).to have_http_status(200)
