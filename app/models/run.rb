@@ -10,6 +10,7 @@ class Run < ActiveRecord::Base
 
   has_secure_token :claim_token
 
+  after_create :refresh_from_run_file
   after_create :refresh_game
   after_destroy do |run|
     if run.run_file.present? && run.run_file.runs.where.not(id: run).empty?
@@ -19,6 +20,8 @@ class Run < ActiveRecord::Base
 
   @parse_cache = nil
 
+  validates :run_file, presence: true
+  validates_associated :run_file
   validates_with RunValidator
 
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
@@ -135,6 +138,10 @@ class Run < ActiveRecord::Base
 
   def file
     run_file.file
+  end
+
+  def refresh_from_run_file
+    run_file.valid?
   end
 
   def refresh_game

@@ -1,6 +1,8 @@
 class Segment < ActiveRecord::Base
   belongs_to :run_file
 
+  default_scope { order(:order) }
+
   def gold?
     real_duration == best_real_duration || game_duration == best_game_duration
   end

@@ -14,6 +14,6 @@ class RunFileValidator < ActiveModel::Validator
       rescue
         next
       end
-    end || run_file.errors[:base] << "Couldn't parse that file."
+    end || run_file.errors[:file] << "Couldn't parse that file."
   end
 end
