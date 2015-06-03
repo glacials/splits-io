@@ -11,23 +11,29 @@ module SplitterZ
     def read!(run_file)
       run = Parser.new.parse(run_file.file)
 
-      (run[:segments].count - run_file.segments.count).times { run_file.segments << run_file.segments.new }
+      ActiveRecord::Base.traction do
+        if run[:segments].count > run_file.segments.count
+          (run[:segments].count - run_file.segments.count).times { run_file.segments.new }
+        elsif run[:segments].count < run_file.segments.count
+          run_file.segments.limit(run_file.segments.count - run[:segments].count).destroy_all
+        end
 
-      run[:segments].map.with_index do |segment, index|
-        run_file.segments[index].update(
-          order: index,
-          name: segment[:name],
-          real_duration: segment[:real_duration],
-          best_real_duration: segment[:best_real_duration],
-          game_duration: nil,
-          best_game_duration: nil
+        run[:segments].map.with_index do |segment, index|
+          run_file.segments[index].update(
+            order: index,
+            name: segment[:name],
+            real_duration: segment[:real_duration],
+            best_real_duration: segment[:best_real_duration],
+            game_duration: nil,
+            best_game_duration: nil
+          )
+        end.all? && run_file.runs.update_all(
+          program: :splitterz,
+          time: run[:segments].sum { |s| s[:real_duration] },
+          name: run[:name],
+          category_id: nil
         )
-      end.all? && run_file.runs.update_all(
-        program: :splitterz,
-        time: run[:segments].sum { |s| s[:real_duration] },
-        name: run[:name],
-        category_id: nil
-      )
+      end
     end
   end
 

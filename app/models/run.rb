@@ -63,57 +63,15 @@ class Run < ActiveRecord::Base
   end
 
   def offset
-    parse[:offset]
+    0
   end
 
   def attempts
-    parse[:attempts]
+    0
   end
 
   def short?
     time < 20.minutes
-  end
-
-  def history
-    parse[:history]
-  end
-
-  def parses?
-    parse.present?
-  end
-
-  def parse
-    return @parse_cache if @parse_cache.present?
-    if RunFile.programs.map { |program| program::Run.sti_name }.include?(read_attribute(:program))
-      [RunFile.programs[RunFile.programs.map { |program| program::Run.sti_name }.index(read_attribute(:program))]::Parser]
-    else
-      RunFile.programs.map { |program| program::Parser }
-    end.each do |parser|
-      result = parser.new.parse(file)
-      next if result.blank?
-      result[:program] = parser.name.sub('::Parser', '').downcase.to_sym
-
-      assign_attributes(
-        name: result[:name],
-        program: result[:program],
-        time: result[:splits].map { |split| split.duration }.sum.to_f,
-        sum_of_best: result[:splits].map.all? do |split|
-          split.best.duration.present?
-        end && result[:splits].map do |split|
-          split.best.duration
-        end.sum.to_f
-      )
-
-      @parse_cache = result
-
-      return result
-    end
-    {}
-  rescue ArgumentError # comes from non UTF-8 files
-    {
-      error: "Your file wasn't UTF-8 encoded. Usually this means it didn't come straight from your program, but from some
-      other source. If the file was sent to you by a friend, make sure the file as a whole is sent, not just the text inside it."
-    }
   end
 
   def to_param

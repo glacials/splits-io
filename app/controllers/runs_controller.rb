@@ -12,6 +12,7 @@ class RunsController < ApplicationController
   before_action :verify_ownership, only: [:edit, :update, :destroy]
 
   def show
+    @run.run_file.valid?
   end
 
   def index
