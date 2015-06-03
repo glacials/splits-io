@@ -1,16 +1,37 @@
 module TimeSplitTracker
-  def self.to_s
-    "Time Split Tracker"
-  end
+  class << self
+    def shortname
+      'timesplittracker'
+    end
 
-  class Run < Run
-    def self.sti_name
-      :timesplittracker
+    def file_extension
+      shortname
+    end
+
+    def read!(run_file)
+      run = Parser.new.parse(run_file.file)
+
+      (run[:segments].count - run_file.segments.count).times { run_file.segments << run_file.segments.new }
+
+      run[:segments].map.with_index do |segment, index|
+        run_file.segments[index].update(
+          order: index,
+          name: segment[:name],
+          real_duration: segment[:real_duration],
+          best_real_duration: segment[:best_real_duration],
+          game_duration: nil,
+          best_game_duration: nil
+        )
+      end.all? && run_file.runs.update_all(
+        program: :timesplittracker,
+        time: run[:segments].sum { |s| s[:real_duration] },
+        name: run[:name],
+        category_id: nil
+      )
     end
   end
 
-  class Split < Split
-  end
+  private
 
   class Parser < BabelBridge::Parser
     rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
@@ -39,7 +60,7 @@ module TimeSplitTracker
         name: run.title.to_s,
         attempts: run.attempts.to_s.to_i,
         offset: run.offset.to_f,
-        splits: parse_splits(run.splits)
+        segments: parse_splits(run.splits)
       }
     end
 
@@ -52,12 +73,13 @@ module TimeSplitTracker
     end
 
     def parse_split(segment, run_duration_so_far)
-      Split.new.tap do |split|
-        split.best = Split.new
-        split.name = segment.title.to_s
-        split.duration = segment.duration.to_s.to_f
-        split.finish_time = run_duration_so_far + segment.duration.to_s.to_f
-      end
+      {
+        name: segment.title.to_s,
+        real_duration: segment.duration.to_s.to_f,
+        best_real_duration: segment.duration.to_s.to_f,
+        game_duration: nil,
+        best_game_duration: nil
+      }
     end
   end
 end

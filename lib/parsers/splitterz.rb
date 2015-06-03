@@ -1,24 +1,34 @@
 module SplitterZ
-  def self.read!(run_file)
-    run = Parser.new.parse(run_file.file)
+  class << self
+    def shortname
+      'splitterz'
+    end
 
-    (run[:segments].count - run_file.segments.count).times { run_file.segments << run_file.segments.new }
+    def file_extension
+      shortname
+    end
 
-    run[:segments].map.with_index do |segment, index|
-      run_file.segments[index].update(
-        order: index,
-        name: segment[:name],
-        real_duration: segment[:real_duration],
-        best_real_duration: segment[:best_real_duration],
-        game_duration: nil,
-        best_game_duration: nil
+    def read!(run_file)
+      run = Parser.new.parse(run_file.file)
+
+      (run[:segments].count - run_file.segments.count).times { run_file.segments << run_file.segments.new }
+
+      run[:segments].map.with_index do |segment, index|
+        run_file.segments[index].update(
+          order: index,
+          name: segment[:name],
+          real_duration: segment[:real_duration],
+          best_real_duration: segment[:best_real_duration],
+          game_duration: nil,
+          best_game_duration: nil
+        )
+      end.all? && run_file.runs.update_all(
+        program: :splitterz,
+        time: run[:segments].sum { |s| s[:real_duration] },
+        name: run[:name],
+        category_id: nil
       )
-    end.all? && run_file.runs.update_all(
-      program: :splitterz,
-      time: run[:segments].sum { |s| s[:real_duration] },
-      name: run[:name],
-      category_id: nil
-    )
+    end
   end
 
   private
