@@ -18,8 +18,6 @@ class Run < ActiveRecord::Base
     end
   end
 
-  @parse_cache = nil
-
   validates :run_file, presence: true
   validates_associated :run_file
   validates_with RunValidator

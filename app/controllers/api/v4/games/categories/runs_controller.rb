@@ -12,7 +12,7 @@ class Api::V4::Games::Categories::RunsController < Api::V4::ApplicationControlle
     run_file = RunFile.for_file(params.require(:file))
     @record = Run.new(run_file: run_file, user: current_user, image_url: params[:image_url]).tap do |run|
       # TODO: Move this error handling into a before_action or a rescue
-      unless run.parses?
+      unless run.valid?
         render status: 400, json: {
           status: 400,
           message: "Can't parse that file. We support #{RunFile.programs.to_sentence}."
