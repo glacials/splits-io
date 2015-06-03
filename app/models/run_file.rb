@@ -10,7 +10,7 @@ class RunFile < ActiveRecord::Base
 
   class << self
     def programs
-      [LiveSplit, WSplit]
+      [LiveSplit, SplitterZ, WSplit]
     end
 
     def for_file(file)
@@ -25,5 +25,9 @@ class RunFile < ActiveRecord::Base
     def random
       RunFile.offset(rand(RunFile.count)).first
     end
+  end
+
+  def program
+    Hash[RunFile.programs.map { |program| [program.shortname, program] }][runs.first.program]
   end
 end

@@ -46,7 +46,7 @@ class RunsController < ApplicationController
   end
 
   def download
-    unless RunFile.programs.map { |program| program::Run.sti_name.to_s }.include?(params[:program])
+    unless RunFile.programs.map(&:shortname).include?(params[:program])
       redirect_to run_path(@run), alert: 'Unrecognized program.'
       return
     end
@@ -57,7 +57,7 @@ class RunsController < ApplicationController
       else
         render_to_string(params[:program], layout: false)
       end,
-      filename: "#{@run.filename(params[:program])}",
+      filename: "#{@run.id36}.#{@run.run_file.program.file_extension}",
       layout: false
     )
   end
