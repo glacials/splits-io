@@ -10,7 +10,7 @@ class RunFile < ActiveRecord::Base
 
   class << self
     def programs
-      [LiveSplit, TimeSplitTracker, SplitterZ, WSplit]
+      [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     end
 
     def for_file(file)
