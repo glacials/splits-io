@@ -11,7 +11,7 @@ module RivalUser
     end
 
     def rival_for(category)
-      rivalry_for(category).to_user
+      rivalry_for(category).try(:to_user)
     end
   end
 end

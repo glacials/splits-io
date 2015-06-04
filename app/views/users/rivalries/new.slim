@@ -23,10 +23,10 @@ article
         img src=rival[:avatar] height=64 width=64
       .media-body
         h4.media-heading = rival[:name]
-        span = rival[:pb]
+        span class=(rival[:pb] == '???' ? '' : 'time')  = rival[:pb]
         small< pb
         br
-        span = rival[:sum_of_best]
+        span class=(rival[:sum_of_best] == '???' ? '' : 'time') = rival[:sum_of_best]
         small< sum of best
 article
   - if @user.follows.that_run(@category).empty?
