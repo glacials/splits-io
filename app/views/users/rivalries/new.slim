@@ -3,6 +3,32 @@
   h2 appoint a rival
   h5 #{@category.game.name} #{@category.name}
 article
+  article style='border: 1px dashed #ccc; width: 50%;'
+    .media.col-xs-12.col-sm-5.col-md-5.col-lg-5 style='text-align: left; margin: .5em 0'
+      .pull-left
+        img src=@user.avatar height=64 width=64
+      .media-body
+        h4.media-heading = @user.name
+        span.time = @user.pb_for(@category).time
+        small< pb
+        br
+        span.time = @user.pb_for(@category).sum_of_best
+        small< sum of best
+    .media.col-xs-12.col-sm-2.col-md-2.col-lg-2 style='text-align: center; margin: .5em 0;'
+      .media-body
+        h4.media-heading vs.
+    - rival = rival_display_info(@user.rivalry_for(@category))
+    .media.col-xs-12.col-sm-5.col-md-5.col-lg-5 style='text-align: left; margin: .5em 0;'
+      .pull-left
+        img src=rival[:avatar] height=64 width=64
+      .media-body
+        h4.media-heading = rival[:name]
+        span = rival[:pb]
+        small< pb
+        br
+        span = rival[:sum_of_best]
+        small< sum of best
+article
   - if @user.follows.that_run(@category).empty?
     .alert-warning Sorry, nobody you follow on Twitch has submitted runs for this game.
     p Here are some categories that have rivals waiting for you:
