@@ -9,12 +9,14 @@ class Users::RivalriesController < ApplicationController
   end
 
   def create
-    @rivalry = @user.rivalries.new(category: @category, to_user: @to_user)
-    if @rivalry.save
-      redirect_to(
-        compare_path(@user.pb_for(@category), @to_user.pb_for(@category)),
-        notice: "#{@to_user.name} is now your rival in #{@rivalry.game.name} #{@rivalry.category.name}! Here are your latest respective PBs."
-      )
+    Rivalry.transaction do
+      @user.rivalries.for_category(@category).destroy_all
+      if @user.rivalries.create(category: @category, to_user: @to_user)
+        redirect_to(
+          compare_path(@user.pb_for(@category), @to_user.pb_for(@category)),
+          notice: "#{@to_user.name} is now your rival in #{@category.game} #{@category}! Here are your latest respective PBs."
+        )
+      end
     end
   end
 
