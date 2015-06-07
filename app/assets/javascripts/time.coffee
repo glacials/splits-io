@@ -1,6 +1,12 @@
 $ ->
   $(".time").each (i, el) ->
-    if parseFloat(el.innerHTML) is 0
-      el.innerHTML = "-"
-    else
-      el.innerHTML = numeral(Math.floor(el.innerHTML)).format("00:00:00")
+    seconds = Math.floor el.innerHTML
+    negative = seconds < 0
+    formatted = numeral(Math.abs seconds).format("+00:00:00")
+    if !negative
+      if $(el).hasClass "signed"
+        el.innerHTML = "+" + formatted
+      else
+        el.innerHTML = formatted
+    else if negative
+      el.innerHTML = "-" + formatted

@@ -1,13 +1,1 @@
-- show_milliseconds = show_milliseconds.nil? ? false : show_milliseconds
-- if time == 0
-  | -
-- else
-  - if time > 0
-    span.red
-      | +
-      span.time = time
-  - if time < 0
-    span.green
-      span.time = time
-  - if time == 0
-    span.time = time
+span.signed.time class=(time > 0 ? :red : :green) = time
