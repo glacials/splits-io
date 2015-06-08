@@ -1,5 +1,4 @@
-h6
-  - if flash[:alert]
-    .alert-warning = flash[:alert]
-  - if flash[:notice]
-    .alert-success = flash[:notice]
+- if flash[:alert]
+  .alert-danger = flash[:alert]
+- if flash[:notice]
+  .alert-success = flash[:notice]

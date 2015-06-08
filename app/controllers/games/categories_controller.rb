@@ -3,10 +3,6 @@ class Games::CategoriesController < ApplicationController
   before_action :set_category
 
   def show
-    # temporary
-    @category.runs.each do |run|
-      run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
-    end
   end
 
   private

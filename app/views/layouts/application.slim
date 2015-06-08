@@ -44,7 +44,7 @@ html
                 = link_to "tools", tools_path
                 = link_to "sign out", session_path(auth_session), method: :delete
         = yield(:header)
-        = render partial: 'shared/alerts'
+      article#alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
       = yield
       footer#footer data-turbolinks-permanent=true
         = yield(:footer)

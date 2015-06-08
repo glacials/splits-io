@@ -41,10 +41,12 @@
           a href=edit_run_path(@run) edit
 
 - if @run.time > 0
-  = render partial: 'timeline', locals: {run: @run}
-  - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
-    = render partial: 'gold_timeline', locals: {run: @run}
-  = render partial: 'timeline_inspector', locals: {run: @run}
+  #timeline data-turbolinks-permanent=true
+    = render partial: 'timeline', locals: {run: @run}
+    - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
+      = render partial: 'gold_timeline', locals: {run: @run}
+  #timeline-inspector
+    = render partial: 'timeline_inspector', locals: {run: @run}
 
 article
   - cache [:splits, :v1, @run] do
