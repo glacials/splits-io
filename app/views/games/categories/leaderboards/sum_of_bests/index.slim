@@ -2,8 +2,9 @@
 - content_for(:header) do
   h2 Fastest sum of best
   h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
-article = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
-article
+article#category-tabs data-turbolinks-temporary=true
+  = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
+article#run-table data-turbolinks-temporary=true
   - if @category.runs.unarchived.owned.where.not(sum_of_best: nil).where.not(sum_of_best: 0).empty?
     center
       i Not enough data in this category to display sum of bests.

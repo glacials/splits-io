@@ -1,7 +1,8 @@
 - title @game.name
 - content_for(:header) do
   h3 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
-article#category-tabs data-turbolinks-permanent=true = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
+article#category-tabs data-turbolinks-temporary=true
+  = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
 article#run-table data-turbolinks-temporary=true
   = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
   center
