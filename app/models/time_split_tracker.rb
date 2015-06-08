@@ -15,7 +15,7 @@ module TimeSplitTracker
   class Parser < BabelBridge::Parser
     rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
 
-    rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :tab, :newline
+    rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :tab?, :newline
     rule :title_line,  :title, :tab, /([^\t\r\n]*)/, :newline
     rule :splits,      :title, :tab, :duration, :newline, :image_path, :tab, :newline
 
@@ -24,7 +24,7 @@ module TimeSplitTracker
     rule :duration,   :time
     rule :image_path, /([^\t\r\n]*)/
 
-    rule :time,       /(\d*\.\d*)/
+    rule :time,       /(\d*:?\d*\.\d*)/
 
     rule :newline,         :windows_newline
     rule :newline,         :unix_newline
