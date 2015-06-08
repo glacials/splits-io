@@ -166,7 +166,7 @@ class Run < ActiveRecord::Base
   end
 
   def has_golds?
-    splits.all? { |split| split.best.duration.present? }
+    splits.all? { |split| split.best.duration }
   end
 
   def filename(download_program)
