@@ -62,7 +62,7 @@ class Run < ActiveRecord::Base
   end
 
   def splits
-    parse[:splits]
+    parse[:splits] || []
   end
 
   def program
