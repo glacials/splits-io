@@ -51,7 +51,7 @@ module TimeSplitTracker
     rule :duration,   :time
     rule :image_path, /([^\t\r\n]*)/
 
-    rule :time,       /(\d*:?\d*\.\d*)/
+    rule :time,       /((\d+:)?\d*\.\d*)/
 
     rule :newline,         :windows_newline
     rule :newline,         :unix_newline
@@ -74,18 +74,25 @@ module TimeSplitTracker
 
     def parse_splits(splits)
       splits.map.with_index do |split, index|
-        parse_split(split, index == 0 ? 0 : splits.slice(0, index).map { |s| s.duration.to_s.to_f }.sum)
+        parse_split(split, index == 0 ? 0 : splits.slice(0, index).map { |s| duration_in_seconds_of(s.duration.to_s) }.sum)
       end
     end
 
     def parse_split(segment, run_duration_so_far)
       {
         name: segment.title.to_s,
-        real_duration: segment.duration.to_s.to_f,
-        best_real_duration: segment.duration.to_s.to_f,
+        real_duration: duration_in_seconds_of(segment.duration.to_s),
+        best_real_duration: duration_in_seconds_of(segment.duration.to_s),
         game_duration: nil,
         best_game_duration: nil
       }
+    end
+
+    def duration_in_seconds_of(time)
+      return 0 if time.blank?
+
+      time.sub!('.', ':') if time.count('.') == 2
+      ChronicDuration.parse(time, keep_zero: true)
     end
   end
 end
