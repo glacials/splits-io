@@ -1,5 +1,9 @@
 $ ->
   window.upload = (file, options) ->
+    if !file?
+      $("#droplabel").html "that looks like an empty file :("
+      window.isUploading = false
+      return
     options = options or bulk: false
     data = new FormData()
     data.append "file", file

@@ -5,7 +5,9 @@ class RunFile < ActiveRecord::Base
   validates :file, presence: true
 
   def self.for_file(file)
-    RunFile.for_text(file.read)
+    if file.respond_to?(:read)
+      RunFile.for_text(file.read)
+    end
   end
 
   def self.for_text(file_text)
