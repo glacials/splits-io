@@ -14,5 +14,7 @@ class RunValidator < ActiveModel::Validator
         record.errors[:base] << 'Your video URL must be a link to a Twitch, Hitbox, or YouTube video.'
       end
     end
+  rescue URI::InvalidURIError
+    record.errors[:base] << 'Your video URL must be a link to a Twitch, Hitbox, or YouTube video.'
   end
 end
