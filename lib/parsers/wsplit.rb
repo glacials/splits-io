@@ -8,10 +8,10 @@ module WSplit
       shortname
     end
 
-    def self.read!(run_file)
+    def read!(run_file)
       run = Parser.new.parse(run_file.file)
 
-      ActiveRecord::Base.traction do
+      ActiveRecord::Base.transaction do
         if run[:segments].count > run_file.segments.count
           (run[:segments].count - run_file.segments.count).times { run_file.segments.new }
         elsif run[:segments].count < run_file.segments.count
