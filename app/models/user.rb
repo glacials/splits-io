@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   has_many :runs
   has_many :categories, -> { uniq }, through: :runs
   has_many :games, -> { uniq }, through: :runs
-  has_many :rivalries, foreign_key: :from_user_id
+  has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
 
   validates :twitch_id, presence: true
   validates :name, presence: true
