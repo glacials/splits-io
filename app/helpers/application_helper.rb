@@ -18,4 +18,12 @@ module ApplicationHelper
       profile: logged_in? && [user_path(current_user), tools_path].include?(request.path)
     }
   end
+
+  def darkmode_text
+    if cookies[:darkmode] == '1'
+      "lightmode"
+    else
+      "darkmode"
+    end
+  end
 end
