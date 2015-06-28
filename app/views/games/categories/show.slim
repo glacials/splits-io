@@ -1,7 +1,7 @@
 - title @game.name
 - content_for(:header) do
   h3 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
-  = link_to image_tag("/assets/srl.png"), @game.srl_uri
+  = link_to image_tag(asset_path("srl.png")), @game.srl_uri
 article#category-tabs data-turbolinks-temporary=true
   = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
 article#run-table data-turbolinks-temporary=true
