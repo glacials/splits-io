@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506065834) do
+ActiveRecord::Schema.define(version: 20150628222744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,11 +37,10 @@ ActiveRecord::Schema.define(version: 20150506065834) do
     t.string   "two_factored_ip"
     t.integer  "requests",           default: 0
     t.datetime "password_seen_at"
+    t.index ["browser_id"], name: "index_authie_sessions_on_browser_id", using: :btree
+    t.index ["token"], name: "index_authie_sessions_on_token", using: :btree
+    t.index ["user_id"], name: "index_authie_sessions_on_user_id", using: :btree
   end
-
-  add_index "authie_sessions", ["browser_id"], name: "index_authie_sessions_on_browser_id", using: :btree
-  add_index "authie_sessions", ["token"], name: "index_authie_sessions_on_token", using: :btree
-  add_index "authie_sessions", ["user_id"], name: "index_authie_sessions_on_user_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.integer  "game_id"
@@ -49,10 +48,9 @@ ActiveRecord::Schema.define(version: 20150506065834) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "shortname"
+    t.index ["game_id"], name: "index_categories_on_game_id", using: :btree
+    t.index ["name"], name: "index_categories_on_name", using: :btree
   end
-
-  add_index "categories", ["game_id"], name: "index_categories_on_game_id", using: :btree
-  add_index "categories", ["name"], name: "index_categories_on_name", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -66,37 +64,32 @@ ActiveRecord::Schema.define(version: 20150506065834) do
     t.string   "queue"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "games", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "shortname"
-    t.integer  "srl_id"
+    t.index ["name"], name: "index_games_on_name", using: :btree
+    t.index ["shortname"], name: "index_games_on_shortname", using: :btree
   end
-
-  add_index "games", ["name"], name: "index_games_on_name", using: :btree
-  add_index "games", ["shortname"], name: "index_games_on_shortname", using: :btree
 
   create_table "rivalries", force: :cascade do |t|
     t.integer "category_id"
     t.integer "from_user_id"
     t.integer "to_user_id"
+    t.index ["category_id"], name: "index_rivalries_on_category_id", using: :btree
+    t.index ["from_user_id"], name: "index_rivalries_on_from_user_id", using: :btree
+    t.index ["to_user_id"], name: "index_rivalries_on_to_user_id", using: :btree
   end
-
-  add_index "rivalries", ["category_id"], name: "index_rivalries_on_category_id", using: :btree
-  add_index "rivalries", ["from_user_id"], name: "index_rivalries_on_from_user_id", using: :btree
-  add_index "rivalries", ["to_user_id"], name: "index_rivalries_on_to_user_id", using: :btree
 
   create_table "run_files", force: :cascade do |t|
     t.string "digest"
     t.text   "file"
+    t.index ["digest"], name: "index_run_files_on_digest", using: :btree
   end
-
-  add_index "run_files", ["digest"], name: "index_run_files_on_digest", using: :btree
 
   create_table "runs", force: :cascade do |t|
     t.integer  "user_id"
@@ -114,22 +107,20 @@ ActiveRecord::Schema.define(version: 20150506065834) do
     t.boolean  "archived"
     t.string   "video_url"
     t.string   "run_file_digest"
+    t.index ["category_id"], name: "index_runs_on_category_id", using: :btree
+    t.index ["user_id"], name: "index_runs_on_user_id", using: :btree
   end
 
-  add_index "runs", ["category_id"], name: "index_runs_on_category_id", using: :btree
-  add_index "runs", ["user_id"], name: "index_runs_on_user_id", using: :btree
-
-  create_table "splits", force: :cascade do |t|
-    t.integer "run_id"
-    t.integer "position"
+  create_table "segments", force: :cascade do |t|
+    t.integer "order"
     t.string  "name"
     t.float   "real_duration"
     t.float   "best_real_duration"
     t.float   "game_duration"
     t.float   "best_game_duration"
+    t.integer "run_file_id"
+    t.index ["run_file_id"], name: "index_segments_on_run_file_id", using: :btree
   end
-
-  add_index "splits", ["run_id"], name: "index_splits_on_run_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",        default: ""
@@ -139,9 +130,7 @@ ActiveRecord::Schema.define(version: 20150506065834) do
     t.integer  "twitch_id"
     t.string   "name"
     t.string   "avatar"
+    t.index ["email"], name: "index_users_on_email", using: :btree
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", using: :btree
-
-  add_foreign_key "splits", "runs"
 end

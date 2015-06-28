@@ -92,7 +92,6 @@ curl https://splits.io/api/v3/games/sms
     "id": 15,
     "name": "Super Mario Sunshine",
     "shortname": "sms",
-    "srl_id": 7,
     "created_at": "2014-04-18T06:28:59.764Z",
     "updated_at": "2015-02-01T21:33:44.460Z",
     "categories": [ ... ]

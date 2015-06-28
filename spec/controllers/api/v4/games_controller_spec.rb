@@ -42,7 +42,7 @@ describe Api::V4::GamesController do
 
   describe '#show' do
     let(:game) { FactoryGirl.create(:game, :shortnamed) }
-    let(:returned_attributes) { [:id, :name, :shortname, :srl_id, :categories] }
+    let(:returned_attributes) { [:id, :name, :shortname, :categories] }
 
     context 'when given an id' do
       context 'when the game exists' do

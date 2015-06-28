@@ -1,5 +1,5 @@
 class Api::V3::GameSerializer < Api::V3::ApplicationSerializer
   has_many :categories, serializer: Api::V3::CategorySerializer
 
-  attributes :id, :name, :shortname, :srl_id, :created_at, :updated_at
+  attributes :id, :name, :shortname, :created_at, :updated_at
 end

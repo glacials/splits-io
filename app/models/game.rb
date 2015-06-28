@@ -25,11 +25,11 @@ class Game < ActiveRecord::Base
   end
 
   def sync_with_srl
-    return if srl_id.present? && shortname.present?
+    return if shortname.present?
     game = ::SpeedRunsLive.game(name)
     return if game.nil?
 
-    update(srl_id: game['id'].to_i, shortname: game['abbrev'])
+    update(shortname: game['abbrev'])
   end
 
   def to_s
