@@ -4,5 +4,5 @@ class Api::V3::RunSerializer < Api::V3::ApplicationSerializer
   belongs_to :category, serializer: Api::V3::CategorySerializer
   has_one :time
 
-  attributes :id, :path, :name, :program, :image_url, :created_at, :updated_at
+  attributes :id, :path, :name, :program, :image_url, :created_at, :updated_at, :video_url
 end

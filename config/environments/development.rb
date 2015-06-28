@@ -33,8 +33,6 @@ SplitsIO::Application.configure do
   config.use_ssl = false
   config.read_only = false
 
-  Slim::Engine.set_options(pretty: true)
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 end
