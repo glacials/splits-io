@@ -5,8 +5,7 @@
   h3
     - if @run.game.try(:name).present? && @run.category.try(:name).present?
       = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
-      |  
-      = link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+      =< link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
     - else
       = @run.name
   h5
@@ -15,10 +14,10 @@
       small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
   h6
     span#download-menu
-      a href=download_path(@run, @run.program) onclick='hide_download_menu()' = @run.program
+      a> href=download_path(@run, @run.program) onclick='hide_download_menu()' = @run.program
       - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.program]).each do |program|
-        |  &bull; 
-        a href=download_path(@run, program) onclick='hide_download_menu()' = program
+        | &bull;
+        a<> href=download_path(@run, program) onclick='hide_download_menu()' = program
     ul.run-options
       li
         a.fake-link#download-link onclick='toggle_download_menu()' ↓ download

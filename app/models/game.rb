@@ -1,6 +1,8 @@
 require 'speedrunslive'
 
 class Game < ActiveRecord::Base
+  include SRLGame
+
   validates :name, presence: true
 
   has_many :categories
