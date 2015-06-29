@@ -4,7 +4,7 @@ describe Api::V3::RunsController do
   let(:run) { FactoryGirl.create(:run) }
 
   describe '#show' do
-    let(:returned_attributes) { [:id, :path, :name, :image_url, :user, :time] }
+    let(:returned_attributes) { [:id, :path, :name, :image_url, :user, :time, :video_url] }
 
     context 'when given a valid id36' do
       subject(:response) { get :show, id: run.id36 }
