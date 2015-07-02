@@ -15,6 +15,7 @@ splits i/o currently supports splits from Urn, LiveSplit, SplitterZ, Time Split 
 cp config/application.example.yml config/application.yml
 $EDITOR config/application.yml # give it a once-over (required if you want local sign in)
 bundle install
+rake db:create db:migrate
 rails server
 ```
 
