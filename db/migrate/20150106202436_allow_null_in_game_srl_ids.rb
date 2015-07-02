@@ -1,5 +1,5 @@
 class AllowNullInGameSrlIds < ActiveRecord::Migration
   def change
-    change_column :games, :integer, null: true
+    change_column_null :games, :srl_id, true
   end
 end
