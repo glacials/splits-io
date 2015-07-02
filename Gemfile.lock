@@ -475,3 +475,6 @@ DEPENDENCIES
   will_paginate
   workless
   xml-simple
+
+BUNDLED WITH
+   1.10.5
