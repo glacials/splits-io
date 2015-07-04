@@ -5,7 +5,7 @@ describe Api::V3::GamesController do
 
   describe '#index' do
     context 'when given a search term which yields results' do
-      subject(:response) { get(:index, search: 'mario') }
+      subject(:response) { get(:index, params: {search: 'mario'}) }
       subject(:body) { JSON.parse(response.body)['games'] }
 
       it 'returns an expected response code' do
@@ -18,7 +18,7 @@ describe Api::V3::GamesController do
     end
 
     context 'when given a search term which does not yield results' do
-      subject(:response) { get(:index, search: 'fakegame123') }
+      subject(:response) { get(:index, params: {search: 'fakegame123'}) }
       subject(:body) { JSON.parse(response.body)['games'] }
 
       it 'returns an expected response code' do
@@ -46,7 +46,7 @@ describe Api::V3::GamesController do
 
     context 'when given an id' do
       context 'when the game exists' do
-        subject(:response) { get(:show, id: game.id) }
+        subject(:response) { get(:show, params: {id: game.id}) }
         subject(:body) { JSON.parse(response.body)['game'] }
 
         it 'returns an expected response code' do
@@ -61,7 +61,7 @@ describe Api::V3::GamesController do
       end
 
       context 'when the game does not exist' do
-        subject(:response) { get(:show, id: 'bleep bloop blop') }
+        subject(:response) { get(:show, params: {id: 'bleep bloop blop'}) }
         subject(:body) { JSON.parse(response.body) }
 
         it 'returns the correct response code' do
@@ -77,7 +77,7 @@ describe Api::V3::GamesController do
 
     context 'when given a shortname' do
       context 'when the game exists' do
-        subject(:response) { get(:show, id: game.id) }
+        subject(:response) { get(:show, params: {id: game.id}) }
         subject(:body) { JSON.parse(response.body)['game'] }
 
         it 'returns the correct response code' do
@@ -92,7 +92,7 @@ describe Api::V3::GamesController do
       end
 
       context 'when the game does not exist' do
-        subject(:response) { get(:show, id: 'bleep bloop blop') }
+        subject(:response) { get(:show, params: {id: 'bleep bloop blop'}) }
         subject(:body) { JSON.parse(response.body) }
 
         it 'returns the correct response code' do

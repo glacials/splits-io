@@ -7,7 +7,7 @@ describe Api::V3::RunsController do
     let(:returned_attributes) { [:id, :path, :name, :image_url, :user, :time, :video_url] }
 
     context 'when given a valid id36' do
-      subject(:response) { get :show, id: run.id36 }
+      subject(:response) { get :show, params: {id: run.id36} }
       subject(:body) { JSON.parse(response.body)['run'] }
 
       it 'returns an expected response code' do
@@ -22,7 +22,7 @@ describe Api::V3::RunsController do
     end
 
     context 'when given a bad id' do
-      subject(:response) { get :show, id: '...' }
+      subject(:response) { get :show, params: {id: '...'} }
       subject(:body) { JSON.parse(response.body) }
 
       it 'returns an expected response code' do

@@ -4,7 +4,7 @@ class Api::V4::RunSerializer < Api::V4::ApplicationSerializer
   has_one :category
   has_one :time
 
-  attributes :id, :name, :program, :image_url, :created_at, :updated_at, :video_url
+  attributes :id, :srdc_id, :name, :program, :image_url, :created_at, :updated_at, :video_url
 
   private
 

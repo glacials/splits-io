@@ -85,7 +85,7 @@ SplitsIO::Application.routes.draw do
         end
       end
 
-      resources :runs, only: [:show, :create, :destroy]
+      resources :runs, only: [:show, :update, :create, :destroy]
     end
 
     namespace :v3 do

@@ -1,8 +1,9 @@
 class Api::V4::RunsController < Api::V4::ApplicationController
-  before_action :set_run, only: [:show, :destroy, :disown]
-  before_action :verify_ownership!, only: [:destroy, :disown]
+  before_action :set_run, only: [:show, :update, :destroy, :disown]
+  before_action :verify_ownership!, only: [:update, :destroy, :disown]
 
   def show
+    response.headers["Link"] = "#{run_url(@run)}; rel=site"
     render json: @run, serializer: Api::V4::RunSerializer
   end
 
@@ -38,6 +39,10 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     }
   end
 
+  def update
+    @run.update(params.permit(:srdc_id))
+  end
+
   # TODO: This method is not documented and thus is not officially supported by the API. It uses cookie authentication,
   # but the official release of it into the API should use token authentication.
   def destroy
@@ -59,10 +64,10 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def verify_ownership!
-    unless @run.belongs_to?(current_user)
+    unless @run.claim_token.present? && params[:claim_token] == @run.claim_token
       render status: 401, json: {
         status: 401,
-        message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."
+        message: "Invalid claim token."
       }
       return false
     end

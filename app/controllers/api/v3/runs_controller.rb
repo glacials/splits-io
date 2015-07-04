@@ -62,7 +62,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   end
 
   def verify_ownership!
-    unless @run.belongs_to?(current_user)
+    if @run.belongs_to?(current_user)
       render status: 401, json: {
         status: 401,
         message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."
