@@ -42,7 +42,7 @@ gem 'api-pagination'
 gem 'jbuilder'
 
 # authentication
-gem 'authie'
+gem 'authie', github: 'glacials/authie'
 gem 'omniauth'
 gem 'omniauth-twitch'
 
