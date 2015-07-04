@@ -32,6 +32,8 @@
               li
                 a href=compare_path(@run, @run.category.best_known_run) compare to best on record
             li ✓ pb
+      - if @run.srdc_id.present?
+        li = link_to 'speedrun.com', "http://www.speedrun.com/run/#{@run.srdc_id}"
       - if @run.video_url.present?
         li
           a href=@run.video_url proof
