@@ -14,32 +14,28 @@
       small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
   h6
     span#download-menu
-      a href=download_path(@run, @run.program) onclick='hide_download_menu()' = @run.program
+      = link_to @run.program, download_path(@run, @run.program), onclick: 'hide_download_menu()'
       - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.program]).each do |program|
         | &bull;
-        a<> href=download_path(@run, program) onclick='hide_download_menu()' = program
+        =<> link_to program, download_path(@run, program), onclick: 'hide_download_menu()'
     ul.run-options
       li
         a.fake-link#download-link onclick='toggle_download_menu()' ↓ download
         - if @run.category
           - if !@run.belongs_to?(current_user) && current_user.try(:runs?, @run.category)
-            li
-              a href=compare_path(current_user.pb_for(@run.category), @run) compare to my pb
+            li = link_to 'compare to my pb', compare_path(current_user.pb_for(@run.category), @run)
           - if @run.best_known?
             li ✓ best on record
           - elsif @run.pb?
             - if @run.belongs_to?(current_user) && @run.category.best_known_run.present?
-              li
-                a href=compare_path(@run, @run.category.best_known_run) compare to best on record
+              li = link_to 'compare to best on record', compare_path(@run, @run.category.best_known_run)
             li ✓ pb
       - if @run.srdc_id.present?
         li = link_to 'speedrun.com', "http://www.speedrun.com/run/#{@run.srdc_id}"
       - if @run.video_url.present?
-        li
-          a href=@run.video_url proof
+        li = link_to 'proof', @run.video_url
       - if @run.belongs_to?(current_user)
-        li
-          a href=edit_run_path(@run) edit
+        li = link_to 'edit', edit_run_path(@run)
 
 - if @run.time > 0
   #timeline data-turbolinks-permanent=true
