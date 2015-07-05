@@ -32,10 +32,23 @@ class RunsController < ApplicationController
       return
     end
 
-    if @run.update(video_url: params[:run][:video_url])
-      redirect_to edit_run_path(@run), notice: 'Proof saved.'
-    else
-      redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
+    if params[:run][:srdc_url]
+      srdc_id = SpeedrunDotCom::Run.id_from_url(params[:run][:srdc_url])
+      redirect_to edit_run_path(@run), if srdc_id != false
+        @run.update(srdc_id: srdc_id)
+        {notice: 'Link with speedrun.com updated.'}
+      else
+        {alert: 'Your speedrun.com URL must have the format http://www.speedrun.com/run/6yjoqgzd.'}
+      end
+      return
+    end
+
+    if params[:run][:video_url]
+      if @run.update(video_url: params[:run][:video_url])
+        redirect_to edit_run_path(@run), notice: 'Proof saved.'
+      else
+        redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
+      end
     end
   end
 

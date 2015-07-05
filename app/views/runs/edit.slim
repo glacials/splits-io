@@ -5,8 +5,7 @@
   h3
     - if @run.game.try(:name).present? && @run.category.try(:name).present?
       = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
-      |  
-      = link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+      =< link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
     - else
       = @run.name
   h5
@@ -28,6 +27,14 @@ article#proof data-turbolinks-permanent=true
     h3 Video proof
     .input-group.col-md-6
       = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch, Hitbox, or YouTube VOD')
+      span.input-group-btn
+        = f.submit 'Save', class: 'btn btn-default'
+
+article#srdc_url data-turbolinks-permanent=true
+  = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
+    h3 Link with speedrun.com
+    .input-group.col-md-6
+      = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
       span.input-group-btn
         = f.submit 'Save', class: 'btn btn-default'
 

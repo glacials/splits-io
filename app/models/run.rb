@@ -1,6 +1,7 @@
 class Run < ActiveRecord::Base
   include PadawanRun
   include ForgetfulPersonsRun
+  include SRDCRun
   include ActionView::Helpers::DateHelper
 
   belongs_to :user, touch: true
