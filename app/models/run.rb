@@ -178,7 +178,7 @@ class Run < ActiveRecord::Base
   end
 
   def set_name
-    if [category, category.name, category.game, category.game.name].all?(&:present?)
+    if [category, game].all? { |i| i.try(:name).present? }
       self.name = "#{category.game.name} #{category.name}"
     end
   end
