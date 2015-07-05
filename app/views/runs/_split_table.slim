@@ -13,5 +13,5 @@ table.table.table-striped
         td.align-right
           - if split.gold?
             .gold-split title='Gold'
-          span.time = split.duration
-        td.align-right.time = split.finish_time
+          span.time.needs-formatting = split.duration
+        td.align-right.time.needs-formatting = split.finish_time

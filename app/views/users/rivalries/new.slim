@@ -9,10 +9,10 @@ article
         img src=@user.avatar height=64 width=64
       .media-body
         h4.media-heading = @user.name
-        span.time = @user.pb_for(@category).time
+        span.time.needs-formatting = @user.pb_for(@category).time
         small< pb
         br
-        span.time = @user.pb_for(@category).sum_of_best
+        span.time.needs-formatting = @user.pb_for(@category).sum_of_best
         small< sum of best
     .media.col-xs-12.col-sm-2.col-md-2.col-lg-2 style='text-align: center; margin: .5em 0;'
       .media-body
@@ -54,8 +54,8 @@ article
             h4.media-heading
               = user.name
               .call-to-action = next_butt_kick_sentence
-            span.time = user.pb_for(@category).time
+            span.time.needs-formatting = user.pb_for(@category).time
             small< pb
             br
-            span.time = user.pb_for(@category).sum_of_best
+            span.time.needs-formatting = user.pb_for(@category).sum_of_best
             small< sum of best
