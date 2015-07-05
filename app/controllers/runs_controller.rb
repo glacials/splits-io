@@ -26,6 +26,12 @@ class RunsController < ApplicationController
   end
 
   def update
+    if params[:run][:category]
+      @run.update(category: Category.find(params[:run][:category]))
+      redirect_to edit_run_path(@run), notice: 'Game/category updated.'
+      return
+    end
+
     if params[:run][:disown]
       @run.update(user: nil)
       redirect_to run_path(@run), notice: 'Run disowned.'

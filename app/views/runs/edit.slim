@@ -22,6 +22,14 @@
   - unless @run.splits.any? { |split| split.skipped? }
     = render partial: 'gold_timeline', locals: {run: @run}
 
+article#game-category data-turbolinks-permanent=true
+  = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
+    h3 Game/category
+    p
+      = f.collection_select(:game, Game.where.not(shortname: nil).order(:name), :shortname, :name, {selected: @run.game.try(:shortname), include_blank: true}, onchange: 'update_category_selector(this.value)')
+      = f.collection_select(:category, @run.game.try(:categories) || [], :id, :name, selected: @run.category.try(:id))
+    p = f.submit 'Save', id: 'game_category_submit', class: 'btn btn-default'
+
 article#proof data-turbolinks-permanent=true
   = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
     h3 Video proof
@@ -30,7 +38,7 @@ article#proof data-turbolinks-permanent=true
       span.input-group-btn
         = f.submit 'Save', class: 'btn btn-default'
 
-article#srdc_url data-turbolinks-permanent=true
+article#srdc-url data-turbolinks-permanent=true
   = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
     h3 Link with speedrun.com
     .input-group.col-md-6

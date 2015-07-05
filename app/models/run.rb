@@ -24,6 +24,7 @@ class Run < ActiveRecord::Base
   validates_with RunValidator
 
   before_save :populate_category
+  before_save :set_name
 
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
   scope :by_category, ->(category) { where(category: category) }
@@ -174,5 +175,11 @@ class Run < ActiveRecord::Base
   def filename(download_program)
     extension = {'livesplit' => 'lss', 'urn' => 'json'}[download_program] || download_program
     "#{to_param}.#{extension}"
+  end
+
+  def set_name
+    if [category, category.name, category.game, category.game.name].all?(&:present?)
+      self.name = "#{category.game.name} #{category.name}"
+    end
   end
 end

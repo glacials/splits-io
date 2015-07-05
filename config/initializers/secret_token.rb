@@ -4,5 +4,5 @@
 SplitsIO::Application.config.secret_key_base = if Rails.env.development? || Rails.env.test?
   'x' * 30
 else
-  ENV['splitsio_secret_key_base']
+  ENV['SECRET_KEY_BASE']
 end
