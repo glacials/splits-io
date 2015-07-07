@@ -55,13 +55,14 @@ SplitsIO::Application.routes.draw do
 
   resources :tools, only: [:index]
 
-  get    '/runs',            to: redirect('/'),       as: :runs
+  get    '/runs',            to: redirect('/'), as: :runs
   get    '/runs/new',        to: redirect('/upload')
   get    '/runs/:id/edit',   to: redirect('/%{id}/edit')
-  get    '/:id/edit',        to: 'runs#edit',         as: :edit_run
+  get    '/:id/edit',        to: 'runs#edit', as: :edit_run
+  get    '/:run_id/stats',   to: 'runs/stats#index', as: :run_stats
   patch  '/:id',             to: 'runs#update'
   post   '/runs',            to: 'runs#create'
-  get    '/:id',             to: 'runs#show',         as: :run
+  get    '/:id',             to: 'runs#show', as: :run
   delete '/:id',             to: 'runs#destroy'
 
   namespace :api do

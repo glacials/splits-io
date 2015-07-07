@@ -1,8 +1,10 @@
 - title 'Set a rival'
 - content_for(:header) do
   h2 appoint a rival
-  h5 #{@category.game.name} #{@category.name}
-article
+  h5
+    = link_to @category.game, @category.game, class: 'stealth-link game-link'
+    =< link_to @category, game_category_path(@category.game, @category), class: 'stealth-link category-link'
+article.nowrap
   article style='border: 1px dashed #ccc; width: 50%;'
     .media.col-xs-12.col-sm-5.col-md-5.col-lg-5 style='text-align: left; margin: .5em 0'
       .pull-left
@@ -28,9 +30,9 @@ article
         br
         span class=(rival[:sum_of_best] == '???' ? '' : 'time') = rival[:sum_of_best]
         small< sum of best
-article
+article.nowrap
   - if @user.follows.that_run(@category).empty?
-    .alert-warning Sorry, nobody you follow on Twitch has submitted runs for this game.
+    .alert-warning Sorry, nobody you follow on Twitch has submitted runs for this category.
     p Here are some categories that have rivals waiting for you:
     - empty = true
     - @user.categories.each do |category|

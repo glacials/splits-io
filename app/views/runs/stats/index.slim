@@ -1,0 +1,68 @@
+= render partial: 'runs/twitter_card'
+
+- content_for(:header) do
+  h3
+    - if @run.game.try(:name).present? && @run.category.try(:name).present?
+      = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
+      =< link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+    - else
+      = @run.name
+  h5
+    .time.needs-formatting = @run.time
+    - if @run.user.try(:name)
+      small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
+  h6
+    ul.run-options
+      li
+        a href=run_path(@run) &larr; back to run
+
+#timeline data-turbolinks-permanent=true
+  = render partial: 'runs/timeline', locals: {run: @run}
+  - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
+    = render partial: 'runs/gold_timeline', locals: {run: @run}
+
+article#stats
+  .col-md-6
+    h3 Stats
+    table.table.table-striped
+      tbody
+        tr
+          td
+            span Total potential timesave
+            small.tip< title='(PB - sum of best)' (?)
+          td.time.needs-formatting = @run.time - @run.reduced_splits.sum { |split| split.best.duration }
+        tr
+          td
+            span Attempt
+          td = @run.attempts
+        tr
+          td
+            span Splits in the run
+          td = @run.splits.size
+        tr
+          td
+            span Missed splits this run
+          td = @run.splits.size - @run.reduced_splits.size
+        tr
+          td
+            span Exact run duration
+          td #{@run.time}s
+        tr
+          td
+            span Shortest split this run
+          td = @run.reduced_splits.min { |split| split.duration }.name
+        tr
+          td
+            span Longest split this run
+          td = @run.reduced_splits.max { |split| split.duration }.name
+        tr
+          td
+            span Mean segment length
+          td.time.needs-formatting = @run.time / @run.reduced_splits.size
+        tr
+          td
+            span Median segment length
+          td.time.needs-formatting
+            - sorted_segments = @run.reduced_splits.map(&:duration).sort
+            - len = sorted_segments.size
+            = (sorted_segments[(len - 1) / 2] + sorted_segments[len / 2]) / 2.0
