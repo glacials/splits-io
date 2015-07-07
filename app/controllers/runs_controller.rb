@@ -1,6 +1,8 @@
 require 'htmlentities'
 require 'uri'
 
+require 'speedrundotcom'
+
 class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :destroy, :compare, :edit, :update]
   before_action :set_comparison, only: :compare

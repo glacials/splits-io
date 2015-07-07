@@ -1,5 +1,7 @@
 require 'active_support/concern'
 
+require 'speedrundotcom'
+
 module SRDCRun
   extend ActiveSupport::Concern
 
