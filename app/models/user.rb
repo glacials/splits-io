@@ -6,7 +6,12 @@ class User < ActiveRecord::Base
   has_many :runs
   has_many :categories, -> { uniq }, through: :runs
   has_many :games, -> { uniq }, through: :runs
-  has_many :rivalries, foreign_key: :from_user_id
+  has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
+  has_many :incoming_rivalries, class_name: Rivalry, foreign_key: :to_user_id, dependent: :destroy
+
+  after_destroy do |user|
+    user.runs.update_all(user: nil)
+  end
 
   validates :twitch_id, presence: true
   validates :name, presence: true

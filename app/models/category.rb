@@ -1,6 +1,7 @@
 class Category < ActiveRecord::Base
   belongs_to :game, touch: true
   has_many :runs
+  has_many :rivalries, dependent: :destroy
 
   before_create :autodetect_shortname
   after_touch :destroy, if: Proc.new { |category| category.runs.count.zero? }
