@@ -6,7 +6,15 @@ article
   p This will assemble your PBs into a Markdown table for use in a Twitch panel (or elsewhere). You should be able to
     copy+paste the output into a panel with no additional editing on your part.
   - if current_user.present?
-    p = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-primary', target: :_blank
+    p
+      = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-primary', target: :_blank
+    small
+      | order:
+      =< link_to 'alphabetically', user_panels_path(current_user, by: :name, order: :asc)
+      | ,
+      =< link_to 'newest first', user_panels_path(current_user, by: :created_at, order: :desc)
+      | ,
+      =< link_to 'oldest first', user_panels_path(current_user, by: :created_at, order: :asc)
   - else
     p
       button.btn.btn-default.disabled You need to be signed in
