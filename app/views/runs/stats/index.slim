@@ -50,11 +50,11 @@ article#stats
         tr
           td
             span Shortest split this run
-          td = @run.reduced_splits.min { |split| split.duration }.name
+          td = @run.reduced_splits.min_by { |split| split.duration }.name
         tr
           td
             span Longest split this run
-          td = @run.reduced_splits.max { |split| split.duration }.name
+          td = @run.reduced_splits.max_by { |split| split.duration }.name
         tr
           td
             span Mean segment length
