@@ -2,6 +2,8 @@ class Run < ActiveRecord::Base
   include PadawanRun
   include ForgetfulPersonsRun
   include SRDCRun
+  include CompletedRun
+
   include ActionView::Helpers::DateHelper
 
   belongs_to :user, touch: true
@@ -64,10 +66,6 @@ class Run < ActiveRecord::Base
     time_ago_in_words(created_at).sub('about ', '')
   end
 
-  def splits
-    parse[:splits] || []
-  end
-
   def program
     (read_attribute(:program) || parse[:program]).to_sym
   end
@@ -78,14 +76,6 @@ class Run < ActiveRecord::Base
 
   def attempts
     parse[:attempts]
-  end
-
-  def short?
-    time < 20.minutes
-  end
-
-  def history
-    parse[:history]
   end
 
   def parses?
@@ -134,14 +124,6 @@ class Run < ActiveRecord::Base
     "/#{to_param}"
   end
 
-  def best_known?
-    category && time == category.best_known_run.try(:time)
-  end
-
-  def pb?
-    user && category && self == user.pb_for(category)
-  end
-
   def populate_category
     if (category.blank? && parse[:game].present? && parse[:category].present?)
       game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
@@ -155,10 +137,6 @@ class Run < ActiveRecord::Base
     update(category: category, archived: !pb?)
   end
 
-  def time
-    read_attribute(:time).to_f
-  end
-
   def file
     run_file.file
   end
@@ -166,10 +144,6 @@ class Run < ActiveRecord::Base
   def refresh_game
     return if game.blank?
     game.delay.sync_with_srl
-  end
-
-  def has_golds?
-    splits.all? { |split| split.best.duration }
   end
 
   def filename(download_program)
