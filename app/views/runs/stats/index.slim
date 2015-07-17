@@ -42,7 +42,7 @@ article#stats
         tr
           td
             span Missed splits this run
-          td = @run.splits.size - @run.reduced_splits.size
+          td = @run.missed_splits.size
         tr
           td
             span Exact run duration
@@ -50,11 +50,11 @@ article#stats
         tr
           td
             span Shortest split this run
-          td = @run.reduced_splits.min_by { |split| split.duration }.name
+          td = @run.shortest_segment.name
         tr
           td
             span Longest split this run
-          td = @run.reduced_splits.max_by { |split| split.duration }.name
+          td = @run.longest_segment.name
         tr
           td
             span Mean segment length
@@ -63,6 +63,4 @@ article#stats
           td
             span Median segment length
           td.time.needs-formatting
-            - sorted_segments = @run.reduced_splits.map(&:duration).sort
-            - len = sorted_segments.size
-            = (sorted_segments[(len - 1) / 2] + sorted_segments[len / 2]) / 2.0
+            = @run.median_segment_duration
