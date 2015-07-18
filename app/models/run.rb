@@ -35,7 +35,7 @@ class Run < ActiveRecord::Base
 
   class << self
     def programs
-      [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+      [Urn, LiveSplit, Llanfair, SplitterZ, TimeSplitTracker, WSplit]
     end
 
     inheritance_column = :program
