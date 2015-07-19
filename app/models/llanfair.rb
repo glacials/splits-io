@@ -23,9 +23,7 @@ module Llanfair
 
       file.seek(1, 1)
       title_len = file.read(2).unpack("n")[0]
-      run[:title] = file.read(title_len)
-
-      run[:name] = "#{run[:title]}"
+      run[:name] = file.read(title_len)
 
       file.seek(6, 1)
       segment_count = file.read(4).unpack("N")[0]

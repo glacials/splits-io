@@ -6,13 +6,22 @@ class RunFile < ActiveRecord::Base
 
   def self.for_file(file)
     if file.respond_to?(:read)
-      RunFile.for_text(file.read, File.binary?(file.tempfile))
+      if File.binary?(file.path())
+        RunFile.for_binary(file.read)
+      else
+        RunFile.for_text(file.read)
+      end
     end
   end
 
-  def self.for_text(file_text, binary)
+  def self.for_text(file_text)
     digest = Digest::SHA256.hexdigest(file_text)
-    where(digest: digest).first_or_create(file: binary ? RunFile.unpack_binary(file_text) : file_text)
+    where(digest: digest).first_or_create(file: file_text)
+  end
+
+  def self.for_binary(file_text)
+    digest = Digest::SHA256.hexdigest(file_text)
+    where(digest: digest).first_or_create(file: RunFile.unpack_binary(file_text))
   end
 
   def self.random

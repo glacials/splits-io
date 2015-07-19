@@ -76,7 +76,7 @@ class RunsController < ApplicationController
 
     send_data(
       if params[:program] == @run.program.to_s
-        @run.program.to_s == "llanfair" ? RunFile.pack_binary(@run.file) : @run.file
+        @run.original_file
       else
         render_to_string(params[:program], layout: false)
       end,
