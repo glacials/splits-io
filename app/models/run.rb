@@ -37,7 +37,7 @@ class Run < ActiveRecord::Base
 
   class << self
     def programs
-      [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+      [Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     end
 
     inheritance_column = :program
@@ -155,5 +155,9 @@ class Run < ActiveRecord::Base
     if [category, game].all? { |i| i.try(:name).present? }
       self.name = "#{category.game.name} #{category.name}"
     end
+  end
+
+  def original_file
+    program == :llanfair ? RunFile.pack_binary(file) : file
   end
 end
