@@ -22,6 +22,10 @@ module ForgetfulPersonsRun
       end
     end
 
+    def skipped_splits
+      splits.select(&:skipped?)
+    end
+
     def has_skipped_splits?
       splits.any? { |split| split.skipped? }
     end

@@ -8,10 +8,6 @@ module CompletedRun
       parse[:splits] || []
     end
 
-    def missed_splits
-      splits - reduced_splits
-    end
-
     def shortest_segment
       reduced_splits.min_by(&:duration)
     end
