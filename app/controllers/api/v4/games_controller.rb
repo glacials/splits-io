@@ -16,9 +16,7 @@ class Api::V4::GamesController < Api::V4::ApplicationController
 
   private
 
-  def set_game
-    @game = Game.includes(:categories).find_by(shortname: params[:id]) || Game.includes(:categories).find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render not_found(:game, params[:id])
+  def set_games
+    @games = Game.search(params[:search])
   end
 end

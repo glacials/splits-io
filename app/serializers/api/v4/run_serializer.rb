@@ -1,5 +1,4 @@
 class Api::V4::RunSerializer < Api::V4::ApplicationSerializer
-  has_one :user
   has_one :game
   has_one :category
   has_one :time
@@ -10,5 +9,9 @@ class Api::V4::RunSerializer < Api::V4::ApplicationSerializer
 
   def id
     object.id36
+  end
+
+  def runner
+    object.user
   end
 end

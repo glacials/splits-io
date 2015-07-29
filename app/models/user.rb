@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   validates :twitch_id, presence: true
   validates :name, presence: true
 
+  scope :with_runs, -> { joins(:runs) }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}) }
 
   def self.search(term)

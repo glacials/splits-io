@@ -64,7 +64,7 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.missed_splits.map { |s| [s.name, s.duration] }).to eq([])
+      expect(run.skipped_splits.map { |s| [s.name, s.duration] }).to eq([])
     end
 
     it 'accurately reports its shortest segment' do

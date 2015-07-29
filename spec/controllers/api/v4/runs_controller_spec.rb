@@ -1,78 +1,212 @@
 require 'rails_helper'
 
 describe Api::V4::RunsController do
-  let(:run) { FactoryGirl.create(:run) }
+  describe '#create' do
+  end
 
   describe '#show' do
-    let(:returned_attributes) { [:id, :srdc_id, :name, :image_url, :user, :time, :video_url] }
+    context "for a nonexistent run" do
+      subject { get :show, params: {id: '0'} }
 
-    context 'when given a valid id36' do
-      subject(:response) { get :show, params: {id: run.id36} }
-      subject(:body) { JSON.parse(response.body) }
-
-      it 'returns an expected response code' do
-        expect(response).to have_http_status(200)
+      it "returns a 404" do
+        expect(subject).to have_http_status 404
       end
 
-      it 'returns the correct run' do
-        returned_attributes.each do |attribute|
-          expect(body[attribute.to_s]).to eq(
-            attribute == :id ? run.id36 : run.send(attribute)
-          )
-        end
+      it "returns no body" do
+        expect(response.body).to be_blank
       end
     end
 
-    context 'when given a bad id' do
-      subject(:response) { get :show, params: {id: '...'} }
-      subject(:body) { JSON.parse(response.body) }
+    context "for a bogus ID" do
+      subject { get :show, params: {id: '/@??$@;[1;?'} }
 
-      it 'returns an expected response code' do
-        expect(response).to have_http_status(404)
+      it "returns a 404" do
+        expect(subject).to have_http_status 404
       end
 
-      it 'returns an error body' do
-        expect(body['status']).to be_truthy
-        expect(body['message']).to be_truthy
+      it "returns no body" do
+        expect(response.body).to be_blank
       end
     end
 
-    context 'when setting an srdc_id with no authorization' do
-      subject(:response) { put :update, params: {id: run.id36, srdc_id: 'bad id'} }
-      subject(:body) { JSON.parse(response.body) }
+    context "for an existing run" do
+      let(:run) { create(:run) }
+      subject { get :show, params: {id: run.id36} }
+      let(:body) { JSON.parse(subject.body) }
 
-      it 'returns an expected status code' do
-        expect(response).to have_http_status(401)
+      it "returns a 200" do
+        expect(subject).to have_http_status 200
       end
 
-      it 'does not update the run srdc_id' do
-        expect(run.srdc_id).not_to eq('bad id')
+      it "returns a body with no root node" do
+        expect(body['id']).to eq run.id36
+      end
+
+      it "includes a game" do
+        expect(body['game']['id']).to eq run.game.id
+      end
+
+      it "includes a category" do
+        expect(body['category']['id']).to eq run.category.id
+      end
+
+      it "includes a runner" do
+        expect(body['runner']['id']).to eq run.runner.id
+      end
+
+      it "has a number-like time" do
+        expect(body['time']).to be_a_kind_of Float
+      end
+
+      it "doesn't return splits" do
+        expect(body['splits']).to be_nil
+      end
+    end
+  end
+
+  describe '#update' do
+    let(:user) { create(:user) }
+    let(:run) { create(:run, user: user) }
+    let(:body) { JSON.parse(subject.body) }
+
+    context "for a nonexistent run" do
+      subject { put :update, params: {id: '0'} }
+
+      it "returns a 404" do
+        expect(subject).to have_http_status 404
+      end
+
+      it "returns no body" do
+        expect(response.body).to be_blank
       end
     end
 
-    context 'when setting an srdc_id with invalid authorization' do
-      subject(:response) { put :update, params: {claim_token: 'bad claim token', id: run.id36, srdc_id: 'bad id'} }
-      subject(:body) { JSON.parse(response.body) }
+    context "for an unauthenticated request" do
+      subject { put :update, params: {id: run.id36, user: nil} }
 
-      it 'returns an expected status code' do
-        expect(response).to have_http_status(401)
+      it "returns a 401" do
+        expect(response).to have_http_status 401
       end
 
-      it 'does not update the run srdc_id' do
-        expect(run.srdc_id).not_to eq('bad id')
+      it "doesn't update the run" do
+        expect(run.user).to be user
+      end
+
+      it "returns an error asking for a claim token" do
+        expect(body['error']).to "You must supply a claim_token to authorize as the owner of this run."
       end
     end
 
-    context 'when setting an srdc_id with valid authorization' do
-      subject(:response) { put :update, params: {claim_token: run.claim_token, id: run.id36, srdc_id: 'good id'} }
-      subject(:body) { JSON.parse(response.body) }
+    context "for an authenticated request" do
+      subject { put :update, params: params.merge(id: run.id36, claim_token: run.claim_token) }
 
-      it 'returns an expected status code' do
-        expect(response).to have_http_status(204)
+      it "returns a 204" do
+        expect(response).to have_http_status 204
       end
 
-      it 'updates the run srdc_id' do
-        expect(run.srdc_id).not_to eq('good id')
+      it "updates image_url" do
+        let(:params) { {image_url: 'http://google.com/' } }
+        expect(run.image_url).to eq params[:image_url]
+      end
+
+      it "updates srdc_id" do
+        let(:params) { {srdc_id: '4' } }
+        expect(run.srdc_id).to eq params[:srdc_id]
+      end
+
+      it "disowns" do
+        let(:params) { {user: nil} }
+        expect(run.user).to be_nil
+      end
+
+      it "does not allow switching owners" do
+        let(:params) { {user: create(:user)} }
+        expect(run.user).to be_nil
+      end
+
+      it "returns no body" do
+        expect(response.body).to be_blank
+      end
+    end
+  end
+
+  describe '#destroy' do
+    let(:user) { create(:user) }
+    let(:run) { create(:run, user: user) }
+    let(:body) { JSON.parse(subject.body) }
+
+    context "for a nonexistent run" do
+      it "returns a 404" do
+        expect(subject).to have_http_status 404
+      end
+
+      it "returns no body" do
+        expect(response.body).to be_blank
+      end
+    end
+
+    context "for an unauthenticated request" do
+      subject { delete :destroy, params: {id: run.id36} }
+
+      it "returns a 401" do
+        expect(response).to have_http_status 401
+      end
+
+      it "doesn't destroy the run" do
+        expect(run.destroyed?).to be_false
+      end
+
+      it "returns no body" do
+        expect(body['error']).to "You must supply a claim_token to authorize as the owner of this run."
+      end
+    end
+
+    context "for an authenticated request" do
+      subject { delete :destroy, params: {id: run.id36, claim_token: run.claim_token} }
+
+      it "returns a 204" do
+        expect(response).to have_http_status 204
+      end
+
+      it "destroys the run" do
+        expect(run.destroyed?).to be_true
+      end
+
+      it "returns no body" do
+        expect(response.body).to be_blank
+      end
+    end
+  end
+
+  describe '#runners' do
+    context "for a nonexistent run" do
+      subject { get :runners, params: {id: '0'} }
+      let(:body) { JSON.parse(subject.body) }
+
+      it "returns a 404" do
+        expect(subject).to have_http_status 404
+      end
+
+      it "contains no body" do
+        expect(body).to be_blank
+      end
+    end
+
+    context "for an existing run" do
+      let(:run) { create(:run) }
+      subject { get :runners, params: {id: run.id36} }
+      let(:body) { JSON.parse(subject.body) }
+
+      it "returns a 200" do
+        expect(response).to have_http_status 200
+      end
+
+      it "contains no root node" do
+        expect(body).to be_a_kind_of Array
+      end
+
+      it "contains the runner" do
+        expect(body.map(&:id)).to include run.user.id
       end
     end
   end

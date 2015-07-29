@@ -311,9 +311,9 @@ curl https://splits.io/api/v3/runs/c6
 Deletes this run (requires authentication).
 
 #### `POST /runs`
-Upload a new run. If you want to allow an account to claim ownership this run, you should inspect the response for a
+Upload a new run. If you want to allow an account to claim ownership of this run, you should inspect the response for a
 `uris.claim_uri` and send the user who should own the run there. If they're logged in, their account will automatically
-claim ownership of the run and they'll be redirected to the standard run page URI.
+claim ownership of the run, then they'll be immediately redirected to the `uris.public_uri`.
 
 ##### Example request
 ```bash
