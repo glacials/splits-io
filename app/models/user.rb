@@ -56,4 +56,8 @@ class User < ActiveRecord::Base
   def to_s
     name || 'somebody'
   end
+
+  def darkmode
+    false
+  end
 end

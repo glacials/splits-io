@@ -54,6 +54,7 @@ SplitsIO::Application.routes.draw do
   end
 
   resources :tools, only: [:index]
+  resources :settings, only: [:index]
 
   get    '/runs',            to: redirect('/'), as: :runs
   get    '/runs/new',        to: redirect('/upload')
