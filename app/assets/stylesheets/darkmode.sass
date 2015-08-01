@@ -12,6 +12,9 @@ $light-red: rgba(221, 81, 76, .5)
 $light-orange: rgba(243, 123, 29, .5)
 $light-yellow: rgba(250, 210, 50, .5)
 
+$nav-color: #efefef
+$nav-background: #404040
+
 $gold: #ffd700
 
 body
@@ -27,9 +30,12 @@ a
   &:active
     color: #fff
 
-nav > a.blue, nav > a.purple, nav > a.green, nav > a.red, nav > a.orange, nav > a.yellow
-  background-color: #555
-  color: #eee
+nav a.blue, nav a.purple, nav a.green, nav a.red, nav a.orange, nav a.yellow
+  background: $nav-background
+  color: $nav-color
+
+nav
+  background: $nav-background
 
 .dropdown-menu, .dropdown-menu > li > a
   background-color: #333

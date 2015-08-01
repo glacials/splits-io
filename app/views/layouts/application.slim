@@ -25,26 +25,27 @@ html
             span#successful-uploads<
           h2
             | failures:
-            span#failed-uploads<
-      header#header
-        nav.dropdown
-          a.blue href=root_path class=(on_page[:index] ? 'logo' : '') splits i/o
-          a.purple href=new_run_path class=(on_page[:upload] ? 'logo' : '') upload
-          a.green href=games_path class=(on_page[:games] ? 'logo' : '') games
-          a.red href=faq_path class=(on_page[:faq] ? 'logo' : '') faq
-          - if logged_in?
-            a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'logo' : '')
-              small = '∨ '
-              = current_user.name
-          - else
-            a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname;' sign in
-          ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
-            li role=:presentation
-              - if logged_in?
-                = link_to "profile", user_path(current_user)
-                = link_to "tools", tools_path
-                = link_to "sign out", session_path(auth_session), method: :delete
-        = yield(:header)
+          span#failed-uploads<
+      nav
+        .left-nav
+          a.blue href=root_path class=(on_page[:index] ? 'selected' : '') splits i/o
+          a.purple href=new_run_path class=(on_page[:upload] ? 'selected' : '') upload
+          a.green href=games_path class=(on_page[:games] ? 'selected' : '') games
+        .right-nav
+          a.red href=faq_path class=(on_page[:faq] ? 'selected' : '') faq
+          span.dropdown-link
+            - if logged_in?
+              a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'selected' : '')
+                small = '∨ '
+                = current_user.name
+              ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
+                li role=:presentation
+                  = link_to "profile", user_path(current_user)
+                  = link_to "tools", tools_path
+                  = link_to "sign out", session_path(auth_session), method: :delete
+            - else
+              a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname;' sign in
+      header#header = yield(:header)
       article#alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
       = yield
       footer#footer data-turbolinks-permanent=true
