@@ -77,7 +77,7 @@ gem 'nilify_blanks'
 gem 'babel_bridge'
 gem 'chronic_duration', github: 'glacials/chronic_duration', branch: 'pad_to_option'
 gem 'moving_average'
-gem 'ptools'
+gem 'ruby-filemagic'
 gem 'versionomy'
 gem 'xml-simple'
 
