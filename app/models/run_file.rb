@@ -6,7 +6,13 @@ class RunFile < ActiveRecord::Base
 
   def self.for_file(file)
     if file.respond_to?(:read)
-      if File.binary?(file.path())
+      begin
+        fm = FileMagic.new(FileMagic::MAGIC_MIME)
+        mime_type = fm.file(file.path())
+      ensure
+        fm.close
+      end
+      if mime_type == "application/octet-stream; charset=binary"
         RunFile.for_binary(file.read)
       else
         RunFile.for_text(file.read)
