@@ -6,10 +6,11 @@ class RunFile < ActiveRecord::Base
 
   def self.for_file(file)
     if file.respond_to?(:read)
-      if File.binary?(file.path())
-        RunFile.for_binary(file.read)
+      file_text = file.read
+      if file_text.include?("\0")
+        RunFile.for_binary(file_text)
       else
-        RunFile.for_text(file.read)
+        RunFile.for_text(file_text)
       end
     end
   end
