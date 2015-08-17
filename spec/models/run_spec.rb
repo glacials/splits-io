@@ -30,6 +30,12 @@ describe Run, type: :model do
   end
 
   context 'LiveSplit run with file format 1.4.2' do
+    let(:run) do
+      FactoryGirl.create(:run,
+        run_file: RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit_1"))
+      )
+    end
+
     it 'has the correct splits' do
       expect(run.splits.map { |s| [s.name, s.duration] }).to eq([
           ["Tron City", 53.9219256],
@@ -81,6 +87,41 @@ describe Run, type: :model do
 
     it 'accurately reports its median segment duration' do
       expect(run.median_segment_duration).to eq(118.79162584999995)
+    end
+  end
+
+  context 'Llanfair run' do
+    let(:run) do
+      FactoryGirl.create(:run,
+        run_file: RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/llanfair_1"))
+      )
+    end
+
+    it 'has the correct splits' do
+      expect(run.splits.map { |s| [s.name, s.duration] }).to eq([
+          ["Spiral Mountain", 211.23],
+          ["Mumbo's Mountain", 808.2]
+      ])
+    end
+
+    it 'accurately reports its missed splits' do
+      expect(run.skipped_splits.map { |s| [s.name, s.duration] }).to eq([])
+    end
+
+    it 'accurately reports its shortest segment' do
+      expect([run.shortest_segment.name, run.shortest_segment.duration]).to eq(
+        ["Spiral Mountain", 211.23]
+      )
+    end
+
+    it 'accurately reports its longest segment' do
+      expect([run.longest_segment.name, run.longest_segment.duration]).to eq(
+        ["Mumbo's Mountain", 808.2]
+      )
+    end
+
+    it 'accurately reports its median segment duration' do
+      expect(run.median_segment_duration).to eq(509.71500000000003)
     end
   end
 end
