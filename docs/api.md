@@ -142,8 +142,8 @@ curl https://splits.io/api/v3/games/sms/categories/70/runs
 ```
 
 ##### Example response
-```json
 *(see the `/runs/:id` endpoint for the run format)*
+```json
 {
   "runs": [ ... ]
 }
@@ -254,56 +254,43 @@ curl https://splits.io/api/v3/runs/c6
 ```
 
 ##### Example response
-```json
-{
-  "run": {
-    "id": 438,
-      "path": "/c6",
-      "name": "Sonic Colors",
-      "program": "wsplit",
-      "image_url": null,
-      "created_at": "2014-03-09T19:07:46.483Z",
-      "updated_at": "2015-01-31T10:09:02.168Z",
-      "user": {
-        "id": 1,
-        "twitch_id": 29798286,
-        "name": "glacials",
-        "avatar": "http://static-cdn.jtvnw.net/jtv_user_pictures/glacials-profile_image-dc04543f973cfddc-300x300.png",
-        "created_at": "2014-03-09T19:00:43.640Z",
-        "updated_at": "2015-02-01T18:53:03.397Z"
+```json{
+"run": {
+  "id": 4738,
+  "path": "/3nm",
+  "name": "Tron: Evolution Any% (NG+)",
+  "program": "livesplit",
+  "image_url": null,
+  "created_at": "2015-03-06T07:03:49.175Z",
+  "updated_at": "2015-08-17T04:40:20.156Z",
+  "video_url": "http://www.twitch.tv/glacials/v/3809882",
+  "splits": [
+    {
+      "name": "Tron City",
+      "duration": 53.9219256,
+      "finish_time": 53.9219256,
+      "best": {
+        "duration": 49.7325244,
       },
-      "game": null,
-      "category": {
-        "id": 3165,
-        "name": null,
-        "created_at": "2015-01-31T10:09:02.112Z",
-        "updated_at": "2015-01-31T10:09:02.195Z"
+      "gold": false,
+      "skipped": false,
+    },
+    ...
+    {
+      "name": "Final fight phase 3",
+      "duration": 28.333972000000358,
+      "finish_time": 5055.5630296,
+      "best": {
+        "duration": 28.2712893,
       },
-      "time": 5083.74,
-      "splits": [
-      {
-        "name": "Rotatatron",
-        "duration": 501.7,
-        "finish_time": 501.7,
-        "best": {
-          "duration": 462.85
-        },
-        "gold?": false,
-        "skipped?": false
-      },
-      ...
-      {
-        "name": "Epilogue",
-        "duration": 44.719999999999345,
-        "finish_time": 5083.74,
-        "best": {
-          "duration": 44.7199999999993
-        },
-        "gold?": true,
-        "skipped?": false
-      }
-    ]
-  }
+      "gold": false,
+      "skipped": false,
+    }
+  ],
+  "user": { ... }
+  "game": { ... }
+  "category": { ... },
+  "time": 5055.5630296
 }
 ```
 
