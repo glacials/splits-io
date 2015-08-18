@@ -14,7 +14,7 @@
       small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
   h6
     span#download-menu
-      = link_to @run.program, download_path(@run, @run.program), onclick: 'hide_download_menu()'
+      => link_to @run.program, download_path(@run, @run.program), onclick: 'hide_download_menu()'
       - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.program]).each do |program|
         | &bull;
         =<> link_to program, download_path(@run, program), onclick: 'hide_download_menu()'
