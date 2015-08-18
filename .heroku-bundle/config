@@ -1,5 +1,0 @@
----
-BUNDLE_BUILD__RUBY-FILEMAGIC: --with-magic-include=/app/libmagic/usr/include --with-magic-lib=/app/libmagic/usr/lib
-BUNDLE_PATH: vendor
-BUNDLE_DISABLE_SHARED_GEMS: '1'
-BUNDLE_CACHE_ALL: true
