@@ -1,3 +1,5 @@
+Dir['./lib/parsers/*'].each { |file| require file }
+
 class Run < ActiveRecord::Base
   include PadawanRun
   include ForgetfulPersonsRun
@@ -40,11 +42,6 @@ class Run < ActiveRecord::Base
       [Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     end
 
-    inheritance_column = :program
-    def find_sti_class(program)
-      Hash[Run.programs.map { |program| [program::Run.sti_name, program::Run] }][read_attribute(:program)]
-    end
-
     alias_method :find10, :find
     # todo: rename this to `find` when APIv2 is removed
     def find36(id)
@@ -84,14 +81,14 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    if Run.programs.map { |program| program::Run.sti_name }.include?(read_attribute(:program))
-      [Run.programs[Run.programs.map { |program| program::Run.sti_name }.index(read_attribute(:program))]::Parser]
+    if Run.programs.map { |program| program.to_sym }.include?(read_attribute(:program).try(:to_sym))
+      [Run.programs[Run.programs.map { |program| program.to_sym }.index(read_attribute(:program).to_sym)]]
     else
-      Run.programs.map { |program| program::Parser }
-    end.each do |parser|
-      result = parser.new.parse(file)
+      Run.programs.map { |program| program }
+    end.each do |program|
+      result = program::Parser.new.parse(file)
       next if result.blank?
-      result[:program] = parser.name.sub('::Parser', '').downcase.to_sym
+      result[:program] = program.to_sym
 
       assign_attributes(
         name: result[:name],

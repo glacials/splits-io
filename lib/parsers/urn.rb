@@ -1,11 +1,10 @@
 module Urn
-  class Run < Run
-    def self.sti_name
-      :urn
-    end
+  def self.to_s
+    "Urn"
   end
 
-  class Split < Split
+  def self.to_sym
+    :urn
   end
 
   class Parser < BabelBridge::Parser

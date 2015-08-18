@@ -1,11 +1,10 @@
 module WSplit
-  class Run < Run
-    def self.sti_name
-      :wsplit
-    end
+  def self.to_s
+    "WSplit"
   end
 
-  class Split < Split
+  def self.to_sym
+    :wsplit
   end
 
   class Parser < BabelBridge::Parser

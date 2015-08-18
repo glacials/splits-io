@@ -6,7 +6,9 @@ Bundler.require(:default, Rails.env)
 
 module SplitsIO
   class Application < Rails::Application
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    config.autoload_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join('lib')
+
     config.action_controller.allow_forgery_protection = false
     config.active_job.queue_adapter = :delayed_job
 

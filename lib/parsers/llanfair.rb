@@ -1,11 +1,10 @@
 module Llanfair
-  class Run < Run
-    def self.sti_name
-      :llanfair
-    end
+  def self.to_s
+    "Llanfair"
   end
 
-  class Split < Split
+  def self.to_sym
+    :llanfair
   end
 
   class Parser < BabelBridge::Parser

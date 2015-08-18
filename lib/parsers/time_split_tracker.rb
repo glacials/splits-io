@@ -3,13 +3,8 @@ module TimeSplitTracker
     "Time Split Tracker"
   end
 
-  class Run < Run
-    def self.sti_name
-      :timesplittracker
-    end
-  end
-
-  class Split < Split
+  def self.to_sym
+    :time_split_tracker
   end
 
   class Parser < BabelBridge::Parser

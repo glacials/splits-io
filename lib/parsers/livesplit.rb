@@ -1,13 +1,12 @@
 require 'xmlsimple'
 
 module LiveSplit
-  class Run < Run
-    def self.sti_name
-      :livesplit
-    end
+  def self.to_s
+    "LiveSplit"
   end
 
-  class Split < Split
+  def self.to_sym
+    :livesplit
   end
 
   class Parser

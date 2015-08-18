@@ -1,11 +1,10 @@
 module SplitterZ
-  class Run < Run
-    def self.sti_name
-      :splitterz
-    end
+  def self.to_s
+    "SplitterZ"
   end
 
-  class Split < Split
+  def self.to_sym
+    :splitterz
   end
 
   class Parser < BabelBridge::Parser
