@@ -95,7 +95,7 @@ like `split.title` and `split.time` on.
 
 ### In the code
 To accomplish all this, we use the parser generator [Babel-Bridge][2], which is available in a neat little gem. Check
-out the actual implementations of all this stuff in the `app/models` folder. 
+out the actual implementations of all this stuff in the `lib/parsers` folder.
 
 [1]: http://en.wikipedia.org/wiki/LL_parser
 [2]: https://github.com/shanebdavis/Babel-Bridge
