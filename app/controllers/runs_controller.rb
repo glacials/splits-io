@@ -69,7 +69,7 @@ class RunsController < ApplicationController
   end
 
   def download
-    unless Run.programs.map { |program| program::Run.sti_name.to_s }.include?(params[:program])
+    unless Run.programs.map { |program| program.to_sym }.include?(params[:program].to_sym)
       redirect_to run_path(@run), alert: 'Unrecognized program.'
       return
     end

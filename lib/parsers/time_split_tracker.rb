@@ -4,7 +4,7 @@ module TimeSplitTracker
   end
 
   def self.to_sym
-    :time_split_tracker
+    :timesplittracker
   end
 
   class Parser < BabelBridge::Parser
