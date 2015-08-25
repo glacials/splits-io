@@ -7,7 +7,7 @@ class RunFile < ActiveRecord::Base
   def self.for_file(file)
     if file.respond_to?(:read)
       file_text = file.read
-      if file_text.include?("\0")
+      if file_text[8..29] == "org.fenix.llanfair.Run"
         RunFile.for_binary(file_text)
       else
         RunFile.for_text(file_text)
