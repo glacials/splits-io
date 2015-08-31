@@ -13,27 +13,65 @@ module LiveSplit
     def parse(xml)
       xml = XmlSimple.xml_in(xml)
       version = Versionomy.parse(xml['version'] || '1.2')
+
+      return v1_6(xml) if version >= Versionomy.parse('1.6')
       return v1_5(xml) if version >= Versionomy.parse('1.5')
       return v1_4(xml) if version >= Versionomy.parse('1.4')
       return v1_3(xml) if version >= Versionomy.parse('1.3')
       return v1_2(xml) if version >= Versionomy.parse('1.2')
       return nil
-    rescue
-      nil
+    #rescue
+      #nil
     end
 
     private
 
-    # lss file format 1.5 is used by LiveSplit 1.6.x
+    # lss file format 1.6 is used by LiveSplit 1.6.x
+    def v1_6(xml)
+      run = {
+        game: xml['GameName'][0].try(:strip),
+        category: xml['CategoryName'][0].try(:strip),
+        attempts: xml['AttemptCount'][0].try(:strip),
+        offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
+        history: [],
+        splits: [],
+        time: 0,
+      }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}" }
+
+      run[:splits] = xml['Segments'][0]['Segment'].map do |segment|
+        split = Split.new
+        split.best = Split.new
+        split.name = segment['Name'][0].presence || ''
+
+        split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+          k['name'] == 'Personal Best'
+        end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
+        split.duration = [0, split.finish_time - run[:time]].max
+
+        split.best.duration = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
+        split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:duration).try(:round, 5)
+        split.skipped = split.duration == 0
+        split.history = []
+
+        run[:time] += split.duration if split.duration.present?
+        split
+      end
+
+      # it's possible to get here with valid xml without this actually being a livesplit file, so let's make sure
+      if [run[:attempts], run[:offset], run[:splits], run[:time]].any?(&:nil?)
+        raise "Not a proper LiveSplit run file"
+      end
+
+      run
+    end
+
+    # lss file format 1.5 was used by some dev versions of LiveSplit 1.6.x
     def v1_5(xml)
       run = {
         game: xml['GameName'][0].try(:strip),
         category: xml['CategoryName'][0].try(:strip),
         attempts: xml['AttemptCount'][0].try(:strip),
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
-        history: (xml['AttemptHistory'][0]['Time'].presence || []).map do |t|
-          duration_in_seconds_of(t['content'])
-        end.reject { |t| t == 0 },
         splits: [],
         time: 0,
         history: (xml['AttemptHistory'][0]['Time'] || []).map do |t|
