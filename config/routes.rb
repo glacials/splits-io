@@ -68,28 +68,20 @@ SplitsIO::Application.routes.draw do
 
   namespace :api do
     namespace :v4 do
-      resources :categories, only: [:show] do
-        get :runners
-        get :runs
+      resources :categories, shallow: true, module: :categories, only: [:show] do
+        resources :runners, :runs
       end
 
-      resources :games, only: [:index, :show] do
-        get :categories
-        get :runners
-        get :runs
+      resources :games, shallow: true, module: :games, only: [:index, :show] do
+        resources :categories, :runners, :runs
       end
 
-      resources :runners, only: [:show] do
-        get :categories
-        get :games
-        get :pbs
-        get :predictions
-        get :runs
+      resources :runners, shallow: true, module: :runners, only: [:show] do
+        resources :categories, :games, :pbs, :predictions, :runs
       end
 
-      resources :runs, only: [:create, :show, :update, :destroy] do
-        get :runners
-        get :splits
+      resources :runs, shallow: true, module: :runs, only: [:create, :show, :update, :destroy] do
+        resources :runners, :splits
       end
     end
 

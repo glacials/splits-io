@@ -50,20 +50,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     head 200
   end
 
-  def runners
-  end
-
-  def splits
-    render json: @run.splits, each_serializer: Api::V4::SplitSerializer
-  end
-
   private
-
-  def set_run
-    @run = Run.includes(:game, :category, :user).find36(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render not_found(:run, params[:id])
-  end
 
   def set_link_headers
     links = build_link_headers([
