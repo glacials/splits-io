@@ -27,7 +27,6 @@ class Run < ActiveRecord::Base
   validates :run_file, presence: true
   validates_with RunValidator
 
-  before_save :populate_category
   before_save :set_name
 
   scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
@@ -92,6 +91,8 @@ class Run < ActiveRecord::Base
           split.best
         end.sum.to_f
       )
+
+      populate_category(result[:game], result[:category])
       save if changed?
 
       @parse_cache = result
@@ -114,10 +115,10 @@ class Run < ActiveRecord::Base
     "/#{to_param}"
   end
 
-  def populate_category
-    if (category.blank? && parse[:game].present? && parse[:category].present?)
-      game = Game.where("lower(name) = ?", parse[:game].downcase).first_or_create(name: parse[:game])
-      self.category = game.categories.where("lower(name) = ?", parse[:category].downcase).first_or_create(name: parse[:category])
+  def populate_category(game_string, category_string)
+    if category.blank? && game_string.present? && category_string.present?
+      game = Game.where("lower(name) = ?", game_string.downcase).first_or_create(name: game_string)
+      self.category = game.categories.where("lower(name) = ?", category_string.downcase).first_or_create(name: category_string)
     end
   end
 

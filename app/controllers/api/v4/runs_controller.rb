@@ -1,5 +1,5 @@
 class Api::V4::RunsController < Api::V4::ApplicationController
-  before_action :set_run, only: [:show, :update, :destroy, :disown]
+  before_action :set_run, only: [:show, :update, :destroy, :disown, :runners, :splits]
   before_action :verify_ownership!, only: [:update, :destroy, :disown]
 
   before_action :set_link_headers, if: -> { @run.present? }
@@ -50,9 +50,11 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     head 200
   end
 
-  def disown
-    @run.update(user: nil)
-    head 200
+  def runners
+  end
+
+  def splits
+    render json: @run.splits, each_serializer: Api::V4::SplitSerializer
   end
 
   private
