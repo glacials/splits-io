@@ -93,7 +93,7 @@ module Llanfair
           duration: best_time,
           finish_time: run[:time] + best_time
         ).tap do |split|
-          split.gold = split.duration > 0 && split.duration.round(5) == split.best.duration.try(:round, 5)
+          split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
           split.skipped = split.duration == 0.0
         end
         run[:time] += best_time

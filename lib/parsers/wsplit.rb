@@ -57,7 +57,7 @@ module WSplit
         duration: [segment.finish_time.to_s.to_f - prev_split_finish_time, 0].max,
         finish_time: segment.finish_time.to_s.to_f
       ).tap do |split|
-        split.gold = split.duration > 0 && split.duration.round(5) == split.best.duration.try(:round, 5)
+        split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
         split.skipped = split.duration == 0
       end
     end

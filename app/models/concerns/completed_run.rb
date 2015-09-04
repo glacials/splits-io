@@ -43,7 +43,7 @@ module CompletedRun
     end
 
     def has_golds?
-      splits.all? { |split| split.best.duration }
+      splits.all? { |split| split.best }
     end
   end
 end

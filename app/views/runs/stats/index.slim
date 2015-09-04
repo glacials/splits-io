@@ -31,7 +31,7 @@ article#stats
           td
             span Total potential timesave
             small.tip< title='(PB - sum of best)' (?)
-          td.time.needs-formatting = @run.time - @run.reduced_splits.sum { |split| split.best.duration }
+          td.time.needs-formatting = @run.time - @run.reduced_splits.sum { |split| split.best }
         tr
           td
             span Attempt

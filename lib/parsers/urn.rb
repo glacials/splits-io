@@ -36,7 +36,7 @@ module Urn
         finish_time: duration_in_seconds(segment["time"])
       ).tap do |split|
         split.duration = [split.finish_time - prev_split_finish_time, 0].max
-        split.gold = split.duration > 0 && split.duration.round(5) == split.best.duration.try(:round, 5)
+        split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
         split.skipped = split.duration == 0
       end
     end
