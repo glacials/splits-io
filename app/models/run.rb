@@ -63,16 +63,8 @@ class Run < ActiveRecord::Base
     time_ago_in_words(created_at).sub('about ', '')
   end
 
-  def program
-    (read_attribute(:program) || parse[:program]).to_sym
-  end
-
   def offset
     parse[:offset]
-  end
-
-  def attempts
-    parse[:attempts]
   end
 
   def parses?
@@ -81,18 +73,18 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    if Run.programs.map { |program| program.to_sym }.include?(read_attribute(:program).try(:to_sym))
-      [Run.programs[Run.programs.map { |program| program.to_sym }.index(read_attribute(:program).to_sym)]]
+    if Run.programs.map(&:to_s).include?(program)
+      [Run.programs[Run.programs.map(&:to_s).index(program)]]
     else
-      Run.programs.map { |program| program }
+      Run.programs
     end.each do |program|
       result = program::Parser.new.parse(file)
       next if result.blank?
-      result[:program] = program.to_sym
 
       assign_attributes(
         name: result[:name],
-        program: result[:program],
+        program: program,
+        attempts: result[:attempts],
         time: result[:splits].map { |split| split.duration }.sum.to_f,
         sum_of_best: result[:splits].map.all? do |split|
           split.best.duration.present?
@@ -100,6 +92,7 @@ class Run < ActiveRecord::Base
           split.best.duration
         end.sum.to_f
       )
+      save if changed?
 
       @parse_cache = result
 

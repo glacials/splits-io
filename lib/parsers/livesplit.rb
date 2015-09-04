@@ -31,7 +31,7 @@ module LiveSplit
       run = {
         game: xml['GameName'][0].try(:strip),
         category: xml['CategoryName'][0].try(:strip),
-        attempts: xml['AttemptCount'][0].try(:strip),
+        attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
         history: [],
         splits: [],
@@ -40,7 +40,6 @@ module LiveSplit
 
       run[:splits] = xml['Segments'][0]['Segment'].map do |segment|
         split = Split.new
-        split.best = Split.new
         split.name = segment['Name'][0].presence || ''
 
         split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
@@ -48,8 +47,8 @@ module LiveSplit
         end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
         split.duration = [0, split.finish_time - run[:time]].max
 
-        split.best.duration = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
-        split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:duration).try(:round, 5)
+        split.best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
+        split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
         split.skipped = split.duration == 0
         split.history = []
 
@@ -70,7 +69,7 @@ module LiveSplit
       run = {
         game: xml['GameName'][0].try(:strip),
         category: xml['CategoryName'][0].try(:strip),
-        attempts: xml['AttemptCount'][0].try(:strip),
+        attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
         splits: [],
         time: 0,
@@ -187,7 +186,7 @@ module LiveSplit
     def v1_2(xml, run = {})
       run[:game]     ||= xml['GameName'][0].try(:strip)
       run[:category] ||= xml['CategoryName'][0].try(:strip)
-      run[:attempts] ||= xml['AttemptCount'][0].try(:strip)
+      run[:attempts] ||= xml['AttemptCount'][0].to_i
       run[:offset]   ||= duration_in_seconds_of(xml['Offset'][0].try(:strip))
       run[:history]  ||= xml['RunHistory'][0]['Time'].present? ? xml['RunHistory'][0]['Time'].map { |t| duration_in_seconds_of(t['content']) }.reject { |t| t == 0 } : []
 
