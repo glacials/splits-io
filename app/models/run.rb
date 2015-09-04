@@ -58,6 +58,10 @@ class Run < ActiveRecord::Base
     user.present? && self.user == user
   end
 
+  def runners
+    [user]
+  end
+
   def time_since_upload
     time_ago_in_words(created_at).sub('about ', '')
   end
