@@ -87,7 +87,7 @@ class Run < ActiveRecord::Base
         attempts: result[:attempts],
         time: result[:splits].map { |split| split.duration }.sum.to_f,
         sum_of_best: result[:splits].map.all? do |split|
-          split.best.duration.present?
+          split.best.present?
         end && result[:splits].map do |split|
           split.best.duration
         end.sum.to_f

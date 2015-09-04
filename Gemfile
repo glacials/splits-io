@@ -107,4 +107,3 @@ gem 'will_paginate'
 # workers/jobs
 gem 'delayed_job_active_record'
 gem 'foreman'
-gem 'workless'
