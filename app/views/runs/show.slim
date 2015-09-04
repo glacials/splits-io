@@ -15,7 +15,7 @@
   h6
     span#download-menu
       => link_to @run.program, download_path(@run, @run.program), onclick: 'hide_download_menu()'
-      - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.program]).each do |program|
+      - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.program.to_sym]).each do |program|
         | &bull;
         =<> link_to program, download_path(@run, program), onclick: 'hide_download_menu()'
     ul.run-options

@@ -72,17 +72,18 @@ class Run < ActiveRecord::Base
 
   def parse
     return @parse_cache if @parse_cache.present?
-    if Run.programs.map(&:to_s).include?(program)
-      [Run.programs[Run.programs.map(&:to_s).index(program)]]
+    if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
+      [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
     else
       Run.programs
     end.each do |program|
       result = program::Parser.new.parse(file)
       next if result.blank?
 
+      result[:program] = program.to_sym
       assign_attributes(
         name: result[:name],
-        program: program,
+        program: result[:program],
         attempts: result[:attempts],
         time: result[:splits].map { |split| split.duration }.sum.to_f,
         sum_of_best: result[:splits].map.all? do |split|
