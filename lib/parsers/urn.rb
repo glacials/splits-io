@@ -31,7 +31,7 @@ module Urn
 
     def parse_split(segment, prev_split_finish_time)
       Split.new(
-        best: Split.new(duration: duration_in_seconds(segment["best_segment"])),
+        best: duration_in_seconds(segment["best_segment"]),
         name: segment["title"].to_s,
         finish_time: duration_in_seconds(segment["time"])
       ).tap do |split|

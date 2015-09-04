@@ -89,7 +89,7 @@ module Llanfair
 
         run[:splits] << Split.new(
           name: segment_name.to_s,
-          best: Split.new(duration: best_segment_time),
+          best: best_segment_time,
           duration: best_time,
           finish_time: run[:time] + best_time
         ).tap do |split|

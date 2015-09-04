@@ -52,7 +52,7 @@ module WSplit
 
     def parse_split(segment, prev_split_finish_time)
       Split.new(
-        best: Split.new(duration: segment.best_time.to_s.to_f),
+        best: segment.best_time.to_s.to_f,
         name: segment.title.to_s,
         duration: [segment.finish_time.to_s.to_f - prev_split_finish_time, 0].max,
         finish_time: segment.finish_time.to_s.to_f

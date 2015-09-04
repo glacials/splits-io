@@ -80,7 +80,6 @@ module LiveSplit
 
       run[:splits] = xml['Segments'][0]['Segment'].map do |segment|
         split = Split.new
-        split.best = Split.new
         split.name = segment['Name'][0].presence || ''
 
         split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
