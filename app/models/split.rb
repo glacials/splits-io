@@ -7,9 +7,9 @@ class Split
     @finish_time = h[:finish_time]
     @best = h[:best]
     @history = h[:history]
-    @gold = h[:gold?] || h[:gold]
-    @skipped = h[:skipped?] || h[:skipped]
-    @reduced = h[:reduced?] || h[:reduced]
+    @gold = h[:gold?] || h[:gold] || false
+    @skipped = h[:skipped?] || h[:skipped] || false
+    @reduced = h[:reduced?] || h[:reduced] || false
   end
 
   def gold?
@@ -30,10 +30,8 @@ class Split
       duration: duration,
       finish_time: finish_time,
       best: best,
-      gold?: gold,
-      skipped?: skipped,
-      reduced?: reduced,
-      history: history
+      gold: gold,
+      skipped: skipped,
     }.compact
   end
 
@@ -43,9 +41,8 @@ class Split
       duration: duration,
       finish_time: finish_time,
       best: best.try(:serializable_hash),
-      gold?: gold,
-      skipped?: skipped,
-      history: history
+      gold: gold,
+      skipped: skipped,
     }.compact
   end
 end
