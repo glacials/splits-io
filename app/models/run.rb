@@ -75,37 +75,36 @@ class Run < ActiveRecord::Base
   end
 
   def parse
-    Rails.cache.fetch([:run, run_file.digest]) do
-      if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
-        [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
-      else
-        Run.programs
-      end.each do |program|
-        result = program::Parser.new.parse(file)
-        next if result.blank?
+    return @parse_cache if @parse_cache.present?
+    if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
+      [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
+    else
+      Run.programs
+    end.each do |program|
+      result = program::Parser.new.parse(file)
+      next if result.blank?
 
-        result[:program] = program.to_sym
-        assign_attributes(
-          name: result[:name],
-          program: result[:program],
-          attempts: result[:attempts],
-          time: result[:splits].map { |split| split.duration }.sum.to_f,
-          sum_of_best: result[:splits].map.all? do |split|
-            split.best.present?
-          end && result[:splits].map do |split|
-            split.best
-          end.sum.to_f
-        )
+      result[:program] = program.to_sym
+      assign_attributes(
+        name: result[:name],
+        program: result[:program],
+        attempts: result[:attempts],
+        time: result[:splits].map { |split| split.duration }.sum.to_f,
+        sum_of_best: result[:splits].map.all? do |split|
+          split.best.present?
+        end && result[:splits].map do |split|
+          split.best
+        end.sum.to_f
+      )
 
-        populate_category(result[:game], result[:category])
-        save if changed?
+      populate_category(result[:game], result[:category])
+      save if changed?
 
-        @parse_cache = result
+      @parse_cache = result
 
-        return result
-      end
-      {}
+      return result
     end
+    {}
   rescue ArgumentError # comes from non UTF-8 files
     {
       error: "Your file wasn't UTF-8 encoded. Usually this means it didn't come straight from your program, but from some
