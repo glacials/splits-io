@@ -5,4 +5,11 @@ class Api::V3::Detail::RunSerializer < Api::V3::ApplicationSerializer
   has_one :time
 
   attributes :id, :path, :name, :program, :image_url, :created_at, :updated_at, :video_url, :splits
+
+  def splits
+    object.splits.map do |segment|
+      segment.best = {duration: segment.best}
+      segment
+    end
+  end
 end
