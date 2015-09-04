@@ -89,7 +89,7 @@ class Run < ActiveRecord::Base
         sum_of_best: result[:splits].map.all? do |split|
           split.best.present?
         end && result[:splits].map do |split|
-          split.best.duration
+          split.best
         end.sum.to_f
       )
       save if changed?
