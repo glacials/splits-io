@@ -26,6 +26,12 @@ curl https://splits.io/api/v4/runs/3nm/splits
 Runs usually contain Splits. Splits are a special type of resource in that they are not individually identifiable; they
 do not have unique IDs. They are accessible only as an array of splits belonging to a Run.
 
+When retrieving splits, you can pass the `historic=1` flag in order to include history in the resulting splits. **Please
+include history only if you're using it.** Parsing history is computationally expensive, and your request may take an
+order of magnitude longer to process, depending on the number of history entries the run has. For particularly hefty
+runs, it is very possible that the request will simply time out. We're attempting to solve this for the future with
+better caching and more optimized parsing, but for now it remains an extremely slow operation.
+
 ## Runner
 ```bash
 curl https://splits.io/api/v4/runners/glacials
