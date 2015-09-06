@@ -23,6 +23,8 @@ module LiveSplit
       return v1_3(xml, options[:fast]) if version >= Versionomy.parse('1.3')
       return v1_2(xml, options[:fast]) if version >= Versionomy.parse('1.2')
       return nil
+    rescue
+      nil
     end
 
     private
