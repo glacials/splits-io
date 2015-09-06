@@ -43,11 +43,11 @@ describe Api::V4::Runs::SplitsController do
         expect(body[0]['history']).to be_nil
       end
 
-      context "with a slow=true parameter" do
-        subject { get :index, params: {run_id: run.id36, slow: true} }
+      context "with a fast=0 parameter" do
+        subject { get :index, params: {run_id: run.id36, fast: '0'} }
 
         it "includes history" do
-          expect(body[0]['history']).to eq '6'
+          expect(body[0]['history']).to eq [54.279395, 57.5447017, 57.234414, 53.2568428, 50.3245258, 55.0088332, 50.736531, 53.44994, 53.739547, 53.4956392, 55.2457862, 49.7325244, 56.2357967, 54.4453876, 52.9656984, 53.9219256]
         end
       end
     end
