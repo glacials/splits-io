@@ -25,7 +25,7 @@ module SplitterZ
     rule :windows_newline, "\r\n"
     rule :unix_newline,    "\n"
 
-    def parse(file)
+    def parse(file, options = {})
       splits = super(file)
       return nil unless splits
       run = {}

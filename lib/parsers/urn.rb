@@ -8,7 +8,7 @@ module Urn
   end
 
   class Parser < BabelBridge::Parser
-    def parse(json)
+    def parse(json, options = {})
       json = JSON.parse(json)
       run = {}
       run[:name] = json["title"]

@@ -81,7 +81,7 @@ SplitsIO::Application.routes.draw do
       end
 
       resources :runs, only: [:create, :show, :update, :destroy] do
-        resources :runners, :splits, only: :index, module: :runs
+        resources :splits, only: :index, module: :runs
       end
     end
 

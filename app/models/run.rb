@@ -74,14 +74,14 @@ class Run < ActiveRecord::Base
     parse.present?
   end
 
-  def parse
+  def parse(options = {fast: true})
     return @parse_cache if @parse_cache.present?
     if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
       [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
     else
       Run.programs
     end.each do |program|
-      result = program::Parser.new.parse(file)
+      result = program::Parser.new.parse(file, options)
       next if result.blank?
 
       result[:program] = program.to_sym
@@ -105,11 +105,6 @@ class Run < ActiveRecord::Base
       return result
     end
     {}
-  rescue ArgumentError # comes from non UTF-8 files
-    {
-      error: "Your file wasn't UTF-8 encoded. Usually this means it didn't come straight from your program, but from some
-      other source. If the file was sent to you by a friend, make sure the file as a whole is sent, not just the text inside it."
-    }
   end
 
   def to_param

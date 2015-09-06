@@ -10,30 +10,33 @@ module LiveSplit
   end
 
   class Parser
-    def parse(xml)
+    # When `options[:fast] == true`, run in O(n) time, with n being the number of splits in one run.
+    # Do not parse run history, split history, or other things that scale beyond O(n).
+    # When `options[:fast] == false`, go nuts.
+    def parse(xml, options = {fast: true})
       xml = XmlSimple.xml_in(xml)
       version = Versionomy.parse(xml['version'] || '1.2')
 
-      return v1_6(xml) if version >= Versionomy.parse('1.6')
-      return v1_5(xml) if version >= Versionomy.parse('1.5')
-      return v1_4(xml) if version >= Versionomy.parse('1.4')
-      return v1_3(xml) if version >= Versionomy.parse('1.3')
-      return v1_2(xml) if version >= Versionomy.parse('1.2')
+      return v1_6(xml, options[:fast]) if version >= Versionomy.parse('1.6')
+      return v1_5(xml, options[:fast]) if version >= Versionomy.parse('1.5')
+      return v1_4(xml, options[:fast]) if version >= Versionomy.parse('1.4')
+      return v1_3(xml, options[:fast]) if version >= Versionomy.parse('1.3')
+      return v1_2(xml, options[:fast]) if version >= Versionomy.parse('1.2')
       return nil
-    rescue
-      nil
     end
 
     private
 
     # lss file format 1.6 is used by LiveSplit 1.6.x
-    def v1_6(xml)
+    def v1_6(xml, fast)
       run = {
         game: xml['GameName'][0].try(:strip),
         category: xml['CategoryName'][0].try(:strip),
         attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
-        history: [],
+        history: fast ? [] : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
+          duration_in_seconds_of(t['RealTime'].try(:[], 0))
+        end.reject { |t| t == 0 }.uniq,
         splits: [],
         time: 0,
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}" }
@@ -50,7 +53,9 @@ module LiveSplit
         split.best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
         split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
         split.skipped = split.duration == 0
-        split.history = []
+        split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
+          times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
+        end
 
         run[:time] += split.duration if split.duration.present?
         split
@@ -65,7 +70,7 @@ module LiveSplit
     end
 
     # lss file format 1.5 was used by some dev versions of LiveSplit 1.6.x
-    def v1_5(xml)
+    def v1_5(xml, fast)
       run = {
         game: xml['GameName'][0].try(:strip),
         category: xml['CategoryName'][0].try(:strip),
@@ -73,7 +78,7 @@ module LiveSplit
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
         splits: [],
         time: 0,
-        history: (xml['AttemptHistory'][0]['Time'] || []).map do |t|
+        history: fast ? [] : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}" }
@@ -91,7 +96,7 @@ module LiveSplit
         split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
         split.skipped = split.duration == 0
 
-        split.history = segment['SegmentHistory'][0]['Time'].try do |times|
+        split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
           times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
         end
 
@@ -112,43 +117,47 @@ module LiveSplit
     # then hands the rest of the XML off to the 1.2 function, which parses the rest as if it were 1.2 content.
 
     # lss file format 1.4 is used by LiveSplit 1.4.x and LiveSplit 1.5.x
-    def v1_4(xml, run = {})
-      run[:splits]  ||= []
-      run[:time]    ||= 0
-      run[:history] ||= (xml['RunHistory'][0]['Time'] || []).map do |t|
-        duration_in_seconds_of(t['RealTime'].try(:[], 0))
-      end.reject { |t| t == 0 }.uniq
-      if run[:splits].empty?
-        xml['Segments'][0]['Segment'].each do |segment|
-          split = Split.new
-          split.name = segment['Name'][0].present? ? segment['Name'][0] : ''
+    def v1_4(xml, fast)
+      run = {
+        splits: [],
+        time: 0,
+        history: fast ? [] : (xml['RunHistory'][0]['Time'] || []).map do |t|
+          duration_in_seconds_of(t['RealTime'].try(:[], 0))
+        end.reject { |t| t == 0 }.uniq
+      }
 
-          split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
-            k['name'] == 'Personal Best'
-          end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
-          split.duration = split.finish_time - run[:time]
-          split.duration = 0 if split.duration < 0
+      xml['Segments'][0]['Segment'].each do |segment|
+        split = Split.new
+        split.name = segment['Name'][0].present? ? segment['Name'][0] : ''
 
-          best_segment = segment['BestSegmentTime'][0]['RealTime'].try(:[], 0)
-          split.best = duration_in_seconds_of(best_segment)
-          split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
-          split.skipped = split.duration == 0
+        split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+          k['name'] == 'Personal Best'
+        end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
+        split.duration = split.finish_time - run[:time]
+        split.duration = 0 if split.duration < 0
 
-          split.history = segment['SegmentHistory'][0]['Time'].try do |times|
-            times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
-          end
+        best_segment = segment['BestSegmentTime'][0]['RealTime'].try(:[], 0)
+        split.best = duration_in_seconds_of(best_segment)
+        split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
+        split.skipped = split.duration == 0
 
-          run[:time] += split.duration if split.duration.present?
-          run[:splits] << split
+        split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
+          times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
         end
+
+        run[:time] += split.duration if split.duration.present?
+        run[:splits] << split
       end
-      v1_3(xml, run)
+      v1_3(xml, fast, run)
     end
 
     # lss file format 1.3 is used by LiveSplit 1.3.x
-    def v1_3(xml, run = {})
-      run[:splits] ||= []
-      run[:time]   ||= 0
+    def v1_3(xml, fast, run = {})
+      run = {
+        splits: [],
+        time: 0
+      }.merge(run)
+
       if run[:splits].empty?
         xml['Segments'][0]['Segment'].each do |segment|
           split = Split.new
@@ -168,7 +177,7 @@ module LiveSplit
           split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
           split.skipped = split.duration == 0
 
-          split.history = segment['SegmentHistory'][0]['Time'].try do |times|
+          split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
             times.map { |time| duration_in_seconds_of(time['content'].strip) }
           end
 
@@ -176,20 +185,28 @@ module LiveSplit
           run[:splits] << split
         end
       end
-      v1_2(xml, run)
+      v1_2(xml, fast, run)
     end
 
     # lss file format 1.2 is used by LiveSplit 1.2.x and below
-    def v1_2(xml, run = {})
-      run[:game]     ||= xml['GameName'][0].try(:strip)
-      run[:category] ||= xml['CategoryName'][0].try(:strip)
-      run[:attempts] ||= xml['AttemptCount'][0].to_i
-      run[:offset]   ||= duration_in_seconds_of(xml['Offset'][0].try(:strip))
-      run[:history]  ||= xml['RunHistory'][0]['Time'].present? ? xml['RunHistory'][0]['Time'].map { |t| duration_in_seconds_of(t['content']) }.reject { |t| t == 0 } : []
+    def v1_2(xml, fast, run = {})
+      run = {
+        game:     xml['GameName'][0].try(:strip),
+        category: xml['CategoryName'][0].try(:strip),
+        attempts: xml['AttemptCount'][0].to_i,
+        offset:   duration_in_seconds_of(xml['Offset'][0].try(:strip)),
+        history:  if !fast && xml['RunHistory'][0]['Time'].present?
+                    xml['RunHistory'][0]['Time'].map do |t|
+                      duration_in_seconds_of(t['content'])
+                    end.reject { |t| t == 0 }
+                  else
+                    []
+                  end,
+        name:     "#{run[:game]} #{run[:category]}",
+        splits:   [],
+        time:     0
+      }.merge(run)
 
-      run[:name]     ||= "#{run[:game]} #{run[:category]}"
-      run[:splits]   ||= []
-      run[:time]     ||= 0
       if run[:splits].empty?
         xml['Segments'][0]['Segment'].each do |segment|
           split = Split.new
@@ -202,7 +219,7 @@ module LiveSplit
           split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
           split.skipped = split.duration == 0
 
-          split.history = segment['SegmentHistory'][0]['Time'].try do |times|
+          split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
             times.map { |time| duration_in_seconds_of(time['content'].strip) }
           end
 

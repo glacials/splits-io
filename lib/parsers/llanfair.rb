@@ -8,7 +8,7 @@ module Llanfair
   end
 
   class Parser < BabelBridge::Parser
-    def parse(character_array)
+    def parse(character_array, options = {})
       # Convert the array of character from string form to an actual array
       # Then pack the characters back to the original bytes
       file = RunFile.pack_binary(character_array)

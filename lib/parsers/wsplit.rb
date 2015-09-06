@@ -33,7 +33,7 @@ module WSplit
     rule :windows_newline, "\r\n"
     rule :unix_newline,    "\n"
 
-    def parse(file)
+    def parse(file, options = {})
       (run = super(file)) && {
         name: run.title.to_s,
         attempts: run.attempts.to_s.to_i,

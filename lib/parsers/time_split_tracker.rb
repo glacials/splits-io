@@ -27,7 +27,7 @@ module TimeSplitTracker
     rule :windows_newline, "\r\n"
     rule :unix_newline,    "\n"
 
-    def parse(file)
+    def parse(file, options = {})
       run = super(file)
       return nil if run.nil?
       {
