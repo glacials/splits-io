@@ -5,7 +5,12 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   before_action :set_link_headers, if: -> { @run.present? }
 
   def show
-    render json: @run, serializer: Api::V4::RunSerializer
+    if params[:historic] == '1'
+      @run.parse(fast: false)
+      render json: @run, serializer: Api::V4::RunWithHistorySerializer
+    else
+      render json: @run, serializer: Api::V4::RunSerializer
+    end
   end
 
   def create

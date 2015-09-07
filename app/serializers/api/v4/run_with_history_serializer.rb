@@ -1,4 +1,4 @@
-class Api::V4::SplitWithHistorySerializer < Api::V4::SplitSerializer
+class Api::V4::RunWithHistorySerializer < Api::V4::RunSerializer
   attributes :history
 
   private

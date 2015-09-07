@@ -16,8 +16,33 @@ strings. But as a human it's nice to be able to glean some meaning out of them.
 ## Run
 ```bash
 curl https://splits.io/api/v4/runs/3nm
+curl https://splits.io/api/v4/runs/3nm?historic=1
 ```
 A Run maps 1:1 to an uploaded splits file.
+
+| Field        | Type                                         | Null when...                                     | Description                                                                                                                                                                                                                                  |
+|-------------:|:---------------------------------------------|:-------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`         | string                                       | never                                            | Unique ID for identifying the run on splits.io. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
+| `srdc_id`    | string                                       | no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
+| `name`       | string                                       | never                                            | Name of the run. For timers that support a "name" or similar field, this value is an exact copy of that field. For other timers, this is typically "%full_game_name% %full_category_name%".                                                  |
+| `time`       | number                                       | never                                            | Duration in seconds of the run.                                                                                                                                                                                                              |
+| `program`    | string                                       | never                                            | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                            |
+| `attempts`   | number                                       | not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                       |
+| `image_url`  | string                                       | not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to splits.io.                                                                                           |
+| `created_at` | string                                       | never                                            | The time and date at which this run's source file was uploaded to splits.io. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
+| `updated_at` | string                                       | never                                            | The time and date at which this run was most recently modified on splits.io (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
+| `video_url`  | string                                       | not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                          |
+| `game`       | Game object (see Game section)               | unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                          |
+| `category`   | Category object (see Category section)       | unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                      |
+| `runners`    | array of Runner objects (see Runner section) | anonymously uploaded or disowned by runner       | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                   |
+
+If a `historic=1` param is included in the request, one additional field will be present:
+
+| Field        | Type             | Null when... | Description                                                                                                                                                                                                                         |
+|-------------:|:-----------------|:-------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `history`    | array of numbers | never        | Ordered durations of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history. |
+
+[iso8601]: https://en.wikipedia.org/wiki/ISO_8601
 
 ### Splits
 ```bash

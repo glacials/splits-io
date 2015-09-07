@@ -58,8 +58,28 @@ describe Api::V4::RunsController do
         expect(body['time']).to be_a_kind_of Float
       end
 
-      it "doesn't return splits" do
+      it "doesn't include splits" do
         expect(body['splits']).to be_nil
+      end
+
+      it "doesn't include history" do
+        expect(body['history']).to be_nil
+      end
+
+      it "doesn't include claim_token" do
+        expect(body['claim_token']).to be_nil
+      end
+
+      it "doesn't include run_file_digest" do
+        expect(body['run_file_digest']).to be_nil
+      end
+
+      context "with historic=1" do
+        subject { get :show, params: {id: run.id36, historic: '1'} }
+
+        it "includes history" do
+          expect(body['history'][1]).to eq 6
+        end
       end
     end
   end
@@ -174,39 +194,6 @@ describe Api::V4::RunsController do
 
       it "returns no body" do
         expect(response.body).to be_blank
-      end
-    end
-  end
-
-  describe '#runners' do
-    context "for a nonexistent run" do
-      subject { get :runners, params: {id: '0'} }
-      let(:body) { JSON.parse(subject.body) }
-
-      it "returns a 404" do
-        expect(subject).to have_http_status 404
-      end
-
-      it "contains no body" do
-        expect(body).to be_blank
-      end
-    end
-
-    context "for an existing run" do
-      let(:run) { create(:run) }
-      subject { get :runners, params: {id: run.id36} }
-      let(:body) { JSON.parse(subject.body) }
-
-      it "returns a 200" do
-        expect(response).to have_http_status 200
-      end
-
-      it "contains no root node" do
-        expect(body).to be_a_kind_of Array
-      end
-
-      it "contains the runner" do
-        expect(body.map(&:id)).to include run.user.id
       end
     end
   end
