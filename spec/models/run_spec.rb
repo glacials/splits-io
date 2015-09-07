@@ -7,6 +7,25 @@ describe Run, type: :model do
     expect(run.id36).to eq(run.id.to_s(36))
   end
 
+  context 'with no owner' do
+    context 'with an srdc_id' do
+      let(:run) { FactoryGirl.create(:speedrundotcom_run) }
+
+      before do
+        expect(SpeedrunDotCom).to receive(:run).with(run.srdc_id).and_return(
+          SpeedrunDotCom::Run.new('id' => 0, 'players' => [{'id' => 'test'}])
+        )
+        expect(SpeedrunDotCom).to receive(:user).with('test').and_return(
+          SpeedrunDotCom::User.new('id' => 0, 'twitch' => {'uri' => 'http://www.twitch.tv/glacials'})
+        )
+      end
+
+      it 'tries to fetch its runner from speedrun.com' do
+        run.set_runner_from_srdc
+      end
+    end
+  end
+
   context 'with a valid video URL to a non-valid location' do
     let(:run) { FactoryGirl.build(:run, video_url: 'http://google.com/') }
 

@@ -16,6 +16,10 @@ class Run < ActiveRecord::Base
   has_secure_token :claim_token
 
   after_create :refresh_game
+  after_create :discover_runner
+
+  after_update :discover_runner
+
   after_destroy do |run|
     if run.run_file.present? && run.run_file.runs.where.not(id: run).empty?
       run.run_file.destroy
@@ -133,6 +137,14 @@ class Run < ActiveRecord::Base
   def refresh_game
     return if game.blank?
     game.delay.sync_with_srl
+  end
+
+  # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
+  # speedrun.com. For this to work that user must have a splits.io account and must have their Twitch account tied to
+  # their speedrun.com account.
+  def discover_runner
+    return if user.present?
+    delay.set_runner_from_srdc
   end
 
   def filename(download_program)

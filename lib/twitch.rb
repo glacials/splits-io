@@ -21,6 +21,10 @@ class Twitch
     end
   end
 
+  def self.login_from_uri(twitch_uri)
+    /^https?:\/\/(?:www\.)?twitch\.tv\/([^\/]+)(?:.*)$/.match(twitch_uri)[1]
+  end
+
   private
 
   def self.kraken

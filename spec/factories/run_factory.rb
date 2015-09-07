@@ -2,6 +2,10 @@ FactoryGirl.define do
   factory :run do
     run_file RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit1.4"))
 
+    factory :speedrundotcom_run do
+      srdc_id 0
+    end
+
     factory :livesplit1_4_run do
       run_file RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit1.4"))
     end
