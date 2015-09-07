@@ -13,15 +13,15 @@ module LiveSplit
     # When `options[:fast] == true`, run in O(n) time, with n being the number of splits in one run.
     # Do not parse run history, split history, or other things that scale beyond O(n).
     # When `options[:fast] == false`, go nuts.
-    def parse(xml, options = {fast: true})
+    def parse(xml, fast: true)
       xml = XmlSimple.xml_in(xml)
       version = Versionomy.parse(xml['version'] || '1.2')
 
-      return v1_6(xml, options[:fast]) if version >= Versionomy.parse('1.6')
-      return v1_5(xml, options[:fast]) if version >= Versionomy.parse('1.5')
-      return v1_4(xml, options[:fast]) if version >= Versionomy.parse('1.4')
-      return v1_3(xml, options[:fast]) if version >= Versionomy.parse('1.3')
-      return v1_2(xml, options[:fast]) if version >= Versionomy.parse('1.2')
+      return v1_6(xml, fast) if version >= Versionomy.parse('1.6')
+      return v1_5(xml, fast) if version >= Versionomy.parse('1.5')
+      return v1_4(xml, fast) if version >= Versionomy.parse('1.4')
+      return v1_3(xml, fast) if version >= Versionomy.parse('1.3')
+      return v1_2(xml, fast) if version >= Versionomy.parse('1.2')
       return nil
     rescue
       nil
@@ -36,7 +36,7 @@ module LiveSplit
         category: xml['CategoryName'][0].try(:strip),
         attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
-        history: fast ? [] : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
+        history: fast ? [] : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq,
         splits: [],

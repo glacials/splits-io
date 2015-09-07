@@ -22,8 +22,6 @@ class Run < ActiveRecord::Base
     end
   end
 
-  @parse_cache = nil
-
   validates :run_file, presence: true
   validates_with RunValidator
 
@@ -74,14 +72,14 @@ class Run < ActiveRecord::Base
     parse.present?
   end
 
-  def parse(options = {fast: true})
-    return @parse_cache if @parse_cache.present?
+  def parse(fast: true)
+    return @parse_cache[fast] if @parse_cache.try(:[], fast).present?
     if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
       [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
     else
       Run.programs
     end.each do |program|
-      result = program::Parser.new.parse(file, options)
+      result = program::Parser.new.parse(file, fast: fast)
       next if result.blank?
 
       result[:program] = program.to_sym
@@ -100,7 +98,7 @@ class Run < ActiveRecord::Base
       populate_category(result[:game], result[:category])
       save if changed?
 
-      @parse_cache = result
+      @parse_cache = (@parse_cache || {}).merge(fast => result)
 
       return result
     end

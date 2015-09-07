@@ -7,7 +7,7 @@ describe Run, type: :model do
     expect(run.id36).to eq(run.id.to_s(36))
   end
 
-  context 'run with a valid video URL to a non-valid location' do
+  context 'with a valid video URL to a non-valid location' do
     let(:run) { FactoryGirl.build(:run, video_url: 'http://google.com/') }
 
     it 'fails to validate' do
@@ -15,7 +15,7 @@ describe Run, type: :model do
     end
   end
 
-  context 'run with an invalid video URL' do
+  context 'with an invalid video URL' do
     let(:run) { FactoryGirl.build(:run, video_url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!') }
 
     it 'fails to validate' do
@@ -23,17 +23,15 @@ describe Run, type: :model do
     end
   end
 
-  context 'new run' do
+  context 'just created' do
     it 'has a non-nil claim token' do
       expect(run.claim_token).not_to eq(nil)
     end
   end
 
-  context 'LiveSplit run with file format 1.4.2' do
+  context 'from LiveSplit 1.4' do
     let(:run) do
-      FactoryGirl.create(:run,
-        run_file: RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit_1"))
-      )
+      FactoryGirl.create(:livesplit1_4_run)
     end
 
     it 'has the correct splits' do
@@ -88,13 +86,82 @@ describe Run, type: :model do
     it 'accurately reports its median segment duration' do
       expect(run.median_segment_duration).to eq(118.79162584999995)
     end
+
+    it 'reports no history by default' do
+      expect(run.history).to eq []
+    end
+
+    it 'reports correct history when asked' do
+      expect(run.parse(fast: false)[:history]).to eq ([
+        6911.1422649, 6261.793028, 6123.6647933, 5944.5159323, 5694.8238343, 5410.1111281, 5746.1888454, 5390.4596715,
+        5258.0010184, 5236.1128949, 5102.848171, 5126.4048091, 5055.5630296
+      ])
+    end
   end
 
-  context 'Llanfair run' do
+  context 'from LiveSplit 1.6' do
     let(:run) do
-      FactoryGirl.create(:run,
-        run_file: RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/llanfair_1"))
+      FactoryGirl.create(:livesplit1_6_run)
+    end
+
+    it 'has the correct splits' do
+      expect(run.splits.map { |s| [s.name, s.duration] }).to eq([
+        ["Hole 1", 30.349],
+        ["Hole 2", 42.742999999999995],
+        ["Hole 3", 35.263999999999996],
+        ["Hole 4", 25.16500000000002],
+        ["Hole 5", 34.34099999999998],
+        ["Hole 6", 34.97200000000001],
+        ["Hole 7", 20.754999999999995],
+        ["Hole 8", 41.22199999999998],
+        ["Hole 9", 43.62100000000004],
+        ["Hole 10", 28.661999999999978],
+        ["Hole 11", 37.146000000000015],
+        ["Hole 12", 62.91300000000001],
+        ["Hole 13", 41.539999999999964],
+        ["Hole 14", 35.33299999999997],
+        ["Hole 15", 36.65300000000002],
+        ["Hole 16", 31.277000000000044],
+        ["Hole 17", 37.63199999999995],
+        ["Hole 18", 66.08300000000008]
+      ])
+    end
+
+    it 'accurately reports its missed splits' do
+      expect(run.skipped_splits.map { |s| [s.name, s.duration] }).to eq([])
+    end
+
+    it 'accurately reports its shortest segment' do
+      expect([run.shortest_segment.name, run.shortest_segment.duration]).to eq(
+        ["Hole 7", 20.754999999999995]
       )
+    end
+
+    it 'accurately reports its longest segment' do
+      expect([run.longest_segment.name, run.longest_segment.duration]).to eq(
+        ["Hole 18", 66.08300000000008]
+      )
+    end
+
+    it 'accurately reports its median segment duration' do
+      expect(run.median_segment_duration).to eq(35.992999999999995)
+    end
+
+    it 'reports no history by default' do
+      expect(run.history).to eq []
+    end
+
+    it 'reports correct history when asked' do
+      expect(run.parse(fast: false)[:history]).to eq ([
+        912.296, 859.304, 801.458, 755.249, 793.755, 744.211, 741.924, 815.122, 761.782, 696.49, 710.935, 727.007,
+        715.404, 730.922, 705.515, 728.286, 714.258, 705.742, 691.061, 685.671
+      ])
+    end
+  end
+
+  context 'from Llanfair' do
+    let(:run) do
+      FactoryGirl.create(:llanfair_run)
     end
 
     it 'has the correct splits' do
