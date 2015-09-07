@@ -148,7 +148,7 @@ class RunsController < ApplicationController
 
   def handle_first_visit
     if @run.parses?
-      @run.update(visited: true, user: @run.user || current_user)
+      @run.update(visited: true)
     else
       @run.destroy
       redirect_to cant_parse_path
