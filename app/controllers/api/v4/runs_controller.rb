@@ -48,8 +48,6 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     @run.update(params.permit(:srdc_id, :image_url))
   end
 
-  # TODO: This method is not documented and thus is not officially supported by the API. It uses cookie authentication,
-  # but the official release of it into the API should use token authentication.
   def destroy
     @run.destroy
     head 200
