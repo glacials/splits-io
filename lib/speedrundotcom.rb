@@ -1,4 +1,7 @@
 module SpeedrunDotCom
+  class RunNotFound < StandardError; end
+  class UserNotFound < StandardError; end
+
   class Run
     attr_accessor :id, :players
 
@@ -39,10 +42,18 @@ module SpeedrunDotCom
   end
 
   def self.run(id)
+    raw_run = raw_run(id)
+    if raw_run.try(:[], 'id').blank? || raw_run.try(:[], 'players').blank?
+      raise RunNotFound
+    end
     Run.new(raw_run(id))
   end
 
   def self.user(id)
+    raw_user = raw_user(id)
+    if raw_user.try(:[], 'id').blank? || raw_user.try(:[], 'twitch').try(:[], 'uri').blank?
+      raise UserNotFound
+    end
     User.new(raw_user(id))
   end
 

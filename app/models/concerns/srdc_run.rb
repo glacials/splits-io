@@ -23,6 +23,7 @@ module SRDCRun
           ).twitch_login
         )
       )
+    rescue SpeedrunDotCom::RunNotFound, SpeedrunDotCom::UserNotFound
     end
   end
 end
