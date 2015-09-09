@@ -44,34 +44,34 @@ ActiveRecord::Schema.define(version: 20150904023532) do
 
   create_table "categories", force: :cascade do |t|
     t.integer  "game_id"
-    t.string   "name",       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "shortname",  limit: 255
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "shortname"
     t.index ["game_id"], name: "index_categories_on_game_id", using: :btree
     t.index ["name"], name: "index_categories_on_name", using: :btree
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",               default: 0, null: false
-    t.integer  "attempts",               default: 0, null: false
-    t.text     "handler",                            null: false
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
-    t.string   "locked_by",  limit: 255
-    t.string   "queue",      limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
   create_table "games", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "shortname",  limit: 255
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "shortname"
     t.index ["name"], name: "index_games_on_name", using: :btree
     t.index ["shortname"], name: "index_games_on_shortname", using: :btree
   end
@@ -86,27 +86,27 @@ ActiveRecord::Schema.define(version: 20150904023532) do
   end
 
   create_table "run_files", force: :cascade do |t|
-    t.string "digest", limit: 255
+    t.string "digest"
     t.text   "file"
     t.index ["digest"], name: "index_run_files_on_digest", using: :btree
   end
 
   create_table "runs", force: :cascade do |t|
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "nick",            limit: 255
-    t.string   "image_url",       limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "nick"
+    t.string   "image_url"
     t.integer  "category_id"
-    t.string   "name",            limit: 255
+    t.string   "name"
     t.decimal  "time"
-    t.string   "program",         limit: 255
-    t.boolean  "visited",                     default: false, null: false
-    t.string   "claim_token",     limit: 255
+    t.string   "program"
+    t.boolean  "visited",         default: false, null: false
+    t.string   "claim_token"
     t.decimal  "sum_of_best"
     t.boolean  "archived"
-    t.string   "video_url",       limit: 255
-    t.string   "run_file_digest", limit: 255
+    t.string   "video_url"
+    t.string   "run_file_digest"
     t.string   "srdc_id"
     t.integer  "attempts"
     t.index ["category_id"], name: "index_runs_on_category_id", using: :btree
@@ -125,13 +125,13 @@ ActiveRecord::Schema.define(version: 20150904023532) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",        limit: 255, default: ""
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "twitch_token", limit: 255
+    t.string   "email",        default: ""
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "twitch_token"
     t.integer  "twitch_id"
-    t.string   "name",         limit: 255
-    t.string   "avatar",       limit: 255
+    t.string   "name"
+    t.string   "avatar"
     t.index ["email"], name: "index_users_on_email", using: :btree
   end
 
