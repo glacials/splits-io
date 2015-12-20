@@ -9,6 +9,8 @@ SplitsIO::Application.routes.draw do
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
+  get  '/convert',    to: 'converts#new'
+
   get '/search',        to: redirect('/games')
   get '/search/:q',     to: redirect('/games?q=%{q}')
   get '/search(?q=:q)', to: redirect('/games?q=%{q}')
@@ -83,6 +85,8 @@ SplitsIO::Application.routes.draw do
       resources :runs, only: [:create, :show, :update, :destroy] do
         resources :splits, only: :index, module: :runs
       end
+
+      post '/convert',    to: 'converts#create',  as: :api_convert
     end
 
     namespace :v3 do

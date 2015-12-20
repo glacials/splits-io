@@ -76,6 +76,33 @@ class Run < ActiveRecord::Base
     parse.present?
   end
 
+  def convert(fast: true)
+    if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
+      [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
+    else
+      Run.programs
+    end.each do |program|
+      result = program::Parser.new.parse(file, fast: fast)
+      next if result.blank?
+
+      result[:program] = program.to_sym
+      assign_attributes(
+        name: result[:name],
+        program: result[:program],
+        attempts: result[:attempts],
+        time: result[:splits].map { |split| split.duration }.sum.to_f,
+        sum_of_best: result[:splits].map.all? do |split|
+          split.best.present?
+        end && result[:splits].map do |split|
+          split.best
+        end.sum.to_f
+      )
+
+      return result
+    end
+    {}
+  end
+
   def parse(fast: true)
     return @parse_cache[fast] if @parse_cache.try(:[], fast).present?
     if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
@@ -99,10 +126,10 @@ class Run < ActiveRecord::Base
         end.sum.to_f
       )
 
-      populate_category(result[:game], result[:category])
-      save if changed?
+        populate_category(result[:game], result[:category])
+        save if changed?
 
-      @parse_cache = (@parse_cache || {}).merge(fast => result)
+        @parse_cache = (@parse_cache || {}).merge(fast => result)
 
       return result
     end
