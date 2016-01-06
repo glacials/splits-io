@@ -5,7 +5,7 @@ class Twitch
     private
 
     def self.find(name)
-      Twitch.kraken["/users/#{name}"].get
+      Twitch.kraken["/users/#{name}"]
     rescue RestClient::ResourceNotFound
       nil
     end
@@ -15,7 +15,7 @@ class Twitch
     def self.find_by_user(user)
       Rails.cache.fetch([:twitch, :follows, user]) do
         JSON.parse(
-          Twitch::User.find(user.name)["/follows/channels?oauth_token=#{user.twitch_token}&limit=500"]
+          Twitch::User.find(user.name)["/follows/channels?oauth_token=#{user.twitch_token}&limit=500"].get
         )['follows'].map do |follow|
           follow['channel']['_id']
         end
