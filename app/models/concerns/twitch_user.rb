@@ -11,11 +11,11 @@ module TwitchUser
       end
     end
 
-    def update_avatar
-      user_json = JSON.parse(
-        Twitch::User.find(name).get
-      )
-      if user_json && user_json['logo']
+    def update_avatar!
+      user_json = Twitch::User.find(name)
+      return nil unless user_json.present?
+      user_json = JSON.parse(user_json)
+      if user_json['logo'].present? && avatar != user_json['logo']
         update(avatar: user_json['logo'])
       end
     end
