@@ -117,10 +117,16 @@ class Run < ActiveRecord::Base
     "/#{to_param}"
   end
 
+  GAME_ALIASES = {"Tron Evolution" => "Tron: Evolution"}
+  CATEGORY_ALIASES = {"Any% (NG+)" => "Any% NG+"}
+
   def populate_category(game_string, category_string)
+    game_string = GAME_ALIASES.fetch(game_string, game_string)
+    category_string = CATEGORY_ALIASES.fetch(category_string, category_string)
+
     if category.blank? && game_string.present? && category_string.present?
-      game = Game.where("lower(name) = ?", game_string.downcase).first_or_create(name: game_string)
-      self.category = game.categories.where("lower(name) = ?", category_string.downcase).first_or_create(name: category_string)
+      game = Game.where("lower(name) = lower(?)", game_string).first_or_create(name: game_string)
+      self.category = game.categories.where("lower(name) = lower(?)", category_string).first_or_create(name: category_string)
     end
   end
 
