@@ -10,5 +10,14 @@ module TwitchUser
         User.where(twitch_id: Twitch::Follows.find_by_user(self)).joins(:runs).group('users.id')
       end
     end
+
+    def update_avatar!
+      user_json = Twitch::User.find(name).get
+      return nil unless user_json.present?
+      user_json = JSON.parse(user_json)
+      if user_json['logo'].present? && avatar != user_json['logo']
+        update(avatar: user_json['logo'])
+      end
+    end
   end
 end

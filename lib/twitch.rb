@@ -6,6 +6,8 @@ class Twitch
 
     def self.find(name)
       Twitch.kraken["/users/#{name}"]
+    rescue RestClient::ResourceNotFound
+      nil
     end
   end
 

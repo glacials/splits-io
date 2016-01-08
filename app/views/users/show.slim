@@ -1,6 +1,9 @@
 - title @user.name
 - content_for(:header) do
-  h2= @user.name
+  h2
+    span style="margin-right: .5em;"
+      img src=@user.avatar width=50 height=50
+    span = @user.name
   h6
     a#twitch-channel href=@user.uri target=:_blank = @user.uri.to_s.gsub('http://www.', '')
   h6

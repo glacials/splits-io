@@ -145,10 +145,16 @@ class Run < ActiveRecord::Base
     "/#{to_param}"
   end
 
+  GAME_ALIASES = {"Tron Evolution" => "Tron: Evolution"}
+  CATEGORY_ALIASES = {"Any% (NG+)" => "Any% NG+"}
+
   def populate_category(game_string, category_string)
+    game_string = GAME_ALIASES.fetch(game_string, game_string)
+    category_string = CATEGORY_ALIASES.fetch(category_string, category_string)
+
     if category.blank? && game_string.present? && category_string.present?
-      game = Game.where("lower(name) = ?", game_string.downcase).first_or_create(name: game_string)
-      self.category = game.categories.where("lower(name) = ?", category_string.downcase).first_or_create(name: category_string)
+      game = Game.where("lower(name) = lower(?)", game_string).first_or_create(name: game_string)
+      self.category = game.categories.where("lower(name) = lower(?)", category_string).first_or_create(name: category_string)
     end
   end
 
@@ -168,8 +174,7 @@ class Run < ActiveRecord::Base
   end
 
   # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
-  # speedrun.com. For this to work that user must have a splits.io account and must have their Twitch account tied to
-  # their speedrun.com account.
+  # speedrun.com. For this to work that user must have their Twitch account tied to both splits.io and speedrun.com.
   def discover_runner
     return if user.present?
     delay.set_runner_from_srdc
