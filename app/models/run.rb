@@ -98,6 +98,7 @@ class Run < ActiveRecord::Base
         end.sum.to_f
       )
 
+      @parse_cache = (@parse_cache || {}).merge(fast => result)
       return result
     end
     {}
