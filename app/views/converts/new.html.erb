@@ -8,18 +8,16 @@
       <input type="file" name="file" />
     </div>
     <div class="form-group col-sm-2">
-      <select name="program">
-        <% Run.programs.each do |prgrm| %>
-          <% unless prgrm.to_s.downcase == "llanfair" %>
-            <option value="<%= prgrm.to_s.downcase %>"><%= prgrm.to_s %></option>
-          <% end %>
+      <select name="format">
+        <% (Run.programs - [Llanfair]).each do |prgrm| %>
+          <option value="<%= prgrm.to_sym %>"><%= prgrm.to_s %></option>
         <% end %>
-        <option value="splits_io">Splits-io</option>
+        <option value="json">JSON</option>
       </select>
     </div>
     <div class="form-group col-sm-2">
-      <input type="checkbox" name="include_history" id="include_history" />
-      <label for="include_history">Incldue History?</label>
+      <input type="checkbox" name="historic" id="historic" />
+      <label for="historic">Incldue History?</label>
     </div>
     <div class="form-group col-sm-2">
       <input type="submit" value="convert" />
