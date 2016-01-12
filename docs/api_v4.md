@@ -91,8 +91,8 @@ hold any ties to SRL. Any number of Categories can be associated with a Game.
 
 ## Convert
 ```bash
-curl https://splits.io/api/v4/convert -F "program=splits_io;include_history=on;file=@/path/to/file
+curl https://splits.io/api/v4/convert -F "program=splits_io;historic=1;file=@/path/to/file
 ```
 When converting between timer formats, the file and program parameters must be included.  If you are converting a livesplit
-file and would like to include the history, then include_history parameter can also be included.  The Splits/io format is
+file and would like to include the history, then the historic parameter can also be included.  The JSON format is
 outputted as described above in the form of a .json file.
