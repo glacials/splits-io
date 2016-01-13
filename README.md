@@ -19,13 +19,19 @@ rake db:create db:migrate
 rails server
 ```
 
-If you get errors about `eventmachine` not compiling its native extension during `bundle install`, run
+If you're on OS X and you get errors about `eventmachine` not compiling its native extension during `bundle install`,
+run
+
+```bash
+brew install openssl
+brew link openssl --force
+```
+
+then try again. If that doesn't work, you may need to also run
 
 ```bash
 gem install eventmachine -- --with-cppflags=-I/usr/local/opt/openssl/include
 ```
-
-then try again.
 
 ## API
 See the full API documentation in the [API readme](./docs/api.md) file.
