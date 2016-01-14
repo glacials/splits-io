@@ -10,6 +10,7 @@ SplitsIO::Application.routes.draw do
   get  '/random',     to: 'runs#random',     as: :random
 
   get  '/convert',    to: 'converts#new'
+  post '/convert',    to: 'converts#create'
 
   get '/search',        to: redirect('/games')
   get '/search/:q',     to: redirect('/games?q=%{q}')
