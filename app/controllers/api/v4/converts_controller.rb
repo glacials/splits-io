@@ -3,17 +3,10 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
   before_action :check_parameters, only: [:create]
 
   def create
-    if params[:file].respond_to?(:read)
-      file_text = params[:file].read
-      if file_text[8..29] == "org.fenix.llanfair.Run"
-        run_file = RunFile.new(file: RunFile.unpack_binary(file_text))
-      else
-        run_file = RunFile.new(file: file_text)
-      end
-    end
+    run_file = RunFile.for_convert(params[:file])
 
     @run = Run.new(run_file: run_file, user: nil)
-    @run.parse(fast: ["on", "1"].include?(params[:historic]) ? true : false, convert: true)
+    @run.parse(fast: ["on", "1"].include?(params[:historic]) ? false : true, convert: true)
 
     extension = {'livesplit' => 'lss',
       'urn' => 'json',
