@@ -78,6 +78,8 @@ class Run < ActiveRecord::Base
 
   def parse(fast: true, convert: false)
     return @parse_cache[fast] if @parse_cache.try(:[], fast).present?
+    return @convert_cache if @convert_cache.present?
+
     if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
       [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
     else
@@ -99,7 +101,9 @@ class Run < ActiveRecord::Base
         end.sum.to_f
       )
 
-        unless convert
+        if convert
+          @convert_cache = result
+        else
           populate_category(result[:game], result[:category])
           save if changed?
         end
