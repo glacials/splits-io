@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :incoming_rivalries, class_name: Rivalry, foreign_key: :to_user_id, dependent: :destroy
 
   after_destroy do |user|
-    user.runs.update_all(user: nil)
+    user.runs.update_all(user_id: nil)
   end
 
   validates :twitch_id, presence: true
