@@ -8,9 +8,9 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     @run = Run.new(run_file: run_file, user: nil)
     @run.parse(fast: ["on", "1"].include?(params[:historic]) ? false : true, convert: true)
 
-    extension = {'livesplit' => 'lss',
-      'urn' => 'json',
-    }[params[:format]] || params[:format]
+    program_extensions = {'livesplit' => '.lss', 'urn' => '.json'}
+    file_name = "#{params[:file].original_filename.split(program_extensions[@run.program])[0]}"
+    file_name << (program_extensions[params[:format]] || ".#{params[:format]}")
 
     if params[:format] == "json"
       new_file = render_to_string(json: @run, serializer: Api::V4::Convert::RunSerializer)
@@ -19,7 +19,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     end
     send_data(
       new_file,
-      filename: "#{params[:file].original_filename.split(".")[0..-1].join}.#{extension}",
+      filename: file_name,
       layout: false
     )
   end
