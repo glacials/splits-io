@@ -34,14 +34,14 @@ module RunsHelper
       {
         type: :game,
         source: options[:game],
-        runs: options[:game].runs,
+        runs: options[:game].runs.nonempty,
         cols: [:runner, :time, :name, :uploaded]
       }.merge(sorting_info)
     when :category
       {
         type: :category,
         source: options[:category],
-        runs: options[:category].runs,
+        runs: options[:category].runs.nonempty,
         cols: [:runner, :time, :name, :uploaded]
       }.merge(sorting_info)
     else
