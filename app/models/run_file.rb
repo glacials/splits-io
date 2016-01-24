@@ -7,10 +7,17 @@ class RunFile < ActiveRecord::Base
   def self.for_file(file)
     if file.respond_to?(:read)
       file_text = file.read
-      if file_text[8..29] == "org.fenix.llanfair.Run"
-        RunFile.for_binary(file_text)
+      RunFile.is_llanfair?(file_text) ? RunFile.for_binary(file_text) : RunFile.for_text(file_text)
+    end
+  end
+
+  def self.for_convert(file)
+    if file.respond_to?(:read)
+      file_text = file.read
+      if RunFile.is_llanfair?(file_text)
+        run_file = RunFile.new(file: RunFile.unpack_binary(file_text))
       else
-        RunFile.for_text(file_text)
+        run_file = RunFile.new(file: file_text)
       end
     end
   end
@@ -29,6 +36,10 @@ class RunFile < ActiveRecord::Base
   def self.for_binary(file_text)
     digest = Digest::SHA256.hexdigest(file_text)
     where(digest: digest).first_or_create(file: RunFile.unpack_binary(file_text))
+  end
+
+  def self.is_llanfair?(file_text)
+    file_text[8..29] == "org.fenix.llanfair.Run"
   end
 
   def self.unpack_binary(file_text)

@@ -88,3 +88,11 @@ curl https://splits.io/api/v4/categories/123/runs
 Some timers allow users to specify a "category" or similar field. A Category is a collection of information about the
 type of run performed, more specific than a Game. Each Category belongs to a Game. The definition of a category does not
 hold any ties to SRL. Any number of Categories can be associated with a Game.
+
+## Convert
+```bash
+curl https://splits.io/api/v4/convert -F "program=splits_io;historic=1;file=@/path/to/file
+```
+When converting between timer formats, the file and program parameters must be included.  If you are converting a livesplit
+file and would like to include the history, then the historic parameter can also be included.  The JSON format is
+outputted as described above in the form of a .json file.
