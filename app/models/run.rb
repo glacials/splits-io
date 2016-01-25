@@ -93,7 +93,7 @@ class Run < ActiveRecord::Base
         name: result[:name],
         program: result[:program],
         attempts: result[:attempts],
-        srdc_id: result[:srdc_id].blank? ? nil : result[:srdc_id],
+        srdc_id: result[:srdc_id].presence,
         time: result[:splits].map { |split| split.duration }.sum.to_f,
         sum_of_best: result[:splits].map.all? do |split|
           split.best.present?
