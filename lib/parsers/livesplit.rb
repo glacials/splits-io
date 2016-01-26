@@ -34,6 +34,7 @@ module LiveSplit
       run = {
         game: xml['GameName'][0].try(:strip),
         category: xml['CategoryName'][0].try(:strip),
+        srdc_id: xml['Metadata'][0]['Run'][0]['id'],
         attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
         history: fast ? [] : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
