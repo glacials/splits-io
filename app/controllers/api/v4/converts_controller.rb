@@ -7,6 +7,13 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
 
     @run = Run.new(run_file: run_file, user: nil)
     @run.parse(fast: ["on", "1"].include?(params[:historic]) ? false : true, convert: true)
+    unless @run.splits.present?
+      render status: 400, json: {
+        status: 400,
+        message: "Can't parse that file. We support #{Run.programs.to_sentence}."
+      }
+      return
+    end
 
     program_extensions = {'livesplit' => '.lss', 'urn' => '.json'}
     file_name = "#{params[:file].original_filename.split(program_extensions[@run.program])[0]}"
@@ -36,6 +43,12 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
         message: "Convert supports the following formats: #{supported}"
       }
     end
+  rescue ActionController::ParameterMissing
+    render status: 400, json: {
+      status: 400,
+      message: "Missing 'file' or 'format' parameter. Make sure to include both in your request."
+    }
+    return
   end
 
 end
