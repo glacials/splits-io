@@ -6,8 +6,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     run_file = RunFile.for_convert(params[:file])
 
     @run = Run.new(run_file: run_file, user: nil)
-    @run.parse(fast: ["on", "1"].include?(params[:historic]) ? false : true, convert: true)
-    unless @run.splits.present?
+    unless @run.parses?(fast: !(params[:historic] == "1"), convert: true)
       render status: 400, json: {
         status: 400,
         message: "Can't parse that file. We support #{Run.programs.to_sentence}."
@@ -40,7 +39,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     unless supported.include?(params[:format])
       render status: 400, json: {
         status: 400,
-        message: "Convert supports the following formats: #{supported}"
+        message: "Convert supports the following formats: #{supported}.to_sentence"
       }
     end
   rescue ActionController::ParameterMissing
