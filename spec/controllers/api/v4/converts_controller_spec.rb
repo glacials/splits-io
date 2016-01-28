@@ -8,7 +8,7 @@ describe Api::V4::ConvertsController do
         fixture_file_upload('files/llanfair')
       end
       context 'supported format' do
-        subject { post :create, params: {file: file, format: "json", historic: "on"} }
+        subject { post :create, params: {file: file, format: "json", historic: "1"} }
         let(:body) { JSON.parse(subject.body) }
 
         it "returns a 200" do
@@ -57,21 +57,19 @@ describe Api::V4::ConvertsController do
     end
 
     context 'from Malformed' do
-      context 'malformed file' do
-        let(:file) do
-          fixture_file_upload('files/malformed')
-        end
-        subject { post :create, params: {file: file, format: "json"} }
-        let(:body) { JSON.parse(subject.body) }
+      let(:file) do
+        fixture_file_upload('files/malformed')
+      end
+      subject { post :create, params: {file: file, format: "json"} }
+      let(:body) { JSON.parse(subject.body) }
 
-        it "returns a 400" do
-          expect(subject).to have_http_status 400
-        end
+      it "returns a 400" do
+        expect(subject).to have_http_status 400
+      end
 
-        it 'returns an error body' do
-          expect(body['status']).to be_truthy
-          expect(body['message']).to be_truthy
-        end
+      it 'returns an error body' do
+        expect(body['status']).to be_truthy
+        expect(body['message']).to be_truthy
       end
     end
   end
