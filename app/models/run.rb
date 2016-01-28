@@ -72,8 +72,8 @@ class Run < ActiveRecord::Base
     parse[:offset]
   end
 
-  def parses?
-    parse.present?
+  def parses?(fast: true, convert: false)
+    parse(fast: fast, convert: convert).present?
   end
 
   def parse(fast: true, convert: false)
