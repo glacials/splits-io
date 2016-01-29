@@ -6,7 +6,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     run_file = RunFile.for_convert(params[:file])
 
     @run = Run.new(run_file: run_file, user: nil)
-    unless @run.parses?(fast: !(params[:historic] == "1"), convert: true)
+    unless @run.parses?(fast: params[:historic] != "1", convert: true)
       render status: 400, json: {
         status: 400,
         message: "Can't parse that file. We support #{Run.programs.to_sentence}."
