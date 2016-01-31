@@ -9,8 +9,7 @@ class ConvertsController < ApplicationController
     run_file = RunFile.for_convert(params[:file])
 
     @run = Run.new(run_file: run_file, user: nil)
-    @run.parse(fast: ["on", "1"].include?(params[:historic]) ? false : true, convert: true)
-    unless @run.splits
+    unless @run.parses?(fast: params[:historic] != "1", convert: true)
       redirect_to cant_parse && return
     end
 
@@ -28,6 +27,9 @@ class ConvertsController < ApplicationController
       filename: file_name,
       layout: false
     )
+  rescue ActionController::ParameterMissing
+    flash.now[:alert] = "You forgot to select a file."
+    render :new
   end
 
 end
