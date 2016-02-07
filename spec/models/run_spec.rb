@@ -209,5 +209,10 @@ describe Run, type: :model do
     it 'accurately reports its median segment duration' do
       expect(run.median_segment_duration).to eq(509.71500000000003)
     end
+
+    it 'correctly converts back to llanfair files' do
+      run.program = :llanfair
+      expect(run.original_file).to eq(RunFile.pack_binary(run.file))
+    end
   end
 end
