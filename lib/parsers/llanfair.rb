@@ -22,7 +22,7 @@ module Llanfair
 
       file.seek(1, 1)
       title_len = file.read(2).unpack("n")[0]
-      run[:name] = file.read(title_len)
+      run[:name] = file.read(title_len).force_encoding("UTF-8")
 
       file.seek(6, 1)
       segment_count = file.read(4).unpack("N")[0]
@@ -72,7 +72,7 @@ module Llanfair
 
         file.seek(1, 1)
         segment_name_len = file.read(2).unpack("n")[0]
-        segment_name = file.read(segment_name_len)
+        segment_name = file.read(segment_name_len).force_encoding("UTF-8")
 
         best_time_millis = 0
         buffer = file.read(1).ord
@@ -88,7 +88,7 @@ module Llanfair
         best_segment_time = best_segment_millis / 1000.0
 
         run[:splits] << Split.new(
-          name: segment_name.to_s,
+          name: segment_name.to_s.force_encoding("UTF-8"),
           best: best_segment_time,
           duration: best_time,
           finish_time: run[:time] + best_time
