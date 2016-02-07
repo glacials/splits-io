@@ -113,15 +113,15 @@ ActiveRecord::Schema.define(version: 20150904023532) do
     t.index ["user_id"], name: "index_runs_on_user_id", using: :btree
   end
 
-  create_table "segments", force: :cascade do |t|
-    t.integer "order"
+  create_table "splits", force: :cascade do |t|
+    t.integer "run_id"
+    t.integer "position"
     t.string  "name"
     t.float   "real_duration"
     t.float   "best_real_duration"
     t.float   "game_duration"
     t.float   "best_game_duration"
-    t.integer "run_file_id"
-    t.index ["run_file_id"], name: "index_segments_on_run_file_id", using: :btree
+    t.index ["run_id"], name: "index_splits_on_run_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -135,4 +135,5 @@ ActiveRecord::Schema.define(version: 20150904023532) do
     t.index ["email"], name: "index_users_on_email", using: :btree
   end
 
+  add_foreign_key "splits", "runs"
 end

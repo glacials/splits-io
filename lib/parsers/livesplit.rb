@@ -56,8 +56,12 @@ module LiveSplit
         split.best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
         split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
         split.skipped = split.duration == 0
-        split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
-          times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
+
+        split.history = fast ? [] : segment['SegmentHistory'][0]['Time']
+        if split.history.present?
+          split.history.map! do |time|
+            time['RealTime'].nil? ? 0 : duration_in_seconds_of(time['RealTime'][0].try(:strip))
+          end
         end
 
         run[:time] += split.duration if split.duration.present?

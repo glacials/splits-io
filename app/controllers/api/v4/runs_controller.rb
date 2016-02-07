@@ -50,7 +50,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
   def destroy
     @run.destroy
-    head 200
+    head 204
   end
 
   private
@@ -73,7 +73,6 @@ class Api::V4::RunsController < Api::V4::ApplicationController
         status: 401,
         message: "Invalid claim token."
       }
-      return false
     end
   end
 

@@ -173,11 +173,11 @@ describe Api::V4::RunsController do
       end
 
       it "doesn't destroy the run" do
-        expect(run.destroyed?).to be_false
+        expect(run.destroyed?).to be false
       end
 
       it "returns no body" do
-        expect(body['error']).to "You must supply a claim_token to authorize as the owner of this run."
+        expect(body['error']).to eq "You must supply a claim_token to authorize as the owner of this run."
       end
     end
 
@@ -189,7 +189,7 @@ describe Api::V4::RunsController do
       end
 
       it "destroys the run" do
-        expect(run.destroyed?).to be_true
+        expect(run.destroyed?).to be true
       end
 
       it "returns no body" do

@@ -106,11 +106,11 @@ describe Run, type: :model do
       expect(run.median_segment_duration).to eq(118.79162584999995)
     end
 
-    it 'reports no history by default' do
-      expect(run.history).to eq []
+    it 'reports no history using fast parsing' do
+      expect(run.parse(fast: true)[:history]).to eq []
     end
 
-    it 'reports correct history when asked' do
+    it 'reports correct history when using slow parsing' do
       expect(run.parse(fast: false)[:history]).to eq ([
         6911.1422649, 6261.793028, 6123.6647933, 5944.5159323, 5694.8238343, 5410.1111281, 5746.1888454, 5390.4596715,
         5258.0010184, 5236.1128949, 5102.848171, 5126.4048091, 5055.5630296
@@ -166,11 +166,11 @@ describe Run, type: :model do
       expect(run.median_segment_duration).to eq(35.992999999999995)
     end
 
-    it 'reports no history by default' do
-      expect(run.history).to eq []
+    it 'reports no history using fast parsing' do
+      expect(run.parse(fast: true)[:history]).to eq []
     end
 
-    it 'reports correct history when asked' do
+    it 'reports correct history when using slow parsing' do
       expect(run.parse(fast: false)[:history]).to eq ([
         912.296, 859.304, 801.458, 755.249, 793.755, 744.211, 741.924, 815.122, 761.782, 696.49, 710.935, 727.007,
         715.404, 730.922, 705.515, 728.286, 714.258, 705.742, 691.061, 685.671
