@@ -171,6 +171,6 @@ class Run < ActiveRecord::Base
   end
 
   def original_file
-    program == :llanfair ? RunFile.pack_binary(file) : file
+    program.to_sym == :llanfair ? RunFile.pack_binary(file) : file
   end
 end
