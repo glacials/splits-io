@@ -29,6 +29,10 @@ article#stats
       tbody
         tr
           td
+            span Timer
+          td = Run.programs[Run.programs.map(&:to_sym).index(@run.program.to_sym)]
+        tr
+          td
             span Total potential timesave
             small.tip< title='(PB - sum of best)' (?)
           td.time.needs-formatting = @run.time - @run.reduced_splits.sum { |split| split.best }
