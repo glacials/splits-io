@@ -1,6 +1,7 @@
 module SpeedrunDotCom
   class RunNotFound < StandardError; end
   class UserNotFound < StandardError; end
+  class ServerError < StandardError; end
 
   class Run
     attr_accessor :id, :players
@@ -42,32 +43,42 @@ module SpeedrunDotCom
   end
 
   def self.run(id)
-    raw_run = raw_run(id)
-    if raw_run.try(:[], 'id').blank? || raw_run.try(:[], 'players').blank?
+    r = raw_run(id)
+
+    if [r['id'], r['players']].any?(&:blank?)
       raise RunNotFound
     end
-    Run.new(raw_run(id))
+
+    Run.new(r)
   end
 
   def self.user(id)
-    raw_user = raw_user(id)
-    if raw_user.try(:[], 'id').blank? || raw_user.try(:[], 'twitch').try(:[], 'uri').blank?
+    u = raw_user(id)
+
+    if [u['id'], u['twitch'], u['uri']].any?(&:blank?)
       raise UserNotFound
     end
-    User.new(raw_user(id))
+
+    User.new(u)
   end
 
   private
 
   def self.raw_run(id)
-    HTTParty.get(
+    r = HTTParty.get(
       URI.parse("http://speedrun.com/api/v1/runs/#{id}").to_s
     )['data']
+
+    raise ServerError unless r.respond_to?(:[])
+    r
   end
 
   def self.raw_user(id)
-    HTTParty.get(
+    u = HTTParty.get(
       URI.parse("http://speedrun.com/api/v1/users/#{id}").to_s
     )['data']
+
+    raise ServerError unless u.respond_to?(:[])
+    u
   end
 end
