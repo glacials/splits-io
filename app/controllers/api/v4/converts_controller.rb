@@ -33,10 +33,9 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
   private
 
   def check_parameters
-    params.require(:file)
-    params.require(:format)
+    params.require(:file, :format)
     supported = (Run.programs - [Llanfair]) + ["json"]
-    unless supported.include?(params[:format])
+    unless supported.map(&:to_s).include?(params[:format])
       render status: 400, json: {
         status: 400,
         message: "Convert supports the following formats: #{supported.to_sentence}"
