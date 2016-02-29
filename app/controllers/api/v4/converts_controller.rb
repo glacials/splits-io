@@ -39,7 +39,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     unless supported.include?(params[:format])
       render status: 400, json: {
         status: 400,
-        message: "Convert supports the following formats: #{supported}.to_sentence"
+        message: "Convert supports the following formats: #{supported.to_sentence}"
       }
     end
   rescue ActionController::ParameterMissing
