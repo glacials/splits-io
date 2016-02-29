@@ -1,5 +1,5 @@
 class Api::V4::RunnersController < Api::V4::ApplicationController
-  before_action :set_runer
+  before_action :set_runner
 
   def show
   end
