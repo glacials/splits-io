@@ -22,4 +22,4 @@ production:
   ROLLBAR_ACCESS_TOKEN:
 
   # used for signing cookies. generate a secure one with `rake secret`
-  splitsio_secret_key_base:
+  SECRET_KEY_BASE:
