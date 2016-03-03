@@ -49,9 +49,18 @@ module RunsHelper
     end
   end
 
-  def next_timeline_color
-    @next_index = ((@next_index || -1) + 1) % TIMELINE_COLORS.length
-    TIMELINE_COLORS[@next_index]
+  def next_timeline_color(timeline_id)
+    if @next_index.blank?
+      @next_index = {}
+    end
+
+    if @next_index[timeline_id].blank?
+      @next_index[timeline_id] = 0
+    else
+      @next_index[timeline_id] = (@next_index[timeline_id] + 1) % TIMELINE_COLORS.length
+    end
+
+    TIMELINE_COLORS[@next_index[timeline_id]]
   end
 
   private

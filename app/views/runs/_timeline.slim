@@ -2,7 +2,7 @@
 - cache [:timeline, :v3, {run: run, scale_to: scale_to}] do
   .timeline
     - run.reduced_splits.each_with_index do |split, index|
-      .pure-u.split id="#{run.id}-split-#{index}" class=next_timeline_color style='width: 0;'
+      .pure-u.split id="#{run.id}-split-#{index}" class=next_timeline_color(run.id) style='width: 0;'
         .title = split.name
         .time.needs-formatting = split.duration
     - if run.time < scale_to
