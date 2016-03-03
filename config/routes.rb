@@ -3,6 +3,7 @@ SplitsIO::Application.routes.draw do
 
   get '/faq', to: 'pages#faq', as: :faq
   get '/why', to: 'pages#why', as: :why
+  get '/health', to: 'health#index'
 
   get  '/upload',     to: 'runs#new', as: :new_run
   post '/upload',     to: 'runs#create' # deprecated; use POST /runs or POST /api/v3/runs
