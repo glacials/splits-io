@@ -75,6 +75,6 @@ SplitsIO::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.use_ssl = ENV['USE_SSL'].nil? ? (ENV['USE_SSL'] == '1') || true
+  config.use_ssl = ENV['USE_SSL'].nil? ? (ENV['USE_SSL'] == '1') : true
   config.read_only = false
 end
