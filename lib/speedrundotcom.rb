@@ -1,6 +1,5 @@
 module SpeedrunDotCom
-  class RunNotFound < StandardError; end
-  class UserNotFound < StandardError; end
+  class NotFound < StandardError; end
   class ServerError < StandardError; end
 
   class Run
@@ -44,41 +43,35 @@ module SpeedrunDotCom
 
   def self.run(id)
     r = raw_run(id)
-
-    if [r['id'], r['players']].any?(&:blank?)
-      raise RunNotFound
-    end
-
     Run.new(r)
   end
 
   def self.user(id)
     u = raw_user(id)
-
-    if [u['id'], u['twitch'], u['uri']].any?(&:blank?)
-      raise UserNotFound
-    end
-
     User.new(u)
   end
 
   private
 
   def self.raw_run(id)
-    r = HTTParty.get(
+    res = HTTParty.get(
       URI.parse("http://speedrun.com/api/v1/runs/#{id}").to_s
-    )['data']
+    )
 
-    raise ServerError unless r.respond_to?(:[])
-    r
+    raise NotFound if res['status'] == 404
+    raise ServerError unless res['data'].respond_to?(:[])
+
+    res['data']
   end
 
   def self.raw_user(id)
-    u = HTTParty.get(
+    res = HTTParty.get(
       URI.parse("http://speedrun.com/api/v1/users/#{id}").to_s
-    )['data']
+    )
 
-    raise ServerError unless u.respond_to?(:[])
-    u
+    raise NotFound if res['status'] == 404
+    raise ServerError unless res['data'].respond_to?(:[])
+
+    res['data']
   end
 end
