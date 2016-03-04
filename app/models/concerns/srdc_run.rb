@@ -24,7 +24,7 @@ module SRDCRun
       return if srdc_runner.blank?
 
       update(user: User.find_by(name: srdc_runner.twitch_login))
-    rescue SpeedrunDotCom::RunNotFound, SpeedrunDotCom::UserNotFound
+    rescue SpeedrunDotCom::NotFound
     end
   end
 end
