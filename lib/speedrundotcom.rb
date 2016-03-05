@@ -1,6 +1,7 @@
 module SpeedrunDotCom
-  class NotFound < StandardError; end
-  class ServerError < StandardError; end
+  class Error < StandardError; end
+  class NotFound < Error; end
+  class ServerError < Error; end
 
   class Run
     attr_accessor :id, :players
@@ -37,7 +38,9 @@ module SpeedrunDotCom
 
     def initialize(attrs)
       self.id = attrs['id']
-      self.twitch_login = Twitch.login_from_uri(attrs['twitch']['uri'])
+      if attrs['twitch'].respond_to?(:[])
+        self.twitch_login = Twitch.login_from_uri(attrs['twitch']['uri'])
+      end
     end
   end
 
