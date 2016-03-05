@@ -167,7 +167,7 @@ curl https://splits.io/api/v3/users/glacials
     "id": 1,
     "twitch_id": 29798286,
     "name": "glacials",
-    "avatar": "http://static-cdn.jtvnw.net/jtv_user_pictures/glacials-profile_image-dc04543f973cfddc-300x300.png",
+    "avatar": "https://static-cdn.jtvnw.net/jtv_user_pictures/glacials-profile_image-dc04543f973cfddc-300x300.png",
     "created_at": "2014-03-09T19:00:43.640Z",
     "updated_at": "2015-02-01T18:53:03.397Z"
   }

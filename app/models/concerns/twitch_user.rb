@@ -12,12 +12,19 @@ module TwitchUser
     end
 
     def update_avatar!
-      user_json = Twitch::User.find(name).get
-      return nil unless user_json.present?
-      user_json = JSON.parse(user_json)
-      if user_json['logo'].present? && avatar != user_json['logo']
-        update(avatar: user_json['logo'])
+      body = Twitch::User.find(name).get
+
+      avatar = JSON.parse(body)['logo']
+      return if avatar.blank?
+
+      uri = URI.parse(avatar).tap do |uri|
+        uri.scheme = 'https'
       end
+      return if avatar == uri.to_s
+
+      update(avatar: uri.to_s)
+    rescue RestClient::ResourceNotFound
+      nil
     end
   end
 end
