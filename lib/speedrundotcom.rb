@@ -59,7 +59,6 @@ module SpeedrunDotCom
     )
 
     raise NotFound if res['status'] == 404
-    raise ServerError unless res['data'].respond_to?(:[])
 
     res['data']
   end
@@ -70,7 +69,6 @@ module SpeedrunDotCom
     )
 
     raise NotFound if res['status'] == 404
-    raise ServerError unless res['data'].respond_to?(:[])
 
     res['data']
   end
