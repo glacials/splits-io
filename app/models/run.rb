@@ -18,8 +18,6 @@ class Run < ActiveRecord::Base
   after_create :refresh_game
   after_create :discover_runner
 
-  after_update :discover_runner
-
   after_destroy do |run|
     if run.run_file.present? && run.run_file.runs.where.not(id: run).empty?
       run.run_file.destroy
