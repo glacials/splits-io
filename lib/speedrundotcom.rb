@@ -1,8 +1,7 @@
 module SpeedrunDotCom
-  class Error < StandardError
-    class NotFound; end
-    class MalformedResponse; end
-  end
+  class Error < StandardError; end
+  class NotFound < Error; end
+  class MalformedResponse < Error; end
 
   class Run
     def self.runner_id(id)
