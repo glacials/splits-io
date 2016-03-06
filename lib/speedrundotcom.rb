@@ -53,7 +53,7 @@ module SpeedrunDotCom
 
       raise MalformedResponse unless body.respond_to?(:[])
       raise MalformedResponse unless body['data'].respond_to?(:[])
-      raise MalformedResponse unless body['data']['twitch'].respond_to?(:[])
+      raise MalformedResponse.new(body) unless body['data']['twitch'].respond_to?(:[])
       raise MalformedResponse unless body['data']['twitch']['uri'].present?
 
       Twitch::User.login_from_url(body['data']['twitch']['uri'])
