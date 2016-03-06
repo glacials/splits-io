@@ -5,32 +5,46 @@ class Twitch
   class NotFound < Error; end
 
   module User
+    def self.login_from_url(twitch_url)
+      /^https?:\/\/(?:www\.)?twitch\.tv\/([^\/]+)(?:.*)$/.match(twitch_url)[1]
+    end
+
     private
 
-    def self.find(name)
-      Twitch.kraken["/users/#{name}"]
+    def self.get(login)
+      route(login).get
+    end
+
+    def self.route(login)
+      Twitch.route["/users/#{login}"]
     end
   end
 
   module Follows
-    def self.find_by_user(user)
-      Rails.cache.fetch([:twitch, :follows, user]) do
+    def self.followed_ids(login)
+      Rails.cache.fetch([:twitch, :follows, login]) do
         JSON.parse(
-          Twitch::User.find(user.name)["/follows/channels?limit=500"].get
+          Twitch::Follows.get(login)
         )['follows'].map do |follow|
           follow['channel']['_id']
         end
       end
     end
-  end
 
-  def self.login_from_uri(twitch_uri)
-    /^https?:\/\/(?:www\.)?twitch\.tv\/([^\/]+)(?:.*)$/.match(twitch_uri)[1]
+    private
+
+    def self.get(login)
+      route(login).get
+    end
+
+    def self.route(login)
+      Twitch::User.route(login)["/follows/channels?limit=500"]
+    end
   end
 
   private
 
-  def self.kraken
+  def self.route
     RestClient::Resource.new('https://api.twitch.tv/kraken')
   end
 end

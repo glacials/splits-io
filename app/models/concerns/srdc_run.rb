@@ -17,14 +17,11 @@ module SRDCRun
     def set_runner_from_srdc
       return if srdc_id.nil? || user.present?
 
-      srdc_run = SpeedrunDotCom.run(srdc_id)
-      return if srdc_run.blank?
+      srdc_runner_id = SpeedrunDotCom::Run.runner_id(srdc_id)
+      twitch_login = SpeedrunDotCom::User.twitch_login(srdc_runner_id)
+      return if twitch_login.blank?
 
-      srdc_runner = SpeedrunDotCom.user(srdc_run.players[0]['id'])
-      return if srdc_runner.blank?
-
-      update(user: User.find_by(name: srdc_runner.twitch_login))
-    rescue SpeedrunDotCom::NotFound
+      update(user: User.find_by(name: twitch_login))
     end
   end
 end

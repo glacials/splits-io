@@ -1,14 +1,21 @@
 module SpeedrunDotCom
-  class Error < StandardError; end
-  class NotFound < Error; end
-  class ServerError < Error; end
+  class Error < StandardError
+    class NotFound; end
+    class MalformedResponse; end
+  end
 
   class Run
-    attr_accessor :id, :players
+    def self.runner_id(id)
+      res = get(id)
+      body = JSON.parse(res.body)
 
-    def initialize(attrs)
-      self.id = attrs['id']
-      self.players = attrs['players']
+      raise MalformedResponse unless body.respond_to?(:[])
+      raise MalformedResponse unless body['data'].respond_to?(:[])
+      raise MalformedResponse unless body['data']['players'].respond_to?(:[])
+      raise MalformedResponse unless body['data']['players'][0].respond_to?(:[])
+      raise MalformedResponse unless body['data']['players'][0]['id'].present?
+
+      body['data']['players'][0]['id']
     end
 
     def self.id_from_url(url)
@@ -16,63 +23,57 @@ module SpeedrunDotCom
         return nil
       end
 
-      URI.parse(url).tap do |uri|
-        unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ /^\/run\/(.*)$/
-          return false
-        end
-
-        return /^\/run\/(.*)$/.match(uri.path)[1]
+      uri = URI.parse(url)
+      unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ /^\/run\/(.*)$/
+        return false
       end
-    rescue URI::InvalidURIError
-      return false
+
+      /^\/run\/(.*)$/.match(uri.path)[1]
     end
 
     def self.url_from_id(id)
       return nil if id.blank?
       "http://www.speedrun.com/run/#{id}"
     end
-  end
 
-  class User
-    attr_accessor :id, :twitch_login
+    private
 
-    def initialize(attrs)
-      self.id = attrs['id']
-      if attrs['twitch'].respond_to?(:[])
-        self.twitch_login = Twitch.login_from_uri(attrs['twitch']['uri'])
-      end
+    def self.get(id)
+      route(id).get
+    end
+
+    def self.route(id)
+      SpeedrunDotCom.route["/runs/#{id}"]
     end
   end
 
-  def self.run(id)
-    r = raw_run(id)
-    Run.new(r)
-  end
+  class User
+    def self.twitch_login(id)
+      res = get(id)
+      body = JSON.parse(res.body)
 
-  def self.user(id)
-    u = raw_user(id)
-    User.new(u)
+      raise MalformedResponse unless body.respond_to?(:[])
+      raise MalformedResponse unless body['data'].respond_to?(:[])
+      raise MalformedResponse unless body['data']['twitch'].respond_to?(:[])
+      raise MalformedResponse unless body['data']['twitch']['uri'].present?
+
+      Twitch::User.login_from_url(body['data']['twitch']['uri'])
+    end
+
+    private
+
+    def self.get(id)
+      route(id).get
+    end
+
+    def self.route(id)
+      SpeedrunDotCom.route["/users/#{id}"]
+    end
   end
 
   private
 
-  def self.raw_run(id)
-    res = HTTParty.get(
-      URI.parse("http://speedrun.com/api/v1/runs/#{id}").to_s
-    )
-
-    raise NotFound if res['status'] == 404
-
-    res['data']
-  end
-
-  def self.raw_user(id)
-    res = HTTParty.get(
-      URI.parse("http://speedrun.com/api/v1/users/#{id}").to_s
-    )
-
-    raise NotFound if res['status'] == 404
-
-    res['data']
+  def self.route
+    RestClient::Resource.new('http://speedrun.com/api/v1')
   end
 end
