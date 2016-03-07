@@ -10,6 +10,10 @@ module LiveSplit
   end
 
   class Parser
+    def tugnut_parse(xml, fast: true)
+      Tugnut.parse(xml)
+    end
+
     # When `options[:fast] == true`, run in O(n) time, with n being the number of splits in one run.
     # Do not parse run history, split history, or other things that scale beyond O(n).
     # When `options[:fast] == false`, go nuts.
