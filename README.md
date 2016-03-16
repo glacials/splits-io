@@ -19,18 +19,25 @@ rake db:create db:migrate
 rails server
 ```
 
-If you're on OS X and you get errors about `eventmachine` not compiling its native extension during `bundle install`,
-run
+#### Troubleshooting (OS X)
+
+If you get Bundler errors about `eventmachine`, try
 
 ```bash
 brew install openssl
 brew link openssl --force
 ```
 
-then try again. If that doesn't work, you may need to also run
+If that doesn't work, you may need to also run
 
 ```bash
 gem install eventmachine -- --with-cppflags=-I/usr/local/opt/openssl/include
+```
+
+If you get Bundler errors about `nokogiri`, run
+
+```bash
+xcode-select --install
 ```
 
 ## API
