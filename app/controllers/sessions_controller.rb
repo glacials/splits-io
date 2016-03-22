@@ -1,18 +1,22 @@
 class SessionsController < ApplicationController
   def create
-    user = User.where(twitch_id: request.env['omniauth.auth'].uid).first_or_create(
+    twitch_id = request.env['omniauth.auth'].uid
+    user = User.find_by(twitch_id: twitch_id) || User.new(twitch_id: twitch_id)
+
+    user.update(
       name: request.env['omniauth.auth'].info.name,
       email: request.env['omniauth.auth'].info.email,
       avatar: request.env['omniauth.auth'].info.logo
     )
+
     if user.errors.present?
-      redirect_to cookies.delete(:return_to) || root_path, alert: "Error: #{user.errors.full_messages.join(', ')}."
+      redirect_to redirect_path, alert: "Error: #{user.errors.full_messages.join(', ')}."
       return
     end
 
     self.current_user = user
     auth_session.persist!
-    redirect_to cookies.delete(:return_to) || root_path, notice: "Signed in as #{current_user.name}. o/"
+    redirect_to redirect_path, notice: "Signed in as #{current_user.name}. o/"
   end
 
   def destroy
@@ -21,6 +25,12 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    redirect_to cookies.delete(:return_to) || root_path, alert: params[:message]
+    redirect_to redirect_path, alert: params[:message]
+  end
+
+  private
+
+  def redirect_path
+    cookies.delete(:return_to) || root_path
   end
 end
