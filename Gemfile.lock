@@ -94,9 +94,8 @@ GEM
   specs:
     api-pagination (4.1.1)
     ast (2.2.0)
-    autoprefixer-rails (5.2.0)
+    autoprefixer-rails (6.3.4)
       execjs
-      json
     awesome_print (1.6.1)
     babel_bridge (0.5.4)
     better_errors (2.1.1)
@@ -106,9 +105,9 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     blockenspiel (0.4.5)
-    bootstrap-sass (3.3.4.1)
-      autoprefixer-rails (>= 5.0.0.1)
-      sass (>= 3.2.19)
+    bootstrap-sass (3.3.6)
+      autoprefixer-rails (>= 5.2.1)
+      sass (>= 3.3.4)
     builder (3.2.2)
     callsite (0.0.11)
     celluloid (0.16.0)
@@ -138,7 +137,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.8)
     excon (0.45.3)
-    execjs (2.5.2)
+    execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.6.0)
@@ -184,7 +183,7 @@ GEM
       multi_json (>= 1.9.2)
       netrc
     hitimes (1.2.2)
-    htmlentities (4.3.3)
+    htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     httparty (0.13.5)
@@ -374,7 +373,7 @@ GEM
       sass-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (2.7.1)
+    uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     underscore-rails (1.8.2)
@@ -388,7 +387,7 @@ GEM
       raindrops (~> 0.7)
     versionomy (0.4.4)
       blockenspiel (>= 0.4.5)
-    will_paginate (3.0.7)
+    will_paginate (3.1.0)
     xml-simple (1.1.5)
 
 PLATFORMS
