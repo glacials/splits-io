@@ -23,8 +23,11 @@ nav .dropdown
   display: inline-block
   text-align: right
 
-.dropdown-menu
-  right: 0
+.dropdown-menu li a
+  background-color: #444
+  border-bottom: 1px #fff solid
+  &:hover
+    background-color: $red
 
 nav a.selected
   color: $nav-background

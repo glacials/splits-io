@@ -1,10 +1,10 @@
 $ ->
-  window.disown_run = (run) ->
+  window.disown_run = (runID) ->
     $.ajax
-      url: "/api/v3/runs/" + run.id + "/disown"
+      url: "/api/v3/runs/" + runID + "/disown"
       type: "POST"
       success: ->
-        $("#run_" + run.id).addClass("faded")
-        $("#run_" + run.id + " > td > div.dropdown").remove()
+        $("#run_" + runID).addClass("faded")
+        $("#run_" + runID + " > td > div.dropdown").remove()
       error: (response) ->
         console.log "Run disown failed with response: " + JSON.stringify(response)
