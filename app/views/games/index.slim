@@ -7,7 +7,7 @@ article#search data-turbolinks-permanent=true
     .input-group.col-md-6
       = f.text_field(:q, name: :q, placeholder: "e.g. #{placeholder.name}, or #{placeholder.shortname}", class: 'form-control', autofocus: @query.blank?, value: @query)
       span.input-group-btn
-        = f.submit('Search', class: 'btn btn-default')
+        = f.submit('Search', class: 'btn btn-default', name: nil)
 article#games data-turbolinks-temporary=true
   - if @games.present?
     h4 Games
