@@ -34,7 +34,7 @@
               td.align-right
                 .dropdown
                   .dropdown-toggle id="dropdown_#{run.id36}" style="cursor: pointer; color: #a33;" data={toggle: :dropdown} x
-                  ul.dropdown-menu role=:menu aria={labelledby: "dropdown_#{run.id36}"}
+                  ul.dropdown-menu.red role=:menu aria={labelledby: "dropdown_#{run.id36}"}
                     li role=:presentation
                       = link_to 'Disown', '#', onclick: "window.disown_run(#{run.id36});", class: 'dropdown-header'
                       = link_to 'Delete', '#', onclick: "window.delete_run(#{run.id36});", class: 'dropdown-header'
