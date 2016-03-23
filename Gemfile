@@ -43,8 +43,9 @@ gem 'jbuilder'
 
 # authentication
 gem 'authie', github: 'glacials/authie'
-gem 'omniauth'
+gem 'omniauth', '~> 1.2.2'
 gem 'omniauth-twitch'
+gem 'omniauth-oauth2', '~> 1.3.0'
 
 # db
 gem 'arel', github: 'rails/arel'

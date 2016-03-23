@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    redirect_to redirect_path, alert: params[:message]
+    redirect_to redirect_path, alert: "Error: #{params[:message]}"
   end
 
   private
