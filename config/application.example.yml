@@ -17,7 +17,8 @@ test:
   # required to be able to run tests
   DATABASE_URL: postgres://localhost
 
-# you don't need to fill out anything past here unless you're deploying this somewhere
+# You don't need to change anything below this line.
+
 production:
   DATABASE_URL:
 
@@ -27,5 +28,4 @@ production:
   NEW_RELIC_LICENSE_KEY:
   ROLLBAR_ACCESS_TOKEN:
 
-  # used for signing cookies. generate a secure one with `rake secret`
   SECRET_KEY_BASE:

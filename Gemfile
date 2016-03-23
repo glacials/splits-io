@@ -52,7 +52,7 @@ gem 'arel', github: 'rails/arel'
 gem 'pg'
 
 # errors+logging
-# gem 'newrelic_rpm', github: 'newrelic/rpm' # no rails 5 support yet
+gem 'newrelic_rpm'
 
 # external communication
 gem 'httparty'
