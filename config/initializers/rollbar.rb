@@ -3,6 +3,14 @@ Rollbar.configure do |config|
   config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
 
   config.enabled = (Rails.env == 'production')
+  config.js_enabled = true
+  config.js_options = {
+    accessToken: 'adf345795baf4fc8824abf30aab4bde2',
+    captureUncaught: true,
+    payload: {
+      environment: 'production'
+    }
+  }
 
   config.person_method = 'current_user'
   config.person_id_method = 'id'
