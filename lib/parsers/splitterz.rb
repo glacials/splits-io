@@ -7,6 +7,10 @@ module SplitterZ
     :splitterz
   end
 
+  def self.file_extension
+    'splitterz'
+  end
+
   class Parser < BabelBridge::Parser
     rule :splitterz_file, :title_line, many?(:splits)
 

@@ -7,6 +7,10 @@ module TimeSplitTracker
     :timesplittracker
   end
 
+  def self.file_extension
+    'timesplittracker'
+  end
+
   class Parser < BabelBridge::Parser
     rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
 

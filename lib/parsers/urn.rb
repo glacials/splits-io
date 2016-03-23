@@ -7,6 +7,10 @@ module Urn
     :urn
   end
 
+  def self.file_extension
+    'json'
+  end
+
   class Parser < BabelBridge::Parser
     def parse(json, options = {})
       json = JSON.parse(json)

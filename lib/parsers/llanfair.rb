@@ -7,6 +7,10 @@ module Llanfair
     :llanfair
   end
 
+  def self.file_extension
+    'llanfair'
+  end
+
   class Parser < BabelBridge::Parser
     def parse(character_array, options = {})
       # Convert the array of character from string form to an actual array

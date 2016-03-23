@@ -41,6 +41,12 @@ class Run < ActiveRecord::Base
       [Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     end
 
+    def program(string_or_symbol)
+      program_strings = Run.programs.map(&:to_sym).map(&:to_s)
+      h = Hash[program_strings.zip(Run.programs)]
+      h[string_or_symbol.to_s]
+    end
+
     alias_method :find10, :find
     # todo: rename this to `find` when APIv2 is removed
     def find36(id)
@@ -157,9 +163,8 @@ class Run < ActiveRecord::Base
     delay.set_runner_from_srdc
   end
 
-  def filename(download_program)
-    extension = {'livesplit' => 'lss', 'urn' => 'json'}[download_program] || download_program
-    "#{to_param}.#{extension}"
+  def filename(program)
+    "#{to_param}.#{program.file_extension}"
   end
 
   def set_name

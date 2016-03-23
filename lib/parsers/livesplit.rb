@@ -9,6 +9,10 @@ module LiveSplit
     :livesplit
   end
 
+  def self.file_extension
+    'lss'
+  end
+
   class Parser
     def tugnut_parse(xml, fast: true)
       Tugnut.parse(xml)

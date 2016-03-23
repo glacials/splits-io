@@ -69,18 +69,19 @@ class RunsController < ApplicationController
   end
 
   def download
-    unless Run.programs.map(&:to_sym).include?(params[:program].to_sym)
+    program = Run.program(params[:program])
+    if program.nil?
       redirect_to run_path(@run), alert: 'Unrecognized program.'
       return
     end
 
     send_data(
-      if params[:program].to_sym == @run.program.to_sym
+      if program == Run.program(@run.program)
         @run.original_file
       else
         render_to_string(params[:program], layout: false)
       end,
-      filename: "#{@run.filename(params[:program])}",
+      filename: "#{@run.filename(program)}",
       layout: false
     )
   end

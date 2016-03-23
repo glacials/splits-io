@@ -1,5 +1,4 @@
 class ConvertsController < ApplicationController
-
   def new
   end
 
@@ -10,7 +9,7 @@ class ConvertsController < ApplicationController
 
     @run = Run.new(run_file: run_file, user: nil)
     unless @run.parses?(fast: params[:historic] != "1", convert: true)
-      redirect_to cant_parse && return
+      redirect_to cant_parse_path && return
     end
 
     program_extensions = {'livesplit' => '.lss', 'urn' => '.json'}
@@ -31,5 +30,4 @@ class ConvertsController < ApplicationController
     flash.now[:alert] = "You forgot to select a file."
     render :new
   end
-
 end

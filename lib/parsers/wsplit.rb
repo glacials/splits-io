@@ -7,6 +7,10 @@ module WSplit
     :wsplit
   end
 
+  def self.file_extension
+    'wsplit'
+  end
+
   class Parser < BabelBridge::Parser
     rule :wsplit_file, :title_line, :attempts_line, :offset_line, :size_line, many?(:splits), :icons_line
 
