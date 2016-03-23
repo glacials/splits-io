@@ -23,7 +23,7 @@ class Game < ActiveRecord::Base
   end
 
   def to_param
-    shortname || name.downcase.gsub(/\..*/, '')
+    shortname || name.downcase
   end
 
   def sync_with_srl
