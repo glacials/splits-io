@@ -3,7 +3,7 @@ Rollbar.configure do |config|
   config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
 
   config.enabled = (Rails.env == 'production')
-  config.js_enabled = true
+  config.js_enabled = false # Somehow adds a '<' to the top of every page when on ¯\_(ツ)_/¯
   config.js_options = {
     accessToken: 'adf345795baf4fc8824abf30aab4bde2',
     captureUncaught: true,
