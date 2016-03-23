@@ -9,7 +9,7 @@ under the `Link`, `Total`, and `Per-Page` fields.
 Base URL is **https://splits.io/api/v3**.
 
 ### Based on game
-Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or splits-io base 10 `id`s (which you can discover in other
+Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or Splits I/O base 10 `id`s (which you can discover in other
 routes).
 
     GET /games?search=:term
@@ -19,7 +19,7 @@ routes).
     GET /games/:game_id/categories/:category_id/runs
 
 ### Based on user
-User ids are Twitch usernames or splits-io base 10 `id`s.
+User ids are Twitch usernames or Splits I/O base 10 `id`s.
 
     GET /users/:id
     GET /users/:user_id/runs
@@ -29,7 +29,7 @@ User ids are Twitch usernames or splits-io base 10 `id`s.
     GET /users/:user_id/games/:game_id/categories/:category_id/prediction
 
 ### Based on run
-Run ids are splits-io base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
+Run ids are Splits I/O base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
 
     GET /runs/:id
     DELETE /runs/:id
@@ -38,7 +38,7 @@ Run ids are splits-io base 36 ids. These are the strings you see in user-friendl
 ## Route details
 
 ### Based on game
-Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or splits-io base 10 `id`s (which you can discover in other
+Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or Splits I/O base 10 `id`s (which you can discover in other
 routes).
 
 #### `GET /games?search=:term`
@@ -150,7 +150,7 @@ curl https://splits.io/api/v3/games/sms/categories/70/runs
 ```
 
 ### Based on user
-User ids are Twitch usernames (which we call `name`) or splits-io base 10 `id`s.
+User ids are Twitch usernames (which we call `name`) or Splits I/O base 10 `id`s.
 
 #### `GET /users/:id`
 Returns information about a user.
@@ -243,7 +243,7 @@ all recorded run history of the user for this category. The response for this en
 normal "get run" endpoint, but has a `null` id.
 
 ### Based on run
-Run ids are splits-io base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
+Run ids are Splits I/O base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
 
 #### `GET /runs/:id`
 Returns a run.
@@ -304,7 +304,7 @@ claim ownership of the run, then they'll be immediately redirected to the `uris.
 
 ##### Example request
 ```bash
-curl -iX POST --form file=@/path/to/splits_file.lss splits.io/api/v3/runs
+curl -iX POST --form file=@/path/to/splits_file.lss https://splits.io/api/v3/runs
 ```
 
 ##### Example response

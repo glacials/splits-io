@@ -16,7 +16,7 @@ article
     p Check here: #{link_to 'github.com/glacials/splits-io/labels/parsing', 'https://github.com/glacials/splits-io/labels/parsing'}.
       It's possible that your favorite program is on my radar but not a current priority. If that's the case, comment on
       the issue to let me know, so I can be more informed about the demand. If it's not, make a GitHub issue for me! I
-      want splits.io to be as complete as reasonably possible with regards to program support.
+      want Splits I/O to be as complete as reasonably possible with regards to program support.
   .question
     h4 How are game/category chosen for my uploaded run?
     p If you use LiveSplit, we try to associate your splits with an existing game and category from SRL. If we get it
@@ -31,28 +31,26 @@ article
       | (# attempts) * (# splits in the run)
     p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like
       #{link_to 'predictions', 'https://github.com/glacials/splits-io/blob/master/docs/api.md#get-usersuser_idgamesgame_idcategoriescategory_idprediction'}).
-    p It's my own fault that splits.io's handling of this is not as optimized as it should be, and I'm actively working
+    p It's my own fault that Splits I/O's handling of this is not as optimized as it should be, and I'm actively working
       to solve it, but it's not a one-stop bug fix. To see how it's going and what specifically is being planned, you
-      can check splits.io's #{link_to 'speed', 'https://github.com/glacials/splits-io/labels/speed'} label on
-      GitHub.
+      can check Splits I/O's #{link_to 'speed', 'https://github.com/glacials/splits-io/labels/speed'} label on GitHub.
     p As a temporary solution, you can manually strip history before uploading by making a copy of your splits, opening
       the copy in LiveSplit, and resetting all of your best segments (drag-select the whole column and press Delete).
       This will remove all split history; you should notice a sizeable decrease in file size, and consequently the file
-      should upload to splits.io without a hitch.
+      should upload to Splits I/O without a hitch.
   .question
-    h4 How is 'splits i/o' supposed to be capitalized?
-    p idk man.
-  .question
-    h4 Is it open source?
+    h4 Is Splits I/O open source?
     p
-      | Yep:
+      | Yes!! Have a look at and lend a hand at
       a< target=:_blank href="https://github.com/glacials/splits-io" github.com/glacials/splits-io
+      | .
   .question
-    h4 Is there an API?
+    h4 Does Splits I/O have an API?
     p
-      | Yeah, here are the docs: #{link_to 'github.com/glacials/splits-io/blob/master/docs/api.md', 'https://github.com/glacials/splits-io/blob/master/docs/api.md'}
+      | Yes as well! Here are the docs:
+      a< target=:_blank href="https://github.com/glacials/splits-io/blob/master/docs/api.md" github.com/glacials/splits-io/blob/master/docs/api.md
   .question
-    h4 Help! splits.io kidnapped my sister.
+    h4 Help! Splits I/O kidnapped my sister!!
     p
       | You can always email me at
       a<> href="mailto:qhiiyr@gmail.com" qhiiyr@gmail.com
@@ -77,8 +75,8 @@ article
   .project
     h4 PB Tracker
     small #{link_to 'source', 'https://github.com/rggibson/pb-tracker'}, #{link_to 'website', 'http://www.pbtracker.net/'}
-    p PB Tracker is splits.io's spiritual sister, preferring a you-curated, diary-style progress tracking system to
-      splits.io's more automated "give me all your splits" attitude.
+    p PB Tracker is Splits I/O's spiritual sister, preferring a you-curated, diary-style progress tracking system to
+      Splits I/O's more automated "give me all your splits" attitude.
 
   .project
     h4 SaltyBot

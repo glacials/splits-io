@@ -151,7 +151,7 @@ class Run < ActiveRecord::Base
   end
 
   # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
-  # speedrun.com. For this to work that user must have their Twitch account tied to both splits.io and speedrun.com.
+  # speedrun.com. For this to work that user must have their Twitch account tied to both Splits I/O and speedrun.com.
   def discover_runner
     return if user.present?
     delay.set_runner_from_srdc

@@ -21,7 +21,7 @@ class Api::V4::ApplicationController < ActionController::Base
 
   def force_ssl
     if !request.ssl?
-      render status: 301, json: {error: "The splits-io API is only accessible over HTTPS."}
+      render status: 301, json: {error: "The Splits I/O API is only accessible over HTTPS."}
     end
   end
 
