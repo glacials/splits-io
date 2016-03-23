@@ -2,13 +2,13 @@
 - content_for(:header) do
   h2 games
   h5 only the fast ones though
-article#search data-turbolinks-permanent=true
+article#search
   = form_for(:game, method: :get, url: games_path) do |f|
     .input-group.col-md-6
       = f.text_field(:q, name: :q, placeholder: "e.g. #{placeholder.name}, or #{placeholder.shortname}", class: 'form-control', autofocus: @query.blank?, value: @query)
       span.input-group-btn
         = f.submit('Search', class: 'btn btn-default', name: nil)
-article#games data-turbolinks-temporary=true
+article#games
   - if @games.present?
     h4 Games
     table.table.table-striped
@@ -18,7 +18,7 @@ article#games data-turbolinks-temporary=true
             td
               = link_to game, game_path(game), class: 'game-link'
               small.pull-right = game.categories.pluck(:name).join(', ')
-article#runs data-turbolinks-temporary=true
+article#runs
   - if @games.present?
     h4 Runs
     - @games.each do |game|
