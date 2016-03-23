@@ -1,0 +1,26 @@
+- from_user_pb = rivalry.from_user.pb_for(rivalry.category)
+- to_user_pb = rivalry.to_user.pb_for(rivalry.category)
+.vs
+  .media.col-md-5 style='text-align: left; margin: .5em 0'
+    .pull-left
+      img src=rivalry.from_user.avatar height=64 width=64
+    .media-body
+      h4.media-heading = rivalry.from_user.present? ? (link_to rivalry.from_user, rivalry.from_user, class: 'stealth-link user-link') : '???'
+      span = from_user_pb.present? ? (link_to from_user_pb.time, from_user_pb, class: 'time needs-formatting stealth-link run-link') : '-'
+      small< pb
+      br
+      span.time.needs-formatting = from_user_pb.sum_of_best || '0'
+      small< sum of best
+  .media.col-md-2 style='text-align: center; margin: .5em 0;'
+    .media-body
+      h4.media-heading vs.
+  .media.col-md-5 style='text-align: left; margin: .5em 0;'
+    .pull-left
+      img src=rivalry.to_user.avatar height=64 width=64
+    .media-body
+      h4.media-heading = rivalry.to_user.present? ? (link_to rivalry.to_user, rivalry.to_user, class: 'stealth-link user-link') : '???'
+      span = to_user_pb.present? ? (link_to to_user_pb.time, to_user_pb, class: 'time needs-formatting stealth-link run-link') : '-'
+      small< pb
+      br
+      span.time.needs-formatting = to_user_pb.sum_of_best || '0'
+      small< sum of best

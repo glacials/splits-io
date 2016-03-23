@@ -1,63 +1,28 @@
 - title 'Set a rival'
 - content_for(:header) do
   h2 appoint a rival
-  h5
-    = link_to @category.game, @category.game, class: 'stealth-link game-link'
-    =< link_to @category, game_category_path(@category.game, @category), class: 'stealth-link category-link'
-article.nowrap
-  article style='border: 1px dashed #ccc; width: 50%;'
-    .media.col-xs-12.col-sm-5.col-md-5.col-lg-5 style='text-align: left; margin: .5em 0'
-      .pull-left
-        img src=@user.avatar height=64 width=64
-      .media-body
-        h4.media-heading = @user.name
-        span.time.needs-formatting = @user.pb_for(@category).time
-        small< pb
-        br
-        span.time.needs-formatting = @user.pb_for(@category).sum_of_best
-        small< sum of best
-    .media.col-xs-12.col-sm-2.col-md-2.col-lg-2 style='text-align: center; margin: .5em 0;'
-      .media-body
-        h4.media-heading vs.
-    - rival = rival_display_info(@user.rivalry_for(@category))
-    .media.col-xs-12.col-sm-5.col-md-5.col-lg-5 style='text-align: left; margin: .5em 0;'
-      .pull-left
-        img src=rival[:avatar] height=64 width=64
-      .media-body
-        h4.media-heading = rival[:name]
-        span class=(rival[:pb] == '???' ? '' : 'time')  = rival[:pb]
-        small< pb
-        br
-        span class=(rival[:sum_of_best] == '???' ? '' : 'time') = rival[:sum_of_best]
-        small< sum of best
-article.nowrap
-  - if @user.follows.that_run(@category).empty?
-    .alert-warning Sorry, nobody you follow on Twitch has submitted runs for this category.
-    p Here are some categories that have rivals waiting for you:
-    - empty = true
-    - @user.categories.each do |category|
-      - if @user.follows.that_run(category).present?
-        - empty = false
-        = link_to new_user_rivalry_path(category: category), class: 'col-xs-12 col-sm-6 col-md-4 stealth-link category-link'
-          .media style='border: 1px dashed #ccc; margin: .5em 0; padding: 1em;'
-            .media-body
-              h4.media-heading = category.game
-              span = category
-              h6 = @user.follows.that_run(category).join(' ')
-    - if empty
-      i none found
+  - if @category.present?
+    h5
+      = link_to @category.game, @category.game, class: 'stealth-link game-link'
+      =< link_to @category, game_category_path(@category.game, @category), class: 'stealth-link category-link'
   - else
-    = @user.follows.that_run(@category).find_each do |user|
-      = link_to user_rivalries_path(category: @category, to_user: user.name), method: :post, class: 'col-xs-12 col-sm-6 col-md-4 stealth-link user-link new-rivalry' do
-        .media style='margin: .5em 0;'
-          .pull-left
-            img src=user.avatar height=64 width=64
-          .media-body
-            h4.media-heading
-              = user.name
-              .call-to-action = next_butt_kick_sentence
-            span.time.needs-formatting = user.pb_for(@category).time
-            small< pb
-            br
-            span.time.needs-formatting = user.pb_for(@category).sum_of_best
-            small< sum of best
+    p Here are the games and categories that both you and someone you follow on Twitch run. Click one to appoint a rival
+      for it.
+- if @category.present?
+  - rivalry = @user.rivalry_for(@category)
+  - if rivalry.present?
+    article
+      h4.center Current matchup
+    article.nowrap
+      article.showcase
+        = render partial: 'vs', locals: {rivalry: rivalry}
+  article.nowrap
+    h4 Punch someone down here with your mouse to set them as your rival for this category
+    - if @user.follows.that_run(@category).empty?
+      .alert-warning Sorry, nobody you follow on Twitch has submitted runs for this category.
+      p Here are some categories that have rivals waiting for you:
+      = render partial: 'category_candidates', locals: {user: @user}
+    - else
+      = render partial: 'user_candidates', locals: {user: @user, category: @category}
+- else
+  article.nowrap = render partial: 'category_candidates', locals: {user: @user}

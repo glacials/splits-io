@@ -1,0 +1,27 @@
+- title 'Rivalries'
+- content_for(:header) do
+  h2 Rivals
+article
+  - @user.rivalries.each do |rivalry|
+    - user_pb = @user.pb_for(rivalry.category)
+    - rival_pb = rivalry.to_user.pb_for(rivalry.category)
+    - rival = rival_display_info(rivalry)
+    .col-md-3
+      h4
+        span> = link_to rivalry.game, rivalry.game, class: 'stealth-link game-link'
+        span = link_to rivalry.category, game_category_path(rivalry.game, rivalry.category), class: 'stealth-link category-link'
+      - if rival_pb.present?
+        a.stealth-link.run-link href=compare_path(user_pb, rival_pb)
+          div
+            span> pb:
+            span = render partial: 'shared/time_difference', locals: {time: difference(user_pb, rival_pb)}
+          div
+            span> sum of best:
+            span = render partial: 'shared/time_difference', locals: {time: sob_difference(user_pb, rival_pb)}
+    .col-md-8 = render partial: 'vs', locals: {rivalry: rivalry}
+    .col-md-1 style="cursor: pointer; color: #a33;"
+      small
+        = button_to user_rivalry_path(rivalry.from_user, rivalry), method: :delete, data: {confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?"}, class: 'btn btn-default', style: "cursor: pointer; color: #a33; border: none;"
+          | X
+    hr
+  h5 = link_to '+ Add or replace a rival', new_user_rivalry_path(@user)

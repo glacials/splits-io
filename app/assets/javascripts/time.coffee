@@ -4,6 +4,9 @@ $ ->
     seconds = Math.floor el.innerHTML
     negative = seconds < 0
     formatted = numeral(Math.abs seconds).format("+00:00:00")
+    if formatted == '0:00:00'
+      el.innerHTML = '-'
+      return
     if !negative
       if $(el).hasClass "signed"
         el.innerHTML = "+" + formatted

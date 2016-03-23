@@ -31,6 +31,8 @@ html
           a.blue href=root_path class=(on_page[:index] ? 'selected' : '') splits i/o
           a.purple href=new_run_path class=(on_page[:upload] ? 'selected' : '') upload
           a.green href=games_path class=(on_page[:games] ? 'selected' : '') games
+          - if current_user.present?
+            a.yellow href=user_rivalries_path(current_user) class=(on_page[:rivalries] ? 'selected' : '') rivals
         .right-nav
           a.red href=faq_path class=(on_page[:faq] ? 'selected' : '') faq
           span.dropdown-link

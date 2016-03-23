@@ -19,21 +19,26 @@ module RivalriesHelper
     BUTT_KICK_SENTENCES[@next_index]
   end
 
+  def empty_rival_avatar
+    'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
+  end
+
   def rival_display_info(rivalry)
     if rivalry.nil?
-      {
+      return {
         avatar: 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png',
         name: '???',
         pb: '???',
-        sum_of_best: '???'
-      }
-    else
-      {
-        avatar: rivalry.to_user.avatar,
-        name: rivalry.to_user.name,
-        pb: rivalry.to_user.pb_for(rivalry.category).time,
-        sum_of_best: rivalry.to_user.pb_for(rivalry.category).sum_of_best
       }
     end
+
+    rival_pb = rivalry.to_user.pb_for(rivalry.category)
+    return {
+      avatar: rivalry.to_user.avatar,
+      name: rivalry.to_user.name,
+      run: rival_pb,
+      pb: rival_pb.try(:time) || 0,
+      sum_of_best: rival_pb.try(:sum_of_best) || 0,
+    }
   end
 end

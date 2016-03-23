@@ -4,6 +4,7 @@ $green: rgba(94, 185, 94, 1)
 $red: rgba(221, 81, 76, 1)
 $orange: rgba(243, 123, 29, 1)
 $yellow: rgba(250, 210, 50, 1)
+$black: rgba(40, 40, 40, 1)
 
 $light-blue: rgba(14, 144, 210, .5)
 $light-purple: rgba(128, 87, 165, .5)
@@ -11,6 +12,7 @@ $light-green: rgba(94, 185, 94, .5)
 $light-red: rgba(221, 81, 76, .5)
 $light-orange: rgba(243, 123, 29, .5)
 $light-yellow: rgba(250, 210, 50, .5)
+$light-black: rgba(80, 80, 80, 1)
 
 $gold: #ffd700
 
@@ -50,6 +52,15 @@ $gold: #ffd700
     &.selected
       color: $red
 
+.orange
+  background: $orange
+  nav &
+    @extend .nav-link
+    &:hover
+      background: $orange
+    &.selected
+      color: $orange
+
 .yellow
   background: $yellow
   nav &
@@ -59,14 +70,14 @@ $gold: #ffd700
     &.selected
       color: $yellow
 
-.orange
-  background: $orange
+.black
+  background: $black
   nav &
     @extend .nav-link
     &:hover
-      background: $orange
+      background: $black
     &.selected
-      color: $orange
+      color: $black
 
 .light-blue
   background: $light-blue
@@ -104,6 +115,15 @@ $gold: #ffd700
     &.selected
       background: $light-red
 
+.light-orange
+  background: $light-orange
+  nav &
+    @extend .nav-link
+    &:hover
+      background: $light-orange
+    &.selected
+      background: $light-orange
+
 .light-yellow
   background: $light-yellow
   nav &
@@ -113,14 +133,14 @@ $gold: #ffd700
     &.selected
       background: $light-yellow
 
-.light-orange
-  background: $light-orange
+.light-black
+  background: $light-black
   nav &
     @extend .nav-link
     &:hover
-      background: $light-orange
+      background: $light-black
     &.selected
-      background: $light-orange
+      background: $light-black
 
 .badge.blue
   background: #fff
@@ -145,3 +165,7 @@ $gold: #ffd700
 .badge.yellow
   background: #fff
   color: $yellow
+
+.badge.black
+  background: #fff
+  color: $black

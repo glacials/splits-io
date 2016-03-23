@@ -1,14 +1,30 @@
 module RunsHelper
 
-  TIMELINE_COLORS = [:blue, :purple, :green, :red, :orange, :yellow]
+  TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange]
 
   def difference(run_a, run_b)
-    (run_a.time - run_b.time).tap do |difference|
-      if difference > 0
-        "+ #{difference}"
-      else
-        "#{difference}"
-      end
+    if run_a.nil? || run_b.nil?
+      return 0
+    end
+
+    run_a.time - run_b.time
+  end
+
+  def sob_difference(run_a, run_b)
+    if run_a.nil? || run_b.nil?
+      return 0
+    end
+
+    run_a.sum_of_best - run_b.sum_of_best
+  end
+
+  def difference_color(time)
+    if time == 0
+      :gray
+    elsif time > 0
+      :red
+    else
+      :green
     end
   end
 
