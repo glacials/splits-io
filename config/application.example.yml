@@ -1,3 +1,9 @@
+# You can use this file to manage environment variables. Each variable in this file is loaded as an environment variable
+# when the corresponding environment is booted into. You can instead choose to use normal environment variables and that
+# works fine too.
+
+# The gem that does this is called Figaro.
+
 development:
   # required. default should be fine if your postgresql server is running locally.
   DATABASE_URL: postgres://localhost
