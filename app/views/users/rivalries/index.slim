@@ -10,7 +10,7 @@ article
       h4
         span> = link_to rivalry.game, rivalry.game, class: 'stealth-link game-link'
         span = link_to rivalry.category, game_category_path(rivalry.game, rivalry.category), class: 'stealth-link category-link'
-      - if rival_pb.present?
+      - if user_pb.present? && rival_pb.present?
         a.stealth-link.run-link href=compare_path(user_pb, rival_pb)
           div
             span> pb:
