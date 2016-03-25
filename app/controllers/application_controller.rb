@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   before_action :remove_www
   before_action :set_gon
+  before_action :sanitize_pagination_params
 
   def remove_www
     redirect_to(subdomain: nil) if request.subdomain == 'www'
@@ -25,6 +26,10 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not found')
   end
 
+  def bad_request
+    raise ActionController::BadRequest.new('Bad request')
+  end
+
   def unauthorized
     raise ActionController::RoutingError.new('Unauthorized')
   end
@@ -38,5 +43,17 @@ class ApplicationController < ActionController::Base
 
   def ssl_configured?
     Rails.application.config.use_ssl
+  end
+
+  def sanitize_pagination_params
+    if params[:page].blank?
+      params[:page] = 1
+      return
+    end
+
+    params[:page] = params[:page].to_i
+    if params[:page] < 1
+      bad_request
+    end
   end
 end
