@@ -47,4 +47,9 @@ See the full API documentation in the [API readme](./docs/api.md) file.
 If you're interested in how we parse run files from different programs, check out the [parsing
 readme](./docs/parsing.md).
 
-[1]: https://github.com/laserlemon/figaro
+## Tests
+To start running tests, you'll need to set up a test database:
+
+```bash
+RAILS_ENV=test rake db:create db:migrate
+```

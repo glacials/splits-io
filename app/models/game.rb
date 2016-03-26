@@ -7,19 +7,21 @@ class Game < ActiveRecord::Base
 
   has_many :categories
   has_many :runs, through: :categories
+  has_many :aliases, class_name: 'Game::Alias'
 
+  after_create :create_alias
   after_touch :destroy, if: Proc.new { |game| game.categories.count.zero? }
 
   scope :named, -> { where.not(name: nil) }
 
   def self.search(term)
-    t = self.arel_table
-    where(t[:name].matches("%#{term}%").or(t[:shortname].eq(term))).order(:name)
+    return nil if term.blank?
+    joins(:aliases).where('game_aliases.name LIKE ? OR games.shortname = ?', "%#{term}%", term).order(:name)
   end
 
   def self.from_name(name)
-    return nil if name.nil?
-    where("lower(name) = ?", name.strip.downcase).first_or_create(name: name.strip)
+    return nil if name.blank?
+    joins(:aliases).where(aliases: {name: name}).first_or_create(name: name)
   end
 
   def to_param
@@ -44,5 +46,11 @@ class Game < ActiveRecord::Base
 
   def unpopular_categories
     categories.joins(:runs).group('categories.id').having('count(runs.id) < ' + (Run.where(category: categories.pluck(:id)).count / 20).to_s).order('count(runs.id) desc')
+  end
+
+  private
+
+  def create_alias
+    aliases.create(name: name)
   end
 end

@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904023532) do
+ActiveRecord::Schema.define(version: 20160326064249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "citext"
 
   create_table "authie_sessions", force: :cascade do |t|
     t.string   "token"
@@ -65,6 +66,13 @@ ActiveRecord::Schema.define(version: 20150904023532) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  end
+
+  create_table "game_aliases", force: :cascade do |t|
+    t.integer "game_id"
+    t.citext  "name"
+    t.index ["game_id"], name: "index_game_aliases_on_game_id", using: :btree
+    t.index ["name"], name: "index_game_aliases_on_name", unique: true, using: :btree
   end
 
   create_table "games", force: :cascade do |t|
@@ -135,5 +143,6 @@ ActiveRecord::Schema.define(version: 20150904023532) do
     t.index ["email"], name: "index_users_on_email", using: :btree
   end
 
+  add_foreign_key "game_aliases", "games"
   add_foreign_key "splits", "runs"
 end
