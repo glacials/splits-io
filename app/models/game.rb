@@ -9,8 +9,7 @@ class Game < ActiveRecord::Base
   has_many :runs, through: :categories
   has_many :aliases, class_name: 'Game::Alias'
 
-  after_create :create_alias
-  after_touch :destroy, if: Proc.new { |game| game.categories.count.zero? }
+  after_create :create_initial_alias
 
   scope :named, -> { where.not(name: nil) }
 
@@ -50,7 +49,7 @@ class Game < ActiveRecord::Base
 
   private
 
-  def create_alias
+  def create_initial_alias
     aliases.create(name: name)
   end
 end

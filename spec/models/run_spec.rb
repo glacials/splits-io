@@ -7,17 +7,71 @@ describe Run, type: :model do
     expect(run.id36).to eq(run.id.to_s(36))
   end
 
+  context 'with a game' do
+    context 'that has no other runs' do
+      let(:run) { FactoryGirl.create(:run, game: FactoryGirl.create(:game)) }
+
+      it "doesn't destroy its game when destroyed" do
+        game = run.game
+        run.destroy
+        expect(game.destroyed?).to eq(false)
+      end
+    end
+
+    context 'that has other runs' do
+      let(:run) do
+        game = FactoryGirl.create(:game)
+        FactoryGirl.create(:run, game: game)
+        FactoryGirl.create(:run, game: game)
+      end
+
+      it "doesn't destroy its game when destroyed" do
+        game = run.game
+        run.destroy
+        expect(game.destroyed?).to eq(false)
+      end
+    end
+  end
+
+  context 'with a run_file' do
+    context "that doesn't belong to other runs" do
+      let(:run) { FactoryGirl.create(:run) }
+
+      before do
+        Run.destroy_all
+      end
+
+      it "destroys its run_file when destroyed" do
+        run_file = run.run_file
+        run.destroy
+
+        expect(run_file.destroyed?).to eq(true)
+      end
+    end
+
+    context "that belongs to other runs" do
+      let(:run) do
+        run_file = RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit1.4"))
+        FactoryGirl.create(:run, run_file: run_file)
+        FactoryGirl.create(:run, run_file: run_file)
+      end
+
+      it "doesn't destroy its run_file when destroyed" do
+        run_file = run.run_file
+        run.destroy
+
+        expect(run_file.destroyed?).to eq(false)
+      end
+    end
+  end
+
   context 'with no owner' do
     context 'with an srdc_id' do
       let(:run) { FactoryGirl.create(:speedrundotcom_run) }
 
       before do
-        expect(SpeedrunDotCom).to receive(:run).with(run.srdc_id).and_return(
-          SpeedrunDotCom::Run.new('id' => 0, 'players' => [{'id' => 'test'}])
-        )
-        expect(SpeedrunDotCom).to receive(:user).with('test').and_return(
-          SpeedrunDotCom::User.new('id' => 0, 'twitch' => {'uri' => 'http://www.twitch.tv/glacials'})
-        )
+        expect(SpeedrunDotCom::Run).to receive(:runner_id).with(run.srdc_id).and_return(0)
+        expect(SpeedrunDotCom::User).to receive(:twitch_login).with(0).and_return('glacials')
       end
 
       it 'tries to fetch its runner from speedrun.com' do

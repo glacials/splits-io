@@ -18,11 +18,7 @@ class Run < ActiveRecord::Base
   after_create :refresh_game
   after_create :discover_runner
 
-  after_destroy do |run|
-    if run.run_file.present? && run.run_file.runs.where.not(id: run).empty?
-      run.run_file.destroy
-    end
-  end
+  after_destroy :destroy_run_file_if_orphaned
 
   validates :run_file, presence: true
   validates_with RunValidator
@@ -173,5 +169,13 @@ class Run < ActiveRecord::Base
 
   def original_file
     program.to_sym == :llanfair ? RunFile.pack_binary(file) : file
+  end
+
+  def destroy_run_file_if_orphaned
+    return if run_file.nil?
+
+    if run_file.runs.where.not(id: id).empty?
+      run_file.destroy
+    end
   end
 end

@@ -4,7 +4,6 @@ class Category < ActiveRecord::Base
   has_many :rivalries, dependent: :destroy
 
   before_create :autodetect_shortname
-  after_touch :destroy, if: Proc.new { |category| category.runs.count.zero? }
 
   def self.from_name(name)
     return nil if name.nil?
