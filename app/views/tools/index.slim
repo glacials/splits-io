@@ -18,23 +18,26 @@ article
   - else
     p
       button.btn.btn-default.disabled You need to be signed in
-article.danger
-  h4 Delete your account
-  p If you like, you can permanently delete your account on splits i/o. You can recreate it later by signing in with
-    Twitch again, but it will be a fresh account with no runs.
-  p You can choose to cascade this deletion to all your runs, or to disown them instead. Disowned runs do not belong to
-    any user and will not be reclaimable, even if you recreate your account. Your name will not appear on them.
-  p
-    center style='color: #d22' This is a hard delete. We cannot restore your account if you change your mind.
-  .col-md-6
-    center
-      = button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be permanently deleted."}, params: {destroy_runs: '1'}, class: 'button btn btn-danger'
-        div
-          big Delete my account
-        small Deleting #{current_user.runs.count} runs (#{current_user.pbs.count} PBs) across #{current_user.games.count} games with it
-  .col-md-6
-    center
-      = button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be disowned."}, class: 'button btn btn-danger-inverted'
-        div
-          big Delete my account
-        small Keeping all runs, but anonymizing them permanently
+- if logged_in?
+  article.danger
+    h3.center Dangerous stuff below
+  article.danger
+    h4 Delete your account
+    p If you like, you can permanently delete your account on splits i/o. You can recreate it later by signing in with
+      Twitch again, but it will be a fresh account with no runs.
+    p You can choose to cascade this deletion to all your runs, or to disown them instead. Disowned runs do not belong to
+      any user and will not be reclaimable, even if you recreate your account. Your name will not appear on them.
+    p
+      center style='color: #d22' This is a hard delete. We cannot restore your account if you change your mind.
+    .col-md-6
+      center
+        = button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be permanently deleted."}, params: {destroy_runs: '1'}, class: 'button btn btn-danger'
+          div
+            big Delete my account
+          small Deleting #{current_user.runs.count} runs (#{current_user.pbs.count} PBs) across #{current_user.games.count} games with it
+    .col-md-6
+      center
+        = button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be disowned."}, class: 'button btn btn-danger-inverted'
+          div
+            big Delete my account
+          small Keeping all runs, but anonymizing them permanently
