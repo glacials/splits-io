@@ -47,6 +47,9 @@ gem 'omniauth', '~> 1.2.2'
 gem 'omniauth-twitch'
 gem 'omniauth-oauth2', '~> 1.3.0'
 
+# authorization
+gem 'cancancan'
+
 # db
 gem 'arel', github: 'rails/arel'
 gem 'pg'

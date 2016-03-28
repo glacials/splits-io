@@ -8,8 +8,8 @@ class Run < ActiveRecord::Base
 
   include ActionView::Helpers::DateHelper
 
-  belongs_to :user, touch: true
-  belongs_to :category, touch: true
+  belongs_to :user
+  belongs_to :category
   belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
   has_one :game, through: :category
 
@@ -130,14 +130,14 @@ class Run < ActiveRecord::Base
     category_string = CATEGORY_ALIASES.fetch(category_string, category_string)
 
     if category.blank? && game_string.present? && category_string.present?
-      game = Game.from_name(game_string)
+      game = Game.from_name!(game_string)
       self.category = game.categories.where("lower(name) = lower(?)", category_string).first_or_create(name: category_string)
     end
   end
 
   def refresh_from_file
-    game = Game.from_name(parse[:game])
-    category = game ? game.categories.from_name(parse[:category]) : nil
+    game = Game.from_name!(parse[:game])
+    category = game ? game.categories.from_name!(parse[:category]) : nil
     update(category: category, archived: !pb?)
   end
 

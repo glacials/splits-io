@@ -14,6 +14,7 @@ class Game::Alias < ActiveRecord::Base
   belongs_to :game, dependent: :destroy
 
   validates_uniqueness_of :name
+  validates_presence_of :name
 
   def to_s
     name

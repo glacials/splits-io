@@ -7,7 +7,9 @@ FactoryGirl.define do
     end
 
     trait :with_categories do
-      association :categories
+      after(:create) do |game|
+        FactoryGirl.create_list(:category, 1, game: game)
+      end
     end
   end
 end

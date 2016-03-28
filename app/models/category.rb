@@ -6,8 +6,15 @@ class Category < ActiveRecord::Base
   before_create :autodetect_shortname
 
   def self.from_name(name)
-    return nil if name.nil?
-    where("lower(name) = ?", name.strip.downcase).first_or_create(name: name.strip)
+    return nil if name.blank?
+    name = name.strip
+    where("lower(name) = lower(?)", name).first
+  end
+
+  def self.from_name!(name)
+    return nil if name.blank?
+    name = name.strip
+    where("lower(name) = lower(?)", name).first_or_create(name: name)
   end
 
   def best_known_run
@@ -35,5 +42,15 @@ class Category < ActiveRecord::Base
 
   def popular?
     runs.count * 10 >= game.runs.count
+  end
+
+  # merge_into! changes ownership of all of this category's runs and rivalries to the given category, then destroys this
+  # category.
+  def merge_into!(category)
+    ActiveRecord::Base.transaction do
+      runs.update_all(category_id: category.id)
+      rivalries.update_all(category_id: category.id)
+      destroy
+    end
   end
 end

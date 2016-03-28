@@ -1,0 +1,18 @@
+- title @game.name
+- content_for(:header) do
+  h3 Edit game
+  h5 #{link_to @game, @game, class: 'stealth-link game-link'}
+article
+  = form_for Game::Alias.new, url: game_aliases_path(@game) do |f|
+    h3 Merge games
+    p Enter a game that should be merged into #{@game}.
+    .input-group.col-md-6
+      = f.text_field(:name, class: 'form-control', placeholder: 'Exact game name to be merged', autofocus: true)
+      span.input-group-btn
+        = f.submit 'Merge', class: 'btn btn-default'
+    p
+      ul
+        li All runs for the entered game will be converted to #{@game} runs.
+        li All categories for the entered game will become #{@game} categories.
+        li If a category has an identical name to a #{@game} category, the two will be merged into one #{@game}
+           category.
