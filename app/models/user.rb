@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true
 
   scope :with_runs, -> { joins(:runs).distinct }
-  scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}) }
+  scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
 
   def self.search(term)
     where(User.arel_table[:name].matches "%#{term}%").joins(:runs).uniq.order(:name)

@@ -5,9 +5,10 @@
 article#category-tabs data-turbolinks-temporary=true
   = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
 article#run-table data-turbolinks-temporary=true
-  - if @category.runs.unarchived.owned.where.not(sum_of_best: nil).where.not(sum_of_best: 0).empty?
+  - runners = @category.runners.joins(:runs).includes(:runs).where('runs.sum_of_best > 0').order('runs.sum_of_best asc')
+  - if runners.empty?
     center
-      i Not enough data in this category to display sum of bests.
+      i Not enough data in this category to display a sum-of-best leaderboard.
   - else
     table.table.table-striped
       thead
@@ -23,19 +24,15 @@ article#run-table data-turbolinks-temporary=true
               a.tip< title='(PB - sum of best)'
       tbody
         - i = 0
-        - @category.runs.unarchived.owned.where('sum_of_best > 0').order(:sum_of_best).each do |run|
-          tr id=[:run, run.id]
+        - runners.each do |runner|
+          - pb = runner.pb_for(@category)
+          tr id=[:run, pb.id]
             td.align-right = i += 1
+            td.align-left = link_to runner, runner, class: 'user-link'
+            td.align-left.time.needs-formatting style='border-left: 2px solid #ffd700;' = pb.sum_of_best
             td.align-left
-              - if run.user && run.user.name
-                = link_to run.user, user_path(run.user), class: 'user-link'
-              - else
-                = '-'
-            td.align-left.time.needs-formatting style='border-left: 2px solid #ffd700;' = run.sum_of_best
+              small = link_to pb.time, pb, class: 'time needs-formatting run-link'
             td.align-left
-              small
-                a.run-link.time.needs-formatting href=run_path(run) = run.time
-            td.align-left
-              small = ChronicDuration.output(run.time.floor - run.sum_of_best.floor, format: :short)
+              small = ChronicDuration.output(pb.time.floor - pb.sum_of_best.floor, format: :short)
   center
     small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'

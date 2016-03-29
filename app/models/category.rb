@@ -17,6 +17,10 @@ class Category < ActiveRecord::Base
     where("lower(name) = lower(?)", name).first_or_create(name: name)
   end
 
+  def runners
+    User.that_run(self)
+  end
+
   def best_known_run
     runs.where("time != 0").order(:time).first
   end
