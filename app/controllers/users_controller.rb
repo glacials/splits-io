@@ -3,10 +3,6 @@ class UsersController < ApplicationController
   before_action :verify_ownership, only: [:destroy]
 
   def show
-    # temporary
-    @user.runs.each do |run|
-      run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
-    end
   end
 
   def destroy

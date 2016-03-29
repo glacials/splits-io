@@ -15,7 +15,6 @@ class RunsController < ApplicationController
   before_action :verify_ownership, only: [:edit, :update, :destroy]
 
   def show
-    @run.delay.refresh_from_file if rand < SplitsIO::Application.config.run_refresh_chance
   end
 
   def index

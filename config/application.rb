@@ -12,9 +12,6 @@ module SplitsIO
     config.action_controller.allow_forgery_protection = false
     config.active_job.queue_adapter = :delayed_job
 
-    # How often should encountering a run trigger a background refresh-from-file job?
-    config.run_refresh_chance = 0.1
-
     config.assets.precompile += ['darkmode.css']
   end
 end
