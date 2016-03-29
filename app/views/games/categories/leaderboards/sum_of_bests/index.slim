@@ -23,7 +23,7 @@ article#run-table data-turbolinks-temporary=true
               a.tip< title='(PB - sum of best)'
       tbody
         - i = 0
-        - @category.runs.unarchived.owned.where.not(sum_of_best: nil).where.not(sum_of_best: 0).order(:sum_of_best).each do |run|
+        - @category.runs.unarchived.owned.where('sum_of_best > 0').order(:sum_of_best).each do |run|
           tr id=[:run, run.id]
             td.align-right = i += 1
             td.align-left
