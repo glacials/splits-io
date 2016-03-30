@@ -1,5 +1,5 @@
 class Category < ActiveRecord::Base
-  belongs_to :game, touch: true
+  belongs_to :game
   has_many :runs
   has_many :rivalries, dependent: :destroy
 
