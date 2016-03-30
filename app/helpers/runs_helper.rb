@@ -46,11 +46,11 @@ module RunsHelper
         cols: [:time, :name, :uploaded],
         description: "personal bests"
       }.merge(sorting_info)
-    when :game
+    when :games
       {
-        type: :game,
-        source: options[:game],
-        runs: options[:game].runs.nonempty,
+        type: :games,
+        source: options[:games],
+        runs: Run.by_game(options[:games]).nonempty,
         cols: [:runner, :time, :name, :uploaded]
       }.merge(sorting_info)
     when :category

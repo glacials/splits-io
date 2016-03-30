@@ -25,7 +25,7 @@ class Run < ActiveRecord::Base
 
   before_save :set_name
 
-  scope :by_game, ->(game) { joins(:category).where(categories: {game_id: game}) }
+  scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
   scope :by_category, ->(category) { where(category: category) }
   scope :nonempty, -> { where("time != 0") }
   scope :owned, -> { where.not(user: nil) }

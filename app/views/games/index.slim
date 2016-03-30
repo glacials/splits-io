@@ -13,7 +13,7 @@ article#games
     h4 Games
     table.table.table-striped
       tbody
-        - @games.each do |game|
+        - @games.order(:shortname, :name).each do |game|
           tr
             td
               = link_to game, game_path(game), class: 'game-link'
@@ -21,5 +21,4 @@ article#games
 article#runs
   - if @games.present?
     h4 Runs
-    - @games.each do |game|
-      = render partial: 'shared/run_table', locals: table_locals(:game, game: game)
+    = render partial: 'shared/run_table', locals: table_locals(:games, games: @games)

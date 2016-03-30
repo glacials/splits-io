@@ -16,7 +16,7 @@ class Game < ActiveRecord::Base
   def self.search(term)
     term = term.strip
     return nil if term.blank?
-    joins(:aliases).where('game_aliases.name LIKE ? OR games.shortname = ?', "%#{term}%", "%#{term}%").order(:name).distinct
+    joins(:aliases).where('game_aliases.name LIKE ? OR games.shortname LIKE ?', "%#{term}%", "%#{term}%").distinct
   end
 
   def self.from_name(name)
