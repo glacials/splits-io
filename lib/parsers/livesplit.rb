@@ -50,7 +50,7 @@ module LiveSplit
         end.reject { |t| t == 0 }.uniq,
         splits: [],
         time: 0,
-      }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}" }
+      }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
 
       run[:splits] = xml['Segments'][0]['Segment'].map do |segment|
         split = Split.new
@@ -96,7 +96,7 @@ module LiveSplit
         history: fast ? [] : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq
-      }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}" }
+      }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
 
       run[:splits] = xml['Segments'][0]['Segment'].map do |segment|
         split = Split.new
@@ -172,6 +172,7 @@ module LiveSplit
         splits: [],
         time: 0
       }.merge(run)
+      run[:name] = "#{run[:game]} #{run[:category]}".strip
 
       if run[:splits].empty?
         xml['Segments'][0]['Segment'].each do |segment|
@@ -217,10 +218,10 @@ module LiveSplit
                   else
                     []
                   end,
-        name:     "#{run[:game]} #{run[:category]}",
         splits:   [],
         time:     0
       }.merge(run)
+      run[:name] = "#{run[:game]} #{run[:category]}".strip
 
       if run[:splits].empty?
         xml['Segments'][0]['Segment'].each do |segment|

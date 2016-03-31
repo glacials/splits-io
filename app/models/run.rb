@@ -124,6 +124,14 @@ class Run < ActiveRecord::Base
     id36
   end
 
+  def to_s
+    name
+  end
+
+  def name
+    read_attribute(:name).presence || "(no title)"
+  end
+
   def path
     "/#{to_param}"
   end
