@@ -80,11 +80,15 @@ class Run < ActiveRecord::Base
     return @parse_cache[fast] if @parse_cache.try(:[], fast).present?
     return @convert_cache if @convert_cache.present?
 
-    if Run.programs.map(&:to_sym).include?(program.try(:to_sym))
-      [Run.programs[Run.programs.map(&:to_sym).index(program.to_sym)]]
+    timer = Run.program(program)
+
+    if timer.present?
+      timers_to_try = [timer]
     else
-      Run.programs
-    end.each do |program|
+      timers_to_try = Run.programs
+    end
+
+    timers_to_try.each do |program|
       result = program::Parser.new.parse(file, fast: fast)
       next if result.blank?
 
@@ -102,14 +106,14 @@ class Run < ActiveRecord::Base
         end.sum.to_f
       )
 
-        if convert
-          @convert_cache = result
-        else
-          populate_category(result[:game], result[:category])
-          save if changed?
-        end
+      if convert
+        @convert_cache = result
+      else
+        populate_category(result[:game], result[:category])
+        save if changed?
+      end
 
-        @parse_cache = (@parse_cache || {}).merge(fast => result)
+      @parse_cache = (@parse_cache || {}).merge(fast => result)
 
       return result
     end
