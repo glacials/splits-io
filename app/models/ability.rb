@@ -2,10 +2,15 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    return if user.nil?
+    user ||= User.new
+
+    can :read, [Run, Category, Game, User]
+
+    can [:update, :create, :destroy], Run.owned, user_id: user.id
+    can [:read, :update, :create, :destroy], Rivalry, from_user_id: user.id
 
     if user.name == 'glacials'
-      can :edit, Game
+      can [:update, :destroy, :merge], Game
     end
   end
 end
