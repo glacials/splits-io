@@ -13,6 +13,10 @@ module LiveSplit
     'lss'
   end
 
+  def self.website
+    'http://livesplit.org/'
+  end
+
   class Parser
     def tugnut_parse(xml, fast: true)
       Tugnut.parse(xml)

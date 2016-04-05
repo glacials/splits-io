@@ -9,15 +9,15 @@ module CompletedRun
     end
 
     def shortest_segment
-      reduced_splits.min_by(&:duration)
+      collapsed_splits.min_by(&:duration)
     end
 
     def longest_segment
-      reduced_splits.max_by(&:duration)
+      collapsed_splits.max_by(&:duration)
     end
 
     def median_segment_duration
-      sorted_segments = reduced_splits.map(&:duration).sort
+      sorted_segments = collapsed_splits.map(&:duration).sort
       len = sorted_segments.size
       (sorted_segments[(len - 1) / 2] + sorted_segments[len / 2]) / 2.0
     end

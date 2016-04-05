@@ -11,6 +11,10 @@ module Llanfair
     'llanfair'
   end
 
+  def self.website
+    'http://jenmaarai.com/llanfair/en/'
+  end
+
   class Parser < BabelBridge::Parser
     def parse(character_array, options = {})
       # Convert the array of character from string form to an actual array

@@ -11,6 +11,10 @@ module SplitterZ
     'splitterz'
   end
 
+  def self.website
+    'http://splitterz420.blogspot.com/'
+  end
+
   class Parser < BabelBridge::Parser
     rule :splitterz_file, :title_line, many?(:splits)
 

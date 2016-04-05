@@ -109,7 +109,7 @@ class RunsController < ApplicationController
 
   def set_run
     @run = Run.find_by(id: params[:id].to_i(36)) || Run.find_by!(nick: params[:id])
-    gon.run = {id: @run.id, splits: @run.reduced_splits}
+    gon.run = {id: @run.id, splits: @run.collapsed_splits}
     gon.scale_to = @run.time
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: 404
@@ -118,7 +118,7 @@ class RunsController < ApplicationController
   def set_comparison
     return if params[:comparison_run].blank?
     @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
-    gon.comparison_run = {id: @comparison_run.id, splits: @comparison_run.reduced_splits}
+    gon.comparison_run = {id: @comparison_run.id, splits: @comparison_run.collapsed_splits}
     gon.scale_to = [@run.time, @comparison_run.time].max
   rescue ActiveRecord::RecordNotFound
     render :not_found, status: 404

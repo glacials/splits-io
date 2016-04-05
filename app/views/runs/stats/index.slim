@@ -30,19 +30,31 @@ article#stats
         tr
           td
             span Timer
-          td = Run.programs[Run.programs.map(&:to_sym).index(@run.program.to_sym)]
-        tr
           td
-            span Total potential timesave
-            small.tip< title='(PB - sum of best)' (?)
-          td.time.needs-formatting = @run.time - @run.reduced_splits.sum { |split| split.best }
+            - program = Run.program(@run.program)
+            span = program
+            span< = "("
+            span = link_to "website", program.website, target: :_blank
+            span = ")"
+        - if @run.sum_of_best == 0
+          tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
+            td
+              span Total potential timesave
+              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
+            td -
+        - else
+          tr
+            td
+              span Total potential timesave
+              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
+            td.time.needs-formatting = @run.time - @run.collapsed_splits.sum { |split| split.best }
         tr
           td
             span Attempt
           td = @run.attempts
         tr
           td
-            span Splits in the run
+            span Splits
           td = @run.splits.size
         tr
           td
@@ -63,7 +75,7 @@ article#stats
         tr
           td
             span Mean segment length
-          td.time.needs-formatting = @run.time / @run.reduced_splits.size
+          td.time.needs-formatting = @run.time / @run.collapsed_splits.size
         tr
           td
             span Median segment length
