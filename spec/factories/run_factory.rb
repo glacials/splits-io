@@ -2,6 +2,18 @@ FactoryGirl.define do
   factory :run do
     run_file RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit1.4"))
 
+    trait :owned do
+      user
+    end
+
+    trait :unowned do
+      user nil
+    end
+
+    trait :nicked do
+      nick 'boop'
+    end
+
     factory :speedrundotcom_run do
       srdc_id 0
     end

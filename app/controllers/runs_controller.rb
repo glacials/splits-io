@@ -27,6 +27,10 @@ class RunsController < ApplicationController
   end
 
   def update
+    unless params[:run].respond_to?(:[])
+      redirect_to edit_run_path(@run), alert: "There was an error saving that data. Please try again."
+    end
+
     if params[:run][:category]
       @run.update(category: Category.find(params[:run][:category]))
       redirect_to edit_run_path(@run), notice: 'Game/category updated.'
@@ -41,12 +45,16 @@ class RunsController < ApplicationController
 
     if params[:run][:srdc_url]
       srdc_id = SpeedrunDotCom::Run.id_from_url(params[:run][:srdc_url])
-      redirect_to edit_run_path(@run), if srdc_id != false
-        @run.update(srdc_id: srdc_id)
-        {notice: 'Link with speedrun.com updated.'}
+      if !srdc_id
+        redirect_params = {alert: 'Your speedrun.com URL must have the format http://www.speedrun.com/run/6yjoqgzd.'}
       else
-        {alert: 'Your speedrun.com URL must have the format http://www.speedrun.com/run/6yjoqgzd.'}
+        if !@run.update(srdc_id: srdc_id)
+          redirect_params = {alert: "There was an error updating your SRDC link. Please try again."}
+        else
+          redirect_params = {notice: "Link with Speedrun.com updated."}
+        end
       end
+      redirect_to edit_run_path(@run), redirect_params
       return
     end
 
