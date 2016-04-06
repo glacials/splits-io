@@ -41,9 +41,9 @@
 - if @run.time > 0
   #timeline data-turbolinks-permanent=true
     = render partial: 'timeline', locals: {run: @run}
-    - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
+    - if @run.skipped_splits.empty? && @run.has_golds?
       = render partial: 'gold_timeline', locals: {run: @run}
-  #timeline-inspector
+  #timeline-inspector data-turbolinks-permanent=true
     = render partial: 'timeline_inspector', locals: {run: @run}
 
 article

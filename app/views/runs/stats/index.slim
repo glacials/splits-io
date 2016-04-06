@@ -17,10 +17,13 @@
       li
         a href=run_path(@run) &larr; back to run
 
-#timeline data-turbolinks-permanent=true
-  = render partial: 'runs/timeline', locals: {run: @run}
-  - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
-    = render partial: 'runs/gold_timeline', locals: {run: @run}
+- if @run.time > 0
+  #timeline data-turbolinks-permanent=true
+    = render partial: 'runs/timeline', locals: {run: @run}
+    - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
+      = render partial: 'runs/gold_timeline', locals: {run: @run}
+  #timeline-inspector data-turbolinks-permanent=true
+    = render partial: 'runs/timeline_inspector', locals: {run: @run}
 
 article#stats
   .col-md-8

@@ -16,10 +16,13 @@
       li
         a href=run_path(@run) &larr; back to run
 
-#timeline data-turbolinks-permanent=true
-  = render partial: 'timeline', locals: {run: @run}
-  - if @run.splits.all? { |split| !split.skipped? } && @run.has_golds?
-    = render partial: 'gold_timeline', locals: {run: @run}
+- if @run.time > 0
+  #timeline data-turbolinks-permanent=true
+    = render partial: 'timeline', locals: {run: @run}
+    - if @run.skipped_splits.empty? && @run.has_golds?
+      = render partial: 'gold_timeline', locals: {run: @run}
+  #timeline-inspector data-turbolinks-permanent=true
+    = render partial: 'timeline_inspector', locals: {run: @run}
 
 article#game-category data-turbolinks-permanent=true
   = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
