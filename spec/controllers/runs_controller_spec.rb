@@ -21,7 +21,7 @@ describe RunsController do
   end
 
   describe '#show' do
-    let(:response) { get(:show, id: id) }
+    let(:response) { get(:show, params: {id: id}) }
 
     context 'for a nonexisting run' do
       let(:id) { 'z' }
@@ -56,7 +56,7 @@ describe RunsController do
   end
 
   describe '#edit' do
-    let(:response) { get(:edit, id: run.id36) }
+    let(:response) { get(:edit, params: {id: run.id36}) }
 
     context 'for an unowned run' do
       let(:run) { FactoryGirl.create(:run, :unowned) }
@@ -111,7 +111,12 @@ describe RunsController do
 
   describe '#update' do
     context 'category' do
-      let(:response) { put(:update, id: run.id36, run: {category: FactoryGirl.create(:category).id}) }
+      let(:response) do
+        put(:update, params: {
+          id: run.id36,
+          run: {category: FactoryGirl.create(:category).id}
+        })
+      end
 
       context 'for an unowned run' do
         let(:run) { FactoryGirl.create(:run, :unowned) }
@@ -170,7 +175,7 @@ describe RunsController do
   end
 
   describe '#destroy' do
-    let(:response) { delete(:destroy, id: run.id36) }
+    let(:response) { delete(:destroy, params: {id: run.id36}) }
 
     context 'for an unowned run' do
       let(:run) { FactoryGirl.create(:run, :unowned) }

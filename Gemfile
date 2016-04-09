@@ -4,7 +4,7 @@ ruby '2.2.4'
 group :test do
   # tests
   gem 'factory_girl_rails', require: false
-  gem 'rspec-rails', require: false
+  gem 'rspec-rails', '3.5.0.beta3', require: false
   gem 'simplecov', require: false
 end
 
@@ -23,8 +23,8 @@ group :development, :hot do
   gem 'rubocop', require: false
 
   # tests
-  gem 'guard'
-  gem 'guard-rspec'
+  gem 'guard', require: false
+  gem 'guard-rspec', require: false
 end
 
 group :production do
