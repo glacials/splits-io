@@ -15,6 +15,7 @@ class Run < ActiveRecord::Base
 
   has_secure_token :claim_token
 
+  after_create -> { parse(fast: true) }
   after_create :refresh_game
   after_create :discover_runner
 

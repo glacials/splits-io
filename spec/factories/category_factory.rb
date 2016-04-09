@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :category do
     game
-    name "Any%"
+    name 'Any%'
 
     trait :with_runs do
-      after(:create) do |game|
+      after(:create) do
         FactoryGirl.create_list(:run, 3, category: category)
       end
     end

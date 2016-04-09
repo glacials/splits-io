@@ -16,7 +16,10 @@ describe Api::V3::RunsController do
 
       it 'returns the correct run' do
         returned_attributes.each do |attribute|
-          expect(body[attribute.to_s]).to eq(run.send(attribute))
+          expect(body[attribute.to_s]).to(
+            eq(run.send(attribute)),
+            "expected #{attribute} to be #{run.send(attribute)}, got #{body[attribute.to_s]}"
+          )
         end
       end
     end

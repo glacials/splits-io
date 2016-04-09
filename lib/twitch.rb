@@ -6,17 +6,19 @@ class Twitch
 
   module User
     def self.login_from_url(twitch_url)
-      /^https?:\/\/(?:www\.)?twitch\.tv\/([^\/]+)(?:.*)$/.match(twitch_url)[1]
+      %r{^https?://(?:www\.)?twitch\.tv/([^/]+)(?:.*)$}.match(twitch_url)[1]
     end
 
-    private
+    class << self
+      private
 
-    def self.get(login)
-      route(login).get
-    end
+      def get(login)
+        route(login).get
+      end
 
-    def self.route(login)
-      Twitch.route["/users/#{login}"]
+      def route(login)
+        Twitch.route["/users/#{login}"]
+      end
     end
   end
 
@@ -31,20 +33,24 @@ class Twitch
       end
     end
 
-    private
+    class << self
+      private
 
-    def self.get(login)
-      route(login).get
-    end
+      def get(login)
+        route(login).get
+      end
 
-    def self.route(login)
-      Twitch::User.route(login)["/follows/channels?limit=500"]
+      def route(login)
+        Twitch::User.route(login)['/follows/channels?limit=500']
+      end
     end
   end
 
-  private
+  class << self
+    private
 
-  def self.route
-    RestClient::Resource.new('https://api.twitch.tv/kraken')
+    def route
+      RestClient::Resource.new('https://api.twitch.tv/kraken')
+    end
   end
 end

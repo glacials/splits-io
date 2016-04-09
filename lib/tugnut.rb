@@ -5,13 +5,15 @@ class Tugnut
     e.response
   end
 
-  private
+  class << self
+    private
 
-  def self.req(string)
-    client.post(splits: string, multipart: true)
-  end
+    def req(string)
+      client.post(splits: string, multipart: true)
+    end
 
-  def self.client
-    RestClient::Resource.new('https://tugnut.splits.io/parse/livesplit')
+    def client
+      RestClient::Resource.new('https://tugnut.splits.io/parse/livesplit')
+    end
   end
 end

@@ -8,26 +8,18 @@ module SpeedrunDotCom
       res = get(id)
       body = JSON.parse(res.body)
 
-      raise MalformedResponse unless body.respond_to?(:[])
-      raise MalformedResponse unless body['data'].respond_to?(:[])
-      raise MalformedResponse unless body['data']['players'].respond_to?(:[])
-      raise MalformedResponse unless body['data']['players'][0].respond_to?(:[])
-      raise MalformedResponse unless body['data']['players'][0]['id'].present?
-
       body['data']['players'][0]['id']
     end
 
     def self.id_from_url(url)
-      if url.blank?
-        return nil
-      end
+      return nil if url.blank?
 
       uri = URI.parse(url)
-      unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ /^\/run\/(.*)$/
+      unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ %r{^/run/(.*)$}
         return false
       end
 
-      /^\/run\/(.*)$/.match(uri.path)[1]
+      %r{^/run/(.*)$}.match(uri.path)[1]
     end
 
     def self.url_from_id(id)
@@ -35,14 +27,16 @@ module SpeedrunDotCom
       "http://www.speedrun.com/run/#{id}"
     end
 
-    private
+    class << self
+      private
 
-    def self.get(id)
-      route(id).get
-    end
+      def get(id)
+        route(id).get
+      end
 
-    def self.route(id)
-      SpeedrunDotCom.route["/runs/#{id}"]
+      def route(id)
+        SpeedrunDotCom.route["/runs/#{id}"]
+      end
     end
   end
 
@@ -51,28 +45,27 @@ module SpeedrunDotCom
       res = get(id)
       body = JSON.parse(res.body)
 
-      raise MalformedResponse unless body.respond_to?(:[])
-      raise MalformedResponse unless body['data'].respond_to?(:[])
-      raise MalformedResponse.new(body) unless body['data']['twitch'].respond_to?(:[])
-      raise MalformedResponse unless body['data']['twitch']['uri'].present?
-
       Twitch::User.login_from_url(body['data']['twitch']['uri'])
     end
 
-    private
+    class << self
+      private
 
-    def self.get(id)
-      route(id).get
-    end
+      def get(id)
+        route(id).get
+      end
 
-    def self.route(id)
-      SpeedrunDotCom.route["/users/#{id}"]
+      def route(id)
+        SpeedrunDotCom.route["/users/#{id}"]
+      end
     end
   end
 
-  private
+  class << self
+    private
 
-  def self.route
-    RestClient::Resource.new('http://speedrun.com/api/v1')
+    def route
+      RestClient::Resource.new('http://speedrun.com/api/v1')
+    end
   end
 end
