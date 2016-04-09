@@ -10,8 +10,6 @@ class Twitch
     end
 
     class << self
-      private
-
       def get(login)
         route(login).get
       end
@@ -26,7 +24,7 @@ class Twitch
     def self.followed_ids(login)
       Rails.cache.fetch([:twitch, :follows, login]) do
         JSON.parse(
-          Twitch::Follows.get(login)
+          self.get(login)
         )['follows'].map do |follow|
           follow['channel']['_id']
         end
@@ -34,21 +32,17 @@ class Twitch
     end
 
     class << self
-      private
-
       def get(login)
         route(login).get
       end
 
       def route(login)
-        Twitch::User.route(login)['/follows/channels?limit=500']
+        User.route(login)['/follows/channels?limit=500']
       end
     end
   end
 
   class << self
-    private
-
     def route
       RestClient::Resource.new('https://api.twitch.tv/kraken')
     end
