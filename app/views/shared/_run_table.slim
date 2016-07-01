@@ -61,5 +61,5 @@
                   - elsif run.category.present?
                     = link_to '+', new_user_rivalry_path(current_user, category: run.category)
             - if cols.include?(:uploaded)
-              td.align-right.nowrap title=run.created_at = "#{run.time_since_upload} ago"
+              td.align-right.nowrap.upload-date.date-formatting title=run.created_at = run.created_at
     .center = will_paginate(runs)

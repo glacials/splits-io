@@ -216,6 +216,8 @@ GEM
     mime-types (2.6.1)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
+    momentjs-rails (2.11.1)
+      railties (>= 3.1)
     moneta (0.8.0)
     moving_average (0.1.1)
     multi_json (1.11.2)
@@ -413,6 +415,7 @@ DEPENDENCIES
   jquery-rails
   jquery-turbolinks
   meta_request
+  momentjs-rails
   moving_average
   newrelic_rpm
   nilify_blanks
@@ -448,4 +451,4 @@ DEPENDENCIES
   xml-simple
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
