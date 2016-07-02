@@ -72,6 +72,7 @@ gem 'numeraljs-rails'
 gem 'spinjs-rails'
 gem 'tipsy-rails'
 gem 'underscore-rails'
+gem 'momentjs-rails'
 
 # models/db
 gem 'has_secure_token'
