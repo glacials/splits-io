@@ -1,7 +1,7 @@
 $ ->
   $(".time.needs-formatting").each (i, el) ->
     $(el).removeClass("needs-formatting")
-    seconds = Math.floor el.innerHTML
+    seconds = el.innerHTML
     negative = seconds < 0
     formatted = numeral(Math.abs seconds).format("+00:00:00")
     if formatted == '0:00:00'
