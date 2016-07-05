@@ -10,3 +10,4 @@ $ ->
       $("#" + gon.comparison_run.id + "-split-" + i).each (j, el) ->
         el.style["z-index"] = i
         el.style.width = gon.comparison_run.splits[i].duration / gon.scale_to * 100 + "%"
+    $('.draggable').draggable axis: 'x', scroll: false

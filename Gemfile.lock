@@ -197,6 +197,8 @@ GEM
     jquery-turbolinks (2.1.0)
       railties (>= 3.1.0)
       turbolinks
+    jquery-ui-rails (5.0.5)
+      railties (>= 3.2.16)
     json (1.8.3)
     jwt (1.5.1)
     kgio (2.9.3)
@@ -414,6 +416,7 @@ DEPENDENCIES
   jquery-cookie-rails
   jquery-rails
   jquery-turbolinks
+  jquery-ui-rails
   meta_request
   momentjs-rails
   moving_average
@@ -449,6 +452,9 @@ DEPENDENCIES
   versionomy
   will_paginate
   xml-simple
+
+RUBY VERSION
+   ruby 2.2.5p319
 
 BUNDLED WITH
    1.12.5

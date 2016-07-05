@@ -14,6 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery.cookie
 //= require jquery_ujs
+//= require jquery-ui/draggable
 //= require bootstrap
 //= require numeral
 //= require spin
