@@ -8,7 +8,7 @@
     - else
       = @run.name
   h5
-    .time.needs-formatting = @run.time
+    .time.needs-formatting class=('short' if @run.short?) = @run.time
     - if @run.user.try(:name)
       small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
   h6
@@ -70,7 +70,7 @@ article#danger-zone.danger data-turbolinks-permanent=true
             big Delete
           small
             = "#{@run.name} in "
-            span.time.needs-formatting = @run.time
+            span.time.needs-formatting class=('short' if @run.short?) = @run.time
     .col-md-6
       center
         = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run.name} run?"}, params: {'run[disown]' => true}, class: 'button btn btn-danger-inverted', style: 'margin: 1em;'
@@ -78,4 +78,4 @@ article#danger-zone.danger data-turbolinks-permanent=true
             big Disown
           small
             = "#{@run.name} in "
-            span.time.needs-formatting = @run.time
+            span.time.needs-formatting class=('short' if @run.short?) = @run.time

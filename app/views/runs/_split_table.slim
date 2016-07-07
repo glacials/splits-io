@@ -16,8 +16,8 @@ table.table.table-striped
           - if split.skipped?
             span.time -
           - else
-            span.time.needs-formatting = split.duration
+            span.time.needs-formatting class=('short' if short) = split.duration
         - if split.skipped?
           td.align-right.time -
         - else
-          td.align-right.time.needs-formatting = split.finish_time
+          td.align-right.time.needs-formatting class=('short' if short) = split.finish_time

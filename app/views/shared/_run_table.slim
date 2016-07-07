@@ -55,11 +55,11 @@
                   - if rival.present? && rival.runs?(run.category)
                     - rival_run = rival.pb_for(run.category)
                     = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
-                      = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run)}
+                      = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run), short: run.short?}
                       |  against 
                       = rival
                   - elsif run.category.present?
                     = link_to '+', new_user_rivalry_path(current_user, category: run.category)
             - if cols.include?(:uploaded)
-              td.align-right.nowrap.upload-date.needs-formatting title=run.created_at = run.created_at
+              td.align-right.nowrap.upload-date.needs-formatting class=('short' if run.short?) title=run.created_at = run.created_at
     .center = will_paginate(runs)

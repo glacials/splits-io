@@ -14,10 +14,10 @@ article
         a.stealth-link.run-link href=compare_path(user_pb, rival_pb)
           div
             span> pb:
-            span = render partial: 'shared/time_difference', locals: {time: difference(user_pb, rival_pb)}
+            span = render partial: 'shared/time_difference', locals: {time: difference(user_pb, rival_pb), short: user_pb.short?}
           div
             span> sum of best:
-            span = render partial: 'shared/time_difference', locals: {time: sob_difference(user_pb, rival_pb)}
+            span = render partial: 'shared/time_difference', locals: {time: sob_difference(user_pb, rival_pb), short: user_pb.short?}
     .col-md-8 = render partial: 'vs', locals: {rivalry: rivalry}
     .col-md-1 style="cursor: pointer; color: #a33;"
       small

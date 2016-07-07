@@ -9,7 +9,7 @@
     - else
       = @run.name
   h5
-    .time.needs-formatting = @run.time
+    .time.needs-formatting class=('short' if @run.short?) = @run.time
     - if @run.user.try(:name)
       small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
   h6
@@ -48,4 +48,4 @@
 
 article
   - cache [:splits, :v1, @run] do
-    = render partial: 'split_table', locals: {splits: @run.splits, comparison_splits: @run.splits}
+    = render partial: 'split_table', locals: {short: @run.short?, splits: @run.splits, comparison_splits: @run.splits}
