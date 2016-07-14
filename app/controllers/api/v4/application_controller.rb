@@ -2,12 +2,16 @@ class Api::V4::ApplicationController < ActionController::Base
   prepend_before_action :set_cors_headers
   before_action :force_ssl, if: -> { Rails.application.config.use_ssl }
 
+  def options
+    headers['Allow'] = 'POST, PUT, DELETE, GET, OPTIONS'
+  end
+
   private
 
   def set_cors_headers
     headers.merge!(
       'Access-Control-Allow-Origin' => '*',
-      'Access-Control-Allow-Methods' => 'POST, PUT, DELETE, GET, OPTIONS',
+      'Access-Control-Allow-Methods' => '*',
       'Access-Control-Request-Method' => '*',
       'Access-Control-Allow-Headers' => 'origin, X-Requested-With, Content-Type, Accept, Authorization'
     )

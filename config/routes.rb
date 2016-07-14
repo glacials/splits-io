@@ -71,6 +71,7 @@ SplitsIO::Application.routes.draw do
 
   namespace :api do
     namespace :v4 do
+      match '(/*a(/*b(/*c(/*d))))', via: [:options], to: 'application#options'
       resources :categories, only: [:show] do
         resources :runners, :runs, only: :index, module: :categories
       end
@@ -91,6 +92,7 @@ SplitsIO::Application.routes.draw do
     end
 
     namespace :v3 do
+      match '(/*a(/*b(/*c(/*d))))', via: [:options], to: 'application#options'
       resources :games, only: [:index, :show] do
         resources :runs, only: [:index], module: :games
         resources :categories, only: [:show], module: :games do
