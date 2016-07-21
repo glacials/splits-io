@@ -16,16 +16,19 @@ module WSplit
   end
 
   class Parser < BabelBridge::Parser
-    rule :wsplit_file, :title_line, :attempts_line, :offset_line, :size_line, many?(:splits), :icons_line
+    rule :wsplit_file, :title_line, :optional_goal_line, :attempts_line, :offset_line, :size_line, many?(:splits), :icons_line
 
-    rule :title_line,    'Title=',     :title,    :newline
-    rule :attempts_line, 'Attempts=',  :attempts, :newline
-    rule :offset_line,   'Offset=',    :offset,   :newline
-    rule :size_line,     'Size=',      :size,     :newline
-    rule :splits,        :title,       ',',       :old_time, ',', :finish_time, ',', :best_time, :newline
-    rule :icons_line,    'Icons=',     /(.*)/,    :newline?
+    rule :title_line,         'Title=',     :title,    :newline
+    rule :optional_goal_line, 'Goal=',      :goal,     :newline
+    rule :optional_goal_line, ''
+    rule :attempts_line,      'Attempts=',  :attempts, :newline
+    rule :offset_line,        'Offset=',    :offset,   :newline
+    rule :size_line,          'Size=',      :size,     :newline
+    rule :splits,             :title,       ',',       :old_time, ',', :finish_time, ',', :best_time, :newline
+    rule :icons_line,         'Icons=',     /(.*)/,    :newline?
 
     rule :title,    /([^,\r\n]*)/
+    rule :goal,     /([^,\r\n]*)/
     rule :attempts, /(\d+)/
     rule :offset,   /(\d*\.?\d*)/
     rule :size,     /([^\r\n]*)/
