@@ -256,41 +256,47 @@ curl https://splits.io/api/v3/runs/c6
 ##### Example response
 ```json{
 "run": {
-  "id": 4738,
-  "path": "/3nm",
-  "name": "Tron: Evolution Any% (NG+)",
-  "program": "livesplit",
+  "id": 438,
+  "path": "/c6",
+  "name": "Sonic Colors",
+  "program": "wsplit",
   "image_url": null,
-  "created_at": "2015-03-06T07:03:49.175Z",
-  "updated_at": "2015-08-17T04:40:20.156Z",
-  "video_url": "http://www.twitch.tv/glacials/v/3809882",
+  "created_at": "2014-03-09T19:07:46.483Z",
+  "updated_at": "2016-01-27T15:42:02.834Z",
+  "video_url": null,
   "splits": [
     {
-      "name": "Tron City",
-      "duration": 53.9219256,
-      "finish_time": 53.9219256,
+      "name": "Rotatatron",
+      "duration": 501.7,
+      "finish_time": 501.7,
       "best": {
-        "duration": 49.7325244,
+        "duration": 462.85
       },
+      "history": null,
       "gold": false,
       "skipped": false,
+      "reduced": false
     },
     ...
     {
-      "name": "Final fight phase 3",
-      "duration": 28.333972000000358,
-      "finish_time": 5055.5630296,
+      "name": "Epilogue",
+      "duration": 44.719999999999345,
+      "finish_time": 5083.74,
       "best": {
-        "duration": 28.2712893,
+        "duration": 44.7199999999993
       },
-      "gold": false,
+      "history": null,
+      "gold": true,
       "skipped": false,
+      "reduced": false
     }
   ],
+  "attempts": 9,
+  "sum_of_best": 5009.42,
   "user": { ... }
   "game": { ... }
   "category": { ... },
-  "time": 5055.5630296
+  "time": 5083.74
 }
 ```
 
