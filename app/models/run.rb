@@ -79,6 +79,7 @@ class Run < ActiveRecord::Base
 
   def parse(fast: true, convert: false)
     return @parse_cache[fast] if @parse_cache.try(:[], fast).present?
+    return @parse_cache[false] if @parse_cache.try(:[], false).present?
     return @convert_cache if @convert_cache.present?
 
     timer = Run.program(program)
