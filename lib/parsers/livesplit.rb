@@ -85,6 +85,7 @@ module LiveSplit
         raise "Not a proper LiveSplit run file"
       end
 
+      run[:history].unshift(run[:time]) unless fast || run[:time].in?(run[:history])
       run
     end
 
@@ -128,6 +129,7 @@ module LiveSplit
         raise "Not a proper LiveSplit run file"
       end
 
+      run[:history].unshift(run[:time]) unless fast || run[:time].in?(run[:history])
       run
     end
 
@@ -167,6 +169,7 @@ module LiveSplit
         run[:time] += split.duration if split.duration.present?
         run[:splits] << split
       end
+      run[:history].unshift(run[:time]) unless fast || run[:time].in?(run[:history])
       v1_3(xml, fast, run)
     end
 
