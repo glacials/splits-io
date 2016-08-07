@@ -27,7 +27,7 @@ describe RunsController do
       let(:id) { 'z' }
 
       it 'returns a 404' do
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(404)
       end
     end
 
