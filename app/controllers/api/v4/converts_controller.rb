@@ -33,7 +33,8 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
   private
 
   def check_parameters
-    params.require(:file, :format)
+    params.require(:file)
+    params.require(:format)
     supported = (Run.programs - [Llanfair]) + ["json"]
     unless supported.map(&:to_s).include?(params[:format])
       render status: 400, json: {
