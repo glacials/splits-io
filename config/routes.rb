@@ -64,6 +64,7 @@ SplitsIO::Application.routes.draw do
   get    '/runs/:id/edit',   to: redirect('/%{id}/edit')
   get    '/:id/edit',        to: 'runs#edit', as: :edit_run
   get    '/:run_id/stats',   to: 'runs/stats#index', as: :run_stats
+  get    '/:run_id/graphs',  to: 'runs/graphs#index', as: :run_graphs
   patch  '/:id',             to: 'runs#update'
   post   '/runs',            to: 'runs#create'
   get    '/:id',             to: 'runs#show', as: :run

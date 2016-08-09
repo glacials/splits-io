@@ -74,6 +74,8 @@ gem 'spinjs-rails'
 gem 'tipsy-rails'
 gem 'underscore-rails'
 gem 'momentjs-rails'
+gem 'd3-rails', '~> 3.5.17'
+gem 'c3-rails'
 
 # models/db
 gem 'has_secure_token'
