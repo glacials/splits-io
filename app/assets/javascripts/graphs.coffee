@@ -1,18 +1,27 @@
 $ ->
-  if gon.raw_run isnt `undefined`
+  if gon.run.raw_splits?
+    colors_obj = {}
+    $(".timeline").children(".split").each (index) ->
+      color = $(this).css("background-color")
+      return if color is "rgba(0, 0, 0, 0)"
+      colors_obj[$(this).children()[0].innerHTML] = color
+    default_color = $(".timeline").children(".split").first().css("background-color")
+
+
     pb_graph_data = ["PB - Gold"]
     pb_graph_ticks = []
     $.each gon.run.splits, (i, split) ->
-      time = split.duration - split.best
-      if time > 5
-        pb_graph_data.push d3.round(time, 2)
-        pb_graph_ticks.push split.name
+      time = d3.round(split.duration - split.best, 2)
+      return if time <= 0
+      pb_graph_data.push time
+      pb_graph_ticks.push split.name
     pb_graph = c3.generate({
       bindto: "#pb-graph",
       title: { text: "PB vs Golds" },
       data: {
         columns: [pb_graph_data],
-        type: "bar"
+        type: "bar",
+        color: (color, d) -> return default_color
       },
       axis: {
         x: {
@@ -37,25 +46,25 @@ $ ->
       legend: { hide: true }
     })
 
-    if gon.raw_run.program isnt "livesplit"
+    if gon.run.program isnt "livesplit"
       return
 
     split_history_data = ["Mean - Gold"]
     split_history_ticks = []
-    $.each gon.raw_run.splits, (i, split) ->
+    $.each gon.run.raw_splits, (i, split) ->
       if split.history is [] or split.history is null
         return
-      mean = d3.round(d3.mean(split.history) - split.best, 2)
-      if mean < 5
-        return
-      split_history_data.push d3.round(d3.mean(split.history) - split.best, 2)
+      time = d3.round(d3.mean(split.history) - split.best, 2)
+      return if time <= 0
+      split_history_data.push time
       split_history_ticks.push split.name
     c3.generate({
       bindto: "#split-history-graph",
       title: { text: "Split History Mean vs Golds" },
       data: {
         columns: [split_history_data],
-        type: "bar"
+        type: "bar",
+        color: (color, d) -> return default_color
       },
       axis: {
         x: {
@@ -80,16 +89,22 @@ $ ->
       legend: { hide: true }
     })
 
-    duration_data = gon.raw_run.history.map((time) -> return time)
+    duration_data = gon.run.history.map((time) -> return time)
     duration_data.unshift "Run Length"
     c3.generate({
       bindto: "#run-duration-graph",
       title: { text: "Run Duration Over Time" }
-      data: { columns: [duration_data] },
+      data: {
+        columns: [duration_data],
+        color: (color, d) -> return default_color
+      },
       axis: {
         x: {
+          type: "category",
+          categories: index + 1 for split, index in gon.run.history,
           tick: {
-            culling: false
+            culling: true,
+            multiline: false
           }
         },
         y: {
@@ -107,17 +122,23 @@ $ ->
 
 
     seg_histories = []
-    $.each gon.raw_run.splits, (i, split) ->
-      seg_histories.push split.history
+    $.each gon.run.raw_splits, (i, split) ->
+      seg_histories.push JSON.parse(JSON.stringify(split.history))
       seg_histories[i].unshift split.name
     c3.generate({
       bindto: "#segment-duration-graph",
       title: { text: "Segment Histories Over Time"},
-      data: { columns: seg_histories },
+      data: {
+        columns: seg_histories,
+        color: (color, d) -> return if d.id then colors_obj[d.id] else colors_obj[d]
+      }
       axis: {
         x: {
+          type: "category",
+          categories: index + 1 for split, index in gon.run.history
           tick: {
-            culling: false
+            culling: true,
+            multiline: false
           }
         },
         y: {
@@ -132,9 +153,9 @@ $ ->
       }
     })
 
-    reset_counter = gon.raw_run.attempts
+    reset_counter = gon.run.attempts
     reset_data = []
-    $.each gon.raw_run.splits, (i, split) ->
+    $.each gon.run.raw_splits, (i, split) ->
       split_resets = reset_counter - split.history.length
       if split_resets > 0
         reset_data.push [split.name, split_resets]
@@ -143,7 +164,8 @@ $ ->
       bindto: "#reset-graph",
       data: {
         columns: reset_data,
-        type: "donut"
+        type: "donut",
+        color: (color, d) -> return if d.id then color else colors_obj[d]
       },
       donut: {
         title: "Resets/Split",
