@@ -1,7 +1,6 @@
 $ ->
   if gon.run.program isnt "livesplit"
     return
-  console.log "heello there"
 
   default_color = $(".timeline").children(".split").first().css("background-color")
 
