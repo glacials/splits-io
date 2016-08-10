@@ -35,7 +35,6 @@
       - if @run.video_url.present?
         li = link_to 'proof', @run.video_url
       li = link_to 'stats', run_stats_path(@run)
-      li = link_to 'graphs', run_graphs_path(@run)
       - if @run.belongs_to?(current_user)
         li = link_to 'edit', edit_run_path(@run)
 
