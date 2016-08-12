@@ -27,7 +27,7 @@
     = render partial: 'runs/timeline_inspector', locals: {run: @run}
 
 article#stats
-  .col-md-8
+  .col-md-8.col-md-offset-2
     h3 Stats
     table.table.table-striped
       tbody
@@ -85,3 +85,13 @@ article#stats
             span Median segment length
           td.time.needs-formatting class=('short' if @run.short?)
             = @run.median_segment_duration
+  hr
+  #pb-graph
+  hr
+  #split-history-graph
+  hr
+  #run-duration-graph
+  hr
+  #segment-duration-graph
+  hr
+  #reset-graph
