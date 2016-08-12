@@ -1,8 +1,14 @@
 $ ->
-  if gon.run.program isnt "livesplit"
+  if $("#run-duration-graph").length is 0 or gon.run.program isnt "livesplit"
     return
 
-  default_color = $(".timeline").children(".split").first().css("background-color")
+  color_styles = []
+  for sheet in document.styleSheets
+    continue if not sheet.cssRules?
+    for rule in sheet.cssRules
+      for color in gon.run.colors
+        if rule.selectorText? and color is rule.selectorText
+          color_styles.push rule.style["background"]
 
   duration_data = gon.run.history.map((time) -> return time)
   duration_data.unshift "Run Length"
@@ -11,8 +17,8 @@ $ ->
     title: { text: "Run Duration Over Time" }
     data: {
       columns: [duration_data],
-      color: (color, d) -> return default_color
     },
+    color: { pattern: color_styles },
     axis: {
       x: {
         type: "category",

@@ -1,7 +1,14 @@
 $ ->
-  if not gon.run.raw_splits?
+  if $("#pb-graph").length is 0
     return
-  default_color = $(".timeline").children(".split").first().css("background-color")
+
+  color_styles = []
+  for sheet in document.styleSheets
+    continue if not sheet.cssRules?
+    for rule in sheet.cssRules
+      for color in gon.run.colors
+        if rule.selectorText? and color is rule.selectorText
+          color_styles.push rule.style["background"]
 
   pb_graph_data = ["PB - Gold"]
   pb_graph_ticks = []
@@ -16,8 +23,8 @@ $ ->
     data: {
       columns: [pb_graph_data],
       type: "bar",
-      color: (color, d) -> return default_color
     },
+    color: { pattern: color_styles },
     axis: {
       x: {
         type: "category",

@@ -1,12 +1,14 @@
 $ ->
-  if gon.run.program isnt "livesplit"
+  if $("#reset-graph").length is 0 or gon.run.program isnt "livesplit"
     return
 
-  colors_obj = {}
-  $(".timeline").children(".split").each (index) ->
-    color = $(this).css("background-color")
-    return if color is "rgba(0, 0, 0, 0)"
-    colors_obj[$(this).children()[0].innerHTML] = color
+  color_styles = []
+  for sheet in document.styleSheets
+    continue if not sheet.cssRules?
+    for rule in sheet.cssRules
+      for color in gon.run.colors
+        if rule.selectorText? and color is rule.selectorText
+          color_styles.push rule.style["background"]
 
   reset_counter = gon.run.attempts
   reset_data = []
@@ -20,8 +22,8 @@ $ ->
     data: {
       columns: reset_data,
       type: "donut",
-      color: (color, d) -> return if d.id then color else colors_obj[d]
     },
+    color: { pattern: color_styles },
     donut: {
       title: "Resets/Split",
       label: { format: (v) -> return v }

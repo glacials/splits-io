@@ -1,6 +1,10 @@
 module RunsHelper
 
   TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange]
+  GRAPH_COLORS = [
+    ".blue", ".purple", ".green", ".red", ".orange",
+    ".light-blue", ".light-purple", ".light-green", ".light-red", ".light-orange"
+  ]
 
   def difference(run_a, run_b)
     if run_a.nil? || run_b.nil?
