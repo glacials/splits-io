@@ -16,7 +16,6 @@
     ul.run-options
       li
         a href=run_path(@run) &larr; back to run
-      li = link_to 'graphs', run_graphs_path(@run)
 
 - if @run.time > 0
   #timeline data-turbolinks-permanent=true
