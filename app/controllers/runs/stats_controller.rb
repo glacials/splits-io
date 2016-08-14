@@ -1,5 +1,4 @@
 class Runs::StatsController < Runs::ApplicationController
-  include RunsHelper
   before_action :set_run, only: [:index]
 
   def index
@@ -11,7 +10,6 @@ class Runs::StatsController < Runs::ApplicationController
       history: @run.history,
       attempts: @run.attempts,
       program: @run.program,
-      colors: GRAPH_COLORS
     }
     gon.scale_to = @run.time
 

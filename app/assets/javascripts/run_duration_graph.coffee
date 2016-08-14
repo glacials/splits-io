@@ -2,13 +2,7 @@ $ ->
   if $("#run-duration-graph").length is 0 or gon.run.program isnt "livesplit"
     return
 
-  color_styles = []
-  for sheet in document.styleSheets
-    continue if not sheet.cssRules?
-    for rule in sheet.cssRules
-      for color in gon.run.colors
-        if rule.selectorText? and color is rule.selectorText
-          color_styles.push rule.style["background"]
+  color_styles = ["rgba(14, 144, 210, 1)"]
 
   duration_data = gon.run.history.map((time) -> return time)
   duration_data.unshift "Run Length"

@@ -2,13 +2,18 @@ $ ->
   if $("#reset-graph").length is 0 or gon.run.program isnt "livesplit"
     return
 
-  color_styles = []
-  for sheet in document.styleSheets
-    continue if not sheet.cssRules?
-    for rule in sheet.cssRules
-      for color in gon.run.colors
-        if rule.selectorText? and color is rule.selectorText
-          color_styles.push rule.style["background"]
+  color_styles = [
+    "rgba(14, 144, 210, 1)",
+    "rgba(128, 87, 165, 1)",
+    "rgba(94, 185, 94, 1)",
+    "rgba(221, 81, 76, 1)",
+    "rgba(243, 123, 29, 1)",
+    "rgba(14, 144, 210, .5)",
+    "rgba(128, 87, 165, .5)",
+    "rgba(94, 185, 94, .5)",
+    "rgba(221, 81, 76, .5)",
+    "rgba(243, 123, 29, .5)"
+  ]
 
   reset_counter = gon.run.attempts
   reset_data = []
