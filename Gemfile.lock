@@ -109,6 +109,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
     builder (3.2.2)
+    c3-rails (0.4.11)
     callsite (0.0.11)
     cancancan (1.13.1)
     choice (0.2.0)
@@ -121,6 +122,8 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     concurrent-ruby (1.0.1)
+    d3-rails (3.5.17)
+      railties (>= 3.1)
     daemons (1.2.2)
     dalli (2.7.6)
     debug_inspector (0.0.2)
@@ -397,9 +400,11 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass
+  c3-rails
   cancancan
   chronic_duration!
   coffee-rails
+  d3-rails (~> 3.5.17)
   dalli
   delayed_job_active_record
   factory_girl_rails
