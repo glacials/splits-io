@@ -26,7 +26,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     presigned_request = s3_bucket.presigned_post(
       key: "splits/#{@run.id36}",
       key_starts_with: "splits/#{@run.id36}",
-      content_length_range: 1..(10*1024)
+      content_length_range: 1..(100*1024*1024)
     )
 
     render status: 201, location: api_v4_run_url(@run), json: {
