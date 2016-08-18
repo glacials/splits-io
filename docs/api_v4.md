@@ -11,7 +11,7 @@ Resources are identifyable *only* by the following attributes:
 | Category      | ID            | A base 10 number             | 312, 1456, 11                         |
 
 Your code shouldn't care too much about what these attributes actually are, as they're all represented as unique
-strings. But as a human it's nice to be able to glean some meaning out of them.
+strings. But of course as a human it's nice to be able to glean some meaning out of them.
 
 ## Run
 ```bash
@@ -20,27 +20,27 @@ curl https://splits.io/api/v4/runs/3nm?historic=1
 ```
 A Run maps 1:1 to an uploaded splits file.
 
-| Field        | Type                                         | Null when...                                     | Description                                                                                                                                                                                                                                  |
-|-------------:|:---------------------------------------------|:-------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Field        | Type                                         | Null when...                                     | Description                                                                                                                                                                                                                                   |
+|-------------:|:---------------------------------------------|:-------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `id`         | string                                       | never                                            | Unique ID for identifying the run on Splits I/O. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
-| `srdc_id`    | string                                       | no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
-| `name`       | string                                       | never                                            | Name of the run. For timers that support a "name" or similar field, this value is an exact copy of that field. For other timers, this is typically "%full_game_name% %full_category_name%".                                                  |
-| `time`       | number                                       | never                                            | Duration in seconds of the run.                                                                                                                                                                                                              |
-| `program`    | string                                       | never                                            | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                            |
-| `attempts`   | number                                       | not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                       |
+| `srdc_id`    | string                                       | no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                         |
+| `name`       | string                                       | never                                            | Name of the run. For timers that support a "name" or similar field, this value is an exact copy of that field. For other timers, this is typically "%full_game_name% %full_category_name%".                                                   |
+| `time`       | number                                       | never                                            | Duration in seconds of the run.                                                                                                                                                                                                               |
+| `program`    | string                                       | never                                            | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                             |
+| `attempts`   | number                                       | not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                        |
 | `image_url`  | string                                       | not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits I/O.                                                                                           |
 | `created_at` | string                                       | never                                            | The time and date at which this run's source file was uploaded to Splits I/O. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
 | `updated_at` | string                                       | never                                            | The time and date at which this run was most recently modified on Splits I/O (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
-| `video_url`  | string                                       | not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                          |
-| `game`       | Game object (see Game section)               | unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                          |
-| `category`   | Category object (see Category section)       | unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                      |
-| `runners`    | array of Runner objects (see Runner section) | anonymously uploaded or disowned by runner       | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                   |
+| `video_url`  | string                                       | not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                           |
+| `game`       | Game object (see Game section)               | unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                           |
+| `category`   | Category object (see Category section)       | unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                       |
+| `runners`    | array of Runner objects (see Runner section) | anonymously uploaded or disowned by runner       | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                    |
 
 If a `historic=1` param is included in the request, one additional field will be present:
 
-| Field        | Type             | Null when... | Description                                                                                                                                                                                                                         |
-|-------------:|:-----------------|:-------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `history`    | array of numbers | never        | Ordered durations of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history. |
+| Field        | Type                                         | Null when...                                     | Description                                                                                                                                                                                                                                   |
+|-------------:|:---------------------------------------------|:-------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `history`    | array of numbers                             | never                                            | Ordered durations of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.           |
 
 [iso8601]: https://en.wikipedia.org/wiki/ISO_8601
 
@@ -89,7 +89,67 @@ Some timers allow users to specify a "category" or similar field. A Category is 
 type of run performed, more specific than a Game. Each Category belongs to a Game. The definition of a category does not
 hold any ties to SRL. Any number of Categories can be associated with a Game.
 
-## Convert
+## Uploading
+```bash
+curl -X POST https://splits.io/api/v4/runs # then...
+curl -X POST https://s3.amazonaws.com/splits.io --form file=@/path/to/file # some fields not shown; see below
+```
+Uploading runs is a two-step process. Our long-term storage for runs is on [S3][s3], so in the first request you'll tell
+Splits I/O that you're about to upload a run, then in the second you'll upload it directly to S3 using some parameters
+returned from the first. The two-request system is faster for you (we don't have to receive your whole run then make you
+wait for us to put it on S3) and more resilient for us (we don't have to spend a bunch of CPU time waiting on uploads).
+
+The first request will return a body like
+```json
+{
+  "status": 201,
+  "message": "Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.",
+  "id": "rez",
+  "claim_token": "pBeUPBM9IaWqbaF11ocUksXS",
+  "uris": {
+    "api_uri": "https://splits.io/api/v4/runs/rez",
+    "public_uri": "https://splits.io/rez",
+    "claim_uri": "https://splits.io/rez?claim_token=pBeUPBM9IaWqbaF11ocUksXS"
+  },
+  "presigned_request": {
+    "method": "POST",
+    "uri": "https://s3.amazonaws.com/splits.io",
+    "fields": {
+      "key": "splits/rez",
+      "policy": "gibberish",
+      "x-amz-credential": "other gibberish",
+      "x-amz-algorithm": "more gibberish",
+      "x-amz-date": "even more gibberish",
+      "x-amz-signature": "most gibberish",
+    }
+  }
+}
+```
+The above example would have your second request look like
+```bash
+curl -X POST https://s3.amazonaws.com/splits.io \
+  --form key=splits/rez \
+  --form policy="gibberish" \
+  --form x-amz-credential="other gibberish" \
+  --form x-amz-algorithm="more gibberish" \
+  --form x-amz-date="even more gibberish" \
+  --form x-amz-signature="most gibberish" \
+  --form file=@/path/to/file
+```
+This is called a presigned request. Each field above -- except `file`, that's yours -- is directly copied from the
+response of the first request. You don't need to inspect or care about the contents of the fields, as long as you
+include them. They serve as authorization for you to upload a file to S3 with Splits I/O's permission.
+
+Each presigned request can only be successfully made once, and expires if not made within an hour.
+
+[s3]: https://aws.amazon.com/s3
+
+### Giving the run an owner
+If your intention is for this run to belong to a user, you'll need to send that user to the `uris.claim_uri` URI
+returned from the first request. If they're logged in when they visit this URI, their account will automatically claim
+the run.
+
+## Converting
 ```bash
 curl -X POST https://splits.io/api/v4/convert?program=livesplit --form file=@/path/to/file
 ```
