@@ -26,7 +26,11 @@ $ ->
           contentType: false
           data: formData
           success: ->
-            window.location = response.uris.public_uri unless options.bulk
+            window.location = response.uris.claim_uri unless options.bulk
+          error: (xhr, textStatus) ->
+            window.isUploading = false
+            $("#droplabel").html "oops, got a " + xhr.status + " (" + xhr.statusText + ").<br />try again, or contact glacials.<br />"
+            window.spinner.stop()
 
       error: (xhr, textStatus) ->
         if xhr.status is 400
