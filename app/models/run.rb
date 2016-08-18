@@ -15,7 +15,7 @@ class Run < ActiveRecord::Base
 
   has_secure_token :claim_token
 
-  #after_create -> { parse(fast: true) }
+  after_create -> { parse(fast: true) if run_file.present? }
   after_create :refresh_game
   after_create :discover_runner
 
@@ -67,7 +67,11 @@ class Run < ActiveRecord::Base
   alias_method :id10, :id
   # todo: rename this to `id` when APIv2 is removed
   def id36
-    id10.to_s(36)
+    if id10.is_a? Numeric
+      id10.to_s(36)
+    else
+      nil
+    end
   end
 
   def belongs_to?(user)
@@ -163,10 +167,14 @@ class Run < ActiveRecord::Base
   end
 
   def file
-    file = self.class.s3_client.get_object(bucket: ENV['S3_BUCKET'], key: "splits/#{id36}")
-    file.body.read
+    if id36.present?
+      file = self.class.s3_client.get_object(bucket: ENV['S3_BUCKET'], key: "splits/#{id36}")
+      file.body.read
+    else
+      run_file.try(:file)
+    end
   rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::AccessDenied
-    run_file.file
+    run_file.try(:file)
   end
 
   def refresh_game
