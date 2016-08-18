@@ -5,18 +5,28 @@ $ ->
       window.isUploading = false
       return
     options = options or bulk: false
-    data = new FormData()
-    data.append "file", file
     $.ajax
-      url: "/api/v3/runs"
-      type: "POST"
-      data: data
+      method: "POST"
+      url: "/api/v4/runs"
       cache: false
       processData: false
       contentType: false
-      success: (data, textStatus, xhr) ->
-        localStorage.setItem "claim_tokens/" + data.id, data.claim_token
-        window.location = data.uris.public_uri unless options.bulk
+      success: (response, textStatus, xhr) ->
+        localStorage.setItem "claim_tokens/" + response.id, response.claim_token
+
+        formData = new FormData()
+        for key, val of response.presigned_request.fields
+          formData.append(key, val)
+        formData.append('file', file)
+        $.ajax
+          method: response.presigned_request.method
+          url: response.presigned_request.uri
+          cache: false
+          processData: false
+          contentType: false
+          data: formData
+          success: ->
+            window.location = response.uris.public_uri unless options.bulk
 
       error: (xhr, textStatus) ->
         if xhr.status is 400

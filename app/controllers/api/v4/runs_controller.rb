@@ -14,33 +14,36 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def create
-    run_file = RunFile.for_file(params.require(:file))
-    @run = Run.new(run_params.merge(run_file: run_file)).tap do |run|
-      # TODO: Move this error handling into a before_action or a rescue
-      unless run.parses?
-        render status: 400, json: {
-          status: 400,
-          message: "Can't parse that file. We support #{Run.programs.to_sentence}."
-        }
-        return
-      end
-      run.save
+    @run = Run.create(run_params)
+    if !@run.persisted?
+      render status: 400, json: {
+        status: 400,
+        message: "Couldn't reserve run. Please try again."
+      }
+      return
     end
+
+    presigned_request = s3_bucket.presigned_post(
+      key: "splits/#{@run.id36}",
+      key_starts_with: "splits/#{@run.id36}",
+      content_length_range: 1..(10*1024)
+    )
+
     render status: 201, location: api_v4_run_url(@run), json: {
       status: 201,
-      message: "Run created.",
-      id: @run.id.to_s(36),
+      message: "Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.",
+      id: @run.id36,
       claim_token: @run.claim_token,
       uris: {
         api_uri: api_v4_run_url(@run),
         public_uri: run_url(@run),
         claim_uri: run_url(@run, claim_token: @run.claim_token)
+      },
+      presigned_request: {
+        method: 'POST',
+        uri: presigned_request.url,
+        fields: presigned_request.fields
       }
-    }
-  rescue ActionController::ParameterMissing
-    render status: 400, json: {
-      status: 400,
-      message: "No run file received. Make sure you're including a 'file' parameter in your request."
     }
   end
 

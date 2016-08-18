@@ -1,5 +1,4 @@
 class Runs::ApplicationController < ApplicationController
-
   private
 
   def set_run

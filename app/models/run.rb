@@ -15,13 +15,13 @@ class Run < ActiveRecord::Base
 
   has_secure_token :claim_token
 
-  after_create -> { parse(fast: true) }
+  #after_create -> { parse(fast: true) }
   after_create :refresh_game
   after_create :discover_runner
 
   after_destroy :destroy_run_file_if_orphaned
 
-  validates :run_file, presence: true
+  #validates :run_file, presence: true
   validates_with RunValidator
 
   before_save :set_name
@@ -48,6 +48,19 @@ class Run < ActiveRecord::Base
     # todo: rename this to `find` when APIv2 is removed
     def find36(id)
       find10(id.to_i(36))
+    end
+
+    def s3_bucket
+      @s3_bucket ||= Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: s3_client)
+    end
+
+    def s3_client
+      @s3_client ||= Aws::S3::Client.new(
+        credentials: Aws::Credentials.new(
+          ENV['AWS_ACCESS_KEY_ID'],
+          ENV['AWS_SECRET_ACCESS_KEY']
+        )
+      )
     end
   end
 
@@ -150,6 +163,9 @@ class Run < ActiveRecord::Base
   end
 
   def file
+    file = self.class.s3_client.get_object(bucket: ENV['S3_BUCKET'], key: "splits/#{id36}")
+    file.body.read
+  rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::AccessDenied
     run_file.file
   end
 

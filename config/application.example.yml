@@ -13,6 +13,13 @@ development:
   TWITCH_CLIENT_ID:
   TWITCH_CLIENT_SECRET:
 
+  S3_BUCKET: splits.io
+  AWS_REGION: us-east-1
+
+  # This AWS account needs read and write access to the above bucket.
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
+
 test:
   # required to be able to run tests
   DATABASE_URL: postgres://localhost
@@ -29,3 +36,9 @@ production:
   ROLLBAR_ACCESS_TOKEN:
 
   SECRET_KEY_BASE:
+
+  S3_BUCKET: splits.io
+  AWS_REGION: us-east-1
+
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:

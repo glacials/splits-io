@@ -97,6 +97,13 @@ GEM
     autoprefixer-rails (6.3.4)
       execjs
     awesome_print (1.6.1)
+    aws-sdk-core (2.5.4)
+      jmespath (~> 1.0)
+    aws-sdk-rails (1.0.1)
+      aws-sdk-resources (~> 2)
+      railties (>= 3)
+    aws-sdk-resources (2.5.4)
+      aws-sdk-core (= 2.5.4)
     babel_bridge (0.5.4)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -191,6 +198,7 @@ GEM
     jbuilder (2.2.16)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
+    jmespath (1.3.1)
     jquery-cookie-rails (1.3.1.1)
       railties (>= 3.2.0, < 5.0)
     jquery-rails (4.0.3)
@@ -396,6 +404,7 @@ DEPENDENCIES
   arel!
   authie!
   awesome_print
+  aws-sdk-rails
   babel_bridge
   better_errors
   binding_of_caller

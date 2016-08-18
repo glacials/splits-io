@@ -78,6 +78,7 @@ gem 'd3-rails', '~> 3.5.17'
 gem 'c3-rails'
 
 # models/db
+gem 'aws-sdk-rails'
 gem 'has_secure_token'
 gem 'nilify_blanks'
 
