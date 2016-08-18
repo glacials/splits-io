@@ -26,64 +26,65 @@
     = render partial: 'runs/timeline_inspector', locals: {run: @run}
 
 article#stats
-  .col-md-8.col-md-offset-2
-    h3 Stats
-    table.table.table-striped
-      tbody
-        tr
-          td
-            span Timer
-          td
-            - program = Run.program(@run.program)
-            span = program
-            span< = "("
-            span = link_to "website", program.website, target: :_blank
-            span = ")"
-        - if @run.sum_of_best == 0
-          tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
-            td
-              span Total potential timesave
-              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
-            td -
-        - else
+  .row
+    .col-md-8.col-md-offset-2
+      h3 Stats
+      table.table.table-striped
+        tbody
           tr
             td
-              span Total potential timesave
-              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
-            td.time.needs-formatting class=('short' if @run.short?) = @run.time - @run.collapsed_splits.sum { |split| split.best }
-        tr
-          td
-            span Attempt
-          td = @run.attempts
-        tr
-          td
-            span Splits
-          td = @run.splits.size
-        tr
-          td
-            span Missed splits this run
-          td = @run.skipped_splits.size
-        tr
-          td
-            span Exact run duration
-          td #{@run.time}s
-        tr
-          td
-            span Shortest segment
-          td = @run.shortest_segment.name
-        tr
-          td
-            span Longest segment
-          td = @run.longest_segment.name
-        tr
-          td
-            span Mean segment length
-          td.time.needs-formatting class=('short' if @run.short?) = @run.time / @run.collapsed_splits.size
-        tr
-          td
-            span Median segment length
-          td.time.needs-formatting class=('short' if @run.short?)
-            = @run.median_segment_duration
+              span Timer
+            td
+              - program = Run.program(@run.program)
+              span = program
+              span< = "("
+              span = link_to "website", program.website, target: :_blank
+              span = ")"
+          - if @run.sum_of_best == 0
+            tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
+              td
+                span Total potential timesave
+                small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
+              td -
+          - else
+            tr
+              td
+                span Total potential timesave
+                small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
+              td.time.needs-formatting class=('short' if @run.short?) = @run.time - @run.collapsed_splits.sum { |split| split.best }
+          tr
+            td
+              span Attempt
+            td = @run.attempts
+          tr
+            td
+              span Splits
+            td = @run.splits.size
+          tr
+            td
+              span Missed splits this run
+            td = @run.skipped_splits.size
+          tr
+            td
+              span Exact run duration
+            td #{@run.time}s
+          tr
+            td
+              span Shortest segment
+            td = @run.shortest_segment.name
+          tr
+            td
+              span Longest segment
+            td = @run.longest_segment.name
+          tr
+            td
+              span Mean segment length
+            td.time.needs-formatting class=('short' if @run.short?) = @run.time / @run.collapsed_splits.size
+          tr
+            td
+              span Median segment length
+            td.time.needs-formatting class=('short' if @run.short?)
+              = @run.median_segment_duration
   hr
   #pb-graph
   hr
