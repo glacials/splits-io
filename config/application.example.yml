@@ -18,7 +18,7 @@ development:
 
   # This AWS account needs read and write access to the above bucket.
   AWS_ACCESS_KEY_ID:
-  AWS_SECRET_ACCESS_KEY:
+  AWS_SECRET_KEY:
 
 test:
   # required to be able to run tests
@@ -41,4 +41,4 @@ production:
   AWS_REGION: us-east-1
 
   AWS_ACCESS_KEY_ID:
-  AWS_SECRET_ACCESS_KEY:
+  AWS_SECRET_KEY:
