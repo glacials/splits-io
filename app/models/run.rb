@@ -189,7 +189,7 @@ class Run < ActiveRecord::Base
     delay.set_runner_from_srdc
   end
 
-  def filename(program)
+  def filename(program: Run.program(self.program))
     "#{to_param}.#{program.file_extension}"
   end
 

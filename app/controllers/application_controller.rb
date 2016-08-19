@@ -6,6 +6,19 @@ class ApplicationController < ActionController::Base
   before_action :set_gon
   before_action :sanitize_pagination_params
 
+  def s3_bucket
+    @s3_bucket ||= Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: s3_client)
+  end
+
+  def s3_client
+    @s3_client ||= Aws::S3::Client.new(
+      credentials: Aws::Credentials.new(
+        ENV['AWS_ACCESS_KEY_ID'],
+        ENV['AWS_SECRET_KEY']
+      )
+    )
+  end
+
   def remove_www
     redirect_to(subdomain: nil) if request.subdomain == 'www'
   end

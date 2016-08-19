@@ -74,13 +74,25 @@ class RunsController < ApplicationController
       return
     end
 
+    begin
+      s3_file = Aws::S3::Object.new(ENV['S3_BUCKET'], "splits/#{@run.id36}")
+
+      if program == Run.program(@run.program) && s3_file.exists?
+        redirect_to s3_file.presigned_url(:get,
+          response_content_disposition: "attachment; filename=\"#{@run.filename}\""
+        )
+        return
+      end
+    rescue Aws::S3::Errors::Forbidden
+    end
+
     send_data(
       if program == Run.program(@run.program)
         @run.original_file
       else
         render_to_string(params[:program], layout: false)
       end,
-      filename: "#{@run.filename(program)}",
+      filename: "#{@run.filename(program: program)}",
       layout: false
     )
   end
