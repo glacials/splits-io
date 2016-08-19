@@ -6,7 +6,6 @@ SplitsIO::Application.routes.draw do
   get '/health', to: 'health#index'
 
   get  '/upload',     to: 'runs#new', as: :new_run
-  post '/upload',     to: 'runs#create' # deprecated; use POST /runs or POST /api/v3/runs
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
@@ -65,7 +64,6 @@ SplitsIO::Application.routes.draw do
   get    '/:id/edit',        to: 'runs#edit', as: :edit_run
   get    '/:run_id/stats',   to: 'runs/stats#index', as: :run_stats
   patch  '/:id',             to: 'runs#update'
-  post   '/runs',            to: 'runs#create'
   get    '/:id',             to: 'runs#show', as: :run
   delete '/:id',             to: 'runs#destroy'
 

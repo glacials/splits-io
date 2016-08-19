@@ -67,14 +67,6 @@ class RunsController < ApplicationController
     end
   end
 
-  def create
-    run_file = RunFile.for_file(params.require(:file))
-    @run = Run.create!(run_file: run_file, user: current_user, image_url: params[:image_url])
-    redirect_to run_path(@run)
-  rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordInvalid, PG::CharacterNotInRepertoire, ArgumentError
-    redirect_to :cant_parse
-  end
-
   def download
     program = Run.program(params[:program])
     if program.nil?
