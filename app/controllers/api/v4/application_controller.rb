@@ -6,19 +6,6 @@ class Api::V4::ApplicationController < ActionController::Base
     headers['Allow'] = 'POST, PUT, DELETE, GET, OPTIONS'
   end
 
-  def s3_bucket
-    @s3_bucket ||= Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: s3_client)
-  end
-
-  def s3_client
-    @s3_client ||= Aws::S3::Client.new(
-      credentials: Aws::Credentials.new(
-        ENV['AWS_ACCESS_KEY_ID'],
-        ENV['AWS_SECRET_KEY']
-      )
-    )
-  end
-
   private
 
   def set_cors_headers

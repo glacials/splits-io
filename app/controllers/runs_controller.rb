@@ -75,7 +75,7 @@ class RunsController < ApplicationController
     end
 
     begin
-      s3_file = Aws::S3::Object.new(ENV['S3_BUCKET'], "splits/#{@run.id36}")
+      s3_file = $s3_bucket.object("splits/#{@run.id36}")
 
       if program == Run.program(@run.program) && s3_file.exists?
         redirect_to s3_file.presigned_url(:get,

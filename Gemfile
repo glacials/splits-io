@@ -53,6 +53,7 @@ gem 'cancancan'
 # db
 gem 'arel'
 gem 'aws-sdk-rails'
+gem 'fakes3'
 gem 'pg'
 
 # errors+logging

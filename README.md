@@ -19,6 +19,16 @@ rake db:create db:migrate
 rails server
 ```
 
+You must also run a [fakes3][fakes3] server in another terminal window. This is to receive and store raw uploaded splits
+for parsing.
+```bash
+fakes3 -r /tmp -p 4567
+```
+You're good to go! Access [localhost:3000][localhost] in your browser.
+
+[fakes3]: https://github.com/jubos/fake-s3
+[localhost]: http://localhost:3000/
+
 #### Troubleshooting (OS X)
 
 If you get Bundler errors about `eventmachine`, try

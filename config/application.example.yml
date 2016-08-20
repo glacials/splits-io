@@ -13,12 +13,20 @@ development:
   TWITCH_CLIENT_ID:
   TWITCH_CLIENT_SECRET:
 
-  S3_BUCKET: splits.io
-  AWS_REGION: us-east-1
 
-  # This AWS account needs read and write access to the above bucket.
-  AWS_ACCESS_KEY_ID:
-  AWS_SECRET_KEY:
+  # splits-io uses S3 to store splits. For development you probably don't want that, so run fakes3 instead. You can
+  # start a local fakes3 server with
+  #
+  #   fakes3 -r /tmp -p 4567
+  #
+  # When AWS_REGION is set to `local`, the local fakes3 server will be used. AWS_ACCESS_KEY_ID and AWS_SECRET_KEY can be
+  # any non-blank strings.
+  #
+  # Or, if you want to use a real S3 account, fill in its info here.
+  S3_BUCKET: splits-io
+  AWS_REGION: local
+  AWS_ACCESS_KEY_ID: boop
+  AWS_SECRET_KEY: beep
 
 test:
   # required to be able to run tests
@@ -37,8 +45,7 @@ production:
 
   SECRET_KEY_BASE:
 
-  S3_BUCKET: splits.io
-  AWS_REGION: us-east-1
-
+  S3_BUCKET:
+  AWS_REGION:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_KEY:
