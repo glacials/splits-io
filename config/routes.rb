@@ -12,7 +12,7 @@ SplitsIO::Application.routes.draw do
   get  '/convert',    to: 'converts#new'
   post '/convert',    to: 'converts#create'
 
-  get '/search',        to: redirect('/games')
+  get '/search',        to: redirect('/games') # all deprecated, use GET /games
   get '/search/:q',     to: redirect('/games?q=%{q}')
   get '/search(?q=:q)', to: redirect('/games?q=%{q}')
 
@@ -23,6 +23,9 @@ SplitsIO::Application.routes.draw do
 
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/failure', to: 'sessions#failure'
+
+  get  '/gold', to: 'subscriptions#new', as: :new_subscription
+  post '/gold', to: 'subscriptions#create'
 
   resources :sessions, only: [:destroy]
 

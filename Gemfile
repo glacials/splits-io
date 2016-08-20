@@ -92,6 +92,9 @@ gem 'ptools'
 gem 'versionomy'
 gem 'xml-simple'
 
+# payments
+gem 'stripe'
+
 # server/environment
 gem 'figaro'
 gem 'rails', '~> 5'

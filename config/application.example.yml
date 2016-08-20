@@ -28,6 +28,9 @@ development:
   AWS_ACCESS_KEY_ID: boop
   AWS_SECRET_KEY: beep
 
+  STRIPE_PUBLISHABLE_KEY:
+  STRIPE_SECRET_KEY:
+
 test:
   # required to be able to run tests
   DATABASE_URL: postgres://localhost
@@ -54,3 +57,6 @@ production:
   AWS_REGION:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_KEY:
+
+  STRIPE_PUBLISHABLE_KEY:
+  STRIPE_SECRET_KEY:
