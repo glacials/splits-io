@@ -6,12 +6,12 @@ class Twitch
 
   module User
     def self.login_from_url(twitch_url)
-      %r{^https?://(?:www\.)?twitch\.tv/([^/]+)(?:.*)$}.match(twitch_url)[1]
+      %r{^https?://(?:www\.)?twitch\.tv/([^/]+)(?:.*)$}.match(twitch_url)[1].downcase
     end
 
     class << self
       def get(login)
-        route(login).get
+        route(login.downcase).get
       end
 
       def route(login)

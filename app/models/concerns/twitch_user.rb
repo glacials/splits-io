@@ -11,18 +11,24 @@ module TwitchUser
       end
     end
 
-    def update_avatar!
-      body = Twitch::User.find(name).get
+    def twitch_sync!
+      body = Twitch::User.get(name)
 
-      avatar = JSON.parse(body)['logo']
-      return if avatar.blank?
+      basic_info = JSON.parse(body)
+
+      twitch_id = basic_info['_id']
+      name = basic_info['name']
+      avatar = basic_info['logo']
 
       uri = URI.parse(avatar).tap do |uri|
         uri.scheme = 'https'
       end
-      return if avatar == uri.to_s
 
-      update(avatar: uri.to_s)
+      update(
+        twitch_id: twitch_id,
+        name: name,
+        avatar: uri.to_s
+      )
     rescue RestClient::ResourceNotFound
       nil
     end

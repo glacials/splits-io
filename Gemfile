@@ -4,7 +4,7 @@ ruby '2.2.5'
 group :test do
   # tests
   gem 'factory_girl_rails', require: false
-  gem 'rspec-rails', '3.5.0.beta3', require: false
+  gem 'rspec-rails', require: false
   gem 'simplecov', require: false
 end
 
@@ -37,21 +37,22 @@ group :production do
 end
 
 # api
-gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
+gem 'active_model_serializers'
 gem 'api-pagination'
 gem 'jbuilder'
 
 # authentication
 gem 'authie', github: 'glacials/authie'
-gem 'omniauth', '~> 1.2.2'
+gem 'omniauth'
 gem 'omniauth-twitch'
-gem 'omniauth-oauth2', '~> 1.3.0'
+gem 'omniauth-oauth2'
 
 # authorization
 gem 'cancancan'
 
 # db
-gem 'arel', github: 'rails/arel'
+gem 'arel'
+gem 'aws-sdk-rails'
 gem 'pg'
 
 # errors+logging
@@ -67,8 +68,8 @@ gem 'platform-api'
 # javascript
 gem 'coffee-rails'
 gem 'jquery-rails'
-gem 'jquery-cookie-rails'
 gem 'jquery-ui-rails'
+gem 'js_cookie_rails'
 gem 'numeraljs-rails'
 gem 'spinjs-rails'
 gem 'tipsy-rails'
@@ -77,8 +78,7 @@ gem 'momentjs-rails'
 gem 'd3-rails', '~> 3.5.17'
 gem 'c3-rails'
 
-# models/db
-gem 'aws-sdk-rails'
+# models
 gem 'has_secure_token'
 gem 'nilify_blanks'
 
@@ -92,7 +92,7 @@ gem 'xml-simple'
 
 # server/environment
 gem 'figaro'
-gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 5'
 gem 'thin'
 gem 'unicorn'
 
@@ -106,7 +106,7 @@ gem 'bootstrap-sass'
 gem 'flat-ui-rails'
 gem 'gon'
 gem 'htmlentities'
-gem 'purecss-rails'
+gem 'purecss-rails', github: 'glacials/purecss-rails'
 gem 'sass-rails'
 gem 'slim'
 gem 'uglifier'

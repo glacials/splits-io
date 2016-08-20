@@ -1,4 +1,4 @@
-class Category < ActiveRecord::Base
+class Category < ApplicationRecord
   belongs_to :game
   has_many :runs
   has_many :rivalries, dependent: :destroy
@@ -51,7 +51,7 @@ class Category < ActiveRecord::Base
   # merge_into! changes ownership of all of this category's runs and rivalries to the given category, then destroys this
   # category.
   def merge_into!(category)
-    ActiveRecord::Base.transaction do
+    ApplicationRecord.transaction do
       runs.update_all(category_id: category.id)
       rivalries.update_all(category_id: category.id)
       destroy

@@ -10,7 +10,7 @@
 #
 # if you need to, which performs two queries. It is safe to expect that a Game#name will also be represented as a
 # Game::Alias#name.
-class Game::Alias < ActiveRecord::Base
+class Game::Alias < ApplicationRecord
   belongs_to :game, dependent: :destroy
 
   validates_uniqueness_of :name

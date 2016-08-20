@@ -70,23 +70,33 @@ SplitsIO::Application.routes.draw do
   namespace :api do
     namespace :v4 do
       match '(/*a(/*b(/*c(/*d))))', via: [:options], to: 'application#options'
-      resources :categories, only: [:show] do
-        resources :runners, :runs, only: :index, module: :categories
-      end
 
-      resources :games, only: [:index, :show] do
-        resources :categories, :runners, :runs, only: :index, module: :games
-      end
+      get '/games',       to: 'games#index'
+      get '/games/:game', to: 'games#show', as: 'game'
 
-      resources :runners, only: [:show] do
-        resources :categories, :games, :pbs, :predictions, :runs, only: :index, module: :runners
-      end
+      get '/games/:game/categories', to: 'games/categories#index'
+      get '/games/:game/runners',    to: 'games/runners#index'
+      get '/games/:game/runs',       to: 'games/runs#index'
 
-      resources :runs, only: [:create, :show, :update, :destroy] do
-        resources :splits, only: :index, module: :runs
-      end
+      get '/categories/:category', to: 'categories#show', as: 'category'
 
-      post '/convert',    to: 'converts#create',  as: :api_convert
+      get '/categories/:category/:runners', to: 'categories/runners#index'
+
+      get '/runners/:runner', to: 'runners#show', as: 'runner'
+
+      get '/runners/:runner/pbs',        to: 'runners/pbs#index'
+      get '/runners/:runner/runs',       to: 'runners/runs#index'
+      get '/runners/:runner/games',      to: 'runners/games#index'
+      get '/runners/:runner/categories', to: 'runners/categories#index'
+
+      post   '/runs',      to: 'runs#create'
+      get    '/runs/:run', to: 'runs#show', as: 'run'
+      put    '/runs/:run', to: 'runs#update'
+      delete '/runs/:run', to: 'runs#destroy'
+
+      get '/runs/:run/splits', to: 'runs/splits#index'
+
+      post '/convert', to: 'converts#create'
     end
 
     namespace :v3 do

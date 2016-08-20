@@ -52,26 +52,26 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_category
-    @category = Category.find(params[:category_id] || params[:id])
+    @category = Category.find(params[:category])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:category, params[:category_id] || params[:id])
+    render not_found(:category, params[:category])
   end
 
   def set_game
-    @game = Game.find_by!(shortname: params[:game_id] || params[:id])
+    @game = Game.find_by!(shortname: params[:game])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:game, params[:game_id] || params[:id])
+    render not_found(:game, params[:game])
   end
 
   def set_runner
-    @runner = User.with_runs.find(params[:runner_id] || params[:id])
+    @runner = User.with_runs.find(params[:runner])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:runner, params[:runner_id] || params[:id])
+    render not_found(:runner, params[:runner])
   end
 
   def set_run
-    @run = Run.find36(params[:run_id] || params[:id])
+    @run = Run.find36(params[:run])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:run, params[:run_id] || params[:id])
+    render not_found(:run, params[:run])
   end
 end

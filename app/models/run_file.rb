@@ -1,4 +1,4 @@
-class RunFile < ActiveRecord::Base
+class RunFile < ApplicationRecord
   has_many :runs, dependent: :restrict_with_exception, primary_key: :digest, foreign_key: :run_file_digest
 
   validates :digest, presence: true, uniqueness: true

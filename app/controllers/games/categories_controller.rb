@@ -8,13 +8,20 @@ class Games::CategoriesController < ApplicationController
   private
 
   def set_game
-    @game = Game.find_by(shortname: params[:game_id])
-    redirect_to game_path(params[:game_id]) if @game.nil?
+    @game = Game.where(shortname: params[:game_id]).or(Game.where(id: params[:game_id])).first
+
+    if @game.nil?
+      render status: 404, file: "#{Rails.root}/public/404.html"
+    end
   end
 
   def set_category
-    @category = @game.categories.find_by(shortname: params[:id]) ||
-                @game.categories.find_by(id: params[:id])
-    redirect_to game_path(params[:game_id]) if @category.nil?
+    @category = @game.categories.where(shortname: params[:category_id]).or(
+      @game.categories.where(id: params[:category_id])
+    ).first
+
+    if @category.nil?
+      render status: 404, file: "#{Rails.root}/public/404.html"
+    end
   end
 end

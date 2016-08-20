@@ -8,5 +8,4 @@ class Runs::ApplicationController < ApplicationController
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     not_found
   end
-
 end

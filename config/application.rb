@@ -13,6 +13,8 @@ module SplitsIO
     config.active_job.queue_adapter = :delayed_job
 
     config.assets.precompile += ['darkmode.css']
+
+    ActiveSupport.halt_callback_chains_on_return_false = false
   end
 end
 

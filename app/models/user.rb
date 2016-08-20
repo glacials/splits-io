@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include AuthenticatingUser
   include RivalUser
   include TwitchUser
@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
   end
 
   def avatar
+    if read_attribute(:avatar).nil?
+      return nil
+    end
+
     URI.parse(read_attribute(:avatar) || '').tap do |uri|
       uri.scheme = 'https'
     end.to_s

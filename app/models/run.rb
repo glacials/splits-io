@@ -1,6 +1,6 @@
 Dir['./lib/parsers/*'].each { |file| require file }
 
-class Run < ActiveRecord::Base
+class Run < ApplicationRecord
   include PadawanRun
   include ForgetfulPersonsRun
   include SRDCRun
@@ -76,10 +76,6 @@ class Run < ActiveRecord::Base
 
   def belongs_to?(user)
     user.present? && self.user == user
-  end
-
-  def runners
-    [user]
   end
 
   def time_since_upload
@@ -200,7 +196,11 @@ class Run < ActiveRecord::Base
   end
 
   def original_file
-    program.to_sym == :llanfair ? RunFile.pack_binary(file) : file
+    if program.to_sym == :llanfair && file.is_a?(Array)
+      RunFile.pack_binary(file)
+    else
+      file
+    end
   end
 
   def destroy_run_file_if_orphaned

@@ -1,5 +1,5 @@
-class Api::V4::Users::RunsController < Api::V4::ApplicationController
-  before_action :set_user
+class Api::V4::Runners::RunsController < Api::V4::ApplicationController
+  before_action :set_runner
   before_action :set_runs, only: [:index]
 
   def index
@@ -9,6 +9,6 @@ class Api::V4::Users::RunsController < Api::V4::ApplicationController
   private
 
   def set_runs
-    @runs = @user.runs.includes(:game, :category)
+    @runs = @runner.runs.includes(:game, :category)
   end
 end

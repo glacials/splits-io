@@ -41,7 +41,6 @@ class Games::AliasesController < ApplicationController
   def authorize
     if cannot?(:edit, @game) || cannot?(:edit, @game_to_merge)
       redirect_to game_path(@game), alert: "You don't have permission to do that."
-      return
     end
   end
 

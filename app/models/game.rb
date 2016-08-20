@@ -1,6 +1,6 @@
 require 'speedrunslive'
 
-class Game < ActiveRecord::Base
+class Game < ApplicationRecord
   include SRLGame
 
   validates :name, presence: true
@@ -22,13 +22,13 @@ class Game < ActiveRecord::Base
   def self.from_name(name)
     name = name.strip
     return nil if name.blank?
-    joins(:aliases).where(aliases: {name: name}).first
+    joins(:aliases).where(game_aliases: {name: name}).first
   end
 
   def self.from_name!(name)
     name = name.strip
     return nil if name.blank?
-    joins(:aliases).where(aliases: {name: name}).first_or_create(name: name)
+    joins(:aliases).where(game_aliases: {name: name}).first_or_create(name: name)
   end
 
   def to_param
@@ -58,7 +58,7 @@ class Game < ActiveRecord::Base
   # merge_into! changes ownership of all of this game's categories and aliases to the given game, then destroys this
   # game.
   def merge_into!(game)
-    ActiveRecord::Base.transaction do
+    ApplicationRecord.transaction do
       aliases.update_all(game_id: game.id)
 
       categories.each do |category|

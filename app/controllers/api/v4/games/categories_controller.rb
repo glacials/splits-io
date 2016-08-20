@@ -9,12 +9,4 @@ class Api::V4::Games::CategoriesController < Api::V4::ApplicationController
   def show
     render json: @category, serializer: Api::V4::CategorySerializer
   end
-
-  private
-
-  def set_category
-    @category = @game.categories.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render not_found(:category, params[:id])
-  end
 end

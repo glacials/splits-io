@@ -12,6 +12,5 @@ class Runs::StatsController < Runs::ApplicationController
       program: @run.program,
     }
     gon.scale_to = @run.time
-
   end
 end

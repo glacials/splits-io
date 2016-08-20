@@ -12,9 +12,9 @@
 //
 //= require jquery
 //= require jquery.turbolinks
-//= require jquery.cookie
 //= require jquery_ujs
 //= require jquery-ui/draggable
+//= require js.cookie
 //= require bootstrap
 //= require numeral
 //= require spin

@@ -1,4 +1,4 @@
-class Rivalry < ActiveRecord::Base
+class Rivalry < ApplicationRecord
   validates_uniqueness_of :category, scope: :from_user_id
 
   belongs_to :category

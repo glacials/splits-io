@@ -1,11 +1,10 @@
 class Api::V4::ConvertsController < Api::V4::ApplicationController
-
   before_action :check_parameters, only: [:create]
 
   def create
     run_file = RunFile.for_convert(params[:file])
 
-    @run = Run.new(run_file: run_file, user: nil)
+    @run = Run.new(run_file: run_file)
     unless @run.parses?(fast: params[:historic] != "1", convert: true)
       render status: 400, json: {
         status: 400,
@@ -47,7 +46,5 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
       status: 400,
       message: "Missing 'file' or 'format' parameter. Make sure to include both in your request."
     }
-    return
   end
-
 end
