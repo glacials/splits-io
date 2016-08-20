@@ -27,7 +27,7 @@ module CompletedRun
     end
 
     def history
-      parse(fast: false)[:history]
+      parse(fast: false)[:history] || []
     end
 
     def best_known?

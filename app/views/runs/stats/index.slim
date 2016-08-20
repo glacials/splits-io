@@ -55,7 +55,7 @@ article#stats
           tr
             td
               span Attempt
-            td = @run.attempts
+            td = @run.attempts || '-'
           tr
             td
               span Splits
@@ -71,27 +71,43 @@ article#stats
           tr
             td
               span Shortest segment
-            td = @run.shortest_segment.name
+            td
+              - if @run.collapsed_splits.size > 0
+                = @run.shortest_segment.name
+              - else
+                span.time -
           tr
             td
               span Longest segment
-            td = @run.longest_segment.name
+            td
+              - if @run.collapsed_splits.size > 0
+                = @run.longest_segment.name
+              - else
+                span.time -
           tr
             td
               span Mean segment length
-            td.time.needs-formatting class=('short' if @run.short?) = @run.time / @run.collapsed_splits.size
+            td
+              - if @run.collapsed_splits.size > 0
+                span.time.needs-formatting class=('short' if @run.short?) = @run.time / @run.collapsed_splits.size
+              - else
+                span.time -
           tr
             td
               span Median segment length
-            td.time.needs-formatting class=('short' if @run.short?)
-              = @run.median_segment_duration
-  hr
-  #pb-graph
-  hr
-  #split-history-graph
-  hr
-  #run-duration-graph
-  hr
-  #segment-duration-graph
-  hr
-  #reset-graph
+            td
+              - if @run.collapsed_splits.size > 0
+                span.time.needs-formatting class=('short' if @run.short?) = @run.median_segment_duration
+              - else
+                span.time -
+  - if @run.history.size > 0
+    hr
+    #pb-graph
+    hr
+    #split-history-graph
+    hr
+    #run-duration-graph
+    hr
+    #segment-duration-graph
+    hr
+    #reset-graph
