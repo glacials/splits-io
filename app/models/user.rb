@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :games, -> { distinct }, through: :runs
   has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_rivalries, class_name: Rivalry, foreign_key: :to_user_id, dependent: :destroy
+  has_many :subscriptions
 
   after_destroy do |user|
     user.runs.update_all(user_id: nil)
@@ -61,5 +62,9 @@ class User < ApplicationRecord
 
   def darkmode
     false
+  end
+
+  def gold?
+    permagold? || subscriptions.count > 0
   end
 end

@@ -1,31 +1,50 @@
 - title 'Gold'
 .splash
-  h1.splash-head Splits I/O Gold
-  p.splash-subhead get some gold splits... io
-  hr
-  .pricing-tables.pure-g
-    .pure-u-1.pure-u-md-1-2
-      .subscribe.month.stripe-button
-        .pricing-table-header
-          h3 Monthly
-          span.pricing-table-price $3
-        form method='post' action='/gold'
-          input type='hidden' name='period' value='month'
-          script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (month)" data-amount="300" data-locale="auto"
-    .pure-u-1.pure-u-md-1-2
-      .subscribe.year
-        .pricing-table-header
-          h3 Yearly
-          span.pricing-table-price $9
-        form method='post' action='/gold'
-          input type='hidden' name='period' value='year'
-          script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (year)" data-amount="900" data-locale="auto"
+  coffee:
+    $('#alerts').remove()
+  #alerts data-turbolinks-temporary=true
+    - if flash[:alert]
+      .splash-head = flash[:alert]
+    - if flash[:notice]
+      .splash-head = flash[:notice]
+  - if current_user.gold?
+    h1.splash-head You're gold ;)
+    p.splash-subhead Go get some gold splits to match
+    .pricing-tables.pure-g
+      hr
+      .pure-u-1.pure-u-md-1-1
+        - if current_user.permagold?
+          .splash-head Permagold
+        - else
+          = button_to new_subscription_path, method: :delete, data: {confirm: "Really become ungold?"}, class: 'button btn btn-warning', style: 'margin: 1em;'
+            span Cancel gold
+  - else
+    h1.splash-head Splits I/O Gold
+    p.splash-subhead get some gold splits... io
     hr
-    .pure-u-1.pure-u-md-1-1
-      .subscribe.year
-        .pricing-table-header
-          h3 Forever
-          span.pricing-table-price $90
-        form method='post' action='/gold'
-          input type='hidden' name='period' value='forever'
-          script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (forever)" data-amount="9000" data-locale="auto"
+    .pricing-tables.pure-g
+      .pure-u-1.pure-u-md-1-2
+        .subscribe.month.stripe-button
+          .pricing-table-header
+            h3 Monthly
+            span.pricing-table-price $3
+          form method='post' action='/gold'
+            input type='hidden' name='period' value='month'
+            script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (month)" data-amount="300" data-locale="auto"
+      .pure-u-1.pure-u-md-1-2
+        .subscribe.year
+          .pricing-table-header
+            h3 Yearly
+            span.pricing-table-price $9
+          form method='post' action='/gold'
+            input type='hidden' name='period' value='year'
+            script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (year)" data-amount="900" data-locale="auto"
+      hr
+      .pure-u-1.pure-u-md-1-1
+        .subscribe.year
+          .pricing-table-header
+            h3 Forever
+            span.pricing-table-price $90
+          form method='post' action='/gold'
+            input type='hidden' name='period' value='forever'
+            script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (forever)" data-amount="9000" data-locale="auto"
