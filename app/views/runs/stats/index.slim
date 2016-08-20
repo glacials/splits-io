@@ -100,9 +100,10 @@ article#stats
                 span.time.needs-formatting class=('short' if @run.short?) = @run.median_segment_duration
               - else
                 span.time -
-  - if @run.history.size > 0
+  - if @run.collapsed_splits.size > 0
     hr
     #pb-graph
+  - if @run.history.size > 0
     hr
     #split-history-graph
     hr
