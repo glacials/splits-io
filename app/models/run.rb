@@ -132,6 +132,11 @@ class Run < ApplicationRecord
 
       return result
     end
+
+    if time.present?
+      raise "Once-parsable run could not be parsed"
+    end
+
     {}
   end
 
