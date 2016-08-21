@@ -5,7 +5,13 @@
     .pull-left
       img src=rivalry.from_user.avatar height=64 width=64
     .media-body
-      h4.media-heading = rivalry.from_user.present? ? (link_to rivalry.from_user, rivalry.from_user, class: 'stealth-link user-link') : '???'
+      h4.media-heading
+        - if rivalry.from_user.present?
+          = link_to rivalry.from_user, rivalry.from_user, class: 'stealth-link user-link'
+          - if rivalry.from_user.gold?
+            .gold-split title='Gold'
+        - else
+          = '???'
       span = from_user_pb.present? ? (link_to from_user_pb.time, from_user_pb, class: 'time needs-formatting stealth-link run-link') : '-'
       small< pb
       br
@@ -18,8 +24,18 @@
     .pull-left
       img src=rivalry.to_user.avatar height=64 width=64
     .media-body
-      h4.media-heading = rivalry.to_user.present? ? (link_to rivalry.to_user, rivalry.to_user, class: 'stealth-link user-link') : '???'
-      span = to_user_pb.present? ? (link_to to_user_pb.time, to_user_pb, class: 'time needs-formatting stealth-link run-link') : '-'
+      h4.media-heading
+        - if rivalry.to_user.present?
+          = link_to rivalry.to_user, rivalry.to_user, class: 'stealth-link user-link'
+          - if rivalry.to_user.gold?
+            .gold-split title='Gold'
+        - else
+          '???'
+      span
+        - if to_user_pb.present?
+          = link_to to_user_pb.time, to_user_pb, class: 'time needs-formatting stealth-link run-link'
+        - else
+          = '-'
       small< pb
       br
       span.time.needs-formatting = to_user_pb.sum_of_best || '0'

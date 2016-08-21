@@ -14,7 +14,7 @@
       small
         span by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
         - if @run.user.gold?
-          .gold-split title=@run.user.gold_type
+          .gold-split title='Gold'
   h6
     span#download-menu
       => link_to @run.program, download_path(@run, @run.program), onclick: 'hide_download_menu()'

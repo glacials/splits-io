@@ -67,14 +67,4 @@ class User < ApplicationRecord
   def gold?
     permagold? || subscriptions.count > 0
   end
-
-  def gold_type
-    if permagold?
-      return 'Permagold'
-    end
-    if gold?
-      return 'Gold'
-    end
-    return 'Not gold'
-  end
 end

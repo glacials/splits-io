@@ -41,7 +41,7 @@ html
                 small = '∨ '
                 = current_user.name
                 - if current_user.gold?
-                  .gold-split title=current_user.gold_type
+                  .gold-split title='Gold'
               ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
                 li role=:presentation
                   = link_to "profile", user_path(current_user)

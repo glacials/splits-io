@@ -6,6 +6,8 @@
       .media-body
         h4.media-heading
           = user.name
+          - if user.gold?
+            .gold-split title='Gold'
           .call-to-action = next_butt_kick_sentence
         span.time.needs-formatting = user.pb_for(@category).time
         small< pb

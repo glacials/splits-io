@@ -12,6 +12,6 @@
               h4.media-heading
                 = user
                 - if user.gold?
-                  .gold-split title=user.gold_type
+                  .gold-split title='Gold'
             - user.games.reject { |game| game.name.blank? }.each do |game|
               => link_to(game.shortname || game.name.downcase, game, class: 'stealth-link game-link')
