@@ -47,9 +47,9 @@ html
                   = link_to "profile", user_path(current_user)
                   = link_to "tools", tools_path
                   - if current_user.gold?
-                    = link_to "manage gold", new_subscription_path
+                    = link_to "manage gold", subscription_path
                   - else
-                    = link_to "go gold", new_subscription_path
+                    = link_to "go gold", subscription_path
                   = link_to "sign out", session_path(auth_session), method: :delete
             - else
               a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign in

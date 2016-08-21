@@ -24,7 +24,7 @@ SplitsIO::Application.routes.draw do
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/failure', to: 'sessions#failure'
 
-  get    '/gold', to: 'subscriptions#new', as: :new_subscription
+  get    '/gold', to: 'subscriptions#show', as: :subscription
   post   '/gold', to: 'subscriptions#create'
   delete '/gold', to: 'subscriptions#destroy'
 

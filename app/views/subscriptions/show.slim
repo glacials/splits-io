@@ -19,8 +19,8 @@
           span.gold-split title='Gold'
       h4 Permalink redirectors
       .gold-feature
-        p The following URLs are available to you. They will always redirect to your PB for the listed game/category.
-          They follow this format:
+        p The following URLs are available to you. They will always redirect to your PB for their game/category. They
+          follow this format:
         pre splits.io/users/#{current_user.name}/pbs/&lt;game&gt;/&lt;category&gt;
         p Game and category shortnames are used where available; otherwise numeric IDs are used.
         table.table
@@ -37,14 +37,16 @@
                     = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
       h4 Headhunter (coming soon)
       .gold-feature
-        p Smartly and automatically find a good rival for any game/category you run.
+        p Smartly find a good rival for any game/category you run.
     hr
     .pure-u-1.pure-u-md-1-1
       - if current_user.permagold?
         .splash-head Permagold
       - else
-        = button_to new_subscription_path, method: :delete, data: {confirm: "Really become ungold? Permalink redirectors will no longer work, so be sure to update any links that use them."}, class: 'button btn btn-warning', style: 'margin: 1em;'
+        = button_to subscription_path, method: :delete, data: {confirm: "Really become ungold? Permalink redirectors will no longer work, so be sure to update any links that use them."}, class: 'button btn btn-warning', style: 'margin: 1em;'
           span Cancel gold
+        div Renews #{Time.at(@subscription.current_period_end).strftime('%Y-%m-%d')}
+        div Gold since #{Time.at(@subscription.start).strftime('%Y-%m-%d')}
   - else
     h1.splash-head Splits I/O Gold
     hr
@@ -61,7 +63,7 @@
           for that game/category. No more updating links whenever you PB!
       h4 Headhunter (coming soon)
       .gold-feature
-        p Smartly and automatically find a good rival for any game/category you run.
+        p Smartly find a good rival for any game/category you run.
       h4 Feelgoods
       .gold-feature
         p Warm fuzzies for helping me run the site!

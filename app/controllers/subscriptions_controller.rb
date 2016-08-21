@@ -1,10 +1,12 @@
 class SubscriptionsController < ApplicationController
-  def new
+  before_action :set_stripe_subscription, only: [:show]
+
+  def show
   end
 
   def create
     unless ['month', 'year', 'forever'].include?(params[:period])
-      redirect_to new_subscription_path, alert: 'Invalid period.'
+      redirect_to subscription_path, alert: 'Invalid period.'
       return
     end
 
@@ -22,10 +24,10 @@ class SubscriptionsController < ApplicationController
 
         current_user.update(permagold: true)
 
-        redirect_to new_subscription_path
+        redirect_to subscription_path
       rescue => e
         Rollbar.log('error', e)
-        redirect_to new_subscription_path, alert: 'There was an error processing your payment. Please try again.'
+        redirect_to subscription_path, alert: 'There was an error processing your payment. Please try again.'
         raise e
       end
       return
@@ -52,10 +54,10 @@ class SubscriptionsController < ApplicationController
         stripe_subscription_id: subscription.id
       )
 
-      redirect_to new_subscription_path
+      redirect_to subscription_path
     rescue => e
       Rollbar.log('error', e)
-      redirect_to new_subscription_path, alert: 'There was an error processing your payment. Please try again.'
+      redirect_to subscription_path, alert: 'There was an error processing your payment. Please try again.'
       raise e
     end
     return
@@ -65,15 +67,23 @@ class SubscriptionsController < ApplicationController
     begin
       current_user.subscriptions.each do |subscription|
         stripe_subscription = Stripe::Subscription.retrieve(subscription.stripe_subscription_id)
-        stripe_subscription.delete
+        stripe_subscription.delete(at_period_end: true)
       end
       current_user.subscriptions.destroy_all
 
-      redirect_to new_subscription_path, notice: 'Your Gold subscription has been canceled.'
+      redirect_to subscription_path, notice: 'Your Gold subscription has been canceled.'
     rescue => e
       Rollbar.log('error', e)
-      redirect_to new_subscription_path, alert: 'There was an error canceling your subscription. Please try again, or email me: qhiiyr@gmail.com'
+      redirect_to subscription_path, alert: 'There was an error canceling your subscription. Please try again, or email me: qhiiyr@gmail.com'
       raise e
+    end
+  end
+
+  private
+
+  def set_stripe_subscription
+    if current_user.gold?
+      @subscription = Stripe::Subscription.retrieve(current_user.subscriptions.first.stripe_subscription_id)
     end
   end
 end
