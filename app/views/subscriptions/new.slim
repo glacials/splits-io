@@ -9,40 +9,62 @@
       .splash-head = flash[:notice]
   - if current_user.gold?
     h1.splash-head You're gold ;)
+    hr
     p.splash-subhead Being cool and gold, you have access to these cool and gold things:
-    .gold-feature
+    .gold-features
       h4 Name badge
-      p
-        span Your name has a gold boop!
-        span.gold-split title='Gold'
-    .gold-feature
+      .gold-feature
+        p
+          span Your name has a gold boop!
+          span.gold-split title='Gold'
       h4 Permalink redirectors
-      p The following URLs are available to you. They will always redirect to your PB for the listed game/category. No
-        more updating links whenever you PB! They follow this format:
-      pre splits.io/users/#{current_user.name}/pbs/&lt;game&gt;/&lt;category&gt;
-      p Game and category shortnames are used where available; otherwise numeric IDs are used.
-      table.table style='margin-left: 2em'
-        th Game
-        th Category
-        th Redirector
-        - current_user.games.each do |game|
-          - current_user.categories.where(game: game).each do |category|
-            tr
-              td = category.game.name
-              td = category.name
-              td
-                a target='_blank' href=user_pb_path(current_user, game, category)
-                  = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
+      .gold-feature
+        p The following URLs are available to you. They will always redirect to your PB for the listed game/category.
+          They follow this format:
+        pre splits.io/users/#{current_user.name}/pbs/&lt;game&gt;/&lt;category&gt;
+        p Game and category shortnames are used where available; otherwise numeric IDs are used.
+        table.table
+          th Game
+          th Category
+          th Redirector
+          - current_user.games.each do |game|
+            - current_user.categories.where(game: game).each do |category|
+              tr
+                td = category.game.name
+                td = category.name
+                td
+                  a target='_blank' href=user_pb_path(current_user, game, category)
+                    = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
+      h4 Headhunter (coming soon)
+      .gold-feature
+        p Smartly and automatically find a good rival for any game/category you run.
     hr
     .pure-u-1.pure-u-md-1-1
       - if current_user.permagold?
         .splash-head Permagold
       - else
-        = button_to new_subscription_path, method: :delete, data: {confirm: "Really become ungold?"}, class: 'button btn btn-warning', style: 'margin: 1em;'
+        = button_to new_subscription_path, method: :delete, data: {confirm: "Really become ungold? Permalink redirectors will no longer work, so be sure to update any links that use them."}, class: 'button btn btn-warning', style: 'margin: 1em;'
           span Cancel gold
   - else
     h1.splash-head Splits I/O Gold
-    p.splash-subhead get some gold splits... io
+    hr
+    p.splash-subhead Gold grants access to these thingies:
+    .gold-features
+      h4 Name badge
+      .gold-feature
+        p
+          span A gold boop!
+          span.gold-split title='Gold'
+      h4 Permalink redirectors
+      .gold-feature
+        p You'll get a special URL for every game/category you run that will always redirect to your most up-to-date PB
+          for that game/category. No more updating links whenever you PB!
+      h4 Headhunter (coming soon)
+      .gold-feature
+        p Smartly and automatically find a good rival for any game/category you run.
+      h4 Feelgoods
+      .gold-feature
+        p Warm fuzzies for helping me run the site!
     hr
     .pricing-tables.pure-g
       .pure-u-1.pure-u-md-1-2
