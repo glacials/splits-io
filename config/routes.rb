@@ -39,6 +39,8 @@ SplitsIO::Application.routes.draw do
   post '/users/:user/rivalries',            to: 'users/rivalries#create'
   delete '/users/:user/rivalries/:to_user', to: 'users/rivalries#destroy', as: :user_rivalry
 
+  get '/:user/pbs/:game/:category', to: 'users/pbs#show', as: :user_pb
+
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 
   get '/games',            to: 'games#index', as: :games

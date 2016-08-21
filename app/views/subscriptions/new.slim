@@ -9,15 +9,37 @@
       .splash-head = flash[:notice]
   - if current_user.gold?
     h1.splash-head You're gold ;)
-    p.splash-subhead Go get some gold splits to match
-    .pricing-tables.pure-g
-      hr
-      .pure-u-1.pure-u-md-1-1
-        - if current_user.permagold?
-          .splash-head Permagold
-        - else
-          = button_to new_subscription_path, method: :delete, data: {confirm: "Really become ungold?"}, class: 'button btn btn-warning', style: 'margin: 1em;'
-            span Cancel gold
+    p.splash-subhead Being cool and gold, you have access to these cool and gold things:
+    .gold-feature
+      h4 Name badge
+      p
+        span Your name has a gold boop!
+        span.gold-split title='Gold'
+    .gold-feature
+      h4 Permalink redirectors
+      p The following URLs are available to you. They will always redirect to your PB for the listed game/category. No
+        more updating links whenever you PB! They follow this format:
+      pre splits.io/users/#{current_user.name}/pbs/&lt;game&gt;/&lt;category&gt;
+      p Game and category shortnames are used where available; otherwise numeric IDs are used.
+      table.table style='margin-left: 2em'
+        th Game
+        th Category
+        th Redirector
+        - current_user.games.each do |game|
+          - current_user.categories.where(game: game).each do |category|
+            tr
+              td = category.game.name
+              td = category.name
+              td
+                a target='_blank' href=user_pb_path(current_user, game, category)
+                  = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
+    hr
+    .pure-u-1.pure-u-md-1-1
+      - if current_user.permagold?
+        .splash-head Permagold
+      - else
+        = button_to new_subscription_path, method: :delete, data: {confirm: "Really become ungold?"}, class: 'button btn btn-warning', style: 'margin: 1em;'
+          span Cancel gold
   - else
     h1.splash-head Splits I/O Gold
     p.splash-subhead get some gold splits... io

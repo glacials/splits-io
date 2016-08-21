@@ -12,6 +12,7 @@ class Game < ApplicationRecord
   after_create :create_initial_alias
 
   scope :named, -> { where.not(name: nil) }
+  scope :shortnamed, -> { where.not(shortname: nil) }
 
   def self.search(term)
     term = term.strip
@@ -32,7 +33,7 @@ class Game < ApplicationRecord
   end
 
   def to_param
-    shortname || name.downcase.gsub('/', '')
+    shortname || id.to_s || name.downcase.gsub('/', '')
   end
 
   def sync_with_srl
