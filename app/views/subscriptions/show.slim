@@ -45,7 +45,7 @@
       - else
         = button_to subscription_path, method: :delete, data: {confirm: "Really become ungold? Permalink redirectors will no longer work, so be sure to update any links that use them."}, class: 'button btn btn-warning', style: 'margin: 1em;'
           span Cancel gold
-        div Renews #{Time.at(@subscription.current_period_end).strftime('%Y-%m-%d')}
+        div Renews #{Time.at(@subscription.current_period_end).strftime('%Y-%m-%d')} for $#{@subscription.plan.amount / 100}
         div Gold since #{Time.at(@subscription.start).strftime('%Y-%m-%d')}
   - else
     h1.splash-head Splits I/O Gold
