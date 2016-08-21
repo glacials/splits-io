@@ -11,7 +11,7 @@ class Twitch
 
     class << self
       def get(login)
-        route(login.downcase).get
+        route(login.downcase).get(Twitch.headers)
       end
 
       def route(login)
@@ -33,7 +33,7 @@ class Twitch
 
     class << self
       def get(login)
-        route(login).get
+        route(login).get(Twitch.headers)
       end
 
       def route(login)
@@ -45,6 +45,13 @@ class Twitch
   class << self
     def route
       RestClient::Resource.new('https://api.twitch.tv/kraken')
+    end
+
+    def headers
+      {
+        'Accept' => 'application/vnd.twitchtv.v4+json',
+        'Client-ID' => ENV['TWITCH_CLIENT_ID']
+      }
     end
   end
 end
