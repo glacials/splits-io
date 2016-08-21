@@ -11,7 +11,10 @@
   h5
     .time.needs-formatting class=('short' if @run.short?) = @run.time
     - if @run.user.try(:name)
-      small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
+      small
+        span by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
+        - if @run.user.gold?
+          .gold-split title=@run.user.gold_type
   h6
     span#download-menu
       => link_to @run.program, download_path(@run, @run.program), onclick: 'hide_download_menu()'

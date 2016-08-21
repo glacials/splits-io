@@ -4,6 +4,8 @@
     span style="margin-right: .5em;"
       img src=@user.avatar width=50 height=50
     span = link_to @user, @user, class: 'stealth-link user-link'
+    - if @user.gold?
+      .gold-split title=@user.gold_type
   h6
     a#twitch-channel href=@user.uri target=:_blank = @user.uri.to_s.gsub('http://www.', '')
   h6

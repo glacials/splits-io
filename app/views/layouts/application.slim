@@ -38,13 +38,10 @@ html
           span.dropdown-link
             - if logged_in?
               a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'selected' : '')
-                - if current_user.permagold?
-                  .gold-split title='Permagold'
-                - elsif current_user.gold?
-                  .gold-split title='Gold'
-                - else
-                  small = '∨ '
+                small = '∨ '
                 = current_user.name
+                - if current_user.gold?
+                  .gold-split title=current_user.gold_type
               ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
                 li role=:presentation
                   = link_to "profile", user_path(current_user)
