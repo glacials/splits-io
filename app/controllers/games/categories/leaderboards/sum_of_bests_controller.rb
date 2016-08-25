@@ -8,20 +8,20 @@ class Games::Categories::Leaderboards::SumOfBestsController < ApplicationControl
   private
 
   def set_game
-    @game = Game.where(shortname: params[:game_id]).or(Game.where(id: params[:game_id])).first
+    @game = Game.where(shortname: params[:game]).or(Game.where(id: params[:game])).first
 
     if @game.nil?
-      render status: 404, file: "#{Rails.root}/public/404.html"
+      not_found
     end
   end
 
   def set_category
-    @category = @game.categories.where(shortname: params[:category_id]).or(
-      @game.categories.where(id: params[:category_id])
+    @category = @game.categories.where(shortname: params[:category]).or(
+      @game.categories.where(id: params[:category])
     ).first
 
     if @category.nil?
-      render status: 404, file: "#{Rails.root}/public/404.html"
+      not_found
     end
   end
 end

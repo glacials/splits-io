@@ -32,6 +32,11 @@ test:
   # required to be able to run tests
   DATABASE_URL: postgres://localhost
 
+  S3_BUCKET: splits-io
+  AWS_REGION: local
+  AWS_ACCESS_KEY_ID: boop
+  AWS_SECRET_KEY: beep
+
 # You don't need to change anything below this line.
 
 production:

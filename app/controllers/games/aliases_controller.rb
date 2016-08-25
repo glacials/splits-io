@@ -45,10 +45,10 @@ class Games::AliasesController < ApplicationController
   end
 
   def set_game
-    @game = Game.find_by(shortname: params[:game_id])
+    @game = Game.find_by(shortname: params[:game])
 
     if @game.nil?
-      redirect_to games_path(q: params[:game_id])
+      redirect_to games_path(q: params[:game])
     end
   end
 

@@ -44,16 +44,18 @@ SplitsIO::Application.routes.draw do
     end
   end
 
-  resources :games, id: /[^\/]+/, only: [:index, :show, :edit] do
-    resources :categories, only: [:show], module: :games do
-      resources :leaderboards, only: [], module: :categories do
-        collection do
-          resources :sum_of_bests, only: [:index], module: :leaderboards
-        end
-      end
-    end
-    resources :aliases, only: [:create], module: :games
-  end
+  get '/games',            to: 'games#index', as: :games
+  get '/games/:game',      to: 'games#show',  as: :game
+  get '/games/:game/edit', to: 'games#edit', as: :edit_game
+
+  post '/games/:game/aliases', to: 'games/aliases#create'
+
+  get '/games/:game/categories',           to: redirect('/games/%{id}')
+  get '/games/:game/categories/:category', to: 'games/categories#show', as: :game_category
+
+  get '/games/:game/categories/:category/leaderboards/sum_of_bests',
+    to: 'games/categories/leaderboards/sum_of_bests#index',
+    as: :game_category_sum_of_bests
 
   resources :tools, only: [:index]
   resources :settings, only: [:index]
