@@ -7,7 +7,7 @@
       .splash-head = flash[:alert]
     - if flash[:notice]
       .splash-head = flash[:notice]
-  - if current_user.gold?
+  - if current_user.present? && current_user.gold?
     h1.splash-head You're gold ;)
     hr
     p.splash-subhead Being cool and gold, you have access to these cool and gold things:

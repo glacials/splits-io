@@ -82,7 +82,7 @@ class SubscriptionsController < ApplicationController
   private
 
   def set_stripe_subscription
-    if current_user.gold?
+    if current_user.present? && current_user.gold?
       @subscription = Stripe::Subscription.retrieve(current_user.subscriptions.first.stripe_subscription_id)
     end
   end
