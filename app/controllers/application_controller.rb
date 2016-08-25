@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ssl_configured?
-    Rails.application.config.use_ssl
+    Rails.application.config.use_ssl && (controller_name != 'health')
   end
 
   def sanitize_pagination_params
