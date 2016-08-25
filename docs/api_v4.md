@@ -1,5 +1,10 @@
 # API v4
 
+*Note: v4 is still under development. This doc is here to provide an idea of what it will look like, but many of these
+routes are not implemented or not yet up to spec. For now you should use the [v3 API][v3].*
+
+[v3]: https://github.com/glacials/splits-io/blob/master/docs/api.md
+
 ## IDs
 Resources are identifyable *only* by the following attributes:
 
