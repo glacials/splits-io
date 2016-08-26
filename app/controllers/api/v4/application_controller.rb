@@ -51,7 +51,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_runner
-    @runner = User.with_runs.find(params[:runner])
+    @runner = User.with_runs.find_by!(name: params[:runner])
   rescue ActiveRecord::RecordNotFound
     render not_found(:runner, params[:runner])
   end
