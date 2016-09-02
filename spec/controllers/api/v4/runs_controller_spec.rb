@@ -37,7 +37,7 @@ describe Api::V4::RunsController do
         expect(subject).to have_http_status 200
       end
 
-      it 'returns the run' do
+      it 'renders a run schema' do
         expect(subject.body).to match_json_schema(:run)
       end
 

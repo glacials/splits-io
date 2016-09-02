@@ -3,6 +3,7 @@
   "required": [
     "run"
   ],
+  "additionalProperties": false,
   "properties": {
     "run": {
       "type": "object",
@@ -21,6 +22,7 @@
         "category",
         "runners"
       ],
+      "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string"
@@ -70,6 +72,12 @@
         },
         "game": {
           "type": "object",
+          "required": [
+            "name",
+            "shortname",
+            "created_at",
+            "updated_at"
+          ],
           "properties": {
             "name": {
               "type": "string"
@@ -91,6 +99,12 @@
         },
         "category": {
           "type": "object",
+          "required": [
+            "id",
+            "name",
+            "created_at",
+            "updated_at"
+          ],
           "properties": {
             "id": {
               "type": "string"
@@ -111,6 +125,14 @@
           "type": "array",
           "items": {
             "type": "object",
+            "required": [
+              "twitch_id",
+              "name",
+              "avatar",
+              "created_at",
+              "updated_at"
+            ],
+            "additionalProperties": false,
             "properties": {
               "twitch_id": {
                 "type": "string"
@@ -130,13 +152,10 @@
               "updated_at": {
                 "type": "string"
               }
-            },
-            "additionalProperties": false
+            }
           }
         }
-      },
-      "additionalProperties": false
+      }
     }
-  },
-  "additionalProperties": false
+  }
 }

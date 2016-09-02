@@ -4,7 +4,7 @@ FactoryGirl.define do
     name 'Any%'
 
     trait :with_runs do
-      after(:create) do
+      after(:create) do |category|
         FactoryGirl.create_list(:run, 3, category: category)
       end
     end
