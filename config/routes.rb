@@ -5,7 +5,7 @@ SplitsIO::Application.routes.draw do
   get '/why', to: 'pages#why', as: :why
   get '/health', to: 'health#index'
 
-  get  '/upload',     to: 'runs#new', as: :new_run
+  get  '/upload',     to: 'runs#new',        as: :new_run
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
