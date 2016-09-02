@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'json-schema-rspec'
 SimpleCov.start
 
 RSpec.configure do |config|
@@ -25,4 +26,10 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
   end
+
+  config.include JSON::SchemaMatchers
+  #schema file
+  config.json_schemas = {
+    run: 'spec/support/api/v4/run.json'
+  }
 end

@@ -20,4 +20,12 @@ class Api::V4::Convert::RunSerializer < Api::V4::ApplicationSerializer
   def attempts
     object.attempts || 0
   end
+
+  def runners
+    if object.user.nil?
+      []
+    else
+      [object.user]
+    end
+  end
 end

@@ -4,6 +4,8 @@ ruby '2.2.5'
 group :test do
   # tests
   gem 'factory_girl_rails', require: false
+  gem 'json-schema'
+  gem 'json-schema-rspec'
   gem 'rspec-rails', require: false
   gem 'simplecov', require: false
 end

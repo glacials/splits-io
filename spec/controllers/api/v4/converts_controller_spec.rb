@@ -2,11 +2,11 @@ require 'rails_helper'
 
 describe Api::V4::ConvertsController do
   describe '#create' do
-    context 'from Llanfair' do
+    context 'when passed a Llanfair file' do
       let(:file) do
         fixture_file_upload('files/llanfair')
       end
-      context 'supported format' do
+      context 'with a good format' do
         subject { post :create, params: {file: file, format: 'json', historic: '1'} }
         let(:body) { JSON.parse(subject.body) }
 
@@ -14,7 +14,7 @@ describe Api::V4::ConvertsController do
           expect(subject).to have_http_status 200
         end
 
-        it "doesn't include id" do
+        it 'has no id fieild' do
           expect(body['id']).to be_nil
         end
 
@@ -26,7 +26,7 @@ describe Api::V4::ConvertsController do
         end
       end
 
-      context 'unsupported format' do
+      context 'with a bad format' do
         subject { post :create, params: {file: file, format: 'llanfair'} }
         let(:body) { JSON.parse(subject.body) }
 
@@ -40,7 +40,7 @@ describe Api::V4::ConvertsController do
         end
       end
 
-      context 'missing parameter' do
+      context 'with a missing parameter' do
         subject { post :create, params: {file: file} }
         let(:body) { JSON.parse(subject.body) }
 
@@ -55,7 +55,7 @@ describe Api::V4::ConvertsController do
       end
     end
 
-    context 'from Malformed' do
+    context 'with a malformed file' do
       let(:file) do
         fixture_file_upload('files/malformed')
       end

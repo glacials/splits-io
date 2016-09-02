@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Api::V4::Runs::SplitsController do
   describe '#index' do
     context 'for a nonexistent run' do
-      subject { get :index, params: {run_id: '0'} }
+      subject { get :index, params: {run: '0'} }
 
       it 'returns a 404' do
         expect(subject).to have_http_status 404
@@ -15,7 +15,7 @@ describe Api::V4::Runs::SplitsController do
     end
 
     context 'for a bogus ID' do
-      subject { get :index, params: {run_id: '/@??$@;[1;?'} }
+      subject { get :index, params: {run: '/@??$@;[1;?'} }
 
       it 'returns a 404' do
         expect(subject).to have_http_status 404
@@ -28,7 +28,7 @@ describe Api::V4::Runs::SplitsController do
 
     context 'for an existing run' do
       let(:run) { create(:run) }
-      subject { get :index, params: {run_id: run.id36} }
+      subject { get :index, params: {run: run.id36} }
       let(:body) { JSON.parse(subject.body) }
 
       it 'returns a 200' do
@@ -44,7 +44,7 @@ describe Api::V4::Runs::SplitsController do
       end
 
       context 'with a historic=1 parameter' do
-        subject { get :index, params: {run_id: run.id36, historic: '1'} }
+        subject { get :index, params: {run: run.id36, historic: '1'} }
 
         it 'includes history' do
           expect(body[0]['history']).to eq [

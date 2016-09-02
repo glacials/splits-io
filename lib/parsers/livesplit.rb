@@ -49,7 +49,7 @@ module LiveSplit
         srdc_id: xml['Metadata'][0]['Run'][0]['id'],
         attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
-        history: fast ? [] : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
+        history: fast ? nil : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq,
         splits: [],
@@ -69,7 +69,7 @@ module LiveSplit
         split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
         split.skipped = split.duration == 0
 
-        split.history = fast ? [] : segment['SegmentHistory'][0]['Time']
+        split.history = fast ? nil : segment['SegmentHistory'][0]['Time']
         if split.history.present?
           split.history.map! do |time|
             time['RealTime'].nil? ? 0 : duration_in_seconds_of(time['RealTime'][0].try(:strip))
@@ -97,7 +97,7 @@ module LiveSplit
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
         splits: [],
         time: 0,
-        history: fast ? [] : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
+        history: fast ? nil : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
@@ -115,7 +115,7 @@ module LiveSplit
         split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
         split.skipped = split.duration == 0
 
-        split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
+        split.history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
           times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
         end
 
@@ -140,7 +140,7 @@ module LiveSplit
       run = {
         splits: [],
         time: 0,
-        history: fast ? [] : (xml['RunHistory'][0]['Time'] || []).map do |t|
+        history: fast ? nil : (xml['RunHistory'][0]['Time'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq
       }
@@ -160,7 +160,7 @@ module LiveSplit
         split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
         split.skipped = split.duration == 0
 
-        split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
+        split.history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
           times.map { |time| duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip)) }
         end
 
@@ -197,7 +197,7 @@ module LiveSplit
           split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
           split.skipped = split.duration == 0
 
-          split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
+          split.history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
             times.map { |time| duration_in_seconds_of(time['content'].strip) }
           end
 
@@ -239,7 +239,7 @@ module LiveSplit
           split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
           split.skipped = split.duration == 0
 
-          split.history = fast ? [] : segment['SegmentHistory'][0]['Time'].try do |times|
+          split.history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
             times.map { |time| duration_in_seconds_of(time['content'].strip) }
           end
 
