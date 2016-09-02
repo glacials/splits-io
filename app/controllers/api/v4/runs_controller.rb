@@ -48,9 +48,9 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
   def update
     if @run.update(params.permit(:srdc_id, :image_url))
-      render status: 201
+      head 201
     else
-      render status: 500
+      head 500
     end
   end
 
