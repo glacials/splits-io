@@ -61,4 +61,10 @@ class Api::V4::ApplicationController < ActionController::Base
   rescue ActiveRecord::RecordNotFound
     render not_found(:run, params[:run])
   end
+
+  def verify_ownership!
+    unless @run.claim_token.present? && params[:claim_token] == @run.claim_token
+      head 401
+    end
+  end
 end

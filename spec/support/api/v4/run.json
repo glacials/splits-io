@@ -26,10 +26,7 @@
           "type": "string"
         },
         "srdc_id": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         "name": {
           "type": "string"

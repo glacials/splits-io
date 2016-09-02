@@ -62,7 +62,7 @@ describe Api::V4::RunsController do
     end
 
     context 'for an unauthenticated request' do
-      subject { put :update, params: {run: run.id36, user: nil} }
+      subject { put :update, params: {run: run.id36, srdc_id: 'boop'} }
 
       it 'returns a 401' do
         expect(response).to have_http_status 401

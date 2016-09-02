@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by(name: params[:id]) || not_found
+    @user = User.find_by(name: params[:user]) || not_found
   end
 
   def verify_ownership

@@ -47,7 +47,11 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def update
-    @run.update(params.permit(:srdc_id, :image_url))
+    if @run.update(params.permit(:srdc_id, :image_url))
+      render status: 201
+    else
+      render status: 500
+    end
   end
 
   def destroy
@@ -66,15 +70,6 @@ class Api::V4::RunsController < Api::V4::ApplicationController
        "#{headers['Link']}, #{links}"
     else
       links
-    end
-  end
-
-  def verify_ownership!
-    unless @run.claim_token.present? && params[:claim_token] == @run.claim_token
-      render status: 401, json: {
-        status: 401,
-        message: "Invalid claim token."
-      }
     end
   end
 

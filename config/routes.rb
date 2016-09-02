@@ -16,10 +16,10 @@ SplitsIO::Application.routes.draw do
   get '/search/:q',     to: redirect('/games?q=%{q}')
   get '/search(?q=:q)', to: redirect('/games?q=%{q}')
 
-  get '/:id/compare/:comparison_run', to: 'runs#compare',  as: :compare
-  get '/:id/download/:program',       to: 'runs#download', as: :download
+  get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
+  get '/:run/download/:program',       to: 'runs#download', as: :download
 
-  get '/u/:id', to: redirect('/users/%{id}') # deprecated; use GET /users/:id
+  get '/u/:user', to: redirect('/users/%{user}') # deprecated; use GET /users/:user
 
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/failure', to: 'sessions#failure'
@@ -50,7 +50,7 @@ SplitsIO::Application.routes.draw do
 
   post '/games/:game/aliases', to: 'games/aliases#create'
 
-  get '/games/:game/categories',           to: redirect('/games/%{id}')
+  get '/games/:game/categories',           to: redirect('/games/%{game}')
   get '/games/:game/categories/:category', to: 'games/categories#show', as: :game_category
 
   get '/games/:game/categories/:category/leaderboards/sum_of_bests',
@@ -60,14 +60,11 @@ SplitsIO::Application.routes.draw do
   resources :tools, only: [:index]
   resources :settings, only: [:index]
 
-  get    '/runs',            to: redirect('/'), as: :runs
-  get    '/runs/new',        to: redirect('/upload')
-  get    '/runs/:id/edit',   to: redirect('/%{id}/edit')
-  get    '/:id/edit',        to: 'runs#edit', as: :edit_run
-  get    '/:run_id/stats',   to: 'runs/stats#index', as: :run_stats
-  patch  '/:id',             to: 'runs#update'
-  get    '/:id',             to: 'runs#show', as: :run
-  delete '/:id',             to: 'runs#destroy'
+  get    '/:run/edit',  to: 'runs#edit', as: :edit_run
+  get    '/:run/stats', to: 'runs/stats#index', as: :run_stats
+  patch  '/:run',       to: 'runs#update'
+  get    '/:run',       to: 'runs#show', as: :run
+  delete '/:run',       to: 'runs#destroy'
 
   namespace :api do
     namespace :v4 do
@@ -95,6 +92,8 @@ SplitsIO::Application.routes.draw do
       get    '/runs/:run', to: 'runs#show', as: 'run'
       put    '/runs/:run', to: 'runs#update'
       delete '/runs/:run', to: 'runs#destroy'
+
+      delete '/runs/:run/user', to: 'runs/users#destroy'
 
       get '/runs/:run/splits', to: 'runs/splits#index'
 
