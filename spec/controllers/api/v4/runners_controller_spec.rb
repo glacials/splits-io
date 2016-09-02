@@ -13,22 +13,21 @@ describe Api::V4::RunnersController do
       it 'renders a runner schema' do
         expect(subject.body).to match_json_schema(:runner)
       end
-
     end
   end
 
-  describe :categories do
+  describe '#categories' do
   end
 
-  describe :games do
+  describe '#games' do
   end
 
-  describe :pbs do
+  describe '#pbs' do
   end
 
-  describe :predictions do
+  describe '#predictions' do
   end
 
-  describe :runs do
+  describe '#runs' do
   end
 end

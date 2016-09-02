@@ -1,12 +1,12 @@
 {
   "type": "object",
   "required": [
-    "runner"
+    "category"
   ],
   "additionalProperties": false,
   "properties": {
-    "runner": {
-      "$ref": "../../../models/api/v4/runner.json"
+    "category": {
+      "$ref": "../../../../models/api/v4/category.json"
     }
   }
 }

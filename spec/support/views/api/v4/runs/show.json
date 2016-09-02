@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "properties": {
     "run": {
-      "$ref": "../../../models/api/v4/run.json"
+      "$ref": "../../../../models/api/v4/run.json"
     }
   }
 }

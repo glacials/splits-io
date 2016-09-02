@@ -91,33 +91,12 @@
       "additionalProperties": false
     },
     "category": {
-      "type": "object",
-      "required": [
-        "id",
-        "name",
-        "created_at",
-        "updated_at"
-      ],
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "created_at": {
-          "type": "string"
-        },
-        "updated_at": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "../../../models/api/v4/category.json"
     },
     "runners": {
       "type": "array",
       "items": {
-        "$ref": "runner.json"
+        "$ref": "../../../models/api/v4/runner.json"
       }
     }
   }
