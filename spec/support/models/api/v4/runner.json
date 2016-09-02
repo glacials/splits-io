@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "required": [
+    "twitch_id",
+    "name",
+    "avatar",
+    "created_at",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "twitch_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  }
+}

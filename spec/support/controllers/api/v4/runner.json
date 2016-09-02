@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "required": [
+    "runner"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "runner": {
+      "$ref": "../../../models/api/v4/runner.json"
+    }
+  }
+}
