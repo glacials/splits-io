@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "required": [
+    "name",
+    "shortname",
+    "created_at",
+    "updated_at",
+    "categories"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "shortname": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "$ref": "game.json"
+      }
+    }
+  }
+}

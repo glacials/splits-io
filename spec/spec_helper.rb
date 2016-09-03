@@ -30,6 +30,7 @@ RSpec.configure do |config|
   config.include JSON::SchemaMatchers
   #schema file
   config.json_schemas = {
+    game: 'spec/support/views/api/v4/games/show.json',
     category: 'spec/support/views/api/v4/categories/show.json',
     run: 'spec/support/views/api/v4/runs/show.json',
     runner: 'spec/support/views/api/v4/runners/show.json'
