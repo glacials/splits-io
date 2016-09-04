@@ -29,11 +29,11 @@ class Api::V4::ApplicationController < ActionController::Base
     end
   end
 
-  def not_found(collection_name, resource_id)
+  def not_found(collection_name)
     {
       status: 404,
       json: {
-        error: "No #{collection_name} with ID #{resource_id} found."
+        error: "No #{collection_name} with ID #{params[collection_name]} found."
       }
     }
   end
@@ -41,30 +41,32 @@ class Api::V4::ApplicationController < ActionController::Base
   def set_category
     @category = Category.find(params[:category])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:category, params[:category])
+    render not_found(:category)
   end
 
   def set_game
     @game = Game.find_by!(shortname: params[:game])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:game, params[:game])
+    render not_found(:game)
   end
 
   def set_runner
     @runner = User.with_runs.find_by!(name: params[:runner])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:runner, params[:runner])
+    render not_found(:runner)
   end
 
   def set_run
     @run = Run.find36(params[:run])
   rescue ActiveRecord::RecordNotFound
-    render not_found(:run, params[:run])
+    render not_found(:run)
   end
 
   def verify_ownership!
-    unless @run.claim_token.present? && params[:claim_token] == @run.claim_token
+    if params[:claim_token].blank?
       head 401
+    elsif params[:claim_token] != @run.claim_token
+      head 403
     end
   end
 end

@@ -1,6 +1,6 @@
 class Api::V4::RunsController < Api::V4::ApplicationController
-  before_action :set_run, only: [:show, :update, :destroy, :disown, :runners, :splits]
-  before_action :verify_ownership!, only: [:update, :destroy, :disown]
+  before_action :set_run, only: [:show, :update, :destroy]
+  before_action :verify_ownership!, only: [:update, :destroy]
 
   before_action :set_link_headers, if: -> { @run.present? }
 
@@ -47,16 +47,19 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def update
-    if @run.update(params.permit(:srdc_id, :image_url))
-      head 201
+    if @run.update(run_params)
+      head 204
     else
       head 500
     end
   end
 
   def destroy
-    @run.destroy
-    head 204
+    if @run.destroy
+      head 204
+    else
+      head 500
+    end
   end
 
   private

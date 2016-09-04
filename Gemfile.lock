@@ -77,7 +77,6 @@ GEM
     ast (2.3.0)
     autoprefixer-rails (6.4.0.2)
       execjs
-    awesome_print (1.7.0)
     aws-sdk-core (2.5.5)
       jmespath (~> 1.0)
     aws-sdk-rails (1.0.1)
@@ -330,7 +329,7 @@ GEM
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
       rspec-mocks (~> 3.5.0)
-    rspec-core (3.5.2)
+    rspec-core (3.5.3)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -338,7 +337,7 @@ GEM
     rspec-mocks (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
-    rspec-rails (3.5.1)
+    rspec-rails (3.5.2)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
@@ -421,7 +420,6 @@ DEPENDENCIES
   api-pagination
   arel
   authie!
-  awesome_print
   aws-sdk-rails
   babel_bridge
   better_errors

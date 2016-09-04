@@ -20,7 +20,6 @@ group :development, :hot do
   gem 'pry-rails'
 
   # pretty things
-  gem 'awesome_print'
   gem 'rails-erd', require: false
   gem 'rubocop', require: false
 
