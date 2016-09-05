@@ -45,6 +45,8 @@ module WSplit
     rule :unix_newline,    "\n"
 
     def parse(file, options = {})
+      return unless file.ascii_only?
+
       (run = super(file)) && {
         name: run.title.to_s,
         attempts: run.attempts.to_s.to_i,
