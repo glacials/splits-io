@@ -26,7 +26,7 @@ module TwitchUser
 
       update(
         twitch_id: twitch_id,
-        name: name,
+        name: name.downcase,
         avatar: uri.to_s
       )
     rescue RestClient::ResourceNotFound

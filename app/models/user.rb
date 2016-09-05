@@ -4,8 +4,8 @@ class User < ApplicationRecord
   include TwitchUser
 
   has_many :runs
-  has_many :categories, -> { uniq }, through: :runs
-  has_many :games, -> { uniq }, through: :runs
+  has_many :categories, -> { distinct }, through: :runs
+  has_many :games, -> { distinct }, through: :runs
   has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_rivalries, class_name: Rivalry, foreign_key: :to_user_id, dependent: :destroy
 

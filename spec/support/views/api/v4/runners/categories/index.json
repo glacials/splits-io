@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "categories"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "categories": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../../models/api/v4/category.json"
+      }
+    }
+  }
+}

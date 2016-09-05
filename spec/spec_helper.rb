@@ -32,6 +32,10 @@ RSpec.configure do |config|
   config.json_schemas = {
     game: 'spec/support/views/api/v4/games/show.json',
     category: 'spec/support/views/api/v4/categories/show.json',
+    runner_categories: 'spec/support/views/api/v4/runners/categories/index.json',
+    runner_games: 'spec/support/views/api/v4/runners/games/index.json',
+    runner_runs: 'spec/support/views/api/v4/runners/runs/index.json',
+    runner_pbs: 'spec/support/views/api/v4/runners/pbs/index.json',
     run: 'spec/support/views/api/v4/runs/show.json',
     runner: 'spec/support/views/api/v4/runners/show.json'
   }

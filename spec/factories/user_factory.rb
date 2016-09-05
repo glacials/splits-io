@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     trait :with_runs do
       after(:create) do |user|
-        FactoryGirl.create_list(:run, 3, user: user)
+        FactoryGirl.create_list(:run, 3, user: user, category: FactoryGirl.create(:category))
       end
     end
   end

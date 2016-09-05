@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "games"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "games": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../../models/api/v4/game.json"
+      }
+    }
+  }
+}

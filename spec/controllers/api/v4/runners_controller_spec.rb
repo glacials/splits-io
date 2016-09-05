@@ -15,19 +15,4 @@ describe Api::V4::RunnersController do
       end
     end
   end
-
-  describe '#categories' do
-  end
-
-  describe '#games' do
-  end
-
-  describe '#pbs' do
-  end
-
-  describe '#predictions' do
-  end
-
-  describe '#runs' do
-  end
 end

@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "pbs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "pbs": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../../models/api/v4/run.json"
+      }
+    }
+  }
+}
