@@ -120,10 +120,6 @@ class Run < ApplicationRecord
       return result
     end
 
-    if time.present? && !convert
-      raise "Once-parsable run could not be parsed"
-    end
-
     {}
   end
 
