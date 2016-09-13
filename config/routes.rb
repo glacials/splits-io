@@ -26,7 +26,7 @@ SplitsIO::Application.routes.draw do
 
   resources :sessions, only: [:destroy]
 
-  resources :users, only: [:show, :destroy] do
+  resources :users, only: [:show, :destroy], param: :user do
     scope module: :users do
       resources :rivalries, only: [:index, :new, :create, :destroy]
       resources :pbs, only: [], module: :pbs do
