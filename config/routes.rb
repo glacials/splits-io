@@ -26,27 +26,20 @@ SplitsIO::Application.routes.draw do
 
   resources :sessions, only: [:destroy]
 
-  resources :users, only: [:show, :destroy], param: :user do
-    scope module: :users do
-      resources :rivalries, only: [:index, :new, :create, :destroy]
-      resources :pbs, only: [], module: :pbs do
-        collection do
-          resource :export, only: [], module: :export do
-            collection do
-              resources :panels, only: [:index]
-            end
-          end
-        end
-      end
-    end
-    member do
-      get :follows
-    end
-  end
+  get '/users/:user',         to: 'users#show', as: :user
+  delete '/users/:user',      to: 'users#destroy'
+  get '/users/:user/follows', to: 'users#follows'
+
+  get  '/users/:user/rivalries',            to: 'users/rivalries#index', as: :user_rivalries
+  get  '/users/:user/rivalries/new',        to: 'users/rivalries#new',   as: :new_user_rivalry
+  post '/users/:user/rivalries',            to: 'users/rivalries#create'
+  delete '/users/:user/rivalries/:rivalry', to: 'users/rivalries#destroy'
+
+  get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index'
 
   get '/games',            to: 'games#index', as: :games
   get '/games/:game',      to: 'games#show',  as: :game
-  get '/games/:game/edit', to: 'games#edit', as: :edit_game
+  get '/games/:game/edit', to: 'games#edit',  as: :edit_game
 
   post '/games/:game/aliases', to: 'games/aliases#create'
 

@@ -39,7 +39,7 @@ class Users::RivalriesController < ApplicationController
   end
 
   def set_user
-    @user = User.find_by(name: params[:user_id]) || not_found
+    @user = User.find_by(name: params[:user]) || not_found
   end
 
   def set_to_user
