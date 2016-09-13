@@ -20,6 +20,10 @@ module TwitchUser
       name = basic_info['name']
       avatar = basic_info['logo']
 
+      if avatar.nil?
+        avatar = 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
+      end
+
       uri = URI.parse(avatar).tap do |uri|
         uri.scheme = 'https'
       end
