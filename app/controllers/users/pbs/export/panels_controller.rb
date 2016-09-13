@@ -9,7 +9,7 @@ class Users::Pbs::Export::PanelsController < ApplicationController
   private
 
   def set_user
-    @user = User.find_by!(name: params[:user_id])
+    @user = User.find_by!(name: params[:user])
   end
 
   def set_runs

@@ -26,16 +26,16 @@ SplitsIO::Application.routes.draw do
 
   resources :sessions, only: [:destroy]
 
-  get '/users/:user',         to: 'users#show', as: :user
-  delete '/users/:user',      to: 'users#destroy'
-  get '/users/:user/follows', to: 'users#follows'
+  get    '/users/:user',         to: 'users#show', as: :user
+  delete '/users/:user',         to: 'users#destroy'
+  get    '/users/:user/follows', to: 'users#follows'
 
   get  '/users/:user/rivalries',            to: 'users/rivalries#index', as: :user_rivalries
   get  '/users/:user/rivalries/new',        to: 'users/rivalries#new',   as: :new_user_rivalry
   post '/users/:user/rivalries',            to: 'users/rivalries#create'
   delete '/users/:user/rivalries/:rivalry', to: 'users/rivalries#destroy'
 
-  get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index'
+  get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 
   get '/games',            to: 'games#index', as: :games
   get '/games/:game',      to: 'games#show',  as: :game
