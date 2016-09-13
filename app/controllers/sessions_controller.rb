@@ -1,12 +1,15 @@
 class SessionsController < ApplicationController
   def create
-    twitch_id = request.env['omniauth.auth'].uid
+    auth = request.env['omniauth.auth']
+
+    twitch_id = auth.uid
     user = User.find_by(twitch_id: twitch_id) || User.new(twitch_id: twitch_id)
 
     user.update(
-      name: request.env['omniauth.auth'].info.name,
-      email: request.env['omniauth.auth'].info.email,
-      avatar: request.env['omniauth.auth'].info.logo
+      name: auth.info.nickname,
+      email: auth.info.email,
+      avatar: auth.info.image,
+      twitch_token: auth.credentials.token
     )
 
     if user.errors.present?
