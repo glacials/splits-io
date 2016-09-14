@@ -2,7 +2,10 @@ SplitsIO::Application.routes.draw do
   root 'runs#index'
 
   get '/faq', to: 'pages#faq', as: :faq
-  get '/why', to: 'pages#why', as: :why
+
+  get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
+  get '/why/gold', to: 'why#gold', as: :why_gold
+
   get '/health', to: 'health#index'
 
   get  '/upload',     to: 'runs#new',        as: :new_run

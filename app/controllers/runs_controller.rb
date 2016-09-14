@@ -138,7 +138,7 @@ class RunsController < ApplicationController
     redirect_to run_path(@run), flash: {
       icon: 'warning-sign',
       alert: "This run's permalink has changed. You have been redirected to the newer one. \
-              <a href='#{why_path}'>More info</a>.".html_safe
+              <a href='#{why_permalinks_path}'>More info</a>.".html_safe
     }
   end
 
