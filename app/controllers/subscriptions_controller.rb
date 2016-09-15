@@ -1,4 +1,5 @@
 class SubscriptionsController < ApplicationController
+  before_action :disallow, if: -> { ENV['GOLD'] != '1' }
   before_action :set_stripe_subscription, only: [:show]
 
   def show
@@ -90,5 +91,9 @@ class SubscriptionsController < ApplicationController
     if current_user.present? && current_user.gold? && !current_user.permagold?
       @subscription = Stripe::Subscription.retrieve(current_user.subscriptions.first.stripe_subscription_id)
     end
+  end
+
+  def disallow
+    render status: 400, text: 'Gold is turned off for now.'
   end
 end
