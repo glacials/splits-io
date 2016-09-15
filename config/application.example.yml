@@ -5,11 +5,11 @@
 # The gem that does this is called Figaro.
 
 development:
-  # required. default should be fine if your postgresql server is running locally.
+  # Required. Default should be fine if your postgresql server is running locally.
   DATABASE_URL: postgres://localhost
 
-  # required for login to work. register an application @ twitch.tv/settings/connections.
-  # when registering, use a redirect uri of http://localhost:3000/auth/twitch/callback
+  # Required for login to work. Register an application @ twitch.tv/settings/connections.
+  # When registering, use a redirect uri of http://localhost:3000/auth/twitch/callback
   TWITCH_CLIENT_ID:
   TWITCH_CLIENT_SECRET:
 
@@ -30,6 +30,9 @@ development:
 
   STRIPE_PUBLISHABLE_KEY:
   STRIPE_SECRET_KEY:
+
+  # Enable or diable the Gold feature. 1 is on, anything else is off.
+  GOLD: 1
 
 test:
   # required to be able to run tests
