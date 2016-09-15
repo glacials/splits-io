@@ -5,6 +5,11 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
+    if current_user.nil?
+      redirect_to subscription_path, alert: 'Please sign in before signing up for Gold. You were not charged.'
+      return
+    end
+
     unless ['month', 'year', 'forever'].include?(params[:period])
       redirect_to subscription_path, alert: 'Invalid period.'
       return
@@ -82,7 +87,7 @@ class SubscriptionsController < ApplicationController
   private
 
   def set_stripe_subscription
-    if current_user.present? && current_user.gold?
+    if current_user.present? && current_user.gold? && !current_user.permagold?
       @subscription = Stripe::Subscription.retrieve(current_user.subscriptions.first.stripe_subscription_id)
     end
   end

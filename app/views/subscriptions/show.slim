@@ -76,23 +76,35 @@
           .pricing-table-header
             h3 Monthly
             span.pricing-table-price $3
-          form method='post' action='/gold'
-            input type='hidden' name='period' value='month'
-            script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (month)" data-amount="300" data-locale="auto"
+          - if current_user.present?
+            form method='post' action='/gold'
+              input type='hidden' name='period' value='month'
+              script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (month)" data-amount="300" data-locale="auto"
+          - else
+            = button_to '/auth/twitch', class: 'button btn btn-warning', style: 'margin: 1em;', onclick: 'document.cookie="return_to="+window.location.pathname+window.location.search;'
+              span Sign in
       .pure-u-1.pure-u-md-1-2
         .subscribe.year
           .pricing-table-header
             h3 Yearly
             span.pricing-table-price $9
-          form method='post' action='/gold'
-            input type='hidden' name='period' value='year'
-            script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (year)" data-amount="900" data-locale="auto"
+          - if current_user.present?
+            form method='post' action='/gold'
+              input type='hidden' name='period' value='year'
+              script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (year)" data-amount="900" data-locale="auto"
+          - else
+            = button_to '/auth/twitch', class: 'button btn btn-warning', style: 'margin: 1em;', onclick: 'document.cookie="return_to="+window.location.pathname+window.location.search;'
+              span Sign in
       hr
       .pure-u-1.pure-u-md-1-1
         .subscribe.year
           .pricing-table-header
             h3 Forever
             span.pricing-table-price $90
-          form method='post' action='/gold'
-            input type='hidden' name='period' value='forever'
-            script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (forever)" data-amount="9000" data-locale="auto"
+          - if current_user.present?
+            form method='post' action='/gold'
+              input type='hidden' name='period' value='forever'
+              script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key=Rails.configuration.stripe[:publishable_key] data-description="Splits I/O Gold (forever)" data-amount="9000" data-locale="auto"
+          - else
+            = button_to '/auth/twitch', class: 'button btn btn-warning', style: 'margin: 1em;', onclick: 'document.cookie="return_to="+window.location.pathname+window.location.search;'
+              span Sign in
