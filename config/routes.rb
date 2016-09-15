@@ -30,10 +30,10 @@ SplitsIO::Application.routes.draw do
   delete '/users/:user',         to: 'users#destroy'
   get    '/users/:user/follows', to: 'users#follows'
 
-  get  '/users/:user/rivalries',            to: 'users/rivalries#index', as: :user_rivalries
-  get  '/users/:user/rivalries/new',        to: 'users/rivalries#new',   as: :new_user_rivalry
+  get  '/users/:user/rivalries',            to: 'users/rivalries#index',   as: :user_rivalries
+  get  '/users/:user/rivalries/new',        to: 'users/rivalries#new',     as: :new_user_rivalry
   post '/users/:user/rivalries',            to: 'users/rivalries#create'
-  delete '/users/:user/rivalries/:rivalry', to: 'users/rivalries#destroy'
+  delete '/users/:user/rivalries/:to_user', to: 'users/rivalries#destroy', as: :user_rivalry
 
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 
