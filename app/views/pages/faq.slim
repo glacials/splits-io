@@ -3,23 +3,33 @@
   h2 faq + friends
 article
   h3 faq
+
+  a name='who'
   .question
     h4 Who made this?
     p Mostly me, Glacials. My thingies are over at
       #{link_to 'twitch.tv/glacials', 'https://www.twitch.tv/glacials', target: :_blank} and at
       #{link_to 'twitter.com/glcls', 'https://twitter.com/glcls', target: :_blank}.
+
+  a name='timers'
   .question
     h4 Which programs can I upload splits from?
     p #{Run.programs.to_sentence}.
     p In LiveSplit, you can upload from within the program with a right click -> Share.
+
+  a name='open-source'
   .question
     h4 Is Splits I/O open source?
     p Yes!! Have a look or lend a hand at
       #{link_to 'github.com/glacials/splits-io', 'https://github.com/glacials/splits-io', target: :_blank}.
+
+  a name='api'
   .question
     h4 Does Splits I/O have an API?
     p Yes as well!
       #{link_to 'Here are the docs', 'https://github.com/glacials/splits-io/blob/master/docs/api.md', target: :_blank}.
+
+  a name='other-timers'
   .question
     h4 Why no &lt;other timer&gt;?
     p Depends. Maybe we don't know that it exists, or maybe we do but it's so niche that it's not super high priority.
@@ -28,11 +38,15 @@ article
     p If you don't see your timer there, we don't know about it -- remember to bop that Fo- er, New Issue button and
       add it.
     p If you build support for your timer yourself, we'll happily merge in your code!
+
+  a name='games/categories'
   .question
     h4 How are game/category chosen for my run?
     p If you use LiveSplit, we try to associate your splits with an existing game and category from SRL using the
       corresponding LiveSplit fields. If we get it wrong or if you use another timer, you can manually edit your run's
       game and category by pressing "edit" on your run's page, near the download link.
+
+  a name='shortnamed-games'
   .question
     h4 My speedgame doesn't have its own page with category tabs and all that, like other games do. What gives?
     p We give full game pages to any game that's on SRL. We call these games "shortnamed" -- that is, they're recognized
@@ -41,6 +55,8 @@ article
       do bookkeeping. Once you get your game on SRL this process should happen automatically next time a run is
       uploaded, but if it doesn't you can #{link_to 'tweet at us', 'https://twitter.com/splitsio', target: :_blank} or
       something and we can associate it manually.
+
+  a name='parsing'
   .question
     h4 I get "Error eating splits :(" when accessing or uploading my splits!
     p This error happens when the page request times out, which is typically a sign that your splits took too long to
@@ -56,6 +72,8 @@ article
       the copy in LiveSplit, and resetting all of your best segments (drag-select the whole column and press Delete).
       This will remove all split history; you should notice a sizeable decrease in file size, and consequently the file
       should upload to Splits I/O without a hitch.
+
+  a name='help!!!'
   .question
     h4 Help! Splits I/O kidnapped my sister!!
     p
