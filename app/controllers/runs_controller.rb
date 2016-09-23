@@ -9,7 +9,7 @@ class RunsController < ApplicationController
 
   before_action :handle_first_visit, only: [:show, :edit, :update], unless: Proc.new { @run.visited? }
   before_action :warn_about_deprecated_url, only: [:show], if: Proc.new { request.path == "/#{@run.nick}" }
-  before_action :reject_as_unparsable, only: [:show, :download], unless: Proc.new { @run.parses? }
+  before_action :reject_as_unparsable, only: [:show], unless: Proc.new { @run.parses? }
 
   before_action :attempt_to_claim, only: [:show]
   before_action :verify_ownership, only: [:edit, :update, :destroy]
