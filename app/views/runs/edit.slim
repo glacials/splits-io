@@ -25,7 +25,7 @@
     = render partial: 'timeline_inspector', locals: {run: @run}
 
 article#game-category data-turbolinks-permanent=true
-  = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
+  = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
     h3 Game/category
     p
       = f.collection_select(:game, Game.where.not(shortname: nil).order(:name), :shortname, :name, {selected: @run.game.try(:shortname), include_blank: true}, onchange: 'update_category_selector(this.value)')
@@ -33,7 +33,7 @@ article#game-category data-turbolinks-permanent=true
     p = f.submit 'Save', id: 'game_category_submit', class: 'btn btn-default'
 
 article#proof data-turbolinks-permanent=true
-  = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
+  = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
     h3 Video proof
     .input-group.col-md-6
       = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch, Hitbox, or YouTube VOD')
@@ -41,7 +41,7 @@ article#proof data-turbolinks-permanent=true
         = f.submit 'Save', class: 'btn btn-default'
 
 article#srdc-url data-turbolinks-permanent=true
-  = form_for @run, as: :run, remote: true, url: run_path(@run) do |f|
+  = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
     h3 Link with speedrun.com
     .input-group.col-md-6
       = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')

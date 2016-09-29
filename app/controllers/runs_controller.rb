@@ -30,29 +30,29 @@ class RunsController < ApplicationController
   end
 
   def update
-    if cannot(:edit, @run)
+    if cannot?(:edit, @run)
       render :forbidden, status: 403
       return
     end
 
-    unless params[:run].respond_to?(:[])
+    unless params[@run.id36].respond_to?(:[])
       redirect_to edit_run_path(@run), alert: "There was an error saving that data. Please try again."
     end
 
-    if params[:run][:category]
-      @run.update(category: Category.find(params[:run][:category]))
+    if params[@run.id36][:category]
+      @run.update(category: Category.find(params[@run.id36][:category]))
       redirect_to edit_run_path(@run), notice: 'Game/category updated.'
       return
     end
 
-    if params[:run][:disown]
+    if params[@run.id36][:disown]
       @run.update(user: nil)
       redirect_to run_path(@run), notice: 'Run disowned.'
       return
     end
 
-    if params[:run][:srdc_url]
-      srdc_id = SpeedrunDotCom::Run.id_from_url(params[:run][:srdc_url])
+    if params[@run.id36][:srdc_url]
+      srdc_id = SpeedrunDotCom::Run.id_from_url(params[@run.id36][:srdc_url])
       if !srdc_id
         redirect_params = {alert: 'Your speedrun.com URL must have the format http://www.speedrun.com/run/6yjoqgzd.'}
       else
@@ -66,8 +66,8 @@ class RunsController < ApplicationController
       return
     end
 
-    if params[:run][:video_url]
-      if @run.update(video_url: params[:run][:video_url])
+    if params[@run.id36][:video_url]
+      if @run.update(video_url: params[@run.id36][:video_url])
         redirect_to edit_run_path(@run), notice: 'Proof saved.'
       else
         redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
