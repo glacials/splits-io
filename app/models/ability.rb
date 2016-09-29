@@ -11,6 +11,7 @@ class Ability
 
     if user.name == 'glacials'
       can [:update, :destroy, :merge], Game
+      can [:update], Run
     end
   end
 end

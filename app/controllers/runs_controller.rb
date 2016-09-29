@@ -12,7 +12,6 @@ class RunsController < ApplicationController
   before_action :reject_as_unparsable, only: [:show], unless: Proc.new { @run.parses? }
 
   before_action :attempt_to_claim, only: [:show]
-  before_action :verify_ownership, only: [:edit, :update, :destroy]
 
   def show
   end
@@ -24,9 +23,18 @@ class RunsController < ApplicationController
   end
 
   def edit
+    if cannot?(:edit, @run)
+      render :forbidden, status: 403
+      return
+    end
   end
 
   def update
+    if cannot(:edit, @run)
+      render :forbidden, status: 403
+      return
+    end
+
     unless params[:run].respond_to?(:[])
       redirect_to edit_run_path(@run), alert: "There was an error saving that data. Please try again."
     end
@@ -102,6 +110,11 @@ class RunsController < ApplicationController
   end
 
   def destroy
+    if cannot?(:destroy, @run)
+      render :forbidden, status: 403
+      return
+    end
+
     if @run.destroy
       redirect_to root_path, notice: 'Run deleted.'
     else
@@ -126,12 +139,6 @@ class RunsController < ApplicationController
     gon.scale_to = [@run.time, @comparison_run.time].max
   rescue ActiveRecord::RecordNotFound
     render :not_found, status: 404
-  end
-
-  def verify_ownership
-    unless @run.belongs_to?(current_user)
-      render :unauthorized, status: 401
-    end
   end
 
   def warn_about_deprecated_url
