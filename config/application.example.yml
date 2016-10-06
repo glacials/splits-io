@@ -32,7 +32,7 @@ development:
   STRIPE_SECRET_KEY:
 
   # Enable or diable the Gold feature. 1 is on, anything else is off.
-  GOLD: 1
+  GOLD: "1"
 
 test:
   # required to be able to run tests

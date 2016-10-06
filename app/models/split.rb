@@ -13,15 +13,15 @@ class Split
   end
 
   def gold?
-    gold
+    gold || false
   end
 
   def skipped?
-    skipped
+    skipped || false
   end
 
   def reduced?
-    reduced
+    reduced || false
   end
 
   def to_h

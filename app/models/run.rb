@@ -82,6 +82,37 @@ class Run < ApplicationRecord
     return @parse_cache[false] if @parse_cache.try(:[], false).present?
     return @convert_cache if @convert_cache.present?
 
+    if !fast && !convert
+      result = $dynamodb_table.get_item(
+        key: {
+          id: id36
+        },
+        projection_expression: 'id, title, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
+      )
+      if result.item.present?
+        return {
+          id: result.item['id'],
+          title: result.item['title'],
+          timer: result.item['timer'],
+          attempts: result.item['attempts'],
+          srdc_id: result.item['srdc_id'],
+          duration: result.item['duration_in_seconds'],
+          sum_of_best: result.item['sum_of_best'],
+          splits: result.item['splits'].map do |split|
+            s = Split.new
+            s.name = split['title']
+            s.duration = split['duration_in_seconds'],
+            s.finish_time = split['finish_time'],
+            s.best = split['best'],
+            s.gold = split['gold?'],
+            s.skipped = split['skipped?'],
+            s.reduced = split['reduced?']
+            s
+          end
+        }.merge(result.item)
+      end
+    end
+
     timer = Run.program(program)
 
     if timer.present?
@@ -116,6 +147,37 @@ class Run < ApplicationRecord
       end
 
       @parse_cache = (@parse_cache || {}).merge(fast => result)
+
+      if fast && !convert
+        splits = result[:splits].map do |split|
+          {
+            'title' => split.name,
+            'duration_in_seconds' => split.duration,
+            'finish_time' => split.finish_time,
+            'best' => split.best,
+            'gold?' => split.gold?,
+            'skipped?' => split.skipped?,
+            'reduced?' => split.reduced?
+          }
+        end
+
+        $dynamodb_table.put_item(
+          item: {
+            'id' => id36,
+            'title' => result[:name],
+            'timer' => result[:program],
+            'attempts' => result[:attempts],
+            'srdc_id' => srdc_id || result[:srdc_id].presence,
+            'duration_in_seconds' => result[:splits].map { |split| split.duration }.sum.to_f,
+            'sum_of_best' => result[:splits].map.all? do |split|
+                split.best.present?
+              end && result[:splits].map do |split|
+                split.best
+              end.sum.to_f,
+            'splits' => splits
+          }
+        )
+      end
 
       return result
     end
