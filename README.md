@@ -19,14 +19,39 @@ rake db:create db:migrate
 rails server
 ```
 
-You must also run a [fakes3][fakes3] server in another terminal window. This is to receive and store raw uploaded splits
-for parsing.
+Splits I/O runs using some AWS resources, which means to run it locally you'll have to use local versions of these
+resources (or have AWS account credentials specified in `config/application.yml`).
+
+#### S3
+Splits I/O uses AWS S3 for long-term run file storage. S3 is the source of truth for run files, allowing us to reparse
+runs whenever as if the run was just uploaded for the first time. To shim S3 on your local machine, run a
+[fakes3][fakes3] server in another terminal window.
 ```bash
 fakes3 -r /tmp -p 4567
 ```
-You're good to go! Access [localhost:3000][localhost] in your browser.
 
 [fakes3]: https://github.com/jubos/fake-s3
+
+#### DynamoDB
+Splits I/O uses AWS DynamoDB for storing parsed runs, so that we don't have to reparse huge 10MB runs to get the splits
+out of it every time we want to display them. Everything in DynamoDB can theoretically be recreated from what's stored
+in S3.
+
+To shim DynamoDB on your local machine, run Amazon's official [DynamoDB local][dynamodb-local]. If you're on MacOS, you
+can install this with just
+```bash
+brew install dynamodb-local
+```
+then have it auto-run now and at boot with
+```bash
+brew services start dynamodb-local
+```
+
+[dynamodb-local]: http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html
+
+#### In your browser
+You're good to go! Access [localhost:3000][localhost] in your browser.
+
 [localhost]: http://localhost:3000/
 
 #### Troubleshooting (OS X)
