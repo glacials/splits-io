@@ -95,6 +95,8 @@ SplitsIO::Application.routes.draw do
       put    '/runs/:run', to: 'runs#update'
       delete '/runs/:run', to: 'runs#destroy'
 
+      post '/runs/:run/parse', to: 'runs#parse'
+
       delete '/runs/:run/user', to: 'runs/users#destroy'
 
       get '/runs/:run/splits', to: 'runs/splits#index'
