@@ -151,7 +151,7 @@ class Run < ApplicationRecord
       if fast && !convert
         splits = result[:splits].map do |split|
           {
-            'title' => split.name,
+            'title' => split.name.presence,
             'duration_in_seconds' => split.duration,
             'finish_time' => split.finish_time,
             'best' => split.best,
@@ -164,7 +164,7 @@ class Run < ApplicationRecord
         $dynamodb_table.put_item(
           item: {
             'id' => id36,
-            'title' => result[:name],
+            'title' => result[:name].presence,
             'timer' => result[:program],
             'attempts' => result[:attempts],
             'srdc_id' => srdc_id || result[:srdc_id].presence,
