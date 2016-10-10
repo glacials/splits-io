@@ -1,17 +1,8 @@
 class Api::V4::RunsController < Api::V4::ApplicationController
-  before_action :set_run, only: [:parse, :show, :update, :destroy]
+  before_action :set_run, only: [:show, :update, :destroy]
   before_action :verify_ownership!, only: [:update, :destroy]
 
   before_action :set_link_headers, if: -> { @run.present? }
-
-  def parse
-    if @run.parse(fast: true, convert: false).blank?
-      head 500
-      return
-    end
-
-    head 202
-  end
 
   def show
     if params[:historic] == '1'
