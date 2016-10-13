@@ -6,6 +6,6 @@ class Runs::ApplicationController < ApplicationController
     gon.run = {id: @run.id, id36: @run.id36, splits: @run.collapsed_splits}
     gon.scale_to = @run.time
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
-    not_found
+    render :not_found, status: 404
   end
 end
