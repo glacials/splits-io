@@ -82,7 +82,7 @@ class Run < ApplicationRecord
     return @parse_cache[false] if @parse_cache.try(:[], false).present?
     return @convert_cache if @convert_cache.present?
 
-    if !fast && !convert
+    if fast && !convert
       result = $dynamodb_table.get_item(
         key: {
           id: id36
