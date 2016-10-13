@@ -82,7 +82,7 @@ class Run < ApplicationRecord
     return @parse_cache[false] if @parse_cache.try(:[], false).present?
     return @convert_cache if @convert_cache.present?
 
-    if !fast && !convert
+    if fast && !convert
       result = $dynamodb_table.get_item(
         key: {
           id: id36
@@ -101,11 +101,11 @@ class Run < ApplicationRecord
           splits: result.item['splits'].map do |split|
             s = Split.new
             s.name = split['title']
-            s.duration = split['duration_in_seconds'],
-            s.finish_time = split['finish_time'],
-            s.best = split['best'],
-            s.gold = split['gold?'],
-            s.skipped = split['skipped?'],
+            s.duration = split['duration_in_seconds'].round(2)
+            s.finish_time = split['finish_time'].round(2)
+            s.best = split['best'].round(2)
+            s.gold = split['gold?']
+            s.skipped = split['skipped?']
             s.reduced = split['reduced?']
             s
           end
