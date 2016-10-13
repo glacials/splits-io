@@ -65,7 +65,7 @@ $ ->
     $("#dropzone-overlay").fadeTo 125, .9
 
   $("#dropzone").on "dragleave", (evt) ->
-    $("#dropzone-overlay").fadeOut 125  if event.pageX < 10 or event.pageY < 10 or $(window).width() - event.pageX < 10 or $(window).height - event.pageY < 10
+    $("#dropzone-overlay").fadeOut 125  if evt.pageX < 10 or evt.pageY < 10 or $(window).width() - evt.pageX < 10 or $(window).height - evt.pageY < 10
 
   $("#dropzone").on "dragover", (evt) ->
     evt.preventDefault()
