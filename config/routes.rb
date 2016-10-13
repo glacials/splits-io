@@ -46,11 +46,12 @@ SplitsIO::Application.routes.draw do
 
   get '/users/:user/pbs/:game/:category', to: 'users/pbs#show', as: :user_pb
 
-  get '/games',            to: 'games#index', as: :games
-  get '/games/:game',      to: 'games#show',  as: :game
-  get '/games/:game/edit', to: 'games#edit',  as: :edit_game
+  get   '/games',            to: 'games#index', as: :games
+  get   '/games/:game',      to: 'games#show',  as: :game
+  get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
+  patch '/games/:game',      to: 'games#update'
 
-  post '/games/:game/aliases', to: 'games/aliases#create'
+  post '/games/:game/aliases', to: 'games/aliases#create', as: :game_aliases
 
   get '/games/:game/categories',           to: redirect('/games/%{game}')
   get '/games/:game/categories/:category', to: 'games/categories#show', as: :game_category
@@ -62,10 +63,10 @@ SplitsIO::Application.routes.draw do
   resources :tools, only: [:index]
   resources :settings, only: [:index]
 
-  get    '/:run/edit',  to: 'runs#edit', as: :edit_run
+  get    '/:run/edit',  to: 'runs#edit',        as: :edit_run
   get    '/:run/stats', to: 'runs/stats#index', as: :run_stats
   patch  '/:run',       to: 'runs#update'
-  get    '/:run',       to: 'runs#show', as: :run
+  get    '/:run',       to: 'runs#show',        as: :run
   delete '/:run',       to: 'runs#destroy'
 
   namespace :api do

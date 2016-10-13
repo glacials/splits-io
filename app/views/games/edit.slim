@@ -3,11 +3,20 @@
   h3 Edit game
   h5 #{link_to @game, @game, class: 'stealth-link game-link'}
 article
+  = form_for @game, as: @game.id.to_s do |f|
+    h3 Edit game shortname
+    p Enter the shortname you would like for this game. If this is present, links to this game and its categories will
+      use the shortname rather than the numeric ID (#{@game.id}). If you change this after it's already been set, you
+      will be breaking any existing links that use the old shortname.
+    .input-group.col-md-6
+      = f.text_field(:shortname, class: 'form-control', placeholder: 'Shortname', autofocus: true)
+      span.input-group-btn
+        = f.submit 'Save', class: 'btn btn-default'
   = form_for Game::Alias.new, url: game_aliases_path(@game) do |f|
     h3 Merge games
     p Enter a game that should be merged into #{@game}.
     .input-group.col-md-6
-      = f.text_field(:name, class: 'form-control', placeholder: 'Exact game name to be merged', autofocus: true)
+      = f.text_field(:name, class: 'form-control', placeholder: 'Exact game name to be merged')
       span.input-group-btn
         = f.submit 'Merge', class: 'btn btn-default'
     p

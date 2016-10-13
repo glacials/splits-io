@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit]
-  before_action :authorize, only: [:edit]
+  before_action :set_game, only: [:show, :edit, :update]
+  before_action :authorize, only: [:edit, :update]
   before_action :set_query, only: [:index]
   before_action :set_games, only: [:index]
 
@@ -15,6 +15,26 @@ class GamesController < ApplicationController
   def edit
   end
 
+  def update
+    shortname = params[@game.id.to_s][:shortname].presence
+
+    if @game.update(shortname: shortname)
+      redirect_to(
+        edit_game_path(@game),
+        notice: if shortname.present?
+                  "Saved! #{@game.name} now has the shortname '#{@game.shortname}'."
+                else
+                  "Saved! #{@game.name} no longer has a shortname."
+                end
+      )
+    else
+      redirect_to(
+        edit_game_path(@game),
+        alert: "Couldn't update #{@game.name}'s shortname to '#{@game.shortname}'."
+      )
+    end
+  end
+
   private
 
   def authorize
@@ -24,7 +44,7 @@ class GamesController < ApplicationController
   end
 
   def set_game
-    @game = Game.find_by(shortname: params[:game])
+    @game = Game.find_by(shortname: params[:game]) || Game.find_by(id: params[:game])
 
     if @game.nil?
       redirect_to games_path(q: params[:game])
