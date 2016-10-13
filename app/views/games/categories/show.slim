@@ -5,7 +5,8 @@
     ul.run-options
       - if can?(:edit, @game)
         li = link_to 'edit', edit_game_path(@game)
-  = link_to image_tag(asset_path("srl.png")), @game.srl_uri
+  - if @game.srl_uri.present?
+    = link_to image_tag(asset_path("srl.png")), @game.srl_uri
 
 article#category-tabs data-turbolinks-temporary=true
   = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}

@@ -5,11 +5,13 @@ module SRLGame
 
   included do
     def srl_uri
-      URI::HTTP.build(
-        host: "speedrunslive.com",
-        path: "/races/game/",
-        fragment: "!/#{shortname}"
-      ).to_s
+      if shortname.present?
+        URI::HTTP.build(
+          host: "speedrunslive.com",
+          path: "/races/game/",
+          fragment: "!/#{shortname}"
+        ).to_s
+      end
     end
   end
 end
