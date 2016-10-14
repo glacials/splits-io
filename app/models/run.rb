@@ -71,6 +71,10 @@ class Run < ApplicationRecord
     parse[:offset]
   end
 
+  def program
+    read_attribute(:program) || parse[:timer]
+  end
+
   def parses?(fast: true, convert: false)
     parse(fast: fast, convert: convert).present?
   end
