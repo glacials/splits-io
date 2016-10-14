@@ -45,15 +45,13 @@ class Run < ApplicationRecord
     end
 
     alias_method :find10, :find
-    # todo: rename this to `find` when APIv2 is removed
-    def find36(id)
+    def find(id)
       find10(id.to_i(36))
     end
   end
 
   alias_method :id10, :id
-  # todo: rename this to `id` when APIv2 is removed
-  def id36
+  def id
     if id10.is_a? Numeric
       id10.to_s(36)
     else
@@ -85,7 +83,7 @@ class Run < ApplicationRecord
     if fast && !convert
       result = $dynamodb_table.get_item(
         key: {
-          id: id36
+          id: id
         },
         projection_expression: 'id, title, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
       )
@@ -163,7 +161,7 @@ class Run < ApplicationRecord
 
         $dynamodb_table.put_item(
           item: {
-            'id' => id36,
+            'id' => id,
             'title' => result[:name].presence,
             'timer' => result[:program],
             'attempts' => result[:attempts],
@@ -186,7 +184,7 @@ class Run < ApplicationRecord
   end
 
   def to_param
-    id36
+    id
   end
 
   def to_s
@@ -213,8 +211,8 @@ class Run < ApplicationRecord
   end
 
   def file
-    if id36.present?
-      file = $s3_bucket.object("splits/#{id36}")
+    if id.present?
+      file = $s3_bucket.object("splits/#{id}")
       file.get.body.read
     else
       run_file.try(:file)

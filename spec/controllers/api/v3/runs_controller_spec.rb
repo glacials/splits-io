@@ -6,8 +6,8 @@ describe Api::V3::RunsController do
   describe '#show' do
     let(:returned_attributes) { [:id, :path, :name, :image_url, :user, :time, :video_url] }
 
-    context 'when given a valid id36' do
-      subject(:response) { get :show, params: {id: run.id36} }
+    context 'when given a valid id' do
+      subject(:response) { get :show, params: {id: run.id} }
       subject(:body) { JSON.parse(response.body)['run'] }
 
       it 'returns an expected response code' do

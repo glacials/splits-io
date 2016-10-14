@@ -13,14 +13,14 @@ class Api::V3::RunsController < Api::V3::ApplicationController
     )
 
     $s3_bucket.put_object(
-      key: "splits/#{@run.id36}",
+      key: "splits/#{@run.id}",
       body: params.require(:file)
     )
 
     render status: 201, location: api_v3_run_url(@run), json: {
       status: 201,
       message: "Run created.",
-      id: @run.id36,
+      id: @run.id,
       claim_token: @run.claim_token,
       uris: {
         api_uri: api_v3_run_url(@run),
@@ -35,22 +35,30 @@ class Api::V3::RunsController < Api::V3::ApplicationController
     }
   end
 
-  # TODO: This method is not documented and thus is not officially supported by the API. It uses cookie authentication,
-  # but the official release of it into the API should use token authentication.
+  # TODO: These methods are not documented and thus is not officially supported by the API. It uses cookie
+  # authentication, but the official release of it into the API should use token authentication.
   def destroy
-    @run.destroy
+    if !@run.destroy
+      raise "Can't destroy run"
+      return
+    end
+
     head 200
   end
 
   def disown
-    @run.update(user: nil)
+    if !@run.update(user: nil)
+      raise "Can't disown run"
+      return
+    end
+
     head 200
   end
 
   private
 
   def set_run
-    @run = Run.includes(:game, :category, :user).find36(params[:id])
+    @run = Run.includes(:game, :category, :user).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render status: 404, json: {
       status: 404,
@@ -59,7 +67,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   end
 
   def verify_ownership!
-    unless @run.belongs_to?(current_user)
+    if cannot?(:edit, @run)
       render status: 401, json: {
         status: 401,
         message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."

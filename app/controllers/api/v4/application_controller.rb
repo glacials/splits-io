@@ -57,7 +57,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_run
-    @run = Run.find36(params[:run])
+    @run = Run.find(params[:run])
   rescue ActiveRecord::RecordNotFound
     render not_found(:run)
   end

@@ -5,7 +5,6 @@ class Runs::StatsController < Runs::ApplicationController
     @run.parse(fast: false)
     gon.run = {
       id: @run.id,
-      id36: @run.id36,
       splits: @run.collapsed_splits,
       raw_splits: @run.parse(fast: false)[:splits],
       history: @run.history,

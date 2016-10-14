@@ -35,24 +35,24 @@ class RunsController < ApplicationController
       return
     end
 
-    unless params[@run.id36].respond_to?(:[])
+    unless params[@run.id].respond_to?(:[])
       redirect_to edit_run_path(@run), alert: "There was an error saving that data. Please try again."
     end
 
-    if params[@run.id36][:category]
-      @run.update(category: Category.find(params[@run.id36][:category]))
+    if params[@run.id][:category]
+      @run.update(category: Category.find(params[@run.id][:category]))
       redirect_to edit_run_path(@run), notice: 'Game/category updated.'
       return
     end
 
-    if params[@run.id36][:disown]
+    if params[@run.id][:disown]
       @run.update(user: nil)
       redirect_to run_path(@run), notice: 'Run disowned.'
       return
     end
 
-    if params[@run.id36][:srdc_url]
-      srdc_id = SpeedrunDotCom::Run.id_from_url(params[@run.id36][:srdc_url])
+    if params[@run.id][:srdc_url]
+      srdc_id = SpeedrunDotCom::Run.id_from_url(params[@run.id][:srdc_url])
       if !srdc_id
         redirect_params = {alert: 'Your speedrun.com URL must have the format http://www.speedrun.com/run/6yjoqgzd.'}
       else
@@ -66,8 +66,8 @@ class RunsController < ApplicationController
       return
     end
 
-    if params[@run.id36][:video_url]
-      if @run.update(video_url: params[@run.id36][:video_url])
+    if params[@run.id][:video_url]
+      if @run.update(video_url: params[@run.id][:video_url])
         redirect_to edit_run_path(@run), notice: 'Proof saved.'
       else
         redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
@@ -83,7 +83,7 @@ class RunsController < ApplicationController
     end
 
     begin
-      s3_file = $s3_bucket.object("splits/#{@run.id36}")
+      s3_file = $s3_bucket.object("splits/#{@run.id}")
 
       if program == Run.program(@run.program) && s3_file.exists?
         redirect_to s3_file.presigned_url(:get,
@@ -126,7 +126,7 @@ class RunsController < ApplicationController
 
   def set_run
     @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
-    gon.run = {id: @run.id, id36: @run.id36, splits: @run.collapsed_splits}
+    gon.run = {id: @run.id, splits: @run.collapsed_splits}
     gon.scale_to = @run.time
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: 404
@@ -137,7 +137,6 @@ class RunsController < ApplicationController
     @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
     gon.comparison_run = {
       id: @comparison_run.id,
-      id36: @comparison_run.id36,
       splits: @comparison_run.collapsed_splits
     }
     gon.scale_to = [@run.time, @comparison_run.time].max

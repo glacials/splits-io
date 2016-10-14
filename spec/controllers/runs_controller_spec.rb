@@ -34,8 +34,8 @@ describe RunsController do
     context 'for an existing run' do
       let(:run) { FactoryGirl.create(:run, :nicked) }
 
-      context 'by id36' do
-        let(:id) { run.id36 }
+      context 'by id' do
+        let(:id) { run.id }
 
         it 'returns a 200' do
           expect(response).to have_http_status(200)
@@ -57,7 +57,7 @@ describe RunsController do
   end
 
   describe '#edit' do
-    let(:response) { get(:edit, params: {run: run.id36}) }
+    let(:response) { get(:edit, params: {run: run.id}) }
 
     context 'for an unowned run' do
       let(:run) { FactoryGirl.create(:run, :unowned) }
@@ -114,7 +114,7 @@ describe RunsController do
     context 'category' do
       let(:response) do
         put(:update, params: {
-          run: run.id36,
+          run: run.id,
           run: {category: FactoryGirl.create(:category).id}
         })
       end
@@ -176,7 +176,7 @@ describe RunsController do
   end
 
   describe '#destroy' do
-    let(:response) { delete(:destroy, params: {run: run.id36}) }
+    let(:response) { delete(:destroy, params: {run: run.id}) }
 
     context 'for an unowned run' do
       let(:run) { FactoryGirl.create(:run, :unowned) }

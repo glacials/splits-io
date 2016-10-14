@@ -1,5 +1,5 @@
 # splits i/o API
-These docs are for the v3 API. v2 is deprecated and will be removed soon.
+These docs are for the v3 API.
 
 ## Pagination
 Routes that return array resources are paginated to 20 items per page. To get a specific page of results, add `?page=N`

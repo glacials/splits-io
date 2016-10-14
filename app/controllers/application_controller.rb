@@ -14,14 +14,6 @@ class ApplicationController < ActionController::Base
     request.referrer
   end
 
-  def api_v2_run_url(run)
-    super(run.id)
-  end
-
-  def api_v2_run_path(run)
-    super(run.id)
-  end
-
   def not_found
     raise ActionController::RoutingError.new('Not found')
   end

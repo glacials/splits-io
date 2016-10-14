@@ -3,8 +3,8 @@ require 'rails_helper'
 describe Run, type: :model do
   let(:run) { FactoryGirl.create(:run) }
 
-  it 'responds to base 36 id requests' do
-    expect(run.id36).to eq run.id.to_s(36)
+  it 'responds to id requests' do
+    expect(run.id).to eq run.id
   end
 
   context 'with a game' do

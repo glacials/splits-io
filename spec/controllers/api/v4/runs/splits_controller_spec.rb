@@ -28,7 +28,7 @@ describe Api::V4::Runs::SplitsController do
 
     context 'for an existing run' do
       let(:run) { create(:run) }
-      subject { get :index, params: {run: run.id36} }
+      subject { get :index, params: {run: run.id} }
       let(:body) { JSON.parse(subject.body) }
 
       it 'returns a 200' do
@@ -44,7 +44,7 @@ describe Api::V4::Runs::SplitsController do
       end
 
       context 'with a historic=1 parameter' do
-        subject { get :index, params: {run: run.id36, historic: '1'} }
+        subject { get :index, params: {run: run.id, historic: '1'} }
 
         it 'includes history' do
           expect(body[0]['history']).to eq [

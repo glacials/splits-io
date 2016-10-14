@@ -3,6 +3,6 @@
   .timeline-background
     .timeline class=('draggable' if run.time < scale_to)
       - run.collapsed_splits.each_with_index do |split, index|
-        .pure-u.split id="#{run.id36}-split-#{index}" class=next_timeline_color(run.id36) style='width: 0;'
+        .pure-u.split id="#{run.id}-split-#{index}" class=next_timeline_color(run.id) style='width: 0;'
           .title = split.name
           .time.needs-formatting class=('short' if run.short?) = split.duration

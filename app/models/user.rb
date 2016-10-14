@@ -48,7 +48,7 @@ class User < ApplicationRecord
 
   def pbs
     runs.where(
-      id: categories.map { |category| pb_for(category).id } | runs.where(category: nil).pluck(:id)
+      id: categories.map { |category| pb_for(category).id10 } | runs.where(category: nil).pluck(:id)
     )
   end
 
