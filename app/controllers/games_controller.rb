@@ -9,6 +9,10 @@ class GamesController < ApplicationController
 
   def show
     @category = @game.categories.first
+    if @category.nil?
+      render :not_found, status: 404
+      return
+    end
     render template: 'games/categories/show'
   end
 
