@@ -115,15 +115,7 @@ class Run < ApplicationRecord
       end
     end
 
-    timer = Run.program(program)
-
-    if timer.present?
-      timers_to_try = [timer]
-    else
-      timers_to_try = Run.programs
-    end
-
-    timers_to_try.each do |program|
+    Run.programs.each do |program|
       result = program::Parser.new.parse(file, fast: fast)
       next if result.blank?
 
