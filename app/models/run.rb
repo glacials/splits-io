@@ -159,7 +159,7 @@ class Run < ApplicationRecord
 
       if resp.present?
         update(
-          srdc_id: resp['attempts'],
+          srdc_id: resp['srdc_id'],
           time: resp['duration_in_seconds'],
           sum_of_best: resp['sum_of_best']
         )
