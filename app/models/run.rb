@@ -19,8 +19,6 @@ class Run < ApplicationRecord
   after_create :refresh_game
   after_create :discover_runner
 
-  after_destroy :destroy_run_file_if_orphaned
-
   #validates :run_file, presence: true
   validates_with RunValidator
 
@@ -270,7 +268,10 @@ class Run < ApplicationRecord
     "/#{to_param}"
   end
 
-  CATEGORY_ALIASES = {"Any% (NG+)" => "Any% NG+"}
+  CATEGORY_ALIASES = {
+    "Any% (NG+)" => "Any% NG+",
+    "Any %" => "Any%"
+  }
 
   def populate_category(game_string, category_string)
     category_string = CATEGORY_ALIASES.fetch(category_string, category_string)
@@ -313,14 +314,6 @@ class Run < ApplicationRecord
       RunFile.pack_binary(file)
     else
       file
-    end
-  end
-
-  def destroy_run_file_if_orphaned
-    return if run_file.nil?
-
-    if run_file.runs.where.not(id: id).empty?
-      run_file.destroy
     end
   end
 end
