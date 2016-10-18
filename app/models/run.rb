@@ -73,6 +73,14 @@ class Run < ApplicationRecord
     read_attribute(:program) || parse[:timer]
   end
 
+  def timer
+    program
+  end
+
+  def dynamo(attr)
+    parse(fast: true)[attr.to_sym]
+  end
+
   def parses?(fast: true, convert: false)
     parse(fast: fast, convert: convert).present?
   end
@@ -83,21 +91,21 @@ class Run < ApplicationRecord
     return @convert_cache if @convert_cache.present?
 
     if fast && !convert
-      result = $dynamodb_table.get_item(
+      fetch_result = $dynamodb_table.get_item(
         key: {
           id: id
         },
         projection_expression: 'id, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
       )
-      if result.item.present?
+      if fetch_result.item.present?
         return {
-          id: result.item['id'],
-          timer: result.item['timer'],
-          attempts: result.item['attempts'],
-          srdc_id: result.item['srdc_id'],
-          duration: result.item['duration_in_seconds'],
-          sum_of_best: result.item['sum_of_best'],
-          splits: result.item['splits'].map do |split|
+          id: fetch_result.item['id'],
+          timer: fetch_result.item['timer'],
+          attempts: fetch_result.item['attempts'],
+          srdc_id: fetch_result.item['srdc_id'],
+          duration: fetch_result.item['duration_in_seconds'],
+          sum_of_best: fetch_result.item['sum_of_best'],
+          splits: fetch_result.item['splits'].map do |split|
             s = Split.new
             s.name = split['title']
             s.duration = split['duration_in_seconds'].round(2)
@@ -108,38 +116,38 @@ class Run < ApplicationRecord
             s.reduced = split['reduced?']
             s
           end
-        }.merge(result.item)
+        }.merge(fetch_result.item)
       end
     end
 
-    Run.programs.each do |program|
-      result = program::Parser.new.parse(file, fast: fast)
-      next if result.blank?
+    Run.programs.each do |timer|
+      parse_result = timer::Parser.new.parse(file, fast: fast)
+      next if parse_result.blank?
 
-      result[:timer] = program.to_sym
+      parse_result[:timer] = timer.to_sym
       assign_attributes(
-        program: result[:timer],
-        attempts: result[:attempts],
-        srdc_id: srdc_id || result[:srdc_id].presence,
-        time: result[:splits].map { |split| split.duration }.sum.to_f,
-        sum_of_best: result[:splits].map.all? do |split|
+        program: parse_result[:timer],
+        attempts: parse_result[:attempts],
+        srdc_id: srdc_id || parse_result[:srdc_id].presence,
+        time: parse_result[:splits].map { |split| split.duration }.sum.to_f,
+        sum_of_best: parse_result[:splits].map.all? do |split|
           split.best.present?
-        end && result[:splits].map do |split|
+        end && parse_result[:splits].map do |split|
           split.best
         end.sum.to_f
       )
 
       if convert
-        @convert_cache = result
+        @convert_cache = parse_result
       else
-        populate_category(result[:game], result[:category])
+        populate_category(parse_result[:game], parse_result[:category])
         save
       end
 
-      @parse_cache = (@parse_cache || {}).merge(fast => result)
+      @parse_cache = (@parse_cache || {}).merge(fast => parse_result)
 
       if fast && !convert
-        splits = result[:splits].map do |split|
+        splits = parse_result[:splits].map do |split|
           {
             'title' => split.name.presence,
             'duration_in_seconds' => split.duration,
@@ -154,13 +162,13 @@ class Run < ApplicationRecord
         $dynamodb_table.put_item(
           item: {
             'id' => id,
-            'timer' => result[:program],
-            'attempts' => result[:attempts],
-            'srdc_id' => srdc_id || result[:srdc_id].presence,
-            'duration_in_seconds' => result[:splits].map { |split| split.duration }.sum.to_f,
-            'sum_of_best' => result[:splits].map.all? do |split|
+            'timer' => parse_result[:timer],
+            'attempts' => parse_result[:attempts],
+            'srdc_id' => srdc_id || parse_result[:srdc_id].presence,
+            'duration_in_seconds' => parse_result[:splits].map { |split| split.duration }.sum.to_f,
+            'sum_of_best' => parse_result[:splits].map.all? do |split|
                 split.best.present?
-              end && result[:splits].map do |split|
+              end && parse_result[:splits].map do |split|
                 split.best
               end.sum.to_f,
             'splits' => splits
@@ -168,7 +176,7 @@ class Run < ApplicationRecord
         )
       end
 
-      return result
+      return parse_result
     end
 
     {}

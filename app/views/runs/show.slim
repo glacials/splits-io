@@ -6,7 +6,7 @@
   h6
     span#download-menu
       => link_to @run.timer, download_path(@run, @run.timer), onclick: 'hide_download_menu()'
-      - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.timer.to_sym]).each do |timer|
+      - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.timer]).each do |timer|
         | &bull;
         =<> link_to timer, download_path(@run, timer), onclick: 'hide_download_menu()'
     ul.run-options
