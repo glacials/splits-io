@@ -1,0 +1,13 @@
+h3
+  - if @run.game.present? && @run.category.present?
+    = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
+    =< link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+  - else
+    = "(no title)"
+h5
+  .time.needs-formatting class=('short' if @run.short?) = @run.time
+  - if @run.user.try(:name)
+    small
+      span by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
+      - if @run.user.gold?
+        .gold-split title='Gold'

@@ -1,28 +1,14 @@
+- title(@run)
 = render partial: 'twitter_card'
 
 - content_for(:header) do
-  h3
-    - if @run.game.try(:name).present? && @run.category.try(:name).present?
-      = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
-      =< link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
-    - else
-      = @run.name
-  h5
-    .time.needs-formatting class=('short' if @run.short?) = @run.time
-    - if @run.user.try(:name)
-      small by #{link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'}
+  = render partial: 'runs/title', locals: {run: @run}
   h6
     ul.run-options
       li
         a href=run_path(@run) &larr; back to run
 
-- if @run.time > 0
-  #timeline data-turbolinks-permanent=true
-    = render partial: 'timeline', locals: {run: @run}
-    - if @run.skipped_splits.empty? && @run.has_golds?
-      = render partial: 'gold_timeline', locals: {run: @run}
-  #timeline-inspector data-turbolinks-permanent=true
-    = render partial: 'timeline_inspector', locals: {run: @run}
+= render partial: 'runs/full_timeline', locals: {run: @run}
 
 article#game-category data-turbolinks-permanent=true
   = form_for @run, as: @run.id, remote: true, url: run_path(@run) do |f|
