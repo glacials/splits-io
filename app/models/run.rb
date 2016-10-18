@@ -134,7 +134,7 @@ class Run < ApplicationRecord
         @convert_cache = result
       else
         populate_category(result[:game], result[:category])
-        save if changed?
+        save
       end
 
       @parse_cache = (@parse_cache || {}).merge(fast => result)
