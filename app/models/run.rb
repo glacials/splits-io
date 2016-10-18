@@ -87,12 +87,11 @@ class Run < ApplicationRecord
         key: {
           id: id
         },
-        projection_expression: 'id, title, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
+        projection_expression: 'id, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
       )
       if result.item.present?
         return {
           id: result.item['id'],
-          title: result.item['title'],
           timer: result.item['timer'],
           attempts: result.item['attempts'],
           srdc_id: result.item['srdc_id'],
@@ -117,9 +116,9 @@ class Run < ApplicationRecord
       result = program::Parser.new.parse(file, fast: fast)
       next if result.blank?
 
-      result[:program] = program.to_sym
+      result[:timer] = program.to_sym
       assign_attributes(
-        program: result[:program],
+        program: result[:timer],
         attempts: result[:attempts],
         srdc_id: srdc_id || result[:srdc_id].presence,
         time: result[:splits].map { |split| split.duration }.sum.to_f,
@@ -155,7 +154,6 @@ class Run < ApplicationRecord
         $dynamodb_table.put_item(
           item: {
             'id' => id,
-            'title' => result[:name].presence,
             'timer' => result[:program],
             'attempts' => result[:attempts],
             'srdc_id' => srdc_id || result[:srdc_id].presence,
