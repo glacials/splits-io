@@ -24,8 +24,6 @@ class Run < ApplicationRecord
   #validates :run_file, presence: true
   validates_with RunValidator
 
-  before_save :set_name
-
   scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
   scope :by_category, ->(category) { where(category: category) }
   scope :nonempty, -> { where("time != 0") }
@@ -121,7 +119,6 @@ class Run < ApplicationRecord
 
       result[:program] = program.to_sym
       assign_attributes(
-        name: result[:name],
         program: result[:program],
         attempts: result[:attempts],
         srdc_id: srdc_id || result[:srdc_id].presence,
@@ -184,11 +181,15 @@ class Run < ApplicationRecord
   end
 
   def to_s
-    name
-  end
+    if game.present? && category.present?
+      return "#{game.name} #{category.name}"
+    end
 
-  def name
-    read_attribute(:name).presence || "(no title)"
+    if game.present?
+      return game.name
+    end
+
+    return "(no title)"
   end
 
   def path
@@ -231,12 +232,6 @@ class Run < ApplicationRecord
 
   def filename(program: Run.program(self.program))
     "#{to_param}.#{program.file_extension}"
-  end
-
-  def set_name
-    if [category, game].all? { |i| i.try(:name).present? }
-      self.name = "#{category.game.name} #{category.name}"
-    end
   end
 
   def original_file

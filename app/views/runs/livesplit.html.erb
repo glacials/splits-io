@@ -3,7 +3,7 @@
   <GameIcon />
   <GameName>
   </GameName>
-  <CategoryName><%= @run.name %></CategoryName>
+  <CategoryName><%= @run.to_s %></CategoryName>
   <Offset><%= Time.at(@run.offset || 0).utc.strftime("%H:%M:%S").strip %></Offset>
   <AttemptCount><%= @run.attempts || 0 %></AttemptCount>
   <RunHistory />

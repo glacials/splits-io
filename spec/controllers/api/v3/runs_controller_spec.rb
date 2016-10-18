@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe Api::V3::RunsController do
-  let(:run) { FactoryGirl.create(:run) }
+  let(:run) { FactoryGirl.create_stubbed(:run) }
 
   describe '#show' do
-    let(:returned_attributes) { [:id, :path, :name, :image_url, :user, :time, :video_url] }
+    let(:returned_attributes) { [:id, :path, :image_url, :user, :time, :video_url] }
 
     context 'when given a valid id' do
       subject(:response) { get :show, params: {id: run.id} }
@@ -12,6 +12,10 @@ describe Api::V3::RunsController do
 
       it 'returns an expected response code' do
         expect(response).to have_http_status(200)
+      end
+
+      it 'returns the correct name' do
+        expect(body['name']).to eq(run.to_s)
       end
 
       it 'returns the correct run' do

@@ -1,13 +1,13 @@
-- title(@run.name)
+- title(@run)
 = render partial: 'runs/twitter_card'
 
 - content_for(:header) do
   h3
-    - if @run.game.try(:name).present? && @run.category.try(:name).present?
+    - if @run.game.present? && @run.category.present?
       = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
       =< link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
     - else
-      = @run.name
+      = "(no title)"
   h5
     .time.needs-formatting class=('short' if @run.short?) = @run.time
     - if @run.user.try(:name)

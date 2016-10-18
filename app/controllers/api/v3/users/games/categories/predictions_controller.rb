@@ -6,10 +6,11 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
 
   def show
     most_recent_run = @user.runs.where(category: @category).order(:created_at).last
+
     @prediction.merge!(
       id: nil,
       path: nil,
-      name: most_recent_run.name,
+      name: most_recent_run.to_s,
       program: most_recent_run.program,
       image_url: nil,
       created_at: Time.now,

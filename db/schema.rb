@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160820232928) do
+ActiveRecord::Schema.define(version: 20161018071422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,8 +45,8 @@ ActiveRecord::Schema.define(version: 20160820232928) do
   create_table "categories", force: :cascade do |t|
     t.integer  "game_id"
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "shortname"
     t.index ["game_id"], name: "index_categories_on_game_id", using: :btree
     t.index ["name"], name: "index_categories_on_name", using: :btree
@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(version: 20160820232928) do
     t.datetime "failed_at"
     t.string   "locked_by"
     t.string   "queue"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(version: 20160820232928) do
 
   create_table "games", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "shortname"
     t.index ["name"], name: "index_games_on_name", using: :btree
     t.index ["shortname"], name: "index_games_on_shortname", using: :btree
@@ -100,12 +100,11 @@ ActiveRecord::Schema.define(version: 20160820232928) do
 
   create_table "runs", force: :cascade do |t|
     t.integer  "user_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "nick"
     t.string   "image_url"
     t.integer  "category_id"
-    t.string   "name"
     t.decimal  "time"
     t.string   "program"
     t.boolean  "visited",         default: false, null: false
@@ -141,8 +140,8 @@ ActiveRecord::Schema.define(version: 20160820232928) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email",        default: ""
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "twitch_token"
     t.integer  "twitch_id"
     t.string   "name"

@@ -65,17 +65,17 @@ article#danger-zone.danger data-turbolinks-permanent=true
         a later time.
     .col-md-6
       center
-        = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run.name} run?"}, class: 'button btn btn-danger', style: 'margin: 1em;'
+        = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'button btn btn-danger', style: 'margin: 1em;'
           div
             big Delete
           small
-            = "#{@run.name} in "
+            = "#{@run} in "
             span.time.needs-formatting class=('short' if @run.short?) = @run.time
     .col-md-6
       center
-        = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run.name} run?"}, params: {@run.id => {disown: true}}, class: 'button btn btn-danger-inverted', style: 'margin: 1em;'
+        = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id => {disown: true}}, class: 'button btn btn-danger-inverted', style: 'margin: 1em;'
           div
             big Disown
           small
-            = "#{@run.name} in "
+            = "#{@run} in "
             span.time.needs-formatting class=('short' if @run.short?) = @run.time

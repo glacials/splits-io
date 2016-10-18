@@ -16,4 +16,8 @@ class Api::V3::Detail::RunSerializer < Api::V3::ApplicationSerializer
   def sum_of_best
     object.sum_of_best.to_f
   end
+
+  def name
+    object.to_s
+  end
 end

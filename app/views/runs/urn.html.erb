@@ -1,5 +1,5 @@
 {
-    "title": "<%= @run.respond_to?(:name) ? @run.name : "" %>",
+    "title": "<%= @run.respond_to?(:name) ? @run.to_s : "" %>",
     "attempt_count": <%= @run.respond_to?(:attempts) ? @run.attempts : 0 %>,
     "start_delay": "<%= Time.at(@run.offset || 0).utc.strftime("%-H:%-M:%S").strip %>",
     "splits": [
