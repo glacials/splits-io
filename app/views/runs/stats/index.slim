@@ -25,6 +25,11 @@ article#stats
               span< = "("
               span = link_to "website", program.website, target: :_blank
               span = ")"
+          tr
+            td
+              span Uploaded
+            td.upload-date.needs-formatting
+              = @run.created_at
           - if @run.sum_of_best == 0
             tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
               td
