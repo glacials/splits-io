@@ -20,7 +20,7 @@ SplitsIO::Application.routes.draw do
   get '/search(?q=:q)', to: redirect('/games?q=%{q}')
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
-  get '/:run/download/:program',       to: 'runs#download', as: :download
+  get '/:run/download/:timer',         to: 'runs#download', as: :download
 
   get '/u/:user', to: redirect('/users/%{user}') # deprecated; use GET /users/:user
 

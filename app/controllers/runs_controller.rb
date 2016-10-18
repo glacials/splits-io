@@ -76,16 +76,16 @@ class RunsController < ApplicationController
   end
 
   def download
-    program = Run.program(params[:program])
-    if program.nil?
-      redirect_to run_path(@run), alert: 'Unrecognized program.'
+    timer = Run.program(params[:timer])
+    if timer.nil?
+      redirect_to run_path(@run), alert: 'Unrecognized timer.'
       return
     end
 
     begin
       s3_file = $s3_bucket.object("splits/#{@run.id}")
 
-      if program == Run.program(@run.program) && s3_file.exists?
+      if timer == Run.program(@run.timer) && s3_file.exists?
         redirect_to s3_file.presigned_url(:get,
           response_content_disposition: "attachment; filename=\"#{@run.filename}\""
         )
@@ -95,12 +95,12 @@ class RunsController < ApplicationController
     end
 
     send_data(
-      if program == Run.program(@run.program)
+      if timer == Run.program(@run.timer)
         @run.original_file
       else
-        render_to_string(params[:program], layout: false)
+        render_to_string(params[:timer], layout: false)
       end,
-      filename: "#{@run.filename(program: program)}",
+      filename: "#{@run.filename(timer: timer)}",
       layout: false
     )
   end

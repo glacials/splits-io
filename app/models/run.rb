@@ -81,6 +81,68 @@ class Run < ApplicationRecord
     parse(fast: true)[attr.to_sym]
   end
 
+  def parse_into_dynamodb
+    timer_used = nil
+    parse_result = nil
+
+    Run.programs.each do |timer|
+      parse_result = timer::Parser.new.parse(file, fast: true)
+
+      if parse_result.present?
+        timer_used = timer.to_sym
+        break
+      end
+    end
+
+    return false if timer_used.nil?
+
+    if game.nil? || category.nil?
+      populate_category(parse_result[:game], parse_result[:category])
+      save
+    end
+
+    splits = parse_result[:splits].map do |split|
+      {
+        'title' => split.name.presence,
+        'duration_in_seconds' => split.duration,
+        'finish_time' => split.finish_time,
+        'best' => split.best,
+        'gold?' => split.gold?,
+        'skipped?' => split.skipped?,
+        'reduced?' => split.reduced?
+      }
+    end
+
+    run = {
+      'id' => id,
+      'timer' => timer_used.to_s,
+      'attempts' => parse_result[:attempts],
+      'srdc_id' => srdc_id || parse_result[:srdc_id].presence,
+      'duration_in_seconds' => parse_result[:splits].map { |split| split.duration }.sum.to_f,
+      'sum_of_best' => parse_result[:splits].map.all? do |split|
+          split.best.present?
+        end && parse_result[:splits].map do |split|
+          split.best
+        end.sum.to_f,
+      'splits' => splits
+    }
+
+    $dynamodb_table.put_item(item: run)
+  end
+
+  def fetch_from_dynamodb
+    key = {id: id}
+    attrs = 'id, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
+
+    options = {
+      key: key,
+      projection_expression: attrs
+    }
+
+    resp = $dynamodb_table.get_item(options)
+    resp.item
+  end
+
   def parses?(fast: true, convert: false)
     parse(fast: fast, convert: convert).present?
   end
@@ -91,21 +153,27 @@ class Run < ApplicationRecord
     return @convert_cache if @convert_cache.present?
 
     if fast && !convert
-      fetch_result = $dynamodb_table.get_item(
-        key: {
-          id: id
-        },
-        projection_expression: 'id, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
-      )
-      if fetch_result.item.present?
+      resp = fetch_from_dynamodb
+      if resp.blank?
+        parse_into_dynamodb
+        resp = fetch_from_dynamodb
+      end
+
+      if resp.present?
+        update(
+          srdc_id: resp['attempts'],
+          time: resp['duration_in_seconds'],
+          sum_of_best: resp['sum_of_best']
+        )
+
         return {
-          id: fetch_result.item['id'],
-          timer: fetch_result.item['timer'],
-          attempts: fetch_result.item['attempts'],
-          srdc_id: fetch_result.item['srdc_id'],
-          duration: fetch_result.item['duration_in_seconds'],
-          sum_of_best: fetch_result.item['sum_of_best'],
-          splits: fetch_result.item['splits'].map do |split|
+          id: resp['id'],
+          timer: resp['timer'],
+          attempts: resp['attempts'],
+          srdc_id: resp['srdc_id'],
+          duration: resp['duration_in_seconds'],
+          sum_of_best: resp['sum_of_best'],
+          splits: resp['splits'].map do |split|
             s = Split.new
             s.name = split['title']
             s.duration = split['duration_in_seconds'].round(2)
@@ -116,7 +184,7 @@ class Run < ApplicationRecord
             s.reduced = split['reduced?']
             s
           end
-        }.merge(fetch_result.item)
+        }.merge(resp)
       end
     end
 
@@ -236,12 +304,12 @@ class Run < ApplicationRecord
     delay.set_runner_from_srdc
   end
 
-  def filename(program: Run.program(self.program))
-    "#{to_param}.#{program.file_extension}"
+  def filename(timer: Run.program(self.timer))
+    "#{to_param}.#{timer.file_extension}"
   end
 
   def original_file
-    if program.to_sym == :llanfair && file.is_a?(Array)
+    if timer.to_sym == :llanfair && file.is_a?(Array)
       RunFile.pack_binary(file)
     else
       file
