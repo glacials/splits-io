@@ -13,14 +13,14 @@ class Api::V3::RunsController < Api::V3::ApplicationController
     )
 
     $s3_bucket.put_object(
-      key: "splits/#{@run.id}",
+      key: "splits/#{@run.id36}",
       body: params.require(:file)
     )
 
     render status: 201, location: api_v3_run_url(@run), json: {
       status: 201,
       message: "Run created.",
-      id: @run.id,
+      id: @run.id36,
       claim_token: @run.claim_token,
       uris: {
         api_uri: api_v3_run_url(@run),

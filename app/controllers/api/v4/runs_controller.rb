@@ -24,14 +24,14 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     end
 
     presigned_request = $s3_bucket.presigned_post(
-      key: "splits/#{@run.id}",
+      key: "splits/#{@run.id36}",
       content_length_range: 1..(100*1024*1024)
     )
 
     render status: 201, location: api_v4_run_url(@run), json: {
       status: 201,
       message: "Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.",
-      id: @run.id,
+      id: @run.id36,
       claim_token: @run.claim_token,
       uris: {
         api_uri: api_v4_run_url(@run),

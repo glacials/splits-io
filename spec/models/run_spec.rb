@@ -3,10 +3,6 @@ require 'rails_helper'
 describe Run, type: :model do
   let(:run) { FactoryGirl.create(:run) }
 
-  it 'responds to id requests' do
-    expect(run.id).to eq run.id
-  end
-
   context 'with a game' do
     context 'that has no other runs' do
       let(:run) { FactoryGirl.create(:run, game: FactoryGirl.create(:game)) }

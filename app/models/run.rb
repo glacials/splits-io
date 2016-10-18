@@ -41,18 +41,18 @@ class Run < ApplicationRecord
     end
 
     alias_method :find10, :find
-    def find(id)
-      find10(id.to_i(36))
+    def find36(id36)
+      find10(id36.to_i(36))
     end
   end
 
   alias_method :id10, :id
-  def id
-    if id10.is_a? Numeric
-      id10.to_s(36)
-    else
-      nil
+  def id36
+    if id10.nil?
+      return nil
     end
+
+    id10.to_s(36)
   end
 
   def belongs_to?(user)
@@ -112,7 +112,7 @@ class Run < ApplicationRecord
     end
 
     run = {
-      'id' => id,
+      'id' => id36,
       'timer' => timer_used.to_s,
       'attempts' => parse_result[:attempts],
       'srdc_id' => srdc_id || parse_result[:srdc_id].presence,
@@ -129,7 +129,7 @@ class Run < ApplicationRecord
   end
 
   def fetch_from_dynamodb
-    key = {id: id}
+    key = {id: id36}
     attrs = 'id, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
 
     options = {
@@ -227,7 +227,7 @@ class Run < ApplicationRecord
 
         $dynamodb_table.put_item(
           item: {
-            'id' => id,
+            'id' => id36,
             'timer' => parse_result[:timer],
             'attempts' => parse_result[:attempts],
             'srdc_id' => srdc_id || parse_result[:srdc_id].presence,
@@ -249,7 +249,7 @@ class Run < ApplicationRecord
   end
 
   def to_param
-    id
+    id36
   end
 
   def to_s
@@ -270,6 +270,7 @@ class Run < ApplicationRecord
 
   CATEGORY_ALIASES = {
     "Any% (NG+)" => "Any% NG+",
+    "Any% (New Game+)" => "Any% NG+",
     "Any %" => "Any%"
   }
 
@@ -283,8 +284,8 @@ class Run < ApplicationRecord
   end
 
   def file
-    if id.present?
-      file = $s3_bucket.object("splits/#{id}")
+    if id36.present?
+      file = $s3_bucket.object("splits/#{id36}")
       file.get.body.read
     else
       run_file.try(:file)
