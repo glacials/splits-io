@@ -103,7 +103,7 @@ class Run < ApplicationRecord
             s.name = split['title']
             s.duration = split['duration_in_seconds'].round(2)
             s.finish_time = split['finish_time'].round(2)
-            s.best = split['best'].round(2)
+            s.best = split['best'].try(:round, 2)
             s.gold = split['gold?']
             s.skipped = split['skipped?']
             s.reduced = split['reduced?']
