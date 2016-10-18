@@ -19,8 +19,7 @@
           th.align-right
             = link_to "Time", "?#{request.query_parameters.merge(by: :time, order: (params[:by] == 'time' && params[:order] == 'asc') ? :desc : :asc).to_param}"
         - if cols.include?(:name)
-          th
-            = link_to "Name", "?#{request.query_parameters.merge(by: :name, order: (params[:by] == 'name' && params[:order] == 'asc') ? :desc : :asc).to_param}"
+          th Name
         - if cols.include?(:rival)
           th.align-right Rival
         - if cols.include?(:uploaded)
