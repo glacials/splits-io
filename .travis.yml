@@ -1,11 +1,9 @@
 language: ruby
 rvm:
  - 2.3.1
- - jruby
- - rbx-2
 script: rspec spec
 services:
   - postgresql
 before_script:
-  - psql -c 'create database splits-io-test;' -U postgres
+  - psql -c 'create database "splits-io-test";' -U postgres
 
