@@ -44,7 +44,7 @@ module SplitterZ
       run[:time] = 0
       splits.splits.each do |segment|
         split = Split.new
-        split.name = segment.title
+        split.name = segment.title.to_s
         split.duration = duration_in_seconds_of(segment.run_time.to_s) - run[:time]
         split.finish_time = duration_in_seconds_of(segment.run_time.to_s)
         split.best = duration_in_seconds_of(segment.best_time.to_s)
