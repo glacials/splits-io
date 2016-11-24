@@ -31,7 +31,7 @@ class Run < ApplicationRecord
 
   class << self
     def programs
-      [Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+      [LlanfairGered, Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     end
 
     def program(string_or_symbol)

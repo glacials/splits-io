@@ -30,6 +30,10 @@ FactoryGirl.define do
       run_file RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/llanfair"))
     end
 
+    factory :llanfair_gered_run do
+      run_file RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/llanfair_gered.lfs"))
+    end
+
     video_url 'http://www.twitch.tv/glacials/c/3463112'
   end
 end

@@ -1,9 +1,10 @@
 class Split
-  attr_accessor :name, :duration, :finish_time, :best, :history, :gold, :skipped, :reduced
+  attr_accessor :name, :duration, :start_time, :finish_time, :best, :history, :gold, :skipped, :reduced
 
   def initialize(h = {})
     @name = h[:name]
     @duration = h[:duration]
+    @start_time = h[:start_time]
     @finish_time = h[:finish_time]
     @best = h[:best]
     @history = h[:history]
@@ -28,6 +29,7 @@ class Split
     {
       name: name,
       duration: duration,
+      start_time: start_time,
       finish_time: finish_time,
       best: best,
       gold: gold,
@@ -39,6 +41,7 @@ class Split
     {
       name: name,
       duration: duration,
+      start_time: start_time,
       finish_time: finish_time,
       best: best.try(:serializable_hash),
       gold: gold,
