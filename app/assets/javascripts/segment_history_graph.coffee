@@ -11,14 +11,17 @@ $ ->
   ]
 
   seg_histories = []
+  hidden_data = []
   $.each gon.run.raw_splits, (i, split) ->
     seg_histories.push JSON.parse(JSON.stringify(split.history))
     seg_histories[i].unshift split.name
+    if seg_histories.length > 15 then hidden_data.push split.name
   c3.generate({
     bindto: "#segment-duration-graph",
     title: { text: "Segment Histories Over Time"},
     data: {
       columns: seg_histories,
+      hide: hidden_data
     },
     color: { pattern: color_styles },
     axis: {
