@@ -6,8 +6,9 @@ $ ->
     "rgba(14, 144, 210, 1)",
     "rgba(128, 87, 165, 1)",
     "rgba(94, 185, 94, 1)",
+    "rgba(250, 210, 50, 1)",
     "rgba(221, 81, 76, 1)",
-    "rgba(243, 123, 29, 1)",
+    "rgba(243, 123, 29, 1)"
   ]
 
   seg_histories = []
@@ -23,6 +24,7 @@ $ ->
       columns: seg_histories,
       hide: hidden_data
     },
+    size: { height: 320 * ((gon.run.raw_splits.length / 60) + 1) },
     color: { pattern: color_styles },
     axis: {
       x: {
@@ -31,6 +33,10 @@ $ ->
         tick: {
           culling: true,
           multiline: false
+        },
+        label: {
+          text: "Attempt Number",
+          position: "outer-center"
         }
       },
       y: {
