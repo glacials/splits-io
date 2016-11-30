@@ -20,6 +20,10 @@ $ ->
         tick: {
           culling: true,
           multiline: false
+        },
+        label: {
+          text: "Run Number",
+          position: "outer-center"
         }
       },
       y: {
