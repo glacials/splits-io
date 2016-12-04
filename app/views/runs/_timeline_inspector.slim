@@ -8,6 +8,7 @@
           p
         .title = split.name
         .time.needs-formatting class=('short' if run.short?) = split.duration
+        .time.needs-formatting class=('short' if run.short?) = split.finish_time
         .save
           - unless split.gold? || run.has_skipped_splits? || !run.has_golds? || split.duration.round(2) == split.best.round(2)
             | #{BigDecimal.new(split.duration - split.best, 2)}s potential save

@@ -11,13 +11,13 @@ group :test do
 end
 
 group :development, :hot do
-  # errors+logging
-  gem 'better_errors'
-  gem 'binding_of_caller'
-
   # debugging
   gem 'meta_request'
   gem 'pry-rails'
+
+  # errors+logging
+  gem 'better_errors'
+  gem 'binding_of_caller'
 
   # pretty things
   gem 'rails-erd', require: false
