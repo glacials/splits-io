@@ -67,4 +67,26 @@ class User < ApplicationRecord
   def gold?
     permagold? || subscriptions.count > 0
   end
+
+  def should_see_ads?
+    key = {id: "#{id}"}
+    attrs = 'id, show_ads'
+
+    options = {
+      key: key,
+      projection_expression: attrs
+    }
+
+    resp = $dynamodb_users.get_item(options)
+
+    if resp.item.nil?
+      return true
+    end
+
+    if resp.item['show_ads'].nil?
+      return true
+    end
+
+    return resp.item['show_ads']
+  end
 end

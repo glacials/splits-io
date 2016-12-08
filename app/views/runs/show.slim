@@ -35,8 +35,10 @@ article
   - cache [:splits, :v1, @run] do
     = render partial: 'runs/split_table', locals: {short: @run.short?, splits: @run.splits, comparison_splits: @run.splits}
 
-article
-  script async=true src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-  ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2775839314260416" data-ad-slot="8678030483" data-ad-format="auto"
-  javascript:
-    (adsbygoogle = window.adsbygoogle || []).push({});
+- if current_user.nil? || current_user.should_see_ads?
+  article
+    div align='center'
+      script async=true src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2775839314260416" data-ad-slot="8678030483" data-ad-format="auto"
+      javascript:
+        (adsbygoogle = window.adsbygoogle || []).push({});

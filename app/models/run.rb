@@ -125,7 +125,7 @@ class Run < ApplicationRecord
       'splits' => splits
     }
 
-    $dynamodb_table.put_item(item: run)
+    $dynamodb_splits.put_item(item: run)
   end
 
   def fetch_from_dynamodb
@@ -137,7 +137,7 @@ class Run < ApplicationRecord
       projection_expression: attrs
     }
 
-    resp = $dynamodb_table.get_item(options)
+    resp = $dynamodb_splits.get_item(options)
     resp.item
   end
 
@@ -225,7 +225,7 @@ class Run < ApplicationRecord
           }
         end
 
-        $dynamodb_table.put_item(
+        $dynamodb_splits.put_item(
           item: {
             'id' => id36,
             'timer' => parse_result[:timer],

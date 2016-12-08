@@ -53,7 +53,8 @@ html
                       = link_to "go gold", subscription_path
                   = link_to "sign out", session_path(auth_session), method: :delete
             - else
-              a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign in
+              a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign up
+              a#sign-in.yellow href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign in
       header#header = yield(:header)
       article#alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
       = yield
