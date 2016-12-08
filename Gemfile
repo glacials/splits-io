@@ -45,8 +45,9 @@ gem 'jbuilder'
 # authentication
 gem 'authie', github: 'glacials/authie'
 gem 'omniauth'
-gem 'omniauth-twitch'
 gem 'omniauth-oauth2'
+gem 'omniauth-twitch'
+gem 'patreon'
 
 # authorization
 gem 'cancancan'

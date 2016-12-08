@@ -262,6 +262,7 @@ GEM
       omniauth-oauth2 (~> 1.1)
     parser (2.3.1.2)
       ast (~> 2.2)
+    patreon (0.2.0)
     pg (0.18.4)
     pkg-config (1.1.7)
     platform-api (0.8.0)
@@ -462,6 +463,7 @@ DEPENDENCIES
   omniauth
   omniauth-oauth2
   omniauth-twitch
+  patreon
   pg
   platform-api
   pry-rails

@@ -24,8 +24,12 @@ SplitsIO::Application.routes.draw do
 
   get '/u/:user', to: redirect('/users/%{user}') # deprecated; use GET /users/:user
 
-  get '/auth/:provider/callback', to: 'sessions#create'
+  get '/auth/patreon', to: 'patreon#out'
+  get '/auth/patreon/callback', to: 'patreon#in'
+  get '/auth/patreon/unlink', to: 'patreon#unlink'
+
   get '/auth/failure', to: 'sessions#failure'
+  get '/auth/:provider/callback', to: 'sessions#create'
 
   get    '/gold', to: 'subscriptions#show', as: :subscription
   post   '/gold', to: 'subscriptions#create'

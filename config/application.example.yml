@@ -13,7 +13,6 @@ development:
   TWITCH_CLIENT_ID:
   TWITCH_CLIENT_SECRET:
 
-
   # splits-io uses S3 to store splits. For development you probably don't want that, so run fakes3 instead. You can
   # start a local fakes3 server with
   #
@@ -28,11 +27,19 @@ development:
   AWS_ACCESS_KEY_ID: boop
   AWS_SECRET_KEY: beep
 
+
+  ########################################################
+  #  You shouldn't need to fill out anything below here  #
+  ########################################################
+
   STRIPE_PUBLISHABLE_KEY:
   STRIPE_SECRET_KEY:
 
   # Enable or diable the Gold feature. 1 is on, anything else is off.
   GOLD: "1"
+
+  PATREON_CLIENT_ID:
+  PATREON_CLIENT_SECRET:
 
 test:
   # required to be able to run tests
@@ -43,13 +50,14 @@ test:
   AWS_ACCESS_KEY_ID: boop
   AWS_SECRET_KEY: beep
 
-# You don't need to change anything below this line.
-
 production:
   DATABASE_URL:
 
   TWITCH_CLIENT_ID:
   TWITCH_CLIENT_SECRET:
+
+  PATREON_CLIENT_ID:
+  PATREON_CLIENT_SECRET:
 
   NEW_RELIC_LICENSE_KEY:
   ROLLBAR_ACCESS_TOKEN:

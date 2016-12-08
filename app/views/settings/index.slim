@@ -2,16 +2,17 @@
 - content_for(:header)
   h2 settings
 article
-  .col-md-8
-    = form_for current_user, remote: true do |f|
-      label.form-group.input-group
-        .col-sm-4
-          b Name
-        .col-sm-8
-          = f.text_field(:name, id: 'name', class: 'form-control', disabled: true)
-      label.form-group.input-group
-        = f.check_box(:darkmode, id: 'darkmode', class: 'form-control')
-        span< Darkmode
-      .form-group.input-group
-        .col-sm-offset-4.col-sm-8
-          = f.submit(class: 'btn btn-default', value: 'Save')
+  .col-md-6
+    span> ✓ linked with Twitch as
+    b> style='color: #6441A4;' = current_user.name
+article
+  .col-md-6
+    - patreon = current_user.patreon_info
+    - if patreon.nil?
+      span> ✗ not linked with
+      b> style='color: #e44727;' Patreon
+      a href='/auth/patreon' (link)
+    - else
+      span> ✓ linked with Patreon as
+      b> style='color: #E44727;' = patreon['patreon_full_name']
+      a href='/auth/patreon/unlink' (unlink)

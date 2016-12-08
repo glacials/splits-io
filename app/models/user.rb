@@ -65,28 +65,67 @@ class User < ApplicationRecord
   end
 
   def gold?
-    permagold? || subscriptions.count > 0
+    permagold? || subscriptions.count > 0 || silver_patron?
   end
 
   def should_see_ads?
-    key = {id: "#{id}"}
-    attrs = 'id, show_ads'
+    !bronze_patron?
+  end
+
+  def patreon_info
+    key = {user_id: "#{id}"}
+    attrs = 'id, patreon_full_name'
 
     options = {
       key: key,
       projection_expression: attrs
     }
 
-    resp = $dynamodb_users.get_item(options)
+    resp = $dynamodb_patreon_users.get_item(options)
 
     if resp.item.nil?
-      return true
+      return nil
     end
 
-    if resp.item['show_ads'].nil?
-      return true
+    return resp.item
+  end
+
+  def bronze_patron?
+    p = patreon_info
+    if p.nil?
+      return false
     end
 
-    return resp.item['show_ads']
+    if p['pledge_cents'].nil?
+      return false
+    end
+
+    p['pledge_cents'] >= 200
+  end
+
+  def silver_patron?
+    p = patreon_info
+    if p.nil?
+      return false
+    end
+
+    if p['pledge_cents'].nil?
+      return false
+    end
+
+    p['pledge_cents'] >= 400
+  end
+
+  def gold_patron?
+    p = patreon_info
+    if p.nil?
+      return false
+    end
+
+    if p['pledge_cents'].nil?
+      return false
+    end
+
+    p['pledge_cents'] >= 600
   end
 end

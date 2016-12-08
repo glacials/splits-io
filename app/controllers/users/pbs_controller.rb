@@ -4,7 +4,7 @@ class Users::PbsController < ApplicationController
   before_action :set_category, only: [:show]
 
   def show
-    if @user.gold?
+    if @user.gold_patron?
       redirect_to run_path(@user.pb_for(@category))
     else
       redirect_to user_path(@user), alert: 'Redirectors are not enabled for this account.'
