@@ -32,7 +32,7 @@ class PatreonController < ApplicationController
     pledge_created_at = nil
 
     if @pledge.present?
-      pledge_cents = patreon_user['cents_pledged'] = @pledge['attributes']['amount_cents']
+      pledge_cents = @pledge['attributes']['amount_cents']
       pledge_created_at = @pledge['attributes']['created_at']
     end
 
