@@ -33,10 +33,18 @@ article#stats
           - if @run.sum_of_best == 0
             tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
               td
+                span Sum of best
+              td -
+            tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
+              td
                 span Total potential timesave
                 small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
               td -
           - else
+            tr
+              td
+                span Sum of best
+              td.time.needs-formatting class=('short' if @run.short?) = @run.collapsed_splits.sum { |split| split.best }
             tr
               td
                 span Total potential timesave
