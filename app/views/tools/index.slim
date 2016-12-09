@@ -1,6 +1,23 @@
 - title "tools"
 - content_for(:header)
   h2 tools
+- if current_user.present? && current_user.gold_patron?
+  article
+    h4 Permalink redirectors
+    p Thanks for being a patron! You get access to permalink redirectors, which are static links that will always
+      redirect to your current PB for a given game and category. Here they are:
+		table.table
+			th Game
+			th Category
+			th Redirector
+			- current_user.games.each do |game|
+				- current_user.categories.where(game: game).each do |category|
+					tr
+						td = category.game.name
+						td = category.name
+						td
+							a target='_blank' href=user_pb_path(current_user, game, category)
+								= "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
 article
   h4 Twitch panel builder
   p This will assemble your PBs into a Markdown table for use in a Twitch panel (or elsewhere). You should be able to

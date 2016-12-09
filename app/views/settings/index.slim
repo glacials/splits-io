@@ -15,4 +15,6 @@ article
     - else
       span> ✓ linked with Patreon as
       b> style='color: #E44727;' = patreon['patreon_full_name']
-      a href='/auth/patreon/unlink' (unlink)
+      a> href='/auth/patreon/unlink' (unlink)
+      - if current_user.gold_patron?
+        a href=tools_path (see my permalink redirectors)

@@ -74,7 +74,7 @@ class User < ApplicationRecord
 
   def patreon_info
     key = {user_id: "#{id}"}
-    attrs = 'id, patreon_full_name'
+    attrs = 'id, patreon_full_name, pledge_cents'
 
     options = {
       key: key,
