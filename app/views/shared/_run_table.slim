@@ -41,7 +41,7 @@
               - if run.user && run.user.name
                 = link_to run.user, user_path(run.user), class: 'user-link'
                 - if run.user.gold?
-                  .gold-split title='Gold'
+                  .gold-split title='Patron'
               - else
                 | -
           - if cols.include?(:time)
@@ -58,8 +58,8 @@
                     = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run), short: run.short?}
                     |  against 
                     = rival
-                    - if run.user.gold?
-                      .gold-split title='Gold'
+                    - if rival.gold?
+                      .gold-split title='Patron'
                 - elsif run.category.present?
                   = link_to '+', new_user_rivalry_path(current_user, category: run.category)
           - if cols.include?(:uploaded)

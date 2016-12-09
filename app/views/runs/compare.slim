@@ -14,7 +14,7 @@
     - if @comparison_run.user.present?
       = link_to @comparison_run.user, user_path(@comparison_run.user), class: 'stealth-link user-link'
       - if @comparison_run.user.gold?
-        .gold-split title='Gold'
+        .gold-split title='Patron'
     - else
       | unknown
 
@@ -31,7 +31,7 @@ hr style='margin: .5em; opacity: 0.25'
     - if @run.user
       = link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'
       - if @run.user.gold?
-        .gold-split title='Gold'
+        .gold-split title='Patron'
     - else
       | unknown
 

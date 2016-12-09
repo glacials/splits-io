@@ -9,7 +9,7 @@
         - if rivalry.from_user.present?
           = link_to rivalry.from_user, rivalry.from_user, class: 'stealth-link user-link'
           - if rivalry.from_user.gold?
-            .gold-split title='Gold'
+            .gold-split title='Patron'
         - else
           = '???'
       span = from_user_pb.present? ? (link_to from_user_pb.time, from_user_pb, class: 'time needs-formatting stealth-link run-link') : '-'
@@ -28,7 +28,7 @@
         - if rivalry.to_user.present?
           = link_to rivalry.to_user, rivalry.to_user, class: 'stealth-link user-link'
           - if rivalry.to_user.gold?
-            .gold-split title='Gold'
+            .gold-split title='Patron'
         - else
           '???'
       span
