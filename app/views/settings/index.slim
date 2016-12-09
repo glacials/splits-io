@@ -1,20 +1,23 @@
 - title "settings"
 - content_for(:header)
   h2 settings
-article
-  .col-md-6
-    span> ✓ linked with Twitch as
-    b> style='color: #6441A4;' = current_user.name
-article
-  .col-md-6
-    - patreon = current_user.patreon_info
-    - if patreon.nil?
-      span> ✗ not linked with
-      b> style='color: #e44727;' Patreon
-      a href='/auth/patreon' (link)
-    - else
-      span> ✓ linked with Patreon as
-      b> style='color: #E44727;' = patreon['patreon_full_name']
-      a> href='/auth/patreon/unlink' (unlink)
-      - if current_user.gold_patron?
-        a href=tools_path (see my permalink redirectors)
+- if current_user.nil?
+	article You need to be signed in to view this page
+- else
+	article
+		.col-md-6
+			span> ✓ linked with Twitch as
+			b> style='color: #6441A4;' = current_user.name
+	article
+		.col-md-6
+			- patreon = current_user.patreon_info
+			- if patreon.nil?
+				span> ✗ not linked with
+				b> style='color: #e44727;' Patreon
+				a href='/auth/patreon' (link)
+			- else
+				span> ✓ linked with Patreon as
+				b> style='color: #E44727;' = patreon['patreon_full_name']
+				a> href='/auth/patreon/unlink' (unlink)
+				- if current_user.gold_patron?
+					a href=tools_path (see my permalink redirectors)
