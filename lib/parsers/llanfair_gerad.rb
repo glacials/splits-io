@@ -10,7 +10,7 @@ module LlanfairGered
   end
 
   def self.file_extension
-    'llanfair'
+    'lfs'
   end
 
   def self.website

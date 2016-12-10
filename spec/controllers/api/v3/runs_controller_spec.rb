@@ -1,30 +1,50 @@
 require 'rails_helper'
 
 describe Api::V3::RunsController do
-  let(:run) { FactoryGirl.create_stubbed(:run) }
-
   describe '#show' do
-    let(:returned_attributes) { [:id, :path, :image_url, :user, :time, :video_url] }
+    let(:game) do
+      instance_double(
+        "Game",
+        name: "Tron: Evolution",
+        read_attribute_for_serialization: self,
+      )
+    end
+    let(:category) do
+      instance_double(
+        "Category",
+        game: game,
+        name: "Any% NG+",
+        read_attribute_for_serialization: self,
+      )
+    end
+    let(:run) do
+      instance_double(
+        "Run",
+        id: 10,
+        id36: 'a',
+        path: '/a',
+        game: game,
+        category: category,
+        to_s: "Tron: Evolution Any% NG+",
+        image_url: nil,
+        sum_of_best: 2,
+        splits: [
+          instance_double("Split", 'best' => 3, 'best=' => true)
+        ],
+        read_attribute_for_serialization: self,
+      )
+    end
 
     context 'when given a valid id' do
       subject(:response) { get :show, params: {id: run.id36} }
       subject(:body) { JSON.parse(response.body)['run'] }
 
-      it 'returns an expected response code' do
+      it '200s' do
         expect(response).to have_http_status(200)
       end
 
-      it 'returns the correct name' do
-        expect(body['name']).to eq(run.to_s)
-      end
-
-      it 'returns the correct run' do
-        returned_attributes.each do |attribute|
-          expect(body[attribute.to_s]).to(
-            eq(run.send(attribute)),
-            "expected #{attribute} to be #{run.send(attribute)}, got #{body[attribute.to_s]}"
-          )
-        end
+      it 'returns a run with the correct id' do
+        expect(body['id']).to eq(run.id)
       end
     end
 
@@ -32,7 +52,7 @@ describe Api::V3::RunsController do
       subject(:response) { get :show, params: {id: '...'} }
       subject(:body) { JSON.parse(response.body) }
 
-      it 'returns an expected response code' do
+      it '404s' do
         expect(response).to have_http_status(404)
       end
 
