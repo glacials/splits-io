@@ -79,4 +79,8 @@ html
           span<> &bull;
           a href='mailto:qhiiyr@gmail.com' email me
           span<> &bull;
-          a.fake-link onclick='window.toggleDarkmode();' darkmode
+          a.fake-link onclick='window.toggleDarkmode();'
+            - if cookies[:darkmode] == '1'
+              span lightmode
+            - else
+              span darkmode
