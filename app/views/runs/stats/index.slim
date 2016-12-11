@@ -13,7 +13,7 @@
 article#stats
   .row
     .col-md-8.col-md-offset-2
-      h3 Stats
+      h3 Run stats
       table.table.table-striped
         tbody
           tr
@@ -98,6 +98,10 @@ article#stats
                 span.time.needs-formatting class=('short' if @run.short?) = @run.median_segment_duration
               - else
                 span.time -
+  .row
+    .col-md-8.col-md-offset-2
+      h3 Segment stats
+      = render partial: 'runs/split_stats', locals: {short: @run.short?, splits: @raw_splits}
   - if @run.collapsed_splits.size > 0
     hr
     #pb-graph

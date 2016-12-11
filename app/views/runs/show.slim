@@ -32,5 +32,4 @@
 = render partial: 'runs/full_timeline', locals: {run: @run}
 
 article
-  - cache [:splits, :v1, @run] do
-    = render partial: 'runs/split_table', locals: {short: @run.short?, splits: @run.splits, comparison_splits: @run.splits}
+  = render partial: 'runs/split_table', locals: {short: @run.short?, splits: @run.splits, comparison_splits: @run.splits}

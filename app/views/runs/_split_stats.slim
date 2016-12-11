@@ -1,0 +1,32 @@
+table.table.table-striped
+  thead
+    tr
+      th.align-right #
+      th.align-left Name
+      th.align-right Mean
+      th.align-right Median
+      th.align-right
+        span Standard deviation
+        small.tip-html< title="A low standard deviation indicates consistency" = "(?)"
+      th.align-right
+        span 90th percentile
+        small.tip-html< title="90% of this segment's times are faster than this" = "(?)"
+      th.align-right
+        span 99th percentile
+        small.tip-html< title="99% of this segment's times are faster than this" = "(?)"
+  tbody
+    - @raw_splits.each_with_index do |split, index|
+      tr
+        td.align-right= index + 1
+        td.align-left= split.name.present? ? split.name : '-'
+        - unskipped_history = split.history.reject { |t| t == 0 }
+        td.align-right.time.needs-formatting class=('short' if short)
+          = unskipped_history.mean
+        td.align-right.time.needs-formatting class=('short' if short)
+          = unskipped_history.median
+        td.align-right.time.needs-formatting class=('short' if short)
+          = unskipped_history.standard_deviation
+        td.align-right.time.needs-formatting class=('short' if short)
+          = unskipped_history.percentile(90)
+        td.align-right.time.needs-formatting class=('short' if short)
+          = unskipped_history.percentile(99)

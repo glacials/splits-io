@@ -119,6 +119,7 @@ GEM
     delayed_job_active_record (4.1.1)
       activerecord (>= 3.0, < 5.1)
       delayed_job (>= 3.0, < 5)
+    descriptive_statistics (2.5.1)
     diff-lcs (1.2.5)
     docile (1.1.5)
     domain_name (0.5.20160615)
@@ -435,6 +436,7 @@ DEPENDENCIES
   d3-rails (~> 3.5.17)
   dalli
   delayed_job_active_record
+  descriptive_statistics
   factory_girl_rails
   fakes3
   figaro
