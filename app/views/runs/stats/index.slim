@@ -101,6 +101,8 @@ article#stats
   .row
     .col-md-8.col-md-offset-2
       h3 Segment stats
+      .badge
+        a href=run_stats_csv_path ↓ download segment history csv
       = render partial: 'runs/split_stats', locals: {short: @run.short?, splits: @raw_splits}
   - if @run.collapsed_splits.size > 0
     hr
