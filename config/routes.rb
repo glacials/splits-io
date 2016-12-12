@@ -67,12 +67,13 @@ SplitsIO::Application.routes.draw do
   resources :tools, only: [:index]
   resources :settings, only: [:index]
 
-  get    '/:run/edit',      to: 'runs#edit',        as: :edit_run
-  get    '/:run/stats',     to: 'runs/stats#index', as: :run_stats
-  get    '/:run/stats/csv', to: 'runs/stats#csv',   as: :run_stats_csv
-  patch  '/:run',           to: 'runs#update'
-  get    '/:run',           to: 'runs#show',        as: :run
-  delete '/:run',           to: 'runs#destroy'
+  get    '/:run/edit',                      to: 'runs#edit',        as: :edit_run
+  get    '/:run/stats',                     to: 'runs/stats#index', as: :run_stats
+  get    '/:run/stats/run_history.csv',     to: 'runs/stats#run_history_csv',     as: :run_history_csv
+  get    '/:run/stats/segment_history.csv', to: 'runs/stats#segment_history_csv', as: :segment_history_csv
+  patch  '/:run',                           to: 'runs#update'
+  get    '/:run',                           to: 'runs#show',        as: :run
+  delete '/:run',                           to: 'runs#destroy'
 
   namespace :api do
     namespace :v4 do

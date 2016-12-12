@@ -1,5 +1,5 @@
 class Runs::StatsController < Runs::ApplicationController
-  before_action :set_run, only: [:index, :csv]
+  before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
 
   def index
     @run.parse(fast: false)
@@ -15,10 +15,23 @@ class Runs::StatsController < Runs::ApplicationController
     gon.scale_to = @run.time
   end
 
-  def csv
+  def run_history_csv
+    column_names = @run.history.map.with_index do |_, i|
+      "run ##{i}"
+    end
+
+    csv = CSV.generate do |csv|
+      csv << column_names
+      csv << @run.history
+    end
+
+    send_data(csv, filename: "#{@run.id36}_run_history.csv", layout: false)
+  end
+
+  def segment_history_csv
     @raw_splits = @run.parse(fast: false)[:splits]
 
-    column_names = ['name']
+    column_names = ['segment name']
     segment_histories = []
 
     csv = CSV.generate do |csv|
@@ -36,6 +49,6 @@ class Runs::StatsController < Runs::ApplicationController
       end
     end
 
-    send_data(csv, filename: "#{@run.id36}.csv", layout: false)
+    send_data(csv, filename: "#{@run.id36}_segment_history.csv", layout: false)
   end
 end
