@@ -16,17 +16,24 @@ table.table.table-striped
         small.tip-html< title="99% of this segment's times are faster than this" = "(?)"
   tbody
     - @raw_splits.each_with_index do |split, index|
-      tr
-        td.align-right= index + 1
-        td.align-left= split.name.present? ? split.name : '-'
+      - if split.history.nil?
+        tr
+          td.align-right= index + 1
+          td.align-left= split.name.present? ? split.name : '-'
+          td.align-right colspan=99
+            i no segment history available
+      - else
         - unskipped_history = split.history.reject { |t| t == 0 }
-        td.align-right.time.needs-formatting class=('short' if short)
-          = unskipped_history.mean
-        td.align-right.time.needs-formatting class=('short' if short)
-          = unskipped_history.median
-        td.align-right.time.needs-formatting class=('short' if short)
-          = unskipped_history.standard_deviation
-        td.align-right.time.needs-formatting class=('short' if short)
-          = unskipped_history.percentile(90)
-        td.align-right.time.needs-formatting class=('short' if short)
-          = unskipped_history.percentile(99)
+        tr
+          td.align-right= index + 1
+          td.align-left= split.name.present? ? split.name : '-'
+          td.align-right.time.needs-formatting class=('short' if short)
+            = unskipped_history.mean
+          td.align-right.time.needs-formatting class=('short' if short)
+            = unskipped_history.median
+          td.align-right.time.needs-formatting class=('short' if short)
+            = unskipped_history.standard_deviation
+          td.align-right.time.needs-formatting class=('short' if short)
+            = unskipped_history.percentile(90)
+          td.align-right.time.needs-formatting class=('short' if short)
+            = unskipped_history.percentile(99)
