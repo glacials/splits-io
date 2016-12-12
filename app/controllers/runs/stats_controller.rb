@@ -37,7 +37,7 @@ class Runs::StatsController < Runs::ApplicationController
       rows = []
 
       header = ['Segment name']
-      @run.attempts.times do |attempt_no|
+      (1..@run.attempts).each do |attempt_no|
         header << "Attempt ##{attempt_no}"
       end
       csv << header
@@ -45,7 +45,7 @@ class Runs::StatsController < Runs::ApplicationController
       @raw_splits.each do |segment|
         row = []
         row << segment.name
-        @run.attempts.times do |attempt_no|
+        (1..@run.attempts).each do |attempt_no|
           h = segment.indexed_history["#{attempt_no + 1}"]
           if h.nil?
             row << ""
