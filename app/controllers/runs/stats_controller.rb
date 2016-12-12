@@ -19,29 +19,20 @@ class Runs::StatsController < Runs::ApplicationController
     @raw_splits = @run.parse(fast: false)[:splits]
 
     column_names = ['name']
-    segment_histories = {}
+    segment_histories = []
 
     csv = CSV.generate do |csv|
-      segment_no = 0
       @raw_splits.each do |segment|
-        column_names << segment.name
-        segment.indexed_history.each do |attempt_no, duration|
-          segment_histories[attempt_no] ||= {}
-          segment_histories[attempt_no][segment_no] = duration
-        end
-        segment_no += 1
+        segment_histories << [segment.name].concat(segment.history)
       end
 
-      num_segments = segment_histories.map { |h| h[1].length }.max
+      segment_histories.map(&:length).max.times do |i|
+        column_names << "run ##{i + 1}"
+      end
 
       csv << column_names
-
-      segment_histories.each do |attempt_no, segments|
-        if segments.length != num_segments
-          next
-        end
-
-        csv << segments.values
+      segment_histories.each do |segment_history|
+        csv << segment_history
       end
     end
 

@@ -71,12 +71,8 @@ module LiveSplit
 
         split.history = fast ? nil : segment['SegmentHistory'][0]['Time']
         if split.history.present?
-          split.indexed_history = {}
           split.history.map! do |time|
-            t = time['RealTime'].nil? ? 0 : duration_in_seconds_of(time['RealTime'][0].try(:strip))
-
-            split.indexed_history[time['id']] = t
-            t
+            time['RealTime'].nil? ? 0 : duration_in_seconds_of(time['RealTime'][0].try(:strip))
           end
         end
 
