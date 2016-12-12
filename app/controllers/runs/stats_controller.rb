@@ -26,8 +26,8 @@ class Runs::StatsController < Runs::ApplicationController
         segment_histories << [segment.name].concat(segment.history)
       end
 
-      segment_histories.map(&:length).max.times do |i|
-        column_names << "run ##{i + 1}"
+      (segment_histories.map(&:length).max - 1).times do |i|
+        column_names << "logged segment ##{i + 1}"
       end
 
       csv << column_names
