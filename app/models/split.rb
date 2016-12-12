@@ -1,5 +1,5 @@
 class Split
-  attr_accessor :name, :duration, :start_time, :finish_time, :best, :history, :gold, :skipped, :reduced
+  attr_accessor :name, :duration, :start_time, :finish_time, :best, :history, :indexed_history, :gold, :skipped, :reduced
 
   def initialize(h = {})
     @name = h[:name]
@@ -8,6 +8,7 @@ class Split
     @finish_time = h[:finish_time]
     @best = h[:best]
     @history = h[:history]
+    @indexed_history = h[:indexed_history]
     @gold = h[:gold?] || h[:gold] || false
     @skipped = h[:skipped?] || h[:skipped] || false
     @reduced = h[:reduced?] || h[:reduced] || false

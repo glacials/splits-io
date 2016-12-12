@@ -31,21 +31,30 @@ class Runs::StatsController < Runs::ApplicationController
   def segment_history_csv
     @raw_splits = @run.parse(fast: false)[:splits]
 
-    column_names = ['segment name']
     segment_histories = []
 
     csv = CSV.generate do |csv|
+      rows = []
+
+      header = ['Segment name']
+      @run.attempts.times do |attempt_no|
+        header << "Attempt ##{attempt_no}"
+      end
+      csv << header
+
       @raw_splits.each do |segment|
-        segment_histories << [segment.name].concat(segment.history)
-      end
+        row = []
+        row << segment.name
+        @run.attempts.times do |attempt_no|
+          h = segment.indexed_history["#{attempt_no + 1}"]
+          if h.nil?
+            row << ""
+            next
+          end
 
-      (segment_histories.map(&:length).max - 1).times do |i|
-        column_names << "logged segment ##{i + 1}"
-      end
-
-      csv << column_names
-      segment_histories.each do |segment_history|
-        csv << segment_history
+          row << h
+        end
+        csv << row
       end
     end
 
