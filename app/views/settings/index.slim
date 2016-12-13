@@ -21,3 +21,14 @@
 				a> href='/auth/patreon/unlink' (unlink)
 				- if current_user.gold_patron?
 					a href=tools_path (see my permalink redirectors)
+	article
+		.col-md-6
+			- google = current_user.google_info
+			- if google.nil?
+				span> ✗ not linked with
+				b> style='color: #4285f4;' Google
+				a href='/auth/google_oauth2' (link)
+			- else
+				span> ✓ linked with Google as
+				b> style='color: #4285f4;' = google['google_email']
+				a> href='/auth/google_oauth2/unlink' (unlink)

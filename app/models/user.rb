@@ -90,6 +90,24 @@ class User < ApplicationRecord
     return resp.item
   end
 
+  def google_info
+    key = {user_id: "#{id}"}
+    attrs = 'id, google_email, access_token'
+
+    options = {
+      key: key,
+      projection_expression: attrs
+    }
+
+    resp = $dynamodb_google_users.get_item(options)
+
+    if resp.item.nil?
+      return nil
+    end
+
+    return resp.item
+  end
+
   def bronze_patron?
     p = patreon_info
     if p.nil?

@@ -16,16 +16,20 @@ class Runs::StatsController < Runs::ApplicationController
   end
 
   def run_history_csv
-    column_names = @run.history.map.with_index do |_, i|
-      "run ##{i}"
+    send_data(run_history_as_csv, filename: "#{@run.id36}_run_history.csv", layout: false)
+  end
+
+  def run_history_sheets
+    google_info = current_user.google_info
+    if google_info.nil?
+      redirect_to run_stats_path(@run), alert: "You need to associate your Splits I/O account with a Google account first."
+      return
     end
 
-    csv = CSV.generate do |csv|
-      csv << column_names
-      csv << @run.history
-    end
+    sheets = Google::Apis::SheetsV4::SheetsService.new
+    sheets.authorization = google_info.credentials
+    sheets.
 
-    send_data(csv, filename: "#{@run.id36}_run_history.csv", layout: false)
   end
 
   def segment_history_csv
@@ -59,5 +63,19 @@ class Runs::StatsController < Runs::ApplicationController
     end
 
     send_data(csv, filename: "#{@run.id36}_segment_history.csv", layout: false)
+  end
+
+  private
+
+  def run_history_as_csv
+    column_names = @run.history.map.with_index do |_, i|
+      "run ##{i}"
+    end
+
+    csv = CSV.generate do |csv|
+      csv << column_names
+      csv << @run.history
+    end
+
   end
 end

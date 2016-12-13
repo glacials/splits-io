@@ -38,7 +38,7 @@ class PatreonController < ApplicationController
 
     patreon_user = {
       'user_id' => current_user.id.to_s,
-      'acess_token' => access_token,
+      'access_token' => access_token,
       'refresh_token' => refresh_token,
 
       'patreon_id' => @user['id'],
@@ -68,18 +68,14 @@ class PatreonController < ApplicationController
 
     redirect_to settings_path, notice: "Patreon account unlinked :)"
   end
-end
 
-def failure
-  redirect_to redirect_path, alert: "Error: #{params[:message]}"
-end
+  def failure
+    redirect_to redirect_path, alert: "Error: #{params[:message]}"
+  end
 
-private
+  private
 
-def redirect_path
-  cookies.delete(:return_to) || root_path
-end
-
-def redirect_uri
-  "#{request.protocol}#{request.host_with_port}/auth/patreon/callback"
+  def redirect_uri
+    "#{request.protocol}#{request.host_with_port}/auth/patreon/callback"
+  end
 end

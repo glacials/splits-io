@@ -28,8 +28,12 @@ SplitsIO::Application.routes.draw do
   get '/auth/patreon/callback', to: 'patreon#in'
   get '/auth/patreon/unlink', to: 'patreon#unlink'
 
+  get '/auth/twitch/callback', to: 'sessions#create'
+
+  get '/auth/google_oauth2/callback', to: 'google#in'
+  get '/auth/google_oauth2/unlink',   to: 'google#unlink'
+
   get '/auth/failure', to: 'sessions#failure'
-  get '/auth/:provider/callback', to: 'sessions#create'
 
   get    '/gold', to: 'subscriptions#show', as: :subscription
   post   '/gold', to: 'subscriptions#create'
@@ -70,6 +74,7 @@ SplitsIO::Application.routes.draw do
   get    '/:run/edit',                      to: 'runs#edit',        as: :edit_run
   get    '/:run/stats',                     to: 'runs/stats#index', as: :run_stats
   get    '/:run/stats/run_history.csv',     to: 'runs/stats#run_history_csv',     as: :run_history_csv
+  get    '/:run/stats/run_history/sheets',  to: 'runs/stats#run_history_sheets',  as: :run_history_sheets
   get    '/:run/stats/segment_history.csv', to: 'runs/stats#segment_history_csv', as: :segment_history_csv
   patch  '/:run',                           to: 'runs#update'
   get    '/:run',                           to: 'runs#show',        as: :run

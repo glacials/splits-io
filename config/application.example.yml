@@ -38,8 +38,19 @@ development:
   # Enable or diable the Gold feature. 1 is on, anything else is off.
   GOLD: "1"
 
+  # Patreon credentials are used for giving users benefits based on their patronage. The redirect URIs for the client
+  # should be:
+  #   https://splits.io/auth/patreon/callback
+  #   http://localhost:3000/auth/patreon/callback
   PATREON_CLIENT_ID:
   PATREON_CLIENT_SECRET:
+
+  # Google credentials are used for exporting run/segment history to Google Sheets. The redirect URIs for the client
+  # should be:
+  #   https://splits.io/auth/google_oauth2/callback
+  #   http://localhost:3000/auth/google_oauth2/callback
+  GOOGLE_CLIENT_ID:
+  GOOGLE_CLIENT_SECRET:
 
 test:
   # required to be able to run tests
