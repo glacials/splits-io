@@ -45,6 +45,9 @@ class Runs::StatsController < Runs::ApplicationController
       @raw_splits.each do |segment|
         row = []
         row << segment.name
+        if segment.indexed_history.nil?
+          next
+        end
         (1..@run.attempts).each do |attempt_no|
           h = segment.indexed_history["#{attempt_no + 1}"]
           if h.nil?
