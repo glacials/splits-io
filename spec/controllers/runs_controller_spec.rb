@@ -115,7 +115,7 @@ describe RunsController do
       let(:response) do
         put(:update, params: {
           'run' => run.id36,
-          "#{run.id36}[category]" => {category: FactoryGirl.create(:category).id}
+          "#{run.id36}[category]" => FactoryGirl.create(:category).id
         })
       end
 
