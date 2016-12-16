@@ -13,28 +13,34 @@ Base URL is **https://splits.io/api/v3**.
 Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or Splits I/O base 10 `id`s (which you can discover in other
 routes).
 
-    GET /games?search=:term
-    GET /games/:id
-    GET /games/:game_id/runs
-    GET /games/:game_id/categories/:id
-    GET /games/:game_id/categories/:category_id/runs
+```http
+GET /games?search=:term
+GET /games/:id
+GET /games/:game_id/runs
+GET /games/:game_id/categories/:id
+GET /games/:game_id/categories/:category_id/runs
+```
 
 ### Based on user
 User ids are Twitch usernames or Splits I/O base 10 `id`s.
 
-    GET /users/:id
-    GET /users/:user_id/runs
-    GET /users/:user_id/pbs
-    GET /users/:user_id/games/:game_id/categories/:category_id/runs
-    GET /users/:user_id/games/:game_id/categories/:category_id/pb
-    GET /users/:user_id/games/:game_id/categories/:category_id/prediction
+```http
+GET /users/:id
+GET /users/:user_id/runs
+GET /users/:user_id/pbs
+GET /users/:user_id/games/:game_id/categories/:category_id/runs
+GET /users/:user_id/games/:game_id/categories/:category_id/pb
+GET /users/:user_id/games/:game_id/categories/:category_id/prediction
+```
 
 ### Based on run
 Run ids are Splits I/O base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
 
-    GET /runs/:id
-    DELETE /runs/:id
-    POST /runs
+```http
+GET /runs/:id
+DELETE /runs/:id
+POST /runs
+```
 
 ## Route details
 
@@ -255,49 +261,51 @@ curl https://splits.io/api/v3/runs/c6
 ```
 
 ##### Example response
-```json{
-"run": {
-  "id": 438,
-  "path": "/c6",
-  "name": "Sonic Colors",
-  "program": "wsplit",
-  "image_url": null,
-  "created_at": "2014-03-09T19:07:46.483Z",
-  "updated_at": "2016-01-27T15:42:02.834Z",
-  "video_url": null,
-  "splits": [
-    {
-      "name": "Rotatatron",
-      "duration": 501.7,
-      "finish_time": 501.7,
-      "best": {
-        "duration": 462.85
+```json
+{
+  "run": {
+    "id": 438,
+    "path": "/c6",
+    "name": "Sonic Colors",
+    "program": "wsplit",
+    "image_url": null,
+    "created_at": "2014-03-09T19:07:46.483Z",
+    "updated_at": "2016-01-27T15:42:02.834Z",
+    "video_url": null,
+    "splits": [
+      {
+        "name": "Rotatatron",
+        "duration": 501.7,
+        "finish_time": 501.7,
+        "best": {
+          "duration": 462.85
+        },
+        "history": null,
+        "gold": false,
+        "skipped": false,
+        "reduced": false
       },
-      "history": null,
-      "gold": false,
-      "skipped": false,
-      "reduced": false
-    },
-    ...
-    {
-      "name": "Epilogue",
-      "duration": 44.719999999999345,
-      "finish_time": 5083.74,
-      "best": {
-        "duration": 44.7199999999993
-      },
-      "history": null,
-      "gold": true,
-      "skipped": false,
-      "reduced": false
-    }
-  ],
-  "attempts": 9,
-  "sum_of_best": 5009.42,
-  "user": { ... }
-  "game": { ... }
-  "category": { ... },
-  "time": 5083.74
+      ...
+      {
+        "name": "Epilogue",
+        "duration": 44.719999999999345,
+        "finish_time": 5083.74,
+        "best": {
+          "duration": 44.7199999999993
+        },
+        "history": null,
+        "gold": true,
+        "skipped": false,
+        "reduced": false
+      }
+    ],
+    "attempts": 9,
+    "sum_of_best": 5009.42,
+    "user": { ... }
+    "game": { ... }
+    "category": { ... },
+    "time": 5083.74
+  }
 }
 ```
 
