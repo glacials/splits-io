@@ -18,6 +18,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
       new_extension = Run.program(params[:format]).file_extension
     else
       new_extension = params[:format]
+    end
 
     filename_without_extension = params[:file].original_filename.split(old_extension)[0]
 
