@@ -39,8 +39,8 @@ class RunsController < ApplicationController
       redirect_to edit_run_path(@run), alert: "There was an error saving that data. Please try again."
     end
 
-    if params[@run.id36][:category]
-      @run.update(category: Category.find(params[@run.id36][:category]))
+    if params[@run.id36][:category][:category]
+      @run.update(category: Category.find(params[@run.id36][:category][:category]))
       redirect_to edit_run_path(@run), notice: 'Game/category updated.'
       return
     end
