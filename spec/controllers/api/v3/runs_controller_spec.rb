@@ -33,6 +33,7 @@ describe Api::V3::RunsController do
         ],
         read_attribute_for_serialization: self,
       )
+      create(:run)
     end
 
     context 'when given a valid id' do
