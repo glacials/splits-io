@@ -309,7 +309,7 @@ class Run < ApplicationRecord
 
   def remove_file
     if run_file.nil?
-      $s3_client.delete(id36)
+      $s3_bucket.object("splits/#{id36}").delete
     else
       if run_file.runs.count.zero?
         run_file.destroy
