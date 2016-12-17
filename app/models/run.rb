@@ -19,6 +19,8 @@ class Run < ApplicationRecord
   after_create :refresh_game
   after_create :discover_runner
 
+  after_destroy :remove_file
+
   #validates :run_file, presence: true
   validates_with RunValidator
 
@@ -174,9 +176,9 @@ class Run < ApplicationRecord
           splits: resp['splits'].map do |split|
             s = Split.new
             s.name = split['title']
-            s.duration = split['duration_in_seconds'].round(2)
-            s.finish_time = split['finish_time'].round(2)
-            s.best = split['best'].try(:round, 2)
+            s.duration = split['duration_in_seconds'].to_f
+            s.finish_time = split['finish_time'].to_f
+            s.best = split['best'].to_f
             s.gold = split['gold?']
             s.skipped = split['skipped?']
             s.reduced = split['reduced?']
@@ -241,7 +243,6 @@ class Run < ApplicationRecord
           }
         )
       end
-
       return parse_result
     end
 
@@ -306,12 +307,22 @@ class Run < ApplicationRecord
     delay.set_runner_from_srdc
   end
 
+  def remove_file
+    if run_file.nil?
+      $s3_client.delete(id36)
+    else
+      if run_file.runs.count.zero?
+        run_file.destroy
+      end
+    end
+  end
+
   def filename(timer: Run.program(self.timer))
     "#{to_param}.#{timer.file_extension}"
   end
 
   def original_file
-    if timer.to_sym == :llanfair && file.is_a?(Array)
+    if timer.to_sym == :llanfair && file[0] == "["
       RunFile.pack_binary(file)
     else
       file

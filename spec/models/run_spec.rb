@@ -157,7 +157,7 @@ describe Run, type: :model do
     end
 
     it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:history]).to eq []
+      expect(run.parse(fast: true)[:history]).to be_nil
     end
 
     it 'reports correct history when using slow parsing' do
@@ -217,7 +217,7 @@ describe Run, type: :model do
     end
 
     it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:history]).to eq []
+      expect(run.parse(fast: true)[:history]).to be_nil
     end
 
     it 'reports correct history when using slow parsing' do

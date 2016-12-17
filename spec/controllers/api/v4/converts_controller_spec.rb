@@ -19,7 +19,7 @@ describe Api::V4::ConvertsController do
         end
 
         it 'has the correct splits' do
-          expect(body['splits'].map { |s| [s['name'], s['duration']] }).to eq [
+          expect(body['run']['splits'].map { |s| [s['name'], s['duration']] }).to eq [
             ['Spiral Mountain', 211.23],
             ["Mumbo's Mountain", 808.2]
           ]

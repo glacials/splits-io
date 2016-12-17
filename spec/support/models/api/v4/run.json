@@ -3,7 +3,6 @@
   "required": [
     "id",
     "srdc_id",
-    "name",
     "time",
     "program",
     "attempts",
@@ -23,9 +22,6 @@
     "srdc_id": {
       "type": ["string", "null"]
     },
-    "name": {
-      "type": "string"
-    },
     "time": {
       "type": "number",
       "minimum": 0
@@ -43,7 +39,7 @@
       }
     },
     "attempts": {
-      "type": "number"
+      "type": ["number", "null"]
     },
     "image_url": {
       "type": [

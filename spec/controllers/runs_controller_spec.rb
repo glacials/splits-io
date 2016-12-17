@@ -65,16 +65,16 @@ describe RunsController do
       context 'by a logged-in user' do
         before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
 
-        it 'returns a 401' do
-          expect(response).to have_http_status(401)
+        it 'returns a 403' do
+          expect(response).to have_http_status(403)
         end
       end
 
       context 'by a logged-out user' do
         before { allow(controller).to receive(:current_user).and_return(nil) }
 
-        it 'returns a 401' do
-          expect(response).to have_http_status(401)
+        it 'returns a 403' do
+          expect(response).to have_http_status(403)
         end
       end
     end
@@ -86,16 +86,16 @@ describe RunsController do
         context "because they're not logged in" do
           before { allow(controller).to receive(:current_user).and_return(nil) }
 
-          it 'returns a 401' do
-            expect(response).to have_http_status(401)
+          it 'returns a 403' do
+            expect(response).to have_http_status(403)
           end
         end
 
         context "because they're a different user" do
           before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
 
-          it 'returns a 401' do
-            expect(response).to have_http_status(401)
+          it 'returns a 403' do
+            expect(response).to have_http_status(403)
           end
         end
       end
@@ -115,7 +115,7 @@ describe RunsController do
       let(:response) do
         put(:update, params: {
           'run' => run.id36,
-          "#{run.id36}[category]" => {category: FactoryGirl.create(:category).id}
+          "#{run.id36}[category]" => FactoryGirl.create(:category).id
         })
       end
 
@@ -125,16 +125,16 @@ describe RunsController do
         context 'by a logged-in user' do
           before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
 
-          it 'returns a 401' do
-            expect(response).to have_http_status(401)
+          it 'returns a 403' do
+            expect(response).to have_http_status(403)
           end
         end
 
         context 'by a logged-out user' do
           before { allow(controller).to receive(:current_user).and_return(nil) }
 
-          it 'returns a 401' do
-            expect(response).to have_http_status(401)
+          it 'returns a 403' do
+            expect(response).to have_http_status(403)
           end
         end
       end
@@ -146,16 +146,16 @@ describe RunsController do
           context "because they're not logged in" do
             before { allow(controller).to receive(:current_user).and_return(nil) }
 
-            it 'returns a 401' do
-              expect(response).to have_http_status(401)
+            it 'returns a 403' do
+              expect(response).to have_http_status(403)
             end
           end
 
           context "because they're a different user" do
             before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
 
-            it 'returns a 401' do
-              expect(response).to have_http_status(401)
+            it 'returns a 403' do
+              expect(response).to have_http_status(403)
             end
           end
         end
@@ -184,16 +184,16 @@ describe RunsController do
       context 'by a logged-in user' do
         before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
 
-        it 'returns a 401' do
-          expect(response).to have_http_status(401)
+        it 'returns a 403' do
+          expect(response).to have_http_status(403)
         end
       end
 
       context 'by a logged-out user' do
         before { allow(controller).to receive(:current_user).and_return(nil) }
 
-        it 'returns a 401' do
-          expect(response).to have_http_status(401)
+        it 'returns a 403' do
+          expect(response).to have_http_status(403)
         end
       end
     end
@@ -205,16 +205,16 @@ describe RunsController do
         context "because they're not logged in" do
           before { allow(controller).to receive(:current_user).and_return(nil) }
 
-          it 'returns a 401' do
-            expect(response).to have_http_status(401)
+          it 'returns a 403' do
+            expect(response).to have_http_status(403)
           end
         end
 
         context "because they're a different user" do
           before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
 
-          it 'returns a 401' do
-            expect(response).to have_http_status(401)
+          it 'returns a 403' do
+            expect(response).to have_http_status(403)
           end
         end
       end
