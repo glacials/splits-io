@@ -76,6 +76,13 @@ class RunsController < ApplicationController
   end
 
   def download
+    # Enable CORS for this endpoint so clients can download files; this should be an API endpoint but I'm not sure how I
+    # want the timer-specific views to belong to both an API namespace and a user namespace
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+
     timer = Run.program(params[:timer])
     if timer.nil?
       redirect_to run_path(@run), alert: 'Unrecognized timer.'
