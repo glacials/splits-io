@@ -44,7 +44,17 @@ module LlanfairGered
 
         segment.name = xml_segment.at('Segment > default > name').content
         segment.best = seconds(xml_segment.at('Segment > default > bestTime > milliseconds').content)
-        segment.duration = seconds(xml_segment.at('Segment > default > runTime > milliseconds').content)
+
+        duration = nil
+
+        ref = xml_segment.at('Segment > default > runTime').attributes['reference']
+        if !ref.nil? && ref.value == '../bestTime'
+          duration = xml_segment.at('Segment > default > bestTime > milliseconds').content
+        else
+          duration = xml_segment.at('Segment > default > runTime > milliseconds').content
+        end
+        segment.duration = seconds(duration)
+
         segment.finish_time = segment.start_time + segment.duration
 
         run[:splits] << segment

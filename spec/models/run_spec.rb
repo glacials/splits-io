@@ -283,5 +283,23 @@ describe Run, type: :model do
         ["Hammers of Fortune", 46.08]
       ]
     end
+
+    context 'with reference attributes' do
+      let(:run) do
+        FactoryGirl.create(:llanfair_gered_run)
+      end
+      it 'has the correct splits' do
+        expect(run.splits.map { |s| [s.name, s.duration.to_f] }).to eq [
+          ["1-1", 32.18],
+          ["1-2", 31.47],
+          ["4-1", 37.4],
+          ["4-2", 29.39],
+          ["Pipe Jump City", 51.03],
+          ["Jumping Koopas", 37.03],
+          ["Count To 4", 35.31],
+          ["Hammers of Fortune", 46.08]
+        ]
+      end
+    end
   end
 end
