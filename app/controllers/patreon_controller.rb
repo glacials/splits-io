@@ -38,7 +38,7 @@ class PatreonController < ApplicationController
 
     patreon_user = {
       'user_id' => current_user.id.to_s,
-      'acess_token' => access_token,
+      'access_token' => access_token,
       'refresh_token' => refresh_token,
 
       'patreon_id' => @user['id'],
