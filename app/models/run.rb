@@ -36,7 +36,15 @@ class Run < ApplicationRecord
       [LlanfairGered, Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
     end
 
+    def exportable_programs
+      [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+    end
+
     def program(string_or_symbol)
+      if Run.programs.include?(string_or_symbol)
+        return string_or_symbol
+      end
+
       program_strings = Run.programs.map(&:to_sym).map(&:to_s)
       h = Hash[program_strings.zip(Run.programs)]
       h[string_or_symbol.to_s]

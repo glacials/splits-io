@@ -5,10 +5,11 @@
   = render partial: 'runs/title', locals: {run: @run}
   h6
     span#download-menu
-      => link_to @run.timer, download_path(@run, @run.timer), onclick: 'hide_download_menu()'
-      - ([:wsplit, :timesplittracker, :splitterz, :livesplit, :urn] - [@run.timer.to_sym]).each do |timer|
+      - timer = Run.program(@run.timer)
+      => link_to timer.to_s, download_path(@run, timer.to_sym), onclick: 'hide_download_menu()'
+      - (Run.exportable_programs - [Run.program(@run.timer)]).each do |timer|
         | &bull;
-        =<> link_to timer, download_path(@run, timer), onclick: 'hide_download_menu()'
+        =<> link_to timer.to_s, download_path(@run, timer.to_sym), onclick: 'hide_download_menu()'
     ul.run-options
       li
         a.fake-link#download-link onclick='toggle_download_menu()' ↓ download

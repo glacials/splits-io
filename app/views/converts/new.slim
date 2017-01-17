@@ -3,11 +3,13 @@
   h2 convert splits to other cool formats
 article
   form#convert method="post" action="" enctype="multipart/form-data"
-    .form-group.col-sm-4
+    .form-group.col-sm-3
       input type="file" name="file"
+    .form-group.col-sm-1
+      | →
     .form-group.col-sm-2
       select name="format"
-        - (Run.programs - [Llanfair]).each do |prgrm|
+        - (Run.exportable_programs).each do |prgrm|
           option value="#{prgrm.to_sym}"
             = prgrm.to_s
         option value="json" JSON
