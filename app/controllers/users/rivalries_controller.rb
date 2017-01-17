@@ -25,6 +25,11 @@ class Users::RivalriesController < ApplicationController
   end
 
   def destroy
+    if cannot?(:destroy, @rivalry)
+      unauthorized
+      return
+    end
+
     if @rivalry.destroy
       redirect_to user_rivalries_path(@user), notice: 'Rivalry deleted. See? You won in the end.'
     else
@@ -35,7 +40,7 @@ class Users::RivalriesController < ApplicationController
   private
 
   def set_rivalry
-    @rivalry = Rivalry.find_by(id: params[:id]) || not_found
+    @rivalry = Rivalry.find_by(id: params[:rivalry]) || not_found
   end
 
   def set_user
