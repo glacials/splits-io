@@ -95,6 +95,10 @@ class User < ApplicationRecord
       return false
     end
 
+    if p['pledge_cents'] == 0
+      return false
+    end
+
     return true
   end
 
