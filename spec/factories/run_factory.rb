@@ -38,6 +38,10 @@ FactoryGirl.define do
       run_file RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/llanfair_gered_with_refs.lfs"))
     end
 
+    factory :wsplit_run do
+      run_file RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/wsplit"))
+    end
+
     video_url 'http://www.twitch.tv/glacials/c/3463112'
   end
 end

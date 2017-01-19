@@ -60,26 +60,39 @@ module WSplit
 
     def parse_splits(splits)
       splits.map.with_index do |split, index|
-        parse_split(split, index == 0 ? 0 : preceding_unskipped_split(splits, index).try(:finish_time).to_s.to_f)
+        parse_split(
+          split,
+          index == 0 ? 0 : preceding_unskipped_split(splits, index).try(:finish_time).to_s.to_f
+        )
       end
     end
 
-    def parse_split(segment, prev_split_finish_time)
-      Split.new(
-        best: segment.best_time.to_s.to_f,
+    def parse_split(segment, prev_segment_finish_time)
+      segment = Split.new(
         name: segment.segment_title.to_s,
-        duration: [segment.finish_time.to_s.to_f - prev_split_finish_time, 0].max,
-        finish_time: segment.finish_time.to_s.to_f
-      ).tap do |split|
-        split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
-        split.skipped = split.duration == 0
-      end
+        duration: [trunc(segment.finish_time.to_s) - trunc(prev_segment_finish_time), 0].max,
+        finish_time: trunc(segment.finish_time.to_s),
+        best: trunc(segment.best_time.to_s)
+      )
+
+      segment.gold = segment.duration > 0 && segment.duration == segment.best
+      segment.skipped = segment.duration == 0
+
+      return segment
     end
 
     def preceding_unskipped_split(splits, i)
       splits[0...i].reverse.map do |split, j|
-        return split if split.finish_time.to_s.to_f != 0
+        return split if trunc(split.finish_time.to_s) != 0
       end.last
+    end
+
+    def trunc(n)
+      if n.nil?
+        return nil
+      end
+
+      return n.to_f.to_d.truncate(2)
     end
   end
 end

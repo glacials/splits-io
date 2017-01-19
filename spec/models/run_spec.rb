@@ -288,6 +288,7 @@ describe Run, type: :model do
       let(:run) do
         FactoryGirl.create(:llanfair_gered_run)
       end
+
       it 'has the correct splits' do
         expect(run.splits.map { |s| [s.name, s.duration.to_f] }).to eq [
           ["1-1", 32.18],
@@ -300,6 +301,28 @@ describe Run, type: :model do
           ["Hammers of Fortune", 46.08]
         ]
       end
+    end
+  end
+
+  context 'from WSplit' do
+    let(:run) do
+      FactoryGirl.create(:wsplit_run)
+    end
+
+    it 'has the correct splits' do
+      expect(run.splits.map { |s| [s.name, s.duration.to_f] }).to eq [
+        ["Introduction", 85.48],
+        ["Jimmy", 134.2],
+        ["Mona", 124.07],
+        ["Dribbles", 248.24],
+        ["9-Volt", 142.99],
+        ["Jimmy", 161.37],
+        ["Dr.Crygonal", 157.08],
+        ["Orbulon", 187.27],
+        ["Kat", 221.98],
+        ["Jimmy", 177.61],
+        ["Wario", 234.06]
+      ]
     end
   end
 end
