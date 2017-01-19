@@ -50,7 +50,7 @@ html
                   = link_to "sign out", session_path(auth_session), method: :delete
               - if !current_user.patron?
                 a.yellow href='https://www.patreon.com/glacials' target='_blank'
-                img src='/patreon.png' width='20px' height='20px'
+                  img src='/patreon.png' width='20px' height='20px'
             - else
               a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign up
               a#sign-in.yellow href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign in
