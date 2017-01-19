@@ -18,20 +18,21 @@ module WSplit
   class Parser < BabelBridge::Parser
     rule :wsplit_file, :title_line, :optional_goal_line, :attempts_line, :offset_line, :size_line, many?(:splits), :icons_line
 
-    rule :title_line,         'Title=',     :title,    :newline
-    rule :optional_goal_line, 'Goal=',      :goal,     :newline
+    rule :title_line,         'Title=',     :run_title, :newline
+    rule :optional_goal_line, 'Goal=',      :goal,      :newline
     rule :optional_goal_line, ''
-    rule :attempts_line,      'Attempts=',  :attempts, :newline
-    rule :offset_line,        'Offset=',    :offset,   :newline
-    rule :size_line,          'Size=',      :size,     :newline
-    rule :splits,             :title,       ',',       :old_time, ',', :finish_time, ',', :best_time, :newline
-    rule :icons_line,         'Icons=',     /(.*)/,    :newline?
+    rule :attempts_line,      'Attempts=',    :attempts, :newline
+    rule :offset_line,        'Offset=',      :offset,   :newline
+    rule :size_line,          'Size=',        :size,     :newline
+    rule :splits,             :segment_title, ',',       :old_time, ',', :finish_time, ',', :best_time, :newline
+    rule :icons_line,         'Icons=',       /(.*)/,    :newline?
 
-    rule :title,    /([^,\r\n]*)/
-    rule :goal,     /([^,\r\n]*)/
-    rule :attempts, /(\d+)/
-    rule :offset,   /(\d*\.?\d*)/
-    rule :size,     /([^\r\n]*)/
+    rule :run_title,     /([^\r\n]*)/
+    rule :segment_title, /([^,\r\n]*)/
+    rule :goal,          /([^\r\n]*)/
+    rule :attempts,      /(\d+)/
+    rule :offset,        /(\d*\.?\d*)/
+    rule :size,          /([^\r\n]*)/
 
     rule :old_time,    :time
     rule :finish_time, :time
@@ -48,7 +49,7 @@ module WSplit
       return unless file.ascii_only?
 
       (run = super(file)) && {
-        name: run.title.to_s,
+        name: run.run_title.to_s,
         attempts: run.attempts.to_s.to_i,
         offset: run.offset.to_f,
         splits: parse_splits(run.splits)
@@ -66,7 +67,7 @@ module WSplit
     def parse_split(segment, prev_split_finish_time)
       Split.new(
         best: segment.best_time.to_s.to_f,
-        name: segment.title.to_s,
+        name: segment.segment_title.to_s,
         duration: [segment.finish_time.to_s.to_f - prev_split_finish_time, 0].max,
         finish_time: segment.finish_time.to_s.to_f
       ).tap do |split|
