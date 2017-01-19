@@ -8,7 +8,6 @@ class User < ApplicationRecord
   has_many :games, -> { distinct }, through: :runs
   has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_rivalries, class_name: Rivalry, foreign_key: :to_user_id, dependent: :destroy
-  has_many :subscriptions
 
   after_destroy do |user|
     user.runs.update_all(user_id: nil)
@@ -64,10 +63,6 @@ class User < ApplicationRecord
     false
   end
 
-  def gold?
-    permagold? || subscriptions.count > 0 || silver_patron?
-  end
-
   def should_see_ads?
     !bronze_patron?
   end
@@ -88,6 +83,19 @@ class User < ApplicationRecord
     end
 
     return resp.item
+  end
+
+  def patron?
+    p = patreon_info
+    if p.nil?
+      return false
+    end
+
+    if p['pledge_cents'].nil?
+      return false
+    end
+
+    return true
   end
 
   def bronze_patron?

@@ -11,7 +11,7 @@
             a href=user_path(user)
               h4.media-heading
                 = user
-                - if user.gold?
+                - if user.silver_patron?
                   .gold-split title='Patron'
             - user.games.reject { |game| game.name.blank? }.each do |game|
               => link_to(game.shortname || game.name.downcase, game, class: 'stealth-link game-link')

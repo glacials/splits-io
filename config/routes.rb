@@ -4,7 +4,6 @@ SplitsIO::Application.routes.draw do
   get '/faq', to: 'pages#faq', as: :faq
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
-  get '/why/gold', to: 'why#gold', as: :why_gold
 
   get '/health', to: 'health#index'
 
@@ -30,10 +29,6 @@ SplitsIO::Application.routes.draw do
 
   get '/auth/failure', to: 'sessions#failure'
   get '/auth/:provider/callback', to: 'sessions#create'
-
-  get    '/gold', to: 'subscriptions#show', as: :subscription
-  post   '/gold', to: 'subscriptions#create'
-  delete '/gold', to: 'subscriptions#destroy'
 
   resources :sessions, only: [:destroy]
 

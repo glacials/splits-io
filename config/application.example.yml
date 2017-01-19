@@ -35,9 +35,6 @@ development:
   STRIPE_PUBLISHABLE_KEY:
   STRIPE_SECRET_KEY:
 
-  # Enable or diable the Gold feature. 1 is on, anything else is off.
-  GOLD: "1"
-
   PATREON_CLIENT_ID:
   PATREON_CLIENT_SECRET:
 

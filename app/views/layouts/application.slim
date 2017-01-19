@@ -40,19 +40,17 @@ html
               a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'selected' : '')
                 small = '∨ '
                 = current_user.name
-                - if current_user.gold?
+                - if current_user.silver_patron?
                   .gold-split title='Patron'
               ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
                 li role=:presentation
                   = link_to "profile", user_path(current_user)
                   = link_to "settings", settings_path
                   = link_to "tools", tools_path
-                  - if ENV['GOLD'] == '1'
-                    - if current_user.gold?
-                      = link_to "manage gold", subscription_path
-                    - else
-                      = link_to "go gold", subscription_path
                   = link_to "sign out", session_path(auth_session), method: :delete
+              - if !current_user.patron?
+                a.yellow href='https://www.patreon.com/glacials' target='_blank'
+                img src='/patreon.png' width='20px' height='20px'
             - else
               a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign up
               a#sign-in.yellow href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign in
@@ -69,7 +67,7 @@ html
       footer#footer
         = yield(:footer)
         small.pull-right style='text-align: right;'
-          a href='https://patreon.com/glacials' patreon :]
+          a href='https://patreon.com/glacials' by glacials :]
           br
           a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' target=:_blank api
           span<> &bull;

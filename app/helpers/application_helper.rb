@@ -11,7 +11,7 @@ module ApplicationHelper
 
   def on_page
     {
-      index: request.path == root_path || request.path == subscription_path,
+      index: request.path == root_path,
       upload: request.path == new_run_path,
       games: request.path.match(games_path),
       rivalries: current_user.present? && request.path == user_rivalries_path(current_user),
