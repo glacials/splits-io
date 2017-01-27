@@ -52,7 +52,9 @@ module WSplit
         name: run.run_title.to_s,
         attempts: run.attempts.to_s.to_i,
         offset: run.offset.to_f,
-        splits: parse_splits(run.splits)
+        splits: parse_splits(run.splits),
+        history: [],
+        indexed_history: {}
       }
     end
 

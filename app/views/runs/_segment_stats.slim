@@ -1,0 +1,45 @@
+.row
+  .col-md-8.col-md-offset-2
+    h3 Segment stats
+    .badge
+      a href=segment_history_csv_path ↓ download segment history csv
+    table.table.table-striped
+      thead
+        tr
+          th.align-right #
+          th.align-left Name
+          th.align-right Mean
+          th.align-right Median
+          th.align-right
+            span Standard deviation
+            small.tip-html< title="A low standard deviation indicates consistency" = "(?)"
+          th.align-right
+            span 90th percentile
+            small.tip-html< title="90% of this segment's times are faster than this" = "(?)"
+          th.align-right
+            span 99th percentile
+            small.tip-html< title="99% of this segment's times are faster than this" = "(?)"
+      tbody
+        - run.dynamodb_segments.each_with_index do |segment, index|
+          - history = segment.dynamodb_history
+          - if history.nil? || history.length == 0
+            tr
+              td.align-right= index + 1
+              td.align-left= segment.name.present? ? segment.name : '-'
+              td.align-right colspan=99
+                i no segment history available
+          - else
+            - unskipped_history = history.map { |h| h['duration_seconds'] }.reject { |t| t == 0 }
+            tr
+              td.align-right= index + 1
+              td.align-left= segment.name.present? ? segment.name : '-'
+              td.align-right.time.needs-formatting class=('short' if short)
+                = unskipped_history.mean
+              td.align-right.time.needs-formatting class=('short' if short)
+                = unskipped_history.median
+              td.align-right.time.needs-formatting class=('short' if short)
+                = unskipped_history.standard_deviation
+              td.align-right.time.needs-formatting class=('short' if short)
+                = unskipped_history.percentile(90)
+              td.align-right.time.needs-formatting class=('short' if short)
+                = unskipped_history.percentile(99)

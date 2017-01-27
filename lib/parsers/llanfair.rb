@@ -26,7 +26,10 @@ module Llanfair
         file = character_array
       end
 
-      run = {}
+      run = {
+        history: [],
+        indexed_history: {}
+      }
       run[:time] = 0
       # A port of Nitrofski's import llanfair files function for wsplit
       file = StringIO.new(file)

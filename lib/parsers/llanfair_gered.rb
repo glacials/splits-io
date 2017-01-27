@@ -30,7 +30,9 @@ module LlanfairGered
         game: nil,
         category: nil,
         attempts: xml.at('Run > Run > default > numberOfAttempts'),
-        splits: []
+        splits: [],
+        history: [],
+        indexed_history: {}
       }
 
       xml.search('Run > Run > default > segments > Segment').each do |xml_segment|

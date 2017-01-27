@@ -195,7 +195,7 @@ the run.
 
 ## Converting
 ```bash
-curl -X POST https://splits.io/api/v4/convert?program=livesplit --form file=@/path/to/file
+curl -X POST https://splits.io/api/v4/convert?format=livesplit --form file=@/path/to/file
 ```
 When converting between timer formats, the file and program parameters must be included. If you are converting a
 LiveSplit file and would like to include the history, then the `historic=1` parameter can also be included.  The JSON

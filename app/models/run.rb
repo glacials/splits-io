@@ -1,10 +1,12 @@
 Dir['./lib/parsers/*'].each { |file| require file }
 
 class Run < ApplicationRecord
-  include PadawanRun
-  include ForgetfulPersonsRun
-  include SRDCRun
   include CompletedRun
+  include DynamoDBRun
+  include ForgetfulPersonsRun
+  include PadawanRun
+  include SRDCRun
+  include UnparsedRun
 
   include ActionView::Helpers::DateHelper
 
@@ -78,183 +80,22 @@ class Run < ApplicationRecord
   end
 
   def program
-    read_attribute(:program) || parse[:timer]
+    timer
   end
 
   def timer
-    program
-  end
-
-  def dynamo(attr)
-    parse(fast: true)[attr.to_sym]
-  end
-
-  def parse_into_dynamodb
-    timer_used = nil
-    parse_result = nil
-
-    Run.programs.each do |timer|
-      parse_result = timer::Parser.new.parse(file, fast: true)
-
-      if parse_result.present?
-        timer_used = timer.to_sym
-        break
-      end
+    p = read_attribute(:program)
+    if p.present?
+      return p
     end
 
-    return false if timer_used.nil?
-
-    if game.nil? || category.nil?
-      populate_category(parse_result[:game], parse_result[:category])
-      save
+    r = dynamodb_info
+    if r.nil?
+      parse_into_dynamodb
+      r = dynamodb_info
     end
 
-    splits = parse_result[:splits].map do |split|
-      {
-        'title' => split.name.presence,
-        'duration_in_seconds' => split.duration,
-        'finish_time' => split.finish_time,
-        'best' => split.best,
-        'gold?' => split.gold?,
-        'skipped?' => split.skipped?,
-        'reduced?' => split.reduced?
-      }
-    end
-
-    run = {
-      'id' => id36,
-      'timer' => timer_used.to_s,
-      'attempts' => parse_result[:attempts],
-      'srdc_id' => srdc_id || parse_result[:srdc_id].presence,
-      'duration_in_seconds' => parse_result[:splits].map { |split| split.duration }.sum.to_f,
-      'sum_of_best' => parse_result[:splits].map.all? do |split|
-          split.best.present?
-        end && parse_result[:splits].map do |split|
-          split.best
-        end.sum.to_f,
-      'splits' => splits
-    }
-
-    $dynamodb_splits.put_item(item: run)
-  end
-
-  def fetch_from_dynamodb
-    key = {id: id36}
-    attrs = 'id, timer, attempts, srdc_id, duration_in_seconds, sum_of_best, splits'
-
-    options = {
-      key: key,
-      projection_expression: attrs
-    }
-
-    resp = $dynamodb_splits.get_item(options)
-    resp.item
-  end
-
-  def parses?(fast: true, convert: false)
-    parse(fast: fast, convert: convert).present?
-  end
-
-  def parse(fast: true, convert: false)
-    return @parse_cache[fast] if @parse_cache.try(:[], fast).present?
-    return @parse_cache[false] if @parse_cache.try(:[], false).present?
-    return @convert_cache if @convert_cache.present?
-
-    if fast && !convert
-      resp = fetch_from_dynamodb
-      if resp.blank?
-        parse_into_dynamodb
-        resp = fetch_from_dynamodb
-      end
-
-      if resp.present?
-        update(
-          srdc_id: resp['srdc_id'],
-          time: resp['duration_in_seconds'],
-          sum_of_best: resp['sum_of_best']
-        )
-
-        return {
-          id: resp['id'],
-          timer: resp['timer'],
-          attempts: resp['attempts'],
-          srdc_id: resp['srdc_id'],
-          duration: resp['duration_in_seconds'],
-          sum_of_best: resp['sum_of_best'],
-          splits: resp['splits'].map do |split|
-            s = Split.new
-            s.name = split['title']
-            s.duration = split['duration_in_seconds'].to_f
-            s.finish_time = split['finish_time'].to_f
-            s.best = split['best'].to_f
-            s.gold = split['gold?']
-            s.skipped = split['skipped?']
-            s.reduced = split['reduced?']
-            s
-          end
-        }.merge(resp)
-      end
-    end
-
-    Run.programs.each do |timer|
-      parse_result = timer::Parser.new.parse(file, fast: fast)
-      next if parse_result.blank?
-
-      parse_result[:timer] = timer.to_sym
-      assign_attributes(
-        program: parse_result[:timer],
-        attempts: parse_result[:attempts],
-        srdc_id: srdc_id || parse_result[:srdc_id].presence,
-        time: parse_result[:splits].map { |split| split.duration }.sum.to_f,
-        sum_of_best: parse_result[:splits].map.all? do |split|
-          split.best.present?
-        end && parse_result[:splits].map do |split|
-          split.best
-        end.sum.to_f
-      )
-
-      if convert
-        @convert_cache = parse_result
-      else
-        populate_category(parse_result[:game], parse_result[:category])
-        save
-      end
-
-      @parse_cache = (@parse_cache || {}).merge(fast => parse_result)
-
-      if fast && !convert
-        splits = parse_result[:splits].map do |split|
-          {
-            'title' => split.name.presence,
-            'duration_in_seconds' => split.duration,
-            'finish_time' => split.finish_time,
-            'best' => split.best,
-            'gold?' => split.gold?,
-            'skipped?' => split.skipped?,
-            'reduced?' => split.reduced?
-          }
-        end
-
-        $dynamodb_splits.put_item(
-          item: {
-            'id' => id36,
-            'timer' => parse_result[:timer],
-            'attempts' => parse_result[:attempts],
-            'srdc_id' => srdc_id || parse_result[:srdc_id].presence,
-            'duration_in_seconds' => parse_result[:splits].map { |split| split.duration }.sum.to_f,
-            'sum_of_best' => parse_result[:splits].map.all? do |split|
-                split.best.present?
-              end && parse_result[:splits].map do |split|
-                split.best
-              end.sum.to_f,
-            'splits' => splits
-          }
-        )
-      end
-      return parse_result
-    end
-
-    {}
+    r['timer']
   end
 
   def to_param

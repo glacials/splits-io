@@ -14,7 +14,8 @@ $ ->
   seg_histories = []
   hidden_data = []
   $.each gon.run.raw_splits, (i, split) ->
-    seg_histories.push JSON.parse(JSON.stringify(split.history))
+    attempt_durations = split.history.map((attempt) -> attempt['duration_seconds'])
+    seg_histories.push JSON.parse(JSON.stringify(attempt_durations))
     seg_histories[i].unshift split.name
     if seg_histories.length > 15 then hidden_data.push split.name
   c3.generate({

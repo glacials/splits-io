@@ -28,4 +28,8 @@ class Api::V4::Convert::RunSerializer < Api::V4::ApplicationSerializer
       [object.user]
     end
   end
+
+  def splits
+    object.parse[:splits]
+  end
 end

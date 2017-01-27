@@ -9,7 +9,8 @@ $ ->
   $.each gon.run.raw_splits, (i, split) ->
     if split.history is [] or split.history is null
       return
-    time = d3.round(d3.mean(split.history) - split.best, 2)
+    attempt_durations = split.history.map((attempt) -> attempt['duration_seconds'])
+    time = d3.round(d3.mean(attempt_durations) - split.best, 2)
     return if time <= 0
     split_history_data.push time
     split_history_ticks.push split.name

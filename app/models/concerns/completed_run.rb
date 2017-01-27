@@ -5,7 +5,14 @@ module CompletedRun
 
   included do
     def splits
-      parse[:splits] || []
+      segments
+    end
+
+    def segments
+      if @segments_cache.nil?
+        @segments_cache = (dynamodb_segments || [])
+      end
+      return @segments_cache
     end
 
     def shortest_segment
@@ -27,7 +34,7 @@ module CompletedRun
     end
 
     def history
-      parse(fast: false)[:history] || []
+      dynamodb_history
     end
 
     def best_known?

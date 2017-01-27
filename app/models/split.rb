@@ -1,7 +1,8 @@
 class Split
-  attr_accessor :name, :duration, :start_time, :finish_time, :best, :history, :indexed_history, :gold, :skipped, :reduced
+  attr_accessor :id, :name, :duration, :start_time, :finish_time, :best, :history, :indexed_history, :gold, :skipped, :reduced
 
   def initialize(h = {})
+    @id = h[:id]
     @name = h[:name]
     @duration = h[:duration]
     @start_time = h[:start_time]
@@ -28,6 +29,7 @@ class Split
 
   def to_h
     {
+      id: id,
       name: name,
       duration: duration,
       start_time: start_time,
@@ -40,6 +42,7 @@ class Split
 
   def serializable_hash
     {
+      id: id,
       name: name,
       duration: duration,
       start_time: start_time,
@@ -48,5 +51,26 @@ class Split
       gold: gold,
       skipped: skipped,
     }.compact
+  end
+
+  def dynamodb_history
+    attrs = 'segment_id, attempt_number, duration_seconds'
+
+    resp = $dynamodb_segment_histories.query(
+      key_condition_expression: 'segment_id = :segment_id',
+      expression_attribute_values: {
+        ':segment_id' => id,
+      },
+      projection_expression: attrs
+    )
+
+    attempts = resp.items
+
+    attempts.each do |attempt|
+      attempt['attempt_number'] = attempt['attempt_number'].to_i
+      attempt['duration_seconds'] = attempt['duration_seconds'].to_f
+    end
+
+    return attempts
   end
 end

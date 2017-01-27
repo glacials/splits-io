@@ -10,6 +10,11 @@
 
 = render partial: 'runs/full_timeline', locals: {run: @run}
 
+- dynamodb_info = @run.dynamodb_info
+- segments = @run.dynamodb_segments
+- sum_of_best = segments.sum { |s| s.best }
+- attempts = dynamodb_info['attempts']
+
 article#stats
   .row
     .col-md-8.col-md-offset-2
@@ -46,20 +51,20 @@ article#stats
             tr
               td
                 span Sum of best
-              td.time.needs-formatting class=('short' if @run.short?) = @run.collapsed_splits.sum { |split| split.best }
+              td.time.needs-formatting class=('short' if @run.short?) = sum_of_best
             tr
               td
                 span Total potential timesave
                 small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
-              td.time.needs-formatting class=('short' if @run.short?) = @run.time - @run.collapsed_splits.sum { |split| split.best }
+              td.time.needs-formatting class=('short' if @run.short?) = @run.time - sum_of_best
           tr
             td
               span Attempt
-            td = @run.attempts || '-'
+            td = attempts || '-'
           tr
             td
               span Splits
-            td = @run.splits.size
+            td = segments.size
           tr
             td
               span Missed splits this run
@@ -100,12 +105,7 @@ article#stats
                 span.time.needs-formatting class=('short' if @run.short?) = @run.median_segment_duration
               - else
                 span.time -
-  .row
-    .col-md-8.col-md-offset-2
-      h3 Segment stats
-      .badge
-        a href=segment_history_csv_path ↓ download segment history csv
-      = render partial: 'runs/split_stats', locals: {short: @run.short?, splits: @raw_splits}
+  = render partial: 'runs/segment_stats', locals: {run: @run, short: @run.short?, splits: @raw_splits}
   - if @run.collapsed_splits.size > 0
     hr
     #pb-graph

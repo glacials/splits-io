@@ -4,7 +4,7 @@ $ ->
 
   color_styles = ["rgba(14, 144, 210, 1)"]
 
-  duration_data = gon.run.history.map((time) -> return time)
+  duration_data = gon.run.history.map((attempt) -> return attempt['duration_seconds'])
   duration_data.unshift "Run Length"
   c3.generate({
     bindto: "#run-duration-graph",

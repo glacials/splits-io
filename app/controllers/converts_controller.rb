@@ -8,7 +8,8 @@ class ConvertsController < ApplicationController
     run_file = RunFile.for_convert(params[:file])
 
     @run = Run.new(run_file: run_file, user: nil)
-    unless @run.parses?(fast: params[:historic] != "1", convert: true)
+    parse_result = @run.parse(fast: params[:historic] != '1', convert: true)
+    if parse_result.nil? || parse_result[:program].nil?
       redirect_to cant_parse_path && return
     end
 

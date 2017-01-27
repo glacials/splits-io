@@ -2,14 +2,21 @@ class Runs::StatsController < Runs::ApplicationController
   before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
 
   def index
-    @run.parse(fast: false)
-    @raw_splits = @run.parse(fast: false)[:splits]
+    segments = @run.dynamodb_segments
+
+    full_segments = segments
+    full_segments.each do |segment|
+      segment.history = segment.dynamodb_history
+    end
+
+    attempts = @run.dynamodb_info['attempts']
+
     gon.run = {
       id: @run.id36,
-      splits: @run.collapsed_splits,
-      raw_splits: @raw_splits,
+      splits: segments,
+      raw_splits: full_segments,
       history: @run.history,
-      attempts: @run.attempts,
+      attempts: attempts,
       program: @run.program,
     }
     gon.scale_to = @run.time

@@ -5,10 +5,11 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     run_file = RunFile.for_convert(params[:file])
 
     @run = Run.new(run_file: run_file)
-    unless @run.parses?(fast: params[:historic] != "1", convert: true)
+    parse_result = @run.parse(fast: params['historic'] != '1', convert: true)
+    if parse_result.nil? || parse_result[:timer].nil?
       render status: 400, json: {
         status: 400,
-        message: "Can't parse that file. We support #{Run.programs.to_sentence}."
+        message: "Can't parse that file. We support the following input formats: #{Run.programs.to_sentence}."
       }
       return
     end
@@ -41,11 +42,11 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
   def check_parameters
     params.require(:file)
     params.require(:format)
-    supported = (Run.programs - [Llanfair]) + ["json"]
+    supported = (Run.exportable_programs.map(&:to_sym).map(&:to_s)) + ["json"]
     unless supported.map(&:to_s).include?(params[:format])
       render status: 400, json: {
         status: 400,
-        message: "Convert supports the following formats: #{supported.to_sentence}"
+        message: "Convert supports the following output formats: #{supported.to_sentence}."
       }
     end
   rescue ActionController::ParameterMissing
