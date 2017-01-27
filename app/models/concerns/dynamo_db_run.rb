@@ -13,7 +13,7 @@ module DynamoDBRun
         projection_expression: attrs
       }
 
-      resp = $dynamodb_splits.get_item(options)
+      resp = $dynamodb_runs.get_item(options)
       info = resp.item
 
       if info.present?
@@ -127,7 +127,7 @@ module DynamoDBRun
       end.sum.to_f
       }
 
-      $dynamodb_splits.put_item(item: run)
+      $dynamodb_runs.put_item(item: run)
 
       assign_attributes(
         srdc_id: run['srdc_id'],
