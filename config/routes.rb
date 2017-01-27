@@ -43,7 +43,7 @@ SplitsIO::Application.routes.draw do
 
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 
-  get '/users/:user/pbs/:game/:category', to: 'users/pbs#show', as: :user_pb
+  get '/users/:user/pbs/:game/:category(/*trailing_path)', to: 'users/pbs#show', as: :user_pb
 
   get   '/games',            to: 'games#index', as: :games
   get   '/games/:game',      to: 'games#show',  as: :game

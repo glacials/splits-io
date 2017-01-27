@@ -5,7 +5,11 @@ class Users::PbsController < ApplicationController
 
   def show
     if @user.gold_patron?
-      redirect_to run_path(@user.pb_for(@category))
+      if params[:trailing_path].nil?
+        redirect_to run_path(@user.pb_for(@category))
+      else
+        redirect_to "#{run_path(@user.pb_for(@category))}/#{params[:trailing_path]}"
+      end
     else
       redirect_to user_path(@user), alert: 'Redirectors are not enabled for this account.'
     end
