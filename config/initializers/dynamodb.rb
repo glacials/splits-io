@@ -10,11 +10,18 @@ if ENV['AWS_REGION'] == 'local'
   options.merge!(endpoint: 'http://localhost:8000')
 end
 
+$dynamodb_runs_table_name = 'splits'
+$dynamodb_run_histories_table_name = 'run_histories'
+$dynamodb_users_table_name = 'users'
+$dynamodb_patreon_users_table_name = 'patreon_users'
+$dynamodb_segments_table_name = 'segments_v1'
+$dynamodb_segment_histories_table_name = 'segment_histories'
+
 $dynamodb_client = Aws::DynamoDB::Client.new(options)
 
-if !$dynamodb_client.list_tables.table_names.include?('splits')
+if !$dynamodb_client.list_tables.table_names.include?($dynamodb_runs_table_name)
   $dynamodb_client.create_table(
-    table_name: 'splits',
+    table_name: $dynamodb_runs_table_name,
     key_schema: [
       {
         attribute_name: 'id',
@@ -34,9 +41,9 @@ if !$dynamodb_client.list_tables.table_names.include?('splits')
   )
 end
 
-if !$dynamodb_client.list_tables.table_names.include?('run_histories')
+if !$dynamodb_client.list_tables.table_names.include?($dynamodb_run_histories_table_name)
   $dynamodb_client.create_table(
-    table_name: 'run_histories',
+    table_name: $dynamodb_run_histories_table_name,
     key_schema: [
       {
         attribute_name: 'run_id',
@@ -64,9 +71,9 @@ if !$dynamodb_client.list_tables.table_names.include?('run_histories')
   )
 end
 
-if !$dynamodb_client.list_tables.table_names.include?('users')
+if !$dynamodb_client.list_tables.table_names.include?($dynamodb_users_table_name)
   $dynamodb_client.create_table(
-    table_name: 'users',
+    table_name: $dynamodb_users_table_name,
     key_schema: [
       {
         attribute_name: 'id',
@@ -86,9 +93,9 @@ if !$dynamodb_client.list_tables.table_names.include?('users')
   )
 end
 
-if !$dynamodb_client.list_tables.table_names.include?('patreon_users')
+if !$dynamodb_client.list_tables.table_names.include?($dynamodb_patreon_users_table_name)
   $dynamodb_client.create_table(
-    table_name: 'patreon_users',
+    table_name: $dynamodb_patreon_users_table_name,
     key_schema: [
       {
         attribute_name: 'user_id',
@@ -108,9 +115,9 @@ if !$dynamodb_client.list_tables.table_names.include?('patreon_users')
   )
 end
 
-if !$dynamodb_client.list_tables.table_names.include?('segments')
+if !$dynamodb_client.list_tables.table_names.include?($dynamodb_segments_table_name)
   $dynamodb_client.create_table(
-    table_name: 'segments',
+    table_name: $dynamodb_segments_table_name,
     key_schema: [
       {
         attribute_name: 'run_id',
@@ -138,9 +145,9 @@ if !$dynamodb_client.list_tables.table_names.include?('segments')
   )
 end
 
-if !$dynamodb_client.list_tables.table_names.include?('segment_histories')
+if !$dynamodb_client.list_tables.table_names.include?($dynamodb_segment_histories_table_name)
   $dynamodb_client.create_table(
-    table_name: 'segment_histories',
+    table_name: $dynamodb_segment_histories_table_name,
     key_schema: [
       {
         attribute_name: 'segment_id',
@@ -168,9 +175,27 @@ if !$dynamodb_client.list_tables.table_names.include?('segment_histories')
   )
 end
 
-$dynamodb_runs = Aws::DynamoDB::Table.new('splits', client: $dynamodb_client)
-$dynamodb_run_histories = Aws::DynamoDB::Table.new('run_histories', client: $dynamodb_client)
-$dynamodb_users = Aws::DynamoDB::Table.new('users', client: $dynamodb_client)
-$dynamodb_patreon_users = Aws::DynamoDB::Table.new('patreon_users', client: $dynamodb_client)
-$dynamodb_segments = Aws::DynamoDB::Table.new('segments_v1', client: $dynamodb_client)
-$dynamodb_segment_histories = Aws::DynamoDB::Table.new('segment_histories', client: $dynamodb_client)
+$dynamodb_runs = Aws::DynamoDB::Table.new(
+  $dynamodb_runs_table_name,
+  client: $dynamodb_client
+)
+$dynamodb_run_histories = Aws::DynamoDB::Table.new(
+  $dynamodb_run_histories_table_name,
+  client: $dynamodb_client
+)
+$dynamodb_users = Aws::DynamoDB::Table.new(
+  $dynamodb_users_table_name,
+  client: $dynamodb_client
+)
+$dynamodb_patreon_users = Aws::DynamoDB::Table.new(
+  $dynamodb_patreon_users_table_name,
+  client: $dynamodb_client
+)
+$dynamodb_segments = Aws::DynamoDB::Table.new(
+  $dynamodb_segments_table_name,
+  client: $dynamodb_client
+)
+$dynamodb_segment_histories = Aws::DynamoDB::Table.new(
+  $dynamodb_segment_histories_table_name,
+  client: $dynamodb_client
+)
