@@ -241,7 +241,7 @@ module DynamoDBRun
       # DynamoDB supports at most 25 parallel writes
       marshalled_segments.each_slice(25) do |segment_chunk|
         $dynamodb_client.batch_write_item(
-          request_items: {'segments' => segment_chunk}
+          request_items: {'segments_v1' => segment_chunk}
         )
       end
     end
