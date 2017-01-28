@@ -145,7 +145,10 @@ module DynamoDBRun
         segment.id = SecureRandom.uuid
       end
 
-      write_run_histories_to_dynamodb(parse_result[:indexed_history])
+      if parse_result[:indexed_history].present?
+        write_run_histories_to_dynamodb(parse_result[:indexed_history])
+      end
+
       write_segments_to_dynamodb(segments)
       write_segment_histories_to_dynamodb(segments)
 
