@@ -14,6 +14,12 @@ class RunsController < ApplicationController
   before_action :attempt_to_claim, only: [:show]
 
   def show
+    if params['reparse'] == '1'
+      @run.clear_dynamodb_rows
+      @run.parse_into_dynamodb
+      redirect_to run_path(@run)
+      return
+    end
   end
 
   def index

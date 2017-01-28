@@ -24,13 +24,24 @@ module DynamoDBRun
     end
 
     def dynamodb_segments
-      attrs = 'segment_number, id, title, duration_seconds, start_seconds, end_seconds, is_skipped, is_reduced, is_gold, gold_duration_seconds'
+      attrs = [
+        'segment_number',
+        'id',
+        'title',
+        'duration_seconds',
+        'start_seconds',
+        'end_seconds',
+        'is_skipped',
+        'is_reduced',
+        'is_gold',
+        'gold_duration_seconds'
+      ]
       query = {
         key_condition_expression: 'run_id = :run_id',
         expression_attribute_values: {
           ':run_id' => id36
         },
-        projection_expression: attrs
+        projection_expression: attrs.join(',')
       }
 
       resp = $dynamodb_segments.query(query)
@@ -71,14 +82,38 @@ module DynamoDBRun
         projection_expression: attrs
       )
 
-      attempts = resp.items
+      history = resp.items
+      history_map = {}
+      history.each do |attempt|
+        attempt_number = attempt['attempt_number'].to_i
+        duration_seconds = attempt['duration_seconds'].to_f
 
-      attempts.each do |attempt|
-        attempt['attempt_number'] = attempt['attempt_number'].to_i
-        attempt['duration_seconds'] = attempt['duration_seconds'].to_f
+        history_map[attempt_number] = {
+          attempt_number: attempt_number,
+          duration_seconds: duration_seconds
+        }
       end
 
-      return attempts
+      # full_history fills in all attempts, even uncompleted ones
+      attempts = dynamodb_info['attempts']
+      full_history = []
+      (1..attempts).each do |attempt_number|
+        if history_map[attempt_number].nil?
+          full_history[attempt_number] = {
+            attempt_number: attempt_number,
+            duration_seconds: nil
+          }
+          next
+        end
+
+        full_history[attempt_number] = history_map[attempt_number]
+      end
+
+      # attempts start at 1, but full_history is an array that starts at 0, so we have a nil 0th element. shift
+      # everything down 1.
+      full_history.delete_at(0)
+
+      return full_history
     end
 
     def parse_into_dynamodb
@@ -110,7 +145,7 @@ module DynamoDBRun
         segment.id = SecureRandom.uuid
       end
 
-      write_run_histories_to_dynamodb(parse_result[:history])
+      write_run_histories_to_dynamodb(parse_result[:indexed_history])
       write_segments_to_dynamodb(segments)
       write_segment_histories_to_dynamodb(segments)
 
@@ -137,9 +172,54 @@ module DynamoDBRun
       save
     end
 
+    def clear_dynamodb_rows
+      $dynamodb_runs.delete_item(
+        key: {
+          'id' => id36
+        }
+      )
+
+      query = {
+        key_condition_expression: 'run_id = :run_id',
+        expression_attribute_values: {
+          ':run_id' => id36
+        },
+        projection_expression: 'id, run_id, segment_number'
+      }
+
+      resp = $dynamodb_segments.query(query)
+
+      resp.items.each do |segment|
+        query = {
+          key_condition_expression: 'segment_id = :segment_id',
+          expression_attribute_values: {
+            ':segment_id' => segment['id']
+          },
+          projection_expression: 'attempt_number'
+        }
+
+        resp = $dynamodb_segment_histories.query(query)
+        resp.items.each do |segment_attempt|
+          $dynamodb_segment_histories.delete_item(
+            key: {
+              'segment_id' => segment['id'],
+              'attempt_number' => segment_attempt['attempt_number']
+            }
+          )
+        end
+
+        $dynamodb_segments.delete_item(
+          key: {
+            'run_id' => segment['run_id'],
+            'segment_number' => segment['segment_number']
+          }
+        )
+      end
+    end
+
     def write_run_histories_to_dynamodb(histories)
-      marshalled_histories = histories.map.with_index do |history, i|
-        marshal_history_into_dynamodb_format(history, i)
+      marshalled_histories = histories.map do |attempt_number, duration_seconds|
+        marshal_history_into_dynamodb_format(attempt_number, duration_seconds)
       end
 
       # DynamoDB supports at most 25 parallel writes
@@ -189,22 +269,22 @@ module DynamoDBRun
             'duration_seconds' => segment.duration,
             'start_seconds' => segment.start_time,
             'end_seconds' => segment.finish_time,
-            'skipped?' => segment.skipped?,
-            'reduced?' => segment.reduced?,
-            'gold?' => segment.gold?,
+            'is_skipped' => segment.skipped?,
+            'is_reduced' => segment.reduced?,
+            'is_gold' => segment.gold?,
             'gold_duration_seconds' => segment.best
           }
         }
       }
     end
 
-    def marshal_history_into_dynamodb_format(history, order)
+    def marshal_history_into_dynamodb_format(attempt_number, duration_seconds)
       {
         put_request: {
           item: {
             'run_id' => id36,
-            'attempt_number' => order,
-            'duration_seconds' => history
+            'attempt_number' => attempt_number,
+            'duration_seconds' => duration_seconds
           }
         }
       }

@@ -15,7 +15,7 @@ class Runs::StatsController < Runs::ApplicationController
       id: @run.id36,
       splits: segments,
       raw_splits: full_segments,
-      history: @run.history,
+      history: @run.dynamodb_history,
       attempts: attempts,
       program: @run.program,
     }
