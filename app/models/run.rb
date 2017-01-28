@@ -5,6 +5,7 @@ class Run < ApplicationRecord
   include DynamoDBRun
   include ForgetfulPersonsRun
   include PadawanRun
+  include S3Run
   include SRDCRun
   include UnparsedRun
 

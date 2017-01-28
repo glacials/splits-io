@@ -54,7 +54,7 @@ class Split
   end
 
   def dynamodb_history
-    attrs = 'segment_id, attempt_number, duration_seconds'
+    attrs = 'attempt_number, duration_seconds'
 
     resp = $dynamodb_segment_histories.query(
       key_condition_expression: 'segment_id = :segment_id',

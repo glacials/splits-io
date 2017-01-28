@@ -16,8 +16,8 @@ article
     ol
       li Even if the limit is really really high, it's still there, and that irks me.
       li As more runs get uploaded, the chance of generating a URL that's already in use rises. When one that's in use
-         gets generated, we just try again until one works. So the expected time it takes to generate one sort of rises
-         with every run uploaded. Again this is pretty negligible, especially this early on, but again with the irking.
+         gets generated, we just try again until one works. So the expected time it takes to generate one rises with
+         every run uploaded. Again this is pretty negligible, especially this early on, but again with the irking.
       li
          span> URLs are longer than they need to be. We're not taking advantage of the
          code = '(64^1) + (64^2) + (64^3) = 266 304'
@@ -31,8 +31,7 @@ article
             base 36 from the base 10 IDs that runs already have, which is how it probably should be. So we're actually
             getting
       code = '(36^1) + (36^2) + (36^3) = 47 988'
-      span< 1-3 character URLs. We've still got #{47_988 - Run.count} uploads before we hit the point when the fourth
-            character starts kicking in!
+      span< 1-3 character URLs.
     p
       span I realize that changing stuff around like this contradicts the very idea of a permalink. My hope is that with
            this cleaner system, permalink fetching/generation will be more efficient and will be sludging up

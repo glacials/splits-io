@@ -61,7 +61,7 @@ module DynamoDBRun
     end
 
     def dynamodb_history
-      attrs = 'run_id, attempt_number, duration_seconds'
+      attrs = 'attempt_number, duration_seconds'
 
       resp = $dynamodb_run_histories.query(
         key_condition_expression: 'run_id = :run_id',

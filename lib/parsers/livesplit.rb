@@ -56,6 +56,16 @@ module LiveSplit
         time: 0,
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
 
+      indexed_history = {}
+      (xml['AttemptHistory'][0]['Attempt'] || []).each do |t|
+        if t['RealTime'].nil?
+          next
+        end
+
+        indexed_history[t['id'].to_i] = duration_in_seconds_of(t['RealTime'][0].strip)
+      end
+      run[:indexed_history] = indexed_history
+
       run[:splits] = xml['Segments'][0]['Segment'].map do |segment|
         split = Split.new
         split.name = segment['Name'][0].presence || ''
@@ -105,6 +115,16 @@ module LiveSplit
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
+
+      indexed_history = {}
+      (xml['AttemptHistory'][0]['Attempt'] || []).each do |t|
+        if t['RealTime'].nil?
+          next
+        end
+
+        indexed_history[t['id'].to_i] = duration_in_seconds_of(t['RealTime'][0].strip)
+      end
+      run[:indexed_history] = indexed_history
 
       run[:splits] = xml['Segments'][0]['Segment'].map do |segment|
         split = Split.new
