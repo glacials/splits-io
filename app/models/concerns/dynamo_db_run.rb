@@ -97,7 +97,7 @@ module DynamoDBRun
       # full_history fills in all attempts, even uncompleted ones
       attempts = dynamodb_info['attempts']
       full_history = []
-      (1..attempts).each do |attempt_number|
+      (1..history.last['attempt_number']).each do |attempt_number|
         if history_map[attempt_number].nil?
           full_history[attempt_number] = {
             attempt_number: attempt_number,
