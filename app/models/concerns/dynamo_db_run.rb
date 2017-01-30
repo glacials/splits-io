@@ -83,6 +83,10 @@ module DynamoDBRun
       )
 
       history = resp.items
+      if history.length == 0
+        return []
+      end
+
       history_map = {}
       history.each do |attempt|
         attempt_number = attempt['attempt_number'].to_i
