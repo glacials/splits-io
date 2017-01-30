@@ -122,7 +122,8 @@ class Run < ApplicationRecord
   CATEGORY_ALIASES = {
     "Any% (NG+)" => "Any% NG+",
     "Any% (New Game+)" => "Any% NG+",
-    "Any %" => "Any%"
+    "Any %" => "Any%",
+    "All Skills No OOB" => "All Skills no OOB no TA" # for ori_de
   }
 
   def populate_category(game_string, category_string)
