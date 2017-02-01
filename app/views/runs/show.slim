@@ -7,6 +7,8 @@
     span#download-menu
       - timer = Run.program(@run.timer)
       => link_to timer.to_s, download_path(@run, timer.to_sym), onclick: 'hide_download_menu()'
+      | &bull;
+      =<> link_to 'LiveSplit One', "https://cryze.github.io/LiveSplitOne/#/splits-io/#{@run.id36}", target: '_blank'
       - (Run.exportable_programs - [Run.program(@run.timer)]).each do |timer|
         | &bull;
         =<> link_to timer.to_s, download_path(@run, timer.to_sym), onclick: 'hide_download_menu()'
