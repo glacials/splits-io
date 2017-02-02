@@ -90,7 +90,7 @@ module DynamoDBRun
       history_map = {}
       history.each do |attempt|
         attempt_number = attempt['attempt_number'].to_i
-        duration_seconds = attempt['duration_seconds'].to_f
+        duration_seconds = attempt['duration_seconds'].try(:to_f)
 
         history_map[attempt_number] = {
           attempt_number: attempt_number,
