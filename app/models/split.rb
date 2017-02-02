@@ -64,13 +64,36 @@ class Split
       projection_expression: attrs
     )
 
-    attempts = resp.items
-
-    attempts.each do |attempt|
-      attempt['attempt_number'] = attempt['attempt_number'].to_i
-      attempt['duration_seconds'] = attempt['duration_seconds'].to_f
+    history = resp.items
+    if history.length == 0
+      return []
     end
 
-    return attempts
+    history_map = {}
+    history.each do |attempt|
+      attempt_number = attempt['attempt_number'].to_i
+      duration_seconds = attempt['duration_seconds'].to_f
+
+      history_map[attempt_number] = {
+        attempt_number: attempt_number,
+        duration_seconds: duration_seconds
+      }
+    end
+
+    # full_history fills in all attempts, even uncompleted ones
+    full_history = []
+    (1..history.last['attempt_number']).each do |attempt_number|
+      if history_map[attempt_number].nil?
+        full_history << {
+          attempt_number: attempt_number,
+          duration_seconds: nil
+        }
+        next
+      end
+
+      full_history << history_map[attempt_number]
+    end
+
+    return full_history
   end
 end

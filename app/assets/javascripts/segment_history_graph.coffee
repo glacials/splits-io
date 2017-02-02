@@ -20,7 +20,7 @@ $ ->
     if seg_histories.length > 15 then hidden_data.push split.name
   c3.generate({
     bindto: "#segment-duration-graph",
-    title: { text: "Segment Histories Over Time"},
+    title: { text: "Segment Durations Over Time"},
     data: {
       columns: seg_histories,
       hide: hidden_data

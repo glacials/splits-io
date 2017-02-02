@@ -99,23 +99,18 @@ module DynamoDBRun
       end
 
       # full_history fills in all attempts, even uncompleted ones
-      attempts = dynamodb_info['attempts']
       full_history = []
       (1..history.last['attempt_number']).each do |attempt_number|
         if history_map[attempt_number].nil?
-          full_history[attempt_number] = {
+          full_history << {
             attempt_number: attempt_number,
             duration_seconds: nil
           }
           next
         end
 
-        full_history[attempt_number] = history_map[attempt_number]
+        full_history << history_map[attempt_number]
       end
-
-      # attempts start at 1, but full_history is an array that starts at 0, so we have a nil 0th element. shift
-      # everything down 1.
-      full_history.delete_at(0)
 
       return full_history
     end
