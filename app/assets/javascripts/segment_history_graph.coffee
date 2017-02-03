@@ -13,11 +13,26 @@ $ ->
 
   seg_histories = []
   hidden_data = []
-  $.each gon.run.raw_splits, (i, split) ->
-    attempt_durations = split.history.map((attempt) -> attempt['duration_seconds'])
-    seg_histories.push JSON.parse(JSON.stringify(attempt_durations))
-    seg_histories[i].unshift split.name
-    if seg_histories.length > 1 then hidden_data.push split.name
+  first_non_null_attempt = Infinity
+
+  $.each gon.run.splits, (i, split) ->
+    non_null_time_inserted = false
+    attempt_durations = []
+    $.each split.history, (j, attempt) ->
+      if non_null_time_inserted || attempt.duration_seconds != null
+        non_null_time_inserted = true
+        attempt_durations.push(attempt.duration_seconds)
+
+        if j < first_non_null_attempt
+          first_non_null_attempt = j
+      else
+        attempt_durations.push(null)
+
+    seg_histories.push(JSON.parse(JSON.stringify(attempt_durations)))
+    seg_histories[i].unshift(split.name)
+
+    if seg_histories.length > 1
+      hidden_data.push split.name
   c3.generate({
     bindto: "#segment-duration-graph",
     title: {
@@ -50,7 +65,8 @@ $ ->
         label: {
           text: "Attempt Number",
           position: "outer-center"
-        }
+        },
+        min: first_non_null_attempt
       },
       y: {
         label: {
