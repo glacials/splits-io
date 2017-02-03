@@ -29,7 +29,7 @@
               td.align-right colspan=99
                 i no segment history available
           - else
-            - unskipped_history = history.map { |h| h[:duration_seconds] }.reject { |t| t == 0 }
+            - unskipped_history = history.map { |h| h[:duration_seconds] }.reject { |t| t.nil? }
             tr
               td.align-right= index + 1
               td.align-left= segment.name.present? ? segment.name : '-'
