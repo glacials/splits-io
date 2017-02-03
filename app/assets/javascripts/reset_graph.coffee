@@ -11,25 +11,33 @@ $ ->
     "rgba(243, 123, 29, 1)"
   ]
 
-  reset_counter = gon.run.attempts
+  reset_counter = gon.run.history.length
   reset_data = []
-  $.each gon.run.raw_splits, (i, split) ->
-    split_resets = reset_counter - split.history.length
-    if split_resets > 0
-      reset_data.push [split.name, split_resets]
-      reset_counter = split.history.length
+  $.each gon.run.splits, (i, segment) ->
+    segment_resets = reset_counter - segment.history.filter((h) -> h.duration_seconds == null).length
+    if segment_resets > 0
+      reset_data.push [segment.name, segment_resets]
+      reset_counter = segment.history.length
   c3.generate({
     bindto: "#reset-graph",
     data: {
       columns: reset_data,
       type: "donut",
     },
-    color: { pattern: color_styles },
+    color: {
+      pattern: color_styles
+    },
     donut: {
       title: "Resets/Split",
-      label: { format: (v) -> return v }
+      label: {
+        format: (v) ->
+          return v
+      }
     },
     tooltip: {
-      format: { value: (value, ratio) -> return "#{value} | #{d3.round(ratio * 100, 1)}%" }
+      format: {
+        value: (value, ratio) ->
+          return "#{value} | #{d3.round(ratio * 100, 1)}%"
+      }
     }
   })

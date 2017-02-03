@@ -30,7 +30,9 @@ $ ->
     subchart: {
       show: true
     },
-    size: { height: 320 * ((gon.run.raw_splits.length / 60) + 1) },
+    size: {
+      height: 320 * ((gon.run.raw_splits.length / 60) + 1)
+    },
     color: {
       pattern: color_styles
     },
@@ -56,7 +58,8 @@ $ ->
           position: "outer-middle"
         },
         tick: {
-          format: (d) -> moment.utc(moment.duration(d, "seconds").asMilliseconds()).format("H:mm:ss")
+          format: (d) ->
+            moment.utc(moment.duration(d, "seconds").asMilliseconds()).format("H:mm:ss")
         }
       }
     }
