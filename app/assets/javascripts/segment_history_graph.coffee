@@ -17,16 +17,26 @@ $ ->
     attempt_durations = split.history.map((attempt) -> attempt['duration_seconds'])
     seg_histories.push JSON.parse(JSON.stringify(attempt_durations))
     seg_histories[i].unshift split.name
-    if seg_histories.length > 15 then hidden_data.push split.name
+    if seg_histories.length > 1 then hidden_data.push split.name
   c3.generate({
     bindto: "#segment-duration-graph",
-    title: { text: "Segment Durations Over Time"},
+    title: {
+      text: "Segment Durations Over Time (choose segments below)"
+    },
     data: {
       columns: seg_histories,
-      hide: hidden_data
+      hide: hidden_data,
+    },
+    subchart: {
+      show: true
     },
     size: { height: 320 * ((gon.run.raw_splits.length / 60) + 1) },
-    color: { pattern: color_styles },
+    color: {
+      pattern: color_styles
+    },
+    line: {
+      connectNull: true
+    },
     axis: {
       x: {
         type: "category",

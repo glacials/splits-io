@@ -15,7 +15,15 @@ $ ->
     data: {
       columns: [duration_data],
     },
-    color: { pattern: color_styles },
+    subchart: {
+      show: true
+    },
+    color: {
+      pattern: color_styles
+    },
+    line: {
+      connectNull: true
+    },
     axis: {
       x: {
         type: "category",
