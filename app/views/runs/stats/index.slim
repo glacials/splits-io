@@ -78,7 +78,9 @@ article#stats
               span Shortest segment
             td
               - if @run.collapsed_splits.size > 0
-                = @run.shortest_segment.name
+                | #{@run.shortest_segment.name} (
+                span.time.needs-formatting = @run.shortest_segment.duration
+                | )
               - else
                 span.time -
           tr
@@ -86,7 +88,9 @@ article#stats
               span Longest segment
             td
               - if @run.collapsed_splits.size > 0
-                = @run.longest_segment.name
+                | #{@run.longest_segment.name} (
+                span.time.needs-formatting = @run.longest_segment.duration
+                | )
               - else
                 span.time -
           tr
