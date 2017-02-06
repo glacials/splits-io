@@ -7,7 +7,7 @@ splits i/o currently supports splits from Urn, LiveSplit, SplitterZ, Time Split 
 ## Running locally
 
 ### Requirements
-* Ruby 2.2.2
+* Ruby 2.3.1
 * PostgreSQL
 
 ### First run
