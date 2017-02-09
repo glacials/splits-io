@@ -139,15 +139,15 @@ ActiveRecord::Schema.define(version: 20170209005256) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",        limit: 255, default: ""
+    t.string   "email",               limit: 255, default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "twitch_token", limit: 255
+    t.string   "twitch_token",        limit: 255
     t.integer  "twitch_id"
-    t.string   "name",         limit: 255
-    t.string   "avatar",       limit: 255
+    t.string   "name",                limit: 255
+    t.string   "avatar",              limit: 255
     t.boolean  "permagold"
-    t.string   "display_name"
+    t.string   "twitch_display_name"
     t.index ["email"], name: "index_users_on_email", using: :btree
   end
 

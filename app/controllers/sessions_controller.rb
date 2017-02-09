@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
     user.update(
       name: auth.info.nickname,
-      display_name: auth.info.name,
+      twitch_display_name: auth.info.name,
       email: auth.info.email,
       avatar: auth.info.image,
       twitch_token: auth.credentials.token
@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
 
     self.current_user = user
     auth_session.persist!
-    redirect_to redirect_path, notice: "Signed in as #{current_user.display_name || current_user.name}. o/"
+    redirect_to redirect_path, notice: "Signed in as #{current_user}. o/"
   end
 
   def destroy

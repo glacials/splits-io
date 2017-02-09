@@ -56,7 +56,7 @@ class User < ApplicationRecord
   end
 
   def to_s
-    name || 'somebody'
+    twitch_display_name || name || 'somebody'
   end
 
   def darkmode
