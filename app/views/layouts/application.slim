@@ -39,7 +39,7 @@ html
             - if logged_in?
               a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'selected' : '')
                 small = '∨ '
-                = current_user.name
+                = current_user
                 - if current_user.silver_patron?
                   .gold-split title='Patron'
               ul.dropdown-menu role=:menu aria={labelledby: :user_nav}

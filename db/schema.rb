@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170124210210) do
+ActiveRecord::Schema.define(version: 20170209005256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,14 +139,15 @@ ActiveRecord::Schema.define(version: 20170124210210) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",        limit: 255, default: ""
+    t.string   "email",               limit: 255, default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "twitch_token", limit: 255
+    t.string   "twitch_token",        limit: 255
     t.integer  "twitch_id"
-    t.string   "name",         limit: 255
-    t.string   "avatar",       limit: 255
+    t.string   "name",                limit: 255
+    t.string   "avatar",              limit: 255
     t.boolean  "permagold"
+    t.string   "twitch_display_name"
     t.index ["email"], name: "index_users_on_email", using: :btree
   end
 

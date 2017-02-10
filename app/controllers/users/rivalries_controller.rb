@@ -18,7 +18,7 @@ class Users::RivalriesController < ApplicationController
       if @user.rivalries.create(category: @category, to_user: @to_user)
         redirect_to(
           compare_path(@user.pb_for(@category), @to_user.pb_for(@category)),
-          notice: "#{@to_user.name} is now your rival in #{@category.game} #{@category}. Here are your latest PBs."
+          notice: "#{@to_user} is now your rival in #{@category.game} #{@category}. Here are your latest PBs."
         )
       end
     end
