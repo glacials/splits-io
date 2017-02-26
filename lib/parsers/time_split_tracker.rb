@@ -18,12 +18,13 @@ module TimeSplitTracker
   class Parser < BabelBridge::Parser
     rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
 
-    rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :tab?, :newline
+    rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :optional_tab, :game_name, :newline
     rule :title_line,  :title, :tab, /([^\t\r\n]*)/, :newline
     rule :splits,      :title, :tab, :duration, :newline, :image_path, :tab, :newline
 
     rule :attempts,   /([^\t\r\n]*)/
     rule :title,      /([^\t]*)/
+    rule :game_name,       /([^\r\n]*)/
     rule :duration,   :time
     rule :image_path, /([^\t\r\n]*)/
 
@@ -32,6 +33,7 @@ module TimeSplitTracker
     rule :newline,         :windows_newline
     rule :newline,         :unix_newline
     rule :tab,             "\t"
+    rule :optional_tab,    /\t?/
     rule :windows_newline, "\r\n"
     rule :unix_newline,    "\n"
 
