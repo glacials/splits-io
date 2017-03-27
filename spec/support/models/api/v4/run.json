@@ -20,7 +20,10 @@
       "type": "string"
     },
     "srdc_id": {
-      "type": ["string", "null"]
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "time": {
       "type": "number",
@@ -39,7 +42,10 @@
       }
     },
     "attempts": {
-      "type": ["number", "null"]
+      "type": [
+        "number",
+        "null"
+      ]
     },
     "image_url": {
       "type": [
@@ -60,7 +66,10 @@
       ]
     },
     "game": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "required": [
         "name",
         "shortname",
