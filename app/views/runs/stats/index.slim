@@ -38,11 +38,11 @@ article#stats
             td.upload-date.needs-formatting
               = @run.created_at
           - if sum_of_best.nil? || sum_of_best == 0
-            tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
+            tr.tip title="This run has no gold splits recorded"
               td
                 span Sum of best
               td -
-            tr.tip title="This run has no gold splits recorded, so we couldn't calculate this."
+            tr.tip title="This run has no gold splits recorded"
               td
                 span Total potential timesave
                 small.tip-html< title="<code>PB - sum of best</code>" = "(?)"

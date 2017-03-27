@@ -2,7 +2,11 @@
   .col-md-8.col-md-offset-2
     h3 Segment stats
     .badge
-      a href=segment_history_csv_path ↓ download segment history csv
+      - if @run.attempts.blank?
+        strike ↓ download segment history csv
+        small.tip-html< title="Segment history is not available for this run" = "(?)"
+      - else
+        a href=segment_history_csv_path ↓ download segment history csv
     table.table.table-striped
       thead
         tr
