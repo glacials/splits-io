@@ -3,7 +3,9 @@
 @import purecss/grids-responsive
 @import purecss/menus
 @import headings
+@import "bootswatch/superhero/variables"
 @import bootstrap
+@import "bootswatch/superhero/bootswatch"
 @import tipsy
 @import c3
 
@@ -12,13 +14,9 @@
 @import alerts
 @import article
 @import badges
-@import dropdown
 @import faq
 @import footer
-@import forms
 @import jumbotron
-@import links
-@import navigation
 @import rivalries
 @import tables
 @import tabs
@@ -35,7 +33,7 @@ ul.goals
   list-style: none
 
 .stealth-link
-  color: #333
+  color: $text-color
 
 .gold-split
   background: $gold
@@ -125,10 +123,6 @@ th a
 
 tr[href]
   cursor: pointer
-
-body, h1, h2, h3, h4, h5, h6
-  color: #333
-  font-family: "Open Sans", sans-serif
 
 a
   color: #0e90d2

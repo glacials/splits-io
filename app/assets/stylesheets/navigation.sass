@@ -1,9 +1,8 @@
-$nav-background: #fff
-$nav-color: #666
+$nav-background: rgba(43, 62, 80, 1)
+$nav-color: $text-color
 
 nav
   @extend article
-  background-color: $nav-background
   border-color: #ccc
   border-style: dashed
   border-width: 1px 1px 0
@@ -16,7 +15,6 @@ nav a
   letter-spacing: -1px
   padding: .75em
   &:hover
-    background-color: $nav-background
     color: $nav-color
 
 nav .dropdown
@@ -31,14 +29,8 @@ nav .dropdown
 .right-nav .dropdown-menu
   right: 0
 
-nav a.selected
-  color: $nav-background
-
 nav .nav-link
-  background: $nav-background
   color: $nav-color
-  &:hover
-    color: $nav-background
 
 ul.run-options
   display: inline

@@ -59,10 +59,6 @@ class User < ApplicationRecord
     twitch_display_name || name || 'somebody'
   end
 
-  def darkmode
-    false
-  end
-
   def should_see_ads?
     !bronze_patron?
   end

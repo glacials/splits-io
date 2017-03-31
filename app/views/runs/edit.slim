@@ -59,7 +59,7 @@ article#danger-zone.danger data-turbolinks-permanent=true
             span.time.needs-formatting class=('short' if @run.short?) = @run.time
     .col-md-6
       center
-        = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'button btn btn-danger-inverted', style: 'margin: 1em;'
+        = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'button btn btn-danger', style: 'margin: 1em;'
           div
             big Disown
           small
