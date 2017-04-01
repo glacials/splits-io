@@ -21,7 +21,7 @@ article
     .col-md-8 = render partial: 'vs', locals: {rivalry: rivalry}
     .col-md-1 style="cursor: pointer; color: #a33;"
       small
-        = button_to user_rivalry_path(rivalry.from_user, rivalry), method: :delete, data: {confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?"}, class: 'btn btn-default', style: "cursor: pointer; color: #a33; border: none;"
+        = button_to user_rivalry_path(rivalry.from_user, rivalry), method: :delete, data: {confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?"}, class: 'btn btn-default'
           | X
     hr
   h5 = link_to '+ Add or replace a rival', new_user_rivalry_path(@user)
