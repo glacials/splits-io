@@ -42,9 +42,9 @@ html
               li class=('active' if on_page[:faq])
                 a href=faq_path FAQ
             ul.nav.navbar-nav.navbar-right
-              li class=('active' if on_page[:rivalries])
-                a href=user_rivalries_path(current_user) My Rivalries
               - if logged_in?
+                li class=('active' if on_page[:rivalries])
+                  a href=user_rivalries_path(current_user) My Rivalries
                 li.dropdown class=('active' if on_page[:profile])
                   a.dropdown-toggle href='#' data-toggle='dropdown' role='button' aria-expanded='false'
                     span = current_user
@@ -56,8 +56,10 @@ html
                       = link_to 'tools', tools_path
                       = link_to 'sign out', session_path(auth_session), method: :delete
               - else
-                a href='/auth/twitch' sign up
-                a href='/auth/twitch' sign in
+                li
+                  a href='/auth/twitch' sign up
+                li
+                  a href='/auth/twitch' sign in
       header#header = yield(:header)
       article#alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
       = yield
