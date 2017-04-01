@@ -40,6 +40,7 @@ in S3.
 To shim DynamoDB on your local machine, run Amazon's official [DynamoDB local][dynamodb-local]. If you're on MacOS, you
 can install this with just
 ```bash
+brew tap glacials/splits-io
 brew install dynamodb-local
 ```
 then have it auto-run now and at boot with
