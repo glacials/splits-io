@@ -4,6 +4,7 @@ SplitsIO::Application.routes.draw do
   get '/faq', to: 'pages#faq', as: :faq
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
+  get '/why/darkmode', to: 'why#darkmode', as: :why_darkmode
 
   get '/health', to: 'health#index'
 

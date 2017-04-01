@@ -16,7 +16,8 @@ module ApplicationHelper
       games: request.path.match(games_path),
       rivalries: current_user.present? && request.path == user_rivalries_path(current_user),
       faq: request.path == faq_path,
-      profile: logged_in? && [user_path(current_user), tools_path].include?(request.path)
+      profile: logged_in? && [user_path(current_user), tools_path].include?(request.path),
+			why_darkmode: request.path == why_darkmode_path
     }
   end
 end
