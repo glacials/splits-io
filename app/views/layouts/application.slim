@@ -44,7 +44,7 @@ html
             ul.nav.navbar-nav.navbar-right
               - if logged_in?
                 li class=('active' if on_page[:rivalries])
-                  a href=user_rivalries_path(current_user) My Rivalries
+                  a href=user_rivalries_path(current_user) My Rivals
                 li.dropdown class=('active' if on_page[:profile])
                   a.dropdown-toggle href='#' data-toggle='dropdown' role='button' aria-expanded='false'
                     span = current_user
