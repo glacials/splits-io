@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/glacials/authie.git
-  revision: c75f6afe2eadae38b6bf66432f80bc60f28975b8
-  specs:
-    authie (1.2.2)
-
-GIT
   remote: git://github.com/glacials/chronic_duration.git
   revision: ac649be5d0feaba3a83df7b7ff20ed58bdefead5
   branch: pad_to_option
@@ -75,6 +69,7 @@ GEM
     api-pagination (4.3.0)
     arel (7.1.4)
     ast (2.3.0)
+    authie (2.0.1)
     autoprefixer-rails (6.4.0.2)
       execjs
     aws-sdk-core (2.5.5)
@@ -421,7 +416,7 @@ DEPENDENCIES
   active_model_serializers
   api-pagination
   arel
-  authie!
+  authie
   aws-sdk-rails
   babel_bridge
   better_errors
