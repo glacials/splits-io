@@ -3,10 +3,11 @@
 
 - content_for(:header) do
   = render partial: 'runs/title', locals: {run: @run}
-  h6
-    ul.run-options
-      li
-        a href=run_path(@run) &larr; back to run
+  ul.breadcrumb
+    li = link_to @run.game, game_path(@run.game)
+    li = link_to @run.category, game_category_path(@run.game, @run.category)
+    li = link_to @run.id36, run_path(@run)
+    li Edit
 
 = render partial: 'runs/full_timeline', locals: {run: @run}
 

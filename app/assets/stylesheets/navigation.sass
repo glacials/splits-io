@@ -1,39 +1,6 @@
-$nav-background: rgba(43, 62, 80, 1)
-$nav-color: $text-color
-
-nav
-  @extend article
-  border-color: #ccc
-  border-style: dashed
-  border-width: 1px 1px 0
-  margin-top: 1em
-  padding: 0
-
-nav a
-  color: $nav-color
-  display: inline-block
-  letter-spacing: -1px
-  padding: .75em
-  &:hover
-    color: $nav-color
-
-nav .dropdown
-  display: inline-block
-  text-align: right
-
-.dropdown-menu.red li a
-  border-bottom: 1px #fff solid
-  &:hover
-    background-color: $red
-
-.right-nav .dropdown-menu
-  right: 0
-
-nav .nav-link
-  color: $nav-color
-
 ul.run-options
   display: inline
+  list-style: none
   padding: 0
   li
     display: inline
@@ -43,28 +10,3 @@ ul.run-options
     border-right: 1px solid #333
   li:not(:first-child)
     padding: 0 .5em
-
-nav > .left-nav, nav > .right-nav
-  padding: 0
-
-nav > .left-nav
-  @extend .col-lg-10
-  @extend .col-md-10
-  @extend .col-sm-10
-  @extend .col-xs-6
-  text-align: left
-
-nav > .right-nav
-  @extend .col-lg-2
-  @extend .col-md-2
-  @extend .col-sm-2
-  @extend .col-xs-6
-  margin: 0
-  padding: 0
-  text-align: right
-
-.dropdown-toggle
-  white-space: nowrap
-
-.dropdown-link
-  width: 100%

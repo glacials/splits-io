@@ -2,7 +2,23 @@
 = render partial: 'twitter_card'
 
 - content_for(:header) do
-  = render partial: 'runs/title', locals: {run: @run}
+  ul.breadcrumb
+    li = link_to @run.game, game_path(@run.game)
+    li = link_to @run.category, game_category_path(@run.game, @run.category)
+    li = @run.id36
+  nav.navbar.navbar-inverse
+    .container
+      .navbar-header
+        button.navbar-toggle.collapsed type='button' data-toggle='collapse' data-target='#run-nav'
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand href=run_path(@run) = @run
+      .collapse.navbar-collapse#run-nav
+        ul.nav.navbar-nav
+          li = link_to 'Stats', run_stats_path(@run)
+          li = link_to 'Edit', edit_run_path(@run)
   h6
     span#download-menu
       - timer = Run.program(@run.timer)
