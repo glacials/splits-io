@@ -34,7 +34,7 @@
         li = link_to 'speedrun.com', @run.srdc_url
       - if @run.video_url.present?
         li = link_to 'proof', @run.video_url
-      li stats
+      li = link_to 'stats', run_stats_path(@run)
       - if can?(:edit, @run)
         li = link_to 'edit', edit_run_path(@run)
 
