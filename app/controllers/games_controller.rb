@@ -9,7 +9,7 @@ class GamesController < ApplicationController
 
   def show
     @on_game_page = true
-    @category = @game.categories.first
+    @category = @game.categories.joins(:runs).group('categories.id').order('count(runs.id) desc').first
     if @category.nil?
       render :not_found, status: 404
       return
