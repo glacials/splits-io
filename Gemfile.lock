@@ -409,6 +409,8 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     will_paginate (3.1.0)
+    will_paginate-bootstrap (1.0.1)
+      will_paginate (>= 3.0.3)
     xml-simple (1.1.5)
 
 PLATFORMS
@@ -488,6 +490,7 @@ DEPENDENCIES
   unicorn
   versionomy
   will_paginate
+  will_paginate-bootstrap
   xml-simple
 
 RUBY VERSION

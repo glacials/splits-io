@@ -120,6 +120,7 @@ gem 'sass-rails'
 gem 'slim'
 gem 'uglifier'
 gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 # workers/jobs
 gem 'delayed_job_active_record'
