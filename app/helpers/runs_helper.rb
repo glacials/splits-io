@@ -36,7 +36,7 @@ module RunsHelper
         source: current_user,
         runs: current_user.pbs,
         cols: [:time, :name, :uploaded, :owner_controls, :rival],
-        description: "my personal bests"
+        description: "My Personal Bests"
       }.merge(sorting_info)
     when :pbs
       {
@@ -44,7 +44,7 @@ module RunsHelper
         source: options[:user],
         runs: options[:user].pbs,
         cols: [:time, :name, :uploaded],
-        description: "personal bests"
+        description: "Personal Bests"
       }.merge(sorting_info)
     when :games
       {
