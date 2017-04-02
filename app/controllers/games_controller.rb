@@ -8,6 +8,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @on_game_page = true
     @category = @game.categories.first
     if @category.nil?
       render :not_found, status: 404
