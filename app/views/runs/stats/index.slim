@@ -66,8 +66,7 @@ article#stats
           tr
             td
               span Uploaded
-            td.upload-date.needs-formatting
-              = @run.created_at
+            td.upload-date.needs-formatting title=@run.created_at = @run.created_at
           - if sum_of_best.nil? || sum_of_best == 0
             tr.tip title="This run has no gold splits recorded"
               td
