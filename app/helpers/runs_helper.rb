@@ -20,11 +20,11 @@ module RunsHelper
 
   def difference_color(time)
     if time == 0
-      :gray
+      'text-primary'
     elsif time > 0
-      :red
+      'text-danger'
     else
-      :green
+      'text-success'
     end
   end
 
