@@ -1,12 +1,11 @@
 - empty = true
-- user.categories.each do |category|
-  - if user.follows.that_run(category).present?
-    - empty = false
-    = link_to new_user_rivalry_path(category: category), class: 'col-xs-12 col-sm-6 col-md-4 stealth-link category-link'
-      .media style='border: 1px dashed #ccc; margin: .5em 0; padding: 1em;'
-        .media-body
-          h4.media-heading = category.game
-          span = category
-          h6 = user.follows.that_run(category).join(' ')
+.col-md-6
+  .list-group
+    - user.categories.each do |category|
+      - if user.follows.that_run(category).present?
+        - empty = false
+        a.list-group-item href=new_user_rivalry_path(category: category)
+          p = "#{category.game} #{category}"
+          p = user.follows.that_run(category).join(' ')
 - if empty
   i none found
