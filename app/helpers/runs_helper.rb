@@ -1,4 +1,5 @@
 module RunsHelper
+  include ActionView::Helpers::DateHelper
 
   TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange]
 
@@ -77,6 +78,43 @@ module RunsHelper
     end
 
     TIMELINE_COLORS[@next_index[timeline_id]]
+  end
+
+  def pretty_timestamp(timestamp)
+    "<span title=\"#{timestamp}\">#{time_ago_in_words(timestamp)} ago</span>".html_safe
+  end
+
+  def pretty_duration(seconds)
+    ms = (seconds * 1000).floor
+
+    return "<span class=\"text-default\">#{format_milliseconds(ms)}</span>".html_safe
+  end
+
+  def pretty_difference(my_seconds, their_seconds)
+    my_ms = (my_seconds * 1000).floor
+    their_ms = (their_seconds * 1000).floor
+
+    diff_ms = my_ms - their_ms
+
+    if diff_ms < 0
+      diff_ms = diff_ms.abs
+      return "<span class=\"text-success\">- #{format_milliseconds(diff_ms)}</span>".html_safe
+    end
+
+    if diff_ms > 0
+      return "<span class=\"text-danger\">+ #{format_milliseconds(diff_ms)}</span>".html_safe
+    end
+
+    return "<span class=\"text-warning\">+ #{format_milliseconds(diff_ms)}</span>".html_safe
+  end
+
+  def format_milliseconds(milliseconds)
+    total_seconds = milliseconds / 1000
+
+    seconds = total_seconds % 60
+    minutes = total_seconds / 60 % 60
+    hours = total_seconds / 60 / 60
+    "%02d:%02d:%02d" % [hours, minutes, seconds]
   end
 
   private

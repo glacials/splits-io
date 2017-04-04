@@ -1,17 +1,30 @@
 - cache [:follows, @user] do
   - if @user.follows.present?
-    br
-    h5 Hey, you. Here are some people you follow.
-    = @user.follows.find_each do |user|
-      .col-xs-12.col-sm-6.col-md-4
-        .media style='margin: .5em 0;'
-          a.pull-left href=user_path(user)
-            img src=user.avatar height=64 width=64
-          .media-body
-            a href=user_path(user)
-              h4.media-heading
-                = user
-                - if user.silver_patron?
-                  .gold-split title='Patron'
-            - user.games.reject { |game| game.name.blank? }.each do |game|
-              => link_to(game.shortname || game.name.downcase, game, class: 'stealth-link game-link')
+    h4 Recent PBs By People You Follow
+    .row
+      .col-md-6
+        .list-group
+          - Run.includes(:game, :category, :user).where( \
+            user: current_user.follows \
+          ).where.not( \
+            games: {name: [nil, ""]} \
+          ).order('runs.created_at DESC').limit(10).each do |run|
+            a.list-group-item href=( \
+              current_user.runs?(run.category) ? compare_path(current_user.pb_for(run.category), run) : run_path(run) \
+            )
+              .media style='margin: .5em 0;'
+                .pull-left href=user_path(run.user)
+                  img src=run.user.avatar height=64 width=64
+                .media-body
+                  .pull-right = pretty_timestamp(run.created_at)
+                  div
+                    = run.user
+                    - if run.user.silver_patron?
+                      .gold-split title='Patron'
+                  div = "#{run.game} #{run.category}"
+                  div
+                    = pretty_duration(run.time)
+                    - if current_user.runs?(run.category)
+                      = " ("
+                      = pretty_difference(current_user.pb_for(run.category).time, run.time)
+                      = ")"
