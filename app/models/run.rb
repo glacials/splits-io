@@ -22,8 +22,6 @@ class Run < ApplicationRecord
   after_create :refresh_game
   after_create :discover_runner
 
-  after_destroy :remove_file
-
   #validates :run_file, presence: true
   validates_with RunValidator
 
@@ -136,12 +134,8 @@ class Run < ApplicationRecord
   end
 
   def file
-    if id36.present?
-      file = $s3_bucket.object("splits/#{id36}")
-      file.get.body.read
-    else
-      run_file.try(:file)
-    end
+    file = $s3_bucket.object("splits/#{s3_filename}")
+    file.get.body.read
   rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::AccessDenied
     run_file.try(:file)
   end
@@ -156,16 +150,6 @@ class Run < ApplicationRecord
   def discover_runner
     return if user.present?
     delay.set_runner_from_srdc
-  end
-
-  def remove_file
-    if run_file.nil?
-      $s3_bucket.object("splits/#{id36}").delete
-    else
-      if run_file.runs.count.zero?
-        run_file.destroy
-      end
-    end
   end
 
   def filename(timer: Run.program(self.timer))

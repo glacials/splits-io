@@ -14,7 +14,16 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def create
-    @run = Run.create(run_params)
+    filename = SecureRandom.uuid
+
+    rp = run_params
+    if rp.nil?
+      rp = {}
+    end
+
+    rp = rp.merge(s3_filename: filename)
+
+    @run = Run.create(rp)
     if !@run.persisted?
       render status: 400, json: {
         status: 400,
@@ -24,7 +33,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     end
 
     presigned_request = $s3_bucket.presigned_post(
-      key: "splits/#{@run.id36}",
+      key: "splits/#{filename}",
       content_length_range: 1..(100*1024*1024)
     )
 
@@ -77,6 +86,12 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def run_params
-    params.permit(:srdc_id, :image_url)
+    permitted_params = params.permit(:srdc_id, :image_url)
+
+    if permitted_params.nil?
+      return {}
+    end
+
+    return permitted_params
   end
 end
