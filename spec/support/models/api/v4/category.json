@@ -1,5 +1,8 @@
 {
-  "type": "object",
+  "type": [
+    "object",
+    "null"
+  ],
   "required": [
     "id",
     "name",
