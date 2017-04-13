@@ -1,9 +1,20 @@
-language: ruby
+language:
+  ruby
+  java
+cache: bundler
 rvm:
  - 2.3.1
-script: bundle exec rspec spec
+script:
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake db:test:prepare
+  - bundle exec rspec spec
 services:
   - postgresql
 before_script:
   - psql -c 'create database "splits-io-test";' -U postgres
-
+  - wget https://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz -O /tmp/dynamodb.tar.gz
+  - mkdir /tmp/dynamodb
+  - tar -xzvf /tmp/dynamodb.tar.gz -C /tmp/dynamodb
+  - java -Djava.library.path=/tmp/dynamodb/DynamoDBLocal_lib -jar /tmp/dynamodb/DynamoDBLocal.jar -sharedDb -inMemory &
+  - gem install fakes3
+  - fakes3 -r /tmp/splits-io/splits -p 4567 &
