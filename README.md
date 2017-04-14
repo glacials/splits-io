@@ -37,7 +37,7 @@ Splits I/O uses AWS DynamoDB for storing parsed runs, so that we don't have to r
 out of it every time we want to display them. Everything in DynamoDB can theoretically be recreated from what's stored
 in S3.
 
-To shim DynamoDB on your local machine, run Amazon's official [DynamoDB local][dynamodb-local]. If you're on MacOS, you
+To shim DynamoDB on your local machine, run Amazon's official [DynamoDB local][dynamodb-local]. If you're on macOS, you
 can install this with just
 ```bash
 brew tap glacials/splits-io
@@ -55,7 +55,7 @@ You're good to go! Access [localhost:3000][localhost] in your browser.
 
 [localhost]: http://localhost:3000/
 
-#### Troubleshooting (OS X)
+#### Troubleshooting (macOS)
 
 If you get Bundler errors about `eventmachine`, try
 
