@@ -11,13 +11,15 @@ $ ->
     "rgba(243, 123, 29, 1)"
   ]
 
-  reset_counter = gon.run.history.length
+  reset_counter = 0
   reset_data = []
   $.each gon.run.splits, (i, segment) ->
-    segment_resets = reset_counter - segment.history.filter((h) -> h.duration_seconds == null).length
+    segment_total_resets = segment.history.filter((h) -> h.duration_seconds == null).length
+    # By doing this backwards we allow the loop to not need a special case for index 0
+    segment_resets = Math.abs(segment_total_resets - reset_counter)
     if segment_resets > 0
       reset_data.push [segment.name, segment_resets]
-      reset_counter = segment.history.length
+      reset_counter = segment_total_resets
   c3.generate({
     bindto: "#reset-graph",
     data: {
