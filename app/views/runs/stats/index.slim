@@ -4,10 +4,11 @@
 - content_for(:header) do
   - if @run.game.present? && @run.category.present?
     ul.breadcrumb
+      li = link_to "Games", games_path
       li = link_to @run.game, game_path(@run.game)
       li = link_to @run.category, game_category_path(@run.game, @run.category)
       li = link_to @run.id36, run_path(@run)
-      li Statistics
+      li = link_to "Statistics", run_stats_path(@run)
   = render partial: 'runs/title', locals: {run: @run}
   h6
     span#download-menu

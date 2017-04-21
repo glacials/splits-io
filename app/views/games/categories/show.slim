@@ -1,11 +1,10 @@
 - title @game.name
 - content_for(:header) do
   ul.breadcrumb
-    - if @on_game_page
-      li = @category.game
-    - else
-      li = link_to @category.game, game_path(@category.game)
-      li = @category
+    li = link_to "Games", games_path
+    li = link_to @category.game, game_path(@category.game)
+    - unless @on_game_page
+      li = link_to @category
   h3 = @category.game
   h6
     ul.run-options

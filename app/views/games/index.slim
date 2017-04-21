@@ -1,5 +1,7 @@
 - title 'games'
 - content_for(:header) do
+  ul.breadcrumb
+    li = link_to "Games", games_path
   h2 games
   h5 only the fast ones though
 article#search
