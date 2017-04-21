@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require jquery-ui/draggable
 //= require js.cookie
 //= require bootstrap
 //= require numeral
