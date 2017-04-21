@@ -30,34 +30,17 @@ describe Run, type: :model do
   end
 
   context 'with a run_file' do
-    context "that doesn't belong to other runs" do
-      let(:run) { FactoryGirl.create(:run) }
-
-      before do
-        Run.destroy_all
-      end
-
-      it 'destroys its run_file when destroyed' do
-        run_file = run.run_file
-        run.destroy
-
-        expect(run_file.destroyed?).to be true
-      end
+    let(:run) do
+      run_file = RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit1.4"))
+      FactoryGirl.create(:run, run_file: run_file)
+      FactoryGirl.create(:run, run_file: run_file)
     end
 
-    context 'that belongs to other runs' do
-      let(:run) do
-        run_file = RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit1.4"))
-        FactoryGirl.create(:run, run_file: run_file)
-        FactoryGirl.create(:run, run_file: run_file)
-      end
+    it "doesn't destroy its run_file when destroyed" do
+      run_file = run.run_file
+      run.destroy
 
-      it "doesn't destroy its run_file when destroyed" do
-        run_file = run.run_file
-        run.destroy
-
-        expect(run_file.destroyed?).to be false
-      end
+      expect(run_file.destroyed?).to be false
     end
   end
 
