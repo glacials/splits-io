@@ -9,8 +9,6 @@ html
     = render partial: 'shared/rollbarjs'
     = javascript_include_tag 'application'
     = stylesheet_link_tag :application, media: :all
-    - if cookies[:darkmode] == '1'
-      = stylesheet_link_tag :darkmode
     = csrf_meta_tag
     = render partial: 'shared/favicons'
     = content_for(:head)
@@ -26,40 +24,56 @@ html
           h2
             | failures:
           span#failed-uploads<
-      nav
-        .left-nav
-          a.blue href=root_path class=(on_page[:index] ? 'selected' : '') splits i/o
-          a.purple href=new_run_path class=(on_page[:upload] ? 'selected' : '') upload
-          a.green href=games_path class=(on_page[:games] ? 'selected' : '') games
-          - if current_user.present?
-            a.yellow href=user_rivalries_path(current_user) class=(on_page[:rivalries] ? 'selected' : '') rivals
-        .right-nav
-          a.red href=faq_path class=(on_page[:faq] ? 'selected' : '') faq
-          span.dropdown-link
-            - if logged_in?
-              a.orange.dropdown-toggle.fake-link id=:user_nav data={toggle: :dropdown} class=(on_page[:profile] ? 'selected' : '')
-                small = '∨ '
-                = current_user
-                - if current_user.silver_patron?
-                  .gold-split title='Patron'
-              ul.dropdown-menu role=:menu aria={labelledby: :user_nav}
-                li role=:presentation
-                  = link_to "profile", user_path(current_user)
-                  = link_to "settings", settings_path
-                  = link_to "tools", tools_path
-                  = link_to "sign out", session_path(auth_session), method: :delete
-              - if !current_user.patron?
-                a.yellow href='https://www.patreon.com/glacials' target='_blank'
-                  img src='/patreon.png' width='20px' height='20px'
-            - else
-              a#sign-in.orange href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign up
-              a#sign-in.yellow href='/auth/twitch' onclick='document.cookie="return_to="+window.location.pathname+window.location.search;' sign in
+      nav.navbar.navbar-default
+        .container
+          .navbar-header
+            button.navbar-toggle.collapsed type='button' data-toggle='collapse' data-target='#global-nav'
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand href=root_path
+              img.logo src='/logo-20x20.png' width='20' height='20'
+              span Splits I/O
+          .collapse.navbar-collapse#global-nav
+            ul.nav.navbar-nav
+              li class=('active' if on_page[:upload])
+                a href=new_run_path Upload
+              li class=('active' if on_page[:games])
+                a href=games_path Games
+              li class=('active' if on_page[:faq])
+                a href=faq_path FAQ
+              li class=('active' if on_page[:why_darkmode])
+                a href=why_darkmode_path
+                  span.text-info Darkmode!
+            ul.nav.navbar-nav.navbar-right
+              - if logged_in?
+                li class=('active' if on_page[:rivalries])
+                  a href=user_rivalries_path(current_user) My Rivals
+                li.dropdown class=('active' if on_page[:profile])
+                  a.dropdown-toggle href='#' data-toggle='dropdown' role='button' aria-expanded='false'
+                    span = current_user
+                    span.caret
+                  ul.dropdown-menu role='menu'
+                    li
+                      = link_to 'Profile', user_path(current_user)
+                      = link_to 'Settings', settings_path
+                      = link_to 'Tools', tools_path
+                      = link_to 'Sign Out', session_path(auth_session), method: :delete
+              - else
+                li
+                  a href='/auth/twitch' Sign Up
+                li
+                  a href='/auth/twitch' Sign In
       header#header = yield(:header)
-      article#alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
+      article
+        .row
+          .col-md-12
+            #alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
       = yield
       article#footer style='text-align: center;'
         div style='display: inline-block; width: 730px;'
-          - if current_user.nil? || current_user.should_see_ads?
+          - if (current_user.nil? || current_user.should_see_ads?) && (ENV['ENABLE_ADS'] == '1')
             script async=true src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
             ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2775839314260416" data-ad-slot="8678030483" data-ad-format="auto"
             javascript:
@@ -75,10 +89,4 @@ html
           span<> &bull;
           a href='https://twitter.com/splitsio' target=:_blank twitter
           span<> &bull;
-          a href='mailto:qhiiyr@gmail.com' email me
-          span<> &bull;
-          a.fake-link onclick='window.toggleDarkmode();'
-            - if cookies[:darkmode] == '1'
-              span lightmode
-            - else
-              span darkmode
+          a href='mailto:qhiiyr@gmail.com' email

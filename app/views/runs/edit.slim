@@ -2,66 +2,108 @@
 = render partial: 'twitter_card'
 
 - content_for(:header) do
+  - if @run.game.present? && @run.category.present?
+    ul.breadcrumb
+      li = link_to @run.game, game_path(@run.game)
+      li = link_to @run.category, game_category_path(@run.game, @run.category)
+      li = link_to @run.id36, run_path(@run)
+      li Edit
   = render partial: 'runs/title', locals: {run: @run}
-  h6
-    ul.run-options
-      li
-        a href=run_path(@run) &larr; back to run
 
 = render partial: 'runs/full_timeline', locals: {run: @run}
 
-article#game-category data-turbolinks-permanent=true
-  = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-    h3 Game/category
-    p
-      = f.collection_select(:game, Game.where.not(shortname: nil).order(:name), :shortname, :name, {selected: @run.game.try(:shortname), include_blank: true}, onchange: 'update_category_selector(this.value)')
-      = f.collection_select(:category, @run.game.try(:categories) || [], :id, :name, selected: @run.category.try(:id))
-    p = f.submit 'Save', id: 'game_category_submit', class: 'btn btn-default'
-
-article#proof data-turbolinks-permanent=true
-  = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-    h3 Video proof
-    .input-group.col-md-6
-      = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch, Hitbox, or YouTube VOD')
-      span.input-group-btn
-        = f.submit 'Save', class: 'btn btn-default'
-
-article#srdc-url data-turbolinks-permanent=true
-  = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-    h3 Link with speedrun.com
-    .input-group.col-md-6
-      = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
-      span.input-group-btn
-        = f.submit 'Save', class: 'btn btn-default'
-
-article#danger-zone.danger data-turbolinks-permanent=true
-  h3 Danger zone
+article#game-category
   .row
     .col-md-6
-      h4 Delete
-      p
-        | Existing permalinks will be permanently broken and your run, its information, and the original file will all be destroyed. The URL 
-        code #{run_url(@run).split('//')[1]}
-        |  will never be reclaimed.
+      .panel.panel-default
+        .panel-heading Edit Game/Category
+        .panel-body
+          = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+            .col-md-6
+              = f.collection_select( \
+                :game, \
+                Game.where.not(shortname: nil).order(:name), \
+                :shortname, \
+                :name, \
+                { \
+                  selected: @run.game.try(:shortname), \
+                  include_blank: true \
+                }, \
+                onchange: 'update_category_selector(this.value)', \
+                class: 'form-control' \
+              )
+            .col-md-4
+              = f.collection_select( \
+                :category, \
+                @run.game.try(:categories) || [], \
+                :id, \
+                :name, \
+                { \
+                  selected: @run.category.try(:id) \
+                }, \
+                class: 'form-control' \
+              )
+            .col-md-2
+              = f.submit 'Save', id: 'game_category_submit', class: 'btn btn-success'
     .col-md-6
-      h4 Disown
-      p The run will continue to exist and be accessible, but it will no longer be attributed to you. It will appear as
-        anonymously uploaded.
-      p If you disown a run, you will never be able to reclaim it, and consequently you will not be able to delete it at
-        a later time.
+      .panel.panel-default
+        .panel-heading Edit Video Proof
+        .panel-body
+          = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+            .input-group
+              = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch, Hitbox, or YouTube VOD')
+              span.input-group-btn
+                = f.submit 'Save', class: 'btn btn-success'
+
     .col-md-6
-      center
-        = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'button btn btn-danger', style: 'margin: 1em;'
-          div
-            big Delete
-          small
-            = "#{@run} in "
-            span.time.needs-formatting class=('short' if @run.short?) = @run.time
-    .col-md-6
-      center
-        = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'button btn btn-danger-inverted', style: 'margin: 1em;'
-          div
-            big Disown
-          small
-            = "#{@run} in "
-            span.time.needs-formatting class=('short' if @run.short?) = @run.time
+      .panel.panel-default
+        .panel-heading Edit Speedrun.com Link
+        .panel-body
+          = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+            .input-group
+              = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
+              .input-group-btn
+                = f.submit 'Save', class: 'btn btn-success'
+
+article#danger-zone.danger
+  .panel.panel-danger
+    .panel-heading Set My Run Free
+    .panel-body
+      .row
+        .col-md-6
+          .panel.panel-default
+            .panel-heading Delete
+            .panel-body
+              .row
+                .col-md-12
+                  | Existing permalinks will be permanently broken and your run, its information, and the original file will all be destroyed. The URL
+                  code #{run_url(@run).split('//')[1]}
+                  |  will never be reclaimed.
+              .row
+                .col-md-12
+                  center
+                    = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'button btn btn-danger', style: 'margin: 1em;'
+                      div
+                        big Delete
+                      small
+                        = "#{@run} in "
+                        span.time.needs-formatting class=('short' if @run.short?) = @run.time
+        .col-md-6
+          .panel.panel-default
+            .panel-heading Disown
+            .panel-body
+              .row
+                .col-md-12
+                  p The run will continue to exist and be accessible, but it will no longer be attributed to you. It will appear as
+                    anonymously uploaded.
+                  p If you disown a run, you will never be able to reclaim it, and consequently you will not be able to delete it at
+                    a later time.
+              .row
+                .col-md-12
+                  center
+                    = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'button btn btn-danger', style: 'margin: 1em;'
+                      div
+                        big Disown
+                      small
+                        = "#{@run} in "
+                        span.time.needs-formatting class=('short' if @run.short?) = @run.time

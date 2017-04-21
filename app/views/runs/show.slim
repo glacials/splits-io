@@ -2,6 +2,11 @@
 = render partial: 'twitter_card'
 
 - content_for(:header) do
+  - if @run.game.present? && @run.category.present?
+    ul.breadcrumb
+      li = link_to @run.game, game_path(@run.game)
+      li = link_to @run.category, game_category_path(@run.game, @run.category)
+      li = @run.id36
   = render partial: 'runs/title', locals: {run: @run}
   h6
     span#download-menu

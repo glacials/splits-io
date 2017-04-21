@@ -1,6 +1,12 @@
 - title @game.name
 - content_for(:header) do
-  h3 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
+  ul.breadcrumb
+    - if @on_game_page
+      li = @category.game
+    - else
+      li = link_to @category.game, game_path(@category.game)
+      li = @category
+  h3 = @category.game
   h6
     ul.run-options
       - if can?(:edit, @game)

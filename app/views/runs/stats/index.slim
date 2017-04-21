@@ -2,11 +2,42 @@
 = render partial: 'runs/twitter_card'
 
 - content_for(:header) do
+  - if @run.game.present? && @run.category.present?
+    ul.breadcrumb
+      li = link_to @run.game, game_path(@run.game)
+      li = link_to @run.category, game_category_path(@run.game, @run.category)
+      li = link_to @run.id36, run_path(@run)
+      li Statistics
   = render partial: 'runs/title', locals: {run: @run}
   h6
+    span#download-menu
+      - timer = Run.program(@run.timer)
+      => link_to timer.to_s, download_path(@run, timer.to_sym), onclick: 'hide_download_menu()'
+      | &bull;
+      =<> link_to 'LiveSplit One', "https://cryze.github.io/LiveSplitOne/#/splits-io/#{@run.id36}", target: '_blank'
+      - (Run.exportable_programs - [Run.program(@run.timer)]).each do |timer|
+        | &bull;
+        =<> link_to timer.to_s, download_path(@run, timer.to_sym), onclick: 'hide_download_menu()'
     ul.run-options
       li
-        a href=run_path(@run) &larr; back to run
+        a.fake-link#download-link onclick='toggle_download_menu()' ↓ download
+        - if @run.category
+          - if !@run.belongs_to?(current_user) && current_user.try(:runs?, @run.category)
+            li = link_to 'compare to my pb', compare_path(current_user.pb_for(@run.category), @run)
+          - if @run.best_known?
+            li ✓ best on record
+          - elsif @run.pb?
+            - if @run.belongs_to?(current_user) && @run.category.best_known_run.present?
+              li = link_to 'compare to best on record', compare_path(@run, @run.category.best_known_run)
+            li ✓ pb
+      - if @run.srdc_id.present?
+        li = link_to 'speedrun.com', @run.srdc_url
+      - if @run.video_url.present?
+        li = link_to 'proof', @run.video_url
+      li = link_to 'stats', run_stats_path(@run)
+      - if can?(:edit, @run)
+        li = link_to 'edit', edit_run_path(@run)
+
 
 = render partial: 'runs/full_timeline', locals: {run: @run}
 
@@ -35,8 +66,7 @@ article#stats
           tr
             td
               span Uploaded
-            td.upload-date.needs-formatting
-              = @run.created_at
+            td.upload-date.needs-formatting title=@run.created_at = @run.created_at
           - if sum_of_best.nil? || sum_of_best == 0
             tr.tip title="This run has no gold splits recorded"
               td

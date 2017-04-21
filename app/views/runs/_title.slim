@@ -1,7 +1,7 @@
 h3
   - if @run.game.present? && @run.category.present?
-    = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
-    =< link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+    = @run.game
+    =< @run.category
   - else
     = "(no title)"
 h5

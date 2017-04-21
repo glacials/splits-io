@@ -4,9 +4,9 @@
     h2
       span style="margin-right: .5em;"
         img src=current_user.avatar width=50 height=50
-      span splits i/o
+      span Splits I/O
   - else
-    h2 splits i/o
+    h2 Splits I/O
   - if logged_in? && current_user.runs.present?
     h5 want some jelly with these PBs?
   - else
@@ -15,14 +15,16 @@
       u<> all
       | the splits
 article
-  - if logged_in?
-    - if current_user.runs.present?
-      = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
-    - else
-      .jumbotron
-        h4 Drag and drop as many runs as you want right here
-  - else
-    p Save your splits to a file using your favorite splitting program, then drag that file anywhere on this page.
-    p To upload several files at once, #{link_to 'sign in', '/auth/twitch'} first.
+  .row
+    .col-md-12
+      - if logged_in?
+        - if current_user.runs.present?
+          = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
+        - else
+          .jumbotron
+            h4 Drag and drop as many runs as you want right here
+      - else
+        p Save your splits to a file using your favorite splitting program, then drag that file anywhere on this page.
+        p To upload several files at once, #{link_to 'sign in', '/auth/twitch'} first.
 - if logged_in?
   article#follows

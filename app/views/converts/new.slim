@@ -8,7 +8,7 @@ article
     .form-group.col-sm-1
       | →
     .form-group.col-sm-2
-      select name="format"
+      select.form-control name="format"
         - (Run.exportable_programs).each do |prgrm|
           option value="#{prgrm.to_sym}"
             = prgrm.to_s

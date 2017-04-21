@@ -1,16 +1,18 @@
-= user.follows.that_run(@category).find_each do |user|
-  = link_to user_rivalries_path(category: @category, to_user: user.name), method: :post, class: 'col-xs-12 col-sm-6 col-md-4 stealth-link user-link new-rivalry' do
-    .media style='margin: .5em 0;'
-      .pull-left
-        img src=user.avatar height=64 width=64
-      .media-body
-        h4.media-heading
-          = user.name
-          - if user.silver_patron?
-            .gold-split title='Patron'
-          .call-to-action = next_butt_kick_sentence
-        span.time.needs-formatting = user.pb_for(@category).time
-        small< pb
-        br
-        span.time.needs-formatting = user.pb_for(@category).sum_of_best
-        small< sum of best
+.col-md-6
+  .list-group
+    = user.follows.that_run(@category).find_each do |user|
+      = link_to user_rivalries_path(category: @category, to_user: user.name), method: :post, class: 'list-group-item'
+        .media style='margin: .5em 0;'
+          .pull-left
+            img src=user.avatar height=64 width=64
+          .media-body
+            h4.media-heading
+              = user.name
+              - if user.silver_patron?
+                .gold-split title='Patron'
+              .call-to-action = next_butt_kick_sentence
+            span.time.needs-formatting = user.pb_for(@category).time
+            small< pb
+            br
+            span.time.needs-formatting = user.pb_for(@category).sum_of_best
+            small< sum of best

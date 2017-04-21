@@ -5,7 +5,7 @@
   center
     i No runs matched!
 - else
-  table.table.table-striped
+  table.table.table-striped.table-hover
     - if description.present?
       .badge = description
     thead
@@ -31,7 +31,7 @@
           - if cols.include?(:owner_controls)
             td.align-right
               .dropdown
-                .dropdown-toggle id="dropdown_#{run.id36}" style="cursor: pointer; color: #a33;" data={toggle: :dropdown} x
+                .dropdown-toggle.kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown} x
                 ul.dropdown-menu.red role=:menu aria={labelledby: "dropdown_#{run.id36}"}
                   li role=:presentation
                     = link_to 'Disown', '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-header'
@@ -64,4 +64,4 @@
                   = link_to '+', new_user_rivalry_path(current_user, category: run.category)
           - if cols.include?(:uploaded)
             td.align-right.nowrap.upload-date.needs-formatting class=('short' if run.short?) title=run.created_at = run.created_at
-  .center = will_paginate(runs)
+  .center = will_paginate(runs, renderer: BootstrapPagination::Rails)

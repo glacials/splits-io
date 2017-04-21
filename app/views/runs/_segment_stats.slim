@@ -2,7 +2,9 @@
   .col-md-8.col-md-offset-2
     h3 Segment stats
     .badge
-      - if @run.attempts.blank?
+      - dynamodb_info = @run.dynamodb_info
+      - attempts = dynamodb_info['attempts']
+      - if attempts.blank?
         strike ↓ download segment history csv
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else

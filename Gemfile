@@ -111,6 +111,7 @@ gem 'turbolinks', github: 'rails/turbolinks'
 
 # views
 gem 'bootstrap-sass'
+gem 'bootswatch-rails'
 gem 'flat-ui-rails'
 gem 'gon'
 gem 'htmlentities'
@@ -119,6 +120,7 @@ gem 'sass-rails'
 gem 'slim'
 gem 'uglifier'
 gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 # workers/jobs
 gem 'delayed_job_active_record'

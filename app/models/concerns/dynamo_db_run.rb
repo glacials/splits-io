@@ -158,10 +158,10 @@ module DynamoDBRun
         'srdc_id' => srdc_id || parse_result[:srdc_id].presence,
         'duration_in_seconds' => parse_result[:splits].map { |split| split.duration }.sum.to_f,
         'sum_of_best' => parse_result[:splits].map.all? do |split|
-        split.best.present?
-      end && parse_result[:splits].map do |split|
-        split.best
-      end.sum.to_f
+          split.best.present?
+        end && parse_result[:splits].map do |split|
+          split.best
+        end.sum.to_f
       }
 
       $dynamodb_runs.put_item(item: run)

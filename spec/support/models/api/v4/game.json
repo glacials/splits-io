@@ -1,11 +1,13 @@
 {
-  "type": "object",
+  "type": [
+    "object",
+    "null"
+  ],
   "required": [
     "name",
     "shortname",
     "created_at",
-    "updated_at",
-    "categories"
+    "updated_at"
   ],
   "additionalProperties": false,
   "properties": {

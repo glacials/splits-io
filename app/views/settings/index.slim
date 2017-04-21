@@ -1,25 +1,62 @@
 - title "settings"
 - content_for(:header)
-  h2 settings
+	h2 settings
 - if current_user.nil?
-  article You need to be signed in to view this page
+	article You need to be signed in to view this page
 - else
-  article
-    .col-md-6
-      span> ✓ linked with Twitch as
-      b> style='color: #6441A4;' = current_user
-  article
-    .col-md-6
-      - patreon = current_user.patreon_info
-      - if patreon.nil?
-        span> ✗ not linked with
-        b> style='color: #e44727;' Patreon
-        a href='/auth/patreon' (link)
-      - else
-        span> ✓ linked with Patreon as
-        b> style='color: #E44727;' = patreon['patreon_full_name']
-        a> href='/auth/patreon/unlink' (unlink)
-        - if current_user.patron?
-          a> href='https://www.patreon.com/glacials' (see Patreon page)
-        - if current_user.gold_patron?
-          a href=tools_path (see my permalink redirectors)
+	article
+		.row
+			.col-md-6
+				.panel.panel-default
+					.panel-body style='background: rgba(100, 65, 164, 1);'
+						span> ✓ linked with Twitch as
+						b> = current_user
+						.pull-right
+							i.btn.btn-default.disabled Not unlinkable
+					.panel-footer
+						.row
+							.col-md-12
+								a.btn.btn-default href=current_user.uri Visit my Twitch page
+			.col-md-6
+				.panel.panel-default
+					.panel-body style='background: rgba(230, 70, 26, 1.00);'
+						- patreon = current_user.patreon_info
+						- if patreon.nil?
+							span> ✗ not linked with Patreon
+							.pull-right
+								a.btn.btn-success href='/auth/patreon' Link
+						- else
+							span> ✓ linked with Patreon as
+							b> = patreon['patreon_full_name'] || '???'
+							.pull-right
+								a.btn.btn-warning href='/auth/patreon/unlink' Unlink
+					.panel-footer
+						.row
+							.col-md-3
+								a.btn.btn-default> href='https://www.patreon.com/glacials' target='_blank' Visit Patreon
+							- if current_user.gold_patron?
+								.col-md-6
+									a.btn.btn-success href=tools_path View my permalink redirectors
+	article
+		.row
+			.col-md-12
+				.panel.panel-danger
+					.panel-heading Delete My Account
+					.panel-body
+						p If you like, you can permanently delete your account on Splits I/O. You can recreate it later by signing in with
+							Twitch again, but it will be a fresh account with no runs.
+						p You can choose to cascade this deletion to all your runs, or to disown them instead. Disowned runs do not belong to
+							any user and will not be claimable, even if you recreate your account. Your name will not appear on them.
+						p This is a hard delete. No one can restore your account if you change your mind.
+						.col-md-6
+							center
+								= button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be permanently deleted."}, params: {destroy_runs: '1'}, class: 'button btn btn-danger'
+									div
+										big Delete my account
+									small Deleting #{current_user.runs.count} runs (#{current_user.pbs.count} PBs) across #{current_user.games.count} games with it
+						.col-md-6
+							center
+								= button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be disowned."}, class: 'button btn btn-danger'
+									div
+										big Delete my account
+									small Keeping all runs, but anonymizing them permanently

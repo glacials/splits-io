@@ -1,0 +1,86 @@
+.inspect
+  .time
+    display: block
+
+.bar
+  border-color: #aaa
+  border-left: 1px solid
+  border-right: 1px solid
+  color: #aaa
+  overflow: hidden
+  position: relative
+  text-align: center
+  &:before, &:after
+    position: absolute
+    top: 51%
+    overflow: hidden
+    width: 50%
+    height: 1px
+    content: '\a0'
+    background-color: #aaa
+  &:before
+    margin-left: -50%
+    text-align: right
+
+.split, .inspect
+  text-decoration: none
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  white-space: nowrap
+
+.timeline
+  @extend .pure-g
+  margin-bottom: .5em
+  width: 100%
+
+.blank
+  background: rgba(255, 255, 255, 0)
+
+.timeline .split .title
+  padding: .5em 0 0 .5em
+
+.timeline .split .time
+  padding: 0 0 .5em .5em
+
+.split .time
+  color: rgba(255, 255, 255, 0.5)
+
+.timeline .inspect
+  .bar
+    margin-bottom: .3em
+  .title, .time, .save
+    margin: 0 0 0 .5em
+
+.split .time
+  display: block
+
+.gold-split
+  background: $gold
+  cursor: default
+  display: inline-block
+  height: .9em
+  margin: 0 .5em
+  width: .45em
+
+.split > .gold-split.gold
+  background-color: $gold
+  height: .35em
+  margin: 0
+  padding: 0
+
+.split > .gold-split.gray
+  background-color: rgba(0, 0, 0, .3)
+  height: .35em
+  margin: 0
+  padding: 0
+
+.timeline-background
+  background: repeating-linear-gradient(-45deg, #fff, #fff 6px, #f1f1f1 6px, #f1f1f1 12px)
+
+.timeline.draggable
+  cursor: e-resize
+

@@ -2,26 +2,43 @@
 - content_for(:header) do
   h2 Rivals
 article
-  - @user.rivalries.each do |rivalry|
-    - user_pb = @user.pb_for(rivalry.category)
-    - rival_pb = rivalry.to_user.pb_for(rivalry.category)
-    - rival = rival_display_info(rivalry)
-    .col-md-3
-      h4
-        span> = link_to rivalry.game, rivalry.game, class: 'stealth-link game-link'
-        span = link_to rivalry.category, game_category_path(rivalry.game, rivalry.category), class: 'stealth-link category-link'
-      - if user_pb.present? && rival_pb.present?
-        a.stealth-link.run-link href=compare_path(user_pb, rival_pb)
-          div
-            span> pb:
-            span = render partial: 'shared/time_difference', locals: {time: difference(user_pb, rival_pb), short: user_pb.short?}
-          div
-            span> sum of best:
-            span = render partial: 'shared/time_difference', locals: {time: sob_difference(user_pb, rival_pb), short: user_pb.short?}
-    .col-md-8 = render partial: 'vs', locals: {rivalry: rivalry}
-    .col-md-1 style="cursor: pointer; color: #a33;"
-      small
-        = button_to user_rivalry_path(rivalry.from_user, rivalry), method: :delete, data: {confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?"}, class: 'btn btn-default', style: "cursor: pointer; color: #a33; border: none;"
-          | X
-    hr
+  .list-group
+    - @rivalries.each do |rivalry|
+      - user_pb = rivalry.from_user.pb_for(rivalry.category)
+      - rival_pb = rivalry.to_user.pb_for(rivalry.category)
+      - rival = rival_display_info(rivalry)
+      a.list-group-item href=compare_path(user_pb, rival_pb)
+        .row
+          .col-md-1
+            img src=rivalry.to_user.avatar height='64' width='64'
+          .col-md-3
+            h4 = rivalry.to_user
+          .col-md-3
+            h4 = rivalry.game
+            h6 = rivalry.category
+          - if user_pb.present? && rival_pb.present?
+            .col-md-3
+              div
+                span> pb:
+                span = render partial: 'shared/time_difference', locals: {time: difference(user_pb, rival_pb), short: user_pb.short?}
+              div
+                span> sum of best:
+                span = render partial: 'shared/time_difference', locals: { \
+                  time: sob_difference(user_pb, rival_pb), \
+                  short: user_pb.short? \
+                }
+              div
+                span> most recent run:
+                span = render partial: 'shared/time_difference', locals: { \
+                  time: difference( \
+                    rivalry.from_user.runs.where(category: rivalry.category).order('created_at DESC').first, \
+                    rivalry.to_user.runs.where(category: rivalry.category).order('created_at DESC').first \
+                  ), \
+                  short: user_pb.short? \
+                }
+          .col-md-1.pull-right style="cursor: pointer;"
+            small
+              = button_to user_rivalry_path(rivalry.from_user, rivalry), method: :delete, data: {confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?"}, class: 'btn btn-default'
+                | X
+      hr
   h5 = link_to '+ Add or replace a rival', new_user_rivalry_path(@user)

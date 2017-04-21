@@ -90,6 +90,8 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootswatch-rails (3.3.5)
+      railties (>= 3.1)
     builder (3.2.3)
     c3-rails (0.4.11)
     callsite (0.0.11)
@@ -407,6 +409,8 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     will_paginate (3.1.0)
+    will_paginate-bootstrap (1.0.1)
+      will_paginate (>= 3.0.3)
     xml-simple (1.1.5)
 
 PLATFORMS
@@ -422,6 +426,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass
+  bootswatch-rails
   c3-rails
   cancancan
   chronic_duration!
@@ -485,6 +490,7 @@ DEPENDENCIES
   unicorn
   versionomy
   will_paginate
+  will_paginate-bootstrap
   xml-simple
 
 RUBY VERSION

@@ -29,7 +29,7 @@ article#run-table data-turbolinks-temporary=true
           tr id=[:run, pb.id]
             td.align-right = i += 1
             td.align-left = link_to runner, runner, class: 'user-link'
-            td.align-left.time.needs-formatting style='border-left: 2px solid #ffd700;' = pb.sum_of_best
+            td.align-left.time.needs-formatting = pb.sum_of_best
             td.align-left
               small = link_to pb.time, pb, class: 'time needs-formatting run-link'
             td.align-left

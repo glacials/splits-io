@@ -66,34 +66,7 @@
       ]
     },
     "game": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "required": [
-        "name",
-        "shortname",
-        "created_at",
-        "updated_at"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "shortname": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "created_at": {
-          "type": "string"
-        },
-        "updated_at": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "../../../models/api/v4/game.json"
     },
     "category": {
       "$ref": "../../../models/api/v4/category.json"

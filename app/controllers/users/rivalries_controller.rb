@@ -6,6 +6,7 @@ class Users::RivalriesController < ApplicationController
   before_filter :authenticate
 
   def index
+    @rivalries = @user.rivalries
   end
 
   def new

@@ -4,8 +4,12 @@ module S3Run
   extend ActiveSupport::Concern
 
   included do
+    def s3_filename
+      super || id36
+    end
+
     def in_s3?
-      file = $s3_bucket.object("splits/#{id36}")
+      file = $s3_bucket.object("splits/#{s3_filename}")
       return file.exists?
     rescue Aws::S3::Errors::Forbidden
       return false
