@@ -79,7 +79,7 @@ GEM
       railties (>= 3)
     aws-sdk-resources (2.5.5)
       aws-sdk-core (= 2.5.5)
-    babel_bridge (0.5.4)
+    babel_bridge (0.5.5)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -130,7 +130,7 @@ GEM
     factory_girl_rails (4.7.0)
       factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
-    fakes3 (0.2.4)
+    fakes3 (1.0.0)
       builder
       thor
     faraday (0.9.2)
@@ -497,4 +497,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.2
+   1.13.3

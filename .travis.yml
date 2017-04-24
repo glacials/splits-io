@@ -4,8 +4,15 @@ language:
 cache: bundler
 rvm:
  - 2.3.1
+env:
+  AWS_ACCESS_KEY_ID=boop
+  AWS_REGION=local
+  AWS_SECRET_KEY=beep
+  DATABASE_URL=postgres://localhost/splits-io-test
+  DYNAMODB_URL=http://localhost:8000
+  S3_BUCKET=splits
 script:
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - RAILS_ENV=test bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
   - bundle exec rspec spec
 services:
@@ -16,5 +23,4 @@ before_script:
   - mkdir /tmp/dynamodb
   - tar -xzvf /tmp/dynamodb.tar.gz -C /tmp/dynamodb
   - java -Djava.library.path=/tmp/dynamodb/DynamoDBLocal_lib -jar /tmp/dynamodb/DynamoDBLocal.jar -sharedDb -inMemory &
-  - gem install fakes3
-  - fakes3 -r /tmp/splits-io/splits -p 4567 &
+  - bundle exec fakes3 -r /tmp/splits-io/splits -p 4567 -q &
