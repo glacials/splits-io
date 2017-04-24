@@ -2,8 +2,7 @@
 - content_for(:header) do
   ul.breadcrumb
     li = link_to "Games", games_path
-  h2 games
-  h5 only the fast ones though
+  h2 Games
 article#search
   = form_for(:game, method: :get, url: games_path) do |f|
     .input-group.col-md-6

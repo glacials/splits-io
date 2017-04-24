@@ -1,6 +1,6 @@
 - title "tools"
 - content_for(:header)
-  h2 tools
+  h2 Tools
 article
   - if current_user.present? && current_user.gold_patron?
     .col-md-12
@@ -38,7 +38,7 @@ article
           copy+paste the output into a panel with no additional editing on your part.
         - if current_user.present?
           p
-            = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-primary', target: :_blank
+            = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-default', target: :_blank
           small
             | order:
             =< link_to 'alphabetically', user_panels_path(current_user, by: :name, order: :asc)
@@ -54,5 +54,5 @@ article
       .panel-heading Splits Converter
       .panel-body
         p You can download uploaded splits in any exportable format we support, but if you need to convert splits and don't
-          care about storing them, you can use this tool:
-        p = link_to 'Convert splits to other timer formats', convert_path, class: 'btn btn-primary'
+          care about storing them, you can use this tool.
+        p = link_to 'Convert splits to other timer formats', convert_path, class: 'btn btn-default'

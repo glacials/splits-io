@@ -1,6 +1,6 @@
 - title "settings"
 - content_for(:header)
-	h2 settings
+	h2 Settings
 - if current_user.nil?
 	article You need to be signed in to view this page
 - else
@@ -8,32 +8,32 @@
 		.row
 			.col-md-6
 				.panel.panel-default
-					.panel-body style='background: rgba(100, 65, 164, 1);'
-						span> ✓ linked with Twitch as
+					.panel-body style='background: rgba(100, 65, 164, 1); color: #fff;'
+						span> ✓ Linked with Twitch as
 						b> = current_user
 						.pull-right
 							i.btn.btn-default.disabled Not unlinkable
 					.panel-footer
 						.row
 							.col-md-12
-								a.btn.btn-default href=current_user.uri Visit my Twitch page
+								a.btn.btn-default href=current_user.uri target='_blank' Visit my Twitch channel
 			.col-md-6
 				.panel.panel-default
-					.panel-body style='background: rgba(230, 70, 26, 1.00);'
+					.panel-body style='background: rgba(230, 70, 26, 1.00); color: #fff;'
 						- patreon = current_user.patreon_info
 						- if patreon.nil?
-							span> ✗ not linked with Patreon
+							span> ✗ Not linked with Patreon
 							.pull-right
-								a.btn.btn-success href='/auth/patreon' Link
+								a.btn.btn-default href='/auth/patreon' Link
 						- else
-							span> ✓ linked with Patreon as
+							span> ✓ Linked with Patreon as
 							b> = patreon['patreon_full_name'] || '???'
 							.pull-right
-								a.btn.btn-warning href='/auth/patreon/unlink' Unlink
+								a.btn.btn-default href='/auth/patreon/unlink' Unlink
 					.panel-footer
 						.row
 							.col-md-3
-								a.btn.btn-default> href='https://www.patreon.com/glacials' target='_blank' Visit Patreon
+								a.btn.btn-default> href='https://www.patreon.com/glacials' target='_blank' Visit the Splits I/O Patreon
 							- if current_user.gold_patron?
 								.col-md-6
 									a.btn.btn-success href=tools_path View my permalink redirectors
