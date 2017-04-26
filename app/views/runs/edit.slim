@@ -35,7 +35,7 @@ article#game-category
             .col-md-4
               = f.collection_select( \
                 :category, \
-                @run.game.try(:categories) || [], \
+                @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order('count(runs.id) desc') : [], \
                 :id, \
                 :name, \
                 { \
