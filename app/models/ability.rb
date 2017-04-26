@@ -9,9 +9,9 @@ class Ability
     can [:update, :create, :destroy], Run.owned, user_id: user.id
     can [:read, :update, :create, :destroy], Rivalry, from_user_id: user.id
 
-    if user.name == 'glacials'
+    if user.id == 1
       can [:update, :destroy, :merge], Game
-      can [:update], Run
+      can [:update, :destroy], Run
     end
   end
 end
