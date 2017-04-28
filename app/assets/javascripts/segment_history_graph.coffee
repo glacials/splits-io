@@ -15,7 +15,7 @@ $ ->
   hidden_data = []
   first_non_null_attempt = Infinity
 
-  $.each gon.run.splits, (i, split) ->
+  $.each gon.run.raw_splits, (i, split) ->
     non_null_time_inserted = false
     attempt_durations = []
     $.each split.history, (j, attempt) ->

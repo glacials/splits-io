@@ -46,6 +46,7 @@
 - segments = @run.dynamodb_segments
 - sum_of_best = segments.sum { |s| s.best }
 - attempts = dynamodb_info['attempts']
+- total_playtime = @run.total_playtime
 
 article#stats
   .row
@@ -138,6 +139,14 @@ article#stats
             td
               - if @run.collapsed_splits.size > 0
                 span.time.needs-formatting class=('short' if @run.short?) = @run.median_segment_duration
+              - else
+                span.time -
+          tr
+            td
+              span Total Playtime
+            td
+              - if total_playtime != 0
+                span.time.needs-formatting = @run.total_playtime
               - else
                 span.time -
   = render partial: 'runs/segment_stats', locals: {run: @run, short: @run.short?, splits: @raw_splits}

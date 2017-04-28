@@ -15,6 +15,16 @@ module CompletedRun
       return @segments_cache
     end
 
+    def segments_with_history
+      if @segments_with_history_cache.nil?
+        @segments_with_history_cache = segments
+        @segments_with_history_cache.each do |segment|
+          segment.history = segment.dynamodb_history
+        end
+      end
+      return @segments_with_history_cache
+    end
+
     def shortest_segment
       collapsed_splits.min_by(&:duration)
     end
@@ -51,6 +61,15 @@ module CompletedRun
 
     def has_golds?
       splits.all? { |split| split.best }
+    end
+
+    def total_playtime
+      time = 0
+      return time unless program == "livesplit"
+      segments_with_history.each do |segment|
+        time += segment.history.sum { |h| h[:duration_seconds].nil? ? 0 : h[:duration_seconds] }
+      end
+      return time
     end
   end
 end

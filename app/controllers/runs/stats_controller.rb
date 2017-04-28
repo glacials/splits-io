@@ -11,17 +11,12 @@ class Runs::StatsController < Runs::ApplicationController
 
     segments = @run.dynamodb_segments
 
-    full_segments = segments
-    full_segments.each do |segment|
-      segment.history = segment.dynamodb_history
-    end
-
     attempts = @run.dynamodb_info['attempts']
 
     gon.run = {
       id: @run.id36,
       splits: segments,
-      raw_splits: full_segments,
+      raw_splits: @run.segments_with_history,
       history: @run.dynamodb_history,
       attempts: attempts,
       program: @run.program,
