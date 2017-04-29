@@ -67,7 +67,7 @@ module CompletedRun
       time = 0
       return time unless program == "livesplit"
       segments_with_history.each do |segment|
-        time += segment.history.sum { |h| h[:duration_seconds].nil? ? 0 : h[:duration_seconds] }
+        time += segment.history.sum { |h| h[:duration_seconds].blank? ? 0 : h[:duration_seconds] } || 0
       end
       return time
     end
