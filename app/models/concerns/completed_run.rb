@@ -65,9 +65,11 @@ module CompletedRun
 
     def total_playtime
       time = 0
-      return time unless program == "livesplit"
       segments_with_history.each do |segment|
-        time += segment.history.sum { |h| h[:duration_seconds].nil? ? 0 : h[:duration_seconds] }
+        next if segment.history.blank?
+        segment.history.each do |h|
+          time += h[:duration_seconds] unless h[:duration_seconds].blank?
+        end
       end
       return time
     end
