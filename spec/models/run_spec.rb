@@ -139,6 +139,10 @@ describe Run, type: :model do
       expect(run.median_segment_duration).to eq 118.79162584999995
     end
 
+    it 'accurately reports its total playtime' do
+      expect(run.total_playtime).to eq 77067.13229930002
+    end
+
     it 'reports no history using fast parsing' do
       expect(run.parse(fast: true)[:history]).to be_nil
     end
@@ -199,6 +203,10 @@ describe Run, type: :model do
       expect(run.median_segment_duration).to eq 35.992999999999995
     end
 
+    it 'accurately reports its total playtime' do
+      expect(run.total_playtime).to eq 22450.452999999987
+    end
+
     it 'reports no history using fast parsing' do
       expect(run.parse(fast: true)[:history]).to be_nil
     end
@@ -243,6 +251,10 @@ describe Run, type: :model do
       expect(run.median_segment_duration).to eq(509.71500000000003)
     end
 
+    it 'accurately reports its total playtime' do
+      expect(run.total_playtime).to eq 0
+    end
+
     it 'correctly converts back to llanfair files' do
       run.program = :llanfair
       expect(run.original_file).to eq(RunFile.pack_binary(run.file))
@@ -284,6 +296,10 @@ describe Run, type: :model do
           ["Hammers of Fortune", 46.08]
         ]
       end
+
+      it 'accurately reports its total playtime' do
+        expect(run.total_playtime).to eq 0
+      end
     end
   end
 
@@ -306,6 +322,10 @@ describe Run, type: :model do
         ["Jimmy", 177.61],
         ["Wario", 234.06]
       ]
+    end
+
+    it 'accurately reports its total playtime' do
+      expect(run.total_playtime).to eq 0
     end
   end
 end
