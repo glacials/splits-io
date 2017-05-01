@@ -23,7 +23,7 @@ module UnparsedRun
           end
 
           if resp.nil?
-            raise "Can't parse run"
+            return nil
           end
 
           return {
