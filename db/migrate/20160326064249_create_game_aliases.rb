@@ -1,4 +1,4 @@
-class CreateGameAliases < ActiveRecord::Migration
+class CreateGameAliases < ActiveRecord::Migration[4.2]
   def change
     enable_extension :citext
 

@@ -1,4 +1,4 @@
-class RemoveDeviseColumnsFromUsers < ActiveRecord::Migration
+class RemoveDeviseColumnsFromUsers < ActiveRecord::Migration[4.2]
   def change
     remove_column :users, :encrypted_password
     remove_column :users, :reset_password_token

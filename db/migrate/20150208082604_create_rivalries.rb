@@ -1,4 +1,4 @@
-class CreateRivalries < ActiveRecord::Migration
+class CreateRivalries < ActiveRecord::Migration[4.2]
   def change
     create_table :rivalries do |t|
       t.belongs_to :category, index: true
