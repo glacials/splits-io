@@ -49,11 +49,12 @@
 - total_playtime = @run.total_playtime
 
 article#stats
-  .row
-    .col-md-8.col-md-offset-2
-      h3 Run stats
-      .badge
+  .panel.panel-default
+    .panel-heading
+      | Run Information
+      .pull-right 
         a href=run_history_csv_path ↓ download run history csv
+    .panel-body
       table.table.table-striped
         tbody
           tr
@@ -151,14 +152,19 @@ article#stats
                 span.time -
   = render partial: 'runs/segment_stats', locals: {run: @run, short: @run.short?, splits: @raw_splits}
   - if @run.collapsed_splits.size > 0
-    hr
-    #pb-graph
+    .panel.panel-default
+      .panel-body
+        #pb-graph
   - if @run.history.size > 0
-    hr
-    #split-history-graph
-    hr
-    #run-duration-graph
-    hr
-    #segment-duration-graph
-    hr
-    #reset-graph
+    .panel.panel-default
+      .panel-body
+        #split-history-graph
+    .panel.panel-default
+      .panel-body
+        #run-duration-graph
+    .panel.panel-default
+      .panel-body
+        #segment-duration-graph
+    .panel.panel-default
+      .panel-body
+        #reset-graph

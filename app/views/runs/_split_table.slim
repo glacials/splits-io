@@ -1,23 +1,26 @@
-table.table.table-striped.table-hover
-  thead
-    tr
-      th.align-right #
-      th.align-left Name
-      th.align-right Duration
-      th.align-right Finished at
-  tbody
-    - splits.each_with_index do |split, index|
-      tr
-        td.align-right= index + 1
-        td.align-left= split.name.present? ? split.name : '-'
-        td.align-right
-          - if split.gold?
-            .gold-split title='Gold'
-          - if split.skipped?
-            span.time -
-          - else
-            span.time.needs-formatting class=('short' if short) = split.duration
-        - if split.skipped?
-          td.align-right.time -
-        - else
-          td.align-right.time.needs-formatting class=('short' if short) = split.finish_time
+.panel.panel-default
+  .panel-heading Segments
+  .panel-body
+    table.table.table-striped.table-hover
+      thead
+        tr
+          th.align-right #
+          th.align-left Name
+          th.align-right Duration
+          th.align-right Finished at
+      tbody
+        - splits.each_with_index do |split, index|
+          tr
+            td.align-right= index + 1
+            td.align-left= split.name.present? ? split.name : '-'
+            td.align-right
+              - if split.gold?
+                .gold-split title='Gold'
+              - if split.skipped?
+                span.time -
+              - else
+                span.time.needs-formatting class=('short' if short) = split.duration
+            - if split.skipped?
+              td.align-right.time -
+            - else
+              td.align-right.time.needs-formatting class=('short' if short) = split.finish_time

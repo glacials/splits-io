@@ -5,63 +5,65 @@
   center
     i No runs matched!
 - else
-  table.table.table-striped.table-hover
+  .panel.panel-default
     - if description.present?
-      .badge = description
-    thead
-      tr
-        - if cols.include?(:owner_controls)
-          th.align-right
-        - if cols.include?(:runner)
-          th.align-right
-            = link_to "Runner", "?#{request.query_parameters.merge(by: :user_id, order: (params[:by] == 'user_id' && params[:order] == 'asc') ? :desc : :asc).to_param}"
-        - if cols.include?(:time)
-          th.align-right
-            = link_to "Time", "?#{request.query_parameters.merge(by: :time, order: (params[:by] == 'time' && params[:order] == 'asc') ? :desc : :asc).to_param}"
-        - if cols.include?(:name)
-          th Name
-        - if cols.include?(:rival)
-          th.align-right Rival
-        - if cols.include?(:uploaded)
-          th.align-right
-            = link_to "Uploaded", "?#{request.query_parameters.merge(by: :created_at, order: (params[:by] == 'created_at' && params[:order] == 'desc') ? :asc : :desc).to_param}"
-    tbody
-      - runs.includes(:user).each do |run|
-        tr id="run_#{run.id36}"
-          - if cols.include?(:owner_controls)
-            td.align-right
-              .dropdown
-                .dropdown-toggle.kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown} x
-                ul.dropdown-menu.red role=:menu aria={labelledby: "dropdown_#{run.id36}"}
-                  li role=:presentation
-                    = link_to 'Disown', '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-header'
-                    = link_to 'Delete', '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-header'
-          - if cols.include?(:runner)
-            td.align-right
-              - if run.user && run.user.name
-                = link_to run.user, user_path(run.user), class: 'user-link'
-                - if run.user.silver_patron?
-                  .gold-split title='Patron'
-              - else
-                | -
-          - if cols.include?(:time)
-            td.align-right.time.needs-formatting = run.time
-          - if cols.include?(:name)
-            td = link_to run, run_path(run), class: 'run-link'
-          - if cols.include?(:rival)
-            td.align-right
-              small
-                - rival = run.user.rival_for(run.category)
-                - if rival.present? && rival.runs?(run.category)
-                  - rival_run = rival.pb_for(run.category)
-                  = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
-                    = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run), short: run.short?}
-                    |  against 
-                    = rival
-                    - if rival.silver_patron?
+      .panel-heading = description
+    .panel-body
+      table.table.table-striped.table-hover
+        thead
+          tr
+            - if cols.include?(:owner_controls)
+              th.align-right
+            - if cols.include?(:runner)
+              th.align-right
+                = link_to "Runner", "?#{request.query_parameters.merge(by: :user_id, order: (params[:by] == 'user_id' && params[:order] == 'asc') ? :desc : :asc).to_param}"
+            - if cols.include?(:time)
+              th.align-right
+                = link_to "Time", "?#{request.query_parameters.merge(by: :time, order: (params[:by] == 'time' && params[:order] == 'asc') ? :desc : :asc).to_param}"
+            - if cols.include?(:name)
+              th Game + Category
+            - if cols.include?(:rival)
+              th.align-right Rival
+            - if cols.include?(:uploaded)
+              th.align-right
+                = link_to "Uploaded", "?#{request.query_parameters.merge(by: :created_at, order: (params[:by] == 'created_at' && params[:order] == 'desc') ? :asc : :desc).to_param}"
+        tbody
+          - runs.includes(:user).each do |run|
+            tr id="run_#{run.id36}"
+              - if cols.include?(:owner_controls)
+                td.align-right
+                  .dropdown
+                    .dropdown-toggle.kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown} x
+                    ul.dropdown-menu.red role=:menu aria={labelledby: "dropdown_#{run.id36}"}
+                      li role=:presentation
+                        = link_to 'Disown', '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-header'
+                        = link_to 'Delete', '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-header'
+              - if cols.include?(:runner)
+                td.align-right
+                  - if run.user && run.user.name
+                    = link_to run.user, user_path(run.user), class: 'user-link'
+                    - if run.user.silver_patron?
                       .gold-split title='Patron'
-                - elsif run.category.present?
-                  = link_to '+', new_user_rivalry_path(current_user, category: run.category)
-          - if cols.include?(:uploaded)
-            td.align-right.nowrap.upload-date.needs-formatting class=('short' if run.short?) title=run.created_at = run.created_at
-  .center = will_paginate(runs, renderer: BootstrapPagination::Rails)
+                  - else
+                    | -
+              - if cols.include?(:time)
+                td.align-right.time.needs-formatting = run.time
+              - if cols.include?(:name)
+                td = link_to run, run_path(run), class: 'run-link'
+              - if cols.include?(:rival)
+                td.align-right
+                  small
+                    - rival = run.user.rival_for(run.category)
+                    - if rival.present? && rival.runs?(run.category)
+                      - rival_run = rival.pb_for(run.category)
+                      = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
+                        = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run), short: run.short?}
+                        |  against 
+                        = rival
+                        - if rival.silver_patron?
+                          .gold-split title='Patron'
+                    - elsif run.category.present?
+                      = link_to '+', new_user_rivalry_path(current_user, category: run.category)
+              - if cols.include?(:uploaded)
+                td.align-right.nowrap.upload-date.needs-formatting class=('short' if run.short?) title=run.created_at = run.created_at
+      .center = will_paginate(runs, renderer: BootstrapPagination::Rails)

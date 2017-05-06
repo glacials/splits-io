@@ -1,7 +1,7 @@
-.row
-  .col-md-8.col-md-offset-2
-    h3 Segment stats
-    .badge
+.panel.panel-default
+  .panel-heading
+    | Segment Information
+    .pull-right 
       - dynamodb_info = @run.dynamodb_info
       - attempts = dynamodb_info['attempts']
       - if attempts.blank?
@@ -9,6 +9,7 @@
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else
         a href=segment_history_csv_path ↓ download segment history csv
+  .panel-body
     table.table.table-striped
       thead
         tr

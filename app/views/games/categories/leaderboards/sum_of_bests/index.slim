@@ -2,9 +2,8 @@
 - content_for(:header) do
   h2 Fastest sum of best
   h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
-article#category-tabs data-turbolinks-temporary=true
+article data-turbolinks-temporary=true
   = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
-article#run-table data-turbolinks-temporary=true
   - runners = @category.runners.joins(:runs).includes(:runs).where('runs.sum_of_best > 0').order('runs.sum_of_best asc')
   - if runners.empty?
     center
