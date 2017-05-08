@@ -47,7 +47,7 @@
                   - else
                     | -
               - if cols.include?(:time)
-                = format_milliseconds(run.duration_milliseconds)
+                td.align-right = format_milliseconds(run.duration_milliseconds)
               - if cols.include?(:name)
                 td = link_to run, run_path(run), class: 'run-link'
               - if cols.include?(:rival)

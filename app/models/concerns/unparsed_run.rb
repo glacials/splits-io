@@ -160,6 +160,10 @@ module UnparsedRun
       histories = []
 
       segs.each.with_index do |seg, i|
+        if seg.indexed_history.nil?
+          return nil
+        end
+
         seg.indexed_history.each do |history|
           histories << SegmentHistory.new(
             segment_id: ids[i],
