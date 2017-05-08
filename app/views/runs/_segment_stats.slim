@@ -2,9 +2,7 @@
   .panel-heading
     | Segment Information
     .pull-right 
-      - dynamodb_info = @run.dynamodb_info
-      - attempts = dynamodb_info['attempts']
-      - if attempts.blank? || attempts.zero?
+      - if @run.attempts.blank? || @run.attempts.zero?
         strike ↓ download segment history csv
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else
@@ -27,26 +25,25 @@
             span 99th percentile
             small.tip-html< title="99% of this segment's times are faster than this" = "(?)"
       tbody
-        - run.dynamodb_segments.each_with_index do |segment, index|
-          - history = segment.dynamodb_history
-          - if history.nil? || history.length == 0
+        - run.segments.each_with_index do |segment, index|
+          - if segment.histories.nil? || segment.histories.length == 0
             tr
               td.align-right= index + 1
               td.align-left= segment.name.present? ? segment.name : '-'
               td.align-right colspan=99
                 i no segment history available
           - else
-            - unskipped_history = history.map { |h| h[:duration_seconds] }.reject { |t| t.nil? }
+            - history_times = segment.histories.map { |h| h[:duration_milliseconds] }.compact
             tr
               td.align-right= index + 1
               td.align-left= segment.name.present? ? segment.name : '-'
-              td.align-right.time.needs-formatting class=('short' if short)
-                = unskipped_history.mean
-              td.align-right.time.needs-formatting class=('short' if short)
-                = unskipped_history.median
-              td.align-right.time.needs-formatting class=('short' if short)
-                = unskipped_history.standard_deviation
-              td.align-right.time.needs-formatting class=('short' if short)
-                = unskipped_history.percentile(90)
-              td.align-right.time.needs-formatting class=('short' if short)
-                = unskipped_history.percentile(99)
+              td.align-right
+                = format_milliseconds(history_times.mean)
+              td.align-right
+                = format_milliseconds(history_times.median)
+              td.align-right
+                = format_milliseconds(history_times.standard_deviation)
+              td.align-right
+                = format_milliseconds(history_times.percentile(90))
+              td.align-right
+                = format_milliseconds(history_times.percentile(99))

@@ -1,9 +1,8 @@
-- scale_to ||= run.time
+- scale_to ||= run.duration_milliseconds
 - cache [:timeline, :v4, {run: run, scale_to: scale_to}] do
   .timeline-background
     .timeline
-      - run.collapsed_splits.each_with_index do |segment, index|
-        .pure-u.split id="#{run.id36}-split-#{index}" class=next_timeline_color(run.id36) style="width:
-          #{segment.duration / scale_to * 100}%; z-index: #{index}"
+      - run.collapsed_segments.each.with_index do |segment, index|
+        .pure-u.split id="#{run.id36}-split-#{index}" class=next_timeline_color(run.id36) style="width: #{segment.duration_milliseconds.to_f / scale_to * 100}%; z-index: #{index}"
           .title = segment.name
-          .time.needs-formatting class=('short' if run.short?) = segment.duration
+          .time.needs-formatting class=('short' if run.short?) = segment.duration_milliseconds

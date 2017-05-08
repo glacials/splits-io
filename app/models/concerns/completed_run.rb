@@ -8,33 +8,16 @@ module CompletedRun
       segments
     end
 
-    def segments
-      if @segments_cache.nil?
-        @segments_cache = (dynamodb_segments || [])
-      end
-      return @segments_cache
-    end
-
-    def segments_with_history
-      if @segments_with_history_cache.nil?
-        @segments_with_history_cache = segments
-        @segments_with_history_cache.each do |segment|
-          segment.history = segment.dynamodb_history
-        end
-      end
-      return @segments_with_history_cache
-    end
-
     def shortest_segment
-      collapsed_splits.min_by(&:duration)
+      collapsed_segments.min_by(&:duration_milliseconds)
     end
 
     def longest_segment
-      collapsed_splits.max_by(&:duration)
+      collapsed_segments.max_by(&:duration_milliseconds)
     end
 
-    def median_segment_duration
-      sorted_segments = collapsed_splits.map(&:duration).sort
+    def median_segment_duration_milliseconds
+      sorted_segments = collapsed_segments.map(&:duration_milliseconds).sort
       len = sorted_segments.size
       (sorted_segments[(len - 1) / 2] + sorted_segments[len / 2]) / 2.0
     end
@@ -63,12 +46,12 @@ module CompletedRun
       splits.all? { |split| split.best }
     end
 
-    def total_playtime
+    def total_playtime_milliseconds
       time = 0
-      segments_with_history.each do |segment|
-        next if segment.history.blank?
-        segment.history.each do |h|
-          time += h[:duration_seconds] unless h[:duration_seconds].blank?
+      segments.each do |segment|
+        next if segment.histories.blank?
+        segment.histories.each do |h|
+          time += h.duration_milliseconds unless h.duration_milliseconds.blank?
         end
       end
       return time

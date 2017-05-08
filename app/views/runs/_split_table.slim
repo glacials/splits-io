@@ -9,18 +9,18 @@
           th.align-right Duration
           th.align-right Finished at
       tbody
-        - splits.each_with_index do |split, index|
+        - splits.each_with_index do |segment, index|
           tr
             td.align-right= index + 1
-            td.align-left= split.name.present? ? split.name : '-'
+            td.align-left= segment.name.presence || '-'
             td.align-right
-              - if split.gold?
+              - if segment.gold?
                 .gold-split title='Gold'
-              - if split.skipped?
+              - if segment.skipped? || segment.reduced?
                 span.time -
               - else
-                span.time.needs-formatting class=('short' if short) = split.duration
-            - if split.skipped?
+                span.time.needs-formatting class=('short' if short) = segment.duration_milliseconds / 1000
+            - if segment.skipped?
               td.align-right.time -
             - else
-              td.align-right.time.needs-formatting class=('short' if short) = split.finish_time
+              td.align-right.time.needs-formatting class=('short' if short) = segment.end_milliseconds / 1000

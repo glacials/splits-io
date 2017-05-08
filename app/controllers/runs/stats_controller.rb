@@ -9,19 +9,19 @@ class Runs::StatsController < Runs::ApplicationController
       return
     end
 
-    segments = @run.dynamodb_segments
-
-    attempts = @run.dynamodb_info['attempts']
+    segments = @run.segments.map do |segment|
+      segment.attributes.merge(history: segment.histories)
+    end
 
     gon.run = {
       id: @run.id36,
-      splits: segments,
-      raw_splits: @run.segments_with_history,
+      splits: @run.segments,
+      raw_splits: segments,
       history: @run.dynamodb_history,
-      attempts: attempts,
+      attempts: @run.attempts,
       program: @run.program,
     }
-    gon.scale_to = @run.time
+    gon.scale_to = @run.duration_milliseconds
   end
 
   def run_history_csv

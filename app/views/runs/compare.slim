@@ -9,7 +9,7 @@
     = link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
   h5
     big
-      a.stealth-link.run-link.time.needs-formatting class=('short' if @run.short?) href=run_path(@comparison_run) = @comparison_run.time
+      a.stealth-link.run-link.time.needs-formatting class=('short' if @run.short?) href=run_path(@comparison_run) = @comparison_run.duration_milliseconds
     => ' by'
     - if @comparison_run.user.present?
       = link_to @comparison_run.user, user_path(@comparison_run.user), class: 'stealth-link user-link'
@@ -18,7 +18,7 @@
     - else
       | unknown
 
-- time_scale = [@run.time, @comparison_run.time].max
+- time_scale = [@run.duration_milliseconds, @comparison_run.duration_milliseconds].max
 = render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale}
 hr style='margin: .5em; opacity: 0.25'
 = render partial: 'timeline', locals: {run: @run, scale_to: time_scale}
@@ -26,7 +26,7 @@ hr style='margin: .5em; opacity: 0.25'
 .container
   h5
     big
-      a.stealth-link.run-link.time.needs-formatting class=('short' if @run.short?) href=run_path(@run) = @run.time
+      a.stealth-link.run-link.time.needs-formatting class=('short' if @run.short?) href=run_path(@run) = @run.duration_milliseconds
     => ' by'
     - if @run.user
       = link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'
@@ -50,7 +50,7 @@ hr style='margin: .5em; opacity: 0.25'
         li Stop missing splits
     p
       = 'This will get you to a '
-      span.time.needs-formatting class=('short' if @run.short?) = @run.time - improvements.sum { |i| i[:time_difference] / 2 }
+      span.time.needs-formatting class=('short' if @run.short?) = @run.duration_milliseconds - improvements.sum { |i| i[:time_difference] / 2 }
       = ', then we\'ll go from there.'
       - if @comparison_run.user.present?
         p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.uri.to_s, target: :_blank}!

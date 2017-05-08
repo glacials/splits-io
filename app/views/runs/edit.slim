@@ -87,7 +87,7 @@ article#danger-zone.danger
                         big Delete
                       small
                         = "#{@run} in "
-                        span.time.needs-formatting class=('short' if @run.short?) = @run.time
+                        = format_milliseconds(@run.duration_milliseconds)
         .col-md-6
           .panel.panel-default
             .panel-heading Disown
@@ -106,4 +106,4 @@ article#danger-zone.danger
                         big Disown
                       small
                         = "#{@run} in "
-                        span.time.needs-formatting class=('short' if @run.short?) = @run.time
+                        = format_milliseconds(@run.duration_milliseconds)

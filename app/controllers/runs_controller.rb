@@ -138,9 +138,9 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
-    gon.run = {id: @run.id36, splits: @run.collapsed_splits}
-    gon.scale_to = @run.time
+    @run = Run.includes(:user, :category).find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
+    gon.run = {id: @run.id36, splits: @run.collapsed_segments}
+    gon.scale_to = @run.duration_milliseconds
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: 404
   end
@@ -150,9 +150,9 @@ class RunsController < ApplicationController
     @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
     gon.comparison_run = {
       id: @comparison_run.id36,
-      splits: @comparison_run.collapsed_splits
+      splits: @comparison_run.collapsed_segments
     }
-    gon.scale_to = [@run.time, @comparison_run.time].max
+    gon.scale_to = [@run.duration_milliseconds, @comparison_run.duration_milliseconds].max
   rescue ActiveRecord::RecordNotFound
     render :not_found, status: 404
   end

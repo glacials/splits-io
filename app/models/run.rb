@@ -15,6 +15,7 @@ class Run < ApplicationRecord
   belongs_to :category
   belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
   has_one :game, through: :category
+  has_many :segments
 
   has_secure_token :claim_token
 
@@ -78,23 +79,8 @@ class Run < ApplicationRecord
     parse[:offset]
   end
 
-  def program
-    timer
-  end
-
   def timer
-    p = read_attribute(:program)
-    if p.present?
-      return p
-    end
-
-    r = dynamodb_info
-    if r.nil?
-      parse_into_dynamodb
-      r = dynamodb_info
-    end
-
-    r['timer']
+    program
   end
 
   def to_param
@@ -162,5 +148,13 @@ class Run < ApplicationRecord
     else
       file
     end
+  end
+
+  def duration_milliseconds
+    if super.nil?
+      parse_into_activerecord
+    end
+
+    super
   end
 end

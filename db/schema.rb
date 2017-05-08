@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170405204420) do
+ActiveRecord::Schema.define(version: 20170507175932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "citext"
+  enable_extension "uuid-ossp"
 
   create_table "authie_sessions", force: :cascade do |t|
     t.string   "token"
@@ -107,17 +108,44 @@ ActiveRecord::Schema.define(version: 20170405204420) do
     t.integer  "category_id"
     t.decimal  "time"
     t.string   "program"
-    t.boolean  "visited",         default: false, null: false
+    t.boolean  "visited",                  default: false, null: false
     t.string   "claim_token"
     t.decimal  "sum_of_best"
-    t.boolean  "archived",        default: false, null: false
+    t.boolean  "archived",                 default: false, null: false
     t.string   "video_url"
     t.string   "run_file_digest"
     t.string   "srdc_id"
     t.integer  "attempts"
     t.string   "s3_filename"
+    t.integer  "duration_milliseconds"
+    t.integer  "sum_of_best_milliseconds"
     t.index ["category_id"], name: "index_runs_on_category_id", using: :btree
     t.index ["user_id"], name: "index_runs_on_user_id", using: :btree
+  end
+
+  create_table "segment_histories", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.uuid     "segment_id"
+    t.integer  "attempt_number"
+    t.integer  "duration_milliseconds"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["segment_id"], name: "index_segment_histories_on_segment_id", using: :btree
+  end
+
+  create_table "segments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.integer  "run_id",                         null: false
+    t.integer  "segment_number",                 null: false
+    t.integer  "duration_milliseconds",          null: false
+    t.integer  "start_milliseconds",             null: false
+    t.integer  "end_milliseconds",               null: false
+    t.integer  "shortest_duration_milliseconds", null: false
+    t.string   "name",                           null: false
+    t.boolean  "gold",                           null: false
+    t.boolean  "reduced",                        null: false
+    t.boolean  "skipped",                        null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.index ["run_id"], name: "index_segments_on_run_id", using: :btree
   end
 
   create_table "splits", force: :cascade do |t|
@@ -154,5 +182,7 @@ ActiveRecord::Schema.define(version: 20170405204420) do
   end
 
   add_foreign_key "game_aliases", "games", on_delete: :cascade
+  add_foreign_key "segment_histories", "segments"
+  add_foreign_key "segments", "runs"
   add_foreign_key "splits", "runs"
 end

@@ -14,6 +14,10 @@ module SplitsIO
 
     config.assets.precompile += ['darkmode.css']
 
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+    end
+
     ActiveSupport.halt_callback_chains_on_return_false = false
   end
 end

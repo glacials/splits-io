@@ -53,6 +53,7 @@ gem 'patreon'
 gem 'cancancan'
 
 # db
+gem 'activerecord-import'
 gem 'arel'
 gem 'aws-sdk-rails'
 gem 'fakes3'

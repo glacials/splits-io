@@ -1,14 +1,14 @@
-- scale_to ||= run.time
+- scale_to ||= run.duration_milliseconds
 - overlap ||= false
 - cache [:timeline_inspector, :v5, {run: run, scale_to: scale_to, overlap: overlap}] do
   .timeline style="margin-top: .75em;" class=(overlap ? 'absolute' : '')
-    - run.collapsed_splits.each_with_index do |split, index|
-      .pure-u.inspect id="#{run.id36}-inspect-#{index}" style="width: #{split.duration / scale_to * 100}%; opacity: 0;"
+    - run.collapsed_segments.each_with_index do |split, index|
+      .pure-u.inspect id="#{run.id36}-inspect-#{index}" style="width: #{split.duration_milliseconds / scale_to * 100}%; opacity: 0;"
         .bar
           p
         .title = split.name
-        .time.needs-formatting class=('short' if run.short?) = split.duration
-        .time.needs-formatting class=('short' if run.short?) = split.finish_time
+        = format_milliseconds(split.duration_milliseconds)
+        = format_milliseconds(split.end_milliseconds)
         .save
-          - unless split.gold? || run.has_skipped_splits? || !run.has_golds? || split.duration.round(2) == split.best.round(2)
-            | #{BigDecimal.new(split.duration - split.best, 2)}s potential save
+          - unless split.gold? || run.has_skipped_splits? || !run.has_golds? || split.duration_milliseconds.round(2) == split.shortest_duration_milliseconds.round(2)
+            | #{(split.duration_milliseconds - split.shortest_duration_milliseconds) / 1000}s potential save

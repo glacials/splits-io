@@ -109,6 +109,10 @@ module RunsHelper
   end
 
   def format_milliseconds(milliseconds)
+    if milliseconds.nil?
+      return '-'
+    end
+
     total_seconds = milliseconds / 1000
 
     seconds = total_seconds % 60
