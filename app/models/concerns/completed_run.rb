@@ -13,7 +13,7 @@ module CompletedRun
     end
 
     def longest_segment
-      collapsed_segments.max_by(&:duration_milliseconds)
+      collapsed_segments.reject(&:reduced?).max_by(&:duration_milliseconds)
     end
 
     def median_segment_duration_milliseconds
