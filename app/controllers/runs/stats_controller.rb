@@ -9,7 +9,7 @@ class Runs::StatsController < Runs::ApplicationController
       return
     end
 
-    segments = @run.segments.map do |segment|
+    segments = @run.segments.includes(:histories).map do |segment|
       segment.attributes.merge(history: segment.histories)
     end
 

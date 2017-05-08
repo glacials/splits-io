@@ -47,14 +47,7 @@ module CompletedRun
     end
 
     def total_playtime_milliseconds
-      time = 0
-      segments.each do |segment|
-        next if segment.histories.blank?
-        segment.histories.each do |h|
-          time += h.duration_milliseconds unless h.duration_milliseconds.blank?
-        end
-      end
-      return time
+      SegmentHistory.where(segment_id: segments).map(&:duration_milliseconds).compact.sum
     end
   end
 end

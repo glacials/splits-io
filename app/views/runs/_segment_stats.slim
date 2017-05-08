@@ -25,7 +25,7 @@
             span 99th percentile
             small.tip-html< title="99% of this segment's times are faster than this" = "(?)"
       tbody
-        - run.segments.each_with_index do |segment, index|
+        - run.segments.includes(:histories).each_with_index do |segment, index|
           - if segment.histories.nil? || segment.histories.length == 0
             tr
               td.align-right= index + 1
