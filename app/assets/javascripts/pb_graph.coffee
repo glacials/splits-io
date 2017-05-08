@@ -7,7 +7,7 @@ $ ->
   pb_graph_data = ["PB - Gold"]
   pb_graph_ticks = []
   $.each gon.run.splits, (i, split) ->
-    time = d3.round(split.duration - split.best, 2)
+    time = (split.duration_milliseconds - split.shortest_duration_milliseconds) / 1000
     return if time <= 0
     pb_graph_data.push time
     pb_graph_ticks.push split.name

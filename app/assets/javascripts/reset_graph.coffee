@@ -14,7 +14,7 @@ $ ->
   reset_counter = 0
   reset_data = []
   $.each gon.run.raw_splits, (i, segment) ->
-    segment_total_resets = segment.history.filter((h) -> h.duration_seconds == null).length
+    segment_total_resets = segment.history.filter((h) -> h.duration_milliseconds == null).length
     # By doing this backwards we allow the loop to not need a special case for index 0
     segment_resets = Math.abs(segment_total_resets - reset_counter)
     if segment_resets > 0

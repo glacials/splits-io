@@ -19,9 +19,9 @@ $ ->
     non_null_time_inserted = false
     attempt_durations = []
     $.each split.history, (j, attempt) ->
-      if non_null_time_inserted || attempt.duration_seconds != null
+      if non_null_time_inserted || attempt.duration_milliseconds != null
         non_null_time_inserted = true
-        attempt_durations.push(attempt.duration_seconds)
+        attempt_durations.push(attempt.duration_milliseconds / 1000)
 
         if j < first_non_null_attempt
           first_non_null_attempt = j
