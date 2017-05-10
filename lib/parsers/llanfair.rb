@@ -112,6 +112,7 @@ module Llanfair
         ).tap do |split|
           split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
           split.skipped = split.duration == 0.0
+          split.start_time = split.finish_time - split.duration
         end
         run[:time] += best_time
 

@@ -79,6 +79,7 @@ module WSplit
 
       segment.gold = segment.duration > 0 && segment.duration == segment.best
       segment.skipped = segment.duration == 0
+      segment.start_time = segment.finish_time - segment.duration
 
       return segment
     end

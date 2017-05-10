@@ -17,9 +17,7 @@ module CompletedRun
     end
 
     def median_segment_duration_milliseconds
-      sorted_segments = collapsed_segments.map(&:duration_milliseconds).sort
-      len = sorted_segments.size
-      (sorted_segments[(len - 1) / 2] + sorted_segments[len / 2]) / 2.0
+      segments.pluck(:duration_milliseconds).median.truncate
     end
 
     def short?
@@ -43,11 +41,11 @@ module CompletedRun
     end
 
     def has_golds?
-      splits.all? { |split| split.best }
+      segments.all?(&:shortest_duration_milliseconds)
     end
 
     def total_playtime_milliseconds
-      SegmentHistory.where(segment_id: segments).map(&:duration_milliseconds).compact.sum
+      SegmentHistory.where(segment: segments).sum(:duration_milliseconds)
     end
   end
 end

@@ -7,8 +7,8 @@ class Api::V3::Detail::RunSerializer < Api::V3::ApplicationSerializer
   attributes :id, :path, :name, :program, :image_url, :created_at, :updated_at, :video_url, :splits, :attempts, :sum_of_best
 
   def splits
-    object.splits.map do |segment|
-      segment.best = {duration: segment.best}
+    object.segments.map do |segment|
+      segment.shortest_duration_milliseconds = {duration: segment.shortest_duration_milliseconds / 1000}
       segment
     end
   end

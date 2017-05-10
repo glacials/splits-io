@@ -87,35 +87,35 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration] }).to eq [
-        ['Tron City', 53.9219256],
-        ['Start Abraxas fight', 185.4531417],
-        ['Finish Abraxas fight', 108.44651289999996],
-        ['"FLYNN!"', 151.87429940000004],
-        ['"Hey! Over here!"', 117.06788499999993],
-        ['"That was CLU. I saw him." (stack2 skip inc)', 44.8199194],
-        ['"Follow me."', 114.84480970000004],
-        ['End of cycle ride (bridge skip inc)', 75.84340850000001],
-        ['End of bridge thing', 431.47512070000005],
-        ['Da Vinci', 18.88231840000003],
-        ['"Hey! Over here!" #2', 418.688498],
-        ['Drive tank 4 feet', 372.6532138],
-        ['Green guy', 283.0389589000001],
-        ['Beat games', 186.84879569999976],
-        ['Green guy talks to me', 120.51536669999996],
-        ['Get across that bridge', 484.3879244],
-        ['Jump up and down on three lightsabers', 109.8629691000001],
-        ['"That\'s Flynn\'s!"', 43.73782930000016],
-        ['Race green guy', 67.09577760000002],
-        ['Kill green guy', 220.72551559999965],
-        ['Jump the bike', 278.10209810000015],
-        ['Grab me by the arm', 224.73634189999984],
-        ["Popcorn ceiling's revenge", 108.32244480000008],
-        ['Jump onto the flying staple', 112.97768619999988],
-        ['Ride motorbike for 9 seconds', 447.3030593000003],
-        ['Final fight phase 1', 59.78528019999976],
-        ['Final fight phase 2', 185.81795669999974],
-        ['Final fight phase 3', 28.333972000000358]
+      expect(run.segments.map { |s| [s.name, s.duration_milliseconds] }).to match_array [
+        ['Tron City', 53921],
+        ['Start Abraxas fight', 185453],
+        ['Finish Abraxas fight', 108446],
+        ['"FLYNN!"', 151874],
+        ['"Hey! Over here!"', 117067],
+        ['"That was CLU. I saw him." (stack2 skip inc)', 44819],
+        ['"Follow me."', 114844],
+        ['End of cycle ride (bridge skip inc)', 75843],
+        ['End of bridge thing', 431475],
+        ['Da Vinci', 18882],
+        ['"Hey! Over here!" #2', 418688],
+        ['Drive tank 4 feet', 372653],
+        ['Green guy', 283038],
+        ['Beat games', 186848],
+        ['Green guy talks to me', 120515],
+        ['Get across that bridge', 484387],
+        ['Jump up and down on three lightsabers', 109862],
+        ['"That\'s Flynn\'s!"', 43737],
+        ['Race green guy', 67095],
+        ['Kill green guy', 220725],
+        ['Jump the bike', 278102],
+        ['Grab me by the arm', 224736],
+        ["Popcorn ceiling's revenge", 108322],
+        ['Jump onto the flying staple', 112977],
+        ['Ride motorbike for 9 seconds', 447303],
+        ['Final fight phase 1', 59785],
+        ['Final fight phase 2', 185817],
+        ['Final fight phase 3', 28333]
       ]
     end
 
@@ -124,23 +124,23 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its shortest segment' do
-      expect([run.shortest_segment.name, run.shortest_segment.duration]).to eq [
-        'Da Vinci', 18.88231840000003
+      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to eq [
+        'Da Vinci', 18882
       ]
     end
 
     it 'accurately reports its longest segment' do
-      expect([run.longest_segment.name, run.longest_segment.duration]).to eq [
-        'Get across that bridge', 484.3879244
+      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to eq [
+        'Get across that bridge', 484387
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration).to eq 118.79162584999995
+      expect(run.median_segment_duration_milliseconds).to eq 118791
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.total_playtime).to eq 77067.13229930002
+      expect(run.total_playtime_milliseconds).to eq 77743500
     end
 
     it 'reports no history using fast parsing' do
@@ -161,50 +161,50 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration] }).to eq [
-        ['Hole 1', 30.349],
-        ['Hole 2', 42.742999999999995],
-        ['Hole 3', 35.263999999999996],
-        ['Hole 4', 25.16500000000002],
-        ['Hole 5', 34.34099999999998],
-        ['Hole 6', 34.97200000000001],
-        ['Hole 7', 20.754999999999995],
-        ['Hole 8', 41.22199999999998],
-        ['Hole 9', 43.62100000000004],
-        ['Hole 10', 28.661999999999978],
-        ['Hole 11', 37.146000000000015],
-        ['Hole 12', 62.91300000000001],
-        ['Hole 13', 41.539999999999964],
-        ['Hole 14', 35.33299999999997],
-        ['Hole 15', 36.65300000000002],
-        ['Hole 16', 31.277000000000044],
-        ['Hole 17', 37.63199999999995],
-        ['Hole 18', 66.08300000000008]
+      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+        ['Hole 1', 30349],
+        ['Hole 2', 42742],
+        ['Hole 3', 35263],
+        ['Hole 4', 25165],
+        ['Hole 5', 34340],
+        ['Hole 6', 34972],
+        ['Hole 7', 20754],
+        ['Hole 8', 41221],
+        ['Hole 9', 43621],
+        ['Hole 10', 28661],
+        ['Hole 11', 37146],
+        ['Hole 12', 62913],
+        ['Hole 13', 41539],
+        ['Hole 14', 35332],
+        ['Hole 15', 36653],
+        ['Hole 16', 31277],
+        ['Hole 17', 37631],
+        ['Hole 18', 66083]
       ]
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.skipped_splits.map { |s| [s.name, s.duration] }).to eq []
+      expect(run.skipped_splits.map { |s| [s.name, s.duration_milliseconds] }).to eq []
     end
 
     it 'accurately reports its shortest segment' do
-      expect([run.shortest_segment.name, run.shortest_segment.duration]).to eq [
-        'Hole 7', 20.754999999999995
+      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to eq [
+        'Hole 7', 20754
       ]
     end
 
     it 'accurately reports its longest segment' do
-      expect([run.longest_segment.name, run.longest_segment.duration]).to eq [
-        'Hole 18', 66.08300000000008
+      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to eq [
+        'Hole 18', 66083
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration).to eq 35.992999999999995
+      expect(run.median_segment_duration_milliseconds).to eq 35992
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.total_playtime).to eq 22450.452999999987
+      expect(run.total_playtime_milliseconds).to eq 22450448
     end
 
     it 'reports no history using fast parsing' do
@@ -225,34 +225,34 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration] }).to eq [
-        ['Spiral Mountain', 211.23],
-        ["Mumbo's Mountain", 808.2]
+      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+        ['Spiral Mountain', 211230],
+        ["Mumbo's Mountain", 808200]
       ]
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.skipped_splits.map { |s| [s.name, s.duration] }).to eq []
+      expect(run.skipped_splits.map { |s| [s.name, s.duration_milliseconds] }).to eq []
     end
 
     it 'accurately reports its shortest segment' do
-      expect([run.shortest_segment.name, run.shortest_segment.duration]).to eq [
-        'Spiral Mountain', 211.23
+      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to eq [
+        'Spiral Mountain', 211230
       ]
     end
 
     it 'accurately reports its longest segment' do
-      expect([run.longest_segment.name, run.longest_segment.duration]).to eq [
-        "Mumbo's Mountain", 808.2
+      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to eq [
+        "Mumbo's Mountain", 808200
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration).to eq(509.71500000000003)
+      expect(run.median_segment_duration_milliseconds).to eq(509715)
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.total_playtime).to eq 0
+      expect(run.total_playtime_milliseconds).to eq 0
     end
 
     it 'correctly converts back to llanfair files' do
@@ -267,15 +267,15 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration.to_f] }).to eq [
-        ["1-1", 32.18],
-        ["1-2", 31.47],
-        ["4-1", 37.40],
-        ["4-2", 29.39],
-        ["Pipe Jump City", 51.03],
-        ["Jumping Koopas", 37.03],
-        ["Count To 4", 35.31],
-        ["Hammers of Fortune", 46.08]
+      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+        ["1-1", 32180],
+        ["1-2", 31470],
+        ["4-1", 37400],
+        ["4-2", 29390],
+        ["Pipe Jump City", 51030],
+        ["Jumping Koopas", 37030],
+        ["Count To 4", 35310],
+        ["Hammers of Fortune", 46080]
       ]
     end
 
@@ -285,20 +285,20 @@ describe Run, type: :model do
       end
 
       it 'has the correct splits' do
-        expect(run.splits.map { |s| [s.name, s.duration.to_f] }).to eq [
-          ["1-1", 32.18],
-          ["1-2", 31.47],
-          ["4-1", 37.4],
-          ["4-2", 29.39],
-          ["Pipe Jump City", 51.03],
-          ["Jumping Koopas", 37.03],
-          ["Count To 4", 35.31],
-          ["Hammers of Fortune", 46.08]
+        expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+          ["1-1", 32180],
+          ["1-2", 31470],
+          ["4-1", 37400],
+          ["4-2", 29390],
+          ["Pipe Jump City", 51030],
+          ["Jumping Koopas", 37030],
+          ["Count To 4", 35310],
+          ["Hammers of Fortune", 46080]
         ]
       end
 
       it 'accurately reports its total playtime' do
-        expect(run.total_playtime).to eq 0
+        expect(run.total_playtime_milliseconds).to eq 0
       end
     end
   end
@@ -309,23 +309,23 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration.to_f] }).to eq [
-        ["Introduction", 85.48],
-        ["Jimmy", 134.2],
-        ["Mona", 124.07],
-        ["Dribbles", 248.24],
-        ["9-Volt", 142.99],
-        ["Jimmy", 161.37],
-        ["Dr.Crygonal", 157.08],
-        ["Orbulon", 187.27],
-        ["Kat", 221.98],
-        ["Jimmy", 177.61],
-        ["Wario", 234.06]
+      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+        ["Introduction", 85480],
+        ["Jimmy", 134200],
+        ["Mona", 124070],
+        ["Dribbles", 248240],
+        ["9-Volt", 142990],
+        ["Jimmy", 161370],
+        ["Dr.Crygonal", 157080],
+        ["Orbulon", 187270],
+        ["Kat", 221980],
+        ["Jimmy", 177610],
+        ["Wario", 234060]
       ]
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.total_playtime).to eq 0
+      expect(run.total_playtime_milliseconds).to eq 0
     end
   end
 end

@@ -15,7 +15,7 @@ class Run < ApplicationRecord
   belongs_to :category
   belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
   has_one :game, through: :category
-  has_many :segments
+  has_many :segments, dependent: :destroy
 
   has_secure_token :claim_token
 

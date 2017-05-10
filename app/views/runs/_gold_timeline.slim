@@ -4,4 +4,4 @@
     .gold.timeline
       - run.collapsed_segments.each_with_index do |segment, index|
         .pure-u.split style="width: #{segment.duration_milliseconds / scale_to * 100}%;"
-          .gold-split style="width: #{segment.shortest_duration_milliseconds / split.duration_milliseconds * 100}%;" class=(split.gold? ? :gold : :gray)
+          .gold-split style="width: #{segment.shortest_duration_milliseconds / segment.duration_milliseconds * 100}%;" class=(segment.gold? ? :gold : :gray)
