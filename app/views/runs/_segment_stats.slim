@@ -4,7 +4,7 @@
     .pull-right 
       - dynamodb_info = @run.dynamodb_info
       - attempts = dynamodb_info['attempts']
-      - if attempts.blank?
+      - if attempts.blank? || attempts.zero?
         strike ↓ download segment history csv
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else
