@@ -1,0 +1,36 @@
+- title 'Why?'
+- content_for(:header) do
+  h2 why does the site need to be read-only for maintenance?
+  h5 may 2017
+article
+  .row
+    .col-md-8
+      p Today the site went into read-only mode for planned maintenance for about an hour.
+      p The root goal for this maintenance is to make it easier to work with segments and segment history in Splits I/O's
+        code base.
+      p To make it easier to work with segments and segment histories, we're changing from storing them in DynamoDB to
+        storing them in ActiveRecord (PostgreSQL), which is how Ruby on Rails wants you to store your data.
+      p To be able to insert tens of millions of rows into PostgreSQL (there are a lot of segment histories), we need to
+        change PostgreSQL plans, as our current plan (via Heroku) only allows 10 million rows. We're instead moving to AWS
+        RDS, which doesn't limit us by # rows, but by raw computation and storage costs (and is overall cheaper).
+      p AWS has a great database migration tool to allow you to migrate databases with no downtime, but our PostgreSQL
+        version is too old to be supported by it.
+      p To upgrade our PostgreSQL version, we have to make a new PostgreSQL database and copy all our data into it.
+      p Copying data takes a while, and if an entry gets created or changed in the source database after that section of
+        the database has been copied, the created or changed entry is effectively lost when we start using the new
+        database, so we need to turn off writes while the copy happens.
+      p And that's why we were in read-only mode for an hour today.
+      p glcls
+article
+  .row
+    .col-md-8
+      blockquote What's the point of preparing for the fancy no-downtime migration if the preparation itself causes downtime? Why not
+                 just do the migration to RDS with downtime, rather than doing an upgrade then a migration?
+      p It's certainly possible we could have done that, but there are just more unknowns which causes more risk. First, the
+        migration is from Heroku to RDS, and I personally haven't used RDS before, so I don't know what I don't know about
+        it &mdash; I don't want to step on a landmine in the middle of a downtime-causing migration. I'd much rather step on it
+        in the middle of a no-downtime migration and have no user-facing impact.
+      p Second, the migration to RDS would be using an upgraded version of PostgreSQL as well, so it's just a little bit
+        more risky in my mind to perform an upgrade and a migration at the same time, as any landmine I step on has that
+        many more places I need to look at before I learn what it is that went wrong. I'd much rather perform an
+        isolated upgrade followed by an isolated migation.

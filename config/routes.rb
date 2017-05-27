@@ -6,6 +6,7 @@ SplitsIO::Application.routes.draw do
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
   get '/why/darkmode',   to: 'why#darkmode',   as: :why_darkmode
+  get '/why/readonly',   to: 'why#readonly',   as: :why_readonly
 
   get '/health', to: 'health#index'
 
