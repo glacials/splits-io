@@ -43,9 +43,10 @@ html
                 a href=games_path Games
               li class=('active' if on_page[:faq])
                 a href=faq_path FAQ
-              li class=('active' if on_page[:why_darkmode])
-                a href=why_darkmode_path
-                  span.text-info Darkmode!
+              - if ENV['READ_ONLY_MODE'] == '1'
+                li
+                  a href=read_only_mode_path
+                    span.text-warning Read-Only Mode Active
             ul.nav.navbar-nav.navbar-right
               - if logged_in?
                 li class=('active' if on_page[:rivalries])

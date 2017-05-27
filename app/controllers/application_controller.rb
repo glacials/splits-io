@@ -5,6 +5,16 @@ class ApplicationController < ActionController::Base
   before_action :remove_www
   before_action :set_gon
   before_action :sanitize_pagination_params
+  before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
+
+  def read_only_mode
+    write_actions = ['create', 'edit', 'destroy']
+    write_methods = ['POST', 'PUT', 'DELETE', 'PATCH']
+    if write_actions.include?(action_name) || write_methods.include?(request.method)
+      render template: 'pages/read_only_mode'
+      return false
+    end
+  end
 
   def remove_www
     redirect_to(subdomain: nil) if request.subdomain == 'www'

@@ -1,10 +1,11 @@
 SplitsIO::Application.routes.draw do
   root 'runs#index'
 
-  get '/faq', to: 'pages#faq', as: :faq
+  get '/faq',       to: 'pages#faq',            as: :faq
+  get '/read-only', to: 'pages#read_only_mode', as: :read_only_mode
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
-  get '/why/darkmode', to: 'why#darkmode', as: :why_darkmode
+  get '/why/darkmode',   to: 'why#darkmode',   as: :why_darkmode
 
   get '/health', to: 'health#index'
 

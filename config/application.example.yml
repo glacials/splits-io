@@ -32,11 +32,10 @@ development:
   #  You shouldn't need to fill out anything below here  #
   ########################################################
 
-  STRIPE_PUBLISHABLE_KEY:
-  STRIPE_SECRET_KEY:
-
   PATREON_CLIENT_ID:
   PATREON_CLIENT_SECRET:
+
+  READ_ONLY_MODE: 0
 
 test:
   # required to be able to run tests
@@ -66,5 +65,4 @@ production:
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_KEY:
 
-  STRIPE_PUBLISHABLE_KEY:
-  STRIPE_SECRET_KEY:
+  READ_ONLY_MODE: 0

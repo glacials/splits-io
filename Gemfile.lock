@@ -378,8 +378,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stripe (1.50.0)
-      rest-client (>= 1.4, < 3.0)
     temple (0.7.7)
     thin (1.7.0)
       daemons (~> 1.0, >= 1.0.9)
@@ -481,7 +479,6 @@ DEPENDENCIES
   simplecov
   slim
   spinjs-rails
-  stripe
   thin
   tipsy-rails
   turbolinks!
