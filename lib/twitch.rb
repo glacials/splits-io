@@ -37,7 +37,7 @@ class Twitch
       end
 
       def route(login)
-        User.route(login)['/follows/channels?limit=500']
+        User.route(login)['/follows/channels?limit=100']
       end
     end
   end
