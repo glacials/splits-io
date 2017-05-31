@@ -69,7 +69,7 @@ GEM
     api-pagination (4.3.0)
     arel (7.1.4)
     ast (2.3.0)
-    authie (3.0.0)
+    authie (2.0.1)
     autoprefixer-rails (6.4.0.2)
       execjs
     aws-sdk-core (2.5.5)
@@ -494,4 +494,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.15.0
+   1.13.3
