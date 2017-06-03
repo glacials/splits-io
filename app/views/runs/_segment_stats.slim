@@ -36,7 +36,7 @@
               td.align-right colspan=99
                 i no segment history available
           - else
-            - history_times = segment.histories.map { |h| h[:duration_milliseconds] }.compact
+            - history_times = segment.histories.map(&:duration_milliseconds).compact
             tr
               td.align-right = index + 1
               td.align-left = segment.name.present? ? segment.name : '-'
