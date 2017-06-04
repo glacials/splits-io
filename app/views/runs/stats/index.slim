@@ -69,16 +69,18 @@ article#stats
               td
                 span Sum of best
               td -
+          - else
+            tr
+              td
+                span Sum of best
+              td = format_milliseconds(@run.sum_of_best_milliseconds)
+          - if @run.sum_of_best.nil? || @run.sum_of_best == 0 || @run.duration_milliseconds.nil? || @run.duration_milliseconds == 0
             tr.tip title="This run has no gold splits recorded"
               td
                 span Total potential timesave
                 small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
               td -
           - else
-            tr
-              td
-                span Sum of best
-              td = format_milliseconds(@run.sum_of_best_milliseconds)
             tr
               td
                 span Total potential timesave
