@@ -1,4 +1,4 @@
 <%= @run.to_s %>,<%= @run.attempts or 0 %>
-<% @run.splits.each do |split| %>
-<%= split.name %>,<%= Time.at(split.finish_time).utc.strftime("%H:%M:%S.%2N").strip %>,<%= Time.at(split.duration).utc.strftime("%H:%M:%S.%2N").strip %>
+<% @run.segments.each do |segment| %>
+<%= segment.name %>,<%= Time.at((segment.end_milliseconds || 0) / 100).utc.strftime("%H:%M:%S.%2N").strip %>,<%= Time.at((segment.duration_milliseconds || 0 ) / 1000).utc.strftime("%H:%M:%S.%2N").strip %>
 <% end %>
