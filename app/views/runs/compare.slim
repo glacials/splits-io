@@ -9,7 +9,8 @@
     = link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
   h5
     big
-      a.stealth-link.run-link.time.needs-formatting class=('short' if @run.short?) href=run_path(@comparison_run) = @comparison_run.duration_milliseconds
+      a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@comparison_run)
+        = format_milliseconds(@comparison_run.duration_milliseconds)
     => ' by'
     - if @comparison_run.user.present?
       = link_to @comparison_run.user, user_path(@comparison_run.user), class: 'stealth-link user-link'
@@ -26,7 +27,8 @@ hr style='margin: .5em; opacity: 0.25'
 .container
   h5
     big
-      a.stealth-link.run-link.time.needs-formatting class=('short' if @run.short?) href=run_path(@run) = @run.duration_milliseconds
+      a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@run)
+        = format_milliseconds(@run.duration_milliseconds)
     => ' by'
     - if @run.user
       = link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'
