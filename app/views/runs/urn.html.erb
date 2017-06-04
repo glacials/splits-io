@@ -3,13 +3,13 @@
     "attempt_count": <%= @run.respond_to?(:attempts) ? @run.attempts : 0 %>,
     "start_delay": "<%= Time.at(@run.offset || 0).utc.strftime("%-H:%-M:%S").strip %>",
     "splits": [
-        <% @run.splits.each_with_index do |split, index| %>
+        <% @run.segments.each_with_index do |segment, index| %>
         {
-            "title": "<%= split.name %>",
-            "time": "<%= split.skipped ? "0.000000" : Time.at(split.finish_time).utc.strftime("%H:%M:%S.%6N").strip %>",
-            "best_time": "<%= Time.at(split.finish_time || 0).utc.strftime("%H:%M:%S.%6N").strip %>",
-            "best_segment": "<%= Time.at(split.best || split.duration).utc.strftime("%H:%M:%S.%6N").strip %>"
-        }<%= ',' unless @run.splits.size - 1 == index %>
+            "title": "<%= segment.name %>",
+            "time": "<%= segment.skipped ? "0.000000" : Time.at((segment.end_milliseconds || 0) / 1000).utc.strftime("%H:%M:%S.%6N").strip %>",
+            "best_time": "<%= Time.at((segment.end_milliseconds || 0).to_f / 1000).utc.strftime("%H:%M:%S.%6N").strip %>",
+            "best_segment": "<%= Time.at((segment.shortest_duration_milliseconds || segment.duration_milliseconds || 0).to_f / 1000).utc.strftime("%H:%M:%S.%6N").strip %>"
+        }<%= ',' unless @run.segments.size - 1 == index %>
         <% end %>
     ]
 }
