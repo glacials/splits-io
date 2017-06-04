@@ -15,8 +15,7 @@ class RunsController < ApplicationController
 
   def show
     if params['reparse'] == '1'
-      @run.clear_dynamodb_rows
-      @run.parse_into_dynamodb
+      @run.parse_into_activerecord
       redirect_to run_path(@run)
       return
     end
