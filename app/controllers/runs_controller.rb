@@ -20,6 +20,11 @@ class RunsController < ApplicationController
       redirect_to run_path(@run)
       return
     end
+
+    # Catch bad runs
+    if @run.timer.nil?
+      render :cant_parse, status: 500
+    end
   end
 
   def index

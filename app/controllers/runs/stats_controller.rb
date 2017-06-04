@@ -9,6 +9,11 @@ class Runs::StatsController < Runs::ApplicationController
       return
     end
 
+    # Catch bad runs
+    if @run.timer.nil?
+      render 'runs/cant_parse', status: 500
+    end
+
     segments = @run.segments.includes(:histories).map do |segment|
       segment.attributes.merge(history: segment.histories)
     end
@@ -38,6 +43,11 @@ class Runs::StatsController < Runs::ApplicationController
   end
 
   def segment_history_csv
+    if @run.attempts.nil? || @run.attempts == 0
+      redirect_to run_stats_path(@run), alert: "Segment history is not available for this run."
+      return
+    end
+
     @raw_splits = @run.parse(fast: false)[:splits]
 
     segment_histories = []

@@ -2,7 +2,7 @@
   .panel-heading
     | Segment Information
     .pull-right 
-      - if @run.attempts.blank? || @run.attempts.zero?
+      - if @run.attempts.nil? || @run.attempts.zero?
         strike ↓ download segment history csv
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else
