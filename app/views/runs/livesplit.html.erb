@@ -8,12 +8,12 @@
   <AttemptCount><%= @run.attempts || 0 %></AttemptCount>
   <RunHistory />
   <Segments>
-  <% @run.splits.each do |split| %>
+  <% @run.segments.each do |segment| %>
     <Segment>
       <Icon />
-      <Name><%= split.name %></Name>
-      <PersonalBestSplitTime><%= Time.at(split.finish_time || 0).utc.strftime("%H:%M:%S.%7N").strip %></PersonalBestSplitTime>
-      <BestSegmentTime><%= Time.at(split.best || 0).utc.strftime("%H:%M:%S.%7N").strip %></BestSegmentTime>
+      <Name><%= segment.name %></Name>
+      <PersonalBestSplitTime><%= Time.at((segment.end_milliseconds || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></PersonalBestSplitTime>
+      <BestSegmentTime><%= Time.at((segment.shortest_duration_milliseconds || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></BestSegmentTime>
       <SegmentHistory />
     </Segment>
   <% end %>
