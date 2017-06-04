@@ -38,7 +38,7 @@ article
                 }
           .col-md-1.pull-right style="cursor: pointer;"
             small
-              = button_to user_rivalry_path(rivalry.from_user, rivalry), method: :delete, data: {confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?"}, class: 'btn btn-default'
+              = button_to user_rivalry_path(rivalry.from_user, rivalry), method: :delete, data: {confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}? You can always recreate it later."}, class: 'btn btn-default'
                 | X
       hr
   h5 = link_to '+ Add or replace a rival', new_user_rivalry_path(@user)
