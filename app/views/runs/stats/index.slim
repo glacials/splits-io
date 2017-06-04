@@ -116,7 +116,7 @@ article#stats
             td
               span Longest segment
             td
-              - if @run.collapsed_segments.size > 0
+              - if @run.longest_segment.present?
                 | #{@run.longest_segment.name} (
                 span = format_milliseconds(@run.longest_segment.duration_milliseconds)
                 | )
