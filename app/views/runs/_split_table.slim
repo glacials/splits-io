@@ -19,8 +19,8 @@
               - if segment.skipped? || segment.reduced?
                 span.time -
               - else
-                span.time.needs-formatting class=('short' if short) = segment.duration_milliseconds / 1000
+                span = format_milliseconds(segment.duration_milliseconds)
             - if segment.skipped?
               td.align-right.time -
             - else
-              td.align-right.time.needs-formatting class=('short' if short) = segment.end_milliseconds / 1000
+              td.align-right = format_milliseconds(segment.end_milliseconds)

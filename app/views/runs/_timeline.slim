@@ -5,4 +5,4 @@
       - run.collapsed_segments.each.with_index do |segment, index|
         .pure-u.split id="#{run.id36}-split-#{index}" class=next_timeline_color(run.id36) style="width: #{segment.duration_milliseconds.to_f / scale_to * 100}%; z-index: #{index}"
           .title = segment.name
-          .time.needs-formatting class=('short' if run.short?) = segment.duration_milliseconds
+          .time = format_milliseconds(segment.duration_milliseconds)
