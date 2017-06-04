@@ -38,7 +38,9 @@ module TimeSplitTracker
     rule :unix_newline,    "\n"
 
     def parse(file, options = {})
-      return unless file.ascii_only?
+      if file.nil? || file.ascii_only?
+        return nil
+      end
 
       run = super(file)
       return nil if run.nil?
