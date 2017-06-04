@@ -5,7 +5,7 @@ module UnparsedRun
 
   included do
     def parses?(fast: true, convert: false)
-      parse(fast: fast, convert: convert).present?
+      parse(fast: fast, convert: convert).present? && timer.present?
     end
 
     def parsed?
