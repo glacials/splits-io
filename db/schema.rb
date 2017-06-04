@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170507175932) do
+ActiveRecord::Schema.define(version: 20170604082526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,8 +38,10 @@ ActiveRecord::Schema.define(version: 20170507175932) do
     t.string   "two_factored_ip"
     t.integer  "requests",           default: 0
     t.datetime "password_seen_at"
+    t.string   "token_hash"
     t.index ["browser_id"], name: "index_authie_sessions_on_browser_id", using: :btree
     t.index ["token"], name: "index_authie_sessions_on_token", using: :btree
+    t.index ["token_hash"], name: "index_authie_sessions_on_token_hash", using: :btree
     t.index ["user_id"], name: "index_authie_sessions_on_user_id", using: :btree
   end
 
@@ -117,8 +119,8 @@ ActiveRecord::Schema.define(version: 20170507175932) do
     t.string   "srdc_id"
     t.integer  "attempts"
     t.string   "s3_filename"
-    t.integer  "duration_milliseconds"
-    t.integer  "sum_of_best_milliseconds"
+    t.bigint   "duration_milliseconds"
+    t.bigint   "sum_of_best_milliseconds"
     t.index ["category_id"], name: "index_runs_on_category_id", using: :btree
     t.index ["user_id"], name: "index_runs_on_user_id", using: :btree
   end
@@ -126,7 +128,7 @@ ActiveRecord::Schema.define(version: 20170507175932) do
   create_table "segment_histories", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "segment_id"
     t.integer  "attempt_number"
-    t.integer  "duration_milliseconds"
+    t.bigint   "duration_milliseconds"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.index ["segment_id"], name: "index_segment_histories_on_segment_id", using: :btree
@@ -135,10 +137,10 @@ ActiveRecord::Schema.define(version: 20170507175932) do
   create_table "segments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.integer  "run_id",                         null: false
     t.integer  "segment_number",                 null: false
-    t.integer  "duration_milliseconds",          null: false
-    t.integer  "start_milliseconds",             null: false
-    t.integer  "end_milliseconds",               null: false
-    t.integer  "shortest_duration_milliseconds", null: false
+    t.bigint   "duration_milliseconds",          null: false
+    t.bigint   "start_milliseconds",             null: false
+    t.bigint   "end_milliseconds",               null: false
+    t.bigint   "shortest_duration_milliseconds", null: false
     t.string   "name",                           null: false
     t.boolean  "gold",                           null: false
     t.boolean  "reduced",                        null: false
