@@ -31,8 +31,8 @@ module UnparsedRun
             timer: program,
             attempts: attempts,
             srdc_id: srdc_id,
-            duration: duration_milliseconds / 1000,
-            sum_of_best: sum_of_best_milliseconds / 1000,
+            duration: (duration_milliseconds || 0) / 1000,
+            sum_of_best: (sum_of_best_milliseconds || 0) / 1000,
             splits: segments,
           }
         end
