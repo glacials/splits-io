@@ -44,7 +44,7 @@ hr style='margin: .5em; opacity: 0.25'
     ul.goals
       - improvements = @run.improvements_towards(@comparison_run)[:time_differences].sort_by { |t| t[:time_difference] }.reverse[0..2]
       - improvements.each do |improvement|
-        - timesave = number_to_human(improvement[:time_difference], precision: 2, significant: true)
+        - timesave = number_to_human(improvement[:time_difference].to_f / 1000, precision: 2, significant: true)
         li Shave #{pluralize(timesave, "second")} off your #{improvement[:split].name}
       - if @run.improvements_towards(@comparison_run)[:missed_splits].present?
         li Stop missing splits
