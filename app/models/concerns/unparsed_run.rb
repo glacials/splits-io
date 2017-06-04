@@ -103,12 +103,15 @@ module UnparsedRun
       all_segments_have_bests = segments.map.all? do |segment|
         segment.best.present?
       end
-      if !all_segments_have_bests
-        sum_of_best_seconds = nil
-        sum_of_best_milliseconds = nil
-      else
+
+      sum_of_best_seconds = nil
+      sum_of_best_milliseconds = nil
+      if all_segments_have_bests
         sum_of_best_seconds = segments.map(&:best).sum
-        sum_of_best_milliseconds = sum_of_best_seconds * 1000
+
+        if sum_of_best_seconds.present?
+          sum_of_best_milliseconds = sum_of_best_seconds * 1000
+        end
       end
 
       update(
