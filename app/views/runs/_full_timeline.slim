@@ -1,4 +1,4 @@
-- if run.duration_milliseconds > 0
+- if run.duration_milliseconds.present? && run.duration_milliseconds > 0
   #timeline data-turbolinks-permanent=true
     = render partial: 'runs/timeline', locals: {run: run}
     - if run.splits.all? { |segment| !segment.skipped? } && run.has_golds?

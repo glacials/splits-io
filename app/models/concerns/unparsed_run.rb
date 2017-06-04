@@ -137,7 +137,7 @@ module UnparsedRun
           skipped: parsed_segment.skipped?,
           reduced: parsed_segment.reduced?,
           gold: parsed_segment.gold?,
-          shortest_duration_milliseconds: parsed_segment.best * 1000
+          shortest_duration_milliseconds: (parsed_segment.best || 0) * 1000
         )
       end
 

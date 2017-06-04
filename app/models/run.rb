@@ -153,6 +153,9 @@ class Run < ApplicationRecord
   def duration_milliseconds
     if super.nil?
       parse_into_activerecord
+      if super.nil?
+        return 0
+      end
     end
 
     super
