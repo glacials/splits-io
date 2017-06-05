@@ -64,6 +64,27 @@ article#game-category
               = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
               .input-group-btn
                 = f.submit 'Save', class: 'btn btn-success'
+    .col-md-6
+      .panel.panel-default
+        .panel-heading List/Unlist
+        .panel-body
+          p An unlisted run isn't shown in category listings, search results, your profile, your frontpage, etc. but can
+            still be viewed with a direct link and is still owned by and credited to you.
+          p A run will become unlisted automatically when you beat its time, but you can also manually change that
+            status here.
+          center
+            - if @run.archived?
+              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+                = f.hidden_field(:archived, value: false)
+                .btn-group
+                  = f.submit 'List Run', class: 'btn btn-info'
+                  button.btn.btn-info.disabled Unlisted
+            - else
+              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+                = f.hidden_field(:archived, value: true)
+                .btn-group
+                  button.btn.btn-info.disabled Listed
+                  = f.submit 'Unlist Run', class: 'btn btn-info'
 
 article#danger-zone.danger
   .panel.panel-danger

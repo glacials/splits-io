@@ -83,6 +83,18 @@ class RunsController < ApplicationController
         redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
       end
     end
+
+    if params[@run.id36][:archived]
+      if @run.update(archived: params[@run.id36][:archived])
+        if params[@run.id36][:archived] == 'true'
+          redirect_to edit_run_path(@run), notice: 'Run unlisted.'
+        else
+          redirect_to edit_run_path(@run), notice: 'Run listed.'
+        end
+      else
+        redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
+      end
+    end
   end
 
   def download
