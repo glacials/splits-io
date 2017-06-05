@@ -67,6 +67,8 @@ module UnparsedRun
     end
 
     def parse_into_activerecord
+      segments.destroy_all
+
       timer_used = nil
       parse_result = nil
 
