@@ -16,17 +16,23 @@ module SplitterZ
   end
 
   class Parser < BabelBridge::Parser
-    rule :splitterz_file, :title_line, many?(:splits)
+    rule :splitterz_file, :title_line, many?(:splits), :newline?
 
     rule :title_line, :title, ',', :attempts, :newline
-    rule :splits,     :title, ',', :run_time, ',', :best_time, :newline
+    rule :splits,     :title, ',', :run_time, ',', :best_time, :local_img_path?, :newline
 
     rule :title,     /([^,\r\n]*)/
     rule :attempts,  /(\d*)/
     rule :run_time,  :time
     rule :best_time, :time
+    rule :local_img_path, /^.*$/
 
-    rule :time, /(\d*:?\d*:?\d*.\d*)/
+    rule :time, :hours, ':', :minutes, ':', :seconds
+    rule :time, :minutes, ':', :seconds
+
+    rule :hours,   /\d+/
+    rule :minutes, /\d+/
+    rule :seconds, /\d+\.\d+/
 
     rule :newline,         :windows_newline
     rule :newline,         :unix_newline
@@ -45,19 +51,29 @@ module SplitterZ
       splits.splits.each do |segment|
         split = Split.new
         split.name = segment.title.to_s
-        split.duration = duration_in_seconds_of(segment.run_time.to_s) - run[:time]
-        split.finish_time = duration_in_seconds_of(segment.run_time.to_s)
-        split.best = duration_in_seconds_of(segment.best_time.to_s)
+        split.duration = duration_in_seconds(segment.run_time.time) - run[:time]
+        split.finish_time = duration_in_seconds(segment.run_time.time)
+        split.best = duration_in_seconds(segment.best_time.time)
         run[:time] += split.duration
         run[:splits] << split
       end
       run
-    rescue
-      nil
     end
 
-    def duration_in_seconds_of(time)
-      Time.parse(time).seconds_since_midnight
+    def duration_in_milliseconds(time)
+      hours = 0
+      if time.respond_to?(:hours)
+        hours = time.hours.to_s.to_i
+      end
+
+      minutes = time.minutes.to_s.to_i
+      seconds = time.seconds.to_s.to_f
+
+      (hours * 60 * 60 * 1000) + (minutes * 60 * 1000) + (seconds * 1000)
+    end
+
+    def duration_in_seconds(time)
+      duration_in_milliseconds(time).to_f / 1000
     end
   end
 end
