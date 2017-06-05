@@ -52,7 +52,7 @@ article
         .panel-body
           = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
             .input-group
-              = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch, Hitbox, or YouTube VOD')
+              = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
               span.input-group-btn
                 = f.submit 'Save', class: 'btn btn-success'
 

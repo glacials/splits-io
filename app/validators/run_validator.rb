@@ -10,11 +10,11 @@ class RunValidator < ActiveModel::Validator
     return if record.video_url.nil?
 
     URI.parse(record.video_url).tap do |uri|
-      unless uri.host =~ /^(www\.)?(twitch\.tv|hitbox\.tv|youtube\.com|youtu\.be)$/
-        record.errors[:base] << 'Your video URL must be a link to a Twitch, Hitbox, or YouTube video.'
+      unless uri.host =~ /^(www\.)?(twitch\.tv|youtube\.com|youtu\.be)$/
+        record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
       end
     end
   rescue URI::InvalidURIError
-    record.errors[:base] << 'Your video URL must be a link to a Twitch, Hitbox, or YouTube video.'
+    record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
   end
 end
