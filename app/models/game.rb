@@ -17,7 +17,7 @@ class Game < ApplicationRecord
   def self.search(term)
     term = term.strip
     return nil if term.blank?
-    ids = where(shortname: term).pluck(:id) | Alias.where('name ILIKE ?', "%#{term}%").pluck(:game_id)
+    ids = where(shortname: term).or(where('name ILIKE ?', "%#{term}%")).pluck(:id) | Alias.where('name ILIKE ?', "%#{term}%").pluck(:game_id)
     Game.where(id: ids)
   end
 
