@@ -118,7 +118,7 @@ module UnparsedRun
         program: timer_used.to_s,
         attempts: parse_result[:attempts],
         srdc_id: srdc_id || parse_result[:srdc_id].presence,
-        duration_milliseconds: duration_seconds * 1000,
+        duration_milliseconds: (duration_seconds || 0) * 1000,
         sum_of_best_milliseconds: sum_of_best_milliseconds,
 
         time: duration_seconds, # deprecated
