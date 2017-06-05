@@ -37,6 +37,13 @@ class RunsController < ApplicationController
       render :forbidden, status: 403
       return
     end
+
+    if params['reparse'] == '1'
+      @run.parse_into_activerecord
+      redirect_to edit_run_path(@run), notice: 'Reparse complete.'
+      return
+    end
+
   end
 
   def update
