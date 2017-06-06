@@ -2,13 +2,6 @@ class Runs::StatsController < Runs::ApplicationController
   before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
 
   def index
-    if params['reparse'] == '1'
-      @run.clear_dynamodb_rows
-      @run.parse_into_dynamodb
-      redirect_to run_stats_path(@run)
-      return
-    end
-
     # Catch bad runs
     if @run.timer.nil?
       render 'runs/cant_parse', status: 500
