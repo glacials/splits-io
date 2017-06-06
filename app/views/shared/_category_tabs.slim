@@ -1,20 +1,19 @@
-- cache [game, current_category, link_type] do
-  ul#popular-categories.nav.nav-tabs
-    - (game.popular_categories | [current_category]).each do |category|
-      li class=(category == current_category ? 'active' : '')
-        - if link_type == :sum_of_best
-          = link_to category, game_category_sum_of_bests_path(game, category)
-        - else
-          = link_to category, game_category_path(game, category)
-    - if (game.unpopular_categories - [current_category]).present?
-      li.dropdown
-        a.dropdown-toggle data-toggle='dropdown' href='#' aria-expanded='false'
-          span More categories
-          span.caret
-        ul.dropdown-menu
-          - (game.unpopular_categories.order(:name) - [current_category]).each do |category|
-            li
-              - if link_type == :sum_of_best
-                = link_to category, game_category_sum_of_bests_path(game, category)
-              - else
-                = link_to category, game_category_path(game, category)
+ul#popular-categories.nav.nav-tabs
+  - (game.popular_categories | [current_category]).each do |category|
+    li class=(category == current_category ? 'active' : '')
+      - if link_type == :sum_of_best
+        = link_to category, game_category_sum_of_bests_path(game, category)
+      - else
+        = link_to category, game_category_path(game, category)
+  - if (game.unpopular_categories - [current_category]).present?
+    li.dropdown
+      a.dropdown-toggle data-toggle='dropdown' href='#' aria-expanded='false'
+        span More categories
+        span.caret
+      ul.dropdown-menu
+        - (game.unpopular_categories.order(:name) - [current_category]).each do |category|
+          li
+            - if link_type == :sum_of_best
+              = link_to category, game_category_sum_of_bests_path(game, category)
+            - else
+              = link_to category, game_category_path(game, category)

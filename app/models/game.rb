@@ -61,6 +61,10 @@ class Game < ApplicationRecord
   # game.
   def merge_into!(game)
     ApplicationRecord.transaction do
+      if shortname.present? && game.shortname.nil?
+        game.update(shortname: shortname)
+      end
+
       aliases.update_all(game_id: game.id)
 
       categories.each do |category|

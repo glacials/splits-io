@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170604082526) do
+ActiveRecord::Schema.define(version: 20170605194326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 20170604082526) do
   end
 
   add_foreign_key "game_aliases", "games", on_delete: :cascade
-  add_foreign_key "segment_histories", "segments"
-  add_foreign_key "segments", "runs"
+  add_foreign_key "segment_histories", "segments", on_delete: :cascade
+  add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "splits", "runs"
 end
