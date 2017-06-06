@@ -1,7 +1,6 @@
 - scale_to ||= run.duration_milliseconds
-- cache [:gold_timeline, :v3, {run: run, scale_to: scale_to}] do
-  - if @run.has_golds?
-    .gold.timeline
-      - run.collapsed_segments.each_with_index do |segment, index|
-        .pure-u.split style="width: #{segment.duration_milliseconds / scale_to * 100}%;"
-          .gold-split style="width: #{segment.shortest_duration_milliseconds / segment.duration_milliseconds * 100}%;" class=(segment.gold? ? :gold : :gray)
+- if @run.has_golds?
+  .gold.timeline
+    - run.collapsed_segments.each_with_index do |segment, index|
+      .pure-u.split style="width: #{segment.duration_milliseconds / scale_to * 100}%;"
+        .gold-split style="width: #{segment.shortest_duration_milliseconds / segment.duration_milliseconds * 100}%;" class=(segment.gold? ? :gold : :gray)
