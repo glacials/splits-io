@@ -9,7 +9,7 @@ module UnparsedRun
     end
 
     def parsed?
-      return duration_milliseconds.present?
+      return parsed_at.present?
     end
 
     def parse(fast: true, convert: false)
@@ -67,7 +67,7 @@ module UnparsedRun
     end
 
     def parse_into_activerecord
-      segments.destroy_all
+      segments.delete_all
 
       timer_used = nil
       parse_result = nil
@@ -126,6 +126,8 @@ module UnparsedRun
         time: duration_seconds, # deprecated
         sum_of_best: sum_of_best_seconds # depreceated
       )
+
+      update(parsed_at: Time.now)
     end
 
     def write_segments(parsed_segments)

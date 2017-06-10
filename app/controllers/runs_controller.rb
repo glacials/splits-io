@@ -14,6 +14,8 @@ class RunsController < ApplicationController
   before_action :attempt_to_claim, only: [:show]
 
   def show
+    @run.parse_into_activerecord unless @run.parsed?
+
     if params['reparse'] == '1'
       @run.parse_into_activerecord
       redirect_to run_path(@run)
@@ -33,6 +35,8 @@ class RunsController < ApplicationController
   end
 
   def edit
+    @run.parse_into_activerecord unless @run.parsed?
+
     if cannot?(:edit, @run)
       render :forbidden, status: 403
       return

@@ -2,6 +2,8 @@ class Runs::StatsController < Runs::ApplicationController
   before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
 
   def index
+    @run.parse_into_activerecord unless @run.parsed?
+
     # Catch bad runs
     if @run.timer.nil?
       render 'runs/cant_parse', status: 500
@@ -23,51 +25,57 @@ class Runs::StatsController < Runs::ApplicationController
   end
 
   def run_history_csv
+    @run.parse_into_activerecord unless @run.parsed?
+
     column_names = @run.history.map.with_index do |_, i|
-      "run ##{i}"
+      "Run ##{i} (ms)"
     end
 
     csv = CSV.generate do |csv|
       csv << column_names
-      csv << @run.history
+      csv << @run.history.map do |h|
+        if h[:duration_seconds].nil?
+          ""
+        else
+          (h[:duration_seconds] * 1000).truncate
+        end
+      end
     end
 
     send_data(csv, filename: "#{@run.id36}_run_history.csv", layout: false)
   end
 
   def segment_history_csv
+    @run.parse_into_activerecord unless @run.parsed?
+
     if @run.attempts.nil? || @run.attempts == 0
       redirect_to run_stats_path(@run), alert: "Segment history is not available for this run."
       return
     end
 
-    @raw_splits = @run.parse(fast: false)[:splits]
-
-    segment_histories = []
-
     csv = CSV.generate do |csv|
       rows = []
 
       header = ['Segment name']
-      (1..@run.attempts).each do |attempt_no|
-        header << "Attempt ##{attempt_no}"
+      (1..@run.attempts).each do |attempt_number|
+        header << "Attempt ##{attempt_number} (ms)"
       end
       csv << header
 
-      @raw_splits.each do |segment|
+      @run.segments.includes(:histories).each do |segment|
         row = []
         row << segment.name
-        if segment.indexed_history.nil?
+        if segment.histories.empty?
           next
         end
-        (1..@run.attempts).each do |attempt_no|
-          h = segment.indexed_history["#{attempt_no + 1}"]
+        (1..@run.attempts).each do |attempt_number|
+          h = segment.histories.find_by(attempt_number: attempt_number)
           if h.nil?
             row << ""
             next
           end
 
-          row << h
+          row << h.duration_milliseconds
         end
         csv << row
       end

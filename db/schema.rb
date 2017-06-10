@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170605194326) do
+ActiveRecord::Schema.define(version: 20170610153031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 20170605194326) do
     t.string   "s3_filename"
     t.bigint   "duration_milliseconds"
     t.bigint   "sum_of_best_milliseconds"
+    t.datetime "parsed_at"
     t.index ["category_id"], name: "index_runs_on_category_id", using: :btree
     t.index ["user_id"], name: "index_runs_on_user_id", using: :btree
   end
