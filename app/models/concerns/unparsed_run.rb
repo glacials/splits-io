@@ -72,12 +72,14 @@ module UnparsedRun
       timer_used = nil
       parse_result = nil
 
-      if file.nil?
+      f = file
+
+      if f.nil?
         return false
       end
 
       Run.programs.each do |timer|
-        parse_result = timer::Parser.new.parse(file, fast: false)
+        parse_result = timer::Parser.new.parse(f, fast: false)
 
         if parse_result.present?
           timer_used = timer.to_sym
