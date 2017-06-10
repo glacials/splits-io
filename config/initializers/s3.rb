@@ -3,7 +3,12 @@ options = {
   credentials: Aws::Credentials.new(
     ENV['AWS_ACCESS_KEY_ID'],
     ENV['AWS_SECRET_KEY']
-  )
+  ),
+  http_continue_timeout: 1,
+  http_idle_timeout: 5,
+  http_open_timeout: 5,
+  http_read_timeout: 10,
+  retry_limit: 2
 }
 
 if ENV['AWS_REGION'] == 'local'
