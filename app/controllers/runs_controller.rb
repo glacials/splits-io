@@ -14,8 +14,6 @@ class RunsController < ApplicationController
   before_action :attempt_to_claim, only: [:show]
 
   def show
-    @run.parse_into_activerecord unless @run.parsed?
-
     if params['reparse'] == '1'
       @run.parse_into_activerecord
       redirect_to run_path(@run)
@@ -35,8 +33,6 @@ class RunsController < ApplicationController
   end
 
   def edit
-    @run.parse_into_activerecord unless @run.parsed?
-
     if cannot?(:edit, @run)
       render :forbidden, status: 403
       return
@@ -165,7 +161,9 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.includes(:user, :category, :game, :segments).find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
+    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
+    @run.parse_into_activerecord unless @run.parsed?
+
     gon.run = {id: @run.id36, splits: @run.collapsed_segments}
     gon.scale_to = @run.duration_milliseconds
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
