@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170610153031) do
+ActiveRecord::Schema.define(version: 20170610215419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(version: 20170610153031) do
     t.string   "run_file_digest"
     t.string   "srdc_id"
     t.integer  "attempts"
-    t.string   "s3_filename"
+    t.string   "s3_filename",                              null: false
     t.bigint   "duration_milliseconds"
     t.bigint   "sum_of_best_milliseconds"
     t.datetime "parsed_at"
