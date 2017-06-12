@@ -26,6 +26,7 @@ $ ->
           contentType: false
           data: formData
           success: ->
+            $("#droplabel").html "parsing..."
             window.location = response.uris.claim_uri unless options.bulk
           error: (xhr, textStatus) ->
             window.isUploading = false
@@ -78,7 +79,7 @@ $ ->
     if files.length > 1 and gon.user is null
       $("#droplabel").html "to upload more than one file at a time, please sign in."
       return
-    $("#droplabel").html "parsing..."
+    $("#droplabel").html "uploading..."
     window.isUploading = true
     window.showSpinner "#fff"
     if files.length > 1
