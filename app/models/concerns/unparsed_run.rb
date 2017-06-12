@@ -79,7 +79,10 @@ module UnparsedRun
       end
 
       Run.programs.each do |timer|
-        parse_result = timer::Parser.new.parse(f, fast: false)
+        begin
+          parse_result = timer::Parser.new.parse(f, fast: false)
+        rescue ArgumentError
+        end
 
         if parse_result.present?
           timer_used = timer.to_sym

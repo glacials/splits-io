@@ -13,17 +13,14 @@ class Run < ApplicationRecord
 
   belongs_to :user
   belongs_to :category
-  belongs_to :run_file, primary_key: :digest, foreign_key: :run_file_digest
   has_one :game, through: :category
   has_many :segments, dependent: :destroy
 
   has_secure_token :claim_token
 
-  after_create -> { parse(fast: true) if run_file.present? }
   after_create :refresh_game
   after_create :discover_runner
 
-  #validates :run_file, presence: true
   validates_with RunValidator
 
   scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
@@ -123,7 +120,7 @@ class Run < ApplicationRecord
     file = $s3_bucket.object("splits/#{s3_filename}")
     file.get.body.read
   rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::AccessDenied
-    run_file.try(:file)
+    nil
   end
 
   def refresh_game
