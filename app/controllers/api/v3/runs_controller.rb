@@ -7,13 +7,16 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   end
 
   def create
+    filename = SecureRandom.uuid
+
     @run = Run.create(
       user: current_user,
-      image_url: params[:image_url]
+      image_url: params[:image_url],
+      s3_filename: filename
     )
 
     $s3_bucket.put_object(
-      key: "splits/#{@run.id36}",
+      key: "splits/#{filename}",
       body: params.require(:file)
     )
 
