@@ -142,7 +142,7 @@ class RunsController < ApplicationController
   end
 
   def random
-    redirect_to Run.offset(rand(RunFile.count)).first
+    redirect_to Run.offset(rand(Run.count)).first
   end
 
   def destroy

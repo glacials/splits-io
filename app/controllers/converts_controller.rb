@@ -5,13 +5,20 @@ class ConvertsController < ApplicationController
   def create
     params.require(:file)
     params.require(:format)
-    run_file = RunFile.for_convert(params[:file])
 
-    @run = Run.new(run_file: run_file, user: nil)
-    parse_result = @run.parse(fast: params[:historic] != '1', convert: true)
-    if parse_result.nil? || parse_result[:program].nil?
-      redirect_to cant_parse_path && return
-    end
+    filename = SecureRandom.uuid
+
+    @run = Run.create(
+      user: nil,
+      s3_filename: filename
+    )
+
+    $s3_bucket.put_object(
+      key: "splits/#{filename}",
+      body: params.require(:file)
+    )
+
+    @run.parse_into_activerecord
 
     program_extensions = {'livesplit' => '.lss', 'urn' => '.json'}
     file_name = "#{params[:file].original_filename.split(program_extensions[@run.program])[0]}"

@@ -2,25 +2,30 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
   before_action :check_parameters, only: [:create]
 
   def create
-    run_file = RunFile.for_convert(params[:file])
+    params.require(:file)
+    params.require(:format)
 
-    @run = Run.new(run_file: run_file)
-    parse_result = @run.parse(fast: params['historic'] != '1', convert: true)
-    if parse_result.nil? || parse_result[:timer].nil?
-      render status: 400, json: {
-        status: 400,
-        message: "Can't parse that file. We support the following input formats: #{Run.programs.to_sentence}."
-      }
-      return
-    end
+    filename = SecureRandom.uuid
+
+    @run = Run.create(
+      user: nil,
+      s3_filename: filename
+    )
+
+    $s3_bucket.put_object(
+      key: "splits/#{filename}",
+      body: params.require(:file)
+    )
+
+    @run.parse_into_activerecord
 
     old_extension = Run.program(@run.program).file_extension
+
     if Run.program(params[:format])
       new_extension = Run.program(params[:format]).file_extension
     else
       new_extension = params[:format]
     end
-
     filename_without_extension = params[:file].original_filename.split(old_extension)[0]
 
     filename = "#{filename_without_extension}.#{new_extension}"

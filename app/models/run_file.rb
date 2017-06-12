@@ -6,17 +6,6 @@ class RunFile < ApplicationRecord
     end
   end
 
-  def self.for_convert(file)
-    if file.respond_to?(:read)
-      file_text = file.read
-      if RunFile.is_llanfair?(file_text)
-        run_file = RunFile.new(file: RunFile.unpack_binary(file_text))
-      else
-        run_file = RunFile.new(file: file_text)
-      end
-    end
-  end
-
   def self.random
     RunFile.offset(rand(RunFile.count)).first
   end
