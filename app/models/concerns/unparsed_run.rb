@@ -119,6 +119,7 @@ module UnparsedRun
       end
 
       update(
+        parsed_at: Time.now,
         program: timer_used.to_s,
         attempts: parse_result[:attempts],
         srdc_id: srdc_id || parse_result[:srdc_id].presence,
@@ -128,8 +129,6 @@ module UnparsedRun
         time: duration_seconds, # deprecated
         sum_of_best: sum_of_best_seconds # depreceated
       )
-
-      update(parsed_at: Time.now)
     end
 
     def write_segments(parsed_segments)

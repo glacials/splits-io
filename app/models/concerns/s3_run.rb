@@ -4,10 +4,6 @@ module S3Run
   extend ActiveSupport::Concern
 
   included do
-    def s3_filename
-      super || id36
-    end
-
     def in_s3?
       file = $s3_bucket.object("splits/#{s3_filename}")
       return file.exists?

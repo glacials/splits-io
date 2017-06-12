@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170610215419) do
+ActiveRecord::Schema.define(version: 20170612022253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,12 +95,6 @@ ActiveRecord::Schema.define(version: 20170610215419) do
     t.index ["to_user_id"], name: "index_rivalries_on_to_user_id", using: :btree
   end
 
-  create_table "run_files", force: :cascade do |t|
-    t.string "digest"
-    t.text   "file"
-    t.index ["digest"], name: "index_run_files_on_digest", using: :btree
-  end
-
   create_table "runs", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -115,7 +109,6 @@ ActiveRecord::Schema.define(version: 20170610215419) do
     t.decimal  "sum_of_best"
     t.boolean  "archived",                 default: false, null: false
     t.string   "video_url"
-    t.string   "run_file_digest"
     t.string   "srdc_id"
     t.integer  "attempts"
     t.string   "s3_filename",                              null: false
