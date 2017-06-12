@@ -7,28 +7,6 @@ class Api::V3::Games::Categories::RunsController < Api::V3::ApplicationControlle
     paginate json: @runs, each_serializer: Api::V3::RunSerializer, root: :runs
   end
 
-  def create
-    # TODO: Tokens, not cookies
-    run_file = RunFile.for_file(params.require(:file))
-    @record = Run.new(run_file: run_file, user: current_user, image_url: params[:image_url]).tap do |run|
-      # TODO: Move this error handling into a before_action or a rescue
-      unless run.parses?
-        render status: 400, json: {
-          status: 400,
-          message: "Can't parse that file. We support #{Run.programs.to_sentence}."
-        }
-        return
-      end
-      run.save
-    end
-    head 201, location: api_v3_run_url(@record)
-  rescue ActionController::ParameterMissing
-    render status: 400, json: {
-      status: 400,
-      message: "No run file received. Make sure you're including a 'file' parameter in your request."
-    }
-  end
-
   private
 
   def set_game
