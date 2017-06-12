@@ -73,7 +73,7 @@ class Run < ApplicationRecord
   end
 
   def offset
-    parse[:offset]
+    0 # TODO: Replace with real offset
   end
 
   def timer
