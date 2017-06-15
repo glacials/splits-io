@@ -5,7 +5,9 @@ describe Run, type: :model do
 
   context 'with a game' do
     context 'that has no other runs' do
-      let(:run) { FactoryGirl.create(:run, game: FactoryGirl.create(:game)) }
+      let(:run) do
+        FactoryGirl.create(:run, game: FactoryGirl.create(:game))
+      end
 
       it "doesn't destroy its game when destroyed" do
         game = run.game
@@ -26,21 +28,6 @@ describe Run, type: :model do
         run.destroy
         expect(game.destroyed?).to be false
       end
-    end
-  end
-
-  context 'with a run_file' do
-    let(:run) do
-      run_file = RunFile.for_file(File.open("#{Rails.root}/spec/factories/run_files/livesplit1.4"))
-      FactoryGirl.create(:run, run_file: run_file)
-      FactoryGirl.create(:run, run_file: run_file)
-    end
-
-    it "doesn't destroy its run_file when destroyed" do
-      run_file = run.run_file
-      run.destroy
-
-      expect(run_file.destroyed?).to be false
     end
   end
 
@@ -68,7 +55,9 @@ describe Run, type: :model do
   end
 
   context 'with an invalid video URL' do
-    let(:run) { FactoryGirl.build(:run, video_url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!') }
+    let(:run) do
+      FactoryGirl.build(:run, video_url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!')
+    end
 
     it 'fails to validate' do
       expect(run).not_to be_valid
@@ -83,7 +72,10 @@ describe Run, type: :model do
 
   context 'from LiveSplit 1.4' do
     let(:run) do
-      FactoryGirl.create(:livesplit1_4_run)
+      r = FactoryGirl.create(:livesplit1_4_run)
+      r.parse_into_activerecord
+      r.reload
+      r
     end
 
     it 'has the correct splits' do
@@ -120,17 +112,17 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.skipped_splits.map { |s| [s.name, s.duration] }).to eq []
+      expect(run.skipped_splits.map { |s| [s.name, s.duration] }).to match_array []
     end
 
     it 'accurately reports its shortest segment' do
-      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to eq [
+      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to match_array [
         'Da Vinci', 18882
       ]
     end
 
     it 'accurately reports its longest segment' do
-      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to eq [
+      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to match_array [
         'Get across that bridge', 484387
       ]
     end
@@ -148,7 +140,7 @@ describe Run, type: :model do
     end
 
     it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:history]).to eq [
+      expect(run.parse(fast: false)[:history]).to match_array [
         6911.1422649, 6261.793028, 6123.6647933, 5944.5159323, 5694.8238343, 5410.1111281, 5746.1888454, 5390.4596715,
         5258.0010184, 5236.1128949, 5102.848171, 5126.4048091, 5055.5630296
       ]
@@ -157,11 +149,14 @@ describe Run, type: :model do
 
   context 'from LiveSplit 1.6' do
     let(:run) do
-      FactoryGirl.create(:livesplit1_6_run)
+      r = FactoryGirl.create(:livesplit1_6_run)
+      r.parse_into_activerecord
+      r.reload
+      r
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+      expect(run.segments.map { |s| [s.name, s.duration_milliseconds] }).to match_array [
         ['Hole 1', 30349],
         ['Hole 2', 42742],
         ['Hole 3', 35263],
@@ -184,17 +179,17 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.skipped_splits.map { |s| [s.name, s.duration_milliseconds] }).to eq []
+      expect(run.skipped_splits.map { |s| [s.name, s.duration_milliseconds] }).to match_array []
     end
 
     it 'accurately reports its shortest segment' do
-      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to eq [
+      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to match_array [
         'Hole 7', 20754
       ]
     end
 
     it 'accurately reports its longest segment' do
-      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to eq [
+      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to match_array [
         'Hole 18', 66083
       ]
     end
@@ -212,7 +207,7 @@ describe Run, type: :model do
     end
 
     it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:history]).to eq [
+      expect(run.parse(fast: false)[:history]).to match_array [
         912.296, 859.304, 801.458, 755.249, 793.755, 744.211, 741.924, 815.122, 761.782, 696.49, 710.935, 727.007,
         715.404, 730.922, 705.515, 728.286, 714.258, 705.742, 691.061, 685.671
       ]
@@ -221,28 +216,31 @@ describe Run, type: :model do
 
   context 'from Llanfair' do
     let(:run) do
-      FactoryGirl.create(:llanfair_run)
+      r = FactoryGirl.create(:llanfair_run)
+      r.parse_into_activerecord
+      r.reload
+      r
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+      expect(run.segments.map { |s| [s.name, s.duration_milliseconds] }).to match_array [
         ['Spiral Mountain', 211230],
         ["Mumbo's Mountain", 808200]
       ]
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.skipped_splits.map { |s| [s.name, s.duration_milliseconds] }).to eq []
+      expect(run.skipped_splits.map { |s| [s.name, s.duration_milliseconds] }).to match_array []
     end
 
     it 'accurately reports its shortest segment' do
-      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to eq [
+      expect([run.shortest_segment.name, run.shortest_segment.duration_milliseconds]).to match_array [
         'Spiral Mountain', 211230
       ]
     end
 
     it 'accurately reports its longest segment' do
-      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to eq [
+      expect([run.longest_segment.name, run.longest_segment.duration_milliseconds]).to match_array [
         "Mumbo's Mountain", 808200
       ]
     end
@@ -255,19 +253,21 @@ describe Run, type: :model do
       expect(run.total_playtime_milliseconds).to eq 0
     end
 
-    it 'correctly converts back to llanfair files' do
-      run.program = :llanfair
-      expect(run.original_file).to eq(RunFile.pack_binary(run.file))
+    it 'correctly converts back to a Llanfair file' do
+      expect(RunFile.unpack_binary(RunFile.pack_binary(run.file))).to eq(run.file)
     end
   end
 
   context 'from the Gered Llanfair fork' do
     let(:run) do
-      FactoryGirl.create(:llanfair_gered_run)
+      r = FactoryGirl.create(:llanfair_gered_run)
+      r.parse_into_activerecord
+      r.reload
+      r
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+      expect(run.segments.map { |s| [s.name, s.duration_milliseconds] }).to match_array [
         ["1-1", 32180],
         ["1-2", 31470],
         ["4-1", 37400],
@@ -281,11 +281,14 @@ describe Run, type: :model do
 
     context 'with reference attributes' do
       let(:run) do
-        FactoryGirl.create(:llanfair_gered_run)
+        r = FactoryGirl.create(:llanfair_gered_run)
+        r.parse_into_activerecord
+      r.reload
+        r
       end
 
       it 'has the correct splits' do
-        expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+        expect(run.segments.map { |s| [s.name, s.duration_milliseconds] }).to match_array [
           ["1-1", 32180],
           ["1-2", 31470],
           ["4-1", 37400],
@@ -305,11 +308,14 @@ describe Run, type: :model do
 
   context 'from WSplit' do
     let(:run) do
-      FactoryGirl.create(:wsplit_run)
+      r = FactoryGirl.create(:wsplit_run)
+      r.parse_into_activerecord
+      r.reload
+      r
     end
 
     it 'has the correct splits' do
-      expect(run.splits.map { |s| [s.name, s.duration_milliseconds] }).to eq [
+      expect(run.segments.map { |s| [s.name, s.duration_milliseconds] }).to match_array [
         ["Introduction", 85480],
         ["Jimmy", 134200],
         ["Mona", 124070],
@@ -321,6 +327,41 @@ describe Run, type: :model do
         ["Kat", 221980],
         ["Jimmy", 177610],
         ["Wario", 234060]
+      ]
+    end
+
+    it 'accurately reports its total playtime' do
+      expect(run.total_playtime_milliseconds).to eq 0
+    end
+  end
+
+  context 'from Time Split Tracker' do
+    let(:run) do
+      r = FactoryGirl.create(:timesplittracker_run)
+      r.parse_into_activerecord
+      r.reload
+      r.reload
+      r
+    end
+
+    it 'has the correct splits' do
+      expect(run.segments.map { |s| [s.name, s.duration_milliseconds] }).to match_array [
+        ["Hyrule Castle", 377060],
+        ["Eastern Palace", 353060],
+        ["Desert Palace", 467070],
+        ["Tower of hera", 478079],
+        ["Light World", 565099],
+        ["Dark Palace", 445070],
+        ["Dig", 459079],
+        ["Chest", 331050],
+        ["Thieves’ Town", 327159],
+        ["Skull Woods", 491400],
+        ["Ice Palace", 561750],
+        ["Misery Mire", 655769],
+        ["Swamp Palace", 599410],
+        ["Turtle Rock", 1115179],
+        ["Dark World", 686119],
+        ["Triforce", 133640]
       ]
     end
 

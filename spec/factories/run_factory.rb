@@ -35,6 +35,12 @@ FactoryGirl.define do
     body: File.read("#{Rails.root}/spec/factories/run_files/wsplit")
   )
 
+  timesplittracker = SecureRandom.uuid
+  $s3_bucket.put_object(
+    key: "splits/#{timesplittracker}",
+    body: File.read("#{Rails.root}/spec/factories/run_files/timesplittracker.txt")
+  )
+
   factory :run do
     s3_filename livesplit_1_4
 
@@ -76,6 +82,10 @@ FactoryGirl.define do
 
     factory :wsplit_run do
       s3_filename wsplit
+    end
+
+    factory :timesplittracker_run do
+      s3_filename timesplittracker
     end
 
     video_url 'http://www.twitch.tv/glacials/c/3463112'
