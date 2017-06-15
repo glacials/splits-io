@@ -18,6 +18,15 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     )
 
     @run.parse_into_activerecord
+    if @run.program == nil
+      render status: 400, json: {
+        status: 400,
+        message: "Unable to parse that run."
+      }
+      return
+    end
+
+    @run.reload
 
     old_extension = Run.program(@run.program).file_extension
 
