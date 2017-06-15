@@ -19,16 +19,20 @@ module TimeSplitTracker
     rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
 
     rule :first_line,  :attempts, :tab, /([^\t\r\n]*)/, :optional_tab, :game_name, :newline
-    rule :title_line,  :title, :tab, /([^\t\r\n]*)/, :newline
-    rule :splits,      :title, :tab, :duration, :newline, :image_path, :tab, :newline
+    rule :title_line,  :title, :tab, :best_splits_title?, :tab?, :time_title?, :newline
+    rule :splits,      :title, :tab, :best_duration, :tab, :finish_time?, :newline, :image_path, many?(:tab), :newline
 
-    rule :attempts,   /([^\t\r\n]*)/
-    rule :title,      /([^\t]*)/
-    rule :game_name,       /([^\r\n]*)/
-    rule :duration,   :time
-    rule :image_path, /([^\t\r\n]*)/
+    rule :best_splits_title, 'Best Splits'
+    rule :time_title,        'Time'
 
-    rule :time,       /((\d+:)?\d*\.\d*)/
+    rule :attempts,      /([^\t\r\n]*)/
+    rule :title,         /([^\t]*)/
+    rule :game_name,     /([^\r\n]*)/
+    rule :best_duration, :time
+    rule :finish_time,   :time
+    rule :image_path,    /([^\t\r\n]*)/
+
+    rule :time, /(((\d+:)?\d+:)?\d*\.\d*)/
 
     rule :newline,         :windows_newline
     rule :newline,         :unix_newline
@@ -57,20 +61,26 @@ module TimeSplitTracker
     private
 
     def parse_splits(splits)
-      splits.map.with_index do |split, index|
-        parse_split(split, index == 0 ? 0 : splits.slice(0, index).map { |s| duration_in_seconds_of(s.duration.to_s) }.sum)
+      splits.map.with_index do |segment, index|
+        prev_split_finish_time = 0
+        if index > 0
+          prev_split_finish_time = splits[index - 1].finish_time
+        end
+
+        parse_split(segment, prev_split_finish_time)
       end
     end
 
-    def parse_split(segment, run_duration_so_far)
+    def parse_split(segment, prev_segment_finish_time)
       Split.new.tap do |split|
         split.name = segment.title.to_s
-        split.duration = duration_in_seconds_of(segment.duration.to_s)
-        split.finish_time = run_duration_so_far + split.duration
+        split.duration = duration_in_seconds(segment.finish_time.to_s) - duration_in_seconds(prev_segment_finish_time.to_s)
+        split.best = duration_in_seconds(segment.best_duration.to_s)
+        split.finish_time = duration_in_seconds(segment.finish_time.to_s)
       end
     end
 
-    def duration_in_seconds_of(time)
+    def duration_in_seconds(time)
       return 0 if time.blank?
 
       time.sub!('.', ':') if time.count('.') == 2
