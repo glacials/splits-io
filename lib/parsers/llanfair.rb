@@ -16,16 +16,7 @@ module Llanfair
   end
 
   class Parser
-    def parse(character_array, options = {})
-      # Convert the array of characters from string form to an actual array
-      # Then pack the characters back to the original bytes
-      # We don't need to do this if the file is from S3; it's already binary
-      if character_array.is_a?(Array) || character_array[0] == '['
-        file = RunFile.pack_binary(character_array)
-      else
-        file = character_array
-      end
-
+    def parse(file, options = {})
       run = {
         history: [],
         indexed_history: {}

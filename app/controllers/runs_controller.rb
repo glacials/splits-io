@@ -132,7 +132,7 @@ class RunsController < ApplicationController
 
     send_data(
       if timer == Run.program(@run.timer)
-        @run.original_file
+        @run.file
       else
         render_to_string(params[:timer], layout: false)
       end,

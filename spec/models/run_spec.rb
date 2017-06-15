@@ -252,10 +252,6 @@ describe Run, type: :model do
     it 'accurately reports its total playtime' do
       expect(run.total_playtime_milliseconds).to eq 0
     end
-
-    it 'correctly converts back to a Llanfair file' do
-      expect(RunFile.unpack_binary(RunFile.pack_binary(run.file))).to eq(run.file)
-    end
   end
 
   context 'from the Gered Llanfair fork' do

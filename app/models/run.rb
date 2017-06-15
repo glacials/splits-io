@@ -139,14 +139,6 @@ class Run < ApplicationRecord
     "#{to_param}.#{timer.file_extension}"
   end
 
-  def original_file
-    if timer.to_sym == :llanfair && file[0] == "["
-      RunFile.pack_binary(file)
-    else
-      file
-    end
-  end
-
   def duration_milliseconds
     if super.nil?
       parse_into_activerecord
