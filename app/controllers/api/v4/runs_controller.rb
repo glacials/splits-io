@@ -4,6 +4,12 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
   before_action :set_link_headers, if: -> { @run.present? }
 
+  before_action only: [:create] do
+    if current_user.nil? # respect cookie auth
+      doorkeeper_authorize! :upload_run
+    end
+  end
+
   def show
     if params[:historic] == '1'
       @run.parse(fast: false)
@@ -21,7 +27,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       rp = {}
     end
 
-    rp = rp.merge(s3_filename: filename)
+    rp = rp.merge(s3_filename: filename, user: current_user)
 
     @run = Run.create(rp)
     if !@run.persisted?

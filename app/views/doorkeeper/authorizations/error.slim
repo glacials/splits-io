@@ -1,0 +1,15 @@
+- title 'Authorize'
+- if current_user.nil?
+  article You need to be signed in to view this page.
+- else
+  article
+    .row
+      .col-md-6.col-md-offset-3
+        .panel.panel-default
+          .panel-heading
+            b Authorization Request Error
+          .panel-body
+            p
+              big = t('doorkeeper.authorizations.error.title')
+            p = @pre_auth.error_response.body[:error_description]
+

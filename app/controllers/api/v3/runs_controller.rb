@@ -2,6 +2,13 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   before_action :set_run, only: [:show, :destroy, :disown]
   before_action :verify_ownership!, only: [:destroy, :disown]
 
+  before_action only: [:create] do
+    # If an OAuth token is supplied, use it (and fail if it's invalid). Otherwise, upload anonymously.
+    if request.headers['Authorization'].present?
+      doorkeeper_authorize! :upload_run
+    end
+  end
+
   def show
     render json: @run, serializer: Api::V3::Detail::RunSerializer, root: :run
   end
