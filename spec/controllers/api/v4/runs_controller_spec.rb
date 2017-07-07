@@ -28,8 +28,8 @@ describe Api::V4::RunsController do
     context 'when given no cookie and no OAuth token' do
       subject(:response) { post :create, params: {file: run.file} }
 
-      it 'returns a 401' do
-        expect(response).to have_http_status 401
+      it 'returns a 201' do
+        expect(response).to have_http_status 201
       end
     end
 
