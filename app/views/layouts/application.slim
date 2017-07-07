@@ -38,7 +38,9 @@ html
           .collapse.navbar-collapse#global-nav
             ul.nav.navbar-nav
               li class=('active' if on_page[:upload])
-                a href=new_run_path Upload
+                a href=new_run_path
+                  .glyphicon.glyphicon-cloud-upload>
+                  | Upload
               li class=('active' if on_page[:games])
                 a href=games_path Games
               li class=('active' if on_page[:faq])
@@ -50,9 +52,12 @@ html
             ul.nav.navbar-nav.navbar-right
               - if logged_in?
                 li class=('active' if on_page[:rivalries])
-                  a href=user_rivalries_path(current_user) My Rivals
+                  a href=user_rivalries_path(current_user)
+                    .glyphicon.glyphicon-scale>
+                    | My Rivals
                 li.dropdown class=('active' if on_page[:profile])
                   a.dropdown-toggle href='#' data-toggle='dropdown' role='button' aria-expanded='false'
+                    .glyphicon.glyphicon-user>
                     span = current_user
                     span.caret
                   ul.dropdown-menu role='menu'
