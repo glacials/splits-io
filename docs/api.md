@@ -8,10 +8,10 @@ These docs are for the v3 API.
 ### [Run Endpoints][run-endpoints]
 ### [Uploading Runs on Behalf of a User][authorization]
 
-[game-endpoints]: #game-endpoints
-[user-endpoints]: #user-endpoints
-[run-endpoints]: #run-endpoints
-[authorization]: #uploading-runs-on-behalf-of-a-user
+[game-endpoints]: #game-endpoints-1
+[user-endpoints]: #user-endpoints-1
+[run-endpoints]: #run-endpoints-1
+[authorization]: #uploading-runs-on-behalf-of-a-user-1
 
 ## Pagination
 Routes that return array resources are paginated to 20 items per page. To get a specific page of results, add `?page=N`
