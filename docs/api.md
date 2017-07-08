@@ -372,8 +372,8 @@ want to learn more about OAuth or need general OAuth troubleshooting help, you c
 your application is a website, it's likely that the language you're using has well-established libraries that handle
 much of the below OAuth flow for you.
 
-In all cases, you'll need to first go to your Splits I/O account's [settings page][1] and create an application. Add the
-`upload_run` scope to the list of needed scopes, then refer to the relevant section below.
+In all cases, you'll need to first go to your Splits I/O account's [settings page][1] and create an application, then
+refer to the relevant section below.
 
 *Note: Once you have an OAuth token, you can use a request like this to retrieve information about it:*
 ```http
@@ -393,8 +393,6 @@ for an OAuth token using a secure API request.
     http://localhost:8000/auth/splitsio
     ```
     *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-
-    Set your requested scopes to `upload_run`.
 3. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
     this:
     ```http
@@ -460,8 +458,6 @@ should use OAuth's **implicit grant flow**.
     https://YOUR_WEBSITE/auth/splitsio
     ```
     *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-
-    Set your requested scopes to `upload_run`.
 2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
     this:
     ```http
@@ -496,8 +492,6 @@ using a secure API request.
     https://YOUR_WEBSITE/auth/splitsio
     ```
     *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-
-    Set your requested scopes to `upload_run`.
 2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
     this:
     ```http
