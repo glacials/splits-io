@@ -432,7 +432,7 @@ for an OAuth token using a secure API request.
     Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
     by including this header in your requests:
     ```http
-    Bearer: OAuth YOUR_ACCESS_TOKEN
+    Authorization: Bearer YOUR_ACCESS_TOKEN
     ```
     The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
     can retrieve a new one with no user intervention using the returned `refresh_token`:
@@ -474,7 +474,7 @@ should use OAuth's **implicit grant flow**.
     Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
     by including this header in your requests:
     ```http
-    Bearer: OAuth YOUR_ACCESS_TOKEN
+    Authorization: Bearer YOUR_ACCESS_TOKEN
     ```
     The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
     can retrieve a new one with no user intervention using redirection upon accessing your app, or a hidden iframe to
@@ -534,7 +534,7 @@ using a secure API request.
     Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
     by including this header in your requests:
     ```http
-    Bearer: OAuth YOUR_ACCESS_TOKEN
+    Authorization: Bearer YOUR_ACCESS_TOKEN
     ```
     The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
     can retrieve a new one with no user intervention using the returned `refresh_token`:
