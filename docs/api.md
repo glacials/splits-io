@@ -368,9 +368,9 @@ on their behalf. If they accept, you will receive an OAuth token which you can i
 order to create the run as that user.
 
 The following instructions go into naive-case details about implementing this OAuth support in your application. If you
-want to learn more about OAuth or need general OAuth troubleshooting help, you can research OAuth2 online. Especially if
-your application is a website, it's likely that the language you're using has well-established libraries that handle
-much of the below OAuth flow for you.
+want to learn more about OAuth or need general OAuth troubleshooting help, you can [research OAuth2
+online][oauth2-simplified]. Especially if your application is a website, it's likely that the language you're using has
+well-established libraries that handle much of the below OAuth flow for you.
 
 In all cases, you'll need to first go to your Splits I/O account's [settings page][1] and create an application, then
 refer to the relevant section below.
@@ -379,6 +379,8 @@ refer to the relevant section below.
 ```http
 GET https://splits.io/oauth/token/info?access_token=YOUR_TOKEN
 ```
+
+[oauth2-simplified]: https://aaronparecki.com/oauth-2-simplified/
 
 #### Example 1: My application is a local program that runs on the user's computer
 If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
