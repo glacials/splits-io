@@ -51,6 +51,7 @@ gem 'patreon'
 
 # authorization
 gem 'cancancan'
+gem 'doorkeeper'
 
 # db
 gem 'activerecord-import'
@@ -70,6 +71,7 @@ gem 'rest-client'
 gem 'platform-api'
 
 # javascript
+gem 'clipboard-rails'
 gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'

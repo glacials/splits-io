@@ -1,4 +1,8 @@
 SplitsIO::Application.routes.draw do
+  use_doorkeeper do
+    skip_controllers :applications, :authorized_applications
+  end
+
   root 'runs#index'
 
   get '/faq',       to: 'pages#faq',            as: :faq
@@ -63,7 +67,13 @@ SplitsIO::Application.routes.draw do
     as: :game_category_sum_of_bests
 
   resources :tools, only: [:index]
-  resources :settings, only: [:index]
+
+  get    '/settings',                           to: 'settings#index',       as: :settings
+
+  get    '/settings/applications/new',            to: 'applications#new',                as: :new_application
+  post   '/settings/applications',                to: 'applications#create',             as: :applications
+  delete '/settings/applications/:application',   to: 'applications#destroy',            as: :application
+  delete '/settings/authorizations/:application', to: 'authorized_applications#destroy', as: :authorization
 
   get    '/:run/edit',                      to: 'runs#edit',        as: :edit_run
   get    '/:run/stats',                     to: 'runs/stats#index', as: :run_stats

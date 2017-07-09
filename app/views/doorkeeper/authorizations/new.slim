@@ -1,0 +1,48 @@
+- title "Authorize"
+- if current_user.nil?
+  article You need to be signed in to view this page.
+- else
+  article
+    .row
+      .col-md-6.col-md-offset-3
+        .panel.panel-default
+          .panel-heading
+            b #{@pre_auth.client.name} is requesting partial access to your Splits I/O account
+          .panel-body
+            p
+              span Hey
+              b< #{current_user.twitch_display_name}
+              span ! The application
+            p
+              h4.text-info = @pre_auth.client.name
+            p
+              span is requesting these abilities:
+            p
+              ol
+                li
+                  h5.text-info See who you are on Splits I/O
+                - @pre_auth.scope.split(' ').each do |scope|
+                  li
+                    h5.text-info = scope_to_sentence(scope)
+            p
+              span You can always revoke
+              span.text-info<> #{@pre_auth.client.name}'s
+              span permissions later.
+          .panel-footer
+            .row
+              .col-md-6
+                = form_for oauth_authorization_path, method: :post do |f|
+                  = hidden_field_tag :client_id, @pre_auth.client.uid
+                  = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
+                  = hidden_field_tag :state, @pre_auth.state
+                  = hidden_field_tag :response_type, @pre_auth.response_type
+                  = hidden_field_tag :scope, @pre_auth.scope
+                  = submit_tag t('doorkeeper.authorizations.buttons.authorize'), class: 'btn btn-info btn-lg btn-block'
+              .col-md-6
+                = form_for oauth_authorization_path, method: :delete do |f|
+                  = hidden_field_tag :client_id, @pre_auth.client.uid
+                  = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
+                  = hidden_field_tag :state, @pre_auth.state
+                  = hidden_field_tag :response_type, @pre_auth.response_type
+                  = hidden_field_tag :scope, @pre_auth.scope
+                  = submit_tag t('doorkeeper.authorizations.buttons.deny'), class: 'btn btn-default btn-lg btn-block'

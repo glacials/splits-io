@@ -1,0 +1,24 @@
+- title "New Application"
+- if current_user.nil?
+  article You need to be signed in to view this page.
+- else
+  article
+      .col-md-12
+        .panel.panel-default
+          .panel-heading Hook into Splits I/O
+          .panel-body
+            p Create a new developer application here. This will let users authorize you to upload runs on their behalf.
+            br
+            = form_for(Doorkeeper::Application.new, url: applications_path) do |f|
+              .input-group.col-md-12
+                p.row
+                  .col-md-8
+                    = f.text_field(:name, class: 'form-control', placeholder: 'Application name (what users will see)')
+                p.row
+                  .col-md-8
+                    = f.text_field(:redirect_uri, class: 'form-control', placeholder: 'Redirect URI (include http:// or https://)')
+                  .col-md-4 If you haven't created a page for Splits I/O to redirect users back to yet, put "debug" here.
+                p.row
+                  .col-md-8
+                    .input-group-btn
+                      = f.submit 'Create', class: 'btn btn-success'

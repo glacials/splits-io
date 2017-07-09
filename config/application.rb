@@ -19,6 +19,10 @@ module SplitsIO
     end
 
     ActiveSupport.halt_callback_chains_on_return_false = false
+
+    config.to_prepare do
+      Doorkeeper::AuthorizationsController.layout 'application'
+    end
   end
 end
 

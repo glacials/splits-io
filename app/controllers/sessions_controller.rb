@@ -35,6 +35,6 @@ class SessionsController < ApplicationController
   private
 
   def redirect_path
-    cookies.delete(:return_to) || root_path
+    request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
   end
 end

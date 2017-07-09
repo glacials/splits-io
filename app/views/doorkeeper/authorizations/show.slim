@@ -1,0 +1,31 @@
+- title "settings"
+article
+  .row
+    .col-md-6.col-md-offset-3
+      .panel.panel-default
+        .panel-heading Authorization Code Created
+        .panel-body
+          p It works! Here's your authorization code.
+          p
+            .input-group
+              input.form-control id="code" type='text' value=params[:code] readonly=1
+              .input-group-btn
+                .btn.btn-default.clipboard-btn data-clipboard-target="#code"
+                  .glyphicon.glyphicon-copy#copy
+                  .glyphicon.glyphicon-ok#copied style='display: none;'
+          coffee:
+            clipboard = new Clipboard('.clipboard-btn')
+            clipboard.on('success', (e) ->
+              e.trigger.children[0].style.display = 'none'
+              e.trigger.children[1].style.display = 'inline-block'
+              setTimeout(->
+                e.trigger.children[0].style.display = 'inline-block'
+                e.trigger.children[1].style.display = 'none'
+              , 4000)
+            )
+          p
+            span> In a production environment, your users won't see this page and will instead be sent to your
+            code redirect_uri
+            span<> with a
+            code code
+            span< URL param containing this value.
