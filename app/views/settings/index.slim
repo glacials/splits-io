@@ -42,7 +42,7 @@
           .panel-heading Authorized Applications
           .panel-body
             - if current_user.access_tokens.count == 0
-              i You have not authorized any applications to use your account.
+              i There are no applications authorized to use your account.
             - else
               p These applications have partial access to your account.
               table.table.table-striped.table-hover
@@ -53,19 +53,20 @@
                     th Authorized
                     th
                 tbody
-                  - current_user.access_tokens.each do |token|
+                  - Doorkeeper::Application.authorized_for(current_user).each do |application|
+                    - auth = Doorkeeper::AccessToken.find_by(resource_owner_id: current_user, application: application)
                     tr
                       td
-                        big = token.application.name
+                        big = application.name
                       td
                         ul
-                          - token.scopes.all.each do |scope|
+                          - auth.scopes.all.each do |scope|
                             li = scope_to_sentence(scope)
                       td
-                        div title=token.created_at #{time_ago_in_words(token.created_at)} ago
+                        div title=auth.created_at #{time_ago_in_words(auth.created_at)} ago
                       td
-                        = button_to oauth_authorization_path(token), class: 'btn btn-default', method: :delete, data: {\
-                          confirm: "Really revoke permissions from #{token.application.name}?"\
+                        = button_to authorization_path(application.id), class: 'btn btn-default', method: :delete, data: {\
+                          confirm: "Really revoke permissions from #{application.name}?"\
                         }
                           .glyphicon.glyphicon-remove
       .col-md-12

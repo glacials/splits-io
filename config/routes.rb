@@ -69,9 +69,11 @@ SplitsIO::Application.routes.draw do
   resources :tools, only: [:index]
 
   get    '/settings',                           to: 'settings#index',       as: :settings
-  get    '/settings/applications/new',          to: 'applications#new',     as: :new_application
-  post   '/settings/applications',              to: 'applications#create',  as: :applications
-  delete '/settings/applications/:application', to: 'applications#destroy', as: :application
+
+  get    '/settings/applications/new',            to: 'applications#new',                as: :new_application
+  post   '/settings/applications',                to: 'applications#create',             as: :applications
+  delete '/settings/applications/:application',   to: 'applications#destroy',            as: :application
+  delete '/settings/authorizations/:application', to: 'authorized_applications#destroy', as: :authorization
 
   get    '/:run/edit',                      to: 'runs#edit',        as: :edit_run
   get    '/:run/stats',                     to: 'runs/stats#index', as: :run_stats
