@@ -10,7 +10,7 @@ class ApplicationsController < ApplicationController
       redirect_to settings_path, notice: 'Application created! :)'
     else
       error_text = @application.errors.full_messages.to_sentence
-      redirect_to new_application_path, alert: ":( Failed to create application: #{error_text}."
+      redirect_to new_application_path, alert: ":( Failed to create application: #{error_text.chomp('.')}."
     end
   end
 
