@@ -6,7 +6,7 @@ require 'speedrundotcom'
 class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :destroy, :compare, :edit, :update]
   before_action :set_comparison, only: :compare
-  before_action :parse, unless: -> { @run.parsed_at.nil? }, only: [:show, :edit, :update, :download]
+  before_action :parse, if: -> { @run.parsed_at.nil? }, only: [:show, :edit, :update, :download]
 
   before_action :handle_first_visit, only: [:show, :edit, :update], unless: Proc.new { @run.visited? }
   before_action :warn_about_deprecated_url, only: [:show], if: Proc.new { request.path == "/#{@run.nick}" }
