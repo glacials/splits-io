@@ -11,7 +11,7 @@
 activateClaimLink = (claimToken) ->
   if gon.user != null
     claimLink = document.getElementById('claim-nav-link')
-    claimLink.href = window.location.pathname + '?claim_token=' + claimToken
+    claimLink.href = '/' + gon.run.id + '?claim_token=' + claimToken
 
   claimLinkContainer = document.getElementById('claim-nav-link-container')
   claimLinkContainer.style.display = 'inline'
@@ -19,7 +19,7 @@ activateClaimLink = (claimToken) ->
 activateClaimPrompt = (claimToken) ->
   if gon.user != null
     claimPromptButton = document.getElementById('claim-prompt-button')
-    claimPromptButton.href = window.location.pathname + '?claim_token=' + claimToken
+    claimPromptButton.href = '/' + gon.run.id + '?claim_token=' + claimToken
 
   claimPrompt = document.getElementById('claim-prompt')
   claimPrompt.style.display = 'block'
@@ -28,8 +28,8 @@ $ ->
   if gon.run == undefined
     return
 
-  claimTokenKey = 'claim_tokens' + window.location.pathname
-  dismissedClaimTokenKey = 'dismissed_claim_tokens' + window.location.pathname
+  claimTokenKey = 'claim_tokens/' + gon.run.id
+  dismissedClaimTokenKey = 'dismissed_claim_tokens/' + gon.run.id
 
   if gon.run.user != null
     localStorage.removeItem(dismissedClaimTokenKey)
