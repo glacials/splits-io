@@ -1,7 +1,7 @@
 - if run.duration_milliseconds.present? && run.duration_milliseconds > 0
   #timeline data-turbolinks-permanent=true
     = render partial: 'runs/timeline', locals: {run: run}
-    - if run.splits.all? { |segment| !segment.skipped? } && run.has_golds?
+    - if run.segments.all? { |segment| !segment.skipped? } && run.has_golds?
       = render partial: 'runs/gold_timeline', locals: {run: run}
   #timeline-inspector data-turbolinks-permanent=true
     = render partial: 'runs/timeline_inspector', locals: {run: run}
