@@ -37,8 +37,41 @@
       li = link_to 'stats', run_stats_path(@run)
       - if can?(:edit, @run)
         li = link_to 'edit', edit_run_path(@run)
+      - if @run.user.nil?
+        li#claim-nav-link-container style='display: none;'
+          - if current_user.present?
+            = link_to "claim", '#', id: 'claim-nav-link', data: {confirm: "Claim this run as #{current_user.twitch_display_name}?"}
+          - else
+            = link_to "sign in to claim", '/auth/twitch'
+
 
 = render partial: 'runs/full_timeline', locals: {run: @run}
+
+article#claim-prompt style='display: none;'
+  .col-md-6.col-md-offset-3
+    .panel.panel-primary
+      .panel-heading
+        | Claim This Run Like a Broken Headlight
+        button#dismiss-claim-prompt type='button' class='close'
+          span aria-hidden='true'
+            .glyphicon.glyphicon-remove
+          span class='sr-only' Close
+      .panel-body
+        - if current_user.nil?
+          p
+            a href='/auth/twitch' Sign in
+            span< to claim this run.
+        - else
+          p You uploaded this run while logged out.
+          p
+            | You can claim it to your account if you'd like (
+            b = current_user.twitch_display_name
+            | ).
+          p
+            .col-md-12
+              .col-md-4.col-md-offset-4
+                a.btn.btn-success.btn-block#claim-prompt-button href='#'
+                  b Claim!
 
 article
   = render partial: 'runs/split_table', locals: {short: @run.short?, splits: @run.splits, comparison_splits: @run.splits}
