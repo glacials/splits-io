@@ -25,6 +25,9 @@ activateClaimPrompt = (claimToken) ->
   claimPrompt.style.display = 'block'
 
 $ ->
+  if gon.run == undefined
+    return
+
   claimTokenKey = 'claim_tokens' + window.location.pathname
   dismissedClaimTokenKey = 'dismissed_claim_tokens' + window.location.pathname
 
