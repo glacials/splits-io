@@ -4,15 +4,13 @@ require 'uri'
 require 'speedrundotcom'
 
 class RunsController < ApplicationController
-  before_action :set_run, only: [:show, :download, :destroy, :compare, :edit, :update]
-  before_action :set_comparison, only: :compare
-  before_action :parse, if: -> { @run.parsed_at.nil? }, only: [:show, :edit, :update, :download]
+  before_action :set_run,        only: [:show, :download, :destroy, :compare, :edit, :update]
+  before_action :set_comparison, only: [:compare]
 
-  before_action :handle_first_visit, only: [:show, :edit, :update], unless: Proc.new { @run.visited? }
-  before_action :warn_about_deprecated_url, only: [:show], if: Proc.new { request.path == "/#{@run.nick}" }
-  before_action :reject_as_unparsable, only: [:show], unless: Proc.new { @run.parses? }
+  before_action :first_parse, only: [:show, :edit, :update, :download], if: -> { @run.parsed_at.nil? }
 
-  before_action :attempt_to_claim, only: [:show]
+  before_action :warn_about_deprecated_url, only: [:show], if: -> { request.path == "/#{@run.nick}" }
+  before_action :attempt_to_claim,          only: [:show], if: -> { params[:claim_token].present? }
 
   def show
     if params['reparse'] == '1'
@@ -187,40 +185,29 @@ class RunsController < ApplicationController
     render :not_found, status: 404
   end
 
-  def warn_about_deprecated_url
-    redirect_to run_path(@run), flash: {
-      icon: 'warning-sign',
-      alert: "This run's permalink has changed. You have been redirected to the newer one. \
-              <a href='#{why_permalinks_path}'>More info</a>.".html_safe
-    }
-  end
+  def first_parse
+    @run.parse_into_activerecord
 
-  def reject_as_unparsable
-    if @run.visited?
-      render :cant_parse, status: 500
-    else
+    if @run.parsed_at.nil?
       @run.destroy
       redirect_to cant_parse_path
+      return
     end
+  end
+
+  def warn_about_deprecated_url
+    redirect_to(
+      run_path(@run),
+      alert: "This run's permalink has changed. You have been redirected to the newer one. \
+              <a href='#{why_permalinks_path}'>More info</a>.".html_safe
+    )
   end
 
   def attempt_to_claim
     if @run.user == nil && @run.claim_token.present? && @run.claim_token == params[:claim_token]
       @run.update(user: current_user)
-      redirect_to run_path(@run)
     end
-  end
 
-  def handle_first_visit
-    if @run.parses?
-      @run.update(visited: true)
-    else
-      @run.destroy
-      redirect_to cant_parse_path
-    end
-  end
-
-  def parse
-    @run.parse_into_activerecord
+    redirect_to run_path(@run)
   end
 end
