@@ -12,8 +12,6 @@ module SplitsIO
     config.action_controller.allow_forgery_protection = false
     config.active_job.queue_adapter = :delayed_job
 
-    config.assets.precompile += ['darkmode.css']
-
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end

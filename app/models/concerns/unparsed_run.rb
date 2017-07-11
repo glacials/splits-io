@@ -67,71 +67,72 @@ module UnparsedRun
     end
 
     def parse_into_activerecord
-      segments.delete_all
+      with_lock do
+        segments.delete_all
 
-      timer_used = nil
-      parse_result = nil
+        timer_used = nil
+        parse_result = nil
 
-      f = file
-
-      if f.nil?
-        return false
-      end
-
-      Run.programs.each do |timer|
-        begin
-          parse_result = timer::Parser.new.parse(f, fast: false)
-        rescue ArgumentError
+        f = file
+        if f.nil?
+          return false
         end
 
-        if parse_result.present?
-          timer_used = timer.to_sym
-          break
+        Run.programs.each do |timer|
+          begin
+            parse_result = timer::Parser.new.parse(f, fast: false)
+          rescue ArgumentError
+          end
+
+          if parse_result.present?
+            timer_used = timer.to_sym
+            break
+          end
         end
-      end
 
-      return false if timer_used.nil?
+        return false if timer_used.nil?
 
-      if game.nil? || category.nil?
-        populate_category(parse_result[:game], parse_result[:category])
-      end
-
-      segments = parse_result[:splits]
-
-      if parse_result[:indexed_history].present?
-        write_run_histories_to_dynamodb(parse_result[:indexed_history])
-      end
-
-      write_segments(segments)
-      write_segment_histories(segments)
-
-      duration_seconds = segments.map(&:duration).sum
-
-      all_segments_have_bests = segments.map.all? do |segment|
-        segment.best.present?
-      end
-
-      sum_of_best_seconds = nil
-      sum_of_best_milliseconds = nil
-      if all_segments_have_bests
-        sum_of_best_seconds = segments.map(&:best).sum
-
-        if sum_of_best_seconds.present?
-          sum_of_best_milliseconds = sum_of_best_seconds * 1000
+        if game.nil? || category.nil?
+          populate_category(parse_result[:game], parse_result[:category])
         end
+
+        segments = parse_result[:splits]
+
+        if parse_result[:indexed_history].present?
+          write_run_histories_to_dynamodb(parse_result[:indexed_history])
+        end
+
+        write_segments(segments)
+        write_segment_histories(segments)
+
+        duration_seconds = segments.map(&:duration).sum
+
+        all_segments_have_bests = segments.map.all? do |segment|
+          segment.best.present?
+        end
+
+        sum_of_best_seconds = nil
+        sum_of_best_milliseconds = nil
+        if all_segments_have_bests
+          sum_of_best_seconds = segments.map(&:best).sum
+
+          if sum_of_best_seconds.present?
+            sum_of_best_milliseconds = sum_of_best_seconds * 1000
+          end
+        end
+
+        update(
+          parsed_at: Time.now,
+          program: timer_used.to_s,
+          attempts: parse_result[:attempts],
+          srdc_id: srdc_id || parse_result[:srdc_id].presence,
+          duration_milliseconds: (duration_seconds || 0) * 1000,
+          sum_of_best_milliseconds: sum_of_best_milliseconds,
+
+          time: duration_seconds, # deprecated
+          sum_of_best: sum_of_best_seconds # depreceated
+        )
       end
-
-      update(
-        parsed_at: Time.now,
-        program: timer_used.to_s,
-        attempts: parse_result[:attempts],
-        srdc_id: srdc_id || parse_result[:srdc_id].presence,
-        duration_milliseconds: (duration_seconds || 0) * 1000,
-        sum_of_best_milliseconds: sum_of_best_milliseconds,
-
-        time: duration_seconds, # deprecated
-        sum_of_best: sum_of_best_seconds # depreceated
-      )
     end
 
     def write_segments(parsed_segments)

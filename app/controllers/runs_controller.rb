@@ -6,6 +6,7 @@ require 'speedrundotcom'
 class RunsController < ApplicationController
   before_action :set_run, only: [:show, :download, :destroy, :compare, :edit, :update]
   before_action :set_comparison, only: :compare
+  before_action :parse, unless: -> { @run.parsed_at.nil? }, only: [:show, :edit, :update, :download]
 
   before_action :handle_first_visit, only: [:show, :edit, :update], unless: Proc.new { @run.visited? }
   before_action :warn_about_deprecated_url, only: [:show], if: Proc.new { request.path == "/#{@run.nick}" }
@@ -18,6 +19,10 @@ class RunsController < ApplicationController
       @run.parse_into_activerecord
       redirect_to run_path(@run)
       return
+    end
+
+    if @run.parsed_at.nil?
+      @run.parse_into_activerecord
     end
 
     # Catch bad runs
@@ -40,7 +45,7 @@ class RunsController < ApplicationController
 
     if params['reparse'] == '1'
       @run.parse_into_activerecord
-      redirect_to edit_run_path(@run), notice: 'Reparse complete.'
+      redirect_to edit_run_path(@run), notice: 'Reparse complete. It might take a minute for your run to update.'
       return
     end
 
@@ -213,5 +218,9 @@ class RunsController < ApplicationController
       @run.destroy
       redirect_to cant_parse_path
     end
+  end
+
+  def parse
+    @run.parse_into_activerecord
   end
 end
