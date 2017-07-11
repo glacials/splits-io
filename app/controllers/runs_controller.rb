@@ -205,7 +205,10 @@ class RunsController < ApplicationController
 
   def attempt_to_claim
     if @run.user == nil && @run.claim_token.present? && @run.claim_token == params[:claim_token]
-      @run.update(user: current_user)
+      @run.update(
+        user: current_user,
+        claim_token: nil
+      )
     end
 
     redirect_to run_path(@run)
