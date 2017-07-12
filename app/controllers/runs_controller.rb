@@ -168,6 +168,16 @@ class RunsController < ApplicationController
     @run.parse_into_activerecord unless @run.parsed?
 
     gon.run = {id: @run.id36, splits: @run.collapsed_segments}
+
+    if @run.user.nil?
+      gon.run['user'] = nil
+    else
+      gon.run['user'] = {
+        id: @run.user.id,
+        name: @run.user.name
+      }
+    end
+
     gon.scale_to = @run.duration_milliseconds
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: 404
@@ -204,7 +214,22 @@ class RunsController < ApplicationController
   end
 
   def attempt_to_claim
-    if @run.user == nil && @run.claim_token.present? && @run.claim_token == params[:claim_token]
+    if @run.user == nil 
+      if @run.claim_token.nil?
+        redirect_to run_path(@run), alert: 'This run is not claimable.'
+        return
+      end
+
+      if @run.claim_token != params[:claim_token]
+        redirect_to run_path(@run), alert: 'Invalid claim token.'
+        return
+      end
+
+      if current_user.nil?
+        redirect_to run_path(@run)
+        return
+      end
+
       @run.update(
         user: current_user,
         claim_token: nil

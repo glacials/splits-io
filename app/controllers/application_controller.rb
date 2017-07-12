@@ -40,7 +40,15 @@ class ApplicationController < ActionController::Base
 
   def set_gon
     gon.request = {path: request.path}
-    gon.user = current_user
+
+    if current_user.nil?
+      gon.user = nil
+    else
+      gon.user = {
+        id: current_user.id,
+        name: current_user.name
+      }
+    end
   end
 
   def ssl_configured?

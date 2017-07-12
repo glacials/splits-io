@@ -21,6 +21,16 @@ class Runs::StatsController < Runs::ApplicationController
       attempts: @run.attempts,
       program: @run.program,
     }
+
+    if @run.user.nil?
+      gon.run['user'] = nil
+    else
+      gon.run['user'] = {
+        id: @run.user.id,
+        name: @run.user.name
+      }
+    end
+
     gon.scale_to = @run.duration_milliseconds
   end
 
