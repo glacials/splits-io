@@ -74,9 +74,9 @@ module TimeSplitTracker
     def parse_split(segment, prev_segment_finish_time)
       Split.new.tap do |split|
         split.name = segment.title.to_s
-        split.duration = duration_in_seconds(segment.finish_time.to_s) - duration_in_seconds(prev_segment_finish_time.to_s)
-        split.best = duration_in_seconds(segment.best_duration.to_s)
-        split.finish_time = duration_in_seconds(segment.finish_time.to_s)
+        split.realtime_duration = duration_in_seconds(segment.finish_time.to_s) - duration_in_seconds(prev_segment_finish_time.to_s)
+        split.realtime_best = duration_in_seconds(segment.best_duration.to_s)
+        split.realtime_end = duration_in_seconds(segment.finish_time.to_s)
       end
     end
 

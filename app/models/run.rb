@@ -138,15 +138,4 @@ class Run < ApplicationRecord
   def filename(timer: Run.program(self.timer))
     "#{to_param}.#{timer.file_extension}"
   end
-
-  def duration_milliseconds
-    if super.nil?
-      parse_into_activerecord
-      if super.nil?
-        return 0
-      end
-    end
-
-    super
-  end
 end

@@ -51,10 +51,10 @@ module SplitterZ
       splits.splits.each do |segment|
         split = Split.new
         split.name = segment.title.to_s
-        split.duration = duration_in_seconds(segment.run_time.time) - run[:time]
-        split.finish_time = duration_in_seconds(segment.run_time.time)
-        split.best = duration_in_seconds(segment.best_time.time)
-        run[:time] += split.duration
+        split.realtime_duration = duration_in_seconds(segment.run_time.time) - run[:time]
+        split.realtime_end = duration_in_seconds(segment.run_time.time)
+        split.realtime_best = duration_in_seconds(segment.best_time.time)
+        run[:time] += split.realtime_duration
         run[:splits] << split
       end
       run
