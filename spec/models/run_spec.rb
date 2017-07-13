@@ -72,7 +72,7 @@ describe Run, type: :model do
 
   context 'from LiveSplit 1.4' do
     let(:run) do
-      r = FactoryGirl.create(:livesplit1_4_run)
+      r = FactoryGirl.create(:livesplit14_run)
       r.parse_into_activerecord
       r.reload
       r
@@ -149,7 +149,7 @@ describe Run, type: :model do
 
   context 'from LiveSplit 1.6' do
     let(:run) do
-      r = FactoryGirl.create(:livesplit1_6_run)
+      r = FactoryGirl.create(:livesplit16_run)
       r.parse_into_activerecord
       r.reload
       r
