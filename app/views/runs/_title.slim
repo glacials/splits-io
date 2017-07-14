@@ -5,7 +5,7 @@ h3
   - else
     = "(no title)"
 h5
-  div = format_milliseconds(run.duration_milliseconds)
+  div = format_milliseconds(run.realtime_duration_ms)
   - if run.user.try(:name)
     small
       span by #{link_to run.user, user_path(run.user), class: 'stealth-link user-link'}

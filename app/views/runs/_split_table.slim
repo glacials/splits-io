@@ -14,13 +14,13 @@
             td.align-right= index + 1
             td.align-left= segment.name.presence || '-'
             td.align-right
-              - if segment.gold?
+              - if segment.realtime_gold?
                 .gold-split title='Gold'
-              - if segment.skipped? || segment.reduced?
+              - if segment.realtime_skipped? || segment.realtime_reduced?
                 span.time -
               - else
-                span = format_milliseconds(segment.duration_milliseconds)
-            - if segment.skipped?
+                span = format_milliseconds(segment.realtime_duration_ms)
+            - if segment.realtime_skipped?
               td.align-right.time -
             - else
-              td.align-right = format_milliseconds(segment.end_milliseconds)
+              td.align-right = format_milliseconds(segment.realtime_end_ms)

@@ -22,7 +22,7 @@ class Category < ApplicationRecord
   end
 
   def best_known_run
-    runs.unarchived.where("time != 0").order(:time).first
+    runs.unarchived.where("realtime_duration_ms != 0").order(realtime_duration_ms: :asc).first
   end
 
   def to_s

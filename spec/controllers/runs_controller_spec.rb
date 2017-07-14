@@ -40,6 +40,10 @@ describe RunsController do
         it 'returns a 200' do
           expect(response).to have_http_status(200)
         end
+
+        it 'renders the template' do
+          expect(response).to render_template('runs/show')
+        end
       end
 
       context 'by nick' do
