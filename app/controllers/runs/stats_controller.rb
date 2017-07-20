@@ -31,7 +31,7 @@ class Runs::StatsController < Runs::ApplicationController
       }
     end
 
-    gon.scale_to = @run.duration_milliseconds
+    gon.scale_to = @run.realtime_duration_ms
   end
 
   def run_history_csv

@@ -18,7 +18,7 @@ article#stats
     .panel-heading
       | Run Information
       .pull-right 
-        a href=run_history_csv_path ↓ download run history csv
+        a href=run_history_csv_path(@run) ↓ download run history csv
     .panel-body
       table.table.table-striped.table-hover
         tbody
@@ -35,7 +35,9 @@ article#stats
             td
               span Uploaded
             td.upload-date.needs-formatting title=@run.created_at = @run.created_at
-          - if @run.sum_of_best.nil? || @run.sum_of_best == 0
+          - has_sob = @run.realtime_sum_of_best_ms.present? && @run.realtime_sum_of_best_ms != 0
+          - has_attempts = @run.realtime_duration_ms.present? && @run.realtime_duration_ms != 0
+          - if !has_sob
             tr.tip title="This run has no gold splits recorded"
               td
                 span Sum of best
@@ -44,8 +46,8 @@ article#stats
             tr
               td
                 span Sum of best
-              td = format_milliseconds(@run.sum_of_best_milliseconds)
-          - if @run.sum_of_best.nil? || @run.sum_of_best == 0 || @run.duration_milliseconds.nil? || @run.duration_milliseconds == 0
+              td = format_milliseconds(@run.realtime_sum_of_best_ms)
+          - if !has_sob || !has_attempts
             tr.tip title="This run has no gold splits recorded"
               td
                 span Total potential timesave
@@ -56,7 +58,7 @@ article#stats
               td
                 span Total potential timesave
                 small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
-              td = format_milliseconds(@run.duration_milliseconds - @run.sum_of_best_milliseconds)
+              td = format_milliseconds(@run.realtime_duration_ms - @run.realtime_sum_of_best_ms)
           tr
             td
               span Attempt
@@ -68,18 +70,18 @@ article#stats
           tr
             td
               span Missed splits this run
-            td = @run.skipped_splits.size
+            td = @run.realtime_skipped_splits.size
           tr
             td
               span Exact run duration
-            td #{@run.duration_milliseconds.to_f / 1000}s
+            td #{@run.realtime_duration_ms.to_f / 1000}s
           tr
             td
               span Shortest segment
             td
-              - if @run.collapsed_segments.size > 0
-                | #{@run.shortest_segment.name} (
-                span = format_milliseconds(@run.shortest_segment.duration_milliseconds)
+              - if @run.realtime_collapsed_segments.size > 0
+                | #{@run.realtime_shortest_segment.name} (
+                span = format_milliseconds(@run.realtime_shortest_segment.realtime_duration_ms)
                 | )
               - else
                 span.time -
@@ -87,9 +89,9 @@ article#stats
             td
               span Longest segment
             td
-              - if @run.longest_segment.present?
-                | #{@run.longest_segment.name} (
-                span = format_milliseconds(@run.longest_segment.duration_milliseconds)
+              - if @run.realtime_longest_segment.present?
+                | #{@run.realtime_longest_segment.name} (
+                span = format_milliseconds(@run.realtime_longest_segment.realtime_duration_ms)
                 | )
               - else
                 span.time -
@@ -97,28 +99,28 @@ article#stats
             td
               span Mean segment length
             td
-              - if @run.collapsed_segments.size > 0
-                span = format_milliseconds(@run.duration_milliseconds / @run.collapsed_segments.size)
+              - if @run.realtime_collapsed_segments.size > 0
+                span = format_milliseconds(@run.realtime_duration_ms / @run.realtime_collapsed_segments.size)
               - else
                 span.time -
           tr
             td
               span Median segment length
             td
-              - if @run.collapsed_segments.size > 0
-                span = format_milliseconds(@run.median_segment_duration_milliseconds)
+              - if @run.realtime_collapsed_segments.size > 0
+                span = format_milliseconds(@run.realtime_median_segment_duration_ms)
               - else
                 span.time -
           tr
             td
               span Total Playtime
             td
-              - if @run.total_playtime_milliseconds != 0
-                span = format_milliseconds(@run.total_playtime_milliseconds)
+              - if @run.realtime_total_playtime_ms != 0
+                span = format_milliseconds(@run.realtime_total_playtime_ms)
               - else
                 span.time -
-  = render partial: 'runs/segment_stats', locals: {run: @run, short: @run.short?, splits: @raw_splits}
-  - if @run.collapsed_segments.size > 0
+  = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits}
+  - if @run.realtime_collapsed_segments.size > 0
     .panel.panel-default
       .panel-body
         #pb-graph

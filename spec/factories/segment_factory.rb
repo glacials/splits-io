@@ -10,5 +10,9 @@ FactoryGirl.define do
     realtime_gold true
     realtime_reduced false
     realtime_skipped false
+
+    after(:create) do |segment|
+      FactoryGirl.create_list(:segment_history, 10, segment: segment)
+    end
   end
 end
