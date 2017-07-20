@@ -25,7 +25,7 @@ class Run < ApplicationRecord
 
   scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
   scope :by_category, ->(category) { where(category: category) }
-  scope :nonempty, -> { where("time != 0") }
+  scope :nonempty, -> { where("realtime_duration_ms != 0") }
   scope :owned, -> { where.not(user: nil) }
   scope :unarchived, -> { where(archived: false) }
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }

@@ -4,7 +4,15 @@ module ApplicationHelper
   end
 
   def order_runs(runs)
-    col = params[:by] if ['created_at', 'time', 'user_id'].include?(params[:by])
+    col = case params[:by]
+          when 'created_at'
+            'created_at'
+          when 'time'
+            'realtime_duration_ms'
+          when 'user_id'
+            'user_id'
+          end
+
     dir = params[:order].to_sym if col && ['asc', 'desc'].include?(params[:order])
     runs.order((col || 'created_at') => (dir || 'desc'))
   end
