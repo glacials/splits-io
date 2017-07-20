@@ -15,11 +15,21 @@ class Runs::StatsController < Runs::ApplicationController
 
     gon.run = {
       id: @run.id36,
-      splits: @run.segments,
-      raw_splits: segments,
+      segments: @run.segments.map do |segment|
+        {
+          name: segment.name,
+          realtime_duration_ms: segment.realtime_duration_ms,
+          realtime_shortest_duration_ms: segment.realtime_shortest_duration_ms,
+          histories: segment.histories.map do |history|
+            {
+              realtime_duration_ms: history.realtime_duration_ms
+            }
+          end,
+        }
+      end,
       history: @run.dynamodb_history,
       attempts: @run.attempts,
-      program: @run.program,
+      program: @run.program
     }
 
     if @run.user.nil?
