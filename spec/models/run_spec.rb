@@ -31,6 +31,18 @@ describe Run, type: :model do
     end
   end
 
+  context 'with a category' do
+    context 'with other runs' do
+      let(:category) { FactoryGirl.create(:category) }
+      let(:run) { FactoryGirl.create(:run, category: category) }
+      let(:other_run) { FactoryGirl.create(:run, category: category) }
+
+      it 'can be compared against' do
+        run.improvements_towards(other_run)
+      end
+    end
+  end
+
   context 'with no owner' do
     context 'with an srdc_id' do
       let(:run) { FactoryGirl.create(:speedrundotcom_run) }

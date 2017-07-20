@@ -186,11 +186,6 @@ class RunsController < ApplicationController
   def set_comparison
     return if params[:comparison_run].blank?
     @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
-    gon.comparison_run = {
-      id: @comparison_run.id36,
-      splits: @comparison_run.realtime_collapsed_segments
-    }
-    gon.scale_to = [@run.realtime_duration_ms, @comparison_run.realtime_duration_ms].max
   rescue ActiveRecord::RecordNotFound
     render :not_found, status: 404
   end

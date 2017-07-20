@@ -42,11 +42,13 @@ FactoryGirl.define do
       end
       realtime_duration_ms 10000
       realtime_sum_of_best_ms 9000
+      realtime_sum_of_best_s 90
     end
 
     trait :attemptless do
       realtime_duration_ms 0
       realtime_sum_of_best_ms 0
+      realtime_sum_of_best_s 0
     end
 
     test_files.each do |factory_name, file|

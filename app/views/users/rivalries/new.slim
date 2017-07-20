@@ -19,7 +19,7 @@
   article.nowrap
     h4 Punch someone down here with your mouse to set them as your rival for this category
     - if @user.follows.that_run(@category).empty?
-      .alert-warning Sorry, nobody you follow on Twitch has submitted runs for this category.
+      .alert.alert-warning Sorry, nobody you follow on Twitch has submitted runs for this category.
       p Here are some categories that have rivals waiting for you:
       = render partial: 'category_candidates', locals: {user: @user}
     - else
