@@ -5,6 +5,6 @@ RSpec.describe 'runs/show' do
     assign(:run, FactoryGirl.create(:livesplit16_run, :parsed))
     render
 
-    expect(view).to render_template(:show)
+    expect(view).to render_template('runs/show')
   end
 end

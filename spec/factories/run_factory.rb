@@ -40,7 +40,13 @@ FactoryGirl.define do
       after(:create) do |run|
         FactoryGirl.create_list(:segment, 10, run: run)
       end
-      realtime_duration_ms 1000
+      realtime_duration_ms 10000
+      realtime_sum_of_best_ms 9000
+    end
+
+    trait :attemptless do
+      realtime_duration_ms 0
+      realtime_sum_of_best_ms 0
     end
 
     test_files.each do |factory_name, file|
