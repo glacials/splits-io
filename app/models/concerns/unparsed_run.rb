@@ -105,8 +105,6 @@ module UnparsedRun
         write_segments(segments)
         write_segment_histories(segments)
 
-        duration_seconds = segments.map(&:realtime_duration).sum
-
         all_segments_have_bests = segments.map.all? do |segment|
           segment.realtime_best.present?
         end
@@ -126,11 +124,14 @@ module UnparsedRun
           program: timer_used.to_s,
           attempts: parse_result[:attempts],
           srdc_id: srdc_id || parse_result[:srdc_id].presence,
-          realtime_duration_ms: (duration_seconds || 0) * 1000,
-          realtime_sum_of_best_ms: sum_of_best_milliseconds,
 
-          realtime_duration_s:    duration_seconds,   # deprecated
-          realtime_sum_of_best_s: sum_of_best_seconds # deprecated
+          realtime_duration_ms:    (segments.map(&:realtime_duration).sum || 0) * 1000,
+          realtime_sum_of_best_ms: sum_of_best_milliseconds,
+          realtime_duration_s:     (segments.map(&:realtime_duration).sum || 0),   # deprecated
+          realtime_sum_of_best_s:  sum_of_best_seconds, # deprecated
+
+          gametime_duration_ms:    (segments.map(&:gametime_duration).sum || 0) * 1000,
+          gametime_sum_of_best_ms: sum_of_best_milliseconds,
         )
       end
     end
@@ -143,13 +144,22 @@ module UnparsedRun
           run_id: id,
           segment_number: i,
           name: parsed_segment.name,
+
           realtime_start_ms:             (parsed_segment.realtime_start    || 0) * 1000,
           realtime_end_ms:               (parsed_segment.realtime_end      || 0) * 1000,
           realtime_duration_ms:          (parsed_segment.realtime_duration || 0) * 1000,
           realtime_shortest_duration_ms: (parsed_segment.realtime_best     || 0) * 1000,
           realtime_skipped: parsed_segment.realtime_skipped?,
           realtime_reduced: parsed_segment.realtime_reduced?,
-          realtime_gold:    parsed_segment.realtime_gold?
+          realtime_gold:    parsed_segment.realtime_gold?,
+
+          gametime_start_ms:             (parsed_segment.gametime_start    || 0) * 1000,
+          gametime_end_ms:               (parsed_segment.gametime_end      || 0) * 1000,
+          gametime_duration_ms:          (parsed_segment.gametime_duration || 0) * 1000,
+          gametime_shortest_duration_ms: (parsed_segment.gametime_best     || 0) * 1000,
+          gametime_skipped: parsed_segment.gametime_skipped?,
+          gametime_reduced: parsed_segment.gametime_reduced?,
+          gametime_gold:    parsed_segment.gametime_gold?,
         )
       end
 
@@ -157,13 +167,22 @@ module UnparsedRun
         :run_id,
         :segment_number,
         :name,
+
         :realtime_start_ms,
         :realtime_end_ms,
         :realtime_duration_ms,
         :realtime_shortest_duration_ms,
         :realtime_skipped,
         :realtime_reduced,
-        :realtime_gold
+        :realtime_gold,
+
+        :gametime_start_ms,
+        :gametime_end_ms,
+        :gametime_duration_ms,
+        :gametime_shortest_duration_ms,
+        :gametime_skipped,
+        :gametime_reduced,
+        :gametime_gold,
       ], segs)
     end
 
@@ -180,7 +199,7 @@ module UnparsedRun
           histories << SegmentHistory.new(
             segment_id: ids[i],
             attempt_number: history[0].to_i,
-            realtime_duration_ms: history[1].nil? ? nil : history[1] * 1000
+            realtime_duration_ms: history[1].nil? ? nil : history[1] * 1000,
           )
         end
       end

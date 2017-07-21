@@ -257,20 +257,20 @@ describe Run, type: :model do
       end
 
       it 'has the correct gametime segments' do
-        expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
+        expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::GAME)] }).to match_array [
           [0, "WatchYr<3Die", 191265],
-          [1, "Elevator Land", 73595],
-          [2, "Gross, Rats", 131065],
-          [3, "Try Not Falling?", 232498],
-          [4, "Men of the Faith", 147284],
-          [5, "Fuckin Celia", 118806],
-          [6, "Tr4p Haus", 171703],
-          [7, "Troubled Waters", 305158],
-          [8, "RNG Roulette", 215579],
-          [9, "Not At Fault", 246412],
-          [10, "Amateur Work", 377836],
-          [11, "Don't Mind Me", 67085],
-          [12, "H9 U Havelock", 123226]
+          [1, "Elevator Land", 71271],
+          [2, "Gross, Rats", 127293],
+          [3, "Try Not Falling?", 220780],
+          [4, "Men of the Faith", 134083],
+          [5, "Fuckin Celia", 107779],
+          [6, "Tr4p Haus", 159324],
+          [7, "Troubled Waters", 287640],
+          [8, "RNG Roulette", 196420],
+          [9, "Not At Fault", 231033],
+          [10, "Amateur Work", 355115],
+          [11, "Don't Mind Me", 59727],
+          [12, "H9 U Havelock", 116235]
         ]
       end
     end

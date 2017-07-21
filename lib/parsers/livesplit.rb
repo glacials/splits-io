@@ -50,8 +50,12 @@ module LiveSplit
         realtime_history: fast ? nil : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq,
+        gametime_history: fast ? nil : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
+          duration_in_seconds_of(t['GameTime'].try(:[], 0))
+        end.reject { |t| t == 0 }.uniq,
         splits: [],
         realtime_time: 0,
+        gametime_time: 0,
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
 
       indexed_history = {}
@@ -99,7 +103,23 @@ module LiveSplit
           end
         end
 
+        split.gametime_end = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+          k['name'] == 'Personal Best'
+        end[0]['GameTime'].try(:[], 0) || '00:00:00.00')
+        split.gametime_duration = [0, split.gametime_end - run[:gametime_time]].max
+        split.gametime_start = split.gametime_end - split.gametime_duration
+
+        split.gametime_best = duration_in_seconds_of(segment['BestSegmentTime'][0]['GameTime'].try(:[], 0))
+        split.gametime_skipped = split.gametime_duration == 0
+
+        if split.gametime_duration > 0 && split.gametime_duration.round(5) <= split.gametime_best.try(:round, 5)
+          split.gametime_gold = true
+        else
+          split.gametime_gold = false
+        end
+
         run[:realtime_time] += split.realtime_duration if split.realtime_duration.present?
+        run[:gametime_time] += split.gametime_duration if split.gametime_duration.present?
         split
       end
 

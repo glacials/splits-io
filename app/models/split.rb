@@ -40,7 +40,6 @@ class Split
     @gametime_start           = h[:gametime_start]
     @gametime_end             = h[:gametime_end]
     @gametime_best            = h[:gametime_best]
-    @gametime_history         = h[:gametime_history]
     @gametime_gold            = h[:gametime_gold?]           || h[:gametime_gold]    || false
     @gametime_skipped         = h[:gametime_skipped?]        || h[:gametime_skipped] || false
     @gametime_reduced         = h[:gametime_reduced?]        || h[:gametime_reduced] || false
