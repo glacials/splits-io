@@ -1,3 +1,5 @@
+- if run.completed?(Run::REAL) && run.completed?(Run::GAME)
+  = render partial: 'runs/timing_switch', locals: {timing: timing}
 .panel.panel-default
   .panel-heading Segments
   .panel-body
@@ -9,18 +11,18 @@
           th.align-right Duration
           th.align-right Finished at
       tbody
-        - splits.each_with_index do |segment, index|
+        - run.segments.each_with_index do |segment, index|
           tr
             td.align-right= index + 1
             td.align-left= segment.name.presence || '-'
             td.align-right
-              - if segment.realtime_gold?
+              - if segment.gold?(timing)
                 .gold-split title='Gold'
-              - if segment.realtime_skipped? || segment.realtime_reduced?
+              - if segment.skipped?(timing) || segment.reduced?(timing)
                 span.time -
               - else
-                span = format_milliseconds(segment.realtime_duration_ms)
-            - if segment.realtime_skipped?
+                span = format_milliseconds(segment.duration_ms(timing))
+            - if segment.skipped?(timing)
               td.align-right.time -
             - else
-              td.align-right = format_milliseconds(segment.realtime_end_ms)
+              td.align-right = format_milliseconds(segment.end_ms(timing))

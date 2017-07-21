@@ -1,0 +1,10 @@
+.pull-right
+  input#toggle-timing type='checkbox' checked=(timing == Run::REAL) data-toggle='toggle' data-on='Realtime' data-off='Game Time' data-size='small' data-onstyle='default' data-offstyle='default' data-height='42'
+  - if timing == Run::REAL
+    coffee:
+      $("#toggle-timing").change ->
+        Turbolinks.visit("?timing=game")
+  - else
+    coffee:
+      $("#toggle-timing").change ->
+        Turbolinks.visit("?timing=real")

@@ -11,6 +11,10 @@ class Run < ApplicationRecord
 
   include ActionView::Helpers::DateHelper
 
+  # Timing types
+  REAL = 'real'
+  GAME = 'game'
+
   belongs_to :user
   belongs_to :category
   has_one :game, through: :category
@@ -137,5 +141,23 @@ class Run < ApplicationRecord
 
   def filename(timer: Run.program(self.timer))
     "#{to_param}.#{timer.file_extension}"
+  end
+
+  def duration_ms(time_type = default_time_type)
+    case time_type
+    when Run::REAL
+      realtime_duration_ms
+    when Run::GAME
+      gametime_duration_ms
+    end
+  end
+
+  def sum_of_best_ms(time_type = default_time_type)
+    case time_type
+    when Run::REAL
+      realtime_sum_of_best_ms
+    when Run::GAME
+      gametime_sum_of_best_ms
+    end
   end
 end

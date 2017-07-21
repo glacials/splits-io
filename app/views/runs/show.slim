@@ -1,4 +1,5 @@
 - title(@run)
+- timing = params[:timing] || @run.default_timing
 = render partial: 'twitter_card'
 
 - content_for(:header) do
@@ -8,9 +9,13 @@
       li = link_to @run.game, game_path(@run.game)
       li = link_to @run.category, game_category_path(@run.game, @run.category)
       li = link_to @run.id36, run_path(@run)
-  = render partial: 'runs/title', locals: {run: @run}
+  = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
-= render partial: 'runs/full_timeline', locals: {run: @run}
+= render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article
-  = render partial: 'runs/split_table', locals: {short: @run.short?, splits: @run.splits, comparison_splits: @run.splits}
+  = render partial: 'runs/split_table', locals: {\
+    short: @run.short?,\
+    run: @run,\
+    timing: timing\
+  }

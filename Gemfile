@@ -112,6 +112,7 @@ gem 'turbolinks', github: 'rails/turbolinks'
 
 # views
 gem 'bootstrap-sass'
+gem 'bootstrap-toggle-rails'
 gem 'bootswatch-rails'
 gem 'flat-ui-rails'
 gem 'gon'

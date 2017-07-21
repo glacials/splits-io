@@ -1,7 +1,7 @@
-- if run.realtime_duration_ms.present? && run.realtime_duration_ms > 0
+- if run.completed?(timing)
   #timeline data-turbolinks-permanent=true
-    = render partial: 'runs/timeline', locals: {run: run}
-    - if run.segments.all? { |segment| !segment.realtime_skipped? } && run.has_golds?
-      = render partial: 'runs/gold_timeline', locals: {run: run}
+    = render partial: 'runs/timeline', locals: {run: run, timing: timing}
+    - if run.segments.all? { |segment| !segment.skipped?(timing) } && run.has_golds?(timing)
+      = render partial: 'runs/gold_timeline', locals: {run: run, timing: timing}
   #timeline-inspector data-turbolinks-permanent=true
-    = render partial: 'runs/timeline_inspector', locals: {run: run}
+    = render partial: 'runs/timeline_inspector', locals: {run: run, timing: timing}

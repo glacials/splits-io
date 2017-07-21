@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require js.cookie
 //= require bootstrap
+//= require bootstrap-toggle
 //= require numeral
 //= require spin
 //= require jquery.spin

@@ -1,4 +1,5 @@
 - title @run
+- timing = params[:timing] || @run.default_timing
 - short_run = @run.short? || @comparison_run.short?
 = render partial: 'twitter_card'
 
@@ -20,9 +21,9 @@
       | unknown
 
 - time_scale = [@run.realtime_duration_ms, @comparison_run.realtime_duration_ms].max
-= render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale}
+= render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale, timing: timing}
 hr style='margin: .5em; opacity: 0.25'
-= render partial: 'timeline', locals: {run: @run, scale_to: time_scale}
+= render partial: 'timeline', locals: {run: @run, scale_to: time_scale, timing: timing}
 
 .container
   h5
@@ -37,8 +38,8 @@ hr style='margin: .5em; opacity: 0.25'
     - else
       | unknown
 
-= render partial: 'timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true}
-= render partial: 'timeline_inspector', locals: {run: @run, scale_to: time_scale}
+= render partial: 'timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true, timing: timing}
+= render partial: 'timeline_inspector', locals: {run: @run, scale_to: time_scale, timing: timing}
 
 - if @run.belongs_to?(current_user) && @run.improvements_towards(@comparison_run)[:time_differences].present?
   article

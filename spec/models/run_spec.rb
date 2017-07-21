@@ -91,7 +91,7 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Tron City', 53921],
         [1, 'Start Abraxas fight', 185453],
         [2, 'Finish Abraxas fight', 108446],
@@ -124,29 +124,29 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.realtime_skipped_splits.map { |s| [s.segment_number, s.name, s.duration] }).to match_array []
+      expect(run.skipped_splits(Run::REAL).map { |s| [s.segment_number, s.name, s.duration] }).to match_array []
     end
 
     it 'accurately reports its shortest segment' do
-      rss = run.realtime_shortest_segment
-      expect([rss.segment_number, rss.name, rss.realtime_duration_ms]).to match_array [
+      rss = run.shortest_segment(Run::REAL)
+      expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
         9, 'Da Vinci', 18882
       ]
     end
 
     it 'accurately reports its longest segment' do
-      rls = run.realtime_longest_segment
-      expect([rls.segment_number, rls.name, rls.realtime_duration_ms]).to match_array [
+      rls = run.longest_segment(Run::REAL)
+      expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
         15, 'Get across that bridge', 484387
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.realtime_median_segment_duration_ms).to eq 118791
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 118791
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.realtime_total_playtime_ms).to eq 77743500
+      expect(run.total_playtime_ms(Run::REAL)).to eq 77743500
     end
 
     it 'reports no history using fast parsing' do
@@ -170,7 +170,7 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Hole 1', 30349],
         [1, 'Hole 2', 42742],
         [2, 'Hole 3', 35263],
@@ -193,30 +193,30 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its missed splits' do
-      rss = run.realtime_skipped_splits
-      expect(rss.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array []
+      rss = run.skipped_splits(Run::REAL)
+      expect(rss.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array []
     end
 
     it 'accurately reports its shortest segment' do
-      rss = run.realtime_shortest_segment
-      expect([rss.segment_number, rss.name, rss.realtime_duration_ms]).to match_array [
+      rss = run.shortest_segment(Run::REAL)
+      expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
         6, 'Hole 7', 20754
       ]
     end
 
     it 'accurately reports its longest segment' do
-      rls = run.realtime_longest_segment
-      expect([rls.segment_number, rls.name, rls.realtime_duration_ms]).to match_array [
+      rls = run.longest_segment(Run::REAL)
+      expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
         17, 'Hole 18', 66083
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.realtime_median_segment_duration_ms).to eq 35992
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 35992
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.realtime_total_playtime_ms).to eq 22450448
+      expect(run.total_playtime_ms(Run::REAL)).to eq 22450448
     end
 
     it 'reports no history using fast parsing' do
@@ -239,7 +239,7 @@ describe Run, type: :model do
       end
 
       it 'has the correct realtime segments' do
-        expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+        expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
           [0, "WatchYr<3Die", 191265],
           [1, "Elevator Land", 73595],
           [2, "Gross, Rats", 131065],
@@ -257,7 +257,7 @@ describe Run, type: :model do
       end
 
       it 'has the correct gametime segments' do
-        expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+        expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
           [0, "WatchYr<3Die", 191265],
           [1, "Elevator Land", 73595],
           [2, "Gross, Rats", 131065],
@@ -285,36 +285,36 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Spiral Mountain', 211230],
         [1, "Mumbo's Mountain", 808200]
       ]
     end
 
     it 'accurately reports its missed splits' do
-      expect(run.realtime_skipped_splits.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array []
+      expect(run.skipped_splits(Run::REAL).map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array []
     end
 
     it 'accurately reports its shortest segment' do
-      rss = run.realtime_shortest_segment
-      expect([rss.segment_number, rss.name, rss.realtime_duration_ms]).to match_array [
+      rss = run.shortest_segment(Run::REAL)
+      expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
         0, 'Spiral Mountain', 211230
       ]
     end
 
     it 'accurately reports its longest segment' do
-      rls = run.realtime_longest_segment
-      expect([rls.segment_number, rls.name, rls.realtime_duration_ms]).to match_array [
+      rls = run.longest_segment(Run::REAL)
+      expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
         1, "Mumbo's Mountain", 808200
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.realtime_median_segment_duration_ms).to eq(509715)
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq(509715)
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.realtime_total_playtime_ms).to eq 0
+      expect(run.total_playtime_ms(Run::REAL)).to eq 0
     end
   end
 
@@ -327,7 +327,7 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, "1-1", 32180],
         [1, "1-2", 31470],
         [2, "4-1", 37400],
@@ -348,7 +348,7 @@ describe Run, type: :model do
       end
 
       it 'has the correct splits' do
-        expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+        expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
           [0, "1-1", 32180],
           [1, "1-2", 31470],
           [2, "4-1", 37400],
@@ -361,7 +361,7 @@ describe Run, type: :model do
       end
 
       it 'accurately reports its total playtime' do
-        expect(run.realtime_total_playtime_ms).to eq 0
+        expect(run.total_playtime_ms(Run::REAL)).to eq 0
       end
     end
   end
@@ -375,7 +375,7 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, "Introduction", 85480],
         [1, "Jimmy", 134200],
         [2, "Mona", 124070],
@@ -391,7 +391,7 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.realtime_total_playtime_ms).to eq 0
+      expect(run.total_playtime_ms(Run::REAL)).to eq 0
     end
   end
 
@@ -405,7 +405,7 @@ describe Run, type: :model do
     end
 
     it 'has the correct splits' do
-      expect(run.segments.map { |s| [s.segment_number, s.name, s.realtime_duration_ms] }).to match_array [
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, "Hyrule Castle", 377060],
         [1, "Eastern Palace", 353060],
         [2, "Desert Palace", 467070],
@@ -426,7 +426,7 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its total playtime' do
-      expect(run.realtime_total_playtime_ms).to eq 0
+      expect(run.total_playtime_ms(Run::REAL)).to eq 0
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170713052306) do
+ActiveRecord::Schema.define(version: 20170720190131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,16 +147,17 @@ ActiveRecord::Schema.define(version: 20170713052306) do
     t.string   "program"
     t.string   "claim_token"
     t.decimal  "realtime_sum_of_best_s"
-    t.boolean  "archived",                default: false, null: false
+    t.boolean  "archived",                default: false,  null: false
     t.string   "video_url"
     t.string   "srdc_id"
     t.integer  "attempts"
-    t.string   "s3_filename",                             null: false
+    t.string   "s3_filename",                              null: false
     t.bigint   "realtime_duration_ms"
     t.bigint   "realtime_sum_of_best_ms"
     t.datetime "parsed_at"
     t.integer  "gametime_duration_ms"
     t.integer  "gametime_sum_of_best_ms"
+    t.string   "default_timing",          default: "real", null: false
     t.index ["category_id"], name: "index_runs_on_category_id", using: :btree
     t.index ["user_id"], name: "index_runs_on_user_id", using: :btree
   end

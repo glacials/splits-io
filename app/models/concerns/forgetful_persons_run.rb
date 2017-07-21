@@ -38,11 +38,20 @@ module ForgetfulPersonsRun
             gametime_start_ms: skipped_seg.gametime_start_ms,
             gametime_end_ms: skipped_seg.gametime_end_ms,
             gametime_duration_ms: seg.gametime_duration_ms,
-            realtime_reduced: true
+            gametime_reduced: true
           ))]
         else
           segs + [seg]
         end
+      end
+    end
+
+    def collapsed_segments(time_type)
+      case time_type
+      when Run::REAL
+        realtime_collapsed_segments
+      when Run::GAME
+        gametime_collapsed_segments
       end
     end
 
@@ -58,6 +67,15 @@ module ForgetfulPersonsRun
       end
     end
 
+    def skipped_splits(time_type)
+      case time_type
+      when Run::REAL
+        realtime_skipped_splits
+      when Run::GAME
+        gametime_skipped_splits
+      end
+    end
+
     def realtime_has_skipped_splits?
       segments.any? do |segment|
         segment.realtime_skipped?
@@ -67,6 +85,15 @@ module ForgetfulPersonsRun
     def gametime_has_skipped_splits?
       segments.any? do |segment|
         segment.gametime_skipped?
+      end
+    end
+
+    def has_skipped_splits?(time_type)
+      case time_type
+      when Run::REAL
+        realtime_has_skipped_splits?
+      when Run::GAME
+        gametime_has_skipped_splits?
       end
     end
   end
