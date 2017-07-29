@@ -9,8 +9,8 @@ $ ->
   $.each gon.run.segments, (i, segment) ->
     if segment.histories is [] or segment.histories is null
       return
-    attempt_durations = segment.histories.map((attempt) -> attempt['realtime_duration_ms'])
-    time = (d3.mean(attempt_durations) - segment.realtime_shortest_duration_ms) / 1000
+    attempt_durations = segment.histories.map((attempt) -> attempt['duration_ms'])
+    time = (d3.mean(attempt_durations) - segment.shortest_duration_ms) / 1000
     return if time <= 0
     split_history_data.push time
     split_history_ticks.push segment.name

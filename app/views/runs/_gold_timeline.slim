@@ -1,5 +1,5 @@
-- scale_to ||= run.realtime_duration_ms
+- scale_to ||= run.duration_ms(timing)
 .gold.timeline
-  - run.realtime_collapsed_segments.each_with_index do |segment, index|
-    .pure-u.split style="width: #{segment.realtime_duration_ms.to_f / scale_to * 100}%;"
-      .gold-split style="width: #{segment.realtime_shortest_duration_ms.to_f / segment.realtime_duration_ms * 100}%;" class=(segment.realtime_gold? ? :gold : :gray)
+  - run.collapsed_segments(timing).each_with_index do |segment, index|
+    .pure-u.split style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%;"
+      .gold-split style="width: #{segment.shortest_duration_ms(timing).to_f / segment.duration_ms(timing) * 100}%;" class=(segment.gold?(timing) ? :gold : :gray)

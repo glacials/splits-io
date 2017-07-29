@@ -7,7 +7,7 @@ $ ->
   pb_graph_data = ["PB - Gold"]
   pb_graph_ticks = []
   $.each gon.run.segments, (i, segment) ->
-    time = (segment.realtime_duration_ms - segment.realtime_shortest_duration_ms) / 1000
+    time = (segment.duration_ms - segment.shortest_duration_ms) / 1000
     return if time <= 0
     pb_graph_data.push time
     pb_graph_ticks.push segment.name

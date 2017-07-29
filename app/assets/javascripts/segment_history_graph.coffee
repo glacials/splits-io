@@ -19,9 +19,9 @@ $ ->
     non_null_time_inserted = false
     attempt_durations = []
     $.each segment.histories, (j, attempt) ->
-      if non_null_time_inserted || attempt.realtime_duration_ms != null
+      if non_null_time_inserted || attempt.duration_ms != null
         non_null_time_inserted = true
-        attempt_durations.push(attempt.realtime_duration_ms / 1000)
+        attempt_durations.push(attempt.duration_ms / 1000)
 
         if j < first_non_null_attempt
           first_non_null_attempt = j
