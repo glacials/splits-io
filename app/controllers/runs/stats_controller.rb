@@ -2,6 +2,7 @@ class Runs::StatsController < Runs::ApplicationController
   before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
 
   def index
+    timing = params[:timing] || @run.default_timing
     @run.parse_into_activerecord unless @run.parsed?
 
     # Catch bad runs
@@ -18,11 +19,11 @@ class Runs::StatsController < Runs::ApplicationController
       segments: @run.segments.map do |segment|
         {
           name: segment.name,
-          realtime_duration_ms: segment.realtime_duration_ms,
-          realtime_shortest_duration_ms: segment.realtime_shortest_duration_ms,
+          duration_ms: segment.duration_ms(timing),
+          shortest_duration_ms: segment.shortest_duration_ms(timing),
           histories: segment.histories.map do |history|
             {
-              realtime_duration_ms: history.realtime_duration_ms
+              duration_ms: history.duration_ms(timing),
             }
           end,
         }
@@ -41,7 +42,7 @@ class Runs::StatsController < Runs::ApplicationController
       }
     end
 
-    gon.scale_to = @run.realtime_duration_ms
+    gon.scale_to = @run.duration_ms(timing)
   end
 
   def run_history_csv

@@ -1,9 +1,16 @@
 class RunValidator < ActiveModel::Validator
   def validate(record)
+    validate_default_timing(record)
     validate_video_url(record)
   end
 
   private
+
+  def validate_default_timing(record)
+    if !['real', 'game'].include?(record.default_timing)
+      record.errors[:base] << 'Default timing must be either "real" or "game".'
+    end
+  end
 
   def validate_video_url(record)
     record.video_url = nil if record.video_url.try(:strip) == ''
