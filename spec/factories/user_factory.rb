@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user do
-    name 'mario'
+    name SecureRandom.uuid
     twitch_id 0
 
     trait :with_runs do
