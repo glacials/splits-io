@@ -166,7 +166,7 @@ module LiveSplit
         split.realtime_start = split.realtime_end - split.realtime_duration
 
         split.realtime_best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
-        split.skipped = split.realtime_duration == 0
+        split.realtime_skipped = split.realtime_duration == 0
 
         if split.realtime_duration > 0
           split.realtime_gold = split.realtime_duration.round(5) <= split.realtime_best.try(:round, 5)
@@ -276,7 +276,7 @@ module LiveSplit
           best_segment = segment['BestSegmentTime'][0]
           best_segment = best_segment[0] if best_segment.is_a?(Hash)
           split.realtime_best = duration_in_seconds_of(best_segment)
-          split.skipped = split.realtime_duration == 0
+          split.realtime_skipped = split.realtime_duration == 0
           split.realtime_start = split.realtime_end - split.realtime_duration
 
           if split.realtime_duration > 0

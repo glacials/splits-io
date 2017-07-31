@@ -2,6 +2,7 @@ FactoryGirl.define do
   test_files = {
     # factory name:           {filename: 'filename-within-spec/factories/run_files},
     livesplit14:              {filename: 'livesplit1.4'},
+    livesplit15:              {filename: 'livesplit1.5.lss'},
     livesplit16:              {filename: 'livesplit1.6'},
     livesplit16_gametime:     {filename: 'livesplit1.6_gametime.lss'},
     llanfair:                 {filename: 'llanfair'},

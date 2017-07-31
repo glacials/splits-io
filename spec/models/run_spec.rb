@@ -145,7 +145,7 @@ describe Run, type: :model do
       expect(run.median_segment_duration_ms(Run::REAL)).to eq 118791
     end
 
-    it 'accurately reports its total playtime' do
+    it 'reports its total playtime' do
       expect(run.total_playtime_ms(Run::REAL)).to eq 77743500
     end
 
@@ -157,6 +157,61 @@ describe Run, type: :model do
       expect(run.parse(fast: false)[:realtime_history]).to match_array [
         6911.1422649, 6261.793028, 6123.6647933, 5944.5159323, 5694.8238343, 5410.1111281, 5746.1888454, 5390.4596715,
         5258.0010184, 5236.1128949, 5102.848171, 5126.4048091, 5055.5630296
+      ]
+    end
+  end
+
+  context 'from LiveSplit 1.5' do
+    let(:run) do
+      r = FactoryGirl.create(:livesplit15_run)
+      r.parse_into_activerecord
+      r.reload
+      r
+    end
+
+    it 'has the correct splits' do
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
+        [0, "Green Greens", 99390],
+        [1, "Castle LoLoLo", 91940],
+        [2, "Float Islands", 127809],
+        [3, "Bubbly Clouds", 195180],
+        [4, "Mt. DeDeDe", 236439],
+      ]
+    end
+
+    it 'accurately reports its missed splits' do
+      expect(run.skipped_splits(Run::REAL).map { |s| [s.segment_number, s.name, s.duration] }).to match_array []
+    end
+
+    it 'accurately reports its shortest segment' do
+      rss = run.shortest_segment(Run::REAL)
+      expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
+        1, "Castle LoLoLo", 91940
+      ]
+    end
+
+    it 'accurately reports its longest segment' do
+      rls = run.longest_segment(Run::REAL)
+      expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
+        4, 'Mt. DeDeDe', 236439
+      ]
+    end
+
+    it 'accurately reports its median segment duration' do
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 127809
+    end
+
+    it 'reports its total playtime' do
+      expect(run.total_playtime_ms(Run::REAL)).to eq 0
+    end
+
+    it 'reports no history using fast parsing' do
+      expect(run.parse(fast: true)[:realtime_history]).to be_nil
+    end
+
+    it 'reports correct history when using slow parsing' do
+      expect(run.parse(fast: false)[:realtime_history]).to match_array [
+        823.1730805
       ]
     end
   end
@@ -215,7 +270,7 @@ describe Run, type: :model do
       expect(run.median_segment_duration_ms(Run::REAL)).to eq 35992
     end
 
-    it 'accurately reports its total playtime' do
+    it 'reports its total playtime' do
       expect(run.total_playtime_ms(Run::REAL)).to eq 22450448
     end
 
@@ -313,7 +368,7 @@ describe Run, type: :model do
       expect(run.median_segment_duration_ms(Run::REAL)).to eq(509715)
     end
 
-    it 'accurately reports its total playtime' do
+    it 'reports its total playtime' do
       expect(run.total_playtime_ms(Run::REAL)).to eq 0
     end
   end
@@ -360,7 +415,7 @@ describe Run, type: :model do
         ]
       end
 
-      it 'accurately reports its total playtime' do
+      it 'reports its total playtime' do
         expect(run.total_playtime_ms(Run::REAL)).to eq 0
       end
     end
@@ -390,7 +445,7 @@ describe Run, type: :model do
       ]
     end
 
-    it 'accurately reports its total playtime' do
+    it 'reports its total playtime' do
       expect(run.total_playtime_ms(Run::REAL)).to eq 0
     end
   end
@@ -425,7 +480,7 @@ describe Run, type: :model do
       ]
     end
 
-    it 'accurately reports its total playtime' do
+    it 'reports its total playtime' do
       expect(run.total_playtime_ms(Run::REAL)).to eq 0
     end
   end
