@@ -8,17 +8,17 @@ class Api::V3::Detail::RunSerializer < Api::V3::ApplicationSerializer
 
   def splits
     object.segments.map do |segment|
-      segment.shortest_duration_milliseconds = {duration: segment.shortest_duration_milliseconds / 1000}
+      segment.realtime_shortest_duration_ms = {duration: segment.realtime_shortest_duration_ms / 1000}
       segment
       {
         name: segment.name,
-        duration: (segment.realtime_duration_milliseconds || 0).to_f / 1000,
-        finish_time: (segment.realtime_end_milliseconds || 0).to_f / 1000,
+        duration: (segment.realtime_duration_ms || 0).to_f / 1000,
+        finish_time: (segment.realtime_end_ms || 0).to_f / 1000,
         best: {
-          duration: (segment.realtime_shortest_duration_milliseconds || 0).to_f / 1000
+          duration: (segment.realtime_shortest_duration_ms || 0).to_f / 1000
         },
-        history: segment.realtime_histories.map do |history|
-          (history.realtime_duration_milliseconds || 0).to_f / 1000
+        history: segment.histories.map do |history|
+          (history.realtime_duration_ms || 0).to_f / 1000
         end,
         gold: segment.realtime_gold?,
         skipped: segment.realtime_skipped?,
