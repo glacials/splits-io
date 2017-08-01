@@ -39,13 +39,13 @@ module LlanfairGered
         segment = Split.new
 
         if run[:splits].empty?
-          segment.start_time = 0
+          segment.realtime_start = 0
         else
-          segment.start_time = run[:splits].last.finish_time
+          segment.realtime_start = run[:splits].last.realtime_end
         end
 
         segment.name = xml_segment.at('Segment > default > name').content
-        segment.best = seconds(xml_segment.at('Segment > default > bestTime > milliseconds').content)
+        segment.realtime_best = seconds(xml_segment.at('Segment > default > bestTime > milliseconds').content)
 
         duration = nil
 
@@ -55,9 +55,9 @@ module LlanfairGered
         else
           duration = xml_segment.at('Segment > default > runTime > milliseconds').content
         end
-        segment.duration = seconds(duration)
 
-        segment.finish_time = segment.start_time + segment.duration
+        segment.realtime_duration = seconds(duration)
+        segment.realtime_end = segment.realtime_start + segment.realtime_duration
 
         run[:splits] << segment
       end

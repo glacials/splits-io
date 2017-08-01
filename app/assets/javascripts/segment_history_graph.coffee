@@ -15,13 +15,13 @@ $ ->
   hidden_data = []
   first_non_null_attempt = Infinity
 
-  $.each gon.run.raw_splits, (i, split) ->
+  $.each gon.run.segments, (i, segment) ->
     non_null_time_inserted = false
     attempt_durations = []
-    $.each split.history, (j, attempt) ->
-      if non_null_time_inserted || attempt.duration_milliseconds != null
+    $.each segment.histories, (j, attempt) ->
+      if non_null_time_inserted || attempt.duration_ms != null
         non_null_time_inserted = true
-        attempt_durations.push(attempt.duration_milliseconds / 1000)
+        attempt_durations.push(attempt.duration_ms / 1000)
 
         if j < first_non_null_attempt
           first_non_null_attempt = j
@@ -29,10 +29,10 @@ $ ->
         attempt_durations.push(null)
 
     seg_histories.push(JSON.parse(JSON.stringify(attempt_durations)))
-    seg_histories[i].unshift(split.name)
+    seg_histories[i].unshift(segment.name)
 
     if seg_histories.length > 1
-      hidden_data.push split.name
+      hidden_data.push segment.name
   c3.generate({
     bindto: "#segment-duration-graph",
     title: {
@@ -46,7 +46,7 @@ $ ->
       show: true
     },
     size: {
-      height: 320 * ((gon.run.raw_splits.length / 60) + 1)
+      height: 320 * ((gon.run.segments.length / 60) + 1)
     },
     color: {
       pattern: color_styles
@@ -57,7 +57,7 @@ $ ->
     axis: {
       x: {
         type: "category",
-        categories: index + 1 for split, index in gon.run.history
+        categories: index + 1 for segment, index in gon.run.history
         tick: {
           culling: true,
           multiline: false

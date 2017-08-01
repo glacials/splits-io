@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170711050525) do
+ActiveRecord::Schema.define(version: 20170720190131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,18 +143,21 @@ ActiveRecord::Schema.define(version: 20170711050525) do
     t.string   "nick"
     t.string   "image_url"
     t.integer  "category_id"
-    t.decimal  "time"
+    t.decimal  "realtime_duration_s"
     t.string   "program"
     t.string   "claim_token"
-    t.decimal  "sum_of_best"
-    t.boolean  "archived",                 default: false, null: false
+    t.decimal  "realtime_sum_of_best_s"
+    t.boolean  "archived",                default: false,  null: false
     t.string   "video_url"
     t.string   "srdc_id"
     t.integer  "attempts"
     t.string   "s3_filename",                              null: false
-    t.bigint   "duration_milliseconds"
-    t.bigint   "sum_of_best_milliseconds"
+    t.bigint   "realtime_duration_ms"
+    t.bigint   "realtime_sum_of_best_ms"
     t.datetime "parsed_at"
+    t.integer  "gametime_duration_ms"
+    t.integer  "gametime_sum_of_best_ms"
+    t.string   "default_timing",          default: "real", null: false
     t.index ["category_id"], name: "index_runs_on_category_id", using: :btree
     t.index ["user_id"], name: "index_runs_on_user_id", using: :btree
   end
@@ -162,25 +165,33 @@ ActiveRecord::Schema.define(version: 20170711050525) do
   create_table "segment_histories", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.uuid     "segment_id"
     t.integer  "attempt_number"
-    t.bigint   "duration_milliseconds"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.bigint   "realtime_duration_ms"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "gametime_duration_ms"
     t.index ["segment_id"], name: "index_segment_histories_on_segment_id", using: :btree
   end
 
   create_table "segments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.integer  "run_id",                         null: false
-    t.integer  "segment_number",                 null: false
-    t.bigint   "duration_milliseconds",          null: false
-    t.bigint   "start_milliseconds",             null: false
-    t.bigint   "end_milliseconds",               null: false
-    t.bigint   "shortest_duration_milliseconds", null: false
-    t.string   "name",                           null: false
-    t.boolean  "gold",                           null: false
-    t.boolean  "reduced",                        null: false
-    t.boolean  "skipped",                        null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "run_id",                                        null: false
+    t.integer  "segment_number",                                null: false
+    t.bigint   "realtime_duration_ms",                          null: false
+    t.bigint   "realtime_start_ms",                             null: false
+    t.bigint   "realtime_end_ms",                               null: false
+    t.bigint   "realtime_shortest_duration_ms",                 null: false
+    t.string   "name",                                          null: false
+    t.boolean  "realtime_gold",                                 null: false
+    t.boolean  "realtime_reduced",                              null: false
+    t.boolean  "realtime_skipped",                              null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.integer  "gametime_start_ms"
+    t.integer  "gametime_end_ms"
+    t.integer  "gametime_duration_ms"
+    t.integer  "gametime_shortest_duration_ms"
+    t.boolean  "gametime_gold",                 default: false, null: false
+    t.boolean  "gametime_reduced",              default: false, null: false
+    t.boolean  "gametime_skipped",              default: false, null: false
     t.index ["run_id"], name: "index_segments_on_run_id", using: :btree
   end
 

@@ -39,13 +39,18 @@ module Urn
 
     def parse_split(segment, prev_split_finish_time)
       Split.new(
-        best: duration_in_seconds(segment["best_segment"]),
         name: segment["title"].to_s,
-        finish_time: duration_in_seconds(segment["time"])
+        realtime_best: duration_in_seconds(segment["best_segment"]),
+        realtime_end: duration_in_seconds(segment["time"])
       ).tap do |split|
-        split.duration = [split.finish_time - prev_split_finish_time, 0].max
-        split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
-        split.skipped = split.duration == 0
+        split.realtime_duration = [split.realtime_end - prev_split_finish_time, 0].max
+        split.realtime_skipped = split.realtime_duration == 0
+
+        if split.realtime_duration > 0 && split.realtime_duration.round(5) == split.best.try(:round, 5)
+          split.realtime_gold = true
+        else
+          split.realtime_gold = false
+        end
       end
     end
 

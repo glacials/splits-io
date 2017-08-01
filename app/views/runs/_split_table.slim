@@ -6,21 +6,51 @@
         tr
           th.align-right #
           th.align-left Name
-          th.align-right Duration
-          th.align-right Finished at
+          - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
+            th.align-right Realtime Duration
+            th.align-right Gametime Duration
+            th.align-right Realtime Finished At
+            th.align-right Gametime Finished At
+          - else
+            th.align-right Duration
+            th.align-right Finished At
       tbody
-        - splits.each_with_index do |segment, index|
+        - run.segments.each_with_index do |segment, index|
           tr
             td.align-right= index + 1
             td.align-left= segment.name.presence || '-'
-            td.align-right
-              - if segment.gold?
-                .gold-split title='Gold'
-              - if segment.skipped? || segment.reduced?
-                span.time -
+            - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
+              td.align-right
+                - if segment.gold?(Run::REAL)
+                  .gold-split title='Gold'
+                - if segment.skipped?(Run::REAL) || segment.reduced?(Run::REAL)
+                  span.time -
+                - else
+                  span = format_milliseconds(segment.duration_ms(Run::REAL))
+              td.align-right
+                - if segment.gold?(Run::GAME)
+                  .gold-split title='Gold'
+                - if segment.skipped?(Run::GAME) || segment.reduced?(Run::GAME)
+                  span.time -
+                - else
+                  span = format_milliseconds(segment.duration_ms(Run::GAME))
+              - if segment.skipped?(Run::REAL)
+                td.align-right.time -
               - else
-                span = format_milliseconds(segment.duration_milliseconds)
-            - if segment.skipped?
-              td.align-right.time -
+                td.align-right = format_milliseconds(segment.end_ms(Run::REAL))
+              - if segment.skipped?(Run::GAME)
+                td.align-right.time -
+              - else
+                td.align-right = format_milliseconds(segment.end_ms(Run::GAME))
             - else
-              td.align-right = format_milliseconds(segment.end_milliseconds)
+              td.align-right
+                - if segment.gold?(timing)
+                  .gold-split title='Gold'
+                - if segment.skipped?(timing) || segment.reduced?(timing)
+                  span.time -
+                - else
+                  span = format_milliseconds(segment.duration_ms(timing))
+              - if segment.skipped?(timing)
+                td.align-right.time -
+              - else
+                td.align-right = format_milliseconds(segment.end_ms(timing))

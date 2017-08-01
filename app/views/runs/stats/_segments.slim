@@ -2,7 +2,7 @@
   .panel-heading
     | Segment Information
     .pull-right 
-      - if @run.attempts.nil? || @run.attempts.zero?
+      - if run.attempts.nil? || run.attempts.zero?
         strike ↓ download segment history csv
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else
@@ -28,20 +28,20 @@
             span 99th percentile
             small.tip-html< title="99% of this runner's times on this segment are faster than this time" = "(?)"
       tbody
-        - run.segments.includes(:histories).each_with_index do |segment, index|
+        - run.segments.includes(:histories).each do |segment|
           - if segment.histories.nil? || segment.histories.length == 0
             tr
-              td.align-right= index + 1
+              td.align-right= segment.segment_number + 1
               td.align-left= segment.name.present? ? segment.name : '-'
               td.align-right colspan=99
                 i no segment history available
           - else
-            - history_times = segment.histories.map(&:duration_milliseconds).compact
+            - history_times = segment.histories.map(&:realtime_duration_ms).compact
             tr
-              td.align-right = index + 1
+              td.align-right = segment.segment_number + 1
               td.align-left = segment.name.present? ? segment.name : '-'
               td.align-right = format_milliseconds(history_times.standard_deviation)
-              td.align-right = format_milliseconds(segment.shortest_duration_milliseconds)
+              td.align-right = format_milliseconds(segment.realtime_shortest_duration_ms)
               td.align-right = format_milliseconds(history_times.mean)
               td.align-right = format_milliseconds(history_times.median)
               td.align-right = format_milliseconds(history_times.percentile(90))

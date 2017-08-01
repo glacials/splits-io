@@ -61,19 +61,6 @@ module DynamoDBRun
       end
     end
 
-    def write_segments_to_dynamodb(segments)
-      marshalled_segments = segments.map.with_index do |segment, i|
-        marshal_segment_into_dynamodb_format(segment, i)
-      end
-
-      # DynamoDB supports at most 25 parallel writes
-      marshalled_segments.each_slice(25) do |segment_chunk|
-        $dynamodb_client.batch_write_item(
-          request_items: {'segments_v1' => segment_chunk}
-        )
-      end
-    end
-
     def write_segment_histories_to_dynamodb(segments)
       marshalled_segment_histories = segments.map.with_index do |segment, i|
         marshal_segment_histories_into_dynamodb_format(segment, i)
@@ -87,26 +74,6 @@ module DynamoDBRun
           request_items: {'segment_histories' => segment_history_chunk}
         )
       end
-    end
-
-    def marshal_segment_into_dynamodb_format(segment, order)
-      {
-        put_request: {
-          item: {
-            'run_id' => id36,
-            'segment_number' => order,
-            'id' => segment.id,
-            'title' => segment.name.presence,
-            'duration_seconds' => segment.duration,
-            'start_seconds' => segment.start_time,
-            'end_seconds' => segment.finish_time,
-            'is_skipped' => segment.skipped?,
-            'is_reduced' => segment.reduced?,
-            'is_gold' => segment.gold?,
-            'gold_duration_seconds' => segment.best
-          }
-        }
-      }
     end
 
     def marshal_history_into_dynamodb_format(attempt_number, duration_seconds)

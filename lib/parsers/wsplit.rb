@@ -53,7 +53,7 @@ module WSplit
         attempts: run.attempts.to_s.to_i,
         offset: run.offset.to_f,
         splits: parse_splits(run.splits),
-        history: [],
+        realtime_history: [],
         indexed_history: {}
       }
     end
@@ -72,14 +72,14 @@ module WSplit
     def parse_split(segment, prev_segment_finish_time)
       segment = Split.new(
         name: segment.segment_title.to_s,
-        duration: [trunc(segment.finish_time.to_s) - trunc(prev_segment_finish_time), 0].max,
-        finish_time: trunc(segment.finish_time.to_s),
-        best: trunc(segment.best_time.to_s)
+        realtime_duration: [trunc(segment.finish_time.to_s) - trunc(prev_segment_finish_time), 0].max,
+        realtime_end: trunc(segment.finish_time.to_s),
+        realtime_best: trunc(segment.best_time.to_s)
       )
 
-      segment.gold = segment.duration > 0 && segment.duration == segment.best
-      segment.skipped = segment.duration == 0
-      segment.start_time = segment.finish_time - segment.duration
+      segment.realtime_gold = segment.realtime_duration > 0 && segment.realtime_duration == segment.realtime_best
+      segment.realtime_skipped = segment.realtime_duration == 0
+      segment.realtime_start = segment.realtime_end - segment.realtime_duration
 
       return segment
     end

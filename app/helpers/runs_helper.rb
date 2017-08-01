@@ -16,7 +16,7 @@ module RunsHelper
       return 0
     end
 
-    run_a.sum_of_best - run_b.sum_of_best
+    run_a.realtime_sum_of_best_s - run_b.realtime_sum_of_best_s
   end
 
   def difference_color(time)

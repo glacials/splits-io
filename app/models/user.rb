@@ -46,7 +46,7 @@ class User < ApplicationRecord
   end
 
   def pb_for(category)
-    runs.where(category: category).order(:time).first
+    runs.where(category: category).order(:realtime_duration_ms).first
   end
 
   def pbs

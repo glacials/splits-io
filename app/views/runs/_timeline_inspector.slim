@@ -1,13 +1,13 @@
-- scale_to ||= run.duration_milliseconds
+- scale_to ||= run.duration_ms(timing)
 - overlap ||= false
 .timeline style="margin-top: .75em;" class=(overlap ? 'absolute' : '')
-  - run.collapsed_segments.each_with_index do |segment, index|
-    .pure-u.inspect id="#{run.id36}-inspect-#{index}" style="width: #{segment.duration_milliseconds.to_f / scale_to * 100}%; opacity: 0;"
+  - run.collapsed_segments(timing).each_with_index do |segment, index|
+    .pure-u.inspect id="#{run.id36}-inspect-#{index}" style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; opacity: 0;"
       .bar
         p
       .title = segment.name
-      div #{format_milliseconds(segment.duration_milliseconds)} duration
-      div #{format_milliseconds(segment.end_milliseconds)} finished
+      div #{format_milliseconds(segment.duration_ms(timing))} duration
+      div #{format_milliseconds(segment.end_ms(timing))} finished
       .save
-        - unless segment.gold? || run.has_skipped_splits? || !run.has_golds? || segment.duration_milliseconds == segment.shortest_duration_milliseconds
-          | #{(segment.duration_milliseconds - segment.shortest_duration_milliseconds) / 1000}s potential save
+        - unless segment.gold?(timing) || run.has_skipped_splits?(timing) || !run.has_golds?(timing) || segment.duration_ms(timing) == segment.shortest_duration_ms(timing)
+          | #{(segment.duration_ms(timing) - segment.shortest_duration_ms(timing)) / 1000}s potential save

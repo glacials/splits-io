@@ -18,10 +18,10 @@ module Llanfair
   class Parser
     def parse(file, options = {})
       run = {
-        history: [],
+        realtime_history: [],
         indexed_history: {}
       }
-      run[:time] = 0
+      run[:realtime_time] = 0
       # A port of Nitrofski's import llanfair files function for wsplit
       file = StringIO.new(file)
       file.seek(197, 1)
@@ -97,15 +97,19 @@ module Llanfair
 
         run[:splits] << Split.new(
           name: segment_name.to_s.force_encoding("UTF-8"),
-          best: best_segment_time,
-          duration: best_time,
-          finish_time: run[:time] + best_time
+          realtime_best: best_segment_time,
+          realtime_duration: best_time,
+          realtime_end: run[:realtime_time] + best_time
         ).tap do |split|
-          split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
-          split.skipped = split.duration == 0.0
-          split.start_time = split.finish_time - split.duration
+          if split.realtime_duration > 0 && split.realtime_duration.round(5) == split.realtime_best.round(5)
+            split.realtime_gold = true
+          else
+            split.realtime_gold = false
+          end
+          split.realtime_skipped = split.realtime_duration == 0.0
+          split.realtime_start = split.realtime_end - split.realtime_duration
         end
-        run[:time] += best_time
+        run[:realtime_time] += best_time
 
         file.seek(6, 1)
 

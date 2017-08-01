@@ -5,7 +5,7 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
   before_action :set_prediction, only: [:show]
 
   def show
-    most_recent_run = @user.runs.where(category: @category).order(:created_at).last
+    most_recent_run = @user.runs.where(category: @category).order(created_at: :desc).last
 
     @prediction.merge!(
       id: nil,
@@ -20,15 +20,14 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
       category: Api::V3::CategorySerializer.new(@category, root: false),
       time: 0
     )
-    @prediction[:splits] = most_recent_run.splits.map do |split|
-      Run::Split.new(
-        best: split.best,
-        name: split.name,
-        finish_time: @prediction[:time] += (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6),
-        duration: (split.history + [split.duration]).reject { |duration| duration == 0 }.smma.round(6),
+    @prediction[:splits] = most_recent_run.splits.map do |segment|
+      {
+        best: segment.shortest_duration_ms(Run::REAL),
+        finish_time: @prediction[:time] += (segment.histories.map(&:realtime_duration_ms) + [segment.duration_ms(Run::REAL)]).reject { |duration| duration == 0 }.smma.to_f / 1000,
+        duration: (segment.histories.map(&:realtime_duration_ms) + [segment.duration_ms(Run::REAL)]).reject { |duration| duration == 0 }.smma.to_f / 1000,
         gold?: false,
-        skipped?: rand(0.99) < split.history.map { |time| time.nil? ? 1 : 0 }.smma
-      )
+        skipped?: rand(0.99) < segment.histories.map(&:realtime_duration_ms).map { |time| time.nil? ? 1 : 0 }.smma
+      }
     end
     render json: {prediction: @prediction}
   rescue MovingAverage::Errors::InvalidTailError

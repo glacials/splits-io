@@ -4,8 +4,10 @@ h3
     =< run.category
   - else
     = "(no title)"
+- if run.completed?(Run::REAL) && run.completed?(Run::GAME)
+  = render partial: 'runs/timing_switch', locals: {timing: timing}
 h5
-  div = format_milliseconds(run.duration_milliseconds)
+  div = format_milliseconds(run.duration_ms(timing))
   - if run.user.try(:name)
     small
       span by #{link_to run.user, user_path(run.user), class: 'stealth-link user-link'}
@@ -36,7 +38,7 @@ h6
       li = link_to 'speedrun.com', run.srdc_url
     - if run.video_url.present?
       li = link_to 'proof', run.video_url
-    li = link_to 'stats', run_stats_path(run)
+    li = link_to 'stats', run_stats_path(run, params: {timing: params[:timing]})
     - if can?(:edit, run)
       li = link_to 'edit', edit_run_path(run)
     - if run.user.nil?

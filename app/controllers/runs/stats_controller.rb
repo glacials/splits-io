@@ -2,6 +2,7 @@ class Runs::StatsController < Runs::ApplicationController
   before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
 
   def index
+    timing = params[:timing] || @run.default_timing
     @run.parse_into_activerecord unless @run.parsed?
 
     # Catch bad runs
@@ -15,11 +16,21 @@ class Runs::StatsController < Runs::ApplicationController
 
     gon.run = {
       id: @run.id36,
-      splits: @run.segments,
-      raw_splits: segments,
+      segments: @run.segments.map do |segment|
+        {
+          name: segment.name,
+          duration_ms: segment.duration_ms(timing),
+          shortest_duration_ms: segment.shortest_duration_ms(timing),
+          histories: segment.histories.map do |history|
+            {
+              duration_ms: history.duration_ms(timing),
+            }
+          end,
+        }
+      end,
       history: @run.dynamodb_history,
       attempts: @run.attempts,
-      program: @run.program,
+      program: @run.program
     }
 
     if @run.user.nil?
@@ -31,7 +42,7 @@ class Runs::StatsController < Runs::ApplicationController
       }
     end
 
-    gon.scale_to = @run.duration_milliseconds
+    gon.scale_to = @run.duration_ms(timing)
   end
 
   def run_history_csv

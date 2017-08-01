@@ -92,6 +92,7 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootstrap-toggle-rails (2.2.1.0)
     bootswatch-rails (3.3.5)
       railties (>= 3.1)
     builder (3.2.3)
@@ -293,6 +294,10 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 5.0.2)
       sprockets-rails (>= 2.0.0)
+    rails-controller-testing (1.0.2)
+      actionpack (~> 5.x, >= 5.0.1)
+      actionview (~> 5.x, >= 5.0.1)
+      activesupport (~> 5.x)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -430,6 +435,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass
+  bootstrap-toggle-rails
   bootswatch-rails
   c3-rails
   cancancan
@@ -476,6 +482,7 @@ DEPENDENCIES
   ptools
   purecss-rails!
   rails (~> 5)
+  rails-controller-testing
   rails-erd
   rails_12factor
   rails_stdout_logging

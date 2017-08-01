@@ -1,55 +1,113 @@
 class Split
-  attr_accessor :id, :name, :duration, :start_time, :finish_time, :best, :history, :indexed_history, :gold, :skipped, :reduced
+  attr_accessor(
+    :id,
+    :name,
+    :indexed_history,
+
+    :realtime_duration,
+    :realtime_start,
+    :realtime_end,
+    :realtime_best,
+    :realtime_history,
+    :realtime_gold,
+    :realtime_skipped,
+    :realtime_reduced,
+
+    :gametime_duration,
+    :gametime_start,
+    :gametime_end,
+    :gametime_best,
+    :gametime_gold,
+    :gametime_skipped,
+    :gametime_reduced
+  )
 
   def initialize(h = {})
-    @id = h[:id]
+    @id   = h[:id]
     @name = h[:name]
-    @duration = h[:duration]
-    @start_time = h[:start_time]
-    @finish_time = h[:finish_time]
-    @best = h[:best]
-    @history = h[:history]
     @indexed_history = h[:indexed_history]
-    @gold = h[:gold?] || h[:gold] || false
-    @skipped = h[:skipped?] || h[:skipped] || false
-    @reduced = h[:reduced?] || h[:reduced] || false
+
+    @realtime_duration        = h[:realtime_duration]
+    @realtime_start           = h[:realtime_start]
+    @realtime_end             = h[:realtime_end]
+    @realtime_best            = h[:realtime_best]
+    @realtime_history         = h[:realtime_history]
+    @realtime_gold            = h[:realtime_gold?]           || h[:realtime_gold]    || false
+    @realtime_skipped         = h[:realtime_skipped?]        || h[:realtime_skipped] || false
+    @realtime_reduced         = h[:realtime_reduced?]        || h[:realtime_reduced] || false
+
+    @gametime_duration        = h[:gametime_duration]
+    @gametime_start           = h[:gametime_start]
+    @gametime_end             = h[:gametime_end]
+    @gametime_best            = h[:gametime_best]
+    @gametime_gold            = h[:gametime_gold?]           || h[:gametime_gold]    || false
+    @gametime_skipped         = h[:gametime_skipped?]        || h[:gametime_skipped] || false
+    @gametime_reduced         = h[:gametime_reduced?]        || h[:gametime_reduced] || false
   end
 
-  def gold?
-    gold || false
+  def realtime_gold?
+    realtime_gold || false
   end
 
-  def skipped?
-    skipped || false
+  def realtime_skipped?
+    realtime_skipped || false
   end
 
-  def reduced?
-    reduced || false
+  def realtime_reduced?
+    realtime_reduced || false
+  end
+
+  def gametime_gold?
+    gametime_gold || false
+  end
+
+  def gametime_skipped?
+    gametime_skipped || false
+  end
+
+  def gametime_reduced?
+    gametime_reduced || false
   end
 
   def to_h
     {
       id: id,
       name: name,
-      duration: duration,
-      start_time: start_time,
-      finish_time: finish_time,
-      best: best,
-      gold: gold,
-      skipped: skipped,
+
+      realtime_duration:    realtime_duration,
+      realtime_start:       realtime_start,
+      realtime_end:         realtime_end,
+      realtime_best:        realtime_best,
+      realtime_gold:        realtime_gold,
+      realtime_skipped:     realtime_skipped,
+
+      gametime_duration:    gametime_duration,
+      gametime_start_time:  gametime_start,
+      gametime_end:         gametime_end,
+      gametime_best:        gametime_best,
+      gametime_gold:        gametime_gold,
+      gametime_skipped:     gametime_skipped,
     }.compact
   end
 
   def serializable_hash
     {
-      id: id,
-      name: name,
-      duration: duration,
-      start_time: start_time,
-      finish_time: finish_time,
-      best: best.try(:serializable_hash),
-      gold: gold,
-      skipped: skipped,
+      id:          id,
+      name:        name,
+
+      realtime_duration:    realtime_duration,
+      realtime_start_time:  realtime_start,
+      realtime_end:         realtime_end,
+      realtime_best:        realtime_best.try(:serializable_hash),
+      realtime_gold:        realtime_gold,
+      realtime_skipped:     realtime_skipped,
+
+      gametime_duration:    gametime_duration,
+      gametime_start_time:  gametime_start,
+      gametime_end:         gametime_end,
+      gametime_best:        gametime_best.try(:serializable_hash),
+      gametime_gold:        gametime_gold,
+      gametime_skipped:     gametime_skipped,
     }.compact
   end
 end

@@ -1,4 +1,5 @@
 - title @run
+- timing = params[:timing] || @run.default_timing
 - short_run = @run.short? || @comparison_run.short?
 = render partial: 'twitter_card'
 
@@ -10,7 +11,7 @@
   h5
     big
       a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@comparison_run)
-        = format_milliseconds(@comparison_run.duration_milliseconds)
+        = format_milliseconds(@comparison_run.realtime_duration_ms)
     => ' by'
     - if @comparison_run.user.present?
       = link_to @comparison_run.user, user_path(@comparison_run.user), class: 'stealth-link user-link'
@@ -19,16 +20,16 @@
     - else
       | unknown
 
-- time_scale = [@run.duration_milliseconds, @comparison_run.duration_milliseconds].max
-= render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale}
+- time_scale = [@run.realtime_duration_ms, @comparison_run.realtime_duration_ms].max
+= render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale, timing: timing}
 hr style='margin: .5em; opacity: 0.25'
-= render partial: 'timeline', locals: {run: @run, scale_to: time_scale}
+= render partial: 'timeline', locals: {run: @run, scale_to: time_scale, timing: timing}
 
 .container
   h5
     big
       a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@run)
-        = format_milliseconds(@run.duration_milliseconds)
+        = format_milliseconds(@run.realtime_duration_ms)
     => ' by'
     - if @run.user
       = link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'
@@ -37,8 +38,8 @@ hr style='margin: .5em; opacity: 0.25'
     - else
       | unknown
 
-= render partial: 'timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true}
-= render partial: 'timeline_inspector', locals: {run: @run, scale_to: time_scale}
+= render partial: 'timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true, timing: timing}
+= render partial: 'timeline_inspector', locals: {run: @run, scale_to: time_scale, timing: timing}
 
 - if @run.belongs_to?(current_user) && @run.improvements_towards(@comparison_run)[:time_differences].present?
   article
@@ -53,7 +54,7 @@ hr style='margin: .5em; opacity: 0.25'
     p
       = 'This will get you to a '
       span class=('short' if @run.short?)
-        = format_milliseconds(@run.duration_milliseconds - improvements.sum { |i| i[:time_difference] / 2 })
+        = format_milliseconds(@run.realtime_duration_ms - improvements.sum { |i| i[:time_difference] / 2 })
       = ', then we\'ll go from there.'
       - if @comparison_run.user.present?
         p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.uri.to_s, target: :_blank}!

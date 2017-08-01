@@ -11,6 +11,10 @@ class Run < ApplicationRecord
 
   include ActionView::Helpers::DateHelper
 
+  # Timing types
+  REAL = 'real'
+  GAME = 'game'
+
   belongs_to :user
   belongs_to :category
   has_one :game, through: :category
@@ -25,7 +29,7 @@ class Run < ApplicationRecord
 
   scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
   scope :by_category, ->(category) { where(category: category) }
-  scope :nonempty, -> { where("time != 0") }
+  scope :nonempty, -> { where("realtime_duration_ms != 0") }
   scope :owned, -> { where.not(user: nil) }
   scope :unarchived, -> { where(archived: false) }
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
@@ -139,14 +143,21 @@ class Run < ApplicationRecord
     "#{to_param}.#{timer.file_extension}"
   end
 
-  def duration_milliseconds
-    if super.nil?
-      parse_into_activerecord
-      if super.nil?
-        return 0
-      end
+  def duration_ms(time_type = default_time_type)
+    case time_type
+    when Run::REAL
+      realtime_duration_ms
+    when Run::GAME
+      gametime_duration_ms
     end
+  end
 
-    super
+  def sum_of_best_ms(time_type = default_time_type)
+    case time_type
+    when Run::REAL
+      realtime_sum_of_best_ms
+    when Run::GAME
+      gametime_sum_of_best_ms
+    end
   end
 end

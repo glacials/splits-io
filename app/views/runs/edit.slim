@@ -1,4 +1,5 @@
 - title(@run)
+- timing = params[:timing] || @run.default_timing
 = render partial: 'twitter_card'
 
 - content_for(:header) do
@@ -8,9 +9,9 @@
       li = link_to @run.category, game_category_path(@run.game, @run.category)
       li = link_to @run.id36, run_path(@run)
       li Edit
-  = render partial: 'runs/title', locals: {run: @run}
+  = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
-= render partial: 'runs/full_timeline', locals: {run: @run}
+= render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article
   .row
@@ -98,6 +99,27 @@ article
                   button.btn.btn-info.disabled Listed
                   = f.submit 'Unlist Run', class: 'btn btn-info'
 
+    - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
+      .col-md-6
+        .panel.panel-default
+          .panel-heading Realtime / Gametime
+          .panel-body
+            p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
+              However, you can set the default behavior for this run here.
+            center
+              - if @run.default_timing == 'game'
+                = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+                  = f.hidden_field(:default_timing, value: 'real')
+                  .btn-group
+                    = f.submit 'Realtime', class: 'btn btn-info'
+                    button.btn.btn-info.disabled Gametime
+              - else
+                = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+                  = f.hidden_field(:default_timing, value: 'game')
+                  .btn-group
+                    button.btn.btn-info.disabled Realtime
+                    = f.submit 'Gametime', class: 'btn btn-info'
+
 article#danger-zone.danger
   .panel.panel-danger
     .panel-heading Set My Run Free
@@ -120,7 +142,7 @@ article#danger-zone.danger
                         big Delete
                       small
                         = "#{@run} in "
-                        = format_milliseconds(@run.duration_milliseconds)
+                        = format_milliseconds(@run.realtime_duration_ms)
         .col-md-6
           .panel.panel-default
             .panel-heading Disown
@@ -139,4 +161,4 @@ article#danger-zone.danger
                         big Disown
                       small
                         = "#{@run} in "
-                        = format_milliseconds(@run.duration_milliseconds)
+                        = format_milliseconds(@run.realtime_duration_ms)

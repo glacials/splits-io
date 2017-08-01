@@ -35,8 +35,6 @@ module LiveSplit
       return v1_3(xml, fast) if version >= Versionomy.parse('1.3')
       return v1_2(xml, fast) if version >= Versionomy.parse('1.2')
       return nil
-    rescue
-      nil
     end
 
     private
@@ -49,11 +47,15 @@ module LiveSplit
         srdc_id: xml['Metadata'][0]['Run'][0]['id'],
         attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
-        history: fast ? nil : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
+        realtime_history: fast ? nil : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq,
+        gametime_history: fast ? nil : (xml['AttemptHistory'][0]['Attempt'] || []).map do |t|
+          duration_in_seconds_of(t['GameTime'].try(:[], 0))
+        end.reject { |t| t == 0 }.uniq,
         splits: [],
-        time: 0,
+        realtime_time: 0,
+        gametime_time: 0,
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
 
       indexed_history = {}
@@ -70,20 +72,25 @@ module LiveSplit
         split = Split.new
         split.name = segment['Name'][0].presence || ''
 
-        split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+        split.realtime_end = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
           k['name'] == 'Personal Best'
         end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
-        split.duration = [0, split.finish_time - run[:time]].max
-        split.start_time = split.finish_time - split.duration
+        split.realtime_duration = [0, split.realtime_end - run[:realtime_time]].max
+        split.realtime_start = split.realtime_end - split.realtime_duration
 
-        split.best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
-        split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
-        split.skipped = split.duration == 0
+        split.realtime_best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
+        split.realtime_skipped = split.realtime_duration == 0
 
-        split.history = fast ? nil : segment['SegmentHistory'][0]['Time']
-        if split.history.present?
+        if split.realtime_duration > 0 && split.realtime_duration.round(5) <= split.realtime_best.try(:round, 5)
+          split.realtime_gold = true
+        else
+          split.realtime_gold = false
+        end
+
+        split.realtime_history = fast ? nil : segment['SegmentHistory'][0]['Time']
+        if split.realtime_history.present?
           split.indexed_history = {}
-          split.history.map! do |time|
+          split.realtime_history.map! do |time|
             t = time['RealTime']
             if t.nil?
               split.indexed_history[time['id']] = nil
@@ -96,12 +103,28 @@ module LiveSplit
           end
         end
 
-        run[:time] += split.duration if split.duration.present?
+        split.gametime_end = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+          k['name'] == 'Personal Best'
+        end[0]['GameTime'].try(:[], 0) || '00:00:00.00')
+        split.gametime_duration = [0, split.gametime_end - run[:gametime_time]].max
+        split.gametime_start = split.gametime_end - split.gametime_duration
+
+        split.gametime_best = duration_in_seconds_of(segment['BestSegmentTime'][0]['GameTime'].try(:[], 0))
+        split.gametime_skipped = split.gametime_duration == 0
+
+        if split.gametime_duration > 0 && split.gametime_duration.round(5) <= split.gametime_best.try(:round, 5)
+          split.gametime_gold = true
+        else
+          split.gametime_gold = false
+        end
+
+        run[:realtime_time] += split.realtime_duration if split.realtime_duration.present?
+        run[:gametime_time] += split.gametime_duration if split.gametime_duration.present?
         split
       end
 
       # it's possible to get here with valid xml without this actually being a livesplit file, so let's make sure
-      if [run[:attempts], run[:offset], run[:splits], run[:time]].any?(&:nil?)
+      if [run[:attempts], run[:offset], run[:splits], run[:realtime_time]].any?(&:nil?)
         raise "Not a proper LiveSplit run file"
       end
 
@@ -116,8 +139,8 @@ module LiveSplit
         attempts: xml['AttemptCount'][0].to_i,
         offset: duration_in_seconds_of(xml['Offset'][0].try(:strip)),
         splits: [],
-        time: 0,
-        history: fast ? nil : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
+        realtime_time: 0,
+        realtime_history: fast ? nil : (xml['AttemptHistory'][0]['Time'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq
       }.tap { |run| run[:name] = "#{run[:game]} #{run[:category]}".strip }
@@ -136,34 +159,39 @@ module LiveSplit
         split = Split.new
         split.name = segment['Name'][0].presence || ''
 
-        split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+        split.realtime_end = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
           k['name'] == 'Personal Best'
         end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
-        split.duration = [0, split.finish_time - run[:time]].max
-        split.start_time = split.finish_time - split.duration
+        split.realtime_duration = [0, split.realtime_end - run[:realtime_time]].max
+        split.realtime_start = split.realtime_end - split.realtime_duration
 
-        split.best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
-        split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
-        split.skipped = split.duration == 0
+        split.realtime_best = duration_in_seconds_of(segment['BestSegmentTime'][0]['RealTime'].try(:[], 0))
+        split.realtime_skipped = split.realtime_duration == 0
 
-        split.history = []
+        if split.realtime_duration > 0
+          split.realtime_gold = split.realtime_duration.round(5) <= split.realtime_best.try(:round, 5)
+        else
+          spit.realtime_gold = false
+        end
+
+        split.realtime_history = []
         split.indexed_history = {}
 
         if !fast
-          split.history = segment['SegmentHistory'][0]['Time']
-          split.history.map! do |time|
+          split.realtime_history = segment['SegmentHistory'][0]['Time']
+          split.realtime_history.map! do |time|
             t = time['RealTime'].nil? ? 0 : duration_in_seconds_of(time['RealTime'][0].try(:strip))
             split.indexed_history[time['id']] = t
             t
           end
         end
 
-        run[:time] += split.duration if split.duration.present?
+        run[:realtime_time] += split.realtime_duration if split.realtime_duration.present?
         split
       end
 
       # it's possible to get here with valid xml without this actually being a livesplit file, so let's make sure
-      if [run[:attempts], run[:offset], run[:splits], run[:time]].any?(&:nil?)
+      if [run[:attempts], run[:offset], run[:splits], run[:realtime_time]].any?(&:nil?)
         raise "Not a proper LiveSplit run file"
       end
 
@@ -178,8 +206,8 @@ module LiveSplit
     def v1_4(xml, fast)
       run = {
         splits: [],
-        time: 0,
-        history: fast ? nil : (xml['RunHistory'][0]['Time'] || []).map do |t|
+        realtime_time: 0,
+        realtime_history: fast ? nil : (xml['RunHistory'][0]['Time'] || []).map do |t|
           duration_in_seconds_of(t['RealTime'].try(:[], 0))
         end.reject { |t| t == 0 }.uniq
       }
@@ -188,32 +216,37 @@ module LiveSplit
         split = Split.new
         split.name = segment['Name'][0].present? ? segment['Name'][0] : ''
 
-        split.finish_time = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
+        split.realtime_end = duration_in_seconds_of(segment['SplitTimes'][0]['SplitTime'].select do |k, _|
           k['name'] == 'Personal Best'
         end[0]['RealTime'].try(:[], 0) || '00:00:00.00')
-        split.duration = split.finish_time - run[:time]
-        split.duration = 0 if split.duration < 0
-        split.start_time = split.finish_time - split.duration
+        split.realtime_duration = split.realtime_end - run[:realtime_time]
+        split.realtime_duration = 0 if split.realtime_duration < 0
+        split.realtime_start = split.realtime_end - split.realtime_duration
 
         best_segment = segment['BestSegmentTime'][0]['RealTime'].try(:[], 0)
-        split.best = duration_in_seconds_of(best_segment)
-        split.gold = split.duration > 0 && split.duration.round(5) <= split.best.try(:round, 5)
-        split.skipped = split.duration == 0
+        split.realtime_best = duration_in_seconds_of(best_segment)
+        split.realtime_skipped = split.realtime_duration == 0
 
-        split.history = []
+        if split.realtime_duration > 0
+          split.realtime_gold = split.realtime_duration.round(5) <= split.realtime_best.try(:round, 5)
+        else
+          split.realtime_gold = false
+        end
+
+        split.realtime_history = []
         split.indexed_history = {}
 
         if !fast
-          split.history = segment['SegmentHistory'][0]['Time']
-          if split.history.present?
-            split.history.map! do |time|
+          split.realtime_history = segment['SegmentHistory'][0]['Time']
+          if split.realtime_history.present?
+            split.realtime_history.map! do |time|
               t = time['RealTime'].nil? ? 0 : duration_in_seconds_of(time['RealTime'].try(:[], 0).try(:strip))
               split.indexed_history[time['id']] = t
             end
           end
         end
 
-        run[:time] += split.duration if split.duration.present?
+        run[:realtime_time] += split.realtime_duration if split.realtime_duration.present?
         run[:splits] << split
       end
       v1_3(xml, fast, run)
@@ -223,7 +256,7 @@ module LiveSplit
     def v1_3(xml, fast, run = {})
       run = {
         splits: [],
-        time: 0
+        realtime_time: 0
       }.merge(run)
       run[:name] = "#{run[:game]} #{run[:category]}".strip
 
@@ -234,24 +267,29 @@ module LiveSplit
 
           # Okay what the hell. There's no way XML parsing is this crazy.
           # Somebody please enlighten me. Maybe I should switch this to Nokogiri.
-          split.finish_time = duration_in_seconds_of(segment['SplitTimes'].first.first.second.select do |k, _|
+          split.realtime_end = duration_in_seconds_of(segment['SplitTimes'].first.first.second.select do |k, _|
             k['name'] == 'Personal Best'
           end.first['content'].strip)
-          split.duration = split.finish_time - run[:time]
-          split.duration = 0 if split.duration < 0
+          split.realtime_duration = split.realtime_end - run[:realtime_time]
+          split.realtime_duration = 0 if split.realtime_duration < 0
 
           best_segment = segment['BestSegmentTime'][0]
           best_segment = best_segment[0] if best_segment.is_a?(Hash)
-          split.best = duration_in_seconds_of(best_segment)
-          split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
-          split.skipped = split.duration == 0
-          split.start_time = split.finish_time - split.duration
+          split.realtime_best = duration_in_seconds_of(best_segment)
+          split.realtime_skipped = split.realtime_duration == 0
+          split.realtime_start = split.realtime_end - split.realtime_duration
 
-          split.history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
+          if split.realtime_duration > 0
+            split.realtime_gold = split.realtime_duration.round(5) == split.realtime_best.try(:round, 5)
+          else
+            split.realtime_gold = false
+          end
+
+          split.realtime_history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
             times.map { |time| duration_in_seconds_of(time['content'].strip) }
           end
 
-          run[:time] += split.duration if split.duration.present?
+          run[:realtime_time] += split.realtime_duration if split.realtime_duration.present?
           run[:splits] << split
         end
       end
@@ -265,15 +303,15 @@ module LiveSplit
         category: xml['CategoryName'][0].try(:strip),
         attempts: xml['AttemptCount'][0].to_i,
         offset:   duration_in_seconds_of(xml['Offset'][0].try(:strip)),
-        history:  if !fast && xml['RunHistory'][0]['Time'].present?
-                    xml['RunHistory'][0]['Time'].map do |t|
-                      duration_in_seconds_of(t['content'])
-                    end.reject { |t| t == 0 }
-                  else
-                    []
-                  end,
+        realtime_history:  if !fast && xml['RunHistory'][0]['Time'].present?
+                             xml['RunHistory'][0]['Time'].map do |t|
+                               duration_in_seconds_of(t['content'])
+                             end.reject { |t| t == 0 }
+                           else
+                             []
+                           end,
         splits:   [],
-        time:     0
+        realtime_time:     0
       }.merge(run)
       run[:name] = "#{run[:game]} #{run[:category]}".strip
 
@@ -281,26 +319,31 @@ module LiveSplit
         xml['Segments'][0]['Segment'].each do |segment|
           split = Split.new
           split.name = segment['Name'][0].present? ? segment['Name'][0] : ''
-          split.finish_time = duration_in_seconds_of(segment['PersonalBestSplitTime'][0])
+          split.realtime_end = duration_in_seconds_of(segment['PersonalBestSplitTime'][0])
 
-          split.duration = split.finish_time - run[:time]
-          split.duration = 0 if split.duration < 0
-          split.best = duration_in_seconds_of(segment['BestSegmentTime'][0])
-          split.gold = split.duration > 0 && split.duration.round(5) == split.best.try(:round, 5)
-          split.skipped = split.duration == 0
-          split.start_time = split.finish_time - split.duration
+          split.realtime_duration = split.realtime_end - run[:realtime_time]
+          split.realtime_duration = 0 if split.realtime_duration < 0
+          split.realtime_best = duration_in_seconds_of(segment['BestSegmentTime'][0])
+          split.realtime_skipped = split.realtime_duration == 0
+          split.realtime_start = split.realtime_end - split.realtime_duration
 
-          split.history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
+          if split.realtime_duration > 0
+            split.realtime_gold = split.realtime_duration.round(5) == split.realtime_best.try(:round, 5)
+          else
+            split.realtime_gold = false
+          end
+
+          split.realtime_history = fast ? nil : segment['SegmentHistory'][0]['Time'].try do |times|
             times.map { |time| duration_in_seconds_of(time['content'].strip) }
           end
 
-          run[:time] += split.duration if split.duration.present?
+          run[:realtime_time] += split.realtime_duration if split.realtime_duration.present?
           run[:splits] << split
         end
       end
 
       # it's possible to get here with valid xml without this actually being a livesplit file, so let's make sure
-      if [run[:attempts], run[:offset], run[:splits], run[:time]].any?(&:nil?)
+      if [run[:attempts], run[:offset], run[:splits], run[:realtime_time]].any?(&:nil?)
         raise "Not a proper LiveSplit run file"
       end
 

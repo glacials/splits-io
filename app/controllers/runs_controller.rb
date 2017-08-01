@@ -105,6 +105,18 @@ class RunsController < ApplicationController
         redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
       end
     end
+
+    if params[@run.id36][:default_timing]
+      if @run.update(default_timing: params[@run.id36][:default_timing])
+        if params[@run.id36][:default_timing] == 'real'
+          redirect_to edit_run_path(@run), notice: 'Default timing changed to realtime.'
+        else
+          redirect_to edit_run_path(@run), notice: 'Default timing changed to gametime.'
+        end
+      else
+        redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
+      end
+    end
   end
 
   def download
@@ -166,8 +178,9 @@ class RunsController < ApplicationController
   def set_run
     @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
     @run.parse_into_activerecord unless @run.parsed?
+    timing = params[:timing] || @run.default_timing
 
-    gon.run = {id: @run.id36, splits: @run.collapsed_segments}
+    gon.run = {id: @run.id36, splits: @run.collapsed_segments(timing)}
 
     if @run.user.nil?
       gon.run['user'] = nil
@@ -178,7 +191,7 @@ class RunsController < ApplicationController
       }
     end
 
-    gon.scale_to = @run.duration_milliseconds
+    gon.scale_to = @run.duration_ms(timing)
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: 404
   end
@@ -186,11 +199,6 @@ class RunsController < ApplicationController
   def set_comparison
     return if params[:comparison_run].blank?
     @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
-    gon.comparison_run = {
-      id: @comparison_run.id36,
-      splits: @comparison_run.collapsed_segments
-    }
-    gon.scale_to = [@run.duration_milliseconds, @comparison_run.duration_milliseconds].max
   rescue ActiveRecord::RecordNotFound
     render :not_found, status: 404
   end

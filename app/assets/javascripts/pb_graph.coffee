@@ -6,11 +6,11 @@ $ ->
 
   pb_graph_data = ["PB - Gold"]
   pb_graph_ticks = []
-  $.each gon.run.splits, (i, split) ->
-    time = (split.duration_milliseconds - split.shortest_duration_milliseconds) / 1000
+  $.each gon.run.segments, (i, segment) ->
+    time = (segment.duration_ms - segment.shortest_duration_ms) / 1000
     return if time <= 0
     pb_graph_data.push time
-    pb_graph_ticks.push split.name
+    pb_graph_ticks.push segment.name
   pb_graph = c3.generate({
     bindto: "#pb-graph",
     title: { text: "PB vs Golds" },
