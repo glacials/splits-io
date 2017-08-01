@@ -1,6 +1,6 @@
 <%= @run.attempts %><%= "\t" %>0.00<%= "\t" %>
 <%= @run.to_s %><%= "\t" %>Best Splits
 <% @run.segments.each do |segment| %>
-<%= segment.name %><%= "\t" %><%= segment.duration_milliseconds.to_f / 1000 %>
+<%= segment.name %><%= "\t" %><%= segment.duration_ms(Run::REAL).to_f / 1000 %>
 <%= "\t" %>
 <% end %>

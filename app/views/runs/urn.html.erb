@@ -6,9 +6,9 @@
         <% @run.segments.each_with_index do |segment, index| %>
         {
             "title": "<%= segment.name %>",
-            "time": "<%= segment.skipped ? "0.000000" : Time.at((segment.end_milliseconds || 0) / 1000).utc.strftime("%H:%M:%S.%6N").strip %>",
-            "best_time": "<%= Time.at((segment.end_milliseconds || 0).to_f / 1000).utc.strftime("%H:%M:%S.%6N").strip %>",
-            "best_segment": "<%= Time.at((segment.shortest_duration_milliseconds || segment.duration_milliseconds || 0).to_f / 1000).utc.strftime("%H:%M:%S.%6N").strip %>"
+            "time": "<%= segment.skipped?(Run::REAL) ? "0.000000" : Time.at((segment.end_ms(Run::REAL) || 0) / 1000).utc.strftime("%H:%M:%S.%6N").strip %>",
+            "best_time": "<%= Time.at((segment.end_ms(Run::REAL) || 0).to_f / 1000).utc.strftime("%H:%M:%S.%6N").strip %>",
+            "best_segment": "<%= Time.at((segment.shortest_duration_ms(Run::REAL) || segment.duration_ms(Run::REAL) || 0).to_f / 1000).utc.strftime("%H:%M:%S.%6N").strip %>"
         }<%= ',' unless @run.segments.size - 1 == index %>
         <% end %>
     ]

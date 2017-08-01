@@ -3,6 +3,6 @@ Attempts=<%= @run.respond_to?(:attempts) ? @run.attempts : 0 %>
 Offset=<%= @run.respond_to?(:offset) ? @run.offset : 0 %>
 Size=<%= @run.respond_to?(:size) ? @run.size : "152,25" %>
 <% @run.segments.each do |segment| %>
-<%= segment.name %>,0,<%= segment.end_milliseconds.to_f / 1000 %>,<%= segment.shortest_duration_milliseconds.to_f / 1000 || segment.duration_milliseconds.to_f / 1000 %>
+<%= segment.name %>,0,<%= segment.end_ms(Run::REAL).to_f / 1000 %>,<%= segment.shortest_duration_ms(Run::REAL).to_f / 1000 || segment.duration_ms(Run::REAL).to_f / 1000 %>
 <% end %>
 Icons=<%= ('"",' * @run.segments.length)[0..-2].html_safe %>
