@@ -72,7 +72,7 @@ GEM
     arel (7.1.4)
     ast (2.3.0)
     authie (2.0.1)
-    autoprefixer-rails (7.1.1.3)
+    autoprefixer-rails (7.1.2.3)
       execjs
     aws-sdk-core (2.5.5)
       jmespath (~> 1.0)
