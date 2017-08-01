@@ -3,7 +3,7 @@ language:
   java
 cache: bundler
 rvm:
- - 2.3.1
+ - 2.3.4
 env:
   AWS_ACCESS_KEY_ID=boop
   AWS_REGION=local
