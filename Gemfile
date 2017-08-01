@@ -72,6 +72,7 @@ gem 'rest-client'
 gem 'platform-api'
 
 # javascript
+gem 'bower-rails'
 gem 'clipboard-rails'
 gem 'coffee-rails'
 gem 'jquery-rails'
@@ -112,7 +113,6 @@ gem 'turbolinks', github: 'rails/turbolinks'
 
 # views
 gem 'bootstrap-sass'
-gem 'bootstrap-toggle-rails'
 gem 'bootswatch-rails'
 gem 'flat-ui-rails'
 gem 'gon'

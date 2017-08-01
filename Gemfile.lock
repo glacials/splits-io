@@ -92,9 +92,9 @@ GEM
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
-    bootstrap-toggle-rails (2.2.1.0)
     bootswatch-rails (3.3.5)
       railties (>= 3.1)
+    bower-rails (0.11.0)
     builder (3.2.3)
     c3-rails (0.4.11)
     callsite (0.0.11)
@@ -439,8 +439,8 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass
-  bootstrap-toggle-rails
   bootswatch-rails
+  bower-rails
   c3-rails
   cancancan
   chronic_duration!
