@@ -12,8 +12,8 @@
     <Segment>
       <Icon />
       <Name><%= segment.name %></Name>
-      <PersonalBestSplitTime><%= Time.at((segment.end_milliseconds || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></PersonalBestSplitTime>
-      <BestSegmentTime><%= Time.at((segment.shortest_duration_milliseconds || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></BestSegmentTime>
+      <PersonalBestSplitTime><%= Time.at((segment.end_ms(Run::REAL) || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></PersonalBestSplitTime>
+      <BestSegmentTime><%= Time.at((segment.shortest_duration_ms(Run::REAL) || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></BestSegmentTime>
       <SegmentHistory />
     </Segment>
   <% end %>
