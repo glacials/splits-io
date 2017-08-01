@@ -4,7 +4,7 @@
   h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
 article data-turbolinks-temporary=true
   = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
-  - runners = @category.runners.joins(:runs).includes(:runs).where('runs.sum_of_best > 0').order('runs.sum_of_best asc')
+  - runners = @category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc')
   - if runners.empty?
     center
       i Not enough data in this category to display a sum-of-best leaderboard.
@@ -28,10 +28,10 @@ article data-turbolinks-temporary=true
           tr id=[:run, pb.id]
             td.align-right = i += 1
             td.align-left = link_to runner, runner, class: 'user-link'
-            td.align-left.time.needs-formatting = pb.sum_of_best
+            td.align-left = format_milliseconds(pb.sum_of_best_ms(Run::REAL))
             td.align-left
-              small = link_to pb.time, pb, class: 'time needs-formatting run-link'
+              small = link_to format_milliseconds(pb.duration_ms(Run::REAL)), pb
             td.align-left
-              small = ChronicDuration.output(pb.time.floor - pb.sum_of_best.floor, format: :short)
+              small = format_milliseconds(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
   center
     small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'
