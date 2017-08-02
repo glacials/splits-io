@@ -96,7 +96,7 @@ class Runs::StatsController < Runs::ApplicationController
             next
           end
 
-          row << h.duration_milliseconds
+          row << h.duration_ms(Run::REAL)
         end
         csv << row
       end
