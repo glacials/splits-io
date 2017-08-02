@@ -23,8 +23,8 @@
                       .gold-split title='Patron'
                   div = "#{run.game} #{run.category}"
                   div
-                    = pretty_duration(run.time)
+                    = format_milliseconds(run.duration_ms(Run::REAL))
                     - if current_user.runs?(run.category)
                       = " ("
-                      = pretty_difference(current_user.pb_for(run.category).time, run.time)
+                      = pretty_difference(current_user.pb_for(run.category).duration_ms(Run::REAL), run.duration_ms(Run::REAL))
                       = ")"
