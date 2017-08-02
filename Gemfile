@@ -6,6 +6,7 @@ group :test do
   gem 'factory_girl_rails', require: false
   gem 'json-schema'
   gem 'json-schema-rspec'
+  gem 'pry-rails'
   gem 'rails-controller-testing'
   gem 'rspec-rails', require: false
   gem 'simplecov', require: false
