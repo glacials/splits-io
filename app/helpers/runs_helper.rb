@@ -8,7 +8,7 @@ module RunsHelper
       return 0
     end
 
-    run_a.time - run_b.time
+    run_a.duration_ms(Run::REAL) - run_b.duration_ms(Run::REAL)
   end
 
   def sob_difference(run_a, run_b)
@@ -16,7 +16,7 @@ module RunsHelper
       return 0
     end
 
-    run_a.realtime_sum_of_best_s - run_b.realtime_sum_of_best_s
+    run_a.sum_of_best_ms(Run::REAL) - run_b.sum_of_best_ms(Run::REAL)
   end
 
   def difference_color(time)
