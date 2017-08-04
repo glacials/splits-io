@@ -11,8 +11,10 @@
               - if user.silver_patron?
                 .gold-split title='Patron'
               .call-to-action = next_butt_kick_sentence
-            span.time.needs-formatting = user.pb_for(@category).time
+            - run = user.pb_for(@category)
+            - timing = run.default_timing
+            span = format_milliseconds(run.duration_ms(timing))
             small< pb
             br
-            span.time.needs-formatting = user.pb_for(@category).sum_of_best
+            span = format_milliseconds(run.sum_of_best_ms(timing))
             small< sum of best
