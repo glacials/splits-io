@@ -66,4 +66,5 @@
                       = link_to '+', new_user_rivalry_path(current_user, category: run.category)
               - if cols.include?(:uploaded)
                 td.align-right.nowrap.upload-date.needs-formatting class=('short' if run.short?) title=run.created_at = run.created_at
-      .center = will_paginate(runs, renderer: BootstrapPagination::Rails)
+      .center
+        = paginate(runs, theme: 'twitter-bootstrap-3')

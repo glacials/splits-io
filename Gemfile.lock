@@ -89,6 +89,9 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     blockenspiel (0.5.0)
+    bootstrap-kaminari-views (0.0.5)
+      kaminari (>= 0.13)
+      rails (>= 3.1)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
@@ -208,6 +211,18 @@ GEM
     jsonapi (0.1.1.beta2)
       json (~> 1.8)
     jwt (1.5.4)
+    kaminari (1.0.1)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.0.1)
+      kaminari-activerecord (= 1.0.1)
+      kaminari-core (= 1.0.1)
+    kaminari-actionview (1.0.1)
+      actionview
+      kaminari-core (= 1.0.1)
+    kaminari-activerecord (1.0.1)
+      activerecord
+      kaminari-core (= 1.0.1)
+    kaminari-core (1.0.1)
     kgio (2.10.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -420,9 +435,6 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    will_paginate (3.1.0)
-    will_paginate-bootstrap (1.0.1)
-      will_paginate (>= 3.0.3)
     xml-simple (1.1.5)
 
 PLATFORMS
@@ -438,6 +450,7 @@ DEPENDENCIES
   babel_bridge
   better_errors
   binding_of_caller
+  bootstrap-kaminari-views
   bootstrap-sass
   bootswatch-rails
   bower-rails
@@ -469,6 +482,7 @@ DEPENDENCIES
   js_cookie_rails
   json-schema
   json-schema-rspec
+  kaminari
   meta_request
   momentjs-rails
   moving_average
@@ -505,8 +519,6 @@ DEPENDENCIES
   underscore-rails
   unicorn
   versionomy
-  will_paginate
-  will_paginate-bootstrap
   xml-simple
 
 RUBY VERSION
