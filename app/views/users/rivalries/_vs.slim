@@ -1,6 +1,6 @@
 - from_user_pb = rivalry.from_user.pb_for(rivalry.category)
 - to_user_pb = rivalry.to_user.pb_for(rivalry.category)
-- timing = params[:timing] || @run.default_timing
+- timing = params[:timing] || from_user_pb.default_timing
 .vs
   .media.col-md-5 style='text-align: left; margin: .5em 0'
     .pull-left

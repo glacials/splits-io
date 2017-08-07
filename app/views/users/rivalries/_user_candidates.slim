@@ -1,17 +1,17 @@
 .col-md-6
   .list-group
-    = user.follows.that_run(@category).find_each do |user|
-      = link_to user_rivalries_path(category: @category, to_user: user.name), method: :post, class: 'list-group-item'
+    = user.follows.that_run(category).find_each do |potential_rival|
+      = link_to user_rivalries_path(category: category, user: user), method: :post, class: 'list-group-item'
         .media style='margin: .5em 0;'
           .pull-left
-            img src=user.avatar height=64 width=64
+            img src=potential_rival.avatar height=64 width=64
           .media-body
             h4.media-heading
-              = user.name
-              - if user.silver_patron?
+              = potential_rival.name
+              - if potential_rival.silver_patron?
                 .gold-split title='Patron'
               .call-to-action = next_butt_kick_sentence
-            - run = user.pb_for(@category)
+            - run = potential_rival.pb_for(category)
             - timing = run.default_timing
             span = format_milliseconds(run.duration_ms(timing))
             small< pb
