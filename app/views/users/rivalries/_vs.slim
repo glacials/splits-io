@@ -1,5 +1,6 @@
 - from_user_pb = rivalry.from_user.pb_for(rivalry.category)
 - to_user_pb = rivalry.to_user.pb_for(rivalry.category)
+- timing = params[:timing] || from_user_pb.default_timing
 .vs
   .media.col-md-5 style='text-align: left; margin: .5em 0'
     .pull-left
@@ -15,7 +16,7 @@
       span = from_user_pb.present? ? (link_to from_user_pb.time, from_user_pb, class: 'time needs-formatting stealth-link run-link') : '-'
       small< pb
       br
-      span.time.needs-formatting = from_user_pb.sum_of_best || '0'
+      span = format_milliseconds(from_user_pb.sum_of_best_ms(timing)) || '0'
       small< sum of best
   .media.col-md-2 style='text-align: center; margin: .5em 0;'
     .media-body
@@ -38,5 +39,5 @@
           = '-'
       small< pb
       br
-      span.time.needs-formatting = to_user_pb.sum_of_best || '0'
+      span = format_milliseconds(to_user_pb.sum_of_best_ms(timing)) || '0'
       small< sum of best
