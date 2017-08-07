@@ -7,7 +7,7 @@ class Game < ApplicationRecord
 
   has_many :categories
   has_many :runs, through: :categories
-  has_many :aliases, class_name: 'Game::Alias'
+  has_many :aliases, class_name: 'GameAlias'
 
   after_create :create_initial_alias
 
@@ -17,7 +17,7 @@ class Game < ApplicationRecord
   def self.search(term)
     term = term.strip
     return nil if term.blank?
-    ids = where(shortname: term).or(where('name ILIKE ?', "%#{term}%")).pluck(:id) | Alias.where('name ILIKE ?', "%#{term}%").pluck(:game_id)
+    ids = where(shortname: term).or(where('name ILIKE ?', "%#{term}%")).pluck(:id) | GameAlias.where('name ILIKE ?', "%#{term}%").pluck(:game_id)
     Game.where(id: ids)
   end
 

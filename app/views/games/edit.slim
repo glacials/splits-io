@@ -12,7 +12,7 @@ article
       = f.text_field(:shortname, class: 'form-control', placeholder: 'Shortname', autofocus: true)
       span.input-group-btn
         = f.submit 'Save', class: 'btn btn-default'
-  = form_for Game::Alias.new, url: game_aliases_path(@game) do |f|
+  = form_for GameAlias.new, url: game_aliases_path(@game) do |f|
     h3 Merge games
     p Enter a game that should be merged into #{@game}.
     .input-group.col-md-6

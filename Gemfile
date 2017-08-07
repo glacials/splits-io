@@ -39,6 +39,9 @@ group :production do
   gem 'rails_12factor'
 end
 
+# administration
+gem 'administrate'
+
 # api
 gem 'active_model_serializers'
 gem 'api-pagination'
