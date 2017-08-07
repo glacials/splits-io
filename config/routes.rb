@@ -30,9 +30,9 @@ SplitsIO::Application.routes.draw do
 
   get '/u/:user', to: redirect('/users/%{user}') # deprecated; use GET /users/:user
 
-  get '/auth/patreon', to: 'patreon#out'
-  get '/auth/patreon/callback', to: 'patreon#in'
-  get '/auth/patreon/unlink', to: 'patreon#unlink'
+  get '/auth/patreon',          to: 'patreon_users#out'
+  get '/auth/patreon/callback', to: 'patreon_users#in'
+  get '/auth/patreon/unlink',   to: 'patreon_users#unlink'
 
   get '/auth/failure', to: 'sessions#failure'
   get '/auth/:provider/callback', to: 'sessions#create'

@@ -20,14 +20,13 @@
       .col-md-6
         .panel.panel-default
           .panel-body style='background: rgba(230, 70, 26, 1.00); color: #fff;'
-            - patreon = current_user.patreon_info
-            - if patreon.nil?
+            - if current_user.patreon.nil?
               span> ✗ Not linked with Patreon
               .pull-right
                 a.btn.btn-default href='/auth/patreon' Link
             - else
               span> ✓ Linked with Patreon as
-              b> = patreon['patreon_full_name'] || '???'
+              b> = current_user.patreon.full_name
               .pull-right
                 a.btn.btn-default href='/auth/patreon/unlink' Unlink
           .panel-footer

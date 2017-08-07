@@ -6,8 +6,11 @@ class User < ApplicationRecord
   has_many :runs
   has_many :categories, -> { distinct }, through: :runs
   has_many :games, -> { distinct }, through: :runs
+
   has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_rivalries, class_name: Rivalry, foreign_key: :to_user_id, dependent: :destroy
+
+  has_one  :patreon, class_name: PatreonUser, dependent: :destroy
 
   has_many :applications, class_name: Doorkeeper::Application, foreign_key: :owner_id
   has_many :access_grants, class_name: Doorkeeper::AccessGrant, foreign_key: :resource_owner_id
@@ -67,77 +70,35 @@ class User < ApplicationRecord
     !bronze_patron?
   end
 
-  def patreon_info
-    key = {user_id: "#{id}"}
-    attrs = 'id, patreon_full_name, pledge_cents'
-
-    options = {
-      key: key,
-      projection_expression: attrs
-    }
-
-    resp = $dynamodb_patreon_users.get_item(options)
-
-    if resp.item.nil?
-      return nil
-    end
-
-    return resp.item
-  end
-
   def patron?
-    p = patreon_info
-    if p.nil?
+    if patreon.nil?
       return false
     end
 
-    if p['pledge_cents'].nil?
-      return false
-    end
-
-    if p['pledge_cents'] == 0
-      return false
-    end
-
-    return true
+    patreon.pledge_cents > 0
   end
 
   def bronze_patron?
-    p = patreon_info
-    if p.nil?
+    if patreon.nil?
       return false
     end
 
-    if p['pledge_cents'].nil?
-      return false
-    end
-
-    p['pledge_cents'] >= 200
+    patreon.pledge_cents >= 200
   end
 
   def silver_patron?
-    p = patreon_info
-    if p.nil?
+    if patreon.nil?
       return false
     end
 
-    if p['pledge_cents'].nil?
-      return false
-    end
-
-    p['pledge_cents'] >= 400
+    patreon.pledge_cents >= 400
   end
 
   def gold_patron?
-    p = patreon_info
-    if p.nil?
+    if patreon.nil?
       return false
     end
 
-    if p['pledge_cents'].nil?
-      return false
-    end
-
-    p['pledge_cents'] >= 600
+    patreon.pledge_cents >= 600
   end
 end

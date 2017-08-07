@@ -11,7 +11,6 @@ if ENV['AWS_REGION'] == 'local'
 end
 
 $dynamodb_run_histories_table_name = 'run_histories'
-$dynamodb_patreon_users_table_name = 'patreon_users'
 
 $dynamodb_client = Aws::DynamoDB::Client.new(options)
 
@@ -45,33 +44,7 @@ if !$dynamodb_client.list_tables.table_names.include?($dynamodb_run_histories_ta
   )
 end
 
-if !$dynamodb_client.list_tables.table_names.include?($dynamodb_patreon_users_table_name)
-  $dynamodb_client.create_table(
-    table_name: $dynamodb_patreon_users_table_name,
-    key_schema: [
-      {
-        attribute_name: 'user_id',
-        key_type: 'HASH'
-      }
-    ],
-    attribute_definitions: [
-      {
-        attribute_name: 'user_id',
-        attribute_type: 'S'
-      }
-    ],
-    provisioned_throughput: {
-      read_capacity_units: 5,
-      write_capacity_units: 5
-    }
-  )
-end
-
 $dynamodb_run_histories = Aws::DynamoDB::Table.new(
   $dynamodb_run_histories_table_name,
-  client: $dynamodb_client
-)
-$dynamodb_patreon_users = Aws::DynamoDB::Table.new(
-  $dynamodb_patreon_users_table_name,
   client: $dynamodb_client
 )
