@@ -1,12 +1,15 @@
 source 'https://rubygems.org'
 ruby '2.3.4'
 
+group :test, :development do
+  gem 'pry-rails'
+end
+
 group :test do
   # tests
   gem 'factory_girl_rails', require: false
   gem 'json-schema'
   gem 'json-schema-rspec'
-  gem 'pry-rails'
   gem 'rails-controller-testing'
   gem 'rspec-rails', require: false
   gem 'simplecov', require: false
@@ -15,7 +18,6 @@ end
 group :development, :hot do
   # debugging
   gem 'meta_request'
-  gem 'pry-rails'
 
   # errors+logging
   gem 'better_errors'
