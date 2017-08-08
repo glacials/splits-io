@@ -9,10 +9,6 @@ module Users::Pbs::Export::PanelsHelper
     string[0...to].rjust(to, with)
   end
 
-  def time(seconds)
-    Time.at(seconds).utc.strftime("%k:%M:%S").gsub(' ', '')
-  end
-
   def link(run)
     request.protocol + request.host_with_port + run.path
   end
