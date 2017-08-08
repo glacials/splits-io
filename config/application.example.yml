@@ -35,7 +35,7 @@ development:
   PATREON_CLIENT_ID:
   PATREON_CLIENT_SECRET:
 
-  READ_ONLY_MODE: 0
+  READ_ONLY_MODE: "0"
 
 test:
   # required to be able to run tests
