@@ -49,30 +49,30 @@ class RunDashboard < Administrate::BaseDashboard
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = [
-    :user,
-    :category,
-    :game,
-    :segments,
     :id,
+    :user,
+    :game,
+    :category,
     :created_at,
     :updated_at,
-    :nick,
-    :image_url,
+    :parsed_at,
     :realtime_duration_s,
-    :program,
-    :claim_token,
     :realtime_sum_of_best_s,
-    :archived,
-    :video_url,
-    :srdc_id,
-    :attempts,
-    :s3_filename,
     :realtime_duration_ms,
     :realtime_sum_of_best_ms,
-    :parsed_at,
     :gametime_duration_ms,
     :gametime_sum_of_best_ms,
     :default_timing,
+    :segments,
+    :image_url,
+    :program,
+    :claim_token,
+    :archived,
+    :video_url,
+    :attempts,
+    :srdc_id,
+    :s3_filename,
+    :nick,
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -106,6 +106,6 @@ class RunDashboard < Administrate::BaseDashboard
   # across all pages of the admin dashboard.
   #
   def display_resource(run)
-    run
+    run.id36
   end
 end

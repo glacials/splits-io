@@ -25,22 +25,22 @@ class CategoryDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
     :game,
+    :name,
+    :shortname,
     :runs,
-    :rivalries,
-    :id,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = [
-    :game,
-    :runs,
-    :rivalries,
     :id,
+    :game,
     :name,
+    :shortname,
     :created_at,
     :updated_at,
-    :shortname,
+    :runs,
+    :rivalries,
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -58,6 +58,6 @@ class CategoryDashboard < Administrate::BaseDashboard
   # across all pages of the admin dashboard.
   #
   def display_resource(category)
-    "#{category.game} #{category}"
+    category
   end
 end

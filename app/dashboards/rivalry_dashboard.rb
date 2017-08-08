@@ -23,20 +23,20 @@ class RivalryDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = [
-    :category,
     :from_user,
     :to_user,
     :game,
+    :category,
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = [
-    :category,
+    :id,
     :from_user,
     :to_user,
     :game,
-    :id,
+    :category,
     :from_user_id,
     :to_user_id,
   ].freeze
