@@ -21,8 +21,13 @@ class Category < ApplicationRecord
     User.that_run(self)
   end
 
-  def best_known_run
-    runs.unarchived.where("realtime_duration_ms != 0").order(realtime_duration_ms: :asc).first
+  def best_known_run(timing)
+    case timing
+    when 'real'
+      runs.unarchived.where.not(realtime_duration_ms: 0).order(realtime_duration_ms: :asc).first
+    when 'game'
+      runs.unarchived.where.not(gametime_duration_ms: 0).order(gametime_duration_ms: :asc).first
+    end
   end
 
   def to_s

@@ -39,8 +39,8 @@ module CompletedRun
       dynamodb_history
     end
 
-    def best_known?
-      category && time == category.best_known_run.try(:time)
+    def best_known?(timing)
+      category && duration_ms(timing) == category.best_known_run(timing).duration_ms(timing)
     end
 
     def pb?

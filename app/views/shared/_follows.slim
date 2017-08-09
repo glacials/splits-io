@@ -25,6 +25,7 @@
                   div
                     = format_milliseconds(run.duration_ms(Run::REAL))
                     - if current_user.runs?(run.category)
+                      - user_pb = current_user.pb_for(run.category)
                       = " ("
-                      = pretty_difference(current_user.pb_for(run.category).duration_ms(Run::REAL), run.duration_ms(Run::REAL))
+                      = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
                       = ")"
