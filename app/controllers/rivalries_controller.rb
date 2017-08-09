@@ -1,9 +1,14 @@
 class RivalriesController < ApplicationController
-  before_filter :set_rivalry,  only: [:destroy]
-  before_filter :set_target,   only: [:create]
-  before_filter :set_category, only: [:new, :create], if: -> { params[:category].present? }
+  before_action :set_rivalry,  only: [:destroy]
+  before_action :set_target,   only: [:create]
+  before_action :set_category, only: [:new, :create], if: -> { params[:category].present? }
 
   def index
+    if current_user.nil?
+      redirect_to root_path, alert: "You must be logged in to view rivalries."
+      return
+    end
+
     @rivalries = current_user.rivalries
   end
 
