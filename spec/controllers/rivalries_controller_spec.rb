@@ -8,6 +8,8 @@ describe Users::RivalriesController do
       FactoryGirl.create(:run, :attemptless, category: category, user: FactoryGirl.create(:user))
     end
 
+    before { allow(controller).to receive(:current_user).and_return(user) }
+
     let(:response) { get(:index, params: {user: user}) }
 
     it 'returns a 200' do
