@@ -91,18 +91,18 @@ module RunsHelper
   end
 
   def pretty_difference(my_ms, their_ms)
-    diff_ms = my_ms - their_ms
+    diff_s = (my_ms / 1000) - (their_ms / 1000)
 
-    if diff_ms < 0
-      diff_ms = diff_ms.abs
-      return "<span class=\"text-success\">-#{format_milliseconds(diff_ms)}</span>".html_safe
+    if diff_s < 0
+      diff_s = diff_s.abs
+      return "<span class=\"text-success\">-#{format_milliseconds(diff_s * 1000)}</span>".html_safe
     end
 
-    if diff_ms > 0
-      return "<span class=\"text-danger\">+#{format_milliseconds(diff_ms)}</span>".html_safe
+    if diff_s > 0
+      return "<span class=\"text-danger\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
     end
 
-    return "<span class=\"text-warning\">+#{format_milliseconds(diff_ms)}</span>".html_safe
+    return "<span class=\"text-warning\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
   end
 
   def format_milliseconds(milliseconds)
@@ -111,10 +111,13 @@ module RunsHelper
     end
 
     total_seconds = milliseconds / 1000
+    total_minutes = total_seconds / 60
+    total_hours   = total_minutes / 60
 
     seconds = total_seconds % 60
-    minutes = total_seconds / 60 % 60
-    hours = total_seconds / 60 / 60
+    minutes = total_minutes % 60
+    hours   = total_hours
+
     "%02d:%02d:%02d" % [hours, minutes, seconds]
   end
 

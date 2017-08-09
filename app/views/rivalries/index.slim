@@ -22,11 +22,11 @@ article
                   div
                     span> pb:
                     span
-                       = pretty_difference(user_pb.sum_of_best_ms(Run::REAL), rival_pb.sum_of_best_ms(Run::REAL))
+                       = pretty_difference(user_pb.duration_ms(Run::REAL), rival_pb.duration_ms(Run::REAL))
                   div
                     span> sum of best:
                     span
-                       = pretty_difference(user_pb.duration_ms(Run::REAL), rival_pb.duration_ms(Run::REAL))
+                       = pretty_difference(user_pb.sum_of_best_ms(Run::REAL), rival_pb.sum_of_best_ms(Run::REAL))
             = button_to rivalry_path(rivalry), \
               method: :delete, \
               class: 'btn btn-default', \
