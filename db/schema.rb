@@ -38,10 +38,8 @@ ActiveRecord::Schema.define(version: 20170807040213) do
     t.string   "two_factored_ip"
     t.integer  "requests",           default: 0
     t.datetime "password_seen_at"
-    t.string   "token_hash"
     t.index ["browser_id"], name: "index_authie_sessions_on_browser_id", using: :btree
     t.index ["token"], name: "index_authie_sessions_on_token", using: :btree
-    t.index ["token_hash"], name: "index_authie_sessions_on_token_hash", using: :btree
     t.index ["user_id"], name: "index_authie_sessions_on_user_id", using: :btree
   end
 

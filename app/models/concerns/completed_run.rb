@@ -40,7 +40,16 @@ module CompletedRun
     end
 
     def best_known?(timing)
-      category && duration_ms(timing) == category.best_known_run(timing).duration_ms(timing)
+      if category.nil?
+        return false
+      end
+
+      best_run = category.best_known_run(timing)
+      if best_run.nil?
+        return false
+      end
+
+      duration_ms(timing) == best_run.duration_ms(timing)
     end
 
     def pb?

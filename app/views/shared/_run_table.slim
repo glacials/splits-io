@@ -57,7 +57,7 @@
                     - if rival.present? && rival.runs?(run.category)
                       - rival_run = rival.pb_for(run.category)
                       = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
-                        = render partial: 'shared/time_difference', locals: {time: difference(run, rival_run), short: run.short?}
+                        = pretty_difference(run.duration_ms(Run::REAL), rival_run.duration_ms(Run::REAL))
                         |  against 
                         = rival
                         - if rival.silver_patron?
