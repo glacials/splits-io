@@ -13,6 +13,11 @@ class RivalriesController < ApplicationController
   end
 
   def new
+    if current_user.nil?
+      redirect_to root_path, alert: "You must be logged in to create rivalries."
+      return
+    end
+
     @rivalry = current_user.rivalries.new(category: @category)
   end
 
