@@ -22,7 +22,7 @@ module ApplicationHelper
       index: request.path == root_path,
       upload: request.path == new_run_path,
       games: request.path.match(games_path),
-      rivalries: current_user.present? && request.path == user_rivalries_path(current_user),
+      rivalries: current_user.present? && request.path == rivalries_path,
       faq: request.path == faq_path,
       profile: logged_in? && [user_path(current_user), tools_path].include?(request.path),
 			why_darkmode: request.path == why_darkmode_path

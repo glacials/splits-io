@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'users/rivalries/_user_candidates' do
+RSpec.describe 'rivalries/_user_candidates' do
   it 'renders user candidates' do
     user = FactoryGirl.create(:user)
     follow = FactoryGirl.create(:user)
@@ -10,6 +10,8 @@ RSpec.describe 'users/rivalries/_user_candidates' do
     FactoryGirl.create(:run, category: category, user: user)
     FactoryGirl.create(:run, category: category, user: follow)
 
+    allow(controller).to receive(:current_user).and_return(user)
+
     users = double
     allow(users).to receive(:follows).and_return(users)
     allow(users).to receive(:that_run).and_return(users)
@@ -17,11 +19,10 @@ RSpec.describe 'users/rivalries/_user_candidates' do
 
     allow(user).to receive(:follows).and_return(users)
 
-    render(partial: 'users/rivalries/user_candidates', locals: {
-      user: user,
+    render(partial: 'rivalries/user_candidates', locals: {
       category: category,
     })
 
-    expect(view).to render_template('users/rivalries/_user_candidates')
+    expect(view).to render_template('rivalries/_user_candidates')
   end
 end

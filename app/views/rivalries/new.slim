@@ -9,7 +9,7 @@
     p Here are the games and categories that both you and someone you follow on Twitch run. Click one to appoint a rival
       for it.
 - if @category.present?
-  - rivalry = @user.rivalry_for(@category)
+  - rivalry = current_user.rivalry_for(@category)
   - if rivalry.present?
     article
       h4.center Current matchup
@@ -18,11 +18,11 @@
         = render partial: 'vs', locals: {rivalry: rivalry}
   article.nowrap
     h4 Punch someone down here with your mouse to set them as your rival for this category
-    - if @user.follows.that_run(@category).empty?
+    - if current_user.follows.that_run(@category).empty?
       .alert.alert-warning Sorry, nobody you follow on Twitch has submitted runs for this category.
       p Here are some categories that have rivals waiting for you:
-      = render partial: 'category_candidates', locals: {user: @user}
+      = render partial: 'category_candidates'
     - else
-      = render partial: 'user_candidates', locals: {user: @user, category: @category}
+      = render partial: 'user_candidates', locals: {category: @category}
 - else
-  article.nowrap = render partial: 'category_candidates', locals: {user: @user}
+  article.nowrap = render partial: 'category_candidates'

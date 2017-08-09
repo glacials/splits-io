@@ -52,7 +52,7 @@ html
             ul.nav.navbar-nav.navbar-right
               - if logged_in?
                 li class=('active' if on_page[:rivalries])
-                  a href=user_rivalries_path(current_user)
+                  a href=rivalries_path
                     .glyphicon.glyphicon-scale>
                     | My Rivals
                 li.dropdown class=('active' if on_page[:profile])
