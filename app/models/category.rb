@@ -23,9 +23,9 @@ class Category < ApplicationRecord
 
   def best_known_run(timing)
     case timing
-    when 'real'
+    when Run::REAL
       runs.unarchived.where.not(realtime_duration_ms: 0).order(realtime_duration_ms: :asc).first
-    when 'game'
+    when Run::GAME
       runs.unarchived.where.not(gametime_duration_ms: 0).order(gametime_duration_ms: :asc).first
     end
   end
