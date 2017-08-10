@@ -10,21 +10,21 @@ class Twitch
     end
 
     class << self
-      def get(login)
-        route(login.downcase).get(Twitch.headers)
+      def get(id)
+        route(id).get(Twitch.headers)
       end
 
-      def route(login)
-        Twitch.route["/users/#{login}"]
+      def route(id)
+        Twitch.route["/users/#{id}"]
       end
     end
   end
 
   module Follows
-    def self.followed_ids(login)
-      Rails.cache.fetch([:twitch, :follows, login]) do
+    def self.followed_ids(id)
+      Rails.cache.fetch([:twitch, :follows, id]) do
         JSON.parse(
-          self.get(login)
+          self.get(id)
         )['follows'].map do |follow|
           follow['channel']['_id']
         end
@@ -32,12 +32,12 @@ class Twitch
     end
 
     class << self
-      def get(login)
-        route(login).get(Twitch.headers)
+      def get(id)
+        route(id).get(Twitch.headers)
       end
 
-      def route(login)
-        User.route(login)['/follows/channels?limit=100']
+      def route(id)
+        User.route(id)['/follows/channels?limit=100']
       end
     end
   end
@@ -49,7 +49,7 @@ class Twitch
 
     def headers
       {
-        'Accept' => 'application/vnd.twitchtv.v4+json',
+        'Accept' => 'application/vnd.twitchtv.v5+json',
         'Client-ID' => ENV['TWITCH_CLIENT_ID']
       }
     end

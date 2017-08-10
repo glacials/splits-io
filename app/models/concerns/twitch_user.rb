@@ -7,18 +7,19 @@ module TwitchUser
   included do
     def follows
       Rails.cache.fetch([:db, :follows, self]) do
-        User.where(twitch_id: Twitch::Follows.followed_ids(self)).joins(:runs).group('users.id')
+        User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id)).joins(:runs).group('users.id')
       end
     end
 
     def twitch_sync!
-      body = Twitch::User.get(name)
+      body = Twitch::User.get(twitch_id)
 
       basic_info = JSON.parse(body)
 
       twitch_id = basic_info['_id']
       name = basic_info['name']
       avatar = basic_info['logo']
+      display_name = basic_info['display_name']
 
       if avatar.nil?
         avatar = 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
@@ -31,7 +32,8 @@ module TwitchUser
       update(
         twitch_id: twitch_id,
         name: name.downcase,
-        avatar: uri.to_s
+        avatar: uri.to_s,
+        twitch_display_name: display_name
       )
     rescue RestClient::ResourceNotFound
       nil
