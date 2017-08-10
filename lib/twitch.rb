@@ -11,7 +11,7 @@ class Twitch
 
     class << self
       def get(login)
-        route(login.twitch_id).get(Twitch.headers)
+        route(login).get(Twitch.headers)
       end
 
       def route(login)
