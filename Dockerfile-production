@@ -1,0 +1,37 @@
+# This is the Dockerfile for production. You only need to touch this if you are actually deploying Splits I/O to
+# production. If you're not, look at Dockerfile instead.
+
+FROM ruby:2.3.4
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
+RUN mkdir /app
+WORKDIR /app
+ADD Gemfile /app/Gemfile
+ADD Gemfile.lock /app/Gemfile.lock
+RUN bundle install
+
+# You don't need to change anything in this file by hand! Set the below env vars as desired in your host, then use
+#   cat Dockerfile | envsubst > Dockerfile.tmp && mv -f Dockerfile.tmp Dockerfile
+# to substitute your host env vars into this file. Do this at build-time on the production box.
+ENV AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_ID
+ENV AWS_SECRET_KEY $AWS_SECRET_KEY
+ENV DATABASE_URL $DATABASE_URL
+ENV NEW_RELIC_LICENSE_KEY $NEW_RELIC_LICENSE_KEY
+ENV PATREON_CLIENT_ID $PATREON_CLIENT_ID
+ENV PATREON_CLIENT_SECRET $PATREON_CLIENT_SECRET
+ENV ROLLBAR_ACCESS_TOKEN $ROLLBAR_ACCESS_TOKEN
+ENV S3_BUCKET $S3_BUCKET
+ENV SECRET_KEY_BASE $SECRET_KEY_BASE
+ENV TWITCH_CLIENT_ID $TWITCH_CLIENT_ID
+ENV TWITCH_CLIENT_SECRET $TWITCH_CLIENT_SECRET
+
+ENV AWS_REGION $AWS_REGION
+ENV BUNDLE_WITHOUT $BUNDLE_WITHOUT
+ENV DYNAMODB_TABLE $DYNAMODB_TABLE
+ENV ENABLE_ADS $ENABLE_ADS
+ENV RACK_ENV $RACK_ENV
+ENV RAILS_SKIP_ASSET_COMPILATION $RAILS_SKIP_ASSET_COMPILATION
+ENV RAILS_SKIP_MIGRATIONS $RAILS_SKIP_MIGRATIONS
+ENV READ_ONLY_MODE $READ_ONLY_MODE
+
+ADD . /app
+EXPOSE 3000

@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /app
+hooks:
+  ApplicationStart:
+    - location: scripts/start_container.sh
+      timeout: 600
+      runas: root

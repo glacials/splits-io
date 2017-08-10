@@ -1,26 +1,8 @@
-language:
-  ruby
-  java
-cache: bundler
-rvm:
- - 2.3.4
-env:
-  AWS_ACCESS_KEY_ID=boop
-  AWS_REGION=local
-  AWS_SECRET_KEY=beep
-  DATABASE_URL=postgres://localhost/splits-io-test
-  DYNAMODB_URL=http://localhost:8000
-  S3_BUCKET=splits
-script:
-  - RAILS_ENV=test bundle exec rake db:migrate
-  - bundle exec rake db:test:prepare
-  - bundle exec rspec spec
+sudo: required
 services:
-  - postgresql
-before_script:
-  - psql -c 'create database "splits-io-test";' -U postgres
-  - wget https://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz -O /tmp/dynamodb.tar.gz
-  - mkdir /tmp/dynamodb
-  - tar -xzvf /tmp/dynamodb.tar.gz -C /tmp/dynamodb
-  - java -Djava.library.path=/tmp/dynamodb/DynamoDBLocal_lib -jar /tmp/dynamodb/DynamoDBLocal.jar -sharedDb -inMemory &
-  - bundle exec fakes3 -r /tmp/splits-io/splits -p 4567 -q &
+  - docker
+install:
+  - docker-compose build
+script:
+  - docker-compose run -e RAILS_ENV=test web bundle exec rake db:migrate
+  - docker-compose run -e RAILS_ENV=test web bundle exec rspec

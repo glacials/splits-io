@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-production
+    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    ports:
+      - 3000:3000

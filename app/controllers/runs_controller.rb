@@ -134,7 +134,7 @@ class RunsController < ApplicationController
     end
 
     begin
-      s3_file = $s3_bucket.object("splits/#{@run.s3_filename}")
+      s3_file = $s3_bucket_internal.object("splits/#{@run.s3_filename}")
 
       if timer == Run.program(@run.timer) && s3_file.exists?
         redirect_to s3_file.presigned_url(:get,

@@ -5,7 +5,7 @@ module S3Run
 
   included do
     def in_s3?
-      file = $s3_bucket.object("splits/#{s3_filename}")
+      file = $s3_bucket_internal.object("splits/#{s3_filename}")
       return file.exists?
     rescue Aws::S3::Errors::Forbidden
       return false
@@ -22,7 +22,7 @@ module S3Run
         return false
       end
 
-      object = $s3_bucket.put_object(
+      object = $s3_bucket_internal.put_object(
         key: "splits/#{id36}",
         body: run_file.file
       )

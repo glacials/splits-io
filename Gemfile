@@ -112,7 +112,6 @@ gem 'versionomy'
 gem 'xml-simple'
 
 # server/environment
-gem 'figaro'
 gem 'rails', '~> 5'
 gem 'thin'
 gem 'unicorn'
