@@ -11,7 +11,7 @@ class Twitch
 
     class << self
       def get(login)
-        route(login.downcase).get(Twitch.headers)
+        route(login.twitch_id).get(Twitch.headers)
       end
 
       def route(login)
@@ -33,7 +33,7 @@ class Twitch
 
     class << self
       def get(login)
-        route(login).get(Twitch.headers)
+        route(login.twitch_id).get(Twitch.headers)
       end
 
       def route(login)
@@ -49,7 +49,7 @@ class Twitch
 
     def headers
       {
-        'Accept' => 'application/vnd.twitchtv.v4+json',
+        'Accept' => 'application/vnd.twitchtv.v5+json',
         'Client-ID' => ENV['TWITCH_CLIENT_ID']
       }
     end

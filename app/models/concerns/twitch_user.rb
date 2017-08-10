@@ -12,7 +12,7 @@ module TwitchUser
     end
 
     def twitch_sync!
-      body = Twitch::User.get(name)
+      body = Twitch::User.get(self)
 
       basic_info = JSON.parse(body)
 
