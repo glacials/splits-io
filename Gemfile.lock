@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/glacials/chronic_duration.git
+  remote: https://github.com/glacials/chronic_duration.git
   revision: ac649be5d0feaba3a83df7b7ff20ed58bdefead5
   branch: pad_to_option
   specs:
@@ -7,15 +7,15 @@ GIT
       numerizer (~> 0.1.1)
 
 GIT
-  remote: git://github.com/glacials/purecss-rails.git
+  remote: https://github.com/glacials/purecss-rails.git
   revision: a4c7a6c05bf438465a0d02f75c5bd6063023ca52
   specs:
     purecss-rails (0.6.0)
       railties (>= 3.2.6)
 
 GIT
-  remote: git://github.com/rails/turbolinks.git
-  revision: 37a7c296232d20a61bd1946f600da7f2009189db
+  remote: https://github.com/rails/turbolinks.git
+  revision: 80216ce9d89920bf073709405e3fce6d0a3ccd9a
   specs:
     turbolinks (3.0.0)
       coffee-rails
@@ -540,4 +540,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.0
+   1.15.4
