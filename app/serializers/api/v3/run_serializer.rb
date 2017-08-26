@@ -7,7 +7,7 @@ class Api::V3::RunSerializer < Api::V3::ApplicationSerializer
   attributes :id, :path, :name, :program, :image_url, :created_at, :updated_at, :video_url, :attempts, :sum_of_best
 
   def sum_of_best
-    object.sum_of_best.to_f
+    (object.realtime_sum_of_best_ms / 1000).to_f
   end
 
   def name
