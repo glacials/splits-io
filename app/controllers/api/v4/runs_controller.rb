@@ -14,11 +14,27 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def show
-    if params[:historic] == '1'
-      @run.parse(fast: false)
-      render json: @run, serializer: Api::V4::RunWithHistorySerializer
+    accept = request.headers.fetch('HTTP_ACCEPT', 'json').downcase
+    timer = Run.program(accept)
+    if accept == 'json' || timer.nil? || !Run.exportable_programs.include?(timer)
+      if params[:historic] == '1'
+        @run.parse(fast: false)
+        render json: @run, serializer: Api::V4::RunWithHistorySerializer
+      else
+        render json: @run, serializer: Api::V4::RunSerializer
+      end
     else
-      render json: @run, serializer: Api::V4::RunSerializer
+      send_data(
+        if timer == Run.program(@run.timer)
+          @run.file
+        else
+          render_to_string(file: "runs/#{accept}.html.erb", layout: false)
+        end,
+        layout: false,
+        type: "application/#{accept}",
+        disposition: 'inline',
+        filename: "#{@run.filename(timer: timer)}"
+      )
     end
   end
 
