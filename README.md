@@ -8,7 +8,7 @@ splits i/o currently supports splits from Urn, LiveSplit, SplitterZ, Time Split 
 
 ### Requirements
 * Ruby 2.3.4
-* PostgreSQL
+* PostgreSQL (make sure you've run `createdb`)
 
 ### First run
 ```bash
@@ -38,10 +38,9 @@ out of it every time we want to display them. Everything in DynamoDB can theoret
 in S3.
 
 To shim DynamoDB on your local machine, run Amazon's official [DynamoDB local][dynamodb-local]. If you're on macOS, you
-can install this with just
+can install this with
 ```bash
-brew tap glacials/splits-io
-brew install dynamodb-local
+brew install glacials/splits-io/dynamodb-local
 ```
 then have it auto-run now and at boot with
 ```bash
