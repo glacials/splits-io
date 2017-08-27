@@ -15,9 +15,11 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
   def show
     accept = request.headers.fetch('HTTP_ACCEPT', 'json').downcase
+    if accept == "original_timer"
+      accept = @run.program
+    end
     timer = Run.program(accept)
-    json_out = accept == 'json' || timer.nil? || !Run.exportable_programs.include?(timer)
-    if json_out && accept != "original_timer"
+    if accept == 'json' || timer.nil? || !Run.exportable_programs.include?(timer)
       if params[:historic] == '1'
         @run.parse(fast: false)
         render json: @run, serializer: Api::V4::RunWithHistorySerializer
@@ -26,7 +28,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       end
     else
       send_data(
-        if timer == Run.program(@run.timer) || accept == 'original_timer'
+        if timer == Run.program(@run.timer)
           @run.file
         else
           render_to_string(file: "runs/#{accept}.html.erb", layout: false)
