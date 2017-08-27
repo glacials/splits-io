@@ -7,6 +7,10 @@
     = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
     =>
     = link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+  - run_has_two_timings = @run.completed?(Run::REAL) && run.completed?(Run::GAME)
+  - comparison_run_has_two_timings = @comparison_run.completed?(Run::REAL) && @comparison_run.completed?(Run::GAME)
+  - if run_has_two_timings || comparison_run_has_two_timings
+    = render partial: 'runs/timing_switch', locals: {timing: timing}
   h5
     big
       a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@comparison_run)
@@ -19,10 +23,22 @@
     - else
       | unknown
 
-- time_scale = [@run.duration_ms(timing), @comparison_run.duration_ms(timing)].max
-= render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale, timing: timing}
+- if !@run.completed?(timing) || !@comparison_run.completed?(timing)
+  - time_scale = (@run.duration_ms(timing) || @comparison_run.duration_ms(timing))
+- else
+  - time_scale = [@run.duration_ms(timing), @comparison_run.duration_ms(timing)].max
+
+- if @comparison_run.completed?(timing)
+  = render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale, timing: timing}
+- else
+  i No timing information for this run. Try switching the timing method.
+
 hr style='margin: .5em; opacity: 0.25'
-= render partial: 'timeline', locals: {run: @run, scale_to: time_scale, timing: timing}
+
+- if @run.completed?(timing)
+  = render partial: 'timeline', locals: {run: @run, scale_to: time_scale, timing: timing}
+- else
+  i No timing information for this run. Try switching the timing method.
 
 .container
   h5
