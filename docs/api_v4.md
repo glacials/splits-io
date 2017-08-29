@@ -46,6 +46,11 @@ If a `historic=1` param is included in the request, one additional field will be
 |-------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `history`    | array of numbers                             | never                                                 | Ordered durations of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.           |
 
+If an `Accept` header is present, splits.io will try to render the run file natively not in JSON of the type specified.  The format for the header is `application/timer`, with timer being any of the timers that can be exported by splits.io.
+If the `Accept` header is valid, the `Content-type` header in the response will be in the format `application/timer`, with timer being the specified timer.  If the `Accept` header is not valid, the `Content-type` header of the response
+will be `application/json`, and the status code will be a 406.  In the reponse there will be an array of values that can be rendered.  If no `Accept` header is present or `text/html` is contained in the header, JSON will be rendered.
+You may also specify `application/original-timer`, which will output the run file as is with a `Content-type` header with the run's original timer.
+
 ### Splits
 ```bash
 curl https://splits.io/api/v4/runs/3nm/splits
