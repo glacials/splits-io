@@ -15,6 +15,10 @@ module WSplit
     'https://github.com/Nitrofski/WSplit'
   end
 
+  def self.content_type
+    'application/wsplit'
+  end
+
   class Parser < BabelBridge::Parser
     rule :wsplit_file, :title_line, :optional_goal_line, :attempts_line, :offset_line, :size_line, many?(:splits), :icons_line
 

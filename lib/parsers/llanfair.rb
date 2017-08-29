@@ -15,6 +15,10 @@ module Llanfair
     'http://jenmaarai.com/llanfair/en/'
   end
 
+  def self.content_type
+    'application/llanfair'
+  end
+
   class Parser
     def parse(file, options = {})
       run = {

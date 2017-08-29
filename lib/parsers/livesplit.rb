@@ -17,6 +17,10 @@ module LiveSplit
     'http://livesplit.org/'
   end
 
+  def self.content_type
+    'application/livesplit'
+  end
+
   class Parser
     def tugnut_parse(xml, fast: true)
       Tugnut.parse(xml)

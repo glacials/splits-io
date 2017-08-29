@@ -111,6 +111,57 @@ describe Api::V4::RunsController do
         expect(subject.body).to match_json_schema(:run)
       end
     end
+
+    context 'for an existing run with a valid accept header' do
+      let(:run) { create(:run, :owned, :parsed) }
+      subject(:response) { get :show, params: {run: run.id36} }
+
+      it 'returns a 200' do
+        request.headers["Accept"] = 'application/wsplit'
+
+        expect(subject).to have_http_status 200
+      end
+
+      it 'returns the correct content-type header' do
+        request.headers["Accept"] = 'application/wsplit'
+
+        expect(response.content_type).to eq('application/wsplit')
+      end
+    end
+
+    context 'for an existing run with a bogus accept header' do
+      let(:run) { create(:run, :owned, :parsed) }
+      subject(:response) { get :show, params: {run: run.id36} }
+
+      it 'returns a 406' do
+        request.headers["Accept"] = 'application/liversplit'
+
+        expect(subject).to have_http_status 406
+      end
+
+      it 'returns the correct content-type header' do
+        request.headers["Accept"] = 'application/liversplit'
+
+        expect(response.content_type).to eq('application/json')
+      end
+    end
+
+    context 'for an existing run with a valid original timer accept header' do
+      let(:run) { create(:run, :owned, :parsed) }
+      subject(:response) { get :show, params: {run: run.id36} }
+
+      it 'returns a 200' do
+        request.headers["Accept"] = 'application/original-timer'
+
+        expect(subject).to have_http_status 200
+      end
+
+      it 'returns the correct content-type header' do
+        request.headers["Accept"] = 'application/original-timer'
+
+        expect(response.content_type).to eq('application/livesplit')
+      end
+    end
   end
 
   describe '#update' do

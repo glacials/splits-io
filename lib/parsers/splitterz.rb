@@ -15,6 +15,10 @@ module SplitterZ
     'http://splitterz420.blogspot.com/'
   end
 
+  def self.content_type
+    'application/splitterz'
+  end
+
   class Parser < BabelBridge::Parser
     rule :splitterz_file, :title_line, many?(:splits), :newline?
 
