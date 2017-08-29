@@ -47,10 +47,9 @@ If a `historic=1` param is included in the request, one additional field will be
 | `history`    | array of numbers                             | never                                                 | Ordered durations of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.           |
 
 If an `Accept` header is present, Splits I/O will try to render the run file in the format specified rather than JSON. A full list of valid values is located below.
-The format for the header is `application/<timer>`, with `<timer>` being any of the timers that can be exported by Splits I/O.
-If the `Accept` header is valid, the `Content-Type` header in the response will be in the format `application/<timer>`, with `<timer>` being the specified timer.  If the `Accept` header is not valid, the `Content-Type` header of the response
-will be `application/json`, and the status code will be a 406. In the reponse there will be an array of values that can be rendered. If no `Accept` header is present JSON will be rendered.
-You may also specify `application/original-timer`, which will output the run file as is with a `Content-Type` header with the run's original timer.
+If the `Accept` header is valid, the `Content-Type` header in the response will be set appropriately and the run will be rendered in the specified format, if
+an invalid `Accept` header is supplied, the response `Content-Type` header will be `application/json`, and the status code will be a 406.
+In the 406 reponse there will be an array of values that can be rendered.
 
 | `Accept` Header                  | Return Format      | Return `Content-Type`            |
 |---------------------------------:|:-------------------|:---------------------------------|
@@ -61,7 +60,7 @@ You may also specify `application/original-timer`, which will output the run fil
 | `application/splitterz`          | SplitterZ          | `application/splitterz`          |
 | `application/livesplit`          | LiveSplit          | `application/livesplit`          |
 | `application/urn`                | Urn                | `application/urn`                |
-| `application/original-timer`     | Original Run File  | The above timers `Content-Type`  |
+| `application/original-timer`     | Original Run File  | The above timer's `Content-Type` |
 
 ### Splits
 ```bash
