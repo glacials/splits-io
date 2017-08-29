@@ -17,6 +17,10 @@ module LlanfairGered
     'https://github.com/gered/Llanfair'
   end
 
+  def self.content_type
+    'application/llanfair-gered'
+  end
+
   class Parser
     def parse(xml, fast: true)
       xml = Nokogiri::XML(xml)

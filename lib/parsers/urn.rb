@@ -15,6 +15,10 @@ module Urn
     'https://github.com/3snowp7im/urn'
   end
 
+  def self.content_type
+    'application/urn'
+  end
+
   class Parser < BabelBridge::Parser
     def parse(json, options = {})
       json = JSON.parse(json)

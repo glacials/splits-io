@@ -15,6 +15,10 @@ module TimeSplitTracker
     'https://dunnius.itch.io/time-split-tracker-windows'
   end
 
+  def self.content_type
+    'application/time-split-tracker'
+  end
+
   class Parser < BabelBridge::Parser
     rule :timesplittracker_file, :first_line, :title_line, many?(:splits)
 
