@@ -53,6 +53,13 @@ class Run < ApplicationRecord
       h[string_or_symbol.to_s]
     end
 
+    def program_from_content_type(content_type_string)
+      Run.exportable_programs.each do |prg|
+        return prg if prg.content_type == content_type_string
+      end
+      return nil
+    end
+
     alias_method :find10, :find
     def find36(id36)
       find10(id36.to_i(36))
