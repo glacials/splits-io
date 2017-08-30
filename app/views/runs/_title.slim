@@ -40,8 +40,8 @@ h6
           = link_to "claim", '#', id: 'claim-nav-link', data: {confirm: "Claim this run as #{current_user.twitch_display_name}?"}
         - else
           = link_to "sign in to claim", '/auth/twitch'
-  br
-  span#download-menu
+
+  div#download-menu
     - timer = Run.program(run.timer)
     => link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
     | &bull;
