@@ -14,14 +14,7 @@ h5
       - if run.user.silver_patron?
         .gold-split title='Patron'
 h6
-  span#download-menu
-    - timer = Run.program(run.timer)
-    => link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
-    | &bull;
-    =<> link_to 'LiveSplit One', "https://cryze.github.io/LiveSplitOne/#/splits-io/#{run.id36}", target: '_blank'
-    - (Run.exportable_programs - [Run.program(run.timer)]).each do |timer|
-      | &bull;
-      =<> link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
+
   ul.run-options
     li
       a.fake-link#download-link onclick='toggle_download_menu()' ↓ download
@@ -48,6 +41,14 @@ h6
         - else
           = link_to "sign in to claim", '/auth/twitch'
 
+  div#download-menu
+    - timer = Run.program(run.timer)
+    => link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
+    | &bull;
+    =<> link_to 'LiveSplit One', "https://cryze.github.io/LiveSplitOne/#/splits-io/#{run.id36}", target: '_blank'
+    - (Run.exportable_programs - [Run.program(run.timer)]).each do |timer|
+      | &bull;
+      =<> link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
 article#claim-prompt style='display: none;'
   .col-md-6.col-md-offset-3
     .panel.panel-primary
