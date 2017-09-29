@@ -15,8 +15,10 @@ dependencies. The one downside is that you must first install Docker!
 
 ### Requirements
 * [Docker][docker-download]
+* [Docker Compose][docker-compose-download] (Mac and Windows include this in the Docker install)
 
 [docker-download]: https://www.docker.com/community-edition#/download
+[docker-compose-download]: https://docs.docker.com/compose/install/
 
 ### First run
 The first time you run Splits I/O with Docker is the best, because you'll have time to get a coffee! Yum! After the
