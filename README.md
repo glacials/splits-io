@@ -70,10 +70,3 @@ to rebuild the Docker image for your changes to apply.
 ## Parsing
 If you're interested in how we parse run files from different programs, check out the [parsing
 readme](./docs/parsing.md).
-
-## Tests
-To start running tests, you'll need to set up a test database:
-
-```bash
-RAILS_ENV=test rake db:create db:migrate
-```
