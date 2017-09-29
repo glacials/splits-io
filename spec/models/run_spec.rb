@@ -155,8 +155,8 @@ describe Run, type: :model do
 
     it 'reports correct history when using slow parsing' do
       expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        6911.1422649, 6261.793028, 6123.6647933, 5944.5159323, 5694.8238343, 5410.1111281, 5746.1888454, 5390.4596715,
-        5258.0010184, 5236.1128949, 5102.848171, 5126.4048091, 5055.5630296
+        6911.142264, 6261.793028, 6123.664793, 5944.515932, 5694.823834, 5410.111128, 5746.188845, 5390.459671,
+        5258.001018, 5236.112894, 5102.848171, 5126.404809, 5055.563029
       ]
     end
   end
@@ -202,7 +202,7 @@ describe Run, type: :model do
     end
 
     it 'reports its total playtime' do
-      expect(run.total_playtime_ms(Run::REAL)).to eq 0
+      expect(run.total_playtime_ms(Run::REAL)).to eq 2870185
     end
 
     it 'reports no history using fast parsing' do
@@ -211,7 +211,7 @@ describe Run, type: :model do
 
     it 'reports correct history when using slow parsing' do
       expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        823.1730805
+        823.17308
       ]
     end
   end
@@ -229,8 +229,8 @@ describe Run, type: :model do
         [0, 'Hole 1', 30349],
         [1, 'Hole 2', 42742],
         [2, 'Hole 3', 35263],
-        [3, 'Hole 4', 25165],
-        [4, 'Hole 5', 34340],
+        [3, 'Hole 4', 25164],
+        [4, 'Hole 5', 34341],
         [5, 'Hole 6', 34972],
         [6, 'Hole 7', 20754],
         [7, 'Hole 8', 41221],
@@ -271,7 +271,7 @@ describe Run, type: :model do
     end
 
     it 'reports its total playtime' do
-      expect(run.total_playtime_ms(Run::REAL)).to eq 22450448
+      expect(run.total_playtime_ms(Run::REAL)).to eq 22450446
     end
 
     it 'reports no history using fast parsing' do
@@ -342,7 +342,7 @@ describe Run, type: :model do
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Spiral Mountain', 211230],
-        [1, "Mumbo's Mountain", 808200]
+        [1, "Mumbo's Mountain", 808199]
       ]
     end
 
@@ -360,12 +360,12 @@ describe Run, type: :model do
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        1, "Mumbo's Mountain", 808200
+        1, "Mumbo's Mountain", 808199
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq(509715)
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq(509714)
     end
 
     it 'reports its total playtime' do
@@ -390,7 +390,7 @@ describe Run, type: :model do
         [4, "Pipe Jump City", 51030],
         [5, "Jumping Koopas", 37030],
         [6, "Count To 4", 35310],
-        [7, "Hammers of Fortune", 46080]
+        [7, "Hammers of Fortune", 46079]
       ]
     end
 
@@ -411,7 +411,7 @@ describe Run, type: :model do
           [4, "Pipe Jump City", 51030],
           [5, "Jumping Koopas", 37030],
           [6, "Count To 4", 35310],
-          [7, "Hammers of Fortune", 46080]
+          [7, "Hammers of Fortune", 46079]
         ]
       end
 
@@ -438,10 +438,10 @@ describe Run, type: :model do
         [4, "9-Volt", 142990],
         [5, "Jimmy", 161370],
         [6, "Dr.Crygonal", 157080],
-        [7, "Orbulon", 187270],
+        [7, "Orbulon", 187269],
         [8, "Kat", 221980],
-        [9, "Jimmy", 177610],
-        [10, "Wario", 234060]
+        [9, "Jimmy", 177609],
+        [10, "Wario", 234059]
       ]
     end
 

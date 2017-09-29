@@ -40,30 +40,26 @@ module UnparsedRun
 
       # Convert flow below
 
-      Run.programs.each do |timer|
-        parse_result = timer::Parser.new.parse(file, fast: fast)
-        next if parse_result.blank?
+      parse_result = Parser.parse(file, fast: fast)
+      return {} if parse_result.nil?
 
-        parse_result[:timer] = timer.to_sym
-        assign_attributes(
-          program: parse_result[:timer],
-          attempts: parse_result[:attempts],
-          srdc_id: srdc_id || parse_result[:srdc_id].presence,
-          realtime_duration_s: parse_result[:splits].map { |split| split.realtime_duration }.sum.to_f,
-          realtime_sum_of_best_s: parse_result[:splits].map.all? do |split|
-            split.realtime_best.present?
-          end && parse_result[:splits].map do |split|
-            split.realtime_best
-          end.sum.to_f
-        )
+      parse_result[:timer] = Run.program_from_attribute(:to_s, parse_result[:program]).to_sym
+      assign_attributes(
+        program: parse_result[:timer],
+        attempts: parse_result[:attempts],
+        srdc_id: srdc_id || parse_result[:srdc_id].presence,
+        realtime_duration_s: parse_result[:splits].map { |split| split.realtime_duration }.sum.to_f,
+        realtime_sum_of_best_s: parse_result[:splits].map.all? do |split|
+          split.realtime_best.present?
+        end && parse_result[:splits].map do |split|
+          split.realtime_best
+        end.sum.to_f
+      )
 
-        @convert_cache = parse_result
-        @segments_cache = parse_result[:splits]
+      @convert_cache = parse_result
+      @segments_cache = parse_result[:splits]
 
-        return parse_result
-      end
-
-      {}
+      parse_result
     end
 
     def parse_into_activerecord
@@ -78,19 +74,9 @@ module UnparsedRun
           return false
         end
 
-        Run.programs.each do |timer|
-          begin
-            parse_result = timer::Parser.new.parse(f, fast: false)
-          rescue ArgumentError
-          end
-
-          if parse_result.present?
-            timer_used = timer.to_sym
-            break
-          end
-        end
-
-        return false if timer_used.nil?
+        parse_result = Parser.parse(f)
+        return false if parse_result.nil?
+        timer_used = Run.program_from_attribute(:to_s, parse_result[:program]).to_sym
 
         if game.nil? || category.nil?
           populate_category(parse_result[:game], parse_result[:category])
@@ -199,7 +185,7 @@ module UnparsedRun
           histories << SegmentHistory.new(
             segment_id: ids[i],
             attempt_number: history[0].to_i,
-            realtime_duration_ms: history[1].nil? ? nil : history[1] * 1000,
+            realtime_duration_ms: history[1][:realtime].nil? ? nil : history[1][:realtime] * 1000,
           )
         end
       end

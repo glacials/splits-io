@@ -71,5 +71,5 @@ docker-compose build
 to rebuild the Docker image for your changes to apply.
 
 ## Parsing
-If you're interested in how we parse run files from different programs, check out the [parsing
-readme](./docs/parsing.md).
+Split I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`.
+To upgrade the parser, simply update the version string in `lib/tasks/livesplit_core.rake'.

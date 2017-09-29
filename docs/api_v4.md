@@ -51,16 +51,31 @@ If the `Accept` header is valid, the `Content-Type` header in the response will 
 an invalid `Accept` header is supplied, the response `Content-Type` header will be `application/json`, and the status code will be a 406.
 In the 406 reponse there will be an array of values that can be rendered.
 
-| `Accept` Header                  | Return Format      | Return `Content-Type`            |
-|---------------------------------:|:-------------------|:---------------------------------|
-| None                             | JSON               | `application/json`               |
-| `application/json`               | JSON               | `application/json`               |
-| `application/wsplit`             | WSplit             | `application/wsplit`             |
-| `application/time-split-tracker` | Time Split Tracker | `application/time-split-tracker` |
-| `application/splitterz`          | SplitterZ          | `application/splitterz`          |
-| `application/livesplit`          | LiveSplit          | `application/livesplit`          |
-| `application/urn`                | Urn                | `application/urn`                |
-| `application/original-timer`     | Original Run File  | The above timer's `Content-Type` |
+| `Accept` Headers Supported       | Return Format      | Return `Content-Type`                 |
+|---------------------------------:|:-------------------|:---------------------------------     |
+| None                             | JSON               | `application/json`                    |
+| `application/json`               | JSON               | `application/json`                    |
+| `application/wsplit`             | WSplit             | `application/wsplit`                  |
+| `application/time-split-tracker` | Time Split Tracker | `application/time-split-tracker`      |
+| `application/splitterz`          | SplitterZ          | `application/splitterz`               |
+| `application/livesplit`          | LiveSplit          | `application/livesplit`               |
+| `application/urn`                | Urn                | `application/urn`                     |
+| `application/original-timer`     | Original Run File  | One of the following `Content-Type`'s |
+
+If the accept header is `application/original-timer` then the original file uploaded will be returned as is. Thus it is possible to get back
+any of the following `Content-Type`s.
+* `application/shitsplit`
+* `application/splitty`
+* `application/llanfair2`
+* `application/facesplit`
+* `application/portal-2-live-timer`
+* `application/llanfair-gered`
+* `application/llanfair`
+* `application/urn`
+* `application/livesplit`
+* `application/splitterz`
+* `application/time-split-tracker`
+* `application/wsplit`
 
 ### Splits
 ```bash

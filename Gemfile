@@ -102,8 +102,6 @@ gem 'has_secure_token'
 gem 'nilify_blanks'
 
 # parsing
-gem 'babel_bridge'
-gem 'chronic_duration', github: 'glacials/chronic_duration', branch: 'pad_to_option'
 gem 'descriptive_statistics'
 gem 'moving_average'
 gem 'nokogiri'
