@@ -37,8 +37,9 @@ when asked:
 ```http
 http://localhost:3000/auth/twitch/callback
 ```
-Twitch will give you a client ID and a client secret. Open `Dockerfile` and find the spots to fill in. Then run a
+Twitch will give you a client ID and a client secret. Open `Dockerfile` and find the spots to fill in. Then run
 ```sh
+git update-index --skip-worktree Dockerfile # to avoid accidentally committing your changes
 docker-compose build
 ```
 before starting the server again and you're set!

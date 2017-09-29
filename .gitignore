@@ -18,5 +18,3 @@
 # testing
 /.rspec
 /coverage
-
-Dockerfile
