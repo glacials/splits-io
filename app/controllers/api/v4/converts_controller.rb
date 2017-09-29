@@ -12,7 +12,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
       s3_filename: filename
     )
 
-    $s3_bucket.put_object(
+    $s3_bucket_internal.put_object(
       key: "splits/#{filename}",
       body: params.require(:file)
     )

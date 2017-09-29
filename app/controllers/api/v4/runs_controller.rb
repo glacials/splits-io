@@ -55,7 +55,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       return
     end
 
-    presigned_request = $s3_bucket.presigned_post(
+    presigned_request = $s3_bucket_external.presigned_post(
       key: "splits/#{filename}",
       content_length_range: 1..(100*1024*1024)
     )

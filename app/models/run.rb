@@ -128,7 +128,7 @@ class Run < ApplicationRecord
   end
 
   def file
-    file = $s3_bucket.object("splits/#{s3_filename}")
+    file = $s3_bucket_internal.object("splits/#{s3_filename}")
     file.get.body.read
   rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::AccessDenied
     nil

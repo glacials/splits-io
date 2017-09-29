@@ -22,7 +22,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       s3_filename: filename
     )
 
-    $s3_bucket.put_object(
+    $s3_bucket_internal.put_object(
       key: "splits/#{filename}",
       body: params.require(:file)
     )

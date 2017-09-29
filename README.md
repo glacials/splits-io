@@ -1,90 +1,75 @@
-# splits i/o
-splits i/o is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
+# Splits I/O
+Splits I/O is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
 code. It's written in Ruby on Rails.
 
-splits i/o currently supports splits from Urn, LiveSplit, SplitterZ, Time Split Tracker, and WSplit.
+Splits I/O currently supports splits from Urn, LiveSplit, SplitterZ, Time Split Tracker, and WSplit.
+
+## API
+For full API documentation, see the [API readme][api-docs].
+
+[api-docs]: ./docs/api.md
 
 ## Running locally
+Splits I/O runs on Docker, which makes it easy and consistent to set up and run on any machine despite any unusual
+dependencies. The one downside is that you must first install Docker!
 
 ### Requirements
-* Ruby 2.3.4
-* PostgreSQL (make sure you've run `createdb`)
+* [Docker][docker-download]
+* [Docker Compose][docker-compose-download] (Mac and Windows include this in the Docker install)
+
+[docker-download]: https://www.docker.com/community-edition#/download
+[docker-compose-download]: https://docs.docker.com/compose/install/
 
 ### First run
-```bash
-cp config/application.example.yml config/application.yml
-$EDITOR config/application.yml # give it a once-over (required if you want local sign in)
-bundle install
-rake db:create db:migrate
-rails server
+The first time you run Splits I/O with Docker is the best, because you'll have time to get a coffee! Yum! After the
+first run, it will be much quicker.
+```sh
+docker-compose up
 ```
-
-Splits I/O runs using some AWS resources, which means to run it locally you'll have to use local versions of these
-resources (or have AWS account credentials specified in `config/application.yml`).
-
-#### S3
-Splits I/O uses AWS S3 for long-term run file storage. S3 is the source of truth for run files, allowing us to reparse
-runs whenever as if the run was just uploaded for the first time. To shim S3 on your local machine, run a
-[fakes3][fakes3] server in another terminal window.
-```bash
-fakes3 -r /tmp -p 4567
-```
-
-[fakes3]: https://github.com/jubos/fake-s3
-
-#### DynamoDB
-Splits I/O uses AWS DynamoDB for storing parsed runs, so that we don't have to reparse huge 10MB runs to get the splits
-out of it every time we want to display them. Everything in DynamoDB can theoretically be recreated from what's stored
-in S3.
-
-To shim DynamoDB on your local machine, run Amazon's official [DynamoDB local][dynamodb-local]. If you're on macOS, you
-can install this with
-```bash
-brew install glacials/splits-io/dynamodb-local
-```
-then have it auto-run now and at boot with
-```bash
-brew services start dynamodb-local
-```
-
-[dynamodb-local]: http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html
-
-#### In your browser
-You're good to go! Access [localhost:3000][localhost] in your browser.
+Once the output looks settled, you're good to go! Access [localhost:3000][localhost] in your browser.
 
 [localhost]: http://localhost:3000/
 
-#### Troubleshooting (macOS)
+#### Accounts (optional)
+Splits I/O accounts are built on top of Twitch accounts, so if you want sign up / sign in to work, you will need to
+register a Twitch application at [twitch.tv/settings/connections][twitch.tv/settings/connections]. Use this redirect URI
+when asked:
+```http
+http://localhost:3000/auth/twitch/callback
+```
+Twitch will give you a client ID and a client secret. Open `Dockerfile` and find the spots to fill in. Then run
+```sh
+git update-index --skip-worktree Dockerfile # to avoid accidentally committing your changes
+docker-compose build
+```
+before starting the server again and you're set!
 
-If you get Bundler errors about `eventmachine`, try
+### Debugging
+#### Getting up and running
+If you're having trouble getting Splits I/O running at all using the above instructions, please make a GitHub issue so
+we can work it out! Even if you think it's a silly issue, the fact that it's happening to you means we haven't ironed
+out everything (even if the only thing preventing you from setting up is better documentation!).
 
-```bash
-brew install openssl
-brew link openssl --force
+#### Working with the code
+If you have the app up and running but are looking for insight into debugging your own changes, you can access a Rails
+console with
+```sh
+docker-compose run web rails console
 ```
 
-If that doesn't work, you may need to also run
-
-```bash
-gem install eventmachine -- --with-cppflags=-I/usr/local/opt/openssl/include
+### Running tests
+To run tests, use
+```sh
+docker-compose run -e "RAILS_ENV=test" web rspec
 ```
 
-If you get Bundler errors about `nokogiri`, run
-
-```bash
-xcode-select --install
+### Updating gems or Docker
+If you change the Dockerfile or Gemfile, you'll need to run
+```sh
+docker-compose build
 ```
-
-## API
-See the full API documentation in the [API readme](./docs/api.md) file.
+to rebuild the Docker image for your changes to apply.
 
 ## Parsing
 If you're interested in how we parse run files from different programs, check out the [parsing
 readme](./docs/parsing.md).
-
-## Tests
-To start running tests, you'll need to set up a test database:
-
-```bash
-RAILS_ENV=test rake db:create db:migrate
-```

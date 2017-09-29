@@ -7,7 +7,7 @@ options = {
 }
 
 if ENV['AWS_REGION'] == 'local'
-  options.merge!(endpoint: 'http://localhost:8000')
+  options.merge!(endpoint: 'http://dynamodb:8000')
 end
 
 $dynamodb_run_histories_table_name = 'run_histories'

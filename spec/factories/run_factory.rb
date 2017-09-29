@@ -14,7 +14,7 @@ FactoryGirl.define do
 
   test_files.each do |factory_name, file|
     file[:s3_filename] = SecureRandom.uuid
-    $s3_bucket.put_object(
+    $s3_bucket_internal.put_object(
       key: "splits/#{file[:s3_filename]}",
       body: File.read("#{Rails.root}/spec/factories/run_files/#{file[:filename]}")
     )
