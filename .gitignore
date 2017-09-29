@@ -1,16 +1,12 @@
 # bundler config.
 /.bundle
 
-# the default SQLite database.
-/db/*.sqlite3
-/db/*.sqlite3-journal
-
 # all logfiles and tempfiles.
 /log/*.log
 /tmp
 
-# uploaded runs, Twitch oauth credentials, etc.
-/private
+# Twitch oauth credentials, etc.
+Dockerfile-development
 
 # precompiled assets
 /public/assets
