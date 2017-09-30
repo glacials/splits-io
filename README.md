@@ -2,7 +2,8 @@
 Splits I/O is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
 code. It's written in Ruby on Rails.
 
-Splits I/O currently supports splits from Urn, LiveSplit, SplitterZ, Time Split Tracker, and WSplit.
+Splits I/O currently supports splits from ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer, LlanfairGered, 
+Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit.
 
 ## API
 For full API documentation, see the [API readme][api-docs].
@@ -22,7 +23,7 @@ dependencies. The one downside is that you must first install Docker!
 
 ### First run
 The first time you run Splits I/O with Docker is the best, because you'll have time to get a coffee! Yum! After the
-first run, it will be much quicker.
+first run, it will be much quicker (on Linux, docker commands may need to be prefixed with sudo).
 ```sh
 docker-compose up
 ```
@@ -32,8 +33,8 @@ Once the output looks settled, you're good to go! Access [localhost:3000][localh
 
 #### Accounts (optional)
 Splits I/O accounts are built on top of Twitch accounts, so if you want sign up / sign in to work, you will need to
-register a Twitch application at [twitch.tv/settings/connections][twitch.tv/settings/connections]. Use this redirect URI
-when asked:
+register a Twitch application at [dev.twitch.tv/dashboard](https://dev.twitch.tv/dashboard).
+Use this redirect URI when asked:
 ```http
 http://localhost:3000/auth/twitch/callback
 ```
@@ -71,5 +72,7 @@ docker-compose build
 to rebuild the Docker image for your changes to apply.
 
 ## Parsing
-If you're interested in how we parse run files from different programs, check out the [parsing
-readme](./docs/parsing.md).
+Split I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`.
+To upgrade the parser, simply run `bundle exec rake update_lsc` and commit the changes.
+
+[livesplit-core]: https://github.com/CryZe/livesplit-core/

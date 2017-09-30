@@ -16,7 +16,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def show
-    timer = Run.program_from_content_type(@accept_header)
+    timer = Run.program_from_attribute(:content_type, @accept_header)
     if timer.nil?
       if params[:historic] == '1'
         @run.parse(fast: false)
@@ -110,9 +110,13 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
   def find_accept_header
     @accept_header = request.headers.fetch('HTTP_ACCEPT', 'application/json').downcase
+    if @accept_header == 'application/original-timer'
+      @accept_header = "#{Run.program(@run.timer).content_type}"
+      return
+    end
     @accept_header = 'application/json' if @accept_header.blank?
     @accept_header = 'application/json' if @accept_header.include?('text/html')
-    @accept_header = "#{Run.program(@run.timer).content_type}" if @accept_header == 'application/original-timer'
+
     valid_accepts = Run.exportable_programs.map(&:content_type) << 'application/json'
     unless valid_accepts.include?(@accept_header)
       render status: 406, json: {

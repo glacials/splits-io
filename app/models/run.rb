@@ -1,4 +1,5 @@
-Dir['./lib/parsers/*'].each { |file| require file }
+Dir['./lib/programs/*'].each { |file| require file }
+require './lib/parser/livesplit_core_parser'
 
 class Run < ApplicationRecord
   include CompletedRun
@@ -36,11 +37,14 @@ class Run < ApplicationRecord
 
   class << self
     def programs
-      [LlanfairGered, Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+      [
+        ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer,
+        LlanfairGered, Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit
+      ]
     end
 
     def exportable_programs
-      [Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit]
+      Run.programs.select { |prg| prg.exportable }
     end
 
     def program(string_or_symbol)
@@ -53,9 +57,25 @@ class Run < ApplicationRecord
       h[string_or_symbol.to_s]
     end
 
-    def program_from_content_type(content_type_string)
-      Run.exportable_programs.each do |prg|
-        return prg if prg.content_type == content_type_string
+    def program_from_attribute(func_name, value)
+      Run.programs.map do |prg|
+        case func_name
+        when :to_s
+          prg_value = prg.to_s
+        when :to_sym
+          prg_value = prg.to_sym
+        when :file_extension
+          prg_value = prg.file_extension
+        when :website
+          prg_value = prg.website
+        when :content_type
+          prg_value = prg.content_type
+        when :exportable
+          prg_value = prg.exportable
+        else
+          raise 'not a valid attribute'
+        end
+        return prg if prg_value == value
       end
       return nil
     end

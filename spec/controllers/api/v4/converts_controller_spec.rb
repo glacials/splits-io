@@ -14,14 +14,14 @@ describe Api::V4::ConvertsController do
           expect(subject).to have_http_status 200
         end
 
-        it 'has no id fieild' do
+        it 'has no id field' do
           expect(body['id']).to be_nil
         end
 
         it 'has the correct splits' do
           expect(body['run']['splits'].map { |s| [s['name'], s['duration']] }).to eq [
             ['Spiral Mountain', 211.23],
-            ["Mumbo's Mountain", 808.2]
+            ["Mumbo's Mountain", 808.199]
           ]
         end
       end

@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/glacials/chronic_duration.git
-  revision: ac649be5d0feaba3a83df7b7ff20ed58bdefead5
-  branch: pad_to_option
-  specs:
-    chronic_duration (0.10.6)
-      numerizer (~> 0.1.1)
-
-GIT
   remote: https://github.com/glacials/purecss-rails.git
   revision: a4c7a6c05bf438465a0d02f75c5bd6063023ca52
   specs:
@@ -92,7 +84,6 @@ GEM
       railties (>= 3)
     aws-sdk-resources (2.5.5)
       aws-sdk-core (= 2.5.5)
-    babel_bridge (0.5.5)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -274,7 +265,6 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     numeraljs-rails (1.4.5.0)
-    numerizer (0.1.1)
     oauth2 (1.2.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -460,7 +450,6 @@ DEPENDENCIES
   arel
   authie
   aws-sdk-rails
-  babel_bridge
   better_errors
   binding_of_caller
   bootstrap-kaminari-views
@@ -469,7 +458,6 @@ DEPENDENCIES
   bower-rails
   c3-rails
   cancancan
-  chronic_duration!
   clipboard-rails
   coffee-rails
   d3-rails (~> 3.5.17)
