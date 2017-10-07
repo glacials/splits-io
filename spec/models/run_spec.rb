@@ -85,7 +85,7 @@ describe Run, type: :model do
   context 'from LiveSplit 1.4' do
     let(:run) do
       r = FactoryGirl.create(:livesplit14_run)
-      r.parse_into_activerecord
+      r.parse_into_db
       r.reload
       r
     end
@@ -164,7 +164,7 @@ describe Run, type: :model do
   context 'from LiveSplit 1.5' do
     let(:run) do
       r = FactoryGirl.create(:livesplit15_run)
-      r.parse_into_activerecord
+      r.parse_into_db
       r.reload
       r
     end
@@ -219,7 +219,7 @@ describe Run, type: :model do
   context 'from LiveSplit 1.6' do
     let(:run) do
       r = FactoryGirl.create(:livesplit16_run)
-      r.parse_into_activerecord
+      r.parse_into_db
       r.reload
       r
     end
@@ -288,7 +288,7 @@ describe Run, type: :model do
     context 'with game time' do
       let(:run) do
         r = FactoryGirl.create(:livesplit16_gametime_run)
-        r.parse_into_activerecord
+        r.parse_into_db
         r.reload
         r
       end
@@ -334,7 +334,7 @@ describe Run, type: :model do
   context 'from Llanfair' do
     let(:run) do
       r = FactoryGirl.create(:llanfair_run)
-      r.parse_into_activerecord
+      r.parse_into_db
       r.reload
       r
     end
@@ -376,7 +376,7 @@ describe Run, type: :model do
   context 'from the Gered Llanfair fork' do
     let(:run) do
       r = FactoryGirl.create(:llanfair_gered_run)
-      r.parse_into_activerecord
+      r.parse_into_db
       r.reload
       r
     end
@@ -397,7 +397,7 @@ describe Run, type: :model do
     context 'with reference attributes' do
       let(:run) do
         r = FactoryGirl.create(:llanfair_gered_run)
-        r.parse_into_activerecord
+        r.parse_into_db
       r.reload
         r
       end
@@ -424,7 +424,7 @@ describe Run, type: :model do
   context 'from WSplit' do
     let(:run) do
       r = FactoryGirl.create(:wsplit_run)
-      r.parse_into_activerecord
+      r.parse_into_db
       r.reload
       r
     end
@@ -453,7 +453,7 @@ describe Run, type: :model do
   context 'from Time Split Tracker' do
     let(:run) do
       r = FactoryGirl.create(:timesplittracker_run)
-      r.parse_into_activerecord
+      r.parse_into_db
       r.reload
       r.reload
       r

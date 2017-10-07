@@ -6,7 +6,7 @@ $ ->
 
   duration_data = []
   gon.run.history.forEach (attempt) ->
-    duration_data[attempt['attempt_number']] = attempt['duration_seconds']
+    duration_data[attempt['attempt_number']] = attempt['realtime_duration_ms'] / 1000.0
 
   duration_data[0] = "Run Length"
   c3.generate({

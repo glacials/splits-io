@@ -37,9 +37,10 @@ class Parser
         attempt_id = attempt.index().to_i
         time = attempt.time()
 
-        run_object[:history][attempt_id] = {
-          gametime: time.game_time().try(:total_seconds).try(:*, 1000) || 0,
-          realtime: time.real_time().try(:total_seconds).try(:*, 1000) || 0
+        run_object[:history] << {
+          attempt_number: attempt_id,
+          gametime_duration_ms: time.game_time().try(:total_seconds).try(:*, 1000) || 0,
+          realtime_duration_ms: time.real_time().try(:total_seconds).try(:*, 1000) || 0,
         }
 
         if time.real_time().try(:total_seconds).present?

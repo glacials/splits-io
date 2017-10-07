@@ -35,10 +35,6 @@ module CompletedRun
       time < 20.minutes
     end
 
-    def history
-      dynamodb_history
-    end
-
     def best_known?(timing)
       if category.nil?
         return false

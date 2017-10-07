@@ -12,7 +12,6 @@ services:
     depends_on:
       - db
       - s3
-      - dynamodb
     links:
       - s3:s3.localhost
   db:
@@ -23,7 +22,3 @@ services:
       - 4569:4569
     expose:
       - "4569"
-  dynamodb:
-    image: deangiberson/aws-dynamodb-local
-    ports:
-      - 8000:8000

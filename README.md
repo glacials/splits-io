@@ -61,7 +61,7 @@ docker-compose run web rails console
 ### Running tests
 To run tests, use
 ```sh
-docker-compose run -e "RAILS_ENV=test" web rspec
+docker-compose run -e RAILS_ENV=test web rspec
 ```
 
 ### Updating gems or Docker
