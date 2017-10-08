@@ -112,6 +112,19 @@ describe Api::V4::RunsController do
       end
     end
 
+    context 'for an existing run with historic=1' do
+      let(:run) { create(:run, :owned) }
+      subject { get :show, params: {run: run.id36, historic: '1'} }
+
+      it 'returns a 200' do
+        expect(subject).to have_http_status 200
+      end
+
+      it 'renders a run schema' do
+        expect(subject.body).to match_json_schema(:run)
+      end
+    end
+
     context 'for an existing run with a valid accept header' do
       let(:run) { create(:run, :owned, :parsed) }
       subject(:response) { get :show, params: {run: run.id36} }

@@ -20,7 +20,7 @@ module UnparsedRun
       if !convert
         if fast
           if !parsed?
-            parse_into_activerecord
+            parse_into_db
             if !parsed?
               return nil
             end
@@ -62,9 +62,10 @@ module UnparsedRun
       parse_result
     end
 
-    def parse_into_activerecord
+    def parse_into_db
       with_lock do
         segments.delete_all
+        histories.delete_all
 
         timer_used = nil
         parse_result = nil
@@ -84,8 +85,8 @@ module UnparsedRun
 
         segments = parse_result[:splits]
 
-        if parse_result[:indexed_history].present?
-          write_run_histories_to_dynamodb(parse_result[:indexed_history])
+        if parse_result[:history].present?
+          write_run_histories(parse_result[:history])
         end
 
         write_segments(segments)
@@ -120,6 +121,21 @@ module UnparsedRun
           gametime_sum_of_best_ms: sum_of_best_milliseconds,
         )
       end
+    end
+
+    def write_run_histories(histories)
+      if histories.nil?
+        return nil
+      end
+
+      RunHistory.import(histories.map do |history|
+        RunHistory.new(
+          run_id: id,
+          attempt_number: history[:attempt_number],
+          realtime_duration_ms: history[:realtime_duration_ms],
+          gametime_duration_ms: history[:gametime_duration_ms],
+        )
+      end)
     end
 
     def write_segments(parsed_segments)

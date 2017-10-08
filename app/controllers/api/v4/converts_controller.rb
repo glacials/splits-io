@@ -17,7 +17,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
       body: params.require(:file)
     )
 
-    @run.parse_into_activerecord
+    @run.parse_into_db
     if @run.program == nil
       render status: 400, json: {
         status: 400,

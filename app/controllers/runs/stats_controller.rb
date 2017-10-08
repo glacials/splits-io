@@ -3,7 +3,7 @@ class Runs::StatsController < Runs::ApplicationController
 
   def index
     timing = params[:timing] || @run.default_timing
-    @run.parse_into_activerecord unless @run.parsed?
+    @run.parse_into_db unless @run.parsed?
 
     # Catch bad runs
     if @run.timer.nil?
@@ -28,7 +28,7 @@ class Runs::StatsController < Runs::ApplicationController
           end,
         }
       end,
-      history: @run.dynamodb_history,
+      history: @run.histories.select(:id, :attempt_number, :realtime_duration_ms, :gametime_duration_ms),
       attempts: @run.attempts,
       program: @run.program
     }
@@ -46,20 +46,14 @@ class Runs::StatsController < Runs::ApplicationController
   end
 
   def run_history_csv
-    @run.parse_into_activerecord unless @run.parsed?
+    @run.parse_into_db unless @run.parsed?
 
-    column_names = @run.history.map.with_index do |_, i|
-      "Run ##{i} (ms)"
-    end
+    column_names = ["Attempt #", "Realtime (ms)", "Gametime (ms)"]
 
     csv = CSV.generate do |csv|
       csv << column_names
-      csv << @run.history.map do |h|
-        if h[:duration_seconds].nil?
-          ""
-        else
-          (h[:duration_seconds] * 1000).truncate
-        end
+      @run.histories.each do |history|
+        csv << [history.attempt_number, history.realtime_duration_ms, history.gametime_duration_ms]
       end
     end
 
@@ -67,7 +61,7 @@ class Runs::StatsController < Runs::ApplicationController
   end
 
   def segment_history_csv
-    @run.parse_into_activerecord unless @run.parsed?
+    @run.parse_into_db unless @run.parsed?
 
     if @run.attempts.nil? || @run.attempts == 0
       redirect_to run_stats_path(@run), alert: "Segment history is not available for this run."

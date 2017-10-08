@@ -18,7 +18,7 @@ class ConvertsController < ApplicationController
       body: params.require(:file)
     )
 
-    @run.parse_into_activerecord
+    @run.parse_into_db
 
     program_extensions = {'livesplit' => '.lss', 'urn' => '.json'}
     file_name = "#{params[:file].original_filename.split(program_extensions[@run.program])[0]}"

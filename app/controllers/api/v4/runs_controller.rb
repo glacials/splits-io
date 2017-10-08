@@ -19,7 +19,6 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     timer = Run.program_from_attribute(:content_type, @accept_header)
     if timer.nil?
       if params[:historic] == '1'
-        @run.parse(fast: false)
         render json: @run, serializer: Api::V4::RunWithHistorySerializer
       else
         render json: @run, serializer: Api::V4::RunSerializer

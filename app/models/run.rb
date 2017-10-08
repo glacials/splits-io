@@ -3,7 +3,6 @@ require './lib/parser/livesplit_core_parser'
 
 class Run < ApplicationRecord
   include CompletedRun
-  include DynamoDBRun
   include ForgetfulPersonsRun
   include PadawanRun
   include S3Run
@@ -20,6 +19,7 @@ class Run < ApplicationRecord
   belongs_to :category
   has_one :game, through: :category
   has_many :segments, dependent: :destroy
+  has_many :histories, class_name: 'RunHistory', dependent: :destroy
 
   has_secure_token :claim_token
 

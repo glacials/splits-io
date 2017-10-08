@@ -14,13 +14,13 @@ class RunsController < ApplicationController
 
   def show
     if params['reparse'] == '1'
-      @run.parse_into_activerecord
+      @run.parse_into_db
       redirect_to run_path(@run)
       return
     end
 
     if @run.parsed_at.nil?
-      @run.parse_into_activerecord
+      @run.parse_into_db
     end
 
     # Catch bad runs
@@ -42,7 +42,7 @@ class RunsController < ApplicationController
     end
 
     if params['reparse'] == '1'
-      @run.parse_into_activerecord
+      @run.parse_into_db
       redirect_to edit_run_path(@run), notice: 'Reparse complete. It might take a minute for your run to update.'
       return
     end
@@ -177,7 +177,7 @@ class RunsController < ApplicationController
 
   def set_run
     @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
-    @run.parse_into_activerecord unless @run.parsed?
+    @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
 
     gon.run = {id: @run.id36, splits: @run.collapsed_segments(timing)}
@@ -204,7 +204,7 @@ class RunsController < ApplicationController
   end
 
   def first_parse
-    @run.parse_into_activerecord
+    @run.parse_into_db
 
     if @run.parsed_at.nil?
       @run.destroy

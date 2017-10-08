@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170807040213) do
+ActiveRecord::Schema.define(version: 20171007204951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,16 @@ ActiveRecord::Schema.define(version: 20170807040213) do
     t.index ["to_user_id"], name: "index_rivalries_on_to_user_id", using: :btree
   end
 
+  create_table "run_histories", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
+    t.integer  "run_id"
+    t.integer  "attempt_number"
+    t.integer  "realtime_duration_ms"
+    t.integer  "gametime_duration_ms"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.index ["run_id"], name: "index_run_histories_on_run_id", using: :btree
+  end
+
   create_table "runs", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -243,6 +253,7 @@ ActiveRecord::Schema.define(version: 20170807040213) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"
+  add_foreign_key "run_histories", "runs", on_delete: :cascade
   add_foreign_key "segment_histories", "segments", on_delete: :cascade
   add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "splits", "runs"
