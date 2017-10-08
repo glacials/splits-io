@@ -253,7 +253,7 @@ ActiveRecord::Schema.define(version: 20171007204951) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"
-  add_foreign_key "run_histories", "runs"
+  add_foreign_key "run_histories", "runs", on_delete: :cascade
   add_foreign_key "segment_histories", "segments", on_delete: :cascade
   add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "splits", "runs"

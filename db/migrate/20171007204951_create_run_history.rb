@@ -8,5 +8,8 @@ class CreateRunHistory < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    remove_foreign_key :run_histories, :runs
+    add_foreign_key :run_histories, :runs, on_delete: :cascade
   end
 end
