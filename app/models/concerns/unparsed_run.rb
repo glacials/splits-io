@@ -65,6 +65,7 @@ module UnparsedRun
     def parse_into_db
       with_lock do
         segments.delete_all
+        histories.delete_all
 
         timer_used = nil
         parse_result = nil

@@ -285,6 +285,14 @@ describe Run, type: :model do
       ]
     end
 
+    it 'reports correct history after parsing twice' do
+      run.parse_into_db
+      run.parse_into_db
+      run.reload
+
+      expect(run.histories.count).to eq(55)
+    end
+
     context 'with game time' do
       let(:run) do
         r = FactoryGirl.create(:livesplit16_gametime_run)
