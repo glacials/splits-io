@@ -76,6 +76,27 @@
       "items": {
         "$ref": "../../../models/api/v4/runner.json"
       }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "realtime_duration_ms",
+          "gametime_duration_ms"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "realtime_duration_ms": {
+            "type": "number",
+            "minimum": 0
+          },
+          "gametime_duration_ms": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
     }
   }
 }

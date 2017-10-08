@@ -15,7 +15,11 @@ describe Api::V4::ConvertsController do
         end
 
         it 'has no id field' do
-          expect(body['id']).to be_nil
+          expect(body['run']['id']).to be_nil
+        end
+
+        it 'has a history field' do
+          expect(body['run']['history']).to_not be_nil
         end
 
         it 'has the correct splits' do
