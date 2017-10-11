@@ -42,14 +42,19 @@ html
                 a href=new_run_path
                   .glyphicon.glyphicon-cloud-upload>
                   | Upload
-              li class=('active' if on_page[:games])
-                a href=games_path Games
               li class=('active' if on_page[:faq])
                 a href=faq_path FAQ
               - if ENV['READ_ONLY_MODE'] == '1'
                 li
                   a href=read_only_mode_path
                     span.text-warning Read-Only Mode Active
+            .col-sm-3.col-md-3
+              = form_for(:game, method: :get, url: games_path, html: {class: 'navbar-form', role: 'search'}) do |f|
+                .input-group
+                  = f.text_field(:q, name: :q, class: 'form-control', value: @query, placeholder: 'Search')
+                  .input-group-btn
+                    = button_tag(type: 'submit', class: 'btn btn-default', name: nil) do
+                      i.glyphicon.glyphicon-search
             ul.nav.navbar-nav.navbar-right
               - if logged_in?
                 li class=('active' if on_page[:rivalries])
