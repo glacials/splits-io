@@ -61,7 +61,7 @@ h2 small
   display: block
 
 #download-menu
-  visibility: hidden  
+  visibility: hidden
   float: left
   margin: 0
   white-space: nowrap
@@ -113,3 +113,14 @@ a
 
 .kill-run-button
   cursor: pointer
+
+@media (min-width: 768px) {
+  #global-nav
+    display: flex !important // !important needed to override bootstrap use of !important
+    & > .col-sm-3
+      flex-grow: 1
+      & > .navbar-form > .input-group
+        display: flex;
+  #game_q
+    flex-grow: 1
+}
