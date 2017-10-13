@@ -3,15 +3,6 @@ $(document).on('runs#show:loaded', function() {
     return
   }
 
-  color_styles = [
-    "rgba(14, 144, 210, 1)",
-    "rgba(128, 87, 165, 1)",
-    "rgba(94, 185, 94, 1)",
-    "rgba(250, 210, 50, 1)",
-    "rgba(221, 81, 76, 1)",
-    "rgba(243, 123, 29, 1)"
-  ]
-
   gon.run.segments.forEach(function(segment) {
     let chart = c3.generate({
       bindto: "#segment-graph-" + segment.id,
@@ -29,7 +20,7 @@ $(document).on('runs#show:loaded', function() {
         ],
       },
       color: {
-        pattern: color_styles
+        pattern: ['rgba(14, 144, 210, 1)']
       },
       line: {
         connectNull: true
