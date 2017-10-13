@@ -1,4 +1,5 @@
 $(function() {
+  // Set up our own class of events we can listen for to load some JS only on specific pages.
   let f = function() {
     let data = $('body').data();
     $(document).trigger(data.controller + '#' + data.action + ':loaded');
