@@ -11,7 +11,7 @@ $ ->
   duration_data[0] = "Run Length"
   c3.generate({
     bindto: "#run-duration-graph",
-    title: { text: "Run Duration over Time" }
+    title: { text: "Run Duration Over Time" }
     data: {
       columns: [duration_data],
     },
