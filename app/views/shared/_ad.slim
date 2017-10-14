@@ -1,11 +1,5 @@
 - if (current_user.nil? || current_user.should_see_ads?) && (ENV['ENABLE_ADS'] == '1')
-  article style='text-align: center;'
-    .panel.panel-default style='display: inline-block; width: 730px;'
-      .panel-heading style='text-align: left;'
-        span Ad &mdash;
-        a< target='_blank' href='https://patreon.com/glacials' Hide by contributing
-      .panel-body style='padding: 0;'
-        script async=true src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-        ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2775839314260416" data-ad-slot="8678030483" data-ad-format="auto"
-        javascript:
-          (adsbygoogle = window.adsbygoogle || []).push({});
+  article
+    div#carbonads
+      .panel
+        script async=true type="text/javascript" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=splitsio" id="_carbonads_js"
