@@ -176,32 +176,11 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.includes(segments: [:histories]).find_by(id: params[:run].to_i(36))
-    @run ||= Run.includes(segments: [:histories]).find_by!(nick: params[:run])
-
+    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
     @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
 
-    gon.run = {
-      id: @run.id36,
-      segments: @run.segments.map do |segment|
-        {
-          id: segment.id,
-          name: segment.name,
-          duration_ms: segment.duration_ms(timing),
-          shortest_duration_ms: segment.shortest_duration_ms(timing),
-          histories: segment.histories.map do |history|
-            {
-              attempt_number: history.attempt_number,
-              duration_ms: history.duration_ms(timing),
-            }
-          end,
-        }
-      end,
-      histories: @run.histories.select(:id, :attempt_number, :realtime_duration_ms, :gametime_duration_ms),
-      attempts: @run.attempts,
-      program: @run.program
-    }
+    gon.run = {id: @run.id36, splits: @run.collapsed_segments(timing)}
 
     if @run.user.nil?
       gon.run['user'] = nil
