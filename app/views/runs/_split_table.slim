@@ -1,6 +1,6 @@
 .panel.panel-default
   .panel-heading Segments
-  .panel-body
+  .panel-body.comfy
     table.table.table-striped.table-hover
       thead
         tr
@@ -14,6 +14,7 @@
           - else
             th.align-right Duration
             th.align-right Finished At
+          th.align-right History
       tbody
         - run.segments.each_with_index do |segment, index|
           tr
@@ -54,3 +55,8 @@
                 td.align-right.time -
               - else
                 td.align-right = format_milliseconds(segment.end_ms(timing))
+            td.align-right
+              a data-toggle='collapse' href="#segment-graph-container-#{segment.id}" aria-expanded='false' View
+            tr.collapse id="segment-graph-container-#{segment.id}"
+              td.comfy colspan='999'
+                div id="segment-graph-#{segment.id}"
