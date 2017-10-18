@@ -149,6 +149,7 @@ curl https://splits.io/api/v3/games/sms/categories/852
     "name": "Any%",
     "created_at": "2015-01-08T02:53:19.867Z",
     "updated_at": "2015-02-01T21:33:44.440Z"
+  }
 }
 ```
 
