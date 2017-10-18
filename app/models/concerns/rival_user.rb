@@ -5,7 +5,7 @@ module RivalUser
 
   included do
     def rivalry_for(category)
-      Rails.cache.fetch([:users, self, :categories, category, :rival]) do
+      Rails.cache.fetch([:users, self, :categories, category, :rival], expires_in: 1.hour) do
         rivalries.for_category(category).first
       end
     end
