@@ -348,7 +348,7 @@ curl -iX POST --form file=@/path/to/splits_file.lss https://splits.io/api/v3/run
 ```
 
 ## User Authentication and Authorization
-If you want to upload runs for a user (e.g. from within a timer), you have two options.
+If you want to upload runs for a user (e.g. from within a timer), you have two options. If you only need to know who a user is on Splits I/O, skip to advanced.
 
 ### Simple option
 Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
