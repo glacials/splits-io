@@ -6,12 +6,12 @@ These docs are for the v3 API.
 ### [Game Endpoints][game-endpoints]
 ### [User Endpoints][user-endpoints]
 ### [Run Endpoints][run-endpoints]
-### [Uploading Runs on Behalf of a User][authorization]
+### [User Authentication and Authorization][auth]
 
 [game-endpoints]: #game-endpoints-1
 [user-endpoints]: #user-endpoints-1
 [run-endpoints]: #run-endpoints-1
-[authorization]: #uploading-runs-on-behalf-of-a-user-1
+[auth]: #user-authentication-and-authorization-1
 
 ## Pagination
 Routes that return array resources are paginated to 20 items per page. To get a specific page of results, add `?page=N`
@@ -347,7 +347,7 @@ curl -iX POST --form file=@/path/to/splits_file.lss https://splits.io/api/v3/run
 }
 ```
 
-## Uploading Runs on Behalf of a User
+## User Authentication and Authorization
 If you want to upload runs for a user (e.g. from within a timer), you have two options.
 
 ### Simple option
