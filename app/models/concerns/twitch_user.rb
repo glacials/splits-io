@@ -6,7 +6,7 @@ module TwitchUser
 
   included do
     def follows
-      Rails.cache.fetch([:db, :follows, self]) do
+      Rails.cache.fetch([:db, :follows, self], expires_in: 1.hour) do
         User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id)).joins(:runs).group('users.id')
       end
     end
