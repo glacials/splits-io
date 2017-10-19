@@ -20,6 +20,6 @@ module LlanfairGered
   end
 
   def self.exportable
-    false
+    true
   end
 end

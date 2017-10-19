@@ -1,0 +1,63 @@
+<Run serialization="custom">
+  <Run>
+    <default>
+      <delayedStart><%= (@run.offset || 0) * 1000 %></delayedStart>
+      <numberOfAttempts><%= @run.attempts || 0 %></numberOfAttempts>
+      <numberOfCompletedAttempts><%= @run.histories.completed(Run::REAL).count %></numberOfCompletedAttempts>
+      <segmented>false</segmented>
+      <configuration serialization="custom">
+        <Config>
+          <default>
+            <values>
+              <entry>
+                <string></string>
+                <map>
+                  <entry>
+                    <string>dimension</string>
+                    <java.awt.Dimension>
+                      <width>320</width>
+                      <height>227</height>
+                    </java.awt.Dimension>
+                  </entry>
+                  <entry>
+                    <string>coordinates</string>
+                    <java.awt.Point>
+                      <x>0</x>
+                      <y>0</y>
+                    </java.awt.Point>
+                  </entry>
+                </map>
+              </entry>
+            </values>
+          </default>
+        </Config>
+      </configuration>
+      <counters/>
+      <name><%= @run.to_s %></name>
+      <segments>
+      <% @run.splits.each do |segment| %>
+        <Segment serialization="custom">
+          <Segment>
+            <default>
+              <name><%= segment.name %></name>
+              <% unless segment.skipped?(Run::REAL) %>
+                <bestTime>
+                <milliseconds><%= segment.shortest_duration_ms(Run::REAL) %></milliseconds>
+                </bestTime>
+                <% if segment.gold?(Run::REAL) %>
+                  <runTime reference="../bestTime"/>
+                <% else %>
+                  <runTime>
+                  <milliseconds><%= segment.duration_ms(Run::REAL) %></milliseconds>
+                  </runTime>
+                <% end %>
+            <% end %>
+            </default>
+          </Segment>
+        </Segment>
+      <% end %>
+      </segments>
+      <subTitle></subTitle>
+    </default>
+  </Run>
+</Run>
