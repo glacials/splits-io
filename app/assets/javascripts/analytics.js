@@ -69,7 +69,7 @@ $(function() {
       }
       break;
     default:
-      ga('set', 'page', event.path[0].location.pathname);
+      ga('set', 'page', window.location.pathname);
   };
 
   ga('send', 'pageview');
