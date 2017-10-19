@@ -74,9 +74,5 @@ module CompletedRun
     def completed?(timing)
       duration_ms(timing).present? && duration_ms(timing) > 0
     end
-
-    def completed_runs_count(timing)
-      histories.to_a.count { |history_element| !history_element.duration_ms(timing).zero? }
-    end
   end
 end

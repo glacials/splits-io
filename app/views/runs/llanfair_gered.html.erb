@@ -3,7 +3,7 @@
     <default>
       <delayedStart><%= (@run.offset || 0) * 1000 %></delayedStart>
       <numberOfAttempts><%= @run.attempts || 0 %></numberOfAttempts>
-      <numberOfCompletedAttempts><%= @run.completed_runs_count(Run::REAL) %></numberOfCompletedAttempts>
+      <numberOfCompletedAttempts><%= @run.histories.completed(Run::REAL) %></numberOfCompletedAttempts>
       <segmented>false</segmented>
       <configuration serialization="custom">
         <Config>
