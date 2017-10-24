@@ -18,7 +18,6 @@ ENV ENABLE_ADS 0
 # Nothing below should ever need to be changed
 ENV RAILS_ENV development
 
-ENV DATABASE_URL postgres://postgres@db/postgres
 ENV S3_BUCKET splits-io
 ENV AWS_REGION local
 ENV AWS_ACCESS_KEY_ID beep
