@@ -16,6 +16,8 @@ services:
       - s3:s3.localhost
   db:
     image: postgres
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
   s3:
     image: lphoward/fake-s3
     ports:

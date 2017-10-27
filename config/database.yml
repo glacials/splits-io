@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  timout: 5000
+  username: postgres
+  host: db
+  port: 5432
+
+development:
+  <<: *default
+  database: app_development
+
+test:
+  <<: *default
+  database: app_test
+
+production:
+  url: <%= ENV['DATABASE_URL'] %>
