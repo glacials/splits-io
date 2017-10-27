@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.4'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -84,18 +84,18 @@ gem 'platform-api'
 
 # javascript
 gem 'bower-rails'
+gem 'c3-rails'
 gem 'clipboard-rails'
 gem 'coffee-rails'
+gem 'd3-rails', '~> 3.5.17'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'js_cookie_rails'
+gem 'momentjs-rails'
 gem 'numeraljs-rails'
 gem 'spinjs-rails'
 gem 'tipsy-rails'
 gem 'underscore-rails'
-gem 'momentjs-rails'
-gem 'd3-rails', '~> 3.5.17'
-gem 'c3-rails'
 
 # models
 gem 'has_secure_token'
@@ -110,9 +110,8 @@ gem 'versionomy'
 gem 'xml-simple'
 
 # server/environment
+gem 'puma'
 gem 'rails', '~> 5'
-gem 'thin'
-gem 'unicorn'
 
 # speediness
 gem 'dalli'
