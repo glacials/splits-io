@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :segment do
     run
     name SecureRandom.uuid
@@ -12,7 +12,7 @@ FactoryGirl.define do
     realtime_skipped false
 
     after(:create) do |segment|
-      FactoryGirl.create_list(:segment_history, 10, segment: segment)
+      FactoryBot.create_list(:segment_history, 10, segment: segment)
     end
   end
 end

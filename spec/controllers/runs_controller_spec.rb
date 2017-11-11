@@ -32,7 +32,7 @@ describe RunsController do
     end
 
     context 'for an existing run' do
-      let(:run) { FactoryGirl.create(:run, :nicked) }
+      let(:run) { FactoryBot.create(:run, :nicked) }
 
       context 'by id' do
         let(:id) { run.id36 }
@@ -64,10 +64,10 @@ describe RunsController do
     let(:response) { get(:edit, params: {run: run.id36}) }
 
     context 'for an unowned run' do
-      let(:run) { FactoryGirl.create(:run, :unowned) }
+      let(:run) { FactoryBot.create(:run, :unowned) }
 
       context 'by a logged-in user' do
-        before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
+        before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
         it 'returns a 403' do
           expect(response).to have_http_status(403)
@@ -84,7 +84,7 @@ describe RunsController do
     end
 
     context 'for an owned run' do
-      let(:run) { FactoryGirl.create(:run, :owned) }
+      let(:run) { FactoryBot.create(:run, :owned) }
 
       context "by a user who doesn't own the run" do
         context "because they're not logged in" do
@@ -96,7 +96,7 @@ describe RunsController do
         end
 
         context "because they're a different user" do
-          before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
+          before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
           it 'returns a 403' do
             expect(response).to have_http_status(403)
@@ -119,15 +119,15 @@ describe RunsController do
       let(:response) do
         put(:update, params: {
           'run' => run.id36,
-          "#{run.id36}[category]" => FactoryGirl.create(:category).id
+          "#{run.id36}[category]" => FactoryBot.create(:category).id
         })
       end
 
       context 'for an unowned run' do
-        let(:run) { FactoryGirl.create(:run, :unowned) }
+        let(:run) { FactoryBot.create(:run, :unowned) }
 
         context 'by a logged-in user' do
-          before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
+          before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
           it 'returns a 403' do
             expect(response).to have_http_status(403)
@@ -144,7 +144,7 @@ describe RunsController do
       end
 
       context 'for an owned run' do
-        let(:run) { FactoryGirl.create(:run, :owned) }
+        let(:run) { FactoryBot.create(:run, :owned) }
 
         context "by a user who doesn't own the run" do
           context "because they're not logged in" do
@@ -156,7 +156,7 @@ describe RunsController do
           end
 
           context "because they're a different user" do
-            before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
+            before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
             it 'returns a 403' do
               expect(response).to have_http_status(403)
@@ -183,10 +183,10 @@ describe RunsController do
     let(:response) { delete(:destroy, params: {run: run.id36}) }
 
     context 'for an unowned run' do
-      let(:run) { FactoryGirl.create(:run, :unowned) }
+      let(:run) { FactoryBot.create(:run, :unowned) }
 
       context 'by a logged-in user' do
-        before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
+        before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
         it 'returns a 403' do
           expect(response).to have_http_status(403)
@@ -203,7 +203,7 @@ describe RunsController do
     end
 
     context 'for an owned run' do
-      let(:run) { FactoryGirl.create(:run, :owned) }
+      let(:run) { FactoryBot.create(:run, :owned) }
 
       context "by a user who doesn't own the run" do
         context "because they're not logged in" do
@@ -215,7 +215,7 @@ describe RunsController do
         end
 
         context "because they're a different user" do
-          before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
+          before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
           it 'returns a 403' do
             expect(response).to have_http_status(403)
@@ -238,13 +238,13 @@ describe RunsController do
   end
 
   describe '#compare' do
-    let(:run) { FactoryGirl.create(:run, :parsed) }
-    let(:comparison_run) { FactoryGirl.create(:run, :parsed) }
+    let(:run) { FactoryBot.create(:run, :parsed) }
+    let(:comparison_run) { FactoryBot.create(:run, :parsed) }
 
     let(:response) { get(:compare, params: {run: run.id36, comparison_run: comparison_run.id36}) }
 
     context 'by a logged-in user' do
-      before { allow(controller).to receive(:current_user).and_return(FactoryGirl.build(:user)) }
+      before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
       it 'returns a 200' do
         expect(response).to have_http_status(200)
@@ -253,7 +253,7 @@ describe RunsController do
   end
 
   describe '#download' do
-    let(:run) { FactoryGirl.create(:run, :parsed) }
+    let(:run) { FactoryBot.create(:run, :parsed) }
     let(:response) { get(:download, params: {run: run.id36, timer: timer}) }
 
     context 'as Urn' do

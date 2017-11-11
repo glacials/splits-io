@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Run, type: :model do
-  let(:run) { FactoryGirl.create(:run) }
+  let(:run) { FactoryBot.create(:run) }
 
   context 'with a game' do
     context 'that has no other runs' do
       let(:run) do
-        FactoryGirl.create(:run, game: FactoryGirl.create(:game))
+        FactoryBot.create(:run, game: FactoryBot.create(:game))
       end
 
       it "doesn't destroy its game when destroyed" do
@@ -18,9 +18,9 @@ describe Run, type: :model do
 
     context 'that has other runs' do
       let(:run) do
-        game = FactoryGirl.create(:game)
-        FactoryGirl.create(:run, game: game)
-        FactoryGirl.create(:run, game: game)
+        game = FactoryBot.create(:game)
+        FactoryBot.create(:run, game: game)
+        FactoryBot.create(:run, game: game)
       end
 
       it "doesn't destroy its game when destroyed" do
@@ -33,9 +33,9 @@ describe Run, type: :model do
 
   context 'with a category' do
     context 'with other runs' do
-      let(:category) { FactoryGirl.create(:category) }
-      let(:run) { FactoryGirl.create(:run, category: category) }
-      let(:other_run) { FactoryGirl.create(:run, category: category) }
+      let(:category) { FactoryBot.create(:category) }
+      let(:run) { FactoryBot.create(:run, category: category) }
+      let(:other_run) { FactoryBot.create(:run, category: category) }
 
       it 'can be compared against' do
         run.improvements_towards(other_run)
@@ -45,7 +45,7 @@ describe Run, type: :model do
 
   context 'with no owner' do
     context 'with an srdc_id' do
-      let(:run) { FactoryGirl.create(:speedrundotcom_run) }
+      let(:run) { FactoryBot.create(:speedrundotcom_run) }
 
       before do
         expect(SpeedrunDotCom::Run).to receive(:runner_id).with(run.srdc_id).and_return(0)
@@ -59,7 +59,7 @@ describe Run, type: :model do
   end
 
   context 'with a valid video URL to a non-valid location' do
-    let(:run) { FactoryGirl.build(:run, video_url: 'http://google.com/') }
+    let(:run) { FactoryBot.build(:run, video_url: 'http://google.com/') }
 
     it 'fails to validate' do
       expect(run).not_to be_valid
@@ -68,7 +68,7 @@ describe Run, type: :model do
 
   context 'with an invalid video URL' do
     let(:run) do
-      FactoryGirl.build(:run, video_url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!')
+      FactoryBot.build(:run, video_url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!')
     end
 
     it 'fails to validate' do
@@ -84,7 +84,7 @@ describe Run, type: :model do
 
   context 'from LiveSplit 1.4' do
     let(:run) do
-      r = FactoryGirl.create(:livesplit14_run)
+      r = FactoryBot.create(:livesplit14_run)
       r.parse_into_db
       r.reload
       r
@@ -163,7 +163,7 @@ describe Run, type: :model do
 
   context 'from LiveSplit 1.5' do
     let(:run) do
-      r = FactoryGirl.create(:livesplit15_run)
+      r = FactoryBot.create(:livesplit15_run)
       r.parse_into_db
       r.reload
       r
@@ -218,7 +218,7 @@ describe Run, type: :model do
 
   context 'from LiveSplit 1.6' do
     let(:run) do
-      r = FactoryGirl.create(:livesplit16_run)
+      r = FactoryBot.create(:livesplit16_run)
       r.parse_into_db
       r.reload
       r
@@ -295,7 +295,7 @@ describe Run, type: :model do
 
     context 'with game time' do
       let(:run) do
-        r = FactoryGirl.create(:livesplit16_gametime_run)
+        r = FactoryBot.create(:livesplit16_gametime_run)
         r.parse_into_db
         r.reload
         r
@@ -341,7 +341,7 @@ describe Run, type: :model do
 
   context 'from Llanfair' do
     let(:run) do
-      r = FactoryGirl.create(:llanfair_run)
+      r = FactoryBot.create(:llanfair_run)
       r.parse_into_db
       r.reload
       r
@@ -383,7 +383,7 @@ describe Run, type: :model do
 
   context 'from the Gered Llanfair fork' do
     let(:run) do
-      r = FactoryGirl.create(:llanfair_gered_run)
+      r = FactoryBot.create(:llanfair_gered_run)
       r.parse_into_db
       r.reload
       r
@@ -404,7 +404,7 @@ describe Run, type: :model do
 
     context 'with reference attributes' do
       let(:run) do
-        r = FactoryGirl.create(:llanfair_gered_run)
+        r = FactoryBot.create(:llanfair_gered_run)
         r.parse_into_db
       r.reload
         r
@@ -431,7 +431,7 @@ describe Run, type: :model do
 
   context 'from WSplit' do
     let(:run) do
-      r = FactoryGirl.create(:wsplit_run)
+      r = FactoryBot.create(:wsplit_run)
       r.parse_into_db
       r.reload
       r
@@ -460,7 +460,7 @@ describe Run, type: :model do
 
   context 'from Time Split Tracker' do
     let(:run) do
-      r = FactoryGirl.create(:timesplittracker_run)
+      r = FactoryBot.create(:timesplittracker_run)
       r.parse_into_db
       r.reload
       r.reload

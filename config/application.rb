@@ -6,6 +6,9 @@ Bundler.require(:default, Rails.env)
 
 module SplitsIO
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    # config.load_defaults 5.1
+
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
 
@@ -15,8 +18,6 @@ module SplitsIO
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
-
-    ActiveSupport.halt_callback_chains_on_return_false = false
 
     config.to_prepare do
       Doorkeeper::AuthorizationsController.layout 'application'

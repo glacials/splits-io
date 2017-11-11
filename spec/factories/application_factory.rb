@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :application, class: Doorkeeper::Application do
     name SecureRandom.uuid
     redirect_uri 'debug'

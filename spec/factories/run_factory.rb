@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   test_files = {
     # factory name:           {filename: 'filename-within-spec/factories/run_files},
     livesplit14:              {filename: 'livesplit1.4'},
@@ -39,7 +39,7 @@ FactoryGirl.define do
       parsed_at Time.now
       program 'livesplit'
       after(:create) do |run|
-        FactoryGirl.create_list(:segment, 10, run: run)
+        FactoryBot.create_list(:segment, 10, run: run)
       end
       realtime_duration_ms 10000
       realtime_sum_of_best_ms 9000

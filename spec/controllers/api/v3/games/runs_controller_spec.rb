@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Api::V3::Games::RunsController do
   describe '#index' do
     context 'for an existing game' do
-      let(:game) { FactoryGirl.create(:game, :with_runs) }
+      let(:game) { FactoryBot.create(:game, :with_runs) }
       subject { get :index, params: {game_id: game.id} }
 
       it 'returns a 200' do

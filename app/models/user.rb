@@ -8,13 +8,13 @@ class User < ApplicationRecord
   has_many :games, -> { distinct }, through: :runs
 
   has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
-  has_many :incoming_rivalries, class_name: Rivalry, foreign_key: :to_user_id, dependent: :destroy
+  has_many :incoming_rivalries, class_name: 'Rivalry', foreign_key: :to_user_id, dependent: :destroy
 
-  has_one  :patreon, class_name: PatreonUser, dependent: :destroy
+  has_one  :patreon, class_name: 'PatreonUser', dependent: :destroy
 
-  has_many :applications, class_name: Doorkeeper::Application, foreign_key: :owner_id
-  has_many :access_grants, class_name: Doorkeeper::AccessGrant, foreign_key: :resource_owner_id
-  has_many :access_tokens, class_name: Doorkeeper::AccessToken, foreign_key: :resource_owner_id
+  has_many :applications, class_name: 'Doorkeeper::Application', foreign_key: :owner_id
+  has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
+  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id
 
   after_destroy do |user|
     user.runs.update_all(user_id: nil)

@@ -12,10 +12,10 @@ describe Game, type: :model do
   end
 
   context 'that has categories' do
-    let(:game) { FactoryGirl.create(:game, :with_categories) }
+    let(:game) { FactoryBot.create(:game, :with_categories) }
 
     context 'when merged' do
-      let(:parent_game) { FactoryGirl.create(:game, :with_categories) }
+      let(:parent_game) { FactoryBot.create(:game, :with_categories) }
       let(:game_category_names) { game.categories.pluck(:name) }
       let(:parent_game_category_names) { parent_game.categories.pluck(:name) }
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Api::V3::Users::Games::Categories::PredictionsController do
-  let(:run) { FactoryGirl.create(:run, :owned, :parsed) }
+  let(:run) { FactoryBot.create(:run, :owned, :parsed) }
 
   describe '#show' do
     context 'when given a valid user, game, and category' do

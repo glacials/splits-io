@@ -1,4 +1,6 @@
 class Api::V3::ApplicationController < ActionController::Base
+  include Rails::Pagination
+
   prepend_before_action :set_cors_headers
   before_action :force_ssl, if: :ssl_configured?
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
