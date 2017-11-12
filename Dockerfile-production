@@ -1,7 +1,7 @@
 # This is the Dockerfile for production. You only need to touch this if you are actually deploying Splits I/O to
 # production. If you're not, look at Dockerfile instead.
 
-FROM ruby:2.3.4
+FROM ruby:2.4.2
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs
 RUN mkdir /app
 WORKDIR /app
