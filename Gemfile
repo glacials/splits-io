@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.4'
+ruby '2.4.2'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -12,7 +12,7 @@ end
 
 group :test do
   # tests
-  gem 'factory_girl_rails', require: false
+  gem 'factory_bot_rails', require: false
   gem 'json-schema'
   gem 'json-schema-rspec'
   gem 'rails-controller-testing'
@@ -28,6 +28,9 @@ group :development, :hot do
   gem 'better_errors'
   gem 'binding_of_caller'
 
+  # file watcher
+  gem 'listen'
+
   # pretty things
   gem 'rails-erd', require: false
   gem 'rubocop', require: false
@@ -39,11 +42,7 @@ end
 
 group :production do
   # errors+logging
-  gem 'rails_stdout_logging'
   gem 'rollbar'
-
-  # heroku
-  gem 'rails_12factor'
 end
 
 # administration
@@ -69,6 +68,7 @@ gem 'doorkeeper'
 gem 'activerecord-import'
 gem 'arel'
 gem 'aws-sdk-rails'
+gem 'aws-sdk-s3'
 gem 'fakes3'
 gem 'pg'
 
@@ -105,9 +105,6 @@ gem 'nilify_blanks'
 gem 'descriptive_statistics'
 gem 'moving_average'
 gem 'nokogiri'
-gem 'ptools'
-gem 'versionomy'
-gem 'xml-simple'
 
 # server/environment
 gem 'puma'

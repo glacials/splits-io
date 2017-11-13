@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Api::V3::GamesController do
-  let(:game) { FactoryGirl.create(:game, name: 'Mario is Missing!') }
+  let(:game) { FactoryBot.create(:game, name: 'Mario is Missing!') }
 
   describe '#index' do
     context 'when given a search term which yields results' do
@@ -41,7 +41,7 @@ describe Api::V3::GamesController do
   end
 
   describe '#show' do
-    let(:game) { FactoryGirl.create(:game, :shortnamed) }
+    let(:game) { FactoryBot.create(:game, :shortnamed) }
     let(:returned_attributes) { [:id, :name, :shortname, :categories] }
 
     context 'when given an id' do

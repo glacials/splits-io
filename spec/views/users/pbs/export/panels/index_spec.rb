@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'users/pbs/export/panels/index' do
   it 'renders the index template' do
-    run = FactoryGirl.create(:run)
+    run = FactoryBot.create(:run)
 
     runs = double
     allow(runs).to receive(:order).and_return(runs)

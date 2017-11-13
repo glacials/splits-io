@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe Category, type: :model do
-  let(:category) { FactoryGirl.create(:category) }
+  let(:category) { FactoryBot.create(:category) }
 
   context 'when merged' do
-    let(:parent_category) { FactoryGirl.create(:category) }
+    let(:parent_category) { FactoryBot.create(:category) }
     let(:category_runs) { category.runs }
     let(:parent_category_runs) { parent_category.runs }
 

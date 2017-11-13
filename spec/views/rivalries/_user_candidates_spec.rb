@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe 'rivalries/_user_candidates' do
   it 'renders user candidates' do
-    user = FactoryGirl.create(:user)
-    follow = FactoryGirl.create(:user)
+    user = FactoryBot.create(:user)
+    follow = FactoryBot.create(:user)
 
-    category = FactoryGirl.create(:category)
+    category = FactoryBot.create(:category)
 
-    FactoryGirl.create(:run, category: category, user: user)
-    FactoryGirl.create(:run, category: category, user: follow)
+    FactoryBot.create(:run, category: category, user: user)
+    FactoryBot.create(:run, category: category, user: follow)
 
     allow(controller).to receive(:current_user).and_return(user)
 

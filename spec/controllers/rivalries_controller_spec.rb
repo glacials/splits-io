@@ -4,10 +4,10 @@ describe Users::RivalriesController do
   describe '#index' do
 
     context 'when logged in' do
-      user = FactoryGirl.create(:user, :with_runs)
+      user = FactoryBot.create(:user, :with_runs)
       user.categories.each do |category|
-        FactoryGirl.create(:run, :parsed, category: category, user: FactoryGirl.create(:user))
-        FactoryGirl.create(:run, :attemptless, category: category, user: FactoryGirl.create(:user))
+        FactoryBot.create(:run, :parsed, category: category, user: FactoryBot.create(:user))
+        FactoryBot.create(:run, :attemptless, category: category, user: FactoryBot.create(:user))
       end
 
       before { allow(controller).to receive(:current_user).and_return(user) }
