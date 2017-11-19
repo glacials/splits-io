@@ -22,7 +22,7 @@ The schema is large, but many fields are optional -- a run at its heart resemble
     {
       "name":         "Cap",
       "duration":     {"realtimeMS": 143123},
-      "bestDuration": {"realtimeMS": 143167}
+      "bestDuration": {"realtimeMS": 141167}
     }
   ]
 }
