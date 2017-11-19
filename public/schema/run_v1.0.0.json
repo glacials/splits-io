@@ -4,7 +4,7 @@
   "type": "object",
   "title": "Splits I/O JSON Schema",
   "description": "Splits I/O JSON Schema is a specification for the transmission of runs between services and programs.",
-  "required": ["_schemaVersion", "timer", "runners"],
+  "required": ["_schemaVersion", "timer"],
   "additionalProperties": false,
   "definitions": {
     "duration": {
@@ -208,6 +208,28 @@
           "title": "Shortname",
           "description": "Shortname is a machine-readable game name, intended for use in APIs, databases, URLs, and filenames.",
           "examples": ["sms", "oot", "portal"]
+        },
+        "links": {
+          "type": "object",
+          "title": "Links",
+          "description": "Links specifies the game's identity in other services.",
+          "required": [],
+          "additionalProperties": false,
+          "default": {},
+          "properties": {
+            "splitsioID": {
+              "type": "string",
+              "title": "Splits I/O ID",
+              "description": "Splits I/O ID specifies the game's Splits I/O ID.",
+              "examples": ["234"]
+            },
+            "speedruncomID": {
+              "type": "string",
+              "title": "Speedrun.com ID",
+              "description": "Speedrun.com ID specifies the game's Speedrun.com ID.",
+              "examples": ["kjpdr4jq"]
+            }
+          }
         }
       }
     },
@@ -229,6 +251,28 @@
           "title": "Shortname",
           "description": "Shortname is a machine-readable category name, intended for use in APIs, databases, URLs, and filenames.",
           "examples": ["anypct", "100pct", "anypct-hoverless"]
+        },
+        "links": {
+          "type": "object",
+          "title": "Links",
+          "description": "Links specifies the category's identity in other services.",
+          "required": [],
+          "additionalProperties": false,
+          "default": {},
+          "properties": {
+            "splitsioID": {
+              "type": "string",
+              "title": "Splits I/O ID",
+              "description": "Splits I/O ID specifies the category's Splits I/O ID.",
+              "examples": ["234"]
+            },
+            "speedruncomID": {
+              "type": "string",
+              "title": "Speedrun.com ID",
+              "description": "Speedrun.com ID specifies the category's Speedrun.com ID.",
+              "examples": ["kjpdr4jq"]
+            }
+          }
         }
       }
     },
@@ -241,7 +285,7 @@
         "type": "object",
         "title": "Runner",
         "description": "Runner describes one participant in the recorded run.",
-        "required": ["shortname", "links"],
+        "required": ["shortname"],
         "additionalProperties": false,
         "properties": {
           "longname": {
