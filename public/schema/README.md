@@ -12,8 +12,8 @@ The schema is large, but many fields are optional -- a run at its heart resemble
 {
   "_schemaVersion": "v1.0.0",
   "timer": {
-    "shortname": "LiveSplit",
-    "longname":  "livesplit",
+    "shortname": "livesplit",
+    "longname":  "LiveSplit",
     "version":   "v1.6.0"
   },
   "game":     {"longname": "Super Mario Odyssey"},
