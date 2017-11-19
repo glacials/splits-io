@@ -11,7 +11,6 @@
       "type": "object",
       "title": "Duration",
       "description": "Duration holds a realtime duration and a gametime duration.",
-      "required": [],
       "additionalProperties": false,
       "properties": {
         "realtimeMS": {
@@ -45,7 +44,6 @@
       "type": "object",
       "title": "Links",
       "description": "Links specifies the run's identity in other services.",
-      "required": [],
       "additionalProperties": false,
       "properties": {
         "speedruncomID": {
@@ -100,7 +98,6 @@
       "type": "object",
       "title": "Attempts",
       "description": "Attempts contains historical information about previous runs by this runner in this category.",
-      "required": [],
       "additionalProperties": false,
       "properties": {
         "total": {
@@ -213,7 +210,6 @@
           "type": "object",
           "title": "Links",
           "description": "Links specifies the game's identity in other services.",
-          "required": [],
           "additionalProperties": false,
           "default": {},
           "properties": {
@@ -256,7 +252,6 @@
           "type": "object",
           "title": "Links",
           "description": "Links specifies the category's identity in other services.",
-          "required": [],
           "additionalProperties": false,
           "default": {},
           "properties": {
@@ -304,7 +299,6 @@
             "type": "object",
             "title": "Links",
             "description": "Links specifies the runner's identity in other services.",
-            "required": [],
             "additionalProperties": false,
             "default": {},
             "properties": {
@@ -345,7 +339,6 @@
         "type": "object",
         "title": "Segment",
         "description": "Segment is one segment in this run.",
-        "required": [],
         "additionalProperties": false,
         "properties": {
           "name": {
