@@ -60,6 +60,7 @@ In the 406 reponse there will be an array of values that can be rendered.
 | `application/splitterz`          | SplitterZ          | `application/splitterz`               |
 | `application/livesplit`          | LiveSplit          | `application/livesplit`               |
 | `application/urn`                | Urn                | `application/urn`                     |
+| `application/llanfair-gered`     | Llanfair-Gered     | `application/llanfair-gered`          |
 | `application/original-timer`     | Original Run File  | One of the following `Content-Type`'s |
 
 If the accept header is `application/original-timer` then the original file uploaded will be returned as is. Thus it is possible to get back
