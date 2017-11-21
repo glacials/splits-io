@@ -8,7 +8,6 @@ class Api::V3::Detail::RunSerializer < Api::V3::ApplicationSerializer
 
   def splits
     object.segments.map do |segment|
-      segment.realtime_shortest_duration_ms = {duration: segment.realtime_shortest_duration_ms / 1000}
       segment
       {
         name: segment.name,
