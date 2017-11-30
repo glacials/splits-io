@@ -7,42 +7,41 @@
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else
         a href=segment_history_csv_path ↓ download segment history csv
-  .panel-body
-    table.table.table-striped.table-hover
-      thead
-        tr
-          th.align-right #
-          th.align-left Name
-          th.align-right
-            span Standard deviation
-            small.tip-html< title="A low standard deviation indicates consistency" = "(?)"
-          th.align-right Best
-          th.align-right Mean
-          th.align-right
-            span Median
-            small.tip-html< title="50% of this runner's times on this segment are faster than this time" = "(?)"
-          th.align-right
-            span 90th percentile
-            small.tip-html< title="90% of this runner's times on this segment are faster than this time" = "(?)"
-          th.align-right
-            span 99th percentile
-            small.tip-html< title="99% of this runner's times on this segment are faster than this time" = "(?)"
-      tbody
-        - run.segments.includes(:histories).each do |segment|
-          - if segment.histories.nil? || segment.histories.length == 0
-            tr
-              td.align-right= segment.segment_number + 1
-              td.align-left= segment.name.present? ? segment.name : '-'
-              td.align-right colspan=99
-                i no segment history available
-          - else
-            - history_times = segment.histories.map(&:realtime_duration_ms).compact
-            tr
-              td.align-right = segment.segment_number + 1
-              td.align-left = segment.name.present? ? segment.name : '-'
-              td.align-right = format_milliseconds(history_times.standard_deviation)
-              td.align-right = format_milliseconds(segment.realtime_shortest_duration_ms)
-              td.align-right = format_milliseconds(history_times.mean)
-              td.align-right = format_milliseconds(history_times.median)
-              td.align-right = format_milliseconds(history_times.percentile(90))
-              td.align-right = format_milliseconds(history_times.percentile(99))
+  table.panel-body.table.table-striped.table-hover
+    thead
+      tr
+        th.align-right #
+        th.align-left Name
+        th.align-right
+          span Standard deviation
+          small.tip-html< title="A low standard deviation indicates consistency" = "(?)"
+        th.align-right Best
+        th.align-right Mean
+        th.align-right
+          span Median
+          small.tip-html< title="50% of this runner's times on this segment are faster than this time" = "(?)"
+        th.align-right
+          span 90th percentile
+          small.tip-html< title="90% of this runner's times on this segment are faster than this time" = "(?)"
+        th.align-right
+          span 99th percentile
+          small.tip-html< title="99% of this runner's times on this segment are faster than this time" = "(?)"
+    tbody
+      - run.segments.includes(:histories).each do |segment|
+        - if segment.histories.nil? || segment.histories.length == 0
+          tr
+            td.align-right= segment.segment_number + 1
+            td.align-left= segment.name.present? ? segment.name : '-'
+            td.align-right colspan=99
+              i no segment history available
+        - else
+          - history_times = segment.histories.map(&:realtime_duration_ms).compact
+          tr
+            td.align-right = segment.segment_number + 1
+            td.align-left = segment.name.present? ? segment.name : '-'
+            td.align-right = format_milliseconds(history_times.standard_deviation)
+            td.align-right = format_milliseconds(segment.realtime_shortest_duration_ms)
+            td.align-right = format_milliseconds(history_times.mean)
+            td.align-right = format_milliseconds(history_times.median)
+            td.align-right = format_milliseconds(history_times.percentile(90))
+            td.align-right = format_milliseconds(history_times.percentile(99))
