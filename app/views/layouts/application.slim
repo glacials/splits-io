@@ -42,12 +42,16 @@ html
                 a href=new_run_path
                   .glyphicon.glyphicon-cloud-upload>
                   | Upload
-              li class=('active' if on_page[:faq])
-                a href=faq_path FAQ
+              li class=('active' if on_page[:rivalries])
+                a href=rivalries_path
+                  .glyphicon.glyphicon-scale>
+                  | My Rivals
               - if ENV['READ_ONLY_MODE'] == '1'
                 li
                   a href=read_only_mode_path
                     span.text-warning Read-Only Mode Active
+              li class=('active' if on_page[:faq])
+                a href=faq_path FAQ
             .col-sm-3.col-md-3
               = form_for(:game, method: :get, url: games_path, html: {class: 'navbar-form', role: 'search'}) do |f|
                 .input-group
@@ -56,11 +60,10 @@ html
                     = button_tag(type: 'submit', class: 'btn btn-default', name: nil) do
                       i.glyphicon.glyphicon-search
             ul.nav.navbar-nav.navbar-right
+              li style='background-color: #768AD4;'
+                a href='https://discord.gg/yGaxX39' target='_blank'
+                  img src='/discord.svg' height='20'
               - if logged_in?
-                li class=('active' if on_page[:rivalries])
-                  a href=rivalries_path
-                    .glyphicon.glyphicon-scale>
-                    | My Rivals
                 li.dropdown class=('active' if on_page[:profile])
                   a.dropdown-toggle href='#' data-toggle='dropdown' role='button' aria-expanded='false'
                     .glyphicon.glyphicon-user>
@@ -68,6 +71,8 @@ html
                     span.caret
                   ul.dropdown-menu role='menu'
                     li
+                      - if !current_user.patron?
+                        = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank'
                       = link_to 'Profile', user_path(current_user)
                       = link_to 'Settings', settings_path
                       = link_to 'Tools', tools_path
@@ -95,6 +100,4 @@ html
           span<> &bull;
           a href='https://twitter.com/splitsio' target=:_blank twitter
           span<> &bull;
-          a href='mailto:help@splits.io' email
-          span<> &bull;
-          a href='https://www.patreon.com/glacials' target=:_blank patreon :D
+          a href='mailto:help@splits.io' help
