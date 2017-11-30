@@ -34,7 +34,7 @@ article#stats
           tr
             td
               span Uploaded
-            td.upload-date.needs-formatting title=@run.created_at = @run.created_at
+            td title=@run.created_at = "#{time_ago_in_words(@run.created_at)} ago"
           - has_sob = @run.sum_of_best_ms(timing).present? && @run.sum_of_best_ms(timing) != 0
           - has_attempts = @run.duration_ms(timing).present? && @run.duration_ms(timing) != 0
           - if !has_sob

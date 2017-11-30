@@ -65,6 +65,6 @@
                     - elsif run.category.present?
                       = link_to '+', new_rivalry_path(category: run.category)
               - if cols.include?(:uploaded)
-                td.align-right.nowrap.upload-date.needs-formatting class=('short' if run.short?) title=run.created_at = run.created_at
+                td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
       .center
         = paginate(runs, theme: 'twitter-bootstrap-3')
