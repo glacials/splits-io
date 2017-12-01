@@ -58,7 +58,7 @@ gem 'authie'
 gem 'omniauth'
 gem 'omniauth-oauth2'
 gem 'omniauth-twitch'
-gem 'patreon', github: 'Patreon/patreon-ruby'
+gem 'patreon', '< 0.3.0'
 
 # authorization
 gem 'cancancan'

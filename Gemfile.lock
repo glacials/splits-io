@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/Patreon/patreon-ruby.git
-  revision: 0530a2fbb30f9f2e8d1adf50173e92b9b1c89f01
-  specs:
-    patreon (0.3.0)
-      json-api-vanilla (~> 1.0.1)
-
-GIT
   remote: https://github.com/glacials/purecss-rails.git
   revision: a4c7a6c05bf438465a0d02f75c5bd6063023ca52
   specs:
@@ -225,7 +218,6 @@ GEM
     js_cookie_rails (2.1.4)
       railties (>= 3.1)
     json (2.1.0)
-    json-api-vanilla (1.0.1)
     json-schema (2.8.0)
       addressable (>= 2.4)
     json-schema-rspec (0.0.4)
@@ -303,6 +295,7 @@ GEM
     parallel (1.12.0)
     parser (2.4.0.0)
       ast (~> 2.2)
+    patreon (0.2.0)
     pg (0.21.0)
     platform-api (2.1.0)
       heroics (~> 0.0.23)
@@ -502,7 +495,7 @@ DEPENDENCIES
   omniauth
   omniauth-oauth2
   omniauth-twitch
-  patreon!
+  patreon (< 0.3.0)
   pg
   platform-api
   pry-rails
