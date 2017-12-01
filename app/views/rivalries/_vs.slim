@@ -13,7 +13,11 @@
             .gold-split title='Patron'
         - else
           = '???'
-      span = from_user_pb.present? ? (link_to from_user_pb.time, from_user_pb, class: 'time needs-formatting stealth-link run-link') : '-'
+      span
+        - if from_user_pb.present?
+          = link_to(format_milliseconds(from_user_pb.duration_ms(timing)), from_user_pb, class: 'stealth-link run-link')
+        - else
+          = '-'
       small< pb
       br
       span = format_milliseconds(from_user_pb.sum_of_best_ms(timing)) || '0'
@@ -34,7 +38,7 @@
           '???'
       span
         - if to_user_pb.present?
-          = link_to to_user_pb.time, to_user_pb, class: 'time needs-formatting stealth-link run-link'
+          = link_to(format_milliseconds(to_user_pb.duration_ms(timing)), to_user_pb, class: 'stealth-link run-link')
         - else
           = '-'
       small< pb
