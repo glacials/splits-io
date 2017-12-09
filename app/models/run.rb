@@ -147,8 +147,14 @@ class Run < ApplicationRecord
     end
   end
 
+  class RunTooLarge < StandardError; end
   def file
     file = $s3_bucket_internal.object("splits/#{s3_filename}")
+
+    if file.content_length >= (10 * 1024 * 1024) # 10 MiB
+      raise RunTooLarge
+    end
+
     file.get.body.read
   rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::AccessDenied
     nil
