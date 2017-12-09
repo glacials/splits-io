@@ -151,7 +151,7 @@ class Run < ApplicationRecord
   def file
     file = $s3_bucket_internal.object("splits/#{s3_filename}")
 
-    if file.content_length >= (10 * 1024 * 1024) # 10 MiB
+    if file.content_length >= (100 * 1024 * 1024) # 100 MiB
       raise RunTooLarge
     end
 
