@@ -56,7 +56,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
     presigned_request = $s3_bucket_external.presigned_post(
       key: "splits/#{filename}",
-      content_length_range: 1..(100*1024*1024)
+      content_length_range: 1..(25*1024*1024)
     )
 
     render status: 201, location: api_v4_run_url(@run), json: {
