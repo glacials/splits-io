@@ -1,6 +1,8 @@
 require 'simplecov'
 require 'json-schema-rspec'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/lib/parser/'
+end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -28,7 +30,7 @@ RSpec.configure do |config|
   end
 
   config.include JSON::SchemaMatchers
-  #schema file
+  # schema file
   config.json_schemas = {
     game: 'spec/support/views/api/v4/games/show.json',
     category: 'spec/support/views/api/v4/categories/show.json',
