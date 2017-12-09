@@ -72,25 +72,26 @@ class Runs::StatsController < Runs::ApplicationController
       rows = []
 
       header = ['Segment name']
-      (1..@run.attempts).each do |attempt_number|
-        header << "Attempt ##{attempt_number} (ms)"
+      (1..@run.segments.first.histories.order(attempt_number: :asc).last.attempt_number).each do |attempt_number|
+        header << "Attempt ##{attempt_number}'s Duration (ms)"
       end
       csv << header
 
-      @run.segments.includes(:histories).each do |segment|
+      @run.segments.order(segment_number: :asc).includes(:histories).each do |segment|
         row = []
         row << segment.name
         if segment.histories.empty?
           next
         end
-        (1..@run.attempts).each do |attempt_number|
-          h = segment.histories.find_by(attempt_number: attempt_number)
-          if h.nil?
-            row << ""
-            next
-          end
 
+        attempt_number = 1
+        segment.histories.order(attempt_number: :asc).each do |h|
+          while h.attempt_number > attempt_number
+            row << ""
+            attempt_number += 1
+          end
           row << h.duration_ms(Run::REAL)
+          attempt_number += 1
         end
         csv << row
       end
