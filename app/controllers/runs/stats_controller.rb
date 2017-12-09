@@ -72,7 +72,14 @@ class Runs::StatsController < Runs::ApplicationController
       rows = []
 
       header = ['Segment name']
-      (1..@run.segments.first.histories.order(attempt_number: :asc).last.attempt_number).each do |attempt_number|
+
+      if @run.segments.empty? || @run.segments.first.histories.empty?
+        attempts = 0
+      else
+        attempts = @run.segments.first.histories.order(attempt_number: :asc).last.attempt_number
+      end
+
+      (1..attempts).each do |attempt_number|
         header << "Attempt ##{attempt_number}'s Duration (ms)"
       end
       csv << header
