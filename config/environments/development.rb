@@ -12,6 +12,14 @@ SplitsIO::Application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local = true
 
+  # Allow the use of better_errors from the host (not just the container)
+  if defined? BetterErrors
+    # Private subnets defined by RFC1918 as stated in https://docs.docker.com/v1.5/articles/networking/
+    BetterErrors::Middleware.allow_ip! '10.0.0.0/8'
+    BetterErrors::Middleware.allow_ip! '172.16.0.0/12'
+    BetterErrors::Middleware.allow_ip! '192.168.0.0/16'
+  end
+
   # Enable/disable caching. By default caching is disabled.
   if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
