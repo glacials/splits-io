@@ -53,7 +53,7 @@ hr style='margin: .5em; opacity: 0.25'
     p
       = 'This will get you to a '
       span class=('short' if @run.short?)
-        = format_milliseconds(@run.duration_ms(timing) - improvements.sum { |i| i[:time_difference] / 2 })
+        = format_milliseconds(@run.duration_ms(timing) - improvements.map { |i| i[:time_difference] / 2 }.sum)
       = ', then we\'ll go from there.'
       - if @comparison_run.user.present?
         p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.uri.to_s, target: :_blank}!

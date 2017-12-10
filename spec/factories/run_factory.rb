@@ -1,6 +1,8 @@
 FactoryBot.define do
   test_files = {
     # factory name:           {filename: 'filename-within-spec/factories/run_files},
+
+    # timer runs
     livesplit14:              {filename: 'livesplit1.4'},
     livesplit15:              {filename: 'livesplit1.5.lss'},
     livesplit16:              {filename: 'livesplit1.6'},
@@ -10,6 +12,10 @@ FactoryBot.define do
     llanfair_gered_with_refs: {filename: 'llanfair_gered_with_refs.lfs'},
     wsplit:                   {filename: 'wsplit'},
     timesplittracker:         {filename: 'timesplittracker.txt'},
+
+    # a bad run and a better run from the same category, against which suggestions can be generated
+    compare_subject:          {filename: 'compare_subject.lss'},
+    compare_object:           {filename: 'compare_object.lss'},
   }
 
   test_files.each do |factory_name, file|
