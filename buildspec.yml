@@ -10,7 +10,7 @@ phases:
       - echo Building the Docker image...          
       - docker-compose version
       - docker-compose build
-      - docker-compose run -e RAILS_ENV=test rails db:migrate
+      - docker-compose run -e RAILS_ENV=test web rails db:migrate
       - docker-compose run -e RAILS_ENV=test web rspec
   post_build:
     commands:
