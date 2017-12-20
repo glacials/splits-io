@@ -24,3 +24,12 @@ services:
       - 4569:4569
     expose:
       - "4569"
+  lambda:
+    image: lambci/lambda:nodejs6.10
+    volumes:
+      - ./scripts/lambda:/app
+    depends_on:
+      - db
+      - s3
+    links:
+      - s3:s3.localhost
