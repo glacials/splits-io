@@ -9,7 +9,7 @@ RUN bundle install
 # Fill in your Twitch client information if you want login/signup to work
 # You can make a Twitch client at https://dev.twitch.tv/dashboard/apps
 ENV TWITCH_CLIENT_ID put_your_client_id_here
-ENV TWITCH_CLIENT_SECRET put_your_client_secret_hete
+ENV TWITCH_CLIENT_SECRET put_your_client_secret_here
 
 # Play with these if you want
 ENV READ_ONLY_MODE 0

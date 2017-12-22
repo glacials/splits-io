@@ -1,0 +1,17 @@
+version: 0.2
+
+env:
+  variables:
+    DOCKER_HOST: tcp://127.0.0.1:2375
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker-compose version
+      - docker-compose build
+      - docker-compose run -e RAILS_ENV=test web rails db:migrate
+      - docker-compose run -e RAILS_ENV=test web rspec
+  post_build:
+    commands:
+      - echo Build completed! wixSanic
