@@ -18,3 +18,5 @@
 # testing
 /.rspec
 /coverage
+
+/node_modules
