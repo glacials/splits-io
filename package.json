@@ -1,5 +1,7 @@
 {
   "name": "splits-io",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "moment": "^2.20.1"
+  }
 }

@@ -22,7 +22,7 @@
 //= require tipsy
 //= require turbolinks
 //= require underscore
-//= require moment
+//= require moment/moment
 //= require d3
 //= require c3
 //= require clipboard
