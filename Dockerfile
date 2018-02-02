@@ -16,9 +16,6 @@ WORKDIR /app
 ADD Gemfile /app/Gemfile
 ADD Gemfile.lock /app/Gemfile.lock
 RUN bundle install
-ADD package.json /app/package.json
-ADD yarn.lock /app/yarn.lock
-RUN yarn install
 
 # Fill in your Twitch client information if you want login/signup to work
 # You can make a Twitch client at https://dev.twitch.tv/dashboard/apps

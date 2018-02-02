@@ -19,9 +19,6 @@ WORKDIR /app
 ADD Gemfile /app/Gemfile
 ADD Gemfile.lock /app/Gemfile.lock
 RUN bundle install
-ADD package.json /app/package.json
-ADD yarn.lock /app/yarn.lock
-RUN yarn install
 
 # You don't need to change anything in this file by hand! Set the below env vars as desired in your host, then use
 #   cat Dockerfile | envsubst > Dockerfile.tmp && mv -f Dockerfile.tmp Dockerfile
