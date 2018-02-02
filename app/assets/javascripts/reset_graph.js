@@ -12,16 +12,16 @@ $(function () {
     "rgba(243, 123, 29, 1)"
   ];
 
-  let reset_counter = 0;
-  let reset_data = [];
+  var reset_counter = 0;
+  var reset_data = [];
 
   gon.run.segments.forEach(function (segment, i) {
-    let segment_total_resets = segment.histories.filter(function(h) {
+    var segment_total_resets = segment.histories.filter(function(h) {
       return (h.duration_ms === null || h.duration_ms === 0);
     }).length;
 
     // By doing this backwards we allow the loop to not need a special case for index 0
-    let segment_resets = Math.abs(segment_total_resets - reset_counter);
+    var segment_resets = Math.abs(segment_total_resets - reset_counter);
     if (segment_resets > 0) {
       reset_data.push([segment.name, segment_resets]);
       reset_counter = segment_total_resets;
@@ -46,9 +46,9 @@ $(function () {
     tooltip: {
       format: {
         value: function (value, ratio) {
-          return `${value} | ${d3.round(ratio * 100, 1)}%`;
+          return value + " | " +  d3.round(ratio * 100, 1) + "%";
         }
       }
     }
-  })
+  });
 });
