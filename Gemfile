@@ -83,18 +83,10 @@ gem 'rest-client'
 gem 'platform-api'
 
 # javascript
-gem 'bower-rails'
-gem 'c3-rails'
-gem 'clipboard-rails'
 gem 'coffee-rails'
-gem 'd3-rails', '~> 3.5.17'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'js_cookie_rails'
-gem 'numeraljs-rails'
-gem 'spinjs-rails'
 gem 'tipsy-rails'
-gem 'underscore-rails'
 
 # models
 gem 'has_secure_token'
@@ -126,6 +118,7 @@ gem 'purecss-rails', github: 'glacials/purecss-rails'
 gem 'sass-rails'
 gem 'slim'
 gem 'uglifier'
+gem 'webpacker'
 
 # workers/jobs
 gem 'delayed_job_active_record'
