@@ -16,6 +16,8 @@
 //= require js-cookie/src/js.cookie
 //= require bootstrap
 //= require bootstrap-toggle/js/bootstrap-toggle
+//= require spin
+//= rquire jquery.spin
 //= require numeraljs/numeral
 //= require tipsy
 //= require turbolinks

@@ -86,6 +86,7 @@ gem 'platform-api'
 gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'spinjs-rails'
 gem 'tipsy-rails'
 
 # models
