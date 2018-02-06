@@ -26,6 +26,7 @@ ENV ENABLE_ADS 0
 
 # Nothing below should ever need to be changed
 ENV RAILS_ENV development
+ENV NODE_ENV development
 
 ENV S3_BUCKET splits-io
 ENV AWS_REGION local

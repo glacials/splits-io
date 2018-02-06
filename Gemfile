@@ -84,10 +84,6 @@ gem 'platform-api'
 
 # javascript
 gem 'coffee-rails'
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
-gem 'spinjs-rails'
-gem 'tipsy-rails'
 
 # models
 gem 'has_secure_token'
@@ -104,7 +100,6 @@ gem 'rails', '~> 5'
 
 # speediness
 gem 'dalli'
-gem 'jquery-turbolinks'
 gem 'turbolinks', github: 'rails/turbolinks'
 
 # views

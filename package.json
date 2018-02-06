@@ -13,11 +13,11 @@
     "d3": "3.5.17",
     "jquery": "^3.3.1",
     "jquery-ujs": "^1.2.2",
+    "jquery.turbolinks": "^2.1.0",
     "js-cookie": "^2.2.0",
     "moment": "^2.20.1",
-    "numeraljs": "^1.5.6",
     "spin.js": "^3.1.0",
-    "turbolinks": "^5.1.1",
+    "tipsy": "^1.0.0",
     "underscore": "^1.8.3",
     "webpack-merge": "^4.1.1"
   },
