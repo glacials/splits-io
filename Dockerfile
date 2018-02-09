@@ -1,15 +1,13 @@
 FROM ruby:2.4.2
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 
-# Node.js
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-    && apt-get install -y nodejs
+# Setup for current nodejs
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 
-# yarn
+# Setup for yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -\
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y yarn
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn
 
 RUN mkdir /app
 WORKDIR /app
@@ -28,6 +26,7 @@ ENV ENABLE_ADS 0
 
 # Nothing below should ever need to be changed
 ENV RAILS_ENV development
+ENV NODE_ENV development
 
 ENV S3_BUCKET splits-io
 ENV AWS_REGION local

@@ -2,7 +2,7 @@
 Splits I/O is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
 code. It's written in Ruby on Rails.
 
-Splits I/O currently supports splits from ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer, LlanfairGered, 
+Splits I/O currently supports splits from ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer, LlanfairGered,
 Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit.
 
 ## API
@@ -73,6 +73,6 @@ to rebuild the Docker image for your changes to apply.
 
 ## Parsing
 Split I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`.
-To upgrade the parser, simply run `bundle exec rake update_lsc` and commit the changes.
+To upgrade the parser, simply run `docker-compose run web bundle exec rake update_lsc` and commit the changes.
 
 [livesplit-core]: https://github.com/CryZe/livesplit-core/

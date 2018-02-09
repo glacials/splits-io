@@ -10,20 +10,5 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery.turbolinks
-//= require jquery_ujs
-//= require js.cookie
-//= require bootstrap
-//= require bootstrap-toggle
-//= require numeral
-//= require spin
-//= require jquery.spin
-//= require tipsy
 //= require turbolinks
-//= require underscore
-//= require moment/moment
-//= require d3
-//= require c3
-//= require clipboard
 //= require_tree .

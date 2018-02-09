@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: bash -c "rm -f /app/tmp/pids/server.pid && yarn install && bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/app
     ports:
@@ -12,8 +12,10 @@ services:
     depends_on:
       - db
       - s3
+      - webpacker
     links:
       - s3:s3.localhost
+      - webpacker:webpacker.localhost
   db:
     image: postgres
     volumes:
@@ -24,3 +26,12 @@ services:
       - 4569:4569
     expose:
       - "4569"
+  webpacker:
+    build: .
+    command: bash -c "yarn install && bundle exec bin/webpack-dev-server"
+    volumes:
+      - .:/app
+    ports:
+      - 3035:3035
+    expose:
+      - "3035"
