@@ -14,9 +14,10 @@ RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs ya
 
 RUN mkdir /app
 WORKDIR /app
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
-RUN bundle install
+COPY Gemfile Gemfile.lock ./
+RUN bundle install -j "$(expr "$(getconf _NPROCESSORS_ONLN)" - 1)"
+COPY package.json yarn.lock ./
+RUN yarn install
 
 # You don't need to change anything in this file by hand! Set the below env vars as desired in your host, then use
 #   cat Dockerfile | envsubst > Dockerfile.tmp && mv -f Dockerfile.tmp Dockerfile
@@ -44,5 +45,5 @@ ENV READ_ONLY_MODE $READ_ONLY_MODE
 ENV NODE_ENV $NODE_ENV
 ENV ASSET_HOST $ASSET_HOST
 
-ADD . /app
+COPY . /app
 EXPOSE 3000

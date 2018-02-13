@@ -11,9 +11,10 @@ RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs ya
 
 RUN mkdir /app
 WORKDIR /app
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
-RUN bundle install
+COPY Gemfile Gemfile.lock ./
+RUN bundle install -j "$(expr "$(getconf _NPROCESSORS_ONLN)" - 1)"
+COPY package.json yarn.lock ./
+RUN yarn install
 
 # Fill in your Twitch client information if you want login/signup to work
 # You can make a Twitch client at https://dev.twitch.tv/dashboard/apps
@@ -33,5 +34,5 @@ ENV AWS_REGION local
 ENV AWS_ACCESS_KEY_ID beep
 ENV AWS_SECRET_KEY boop
 
-ADD . /app
+COPY . /app
 EXPOSE 3000
