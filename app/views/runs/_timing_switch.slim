@@ -1,9 +1,7 @@
 input#toggle-timing type='checkbox' checked=(timing == Run::REAL) data-toggle='toggle' data-on='<div class="glyphicon glyphicon-time"></div> Realtime' data-off='<div class="glyphicon glyphicon-time"></div> Gametime' data-size='small' data-style='ios' data-onstyle='success' data-offstyle='info'
 - if timing == Run::REAL
-  coffee:
-    $("#toggle-timing").change ->
-      Turbolinks.visit("?timing=game")
+  javascript:
+    $("#toggle-timing").change(function() { Turbolinks.visit("?timing=game"); });
 - else
-  coffee:
-    $("#toggle-timing").change ->
-      Turbolinks.visit("?timing=real")
+  javascript:
+    $("#toggle-timing").change(function() { Turbolinks.visit("?timing=real"); });

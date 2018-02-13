@@ -222,7 +222,7 @@ class RunsController < ApplicationController
   end
 
   def attempt_to_claim
-    if @run.user == nil 
+    if @run.user.nil?
       if @run.claim_token.nil?
         redirect_to run_path(@run), alert: 'This run is not claimable.'
         return
