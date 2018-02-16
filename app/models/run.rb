@@ -12,8 +12,8 @@ class Run < ApplicationRecord
   include ActionView::Helpers::DateHelper
 
   # Timing types
-  REAL = 'real'
-  GAME = 'game'
+  REAL = 'real'.freeze
+  GAME = 'game'.freeze
 
   belongs_to :user
   belongs_to :category
@@ -44,13 +44,11 @@ class Run < ApplicationRecord
     end
 
     def exportable_programs
-      Run.programs.select { |prg| prg.exportable }
+      Run.programs.select(&:exportable)
     end
 
     def program(string_or_symbol)
-      if Run.programs.include?(string_or_symbol)
-        return string_or_symbol
-      end
+      return string_or_symbol if Run.programs.include?(string_or_symbol)
 
       program_strings = Run.programs.map(&:to_sym).map(&:to_s)
       h = Hash[program_strings.zip(Run.programs)]
@@ -77,7 +75,7 @@ class Run < ApplicationRecord
         end
         return prg if prg_value == value
       end
-      return nil
+      nil
     end
 
     alias_method :find10, :find
@@ -88,9 +86,7 @@ class Run < ApplicationRecord
 
   alias_method :id10, :id
   def id36
-    if id10.nil?
-      return nil
-    end
+    return nil if id10.nil?
 
     id10.to_s(36)
   end
@@ -116,15 +112,10 @@ class Run < ApplicationRecord
   end
 
   def to_s
-    if game.present? && category.present?
-      return "#{game.name} #{category.name}"
-    end
+    return "#{game.name} #{category.name}" if game.present? && category.present?
+    return game.name if game.present?
 
-    if game.present?
-      return game.name
-    end
-
-    return "(no title)"
+    '(no title)'
   end
 
   def path
@@ -132,11 +123,11 @@ class Run < ApplicationRecord
   end
 
   CATEGORY_ALIASES = {
-    "Any% (NG+)" => "Any% NG+",
-    "Any% (New Game+)" => "Any% NG+",
-    "Any %" => "Any%",
-    "All Skills No OOB" => "All Skills no OOB no TA" # for ori_de
-  }
+    'Any% (NG+)' => 'Any% NG+',
+    'Any% (New Game+)' => 'Any% NG+',
+    'Any %' => 'Any%',
+    'All Skills No OOB' => 'All Skills no OOB no TA' # for ori_de
+  }.freeze
 
   def populate_category(game_string, category_string)
     category_string = CATEGORY_ALIASES.fetch(category_string, category_string)
@@ -151,12 +142,12 @@ class Run < ApplicationRecord
   def file
     file = $s3_bucket_internal.object("splits/#{s3_filename}")
 
-    if file.content_length >= (100 * 1024 * 1024) # 100 MiB
-      raise RunTooLarge
-    end
+    return nil unless file.exists?
+
+    raise RunTooLarge if file.content_length >= (100 * 1024 * 1024) # 100 MiB
 
     file.get.body.read
-  rescue Aws::S3::Errors::NoSuchKey, Aws::S3::Errors::AccessDenied
+  rescue Aws::S3::Errors::AccessDenied, Aws::S3::Errors::Forbidden
     nil
   end
 

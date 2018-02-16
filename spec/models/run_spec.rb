@@ -3,6 +3,13 @@ require 'rails_helper'
 describe Run, type: :model do
   let(:run) { FactoryBot.create(:run) }
 
+  context 'with no file' do
+    it 'returns nil' do
+      run.s3_filename = SecureRandom.uuid
+      expect(run.file).to be nil
+    end
+  end
+
   context 'with a game' do
     context 'that has no other runs' do
       let(:run) do
