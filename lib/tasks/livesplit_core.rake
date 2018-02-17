@@ -3,7 +3,7 @@ require 'rubygems/package'
 require 'zlib'
 require 'httparty'
 
-LIVESPLIT_CORE_URL = "https://api.github.com/repos/cryze/livesplit-core/releases/latest"
+LIVESPLIT_CORE_URL = "https://api.github.com/repos/LiveSplit/livesplit-core/releases/latest"
 PARSER_FOLDER = "#{Rake.application.original_dir}/lib/parser"
 DEST_FOLDER = "#{Rake.application.original_dir}/lib/parser/livesplit-core"
 CURRENT_LSC_VERSION = open("#{PARSER_FOLDER}/livesplit_core_version", "r") {|f| f.read }
