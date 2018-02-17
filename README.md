@@ -72,7 +72,7 @@ docker-compose build
 to rebuild the Docker image for your changes to apply.
 
 ## Parsing
-Split I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`.
+Splits I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`.
 To upgrade the parser, simply run `docker-compose run web bundle exec rake update_lsc` and commit the changes.
 
-[livesplit-core]: https://github.com/CryZe/livesplit-core/
+[livesplit-core]: https://github.com/LiveSplit/livesplit-core/
