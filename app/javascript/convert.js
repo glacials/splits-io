@@ -4,9 +4,9 @@ $(() => {
   $("form#convert").submit((evt) => {
     evt.preventDefault();
     let formData = new FormData();
-    formData.set("file", $("input[type=file")[0].files[0]);
-    formData.set("format", $("select").val());
-    formData.set("historic", $("input[type=checkbox]").is("checked"));
+    formData.set("file", $("#convert-file-input")[0].files[0]);
+    formData.set("format", $("#convert-format-select").val());
+
     $("#dropzone-overlay").fadeTo(125, 0.9);
     $("#droplabel").text("Converting file...");
     window.isUploading = true;
@@ -33,6 +33,5 @@ $(() => {
         $("#droplabel").text(`Error converting: ${xhr.responseJSON.message}`);
       }
     });
-    return false;
   });
 });

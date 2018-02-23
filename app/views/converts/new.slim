@@ -4,11 +4,11 @@
 article
   form#convert method="post" action="#" enctype="multipart/form-data"
     .form-group.col-sm-3
-      input type="file" name="file"
+      input#convert-file-input type="file" name="file"
     .form-group.col-sm-1
       | →
     .form-group.col-sm-2
-      select.form-control name="format"
+      select.form-control#convert-format-select name="format"
         - (Run.exportable_programs).each do |prgrm|
           option value="#{prgrm.to_sym}"
             = prgrm.to_s
