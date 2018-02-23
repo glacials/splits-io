@@ -19,14 +19,10 @@ class RunsController < ApplicationController
       return
     end
 
-    if @run.parsed_at.nil?
-      @run.parse_into_db
-    end
+    @run.parse_into_db if @run.parsed_at.nil?
 
     # Catch bad runs
-    if @run.timer.nil?
-      render :cant_parse, status: 500
-    end
+    render :cant_parse, status: 500 if @run.timer.nil?
   end
 
   def index
@@ -46,7 +42,6 @@ class RunsController < ApplicationController
       redirect_to edit_run_path(@run), notice: 'Reparse complete. It might take a minute for your run to update.'
       return
     end
-
   end
 
   def update
@@ -56,7 +51,7 @@ class RunsController < ApplicationController
     end
 
     unless params[@run.id36].respond_to?(:[])
-      redirect_to edit_run_path(@run), alert: "There was an error saving that data. Please try again."
+      redirect_to edit_run_path(@run), alert: 'There was an error saving that data. Please try again.'
     end
 
     if params[@run.id36][:category]
@@ -74,12 +69,12 @@ class RunsController < ApplicationController
     if params[@run.id36][:srdc_url]
       srdc_id = SpeedrunDotCom::Run.id_from_url(params[@run.id36][:srdc_url])
       if !srdc_id
-        redirect_params = {alert: 'Your speedrun.com URL must have the format http://www.speedrun.com/run/6yjoqgzd.'}
+        redirect_params = {alert: 'Your speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.'}
       else
         if !@run.update(srdc_id: srdc_id)
-          redirect_params = {alert: "There was an error updating your SRDC link. Please try again."}
+          redirect_params = {alert: 'There was an error updating your SRDC link. Please try again.'}
         else
-          redirect_params = {notice: "Link with Speedrun.com updated."}
+          redirect_params = {notice: 'Link with Speedrun.com updated.'}
         end
       end
       redirect_to edit_run_path(@run), redirect_params
@@ -137,7 +132,8 @@ class RunsController < ApplicationController
       s3_file = $s3_bucket_internal.object("splits/#{@run.s3_filename}")
 
       if timer == Run.program(@run.timer) && s3_file.exists?
-        redirect_to s3_file.presigned_url(:get,
+        redirect_to s3_file.presigned_url(
+          :get,
           response_content_disposition: "attachment; filename=\"#{@run.filename}\""
         )
         return
@@ -151,7 +147,7 @@ class RunsController < ApplicationController
       else
         render_to_string(params[:timer], layout: false)
       end,
-      filename: "#{@run.filename(timer: timer)}",
+      filename: @run.filename(timer: timer).to_s,
       layout: false
     )
   end
