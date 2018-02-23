@@ -2,7 +2,7 @@
 - content_for(:header) do
   h2 convert splits to other cool formats
 article
-  form#convert method="post" action="" enctype="multipart/form-data"
+  form#convert method="post" action="#" enctype="multipart/form-data"
     .form-group.col-sm-3
       input type="file" name="file"
     .form-group.col-sm-1
@@ -13,8 +13,5 @@ article
           option value="#{prgrm.to_sym}"
             = prgrm.to_s
         option value="json" JSON
-    .form-group.col-sm-2
-      input type="checkbox" name="historic" id="historic" value="1"
-      label< for="historic" Include History?
     .form-group.col-sm-2
       input type="submit" value="convert" class="btn btn-default"

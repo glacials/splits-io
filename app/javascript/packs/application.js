@@ -31,3 +31,6 @@ global.Cookies = Cookies
 $(function() {
     $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle()
 })
+
+import "../convert"
+
