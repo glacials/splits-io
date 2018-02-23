@@ -15,11 +15,11 @@ module SpeedrunDotCom
       return nil if url.blank?
 
       uri = URI.parse(url)
-      unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ %r{^/run/(.*)$}
+      unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ %r{^(?:/.*?)?/run/(.*)$}
         return false
       end
 
-      %r{^/run/(.*)$}.match(uri.path)[1]
+      %r{^(?:/.*?)?/run/(.*)$}.match(uri.path)[1]
     end
 
     def self.url_from_id(id)
