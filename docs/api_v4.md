@@ -232,10 +232,211 @@ Each presigned request can only be successfully made once, and expires if not ma
 
 [s3]: https://aws.amazon.com/s3
 
-### Giving the run an owner
-If your intention is for this run to belong to a user, you'll need to send that user to the `uris.claim_uri` URI
-returned from the first request. If they're logged in when they visit this URI, their account will automatically claim
-the run.
+## User Authentication and Authorization
+If you want to upload runs for a user (e.g. from within a timer), you have two options. If you only need to know who a user is on Splits I/O, skip to advanced.
+
+### Simple option
+Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
+in when they visit it, their account will automatically claim the run.
+
+This is the easier method to implement, but has some flaws:
+
+- The user must open the run in their web browser. If you prefer to upload runs in the background, this method isn't for
+  you.
+- If there are network or browser issues when the user's browser tries to load the run, it won't be claimed.
+- If the user isn't logged in when their browser opens, the run will remain unclaimed. Neither your application nor the
+  user will receive any indication of this.
+
+### Advanced option
+The advanced option is a standard OAuth2 flow. You can request permission from the user to upload runs to their account
+on their behalf. If they accept, you will receive an OAuth token which you can include in your run upload requests in
+order to create the run as that user.
+
+The following instructions go into naive-case details about implementing this OAuth support in your application. If you
+want to learn more about OAuth or need general OAuth troubleshooting help, you can [research OAuth2
+online][oauth2-simplified]. Especially if your application is a website, it's likely that the language you're using has
+well-established libraries that handle much of the below OAuth flow for you.
+
+In all cases, you'll need to first go to your Splits I/O account's [settings page][1] and create an application, then
+refer to the relevant section below.
+
+*Note: Once you have an OAuth token, you can use a request like this to retrieve information about it:*
+```http
+GET https://splits.io/oauth/token/info?access_token=YOUR_TOKEN
+```
+
+[oauth2-simplified]: https://aaronparecki.com/oauth-2-simplified/
+
+#### Example 1: My application is a local program that runs on the user's computer
+If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
+flow**. This means your application will open the Splits I/O authorization page in the user's default browser, and if
+the user accepts the authorization, Splits I/O will give your application a `code` which you should immediately exchange
+for an OAuth token using a secure API request.
+
+1. Configure your program to run a small web server on a port of your choosing, and listen for `GET` requests to a path
+    of your choosing. In this example, let's say you're listening on port 8000 for requests to `/auth/splitsio`.
+2. On your Splits I/O [settings page][1], set your `redirect_uri` to something like
+    ```http
+    http://localhost:8000/auth/splitsio
+    ```
+    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
+3. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
+    this:
+    ```http
+    https://splits.io/oauth/authorize?response_type=code&scope=upload_run&redirect_uri=http://localhost:8000/auth/splitsio&client_id=YOUR_CLIENT_ID
+    ```
+    If the user authorizes your application, they will be redirected to a URL like
+    ```http
+    http://localhost:8000/auth/splitsio?code=YOUR_CODE
+    ```
+    which the web server you set up in step 1 should respond to. Give the user a nice-looking HTML page saying to switch
+    back to the application and strip the `code` URL parameter for the next step.
+4. Use your `code` to make this request:
+    ```http
+    POST https://splits.io/oauth/token
+    ```
+    with this body:
+    ```http
+    grant_type=authorization_code
+    client_id=YOUR_CLIENT_ID
+    client_secret=YOUR_CLIENT_SECRET
+    code=YOUR_CODE
+    redirect_uri=http://localhost:8000/auth/splitsio
+    ```
+    which will respond with something like this:
+    ```json
+    {
+      "access_token": "0e82e0ac69fed3c6e5044682a9eb94ccded5ace70e84838104a131cb50595cd2",
+      "token_type": "bearer",
+      "expires_in": 7200,
+      "refresh_token": "0e23b095e0d0104ff0642cde71b61d236f3b3865734a0e734714ecd45b25106c",
+      "scope": "upload_run",
+      "created_at": 1499314941
+    }
+    ```
+    Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
+    by including this header in your requests:
+    ```http
+    Authorization: Bearer YOUR_ACCESS_TOKEN
+    ```
+    The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
+    can retrieve a new one with no user intervention using the returned `refresh_token`:
+    ```http
+    POST https://splits.io/oauth/token
+    ```
+    ```http
+    grant_type=refresh_token
+    refresh_token=YOUR_REFRESH_TOKEN
+    ```
+    This will return a new access token (and a new refresh token -- update yours!) in a body format identical to
+    original grant (above).
+
+    This style of expiring access tokens periodically and using refresh tokens to replace them improves security by
+    making it obvious when a user's stolen credentials are in use. See [RFC 6749][rfc6749-6] for more information on
+    refresh tokens.
+
+#### Example 2: My application is an all-JavaScript website
+If your application is an in-browser JavaScript application with little or no logic performed by a backend server, you
+should use OAuth's **implicit grant flow**.
+
+1. On your Splits I/O [settings page][1], set your `redirect_uri` to where you want users to land after going through
+   the authorization flow. For this example, we'll use
+    ```http
+    https://YOUR_WEBSITE/auth/splitsio
+    ```
+    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
+2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
+    this:
+    ```http
+    https://splits.io/oauth/authorize?response_type=token&scope=upload_run&redirect_uri=https://YOUR_WEBSITE/auth/splitsio&client_id=YOUR_CLIENT_ID
+    ```
+    If the user authorizes your application, they will be redirected to a URL like
+    ```http
+    https://YOUR_WEBSITE/auth/splitsio#access_token=YOUR_TOKEN
+    ```
+    Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
+    by including this header in your requests:
+    ```http
+    Authorization: Bearer YOUR_ACCESS_TOKEN
+    ```
+    The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
+    can retrieve a new one with no user intervention using redirection upon accessing your app, or a hidden iframe to
+    invisibly take the user through the authorization flow. If the user is still authorized, no user interaction will be
+    required and you can strip your new access token from the URL fragment.
+
+    This style of expiring access tokens periodically improves security by limiting the usability of any stolen
+    credentials.
+
+#### Example 3: My application is a website
+If your application is a website with a backend component, you should use OAuth's **authorization code grant flow**.
+This means your website will link the user to the Splits I/O authorization page, and if the user accepts the
+authorization, Splits I/O will give your application a `code` which it will immediately exchange for an OAuth token
+using a secure API request.
+
+1. On your Splits I/O [settings page][1], set your `redirect_uri` to where you want users to land after going through
+   the authorization flow. For this example, we'll use
+    ```http
+    https://YOUR_WEBSITE/auth/splitsio
+    ```
+    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
+2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
+    this:
+    ```http
+    https://splits.io/oauth/authorize?response_type=code&scope=upload_run&redirect_uri=https://YOUR_WEBSITE/auth/splitsio&client_id=YOUR_CLIENT_ID
+    ```
+    If the user authorizes your application, they will be redirected to a URL like
+    ```http
+    https://YOUR_WEBSITE/auth/splitsio?code=YOUR_CODE
+    ```
+    Strip the `code` URL parameter for the next step.
+4. Use your `code` to make this request:
+    ```http
+    POST https://splits.io/oauth/token
+    ```
+    with this body:
+    ```http
+    grant_type=authorization_code
+    client_id=YOUR_CLIENT_ID
+    client_secret=YOUR_CLIENT_SECRET
+    code=YOUR_CODE
+    redirect_uri=http://localhost:8000/auth/splitsio
+    ```
+    which will respond with something like this:
+    ```json
+    {
+      "access_token": "0e82e0ac69fed3c6e5044682a9eb94ccded5ace70e84838104a131cb50595cd2",
+      "token_type": "bearer",
+      "expires_in": 7200,
+      "refresh_token": "0e23b095e0d0104ff0642cde71b61d236f3b3865734a0e734714ecd45b25106c",
+      "scope": "upload_run",
+      "created_at": 1499314941
+    }
+    ```
+    Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
+    by including this header in your requests:
+    ```http
+    Authorization: Bearer YOUR_ACCESS_TOKEN
+    ```
+    The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
+    can retrieve a new one with no user intervention using the returned `refresh_token`:
+    ```http
+    POST https://splits.io/oauth/token
+    ```
+    ```http
+    grant_type=refresh_token
+    refresh_token=YOUR_REFRESH_TOKEN
+    ```
+    This will return a new access token (and a new refresh token -- update yours!) in a body format identical to
+    original grant (above).
+
+    This style of expiring access tokens periodically and using refresh tokens to replace them improves security by
+    making it obvious when a user's stolen credentials are in use. See [RFC 6749][rfc6749-6] for more information on
+    refresh tokens.
+
+[1]: https://splits.io/settings
+[rfc6749-6]: https://tools.ietf.org/html/rfc6749#section-6
+
+
 
 ## Converting
 ```bash
