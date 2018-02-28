@@ -35,10 +35,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     else
       new_extension = params[:format]
     end
-    filename_without_extension = params[:file].original_filename.split(old_extension)[0]
-    if filename_without_extension.present? && filename_without_extension[-1] == '.'
-      filename_without_extension = filename_without_extension.chop
-    end
+    filename_without_extension = params[:file].original_filename.split(".#{old_extension}")[0]
 
     filename = "#{filename_without_extension}.#{new_extension}"
     response.set_header('X-Filename', filename)
