@@ -10,8 +10,8 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def read_only_mode
-    write_actions = ['create', 'edit', 'destroy']
-    write_methods = ['POST', 'PUT', 'DELETE', 'PATCH']
+    write_actions = %w[create edit destroy]
+    write_methods = %w[POST PUT DELETE PATCH]
     if write_actions.include?(action_name) || write_methods.include?(request.method)
       render template: 'pages/read_only_mode'
       return false
@@ -25,7 +25,7 @@ class Api::V4::ApplicationController < ActionController::Base
       'Access-Control-Allow-Origin' => '*',
       'Access-Control-Allow-Methods' => '*',
       'Access-Control-Request-Method' => '*',
-      'Access-Control-Allow-Headers' => 'origin, X-Requested-With, Content-Type, Accept, Authorization'
+      'Access-Control-Allow-Headers' => 'origin, X-Requested-With, Content-Type, Accept, Authorization, X-Filename'
     )
   end
 
@@ -36,9 +36,13 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def force_ssl
-    if !request.ssl?
-      render status: 301, json: {error: "The Splits I/O API is only accessible over HTTPS."}
-    end
+    return if request.ssl?
+    secure_uri = URI.parse(request.original_url).scheme('https')
+    response.set_header('Location', secure_uri.to_s)
+
+    render status: 301, json: {
+      error: 'The Splits I/O API is only accessible over HTTPS.',
+    }
   end
 
   def not_found(collection_name)
@@ -69,7 +73,11 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_run
-    @run = Run.find36(params[:run])
+    if params[:historic] == '1'
+      @run = Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
+    else
+      @run = Run.includes(:game, :category, :user, :segments).find36(params[:run])
+    end
   rescue ActiveRecord::RecordNotFound
     render not_found(:run)
   end
