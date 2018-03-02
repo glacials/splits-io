@@ -35,6 +35,7 @@ SplitsIO::Application.routes.draw do
   get  '/random',     to: 'runs#random',     as: :random
 
   get  '/convert',    to: 'converts#new'
+  post '/convert',    to: 'converts#create'
 
   get '/search',        to: redirect('/games') # all deprecated, use GET /games
   get '/search/:q',     to: redirect('/games?q=%{q}')
