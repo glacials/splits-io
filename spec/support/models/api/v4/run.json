@@ -120,6 +120,9 @@
         ],
         "additionalProperties": false,
         "properties": {
+          "attempt_number": {
+            "type": "number"
+          },
           "realtime_duration_ms": {
             "type": "number",
             "minimum": 0
@@ -140,6 +143,20 @@
           "realtime_duration_ms",
           "gametime_duration_ms"
         ]
+      },
+      "additionalProperties": false,
+      "properties": {
+        "attempt_number": {
+          "type": "number"
+        },
+          "realtime_duration_ms": {
+            "type": "number",
+            "minimum": 0
+          },
+          "gametime_duration_ms": {
+            "type": "number",
+            "minimum": 0
+          }
       }
     }
   }
