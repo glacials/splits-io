@@ -5,5 +5,5 @@ class Api::V4::SegmentSerializer < Api::V4::ApplicationSerializer
               :gametime_start_ms, :gametime_end_ms, :gametime_duration_ms, :gametime_shortest_duration_ms,
               :gametime_gold, :gametime_reduced, :gametime_skipped
 
-  has_many :histories, serializer: Api::V4::SegmentHistoriesSerializer
+  has_many :histories, serializer: Api::V4::SegmentHistorySerializer
 end
