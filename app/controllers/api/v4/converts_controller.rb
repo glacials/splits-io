@@ -18,10 +18,10 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     )
 
     @run.parse_into_db
-    if @run.program == nil
+    if @run.program.nil?
       render status: 400, json: {
         status: 400,
-        message: "Unable to parse that run."
+        message: 'Unable to parse that run.'
       }
       return
     end
@@ -35,11 +35,12 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     else
       new_extension = params[:format]
     end
-    filename_without_extension = params[:file].original_filename.split(old_extension)[0]
+    filename_without_extension = params[:file].original_filename.split(".#{old_extension}")[0]
 
     filename = "#{filename_without_extension}.#{new_extension}"
+    response.set_header('X-Filename', filename)
 
-    if params[:format] == "json"
+    if params[:format] == 'json'
       new_file = render_to_string(json: @run, serializer: Api::V4::Convert::RunSerializer)
     else
       new_file = render_to_string("runs/#{params[:format]}", layout: false)
@@ -56,7 +57,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
   def check_parameters
     params.require(:file)
     params.require(:format)
-    supported = (Run.exportable_programs.map(&:to_sym).map(&:to_s)) + ["json"]
+    supported = Run.exportable_programs.map(&:to_sym).map(&:to_s) + ['json']
     unless supported.map(&:to_s).include?(params[:format])
       render status: 400, json: {
         status: 400,
