@@ -36,7 +36,14 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def force_ssl
-    render status: 301, json: {error: 'The Splits I/O API is only accessible over HTTPS.'} unless request.ssl?
+    return if request.ssl?
+    secure_uri = URI.parse(request.original_url).scheme('https')
+    response.set_header('Location', secure_uri)
+
+    render status: 301, json: {
+      error: 'The Splits I/O API is only accessible over HTTPS.',
+      location: secure_uri
+    }
   end
 
   def not_found(collection_name)
