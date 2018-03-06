@@ -7,6 +7,7 @@ class Game < ApplicationRecord
 
   has_many :categories
   has_many :runs, through: :categories
+  has_many :users, through: :runs
   has_many :aliases, class_name: 'GameAlias'
 
   after_create :create_initial_alias

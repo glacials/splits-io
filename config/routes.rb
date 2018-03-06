@@ -111,8 +111,8 @@ SplitsIO::Application.routes.draw do
       get '/games/:game/runs',       to: 'games/runs#index'
 
       get '/categories/:category', to: 'categories#show', as: 'category'
-
-      get '/categories/:category/:runners', to: 'categories/runners#index'
+      get '/categories/:category/runners', to: 'categories/runners#index'
+      get '/categories/:category/runs',    to: 'categories/runs#index'
 
       get '/runners/:runner', to: 'runners#show', as: 'runner'
 
