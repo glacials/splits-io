@@ -3,11 +3,7 @@
   "required": [
     "id",
     "srdc_id",
-    "realtime_duration_ms",
-    "gametime_duration_ms",
-    "default_timing",
-    "realtime_sum_of_best_ms",
-    "gametime_sum_of_best_ms",
+    "time",
     "program",
     "attempts",
     "image_url",
@@ -29,37 +25,9 @@
         "null"
       ]
     },
-    "realtime_duration_ms": {
-      "type": [
-        "number",
-        "null"
-      ]
-    },
-    "gametime_duration_ms": {
-      "type": [
-        "number",
-        "null"
-      ]
-    },
-    "default_timing": {
-      "type": {
-        "enum": [
-          "real",
-          "game"
-        ]
-      }
-    },
-    "realtime_sum_of_best_ms": {
-      "type": [
-        "number",
-        "null"
-      ]
-    },
-    "gametime_sum_of_best_ms": {
-      "type": [
-        "number",
-        "null"
-      ]
+    "time": {
+      "type": "number",
+      "minimum": 0
     },
     "program": {
       "type": {
@@ -109,20 +77,16 @@
         "$ref": "../../../models/api/v4/runner.json"
       }
     },
-    "histories": {
+    "history": {
       "type": "array",
       "items": {
         "type": "object",
         "required": [
-          "attempt_number",
           "realtime_duration_ms",
           "gametime_duration_ms"
         ],
         "additionalProperties": false,
         "properties": {
-          "attempt_number": {
-            "type": "number"
-          },
           "realtime_duration_ms": {
             "type": "number",
             "minimum": 0
@@ -131,31 +95,6 @@
             "type": "number",
             "minimum": 0
           }
-        }
-      }
-    },
-    "segments": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "attempt_number",
-          "realtime_duration_ms",
-          "gametime_duration_ms"
-        ]
-      },
-      "additionalProperties": false,
-      "properties": {
-        "attempt_number": {
-          "type": "number"
-        },
-        "realtime_duration_ms": {
-          "type": "number",
-          "minimum": 0
-        },
-        "gametime_duration_ms": {
-          "type": "number",
-          "minimum": 0
         }
       }
     }

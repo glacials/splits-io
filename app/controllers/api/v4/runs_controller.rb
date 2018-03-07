@@ -19,20 +19,18 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     timer = Run.program_from_attribute(:content_type, @accept_header)
     if timer.nil?
       if params[:historic] == '1'
-        render json: @run,
-               serializer: Api::V4::RunSerializer,
-               include: ['game', 'category', 'runners', 'histories', 'segments', 'segments.histories']
+        render json: @run, serializer: Api::V4::RunWithHistorySerializer
       else
-        render json: @run, serializer: Api::V4::RunSerializer, include: %w[game category runners segments]
+        render json: @run, serializer: Api::V4::RunSerializer
       end
     else
       rendered_run = render_run_to_string(timer)
       send_data(
         rendered_run,
         layout: false,
-        type: @accept_header.to_s,
+        type: "#{@accept_header}",
         disposition: 'inline',
-        filename: @run.filename(timer: timer).to_s
+        filename: "#{@run.filename(timer: timer)}"
       )
     end
   end
@@ -41,12 +39,14 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     filename = SecureRandom.uuid
 
     rp = run_params
-    rp = {} if rp.nil?
+    if rp.nil?
+      rp = {}
+    end
 
     rp = rp.merge(s3_filename: filename, user: current_user)
 
     @run = Run.create(rp)
-    unless @run.persisted?
+    if !@run.persisted?
       render status: 400, json: {
         status: 400,
         message: "Couldn't reserve run. Please try again."
@@ -56,12 +56,12 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
     presigned_request = $s3_bucket_external.presigned_post(
       key: "splits/#{filename}",
-      content_length_range: 1..(25 * 1024 * 1024)
+      content_length_range: 1..(25*1024*1024)
     )
 
     render status: 201, location: api_v4_run_url(@run), json: {
       status: 201,
-      message: 'Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.',
+      message: "Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.",
       id: @run.id36,
       claim_token: @run.claim_token,
       uris: {
@@ -96,18 +96,21 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   private
 
   def set_link_headers
-    links = build_link_headers([{url: api_v4_run_url(@run), rel: 'api'}, {url: run_url(@run), rel: 'site'}])
+    links = build_link_headers([
+      {url: api_v4_run_url(@run), rel: 'api'},
+      {url: run_url(@run), rel: 'site'}
+    ])
     headers['Link'] = if headers['Link'].present?
-                        "#{headers['Link']}, #{links}"
-                      else
-                        links
-                      end
+       "#{headers['Link']}, #{links}"
+    else
+      links
+    end
   end
 
   def find_accept_header
     @accept_header = request.headers.fetch('HTTP_ACCEPT', 'application/json').downcase
     if @accept_header == 'application/original-timer'
-      @accept_header = Run.program(@run.timer).content_type.to_s
+      @accept_header = "#{Run.program(@run.timer).content_type}"
       return
     end
     @accept_header = 'application/json' if @accept_header.blank?
@@ -135,8 +138,10 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   def run_params
     permitted_params = params.permit(:srdc_id, :image_url)
 
-    return {} if permitted_params.nil?
+    if permitted_params.nil?
+      return {}
+    end
 
-    permitted_params
+    return permitted_params
   end
 end

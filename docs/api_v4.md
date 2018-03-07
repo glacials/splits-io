@@ -25,70 +25,26 @@ curl https://splits.io/api/v4/runs/3nm?historic=1
 ```
 A Run maps 1:1 to an uploaded splits file.
 
-| Field                     | Type                                         | Can it be null?                                       | Description                                                                                                                                                                                                                                   |
-|--------------------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`                      | string                                       | never                                                 | Unique ID for identifying the run on Splits I/O. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
-| `srdc_id`                 | string                                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                         |
-| `realtime_duration_ms`    | number                                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                 |
-| `realtime_sum_of_best_ms` | number                                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                              |
-| `gametime_duration_ms`    | number                                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                 |
-| `gametime_sum_of_best_ms` | number                                       | never                                                 | Gametime sum of best in milliseconds of the run.                                                                                                                                                                                              |
-| `default_timing`          | string                                       | never                                                 | The timing used for the run.  Will be either `real` or `game`.                                                                                                                                                                                |
-| `program`                 | string                                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                             |
-| `attempts`                | number                                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                        |
-| `image_url`               | string                                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits I/O.                                                                                           |
-| `created_at`              | string                                       | never                                                 | The time and date at which this run's source file was uploaded to Splits I/O. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
-| `updated_at`              | string                                       | never                                                 | The time and date at which this run was most recently modified on Splits I/O (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
-| `video_url`               | string                                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                           |
-| `game`                    | Game object (see Game section)               | when unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                           |
-| `category`                | Category object (see Category section)       | when unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                       |
-| `runners`                 | array of Runner objects (see Runner section) | never                                                 | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                    |
-| `segments`                | array of Segment objects                     | never                                                 | The associated segments for the run.
+| Field        | Type                                         | Can it be null?                                       | Description                                                                                                                                                                                                                                   |
+|-------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`         | string                                       | never                                                 | Unique ID for identifying the run on Splits I/O. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
+| `srdc_id`    | string                                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                         |
+| `time`       | number                                       | never                                                 | Duration in seconds of the run.                                                                                                                                                                                                               |
+| `program`    | string                                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                             |
+| `attempts`   | number                                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                        |
+| `image_url`  | string                                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits I/O.                                                                                           |
+| `created_at` | string                                       | never                                                 | The time and date at which this run's source file was uploaded to Splits I/O. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
+| `updated_at` | string                                       | never                                                 | The time and date at which this run was most recently modified on Splits I/O (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
+| `video_url`  | string                                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                           |
+| `game`       | Game object (see Game section)               | when unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                           |
+| `category`   | Category object (see Category section)       | when unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                       |
+| `runners`    | array of Runner objects (see Runner section) | when anonymously uploaded or disowned by runner       | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                    |
 
 If a `historic=1` param is included in the request, one additional field will be present:
 
-| Field          | Type                                         | Null when...                                          | Description                                                                                                                                                                                                                                   |
-|---------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `histories`    | array of History objects                     | never                                                 | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.     |
-
-Segment objects have the following format.
-
-| Field                           | Type          | Can it be null? | Description                                                                                                                                                                                                                                                        |
-|--------------------------------:|:--------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `name`                          | string        | never           | Name of the segment. This value is an exact copy of timers' fields.                                                                                                                                                                                                |
-| `segment_number`                | number        | never           | The segment number of the run. (This value starts at 0)                                                                                                                                                                                                            |
-| `realtime_start_ms`             | number        | never           | The total elapsed time of the run at the moment when this segment was started in realtime. Provided in milliseconds.                                                                                                                                               |
-| `realtime_duration_ms`          | number        | never           | Realtime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
-| `realtime_end_ms`               | number        | never           | The total elapsed time of the run at the moment when this segment was finished in realtime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
-| `realtime_shortest_duration_ms` | number        | when not known  | The shortest duration the runner has ever gotten on this segment in realtime.  Provided in milliseconds                                                                                                                                                            |
-| `realtime_gold`                 | boolean       | never           | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in realtime. This field is shorthand for `realtime_duration_ms == realtime_shortest_duration_ms`.                                                                 |
-| `realtime_skipped`              | boolean       | never           | Whether or not this split was skipped in realtime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
-| `realtime_reduced`              | boolean       | never           | Whether or not this segment was "reduced" in realtime; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
-| `gametime_start_ms`             | number        | never           | The total elapsed time of the run at the moment when this segment was started in gametime. Provided in milliseconds.                                                                                                                                               |
-| `gametime_duration_ms`          | number        | never           | Gametime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
-| `gametime_end_ms`               | number        | never           | The total elapsed time of the run at the moment when this segment was finished in gametime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
-| `gametime_shortest_duration_ms` | number        | when not known  | The shortest duration the runner has ever gotten on this segment in gametime.  Provided in milliseconds                                                                                                                                                            |
-| `gametime_gold`                 | boolean       | never           | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in gametime. This field is shorthand for `duration == best`.                                                                                                      |
-| `gametime_skipped`              | boolean       | never           | Whether or not this split was skipped in gametime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
-| `gametime_reduced`              | boolean       | never           | Whether or not this segment was "reduced" in gametime; that is, had its duration affected by previous splits being skipped.
-
-If a `historic=1` param is included in the request, one additional field will be present:
-
-| Field          | Type                                         | Null when...                                          | Description                                                                                                                                                                                                                                   |
-|---------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `histories`    | array of History objects                     | never                                                 | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.     |
-
-History objects have the following format.
-
-| Field                  | Type                                         | Null when...                                          | Description                                              |
-|-----------------------:|:---------------------------------------------|:------------------------------------------------------|:---------------------------------------------------------|
-| `attempt_number`       | number                                       | never                                                 | The correpsonding attempt number this attempt was.       |
-| `realtime_duration_ms` | number                                       | never                                                 | The realtime duration this attempt took in milliseconds. |
-| `gametime_duration_ms` | number                                       | never                                                 | The gametime duration this attempt took in milliseconds. |
-
-A note when passing `historic=1` along with your request: Adding historical data to the response can take a long time to
-render, so please only request it if you are actually using it. Be prepared for your request to time out for runs that
-have a lot of historical information present.
+| Field        | Type                                         | Null when...                                          | Description                                                                                                                                                                                                                                   |
+|-------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `history`    | array of numbers                             | never                                                 | Ordered durations of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.           |
 
 If an `Accept` header is present, Splits I/O will try to render the run file in the format specified rather than JSON. A full list of valid values is located below.
 If the `Accept` header is valid, the `Content-Type` header in the response will be set appropriately and the run will be rendered in the specified format, if
@@ -121,6 +77,38 @@ any of the following `Content-Type`s.
 * `application/splitterz`
 * `application/time-split-tracker`
 * `application/wsplit`
+
+### Splits
+```bash
+curl https://splits.io/api/v4/runs/3nm/splits
+```
+Runs usually contain Splits. Splits are a special type of resource in that they are not individually identifiable; they
+do not have unique IDs. They are accessible only as an array of splits belonging to a Run.
+
+*Terminology note: Although sometimes used synonymously (even here), a "segment" refers to the stretch of time a section
+of game takes, where a "split" refers to the moment in time when it completes.*
+
+| Field         | Type             | Can it be null?                   | Description                                                                                                                                                                                                                                            |
+|--------------:|:-----------------|:----------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `name`        | string           | never                             | Name of the segment. This value is an exact copy of timers' fields.                                                                                                                                                                                    |
+| `duration`    | number           | never                             | Duration in seconds of the segment.                                                                                                                                                                                                                    |
+| `finish_time` | number           | never                             | The total elapsed time of the run at the moment when this segment was finished (such that the run's duration is equal to the final split's finish time). Provided in seconds.                                                                          |
+| `best`        | number           | when not known                    | The shortest duration the runner has ever gotten on this segment.                                                                                                                                                                                      |
+| `gold`        | boolean          | never                             | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment. This field is shorthand for `duration == best`.                                                                                                      |
+| `skipped`     | boolean          | never                             | Whether or not this split was skipped -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
+| `reduced`     | boolean          | never                             | Whether or not this segment was "reduced"; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
+
+If a `historic=1` param is included in the request, one additional field will be present:
+
+| Field         | Type             | Null when...                      | Description                                                                                                                                                                                                                                            |
+|-------------:|:------------------|:----------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `history`     | array of numbers | never                             | Ordered durations of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.                    |
+
+When retrieving splits, you can pass the `historic=1` flag in order to include history in the resulting splits. **Please
+include history only if you're using it.** Parsing history is computationally expensive, and your request may take an
+order of magnitude longer to process, depending on the number of history entries the run has. For particularly hefty
+runs, it is very possible that the request will simply time out. We're attempting to solve this for the future with
+better caching and more optimized parsing, but for now it remains an extremely slow operation.
 
 ## Runner
 ```bash
@@ -232,211 +220,10 @@ Each presigned request can only be successfully made once, and expires if not ma
 
 [s3]: https://aws.amazon.com/s3
 
-## User Authentication and Authorization
-If you want to upload runs for a user (e.g. from within a timer), you have two options. If you only need to know who a user is on Splits I/O, skip to advanced.
-
-### Simple option
-Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
-in when they visit it, their account will automatically claim the run.
-
-This is the easier method to implement, but has some flaws:
-
-- The user must open the run in their web browser. If you prefer to upload runs in the background, this method isn't for
-  you.
-- If there are network or browser issues when the user's browser tries to load the run, it won't be claimed.
-- If the user isn't logged in when their browser opens, the run will remain unclaimed. Neither your application nor the
-  user will receive any indication of this.
-
-### Advanced option
-The advanced option is a standard OAuth2 flow. You can request permission from the user to upload runs to their account
-on their behalf. If they accept, you will receive an OAuth token which you can include in your run upload requests in
-order to create the run as that user.
-
-The following instructions go into naive-case details about implementing this OAuth support in your application. If you
-want to learn more about OAuth or need general OAuth troubleshooting help, you can [research OAuth2
-online][oauth2-simplified]. Especially if your application is a website, it's likely that the language you're using has
-well-established libraries that handle much of the below OAuth flow for you.
-
-In all cases, you'll need to first go to your Splits I/O account's [settings page][1] and create an application, then
-refer to the relevant section below.
-
-*Note: Once you have an OAuth token, you can use a request like this to retrieve information about it:*
-```http
-GET https://splits.io/oauth/token/info?access_token=YOUR_TOKEN
-```
-
-[oauth2-simplified]: https://aaronparecki.com/oauth-2-simplified/
-
-#### Example 1: My application is a local program that runs on the user's computer
-If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
-flow**. This means your application will open the Splits I/O authorization page in the user's default browser, and if
-the user accepts the authorization, Splits I/O will give your application a `code` which you should immediately exchange
-for an OAuth token using a secure API request.
-
-1. Configure your program to run a small web server on a port of your choosing, and listen for `GET` requests to a path
-    of your choosing. In this example, let's say you're listening on port 8000 for requests to `/auth/splitsio`.
-2. On your Splits I/O [settings page][1], set your `redirect_uri` to something like
-    ```http
-    http://localhost:8000/auth/splitsio
-    ```
-    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-3. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
-    this:
-    ```http
-    https://splits.io/oauth/authorize?response_type=code&scope=upload_run&redirect_uri=http://localhost:8000/auth/splitsio&client_id=YOUR_CLIENT_ID
-    ```
-    If the user authorizes your application, they will be redirected to a URL like
-    ```http
-    http://localhost:8000/auth/splitsio?code=YOUR_CODE
-    ```
-    which the web server you set up in step 1 should respond to. Give the user a nice-looking HTML page saying to switch
-    back to the application and strip the `code` URL parameter for the next step.
-4. Use your `code` to make this request:
-    ```http
-    POST https://splits.io/oauth/token
-    ```
-    with this body:
-    ```http
-    grant_type=authorization_code
-    client_id=YOUR_CLIENT_ID
-    client_secret=YOUR_CLIENT_SECRET
-    code=YOUR_CODE
-    redirect_uri=http://localhost:8000/auth/splitsio
-    ```
-    which will respond with something like this:
-    ```json
-    {
-      "access_token": "0e82e0ac69fed3c6e5044682a9eb94ccded5ace70e84838104a131cb50595cd2",
-      "token_type": "bearer",
-      "expires_in": 7200,
-      "refresh_token": "0e23b095e0d0104ff0642cde71b61d236f3b3865734a0e734714ecd45b25106c",
-      "scope": "upload_run",
-      "created_at": 1499314941
-    }
-    ```
-    Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
-    by including this header in your requests:
-    ```http
-    Authorization: Bearer YOUR_ACCESS_TOKEN
-    ```
-    The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
-    can retrieve a new one with no user intervention using the returned `refresh_token`:
-    ```http
-    POST https://splits.io/oauth/token
-    ```
-    ```http
-    grant_type=refresh_token
-    refresh_token=YOUR_REFRESH_TOKEN
-    ```
-    This will return a new access token (and a new refresh token -- update yours!) in a body format identical to
-    original grant (above).
-
-    This style of expiring access tokens periodically and using refresh tokens to replace them improves security by
-    making it obvious when a user's stolen credentials are in use. See [RFC 6749][rfc6749-6] for more information on
-    refresh tokens.
-
-#### Example 2: My application is an all-JavaScript website
-If your application is an in-browser JavaScript application with little or no logic performed by a backend server, you
-should use OAuth's **implicit grant flow**.
-
-1. On your Splits I/O [settings page][1], set your `redirect_uri` to where you want users to land after going through
-   the authorization flow. For this example, we'll use
-    ```http
-    https://YOUR_WEBSITE/auth/splitsio
-    ```
-    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
-    this:
-    ```http
-    https://splits.io/oauth/authorize?response_type=token&scope=upload_run&redirect_uri=https://YOUR_WEBSITE/auth/splitsio&client_id=YOUR_CLIENT_ID
-    ```
-    If the user authorizes your application, they will be redirected to a URL like
-    ```http
-    https://YOUR_WEBSITE/auth/splitsio#access_token=YOUR_TOKEN
-    ```
-    Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
-    by including this header in your requests:
-    ```http
-    Authorization: Bearer YOUR_ACCESS_TOKEN
-    ```
-    The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
-    can retrieve a new one with no user intervention using redirection upon accessing your app, or a hidden iframe to
-    invisibly take the user through the authorization flow. If the user is still authorized, no user interaction will be
-    required and you can strip your new access token from the URL fragment.
-
-    This style of expiring access tokens periodically improves security by limiting the usability of any stolen
-    credentials.
-
-#### Example 3: My application is a website
-If your application is a website with a backend component, you should use OAuth's **authorization code grant flow**.
-This means your website will link the user to the Splits I/O authorization page, and if the user accepts the
-authorization, Splits I/O will give your application a `code` which it will immediately exchange for an OAuth token
-using a secure API request.
-
-1. On your Splits I/O [settings page][1], set your `redirect_uri` to where you want users to land after going through
-   the authorization flow. For this example, we'll use
-    ```http
-    https://YOUR_WEBSITE/auth/splitsio
-    ```
-    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
-    this:
-    ```http
-    https://splits.io/oauth/authorize?response_type=code&scope=upload_run&redirect_uri=https://YOUR_WEBSITE/auth/splitsio&client_id=YOUR_CLIENT_ID
-    ```
-    If the user authorizes your application, they will be redirected to a URL like
-    ```http
-    https://YOUR_WEBSITE/auth/splitsio?code=YOUR_CODE
-    ```
-    Strip the `code` URL parameter for the next step.
-4. Use your `code` to make this request:
-    ```http
-    POST https://splits.io/oauth/token
-    ```
-    with this body:
-    ```http
-    grant_type=authorization_code
-    client_id=YOUR_CLIENT_ID
-    client_secret=YOUR_CLIENT_SECRET
-    code=YOUR_CODE
-    redirect_uri=http://localhost:8000/auth/splitsio
-    ```
-    which will respond with something like this:
-    ```json
-    {
-      "access_token": "0e82e0ac69fed3c6e5044682a9eb94ccded5ace70e84838104a131cb50595cd2",
-      "token_type": "bearer",
-      "expires_in": 7200,
-      "refresh_token": "0e23b095e0d0104ff0642cde71b61d236f3b3865734a0e734714ecd45b25106c",
-      "scope": "upload_run",
-      "created_at": 1499314941
-    }
-    ```
-    Success! `access_token` is your OAuth token for the user. Use it in your API requests to act on behalf of the user
-    by including this header in your requests:
-    ```http
-    Authorization: Bearer YOUR_ACCESS_TOKEN
-    ```
-    The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
-    can retrieve a new one with no user intervention using the returned `refresh_token`:
-    ```http
-    POST https://splits.io/oauth/token
-    ```
-    ```http
-    grant_type=refresh_token
-    refresh_token=YOUR_REFRESH_TOKEN
-    ```
-    This will return a new access token (and a new refresh token -- update yours!) in a body format identical to
-    original grant (above).
-
-    This style of expiring access tokens periodically and using refresh tokens to replace them improves security by
-    making it obvious when a user's stolen credentials are in use. See [RFC 6749][rfc6749-6] for more information on
-    refresh tokens.
-
-[1]: https://splits.io/settings
-[rfc6749-6]: https://tools.ietf.org/html/rfc6749#section-6
-
-
+### Giving the run an owner
+If your intention is for this run to belong to a user, you'll need to send that user to the `uris.claim_uri` URI
+returned from the first request. If they're logged in when they visit this URI, their account will automatically claim
+the run.
 
 ## Converting
 ```bash
