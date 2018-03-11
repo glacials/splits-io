@@ -26,13 +26,4 @@ describe Api::V4::GamesController do
       end
     end
   end
-
-  describe '#categories' do
-  end
-
-  describe '#runners' do
-  end
-
-  describe '#runs' do
-  end
 end

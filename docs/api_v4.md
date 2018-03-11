@@ -20,8 +20,8 @@ strings. But of course as a human it's nice to be able to glean some meaning out
 
 ## Run
 ```bash
-curl https://splits.io/api/v4/runs/3nm
-curl https://splits.io/api/v4/runs/3nm?historic=1
+curl https://splits.io/api/v4/runs/10x
+curl https://splits.io/api/v4/runs/10x?historic=1
 ```
 A Run maps 1:1 to an uploaded splits file.
 
@@ -146,6 +146,7 @@ API.
 curl https://splits.io/api/v4/games
 curl https://splits.io/api/v4/games/sms
 curl https://splits.io/api/v4/games/sms/categories
+curl https://splits.io/api/v4/games/sms/runs
 curl https://splits.io/api/v4/games/sms/runners
 ```
 Most timers allow users to specify a "game" field. A Game is a collection of information about the video game specified
@@ -162,9 +163,9 @@ sometimes specified manually. If a game does not have an associated shortname, i
 
 ## Category
 ```bash
-curl https://splits.io/api/v4/categories/123
-curl https://splits.io/api/v4/categories/123/runners
-curl https://splits.io/api/v4/categories/123/runs
+curl https://splits.io/api/v4/categories/40
+curl https://splits.io/api/v4/categories/40/runners
+curl https://splits.io/api/v4/categories/40/runs
 ```
 Some timers allow users to specify a "category" or similar field (any%, 100%, MST, etc.). A Category is a collection of
 information about the type of run performed, more specific than a Game. Each Category belongs to a Game. Any number of

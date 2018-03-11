@@ -16,7 +16,8 @@
     "video_url",
     "game",
     "category",
-    "runners"
+    "runners",
+    "segments"
   ],
   "additionalProperties": false,
   "properties": {
@@ -137,26 +138,7 @@
     "segments": {
       "type": "array",
       "items": {
-        "type": "object",
-        "required": [
-          "attempt_number",
-          "realtime_duration_ms",
-          "gametime_duration_ms"
-        ]
-      },
-      "additionalProperties": false,
-      "properties": {
-        "attempt_number": {
-          "type": "number"
-        },
-        "realtime_duration_ms": {
-          "type": "number",
-          "minimum": 0
-        },
-        "gametime_duration_ms": {
-          "type": "number",
-          "minimum": 0
-        }
+        "$ref": "../../../models/api/v4/segment.json"
       }
     }
   }

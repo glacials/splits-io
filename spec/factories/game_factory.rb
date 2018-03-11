@@ -17,5 +17,11 @@ FactoryBot.define do
         FactoryBot.create_list(:run, 3, :parsed, category: FactoryBot.create(:category, game: game))
       end
     end
+
+    trait :with_runners do
+      after(:create) do |game|
+        FactoryBot.create_list(:run, 3, :owned, :parsed, category: FactoryBot.create(:category, game: game))
+      end
+    end
   end
 end

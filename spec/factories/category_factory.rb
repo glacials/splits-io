@@ -8,5 +8,11 @@ FactoryBot.define do
         FactoryBot.create_list(:run, 3, category: category)
       end
     end
+
+    trait :with_runners do
+      after(:create) do |category|
+        FactoryBot.create_list(:run, 3, :owned, category: category)
+      end
+    end
   end
 end

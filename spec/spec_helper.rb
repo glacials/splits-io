@@ -33,7 +33,12 @@ RSpec.configure do |config|
   # schema file
   config.json_schemas = {
     game: 'spec/support/views/api/v4/games/show.json',
+    game_categories: 'spec/support/views/api/v4/games/categories/index.json',
+    game_runners: 'spec/support/views/api/v4/games/runners/index.json',
+    game_runs: 'spec/support/views/api/v4/games/runs/index.json',
     category: 'spec/support/views/api/v4/categories/show.json',
+    category_runs: 'spec/support/views/api/v4/categories/runs/index.json',
+    category_runners: 'spec/support/views/api/v4/categories/runners/index.json',
     runner_categories: 'spec/support/views/api/v4/runners/categories/index.json',
     runner_games: 'spec/support/views/api/v4/runners/games/index.json',
     runner_runs: 'spec/support/views/api/v4/runners/runs/index.json',

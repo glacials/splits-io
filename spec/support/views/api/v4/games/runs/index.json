@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "runs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "runs": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../../models/api/v4/run.json"
+      }
+    }
+  }
+}

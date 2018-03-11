@@ -1,6 +1,7 @@
 class Category < ApplicationRecord
   belongs_to :game
   has_many :runs
+  has_many :users, through: :runs
   has_many :rivalries, dependent: :destroy
 
   before_create :autodetect_shortname
