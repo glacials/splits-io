@@ -37,7 +37,8 @@ class Api::V4::ApplicationController < ActionController::Base
 
   def force_ssl
     return if request.ssl?
-    secure_uri = URI.parse(request.original_url).scheme('https')
+    secure_uri = URI.parse(request.original_url)
+    secure_uri.scheme = 'https'
     response.set_header('Location', secure_uri.to_s)
 
     render status: 301, json: {
