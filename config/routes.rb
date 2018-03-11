@@ -128,8 +128,6 @@ SplitsIO::Application.routes.draw do
 
       delete '/runs/:run/user', to: 'runs/users#destroy'
 
-      get '/runs/:run/splits', to: 'runs/splits#index'
-
       post '/convert', to: 'converts#create'
 
       post '/workers', to: 'workers#create'
