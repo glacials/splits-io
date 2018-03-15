@@ -18,7 +18,8 @@ $(function() {
 
   Highcharts.chart('segment-history-graph-highchart', {
     chart: {
-      type: 'column'
+      type: 'column',
+      zoomType: 'x'
     },
     title: {
       text: 'Split History Mean vs Golds'
