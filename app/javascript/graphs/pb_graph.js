@@ -17,7 +17,8 @@ $(function() {
 
   Highcharts.chart('pb-graph-highchart', {
     chart: {
-      type: 'column'
+      type: 'column',
+      zoomType: 'x'
     },
     title: {
       text: 'PB vs Golds'

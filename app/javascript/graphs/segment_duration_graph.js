@@ -7,9 +7,10 @@ $(function() {
 
   let graph_data = [];
   gon.run.segments.forEach(function(segment) {
+    const non_zero_values = segment.histories.filter((attempt) => attempt.duration_ms > 0);
     graph_data.push({
       name: segment.name,
-      data: segment.histories.map(function(hist) { return hist.duration_ms; }),
+      data: non_zero_values.map(function(hist) { return hist.duration_ms; }),
       visible: false,
       pointStart: 1
     });

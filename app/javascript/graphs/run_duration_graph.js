@@ -5,7 +5,7 @@ $(function() {
     return;
   }
 
-  let graph_data = [];
+  const graph_data = [];
   gon.run.history.forEach(function(attempt) {
     let ms = attempt.realtime_duration_ms;
     if (ms === 0) {
@@ -27,7 +27,7 @@ $(function() {
       shared: true,
       crosshairs: true,
       pointFormatter: function() {
-        let time = moment.utc(moment.duration(this.y).asMilliseconds()).format('H:mm:ss');
+        const time = moment.utc(moment.duration(this.y).asMilliseconds()).format('H:mm:ss');
         return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${time}</b><br/>`;
       }
     },

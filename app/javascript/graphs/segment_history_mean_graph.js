@@ -5,11 +5,12 @@ $(function() {
     return;
   }
 
-  let graph_data = [];
+  const graph_data = [];
   gon.run.segments.forEach(function(segment) {
     let time = 0;
     if (segment.histories.length !== 0) {
-      time = segment.histories.map((history) => history.duration_ms).reduce((a, b) => a + b, 0) / segment.histories.length;
+      const non_zero_values = segment.histories.filter(attempt => attempt.duration_ms > 0);
+      time = non_zero_values.map((history) => history.duration_ms).reduce((a, b) => a + b, 0) / non_zero_values.length;
       time = (time - segment.shortest_duration_ms) / 1000;
     }
     graph_data.push([segment.name, time]);
