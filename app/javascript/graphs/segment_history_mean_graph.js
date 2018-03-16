@@ -1,22 +1,41 @@
-import Highcharts from 'highcharts';
+import Highcharts from 'highcharts'
+import Exporting from 'highcharts/modules/exporting'
+Exporting(Highcharts)
 
-$(function() {
+const build_segment_history_mean_graph = function(run) {
   if ($('#segment-history-graph-highchart').length === 0) {
-    return;
+    return
   }
 
-  const graph_data = [];
-  gon.run.segments.forEach(function(segment) {
-    let time = 0;
+  const url = new URL(window.location.href)
+  const duration_string = `${url.searchParams.get('timing') || 'real'}time_duration_ms`
+  const shortest_string = `${url.searchParams.get('timing') || 'real'}time_shortest_duration_ms`
+
+
+  const graph_data = []
+  run.segments.forEach(function(segment) {
+    let time = 0
     if (segment.histories.length !== 0) {
-      const non_zero_values = segment.histories.filter(attempt => attempt.duration_ms > 0);
-      time = non_zero_values.map((history) => history.duration_ms).reduce((a, b) => a + b, 0) / non_zero_values.length;
-      time = (time - segment.shortest_duration_ms) / 1000;
+      const non_zero_values = segment.histories.filter(attempt => attempt[duration_string] > 0)
+      time = non_zero_values.map((attempt) => attempt[duration_string]).reduce((a, b) => a + b, 0) / non_zero_values.length
+      time = (time - segment[shortest_string]) / 1000
     }
-    graph_data.push([segment.name, time]);
-  });
+    graph_data.push([segment.name, time])
+  })
 
   Highcharts.chart('segment-history-graph-highchart', {
+    exporting: {
+        chartOptions: {
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            }
+        },
+        fallbackToExportServer: false
+    },
     chart: {
       type: 'column',
       zoomType: 'x'
@@ -35,7 +54,7 @@ $(function() {
       enabled: false
     },
     xAxis: {
-      categories: graph_data.map(function(seg) { return seg[0]; }),
+      categories: graph_data.map(function(seg) { return seg[0] }),
       crosshair: true
     },
     yAxis: {
@@ -47,5 +66,7 @@ $(function() {
       name: 'History Mean - Gold',
       data: graph_data
     }]
-  });
-});
+  })
+}
+
+export {build_segment_history_mean_graph}

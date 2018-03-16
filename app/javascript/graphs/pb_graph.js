@@ -1,21 +1,39 @@
-import Highcharts from 'highcharts';
+import Highcharts from 'highcharts'
+import Exporting from 'highcharts/modules/exporting'
+Exporting(Highcharts)
 
-$(function() {
+const build_pb_graph = function(run) {
   if ($('#pb-graph-highchart').length === 0) {
-    return;
+    return
   }
 
-  let graph_data = [];
-  gon.run.segments.forEach(function(segment, i) {
-    let time = (segment.duration_ms - segment.shortest_duration_ms) / 1000;
+  const url = new URL(window.location.href)
+  const duration_string = `${url.searchParams.get('timing') || 'real'}time_duration_ms`
+  const shortest_string = `${url.searchParams.get('timing') || 'real'}time_shortest_duration_ms`
+
+  let graph_data = []
+  run.segments.forEach(function(segment, i) {
+    let time = (segment[duration_string] - segment[shortest_string]) / 1000
     if (time < 0) {
-      time = 0;
+      time = 0
     }
 
-    graph_data.push([segment.name, time]);
-  });
+    graph_data.push([segment.name, time])
+  })
 
   Highcharts.chart('pb-graph-highchart', {
+    exporting: {
+        chartOptions: {
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            }
+        },
+        fallbackToExportServer: false
+    },
     chart: {
       type: 'column',
       zoomType: 'x'
@@ -46,5 +64,7 @@ $(function() {
       name: 'PB - Gold',
       data: graph_data
     }]
-  });
-});
+  })
+}
+
+export {build_pb_graph}
