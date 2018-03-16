@@ -24,7 +24,7 @@ $(function() {
   .then(function(run) {
     build_pb_graph(run.run)
     if (run.run.program === 'livesplit') {
-      build_segment_duration_graph(run.run)
+      build_segment_history_mean_graph(run.run)
       build_run_druation_graph(run.run)
       build_segment_duration_graph(run.run)
       build_reset_graph(run.run)
