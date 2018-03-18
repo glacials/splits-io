@@ -122,22 +122,17 @@ article#stats
   - if @run.collapsed_segments(timing).size > 0
     .panel.panel-default
       .panel-body
-        #pb-graph
         #pb-graph-highchart
   - if @run.histories.size > 0
     .panel.panel-default
       .panel-body
-        #split-history-graph
         #segment-history-graph-highchart
     .panel.panel-default
       .panel-body
-        #run-duration-graph
         #run-duration-graph-highchart
     .panel.panel-default
       .panel-body
-        #segment-duration-graph
         #segment-duration-graph-highchart
     .panel.panel-default
       .panel-body
-        #reset-graph
         #reset-graph-highchart

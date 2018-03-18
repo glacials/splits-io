@@ -2,7 +2,6 @@ class Runs::StatsController < Runs::ApplicationController
   before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
 
   def index
-    timing = params[:timing] || @run.default_timing
     @run.parse_into_db unless @run.parsed?
 
     # Catch bad runs
@@ -12,19 +11,6 @@ class Runs::StatsController < Runs::ApplicationController
 
     gon.run = {
       id: @run.id36,
-      segments: @run.segments.includes(:histories).map do |segment|
-        {
-          name: segment.name,
-          duration_ms: segment.duration_ms(timing),
-          shortest_duration_ms: segment.shortest_duration_ms(timing),
-          histories: segment.histories.map do |history|
-            {
-              duration_ms: history.duration_ms(timing)
-            }
-          end
-        }
-      end,
-      history: @run.histories.select(:id, :attempt_number, :realtime_duration_ms, :gametime_duration_ms),
       attempts: @run.attempts,
       program: @run.program
     }

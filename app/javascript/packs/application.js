@@ -12,8 +12,6 @@ import "jquery-ujs"
 import "bootstrap"
 import "bootstrap-toggle"
 import "moment"
-import "d3"
-import "c3"
 import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
@@ -22,7 +20,6 @@ import "tipsy"
 import "jquery.turbolinks"
 
 global.moment = moment
-global.c3 = c3
 global._ = underscore
 global.Spinner = Spinner
 global.Clipboard = clipboard
@@ -34,6 +31,4 @@ $(function() {
 
 import "../convert"
 import "../highchart_theme.js"
-import "../graphs/run_duration_graph.js"
-
 import "../graph_builder.js"
