@@ -71,8 +71,21 @@ docker-compose build
 ```
 to rebuild the Docker image for your changes to apply.
 
-## Parsing
-Splits I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`.
-To upgrade the parser, simply run `docker-compose run web bundle exec rake update_lsc` and commit the changes.
+## Library information
+### LiveSplit Core
+Splits I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`. To upgrade it,
+run
+```sh
+docker-compose run web bundle exec rake update_lsc
+```
+and commit the changes.
 
 [livesplit-core]: https://github.com/LiveSplit/livesplit-core/
+
+### Highcharts
+To generate run history charts Splits I/O uses [Highcharts][highcharts-home], which requires a
+[written license][highcharts-licenses]. Licensing is based on the honor system, so you do not need to enter a key
+anywhere. Highcharts is free to use for testing purposes.
+
+[highcharts-home]: https://www.highcharts.com/
+[highcharts-licenses]: https://shop.highsoft.com/highcharts
