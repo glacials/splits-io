@@ -95,6 +95,12 @@ describe Run, type: :model do
     it 'has a realtime sum of best in ms' do
       run.parse_into_db
       run.reload
+
+      # Float values get truncated when saved to the database, so there can be
+      # a difference between the individually truncated number of ms saved on
+      # each segment vs the whole sum which is first sumed up as floats and *then*
+      # truncated. That's why there can be a difference up to the number of segments
+      # present and we need to use `be_within`.
       expect(run.realtime_sum_of_best_ms).to be_within(run.segments.count)
         .of(run.segments.map(&:realtime_shortest_duration_ms).sum)
     end
