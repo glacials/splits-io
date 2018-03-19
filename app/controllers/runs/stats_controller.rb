@@ -7,6 +7,7 @@ class Runs::StatsController < Runs::ApplicationController
     # Catch bad runs
     if @run.timer.nil?
       render 'runs/cant_parse', status: 500
+      return
     end
 
     gon.run = {
