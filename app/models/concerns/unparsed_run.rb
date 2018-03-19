@@ -105,12 +105,12 @@ module UnparsedRun
           srdc_id: srdc_id || parse_result[:srdc_id].presence,
 
           realtime_duration_ms:    (segments.map(&:realtime_duration).sum || 0) * 1000,
-          realtime_sum_of_best_ms: realtime_best_times.try(:[], :milliseconds),
+          realtime_sum_of_best_ms: realtime_best_times,
           realtime_duration_s:     (segments.map(&:realtime_duration).sum || 0), # deprecated
-          realtime_sum_of_best_s:  realtime_best_times.try(:[], :seconds), # deprecated
+          realtime_sum_of_best_s:  realtime_best_times.try(:/, 1000), # deprecated
 
           gametime_duration_ms:    (segments.map(&:gametime_duration).sum || 0) * 1000,
-          gametime_sum_of_best_ms: gametime_best_times.try(:[], :milliseconds)
+          gametime_sum_of_best_ms: gametime_best_times
         )
       end
     end
@@ -201,8 +201,7 @@ module UnparsedRun
     end
 
     def extract_best_times(segments, timer)
-      seconds = segments.map(&:"#{timer}_best").sum
-      { seconds: seconds, milliseconds: seconds * 1000 }
+      segments.map(&:"#{timer}_best").sum * 1000
     end
   end
 end
