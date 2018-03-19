@@ -90,14 +90,12 @@ module UnparsedRun
           segment.realtime_best.present?
         end
 
-        sum_of_best_seconds = nil
-        sum_of_best_milliseconds = nil
-        if all_segments_have_bests
-          sum_of_best_seconds = segments.map(&:realtime_best).sum
+        realtime_best_times = nil
+        gametime_best_times = nil
 
-          if sum_of_best_seconds.present?
-            sum_of_best_milliseconds = sum_of_best_seconds * 1000
-          end
+        if all_segments_have_bests
+          realtime_best_times = extract_best_times(segments, :realtime)
+          gametime_best_times = extract_best_times(segments, :gametime)
         end
 
         update(
@@ -107,12 +105,12 @@ module UnparsedRun
           srdc_id: srdc_id || parse_result[:srdc_id].presence,
 
           realtime_duration_ms:    (segments.map(&:realtime_duration).sum || 0) * 1000,
-          realtime_sum_of_best_ms: sum_of_best_milliseconds,
+          realtime_sum_of_best_ms: realtime_best_times.try(:[], :milliseconds),
           realtime_duration_s:     (segments.map(&:realtime_duration).sum || 0), # deprecated
-          realtime_sum_of_best_s:  sum_of_best_seconds, # deprecated
+          realtime_sum_of_best_s:  realtime_best_times.try(:[], :seconds), # deprecated
 
           gametime_duration_ms:    (segments.map(&:gametime_duration).sum || 0) * 1000,
-          gametime_sum_of_best_ms: sum_of_best_milliseconds
+          gametime_sum_of_best_ms: gametime_best_times.try(:[], :milliseconds)
         )
       end
     end
@@ -200,6 +198,11 @@ module UnparsedRun
       end
 
       SegmentHistory.import(histories)
+    end
+
+    def extract_best_times(segments, timer)
+      seconds = segments.map(&:"#{timer}_best").sum
+      { seconds: seconds, milliseconds: seconds * 1000 }
     end
   end
 end

@@ -89,6 +89,24 @@ describe Run, type: :model do
     end
   end
 
+  context 'with bests in all segments' do
+    let(:run) { FactoryBot.create(:with_segments_bests_run) }
+
+    it 'has a realtime sum of best in ms' do
+      run.parse_into_db
+      run.reload
+      expect(run.realtime_sum_of_best_ms).to be_within(run.segments.count)
+        .of(run.segments.map(&:realtime_shortest_duration_ms).sum)
+    end
+
+    it 'has a gametime sum of best in ms' do
+      run.parse_into_db
+      run.reload
+      expect(run.gametime_sum_of_best_ms).to be_within(run.segments.count)
+        .of(run.segments.map(&:gametime_shortest_duration_ms).sum)
+    end
+  end
+
   context 'from LiveSplit 1.4' do
     let(:run) do
       r = FactoryBot.create(:livesplit14_run)
