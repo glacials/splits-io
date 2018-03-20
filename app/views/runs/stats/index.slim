@@ -17,7 +17,7 @@ article#stats
   .panel.panel-default
     .panel-heading
       | Run Information
-      .pull-right 
+      .pull-right
         a href=run_history_csv_path(@run) ↓ download run history csv
     table.panel-body.table.table-striped.table-hover
       tbody
@@ -119,20 +119,4 @@ article#stats
             - else
               span.time -
   = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits}
-  - if @run.collapsed_segments(timing).size > 0
-    .panel.panel-default
-      .panel-body
-        #pb-graph
-  - if @run.histories.size > 0
-    .panel.panel-default
-      .panel-body
-        #split-history-graph
-    .panel.panel-default
-      .panel-body
-        #run-duration-graph
-    .panel.panel-default
-      .panel-body
-        #segment-duration-graph
-    .panel.panel-default
-      .panel-body
-        #reset-graph
+  #graph-holder
