@@ -85,6 +85,7 @@ module UnparsedRun
 
         write_segments(segments)
         write_segment_histories(segments)
+        reload
 
         all_segments_have_bests = segments.map.all? do |segment|
           segment.realtime_best.present?
@@ -94,8 +95,8 @@ module UnparsedRun
         gametime_best_times = nil
 
         if all_segments_have_bests
-          realtime_best_times = extract_best_times(segments, :realtime)
-          gametime_best_times = extract_best_times(segments, :gametime)
+          realtime_best_times = extract_best_times(Run::REAL)
+          gametime_best_times = extract_best_times(Run::GAME)
         end
 
         update(
@@ -200,8 +201,8 @@ module UnparsedRun
       SegmentHistory.import(histories)
     end
 
-    def extract_best_times(segments, timer)
-      segments.map(&:"#{timer}_best").sum * 1000
+    def extract_best_times(timing)
+      segments.map { |segment| segment.shortest_duration_ms(timing) }.sum
     end
   end
 end
