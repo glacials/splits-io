@@ -7,9 +7,15 @@ class ApplicationController < ActionController::Base
   before_action :sanitize_pagination_params
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
 
+  rescue_from Authie::Session::ValidityError, with: :auth_session_error
+  rescue_from Authie::Session::InactiveSession, with: :auth_session_error
+  rescue_from Authie::Session::ExpiredSession, with: :auth_session_error
+  rescue_from Authie::Session::BrowserMismatch, with: :auth_session_error
+  rescue_from Authie::Session::HostMismatch, with: :auth_session_error
+
   def read_only_mode
-    write_actions = ['create', 'edit', 'destroy']
-    write_methods = ['POST', 'PUT', 'DELETE', 'PATCH']
+    write_actions = %w[create edit destroy]
+    write_methods = %w[POST PUT DELETE PATCH]
     if write_actions.include?(action_name) || write_methods.include?(request.method)
       render template: 'pages/read_only_mode'
       return false
@@ -62,8 +68,10 @@ class ApplicationController < ActionController::Base
     end
 
     params[:page] = params[:page].to_i
-    if params[:page] < 1
-      bad_request
-    end
+    bad if params[:page] < 1
+  end
+
+  def auth_session_error
+    flash.now[:alert] = 'Your session is no longer valid, please sign in again.'
   end
 end
