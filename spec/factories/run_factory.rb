@@ -16,6 +16,9 @@ FactoryBot.define do
     # a bad run and a better run from the same category, against which suggestions can be generated
     compare_subject:          {filename: 'compare_subject.lss'},
     compare_object:           {filename: 'compare_object.lss'},
+
+    # specific-content runs
+    with_segments_bests:       {filename: 'with_segments_bests.lss'}
   }
 
   test_files.each do |factory_name, file|

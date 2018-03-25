@@ -89,6 +89,30 @@ describe Run, type: :model do
     end
   end
 
+  context 'with bests in all segments' do
+    let(:run) { FactoryBot.create(:with_segments_bests_run) }
+
+    it 'has a realtime sum of best in ms' do
+      run.parse_into_db
+      run.reload
+
+      # Float values get truncated when saved to the database, so there can be
+      # a difference between the individually truncated number of ms saved on
+      # each segment vs the whole sum which is first sumed up as floats and *then*
+      # truncated. That's why there can be a difference up to the number of segments
+      # present and we need to use `be_within`.
+      expect(run.realtime_sum_of_best_ms).to be_within(run.segments.count)
+        .of(run.segments.map(&:realtime_shortest_duration_ms).sum)
+    end
+
+    it 'has a gametime sum of best in ms' do
+      run.parse_into_db
+      run.reload
+      expect(run.gametime_sum_of_best_ms).to be_within(run.segments.count)
+        .of(run.segments.map(&:gametime_shortest_duration_ms).sum)
+    end
+  end
+
   context 'from LiveSplit 1.4' do
     let(:run) do
       r = FactoryBot.create(:livesplit14_run)
