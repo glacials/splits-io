@@ -1,6 +1,8 @@
 class Segment < ApplicationRecord
   belongs_to :run
-  has_many :histories, class_name: 'SegmentHistory', dependent: :destroy
+  # dependent: :delete_all requires there be no child items that need to be deleted
+  # If SegmentHistory is changed to have child records, change this back to just :destroy
+  has_many :histories, class_name: 'SegmentHistory', dependent: :delete_all
 
   default_scope { order(segment_number: :asc) }
 

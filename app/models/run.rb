@@ -19,7 +19,9 @@ class Run < ApplicationRecord
   belongs_to :category
   has_one :game, through: :category
   has_many :segments, dependent: :destroy
-  has_many :histories, class_name: 'RunHistory', dependent: :destroy
+  # dependent: :delete_all requires there be no child records that need to be deleted
+  # If RunHistory is changed to have child records, change this back to just :destroy
+  has_many :histories, class_name: 'RunHistory', dependent: :delete_all
 
   has_secure_token :claim_token
 
