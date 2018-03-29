@@ -59,7 +59,7 @@ class User < ApplicationRecord
   end
 
   def runs?(category)
-    runs.where(category: category).present?
+    !runs.where(category: category).empty?
   end
 
   def to_s
