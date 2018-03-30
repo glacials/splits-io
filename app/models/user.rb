@@ -27,13 +27,11 @@ class User < ApplicationRecord
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
 
   def self.search(term)
-    where(User.arel_table[:name].matches "%#{term}%").joins(:runs).uniq.order(:name)
+    where(User.arel_table[:name].matches("%#{term}%")).joins(:runs).uniq.order(:name)
   end
 
   def avatar
-    if read_attribute(:avatar).nil?
-      return nil
-    end
+    return nil if read_attribute(:avatar).nil?
 
     URI.parse(read_attribute(:avatar) || '').tap do |uri|
       uri.scheme = 'https'
@@ -41,7 +39,7 @@ class User < ApplicationRecord
   end
 
   def uri
-    URI::parse("http://www.twitch.tv/#{name}")
+    URI.parse("http://www.twitch.tv/#{name}")
   end
 
   def to_param
@@ -59,7 +57,7 @@ class User < ApplicationRecord
   end
 
   def runs?(category)
-    runs.where(category: category).present?
+    runs.where(category: category).any?
   end
 
   def to_s
@@ -71,33 +69,25 @@ class User < ApplicationRecord
   end
 
   def patron?
-    if patreon.nil?
-      return false
-    end
+    return false if patreon.nil?
 
-    patreon.pledge_cents > 0
+    patreon.pledge_cents.positive?
   end
 
   def bronze_patron?
-    if patreon.nil?
-      return false
-    end
+    return false if patreon.nil?
 
     patreon.pledge_cents >= 200
   end
 
   def silver_patron?
-    if patreon.nil?
-      return false
-    end
+    return false if patreon.nil?
 
     patreon.pledge_cents >= 400
   end
 
   def gold_patron?
-    if patreon.nil?
-      return false
-    end
+    return false if patreon.nil?
 
     patreon.pledge_cents >= 600
   end

@@ -6,7 +6,8 @@ class Ability
 
     can :read, [Run, Category, Game, User]
 
-    can [:update, :create, :destroy], Run.owned, user_id: user.id
+    can [:update, :create, :destroy], Run, user_id: user.id
+    cannot [:update, :create, :destroy], Run, user_id: nil
     can [:read, :update, :create, :destroy], Rivalry, from_user_id: user.id
     can [:destroy], Doorkeeper::Application, owner_id: user.id
 

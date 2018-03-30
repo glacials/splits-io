@@ -1,9 +1,5 @@
 h3
-  - if run.game.present? && run.category.present?
-    = run.game
-    =< run.category
-  - else
-    = "(no title)"
+  = run.to_s
 - if run.completed?(Run::REAL) && run.completed?(Run::GAME)
   = render partial: 'runs/timing_switch', locals: {timing: timing}
 h5
