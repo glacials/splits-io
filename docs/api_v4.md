@@ -235,7 +235,8 @@ Each presigned request can only be successfully made once, and expires if not ma
 [s3]: https://aws.amazon.com/s3
 
 ## User Authentication and Authorization
-If you want to upload runs for a user (e.g. from within a timer), you have two options. If you only need to know who a user is on Splits I/O, skip to advanced.
+If you want to upload, disown, or delete runs for a user (e.g. from within a timer), you have two options.
+If you only need to know who a user is on Splits I/O, skip to advanced.
 
 ### Simple option
 Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
@@ -251,8 +252,8 @@ This is the easier method to implement, but has some flaws:
 
 ### Advanced option
 The advanced option is a standard OAuth2 flow. You can request permission from the user to upload runs to their account
-on their behalf. If they accept, you will receive an OAuth token which you can include in your run upload requests in
-order to create the run as that user.
+on their behalf. If they accept, you will receive an OAuth token which you can include in your run requests in
+order to perform actions as that user.
 
 The following instructions go into naive-case details about implementing this OAuth support in your application. If you
 want to learn more about OAuth or need general OAuth troubleshooting help, you can [research OAuth2
@@ -268,6 +269,16 @@ GET https://splits.io/oauth/token/info?access_token=YOUR_TOKEN
 ```
 
 [oauth2-simplified]: https://aaronparecki.com/oauth-2-simplified/
+
+
+#### Scopes
+Below is a list of all the possible scopes your application can request along with a brief description. You can specify
+multiple scopes by separating them with spaces in the auth token request.
+
+| Scope        | Description                                  | Endpoints                                                                                                           |
+|--------------|:---------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
+| `upload_run` | Upload runs on behalf of the user            | `POST https://splits.io/api/v4/runs`                                                                                |
+| `delete_run` | Delete or disown runs on behalf of the user  | `DELETE https://splits.io/api/v4/runs/:run_id` and `DELETE https://splits.io/api/v4/runs/:run_id/user` respectively |
 
 #### Example 1: My application is a local program that runs on the user's computer
 If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
