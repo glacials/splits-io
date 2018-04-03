@@ -8,8 +8,18 @@ AllCops:
     - db/**/*
     - config/**/*
     - script/**/*
+    - lib/parser/LiveSplitCore.rb
 Documentation:
   Enabled: false
 
-Style/SpaceInsideHashLiteralBraces:
+Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
