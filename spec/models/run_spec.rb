@@ -202,7 +202,7 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, 'Green Greens', 99_90],
+        [0, 'Green Greens', 99_390],
         [1, 'Castle LoLoLo', 91_940],
         [2, 'Float Islands', 127_809],
         [3, 'Bubbly Clouds', 195_180],
