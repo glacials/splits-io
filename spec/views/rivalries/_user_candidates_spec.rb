@@ -19,9 +19,11 @@ RSpec.describe 'rivalries/_user_candidates' do
 
     allow(user).to receive(:follows).and_return(users)
 
-    render(partial: 'rivalries/user_candidates', locals: {
-      category: category,
-    })
+    render(
+      partial: 'rivalries/user_candidates', locals: {
+        category: category
+      }
+    )
 
     expect(view).to render_template('rivalries/_user_candidates')
   end

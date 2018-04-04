@@ -18,18 +18,20 @@ describe Api::V3::Users::Games::Categories::PredictionsController do
       end
 
       it 'returns the correct segments' do
-        expect(JSON.parse(response.body)['prediction']['splits']).to match_array([
-          {"best"=>1000, "finish_time"=>1.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>2.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>3.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>4.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>5.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>6.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>7.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>8.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>9.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-          {"best"=>1000, "finish_time"=>10.0, "duration"=>1.0, "gold?"=>false, "skipped?"=>false},
-        ])
+        expect(JSON.parse(response.body)['prediction']['splits']).to match_array(
+          [
+            {'best' => 1000, 'finish_time' => 1.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 2.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 3.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 4.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 5.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 6.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 7.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 8.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 9.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false},
+            {'best' => 1000, 'finish_time' => 10.0, 'duration' => 1.0, 'gold?' => false, 'skipped?' => false}
+          ]
+        )
       end
     end
   end

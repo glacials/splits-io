@@ -7,7 +7,7 @@ class RunValidator < ActiveModel::Validator
   private
 
   def validate_default_timing(record)
-    unless ['real', 'game'].include?(record.default_timing)
+    unless %w[real game].include?(record.default_timing)
       record.errors[:base] << 'Default timing must be either "real" or "game".'
     end
   end

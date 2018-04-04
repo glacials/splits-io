@@ -117,10 +117,12 @@ describe RunsController do
   describe '#update' do
     context 'category' do
       let(:response) do
-        put(:update, params: {
-          'run' => run.id36,
-          "#{run.id36}[category]" => FactoryBot.create(:category).id
-        })
+        put(
+          :update, params: {
+            'run' => run.id36,
+            "#{run.id36}[category]" => FactoryBot.create(:category).id
+          }
+        )
       end
 
       context 'for an unowned run' do

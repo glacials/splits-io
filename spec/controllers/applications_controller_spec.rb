@@ -17,50 +17,50 @@ describe ApplicationsController do
         it 'redirects back' do
           expect(response).to redirect_to(settings_path)
         end
-     end
+      end
 
-     context 'when given a non-HTTPS redirect URI' do
-       let(:redirect_uri) { 'http://localhost' }
+      context 'when given a non-HTTPS redirect URI' do
+        let(:redirect_uri) { 'http://localhost' }
 
-       it 'does not create the application' do
-         expect(Doorkeeper::Application.find_by(name: name)).to be_nil
-       end
-     end
-   end
+        it 'does not create the application' do
+          expect(Doorkeeper::Application.find_by(name: name)).to be_nil
+        end
+      end
+    end
 
-   context 'when not logged in' do
-     it 'does not create an application' do
-       expect(Doorkeeper::Application.find_by(name: name)).to be_nil
-     end
-   end
- end
+    context 'when not logged in' do
+      it 'does not create an application' do
+        expect(Doorkeeper::Application.find_by(name: name)).to be_nil
+      end
+    end
+  end
 
- describe '#destroy' do
-   let(:application) { create(:application) }
-   let(:response) { delete :destroy, params: {application: application.id} }
+  describe '#destroy' do
+    let(:application) { create(:application) }
+    let(:response) { delete :destroy, params: {application: application.id} }
 
-   context 'when logged in as the owner' do
-     before { allow(controller).to receive(:current_user) { application.owner } }
+    context 'when logged in as the owner' do
+      before { allow(controller).to receive(:current_user) { application.owner } }
 
-     it 'redirects back' do
-       expect(response).to redirect_to(settings_path)
-     end
-   end
+      it 'redirects back' do
+        expect(response).to redirect_to(settings_path)
+      end
+    end
 
-   context 'when logged in not as the owner' do
-     before { allow(controller).to receive(:current_user) { build(:user) } }
+    context 'when logged in not as the owner' do
+      before { allow(controller).to receive(:current_user) { build(:user) } }
 
-     it 'returns a 403' do
-       expect(response).to have_http_status(403)
-     end
-   end
+      it 'returns a 403' do
+        expect(response).to have_http_status(403)
+      end
+    end
 
-   context 'when not logged in' do
-     before { allow(controller).to receive(:current_user) { nil } }
+    context 'when not logged in' do
+      before { allow(controller).to receive(:current_user) { nil } }
 
-     it 'returns a 403' do
-       expect(response).to have_http_status(403)
-     end
-   end
- end
+      it 'returns a 403' do
+        expect(response).to have_http_status(403)
+      end
+    end
+  end
 end

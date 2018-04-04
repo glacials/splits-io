@@ -21,7 +21,7 @@ FactoryBot.define do
     with_segments_bests:       {filename: 'with_segments_bests.lss'}
   }
 
-  test_files.each do |factory_name, file|
+  test_files.each do |_factory_name, file|
     file[:s3_filename] = SecureRandom.uuid
     $s3_bucket_internal.put_object(
       key: "splits/#{file[:s3_filename]}",
@@ -50,7 +50,7 @@ FactoryBot.define do
       after(:create) do |run|
         FactoryBot.create_list(:segment, 10, run: run)
       end
-      realtime_duration_ms 10000
+      realtime_duration_ms 10_000
       realtime_sum_of_best_ms 9000
       realtime_sum_of_best_s 90
     end

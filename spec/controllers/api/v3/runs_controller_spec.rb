@@ -4,34 +4,34 @@ describe Api::V3::RunsController do
   describe '#show' do
     let(:game) do
       instance_double(
-        "Game",
-        name: "Tron: Evolution",
-        read_attribute_for_serialization: self,
+        'Game',
+        name: 'Tron: Evolution',
+        read_attribute_for_serialization: self
       )
     end
     let(:category) do
       instance_double(
-        "Category",
+        'Category',
         game: game,
-        name: "Any% NG+",
-        read_attribute_for_serialization: self,
+        name: 'Any% NG+',
+        read_attribute_for_serialization: self
       )
     end
     let(:run) do
       instance_double(
-        "Run",
+        'Run',
         id: 10,
         id36: 'a',
         path: '/a',
         game: game,
         category: category,
-        to_s: "Tron: Evolution Any% NG+",
+        to_s: 'Tron: Evolution Any% NG+',
         image_url: nil,
         realtime_sum_of_best_s: 2,
         splits: [
-          instance_double("Split", 'realtime_best' => 3, 'best=' => true)
+          instance_double('Split', 'realtime_best' => 3, 'best=' => true)
         ],
-        read_attribute_for_serialization: self,
+        read_attribute_for_serialization: self
       )
       create(:run)
     end

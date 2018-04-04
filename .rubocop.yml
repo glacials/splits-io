@@ -9,6 +9,8 @@ AllCops:
     - config/**/*
     - script/**/*
     - lib/parser/LiveSplitCore.rb
+    - bin/**/*
+    - node_modules/**/*
 Documentation:
   Enabled: false
 

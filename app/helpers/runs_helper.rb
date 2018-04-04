@@ -1,7 +1,7 @@
 module RunsHelper
   include ActionView::Helpers::DateHelper
 
-  TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange]
+  TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange].freeze
 
   def difference(run_a, run_b)
     return 0 if run_a.nil? || run_b.nil?
@@ -92,9 +92,7 @@ module RunsHelper
       return "<span class=\"text-success\">-#{format_milliseconds(diff_s * 1000)}</span>".html_safe
     end
 
-    if diff_s.positive?
-      return "<span class=\"text-danger\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
-    end
+    return "<span class=\"text-danger\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe if diff_s.positive?
 
     "<span class=\"text-warning\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
   end
