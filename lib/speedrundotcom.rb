@@ -15,9 +15,7 @@ module SpeedrunDotCom
       return nil if url.blank?
 
       uri = URI.parse(url)
-      unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ %r{^(?:/.*?)?/run/(.*)$}
-        return false
-      end
+      return false unless uri.host =~ /^(www\.)?(speedrun.com)$/ && uri.path =~ %r{^(?:/.*?)?/run/(.*)$}
 
       %r{^(?:/.*?)?/run/(.*)$}.match(uri.path)[1]
     end

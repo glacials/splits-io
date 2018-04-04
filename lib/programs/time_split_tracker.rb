@@ -1,6 +1,6 @@
 module TimeSplitTracker
   def self.to_s
-    "Time Split Tracker"
+    'Time Split Tracker'
   end
 
   def self.to_sym

@@ -1,6 +1,6 @@
 module LiveSplit
   def self.to_s
-    "LiveSplit"
+    'LiveSplit'
   end
 
   def self.to_sym

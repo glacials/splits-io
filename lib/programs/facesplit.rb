@@ -1,6 +1,6 @@
 module FaceSplit
   def self.to_s
-    "FaceSplit"
+    'FaceSplit'
   end
 
   def self.to_sym

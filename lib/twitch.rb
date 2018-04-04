@@ -24,7 +24,7 @@ class Twitch
     def self.followed_ids(id)
       Rails.cache.fetch([:twitch, :follows, id]) do
         JSON.parse(
-          self.get(id)
+          get(id)
         )['follows'].map do |follow|
           follow['channel']['_id']
         end

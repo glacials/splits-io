@@ -1,6 +1,6 @@
 module Llanfair
   def self.to_s
-    "Llanfair"
+    'Llanfair'
   end
 
   def self.to_sym

@@ -1,6 +1,6 @@
 module ShitSplit
   def self.to_s
-    "ShitSplit"
+    'ShitSplit'
   end
 
   def self.to_sym

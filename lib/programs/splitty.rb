@@ -1,6 +1,6 @@
 module Splitty
   def self.to_s
-    "Splitty"
+    'Splitty'
   end
 
   def self.to_sym
