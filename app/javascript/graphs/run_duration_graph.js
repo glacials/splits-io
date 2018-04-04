@@ -43,7 +43,7 @@ const build_run_druation_graph = function(run) {
       }
     },
     title: {
-      text: 'Run Duration Over Time'
+      text: 'Run Duration over Time'
     },
     tooltip: {
       shared: true,

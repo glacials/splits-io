@@ -32,3 +32,4 @@ $(function() {
 import "../convert"
 import "../highchart_theme.js"
 import "../graph_builder.js"
+import "../segment_graph_builder.js"
