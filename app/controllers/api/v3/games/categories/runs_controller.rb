@@ -18,7 +18,10 @@ class Api::V3::Games::Categories::RunsController < Api::V3::ApplicationControlle
   def set_category
     @category = @game.categories.find(params[:category_id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "Category with id '#{params[:category_id]}' not found for game '#{params[:game_id]}'."}
+    render status: 404, json: {
+      status: 404,
+      message: "Category with id '#{params[:category_id]}' not found for game '#{params[:game_id]}'."
+    }
   end
 
   def set_runs

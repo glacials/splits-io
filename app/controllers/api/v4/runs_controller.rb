@@ -9,9 +9,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   before_action only: [:create] do
     if current_user.nil? # If a cookie is supplied, use it because we're probably on the website.
       # If an OAuth token is supplied, use it (and fail if it's invalid). Otherwise, upload anonymously.
-      if request.headers['Authorization'].present?
-        doorkeeper_authorize! :upload_run
-      end
+      doorkeeper_authorize! :upload_run if request.headers['Authorization'].present?
     end
   end
 

@@ -3,7 +3,6 @@ class Split
     :id,
     :name,
     :indexed_history,
-
     :realtime_duration,
     :realtime_start,
     :realtime_end,
@@ -12,7 +11,6 @@ class Split
     :realtime_gold,
     :realtime_skipped,
     :realtime_reduced,
-
     :gametime_duration,
     :gametime_start,
     :gametime_end,
@@ -86,7 +84,7 @@ class Split
       gametime_end:         gametime_end,
       gametime_best:        gametime_best,
       gametime_gold:        gametime_gold,
-      gametime_skipped:     gametime_skipped,
+      gametime_skipped:     gametime_skipped
     }.compact
   end
 
@@ -107,7 +105,7 @@ class Split
       gametime_end:         gametime_end,
       gametime_best:        gametime_best.try(:serializable_hash),
       gametime_gold:        gametime_gold,
-      gametime_skipped:     gametime_skipped,
+      gametime_skipped:     gametime_skipped
     }.compact
   end
 end

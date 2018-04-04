@@ -12,14 +12,12 @@ class Api::V3::ApplicationController < ActionController::Base
   end
 
   def read_only_mode
-    write_actions = ['create', 'edit', 'destroy']
-    write_methods = ['POST', 'PUT', 'DELETE', 'PATCH']
+    write_actions = %w[create edit destroy]
+    write_methods = %w[POST PUT DELETE PATCH]
     if write_actions.include?(action_name) || write_methods.include?(request.method)
       render template: 'pages/read_only_mode'
-      return false
     end
   end
-
 
   private
 
@@ -31,9 +29,7 @@ class Api::V3::ApplicationController < ActionController::Base
   end
 
   def force_ssl
-    if !request.ssl?
-      render status: 301, json: {status: 301, message: "API v3 hits must be over HTTPS."}
-    end
+    render status: 301, json: {status: 301, message: 'API v3 hits must be over HTTPS.'} unless request.ssl?
   end
 
   def ssl_configured?

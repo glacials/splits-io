@@ -43,17 +43,13 @@ class GamesController < ApplicationController
   private
 
   def authorize
-    if cannot?(:edit, @game)
-      redirect_to game_path(@game), alert: "You don't have permission to do that."
-    end
+    redirect_to game_path(@game), alert: "You don't have permission to do that." if cannot?(:edit, @game)
   end
 
   def set_game
     @game = Game.find_by(shortname: params[:game]) || Game.find_by(id: params[:game])
 
-    if @game.nil?
-      redirect_to games_path(q: params[:game])
-    end
+    redirect_to games_path(q: params[:game]) if @game.nil?
   end
 
   def set_query

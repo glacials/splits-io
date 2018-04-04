@@ -6,19 +6,19 @@ module S3Run
   included do
     def in_s3?
       file = $s3_bucket_internal.object("splits/#{s3_filename}")
-      return file.exists?
+      file.exists?
     rescue Aws::S3::Errors::Forbidden
-      return false
+      false
     end
 
     def migrate_to_s3
       if in_s3?
-        puts "run in s3, skipping"
+        puts 'run in s3, skipping'
         return true
       end
 
       if run_file.nil?
-        puts "run_file is gone, skipping"
+        puts 'run_file is gone, skipping'
         return false
       end
 
@@ -27,12 +27,10 @@ module S3Run
         body: run_file.file
       )
 
-      if object.nil? || object.key.nil?
-        raise "error uploading run to s3"
-      end
+      raise 'error uploading run to s3' if object.nil? || object.key.nil?
 
-      puts "run stored in s3 :)"
-      return true
+      puts 'run stored in s3 :)'
+      true
     end
   end
 end

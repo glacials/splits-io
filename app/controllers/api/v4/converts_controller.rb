@@ -30,21 +30,21 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
 
     old_extension = Run.program(@run.program).file_extension
 
-    if Run.program(params[:format])
-      new_extension = Run.program(params[:format]).file_extension
-    else
-      new_extension = params[:format]
-    end
+    new_extension = if Run.program(params[:format])
+                      Run.program(params[:format]).file_extension
+                    else
+                      params[:format]
+                    end
     filename_without_extension = params[:file].original_filename.split(".#{old_extension}")[0]
 
     filename = "#{filename_without_extension}.#{new_extension}"
     response.set_header('X-Filename', filename)
 
-    if params[:format] == 'json'
-      new_file = render_to_string(json: @run, serializer: Api::V4::Convert::RunSerializer)
-    else
-      new_file = render_to_string("runs/#{params[:format]}", layout: false)
-    end
+    new_file = if params[:format] == 'json'
+                 render_to_string(json: @run, serializer: Api::V4::Convert::RunSerializer)
+               else
+                 render_to_string("runs/#{params[:format]}", layout: false)
+               end
     send_data(
       new_file,
       filename: filename,

@@ -46,12 +46,10 @@ module UnparsedRun
         program: parse_result[:timer],
         attempts: parse_result[:attempts],
         srdc_id: srdc_id || parse_result[:srdc_id].presence,
-        realtime_duration_s: parse_result[:splits].map { |split| split.realtime_duration }.sum.to_f,
+        realtime_duration_s: parse_result[:splits].map(&:realtime_duration).sum.to_f,
         realtime_sum_of_best_s: parse_result[:splits].map.all? do |split|
           split.realtime_best.present?
-        end && parse_result[:splits].map do |split|
-          split.realtime_best
-        end.sum.to_f
+        end && parse_result[:splits].map(&:realtime_best).sum.to_f
       )
 
       @convert_cache = parse_result
@@ -73,15 +71,11 @@ module UnparsedRun
         return false if parse_result[:splits].blank?
         timer_used = Run.program_from_attribute(:to_s, parse_result[:program]).to_sym
 
-        if game.nil? || category.nil?
-          populate_category(parse_result[:game], parse_result[:category])
-        end
+        populate_category(parse_result[:game], parse_result[:category]) if game.nil? || category.nil?
 
         splits = parse_result[:splits]
 
-        if parse_result[:history].present?
-          write_run_histories(parse_result[:history])
-        end
+        write_run_histories(parse_result[:history]) if parse_result[:history].present?
 
         segments = write_segments(splits)
         write_segment_histories(splits)
@@ -156,26 +150,26 @@ module UnparsedRun
       end
 
       segments.import(
-        [
-          :run_id,
-          :segment_number,
-          :name,
+        %i[
+          run_id
+          segment_number
+          name
 
-          :realtime_start_ms,
-          :realtime_end_ms,
-          :realtime_duration_ms,
-          :realtime_shortest_duration_ms,
-          :realtime_skipped,
-          :realtime_reduced,
-          :realtime_gold,
+          realtime_start_ms
+          realtime_end_ms
+          realtime_duration_ms
+          realtime_shortest_duration_ms
+          realtime_skipped
+          realtime_reduced
+          realtime_gold
 
-          :gametime_start_ms,
-          :gametime_end_ms,
-          :gametime_duration_ms,
-          :gametime_shortest_duration_ms,
-          :gametime_skipped,
-          :gametime_reduced,
-          :gametime_gold
+          gametime_start_ms
+          gametime_end_ms
+          gametime_duration_ms
+          gametime_shortest_duration_ms
+          gametime_skipped
+          gametime_reduced
+          gametime_gold
         ],
         segs
       )

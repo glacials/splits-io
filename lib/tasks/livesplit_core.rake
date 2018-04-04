@@ -20,7 +20,7 @@ task :update_lsc do
 
   download_url = nil
   latest_release['assets'].each do |asset|
-    next unless asset['name'] == LIVESPLIT_CORE_TARGET.format(latest_release['tag_name'])
+    next unless asset['name'] == format(LIVESPLIT_CORE_TARGET, latest_release['tag_name'])
     download_url = asset['browser_download_url']
     break
   end

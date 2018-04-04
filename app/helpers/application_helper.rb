@@ -13,7 +13,7 @@ module ApplicationHelper
             'user_id'
           end
 
-    dir = params[:order].to_sym if col && ['asc', 'desc'].include?(params[:order])
+    dir = params[:order].to_sym if col && %w[asc desc].include?(params[:order])
     runs.order((col || 'created_at') => (dir || 'desc'))
   end
 
@@ -25,7 +25,7 @@ module ApplicationHelper
       rivalries: current_user.present? && request.path == rivalries_path,
       faq: request.path == faq_path,
       profile: logged_in? && [user_path(current_user), tools_path].include?(request.path),
-			why_darkmode: request.path == why_darkmode_path
+      why_darkmode: request.path == why_darkmode_path
     }
   end
 end

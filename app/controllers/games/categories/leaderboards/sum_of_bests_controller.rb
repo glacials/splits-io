@@ -10,9 +10,7 @@ class Games::Categories::Leaderboards::SumOfBestsController < ApplicationControl
   def set_game
     @game = Game.where(shortname: params[:game]).or(Game.where(id: params[:game])).first
 
-    if @game.nil?
-      not_found
-    end
+    not_found if @game.nil?
   end
 
   def set_category
@@ -20,8 +18,6 @@ class Games::Categories::Leaderboards::SumOfBestsController < ApplicationControl
       @game.categories.where(id: params[:category])
     ).first
 
-    if @category.nil?
-      not_found
-    end
+    not_found if @category.nil?
   end
 end

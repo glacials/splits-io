@@ -23,8 +23,8 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
     @prediction[:splits] = most_recent_run.splits.map do |segment|
       {
         best: segment.shortest_duration_ms(Run::REAL),
-        finish_time: @prediction[:time] += (segment.histories.map(&:realtime_duration_ms) + [segment.duration_ms(Run::REAL)]).reject { |duration| duration == 0 }.smma.to_f / 1000,
-        duration: (segment.histories.map(&:realtime_duration_ms) + [segment.duration_ms(Run::REAL)]).reject { |duration| duration == 0 }.smma.to_f / 1000,
+        finish_time: @prediction[:time] += (segment.histories.map(&:realtime_duration_ms) + [segment.duration_ms(Run::REAL)]).reject(&:zero?).smma.to_f / 1000,
+        duration: (segment.histories.map(&:realtime_duration_ms) + [segment.duration_ms(Run::REAL)]).reject(&:zero?).smma.to_f / 1000,
         gold?: false,
         skipped?: rand(0.99) < segment.histories.map(&:realtime_duration_ms).map { |time| time.nil? ? 1 : 0 }.smma
       }
@@ -51,12 +51,18 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
   def set_category
     @category = @game.categories.find(params[:category_id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "Category with id '#{params[:category_id]}' not found for game '#{params[:game_id]}'."}
+    render status: 404, json: {
+      status: 404,
+      message: "Category with id '#{params[:category_id]}' not found for game '#{params[:game_id]}'."
+    }
   end
 
   def set_prediction
     unless @user.runs?(@category)
-      render status: 404, json: {status: 404, message: "User with name or id '#{params[:user_id]}' doesn't run category '#{params[:category_id]}' for game '#{params[:game_id]}'."}
+      render status: 404, json: {
+        status: 404,
+        message: "User with name or id '#{params[:user_id]}' doesn't run category '#{params[:category_id]}' for game '#{params[:game_id]}'."
+      }
     end
     @prediction = {}
   end

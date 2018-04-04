@@ -32,7 +32,7 @@ class Api::V3::Users::Games::Categories::PbsController < Api::V3::ApplicationCon
   end
 
   def set_pb
-    unless @pb = @user.pb_for(@category)
+    unless (@pb = @user.pb_for(@category))
       render status: 404, json: {
         status: 404,
         message: "User '#{params[:user_id]}' does not run category '#{params[:category_id]}' for game '#{params[:game_id]}'."

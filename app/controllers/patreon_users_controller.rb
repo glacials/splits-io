@@ -13,11 +13,11 @@ class PatreonUsersController < ApplicationController
     creator_id = '2972755' # it me
 
     api_client = Patreon::API.new(access_token)
-    user_response = api_client.fetch_user()
+    user_response = api_client.fetch_user
 
     user = user_response['data']
     if user.nil?
-      redirect_to settings_path, alert: "There was an issue connecting your Patreon account. Please try again."
+      redirect_to settings_path, alert: 'There was an issue connecting your Patreon account. Please try again.'
       return
     end
 
@@ -54,7 +54,7 @@ class PatreonUsersController < ApplicationController
   def unlink
     current_user.patreon.destroy
 
-    redirect_to settings_path, notice: "Patreon account unlinked :)"
+    redirect_to settings_path, notice: 'Patreon account unlinked :)'
   end
 
   private
