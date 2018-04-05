@@ -91,7 +91,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
   def destroy
     if @run.destroy
-      head 204
+      head 205
     else
       head 500
     end
