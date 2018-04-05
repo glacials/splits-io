@@ -4,7 +4,9 @@ class Api::V3::RunsController < Api::V3::ApplicationController
 
   before_action only: [:create] do
     # If an OAuth token is supplied, use it (and fail if it's invalid). Otherwise, upload anonymously.
-    doorkeeper_authorize! :upload_run if request.headers['Authorization'].present?
+    if request.headers['Authorization'].present?
+      doorkeeper_authorize! :upload_run
+    end
   end
 
   def show

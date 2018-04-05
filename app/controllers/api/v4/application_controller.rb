@@ -78,7 +78,7 @@ class Api::V4::ApplicationController < ActionController::Base
     @run = if params[:historic] == '1'
              Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
            else
-             @run = Run.includes(:game, :category, :user, :segments).find36(params[:run])
+             Run.includes(:game, :category, :user, :segments).find36(params[:run])
            end
   rescue ActiveRecord::RecordNotFound
     render not_found(:run)
