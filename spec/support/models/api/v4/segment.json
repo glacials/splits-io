@@ -1,6 +1,7 @@
 {
   "type": "object",
   "required": [
+    "id",
     "name",
     "segment_number",
     "realtime_start_ms",
@@ -20,6 +21,9 @@
   ],
   "additionalProperties": false,
   "properties": {
+    "id": {
+      "type": "string"
+    },
     "name": {
       "type": "string"
     },
