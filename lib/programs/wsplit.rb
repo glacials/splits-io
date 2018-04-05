@@ -1,6 +1,6 @@
 module WSplit
   def self.to_s
-    "WSplit"
+    'WSplit'
   end
 
   def self.to_sym

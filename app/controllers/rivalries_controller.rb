@@ -5,7 +5,7 @@ class RivalriesController < ApplicationController
 
   def index
     if current_user.nil?
-      redirect_to root_path, alert: "You must be logged in to view rivalries."
+      redirect_to root_path, alert: 'You must be logged in to view rivalries.'
       return
     end
 
@@ -14,7 +14,7 @@ class RivalriesController < ApplicationController
 
   def new
     if current_user.nil?
-      redirect_to root_path, alert: "You must be logged in to create rivalries."
+      redirect_to root_path, alert: 'You must be logged in to create rivalries.'
       return
     end
 

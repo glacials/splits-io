@@ -6,7 +6,7 @@ describe Api::V4::Categories::RunsController do
       let(:category) { create(:category, :with_runs) }
       subject { get :index, params: {category: category.id} }
 
-      it 'retruns a 200' do
+      it 'returns a 200' do
         expect(subject).to have_http_status 200
       end
 

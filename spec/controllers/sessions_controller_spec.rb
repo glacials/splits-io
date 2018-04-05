@@ -23,7 +23,6 @@ describe SessionsController do
       end
       before { allow(request).to receive(:env) { env } }
 
-
       context 'when given an redirect path via OmniAuth origin' do
         let(:redirect_path) { '/origin-redirect_path' }
         before { allow(request).to receive(:env) { env.merge('omniauth.origin' => redirect_path) } }

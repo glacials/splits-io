@@ -9,13 +9,13 @@ class Category < ApplicationRecord
   def self.from_name(name)
     return nil if name.blank?
     name = name.strip
-    where("lower(name) = lower(?)", name).first
+    where('lower(name) = lower(?)', name).first
   end
 
   def self.from_name!(name)
     return nil if name.blank?
     name = name.strip
-    where("lower(name) = lower(?)", name).first_or_create(name: name)
+    where('lower(name) = lower(?)', name).first_or_create(name: name)
   end
 
   def runners
@@ -41,13 +41,13 @@ class Category < ApplicationRecord
 
   def autodetect_shortname
     shortname = {
-      "any%" => "anypct",
-      "100%" => "100pct",
+      'any%' => 'anypct',
+      '100%' => '100pct',
     }[name.try(:downcase)]
   end
 
   def shortname
-    name.downcase.gsub(/ *%/, 'pct').gsub(/ +/, "-")
+    name.downcase.gsub(/ *%/, 'pct').gsub(/ +/, '-')
   end
 
   def popular?

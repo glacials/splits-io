@@ -32,7 +32,7 @@ class Run < ApplicationRecord
 
   scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
   scope :by_category, ->(category) { where(category: category) }
-  scope :nonempty, -> { where("realtime_duration_ms != 0") }
+  scope :nonempty, -> { where('realtime_duration_ms != 0') }
   scope :owned, -> { where.not(user: nil) }
   scope :unarchived, -> { where(archived: false) }
   scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
@@ -80,13 +80,13 @@ class Run < ApplicationRecord
       nil
     end
 
-    alias_method :find10, :find
+    alias find10 find
     def find36(id36)
       find10(id36.to_i(36))
     end
   end
 
-  alias_method :id10, :id
+  alias id10 id
   def id36
     return nil if id10.nil?
 
@@ -136,7 +136,7 @@ class Run < ApplicationRecord
 
     if category.blank? && game_string.present? && category_string.present?
       game = Game.from_name!(game_string)
-      self.category = game.categories.where("lower(name) = lower(?)", category_string).first_or_create(name: category_string)
+      self.category = game.categories.where('lower(name) = lower(?)', category_string).first_or_create(name: category_string)
     end
   end
 

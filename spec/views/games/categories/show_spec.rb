@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-
 RSpec.describe 'games/categories/show' do
   it 'renders the show template' do
     assign(:game, FactoryBot.create(:game))

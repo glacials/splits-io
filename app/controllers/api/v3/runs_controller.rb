@@ -29,7 +29,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
 
     render status: 201, location: api_v3_run_url(@run), json: {
       status: 201,
-      message: "Run created.",
+      message: 'Run created.',
       id: @run.id36,
       claim_token: @run.claim_token,
       uris: {
@@ -48,19 +48,13 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   # TODO: These methods are not documented and thus is not officially supported by the API. It uses cookie
   # authentication, but the official release of it into the API should use token authentication.
   def destroy
-    if !@run.destroy
-      raise "Can't destroy run"
-      return
-    end
+    raise "Can't destroy run" unless @run.destroy
 
     head 200
   end
 
   def disown
-    if !@run.update(user: nil)
-      raise "Can't disown run"
-      return
-    end
+    raise "Can't disown run" unless @run.update(user: nil)
 
     head 200
   end
@@ -82,7 +76,6 @@ class Api::V3::RunsController < Api::V3::ApplicationController
         status: 401,
         message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."
       }
-      return false
     end
   end
 end

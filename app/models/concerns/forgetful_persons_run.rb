@@ -9,16 +9,18 @@ module ForgetfulPersonsRun
       segments.reduce([]) do |segs, seg|
         if segs.last.try(:realtime_duration_ms) == 0
           skipped_seg = segs.last
-          segs + [Segment.new(segs.pop.attributes.merge(
-            name: "#{skipped_seg.name} + #{seg.name}",
-            realtime_start_ms: skipped_seg.realtime_start_ms,
-            realtime_end_ms: seg.realtime_end_ms,
-            realtime_duration_ms: seg.realtime_duration_ms,
-            gametime_start_ms: skipped_seg.gametime_start_ms,
-            gametime_end_ms: skipped_seg.gametime_end_ms,
-            gametime_duration_ms: seg.gametime_duration_ms,
-            realtime_reduced: true
-          ))]
+          segs + [Segment.new(
+            segs.pop.attributes.merge(
+              name: "#{skipped_seg.name} + #{seg.name}",
+              realtime_start_ms: skipped_seg.realtime_start_ms,
+              realtime_end_ms: seg.realtime_end_ms,
+              realtime_duration_ms: seg.realtime_duration_ms,
+              gametime_start_ms: skipped_seg.gametime_start_ms,
+              gametime_end_ms: skipped_seg.gametime_end_ms,
+              gametime_duration_ms: seg.gametime_duration_ms,
+              realtime_reduced: true
+            )
+          )]
         else
           segs + [seg]
         end
@@ -30,16 +32,18 @@ module ForgetfulPersonsRun
       segments.reduce([]) do |segs, seg|
         if segs.last.try(:gametime_duration_ms) == 0
           skipped_seg = segs.last
-          segs + [Segment.new(segs.pop.attributes.merge(
-            name: "#{skipped_seg.name} + #{seg.name}",
-            realtime_start_ms: skipped_seg.realtime_start_ms,
-            realtime_end_ms: seg.realtime_end_ms,
-            realtime_duration_ms: seg.realtime_duration_ms,
-            gametime_start_ms: skipped_seg.gametime_start_ms,
-            gametime_end_ms: skipped_seg.gametime_end_ms,
-            gametime_duration_ms: seg.gametime_duration_ms,
-            gametime_reduced: true
-          ))]
+          segs + [Segment.new(
+            segs.pop.attributes.merge(
+              name: "#{skipped_seg.name} + #{seg.name}",
+              realtime_start_ms: skipped_seg.realtime_start_ms,
+              realtime_end_ms: seg.realtime_end_ms,
+              realtime_duration_ms: seg.realtime_duration_ms,
+              gametime_start_ms: skipped_seg.gametime_start_ms,
+              gametime_end_ms: skipped_seg.gametime_end_ms,
+              gametime_duration_ms: seg.gametime_duration_ms,
+              gametime_reduced: true
+            )
+          )]
         else
           segs + [seg]
         end
@@ -56,15 +60,11 @@ module ForgetfulPersonsRun
     end
 
     def realtime_skipped_splits
-      segments.select do |segment|
-        segment.realtime_skipped?
-      end
+      segments.select(&:realtime_skipped?)
     end
 
     def gametime_skipped_splits
-      segments.select do |segment|
-        segment.realtime_skipped?
-      end
+      segments.select(&:realtime_skipped?)
     end
 
     def skipped_splits(time_type)
@@ -77,15 +77,11 @@ module ForgetfulPersonsRun
     end
 
     def realtime_has_skipped_splits?
-      segments.any? do |segment|
-        segment.realtime_skipped?
-      end
+      segments.any?(&:realtime_skipped?)
     end
 
     def gametime_has_skipped_splits?
-      segments.any? do |segment|
-        segment.gametime_skipped?
-      end
+      segments.any?(&:gametime_skipped?)
     end
 
     def has_skipped_splits?(time_type)

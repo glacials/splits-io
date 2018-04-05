@@ -1,6 +1,6 @@
 module SplitterZ
   def self.to_s
-    "SplitterZ"
+    'SplitterZ'
   end
 
   def self.to_sym

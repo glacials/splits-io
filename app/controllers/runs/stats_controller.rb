@@ -43,11 +43,11 @@ class Runs::StatsController < Runs::ApplicationController
     csv = CSV.generate do |doc|
       header = ['Segment name']
 
-      if @run.segments.empty? || @run.segments.first.histories.empty?
-        attempts = 0
-      else
-        attempts = @run.segments.first.histories.order(attempt_number: :asc).last.attempt_number
-      end
+      attempts = if @run.segments.empty? || @run.segments.first.histories.empty?
+                   0
+                 else
+                   @run.segments.first.histories.order(attempt_number: :asc).last.attempt_number
+                 end
 
       (1..attempts).each do |attempt_number|
         header << "Attempt ##{attempt_number}'s Duration (ms)"

@@ -47,9 +47,7 @@ class Games::AliasesController < ApplicationController
   def set_game
     @game = Game.find_by(shortname: params[:game])
 
-    if @game.nil?
-      redirect_to games_path(q: params[:game])
-    end
+    redirect_to games_path(q: params[:game]) if @game.nil?
   end
 
   def set_game_to_merge

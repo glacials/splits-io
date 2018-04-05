@@ -1,6 +1,6 @@
 module Portal2LiveTimer
   def self.to_s
-    "Portal 2 Live Timer"
+    'Portal 2 Live Timer'
   end
 
   def self.to_sym

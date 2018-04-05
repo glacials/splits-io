@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe Users::RivalriesController do
   describe '#index' do
-
     context 'when logged in' do
       user = FactoryBot.create(:user, :with_runs)
       user.categories.each do |category|

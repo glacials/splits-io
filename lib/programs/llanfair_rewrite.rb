@@ -1,6 +1,6 @@
 module Llanfair2
   def self.to_s
-    "Llanfair Rewrite"
+    'Llanfair Rewrite'
   end
 
   def self.to_sym

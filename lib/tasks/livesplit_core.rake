@@ -3,11 +3,11 @@ require 'rubygems/package'
 require 'zlib'
 require 'httparty'
 
-LIVESPLIT_CORE_URL = "https://api.github.com/repos/LiveSplit/livesplit-core/releases/latest"
-PARSER_FOLDER = "#{Rake.application.original_dir}/lib/parser"
-DEST_FOLDER = "#{Rake.application.original_dir}/lib/parser/livesplit-core"
-CURRENT_LSC_VERSION = open("#{PARSER_FOLDER}/livesplit_core_version", "r") {|f| f.read }
-LIVESPLIT_CORE_TARGET = "livesplit-core-%s-x86_64-unknown-linux-gnu.tar.gz"
+LIVESPLIT_CORE_URL = 'https://api.github.com/repos/LiveSplit/livesplit-core/releases/latest'.freeze
+PARSER_FOLDER = "#{Rake.application.original_dir}/lib/parser".freeze
+DEST_FOLDER = "#{Rake.application.original_dir}/lib/parser/livesplit-core".freeze
+CURRENT_LSC_VERSION = File.open("#{PARSER_FOLDER}/livesplit_core_version", 'r', &:read)
+LIVESPLIT_CORE_TARGET = 'livesplit-core-%s-x86_64-unknown-linux-gnu.tar.gz'.freeze
 
 desc 'Download and update livesplit-core'
 task :update_lsc do
@@ -20,7 +20,7 @@ task :update_lsc do
 
   download_url = nil
   latest_release['assets'].each do |asset|
-    next unless asset['name'] == LIVESPLIT_CORE_TARGET % [latest_release['tag_name']]
+    next unless asset['name'] == format(LIVESPLIT_CORE_TARGET, latest_release['tag_name'])
     download_url = asset['browser_download_url']
     break
   end
@@ -40,8 +40,7 @@ task :update_lsc do
       if tarfile.directory?
         mkdir_p dest_file
       else
-        file = File.dirname(dest_file)
-        File.open(dest_file, "wb") do |f|
+        File.open(dest_file, 'wb') do |f|
           f.print tarfile.read
         end
       end
@@ -51,5 +50,5 @@ task :update_lsc do
   mv("#{DEST_FOLDER}/liblivesplit_core.so", "#{PARSER_FOLDER}/liblivesplit_core.so")
   mv("#{DEST_FOLDER}/bindings/LiveSplitCore.rb", "#{PARSER_FOLDER}/LiveSplitCore.rb")
   rm_rf DEST_FOLDER
-  open("#{PARSER_FOLDER}/livesplit_core_version", "w") {|f| f.write(latest_release['tag_name']) }
+  File.open("#{PARSER_FOLDER}/livesplit_core_version", 'w') { |f| f.write(latest_release['tag_name']) }
 end

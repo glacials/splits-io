@@ -1,9 +1,7 @@
 if SplitsIO::Application.config.read_only
-  module ActiveRecord
-    class Base
-      def readonly?
-        true
-      end
+  module ActiveRecord::Base
+    def readonly?
+      true
     end
   end
 end

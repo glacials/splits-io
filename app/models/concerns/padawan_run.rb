@@ -11,7 +11,7 @@ module PadawanRun
       return improvements if realtime_collapsed_segments.size != better_run.realtime_collapsed_segments.size
 
       realtime_collapsed_segments.each.with_index do |segment, i|
-        if (better_run.segments[i].realtime_duration_ms) < segment.realtime_duration_ms && !segment.realtime_reduced?
+        if better_run.segments[i].realtime_duration_ms < segment.realtime_duration_ms && !segment.realtime_reduced?
           improvements[:time_differences] << {
             split: segment,
             time_difference: (segment.realtime_duration_ms - better_run.segments[i].realtime_duration_ms)

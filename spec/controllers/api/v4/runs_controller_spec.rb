@@ -130,13 +130,13 @@ describe Api::V4::RunsController do
       subject(:response) { get :show, params: {run: run.id36} }
 
       it 'returns a 200' do
-        request.headers["Accept"] = 'application/wsplit'
+        request.headers['Accept'] = 'application/wsplit'
 
         expect(subject).to have_http_status 200
       end
 
       it 'returns the correct content-type header' do
-        request.headers["Accept"] = 'application/wsplit'
+        request.headers['Accept'] = 'application/wsplit'
 
         expect(response.content_type).to eq('application/wsplit')
       end
@@ -147,13 +147,13 @@ describe Api::V4::RunsController do
       subject(:response) { get :show, params: {run: run.id36} }
 
       it 'returns a 406' do
-        request.headers["Accept"] = 'application/liversplit'
+        request.headers['Accept'] = 'application/liversplit'
 
         expect(subject).to have_http_status 406
       end
 
       it 'returns the correct content-type header' do
-        request.headers["Accept"] = 'application/liversplit'
+        request.headers['Accept'] = 'application/liversplit'
 
         expect(response.content_type).to eq('application/json')
       end
@@ -164,13 +164,13 @@ describe Api::V4::RunsController do
       subject(:response) { get :show, params: {run: run.id36} }
 
       it 'returns a 200' do
-        request.headers["Accept"] = 'application/original-timer'
+        request.headers['Accept'] = 'application/original-timer'
 
         expect(subject).to have_http_status 200
       end
 
       it 'returns the correct content-type header' do
-        request.headers["Accept"] = 'application/original-timer'
+        request.headers['Accept'] = 'application/original-timer'
 
         expect(response.content_type).to eq('application/livesplit')
       end
@@ -222,7 +222,6 @@ describe Api::V4::RunsController do
 
   describe '#destroy' do
     context 'with no claim token' do
-
       context 'on an existing run' do
         let(:run) { create(:run) }
         subject { delete :destroy, params: {run: run.id36} }
@@ -245,9 +244,9 @@ describe Api::V4::RunsController do
       let(:run) { create(:run, claim_token: correct_claim_token) }
       subject { delete :destroy, params: {run: run.id36, claim_token: incorrect_claim_token} }
 
-       it 'returns a 403' do
-         expect(subject).to have_http_status 403
-       end
+      it 'returns a 403' do
+        expect(subject).to have_http_status 403
+      end
     end
 
     context 'with a matching claim token' do

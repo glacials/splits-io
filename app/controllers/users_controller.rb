@@ -6,16 +6,14 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    if params[:destroy_runs] == '1'
-      current_user.runs.destroy_all
-    end
+    current_user.runs.destroy_all if params[:destroy_runs] == '1'
     current_user.destroy
     auth_session.invalidate!
-    redirect_to root_path, alert: "Your account has been deleted. Go have fun outside :)"
+    redirect_to root_path, alert: 'Your account has been deleted. Go have fun outside :)'
   end
 
   def follows
-    render partial: "shared/follows"
+    render partial: 'shared/follows'
   end
 
   private
@@ -25,8 +23,6 @@ class UsersController < ApplicationController
   end
 
   def verify_ownership
-    unless @user == current_user
-      render :unauthorized, status: 401
-    end
+    render :unauthorized, status: 401 unless @user == current_user
   end
 end

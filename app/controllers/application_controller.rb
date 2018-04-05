@@ -31,15 +31,15 @@ class ApplicationController < ActionController::Base
   end
 
   def not_found
-    raise ActionController::RoutingError.new('Not found')
+    raise ActionController::RoutingError, 'Not found'
   end
 
   def bad_request
-    raise ActionController::BadRequest.new('Bad request')
+    raise ActionController::BadRequest, 'Bad request'
   end
 
   def unauthorized
-    raise ActionController::RoutingError.new('Unauthorized')
+    raise ActionController::RoutingError, 'Unauthorized'
   end
 
   private
@@ -47,14 +47,11 @@ class ApplicationController < ActionController::Base
   def set_gon
     gon.request = {path: request.path}
 
-    if current_user.nil?
-      gon.user = nil
-    else
-      gon.user = {
-        id: current_user.id,
-        name: current_user.name
-      }
-    end
+    gon.user = if current_user.nil?
+                 nil
+               else
+                 {id: current_user.id, name: current_user.name}
+               end
   end
 
   def ssl_configured?

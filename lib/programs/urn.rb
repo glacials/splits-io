@@ -1,6 +1,6 @@
 module Urn
   def self.to_s
-    "Urn"
+    'Urn'
   end
 
   def self.to_sym

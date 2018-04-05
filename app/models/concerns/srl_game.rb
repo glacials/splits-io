@@ -5,13 +5,13 @@ module SRLGame
 
   included do
     def srl_uri
-      if shortname.present?
-        URI::HTTP.build(
-          host: "speedrunslive.com",
-          path: "/races/game/",
-          fragment: "!/#{shortname}"
-        ).to_s
-      end
+      return nil unless shortname.present?
+
+      URI::HTTP.build(
+        host: 'speedrunslive.com',
+        path: '/races/game/',
+        fragment: "!/#{shortname}"
+      ).to_s
     end
   end
 end

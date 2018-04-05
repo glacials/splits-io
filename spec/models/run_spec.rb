@@ -123,34 +123,34 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, 'Tron City', 53921],
-        [1, 'Start Abraxas fight', 185453],
-        [2, 'Finish Abraxas fight', 108446],
-        [3, '"FLYNN!"', 151874],
-        [4, '"Hey! Over here!"', 117067],
-        [5, '"That was CLU. I saw him." (stack2 skip inc)', 44819],
-        [6, '"Follow me."', 114844],
-        [7, 'End of cycle ride (bridge skip inc)', 75843],
-        [8, 'End of bridge thing', 431475],
-        [9, 'Da Vinci', 18882],
-        [10, '"Hey! Over here!" #2', 418688],
-        [11, 'Drive tank 4 feet', 372653],
-        [12, 'Green guy', 283038],
-        [13, 'Beat games', 186848],
-        [14, 'Green guy talks to me', 120515],
-        [15, 'Get across that bridge', 484387],
-        [16, 'Jump up and down on three lightsabers', 109862],
-        [17, '"That\'s Flynn\'s!"', 43737],
-        [18, 'Race green guy', 67095],
-        [19, 'Kill green guy', 220725],
-        [20, 'Jump the bike', 278102],
-        [21, 'Grab me by the arm', 224736],
-        [22, "Popcorn ceiling's revenge", 108322],
-        [23, 'Jump onto the flying staple', 112977],
-        [24, 'Ride motorbike for 9 seconds', 447303],
-        [25, 'Final fight phase 1', 59785],
-        [26, 'Final fight phase 2', 185817],
-        [27, 'Final fight phase 3', 28333]
+        [0, 'Tron City', 53_921],
+        [1, 'Start Abraxas fight', 185_453],
+        [2, 'Finish Abraxas fight', 108_446],
+        [3, '"FLYNN!"', 151_874],
+        [4, '"Hey! Over here!"', 117_067],
+        [5, '"That was CLU. I saw him." (stack2 skip inc)', 44_819],
+        [6, '"Follow me."', 114_844],
+        [7, 'End of cycle ride (bridge skip inc)', 75_843],
+        [8, 'End of bridge thing', 431_475],
+        [9, 'Da Vinci', 18_882],
+        [10, '"Hey! Over here!" #2', 418_688],
+        [11, 'Drive tank 4 feet', 372_653],
+        [12, 'Green guy', 283_038],
+        [13, 'Beat games', 186_848],
+        [14, 'Green guy talks to me', 120_515],
+        [15, 'Get across that bridge', 484_387],
+        [16, 'Jump up and down on three lightsabers', 109_862],
+        [17, '"That\'s Flynn\'s!"', 43_737],
+        [18, 'Race green guy', 67_095],
+        [19, 'Kill green guy', 220_725],
+        [20, 'Jump the bike', 278_102],
+        [21, 'Grab me by the arm', 224_736],
+        [22, "Popcorn ceiling's revenge", 108_322],
+        [23, 'Jump onto the flying staple', 112_977],
+        [24, 'Ride motorbike for 9 seconds', 447_303],
+        [25, 'Final fight phase 1', 59_785],
+        [26, 'Final fight phase 2', 185_817],
+        [27, 'Final fight phase 3', 28_333]
       ]
     end
 
@@ -161,23 +161,23 @@ describe Run, type: :model do
     it 'accurately reports its shortest segment' do
       rss = run.shortest_segment(Run::REAL)
       expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
-        9, 'Da Vinci', 18882
+        9, 'Da Vinci', 18_882
       ]
     end
 
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        15, 'Get across that bridge', 484387
+        15, 'Get across that bridge', 484_387
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq 118791
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 118_791
     end
 
     it 'reports its total playtime' do
-      expect(run.total_playtime_ms(Run::REAL)).to eq 77743500
+      expect(run.total_playtime_ms(Run::REAL)).to eq 77_743_500
     end
 
     it 'reports no history using fast parsing' do
@@ -202,11 +202,11 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, "Green Greens", 99390],
-        [1, "Castle LoLoLo", 91940],
-        [2, "Float Islands", 127809],
-        [3, "Bubbly Clouds", 195180],
-        [4, "Mt. DeDeDe", 236439],
+        [0, 'Green Greens', 99_390],
+        [1, 'Castle LoLoLo', 91_940],
+        [2, 'Float Islands', 127_809],
+        [3, 'Bubbly Clouds', 195_180],
+        [4, 'Mt. DeDeDe', 236_439]
       ]
     end
 
@@ -217,23 +217,23 @@ describe Run, type: :model do
     it 'accurately reports its shortest segment' do
       rss = run.shortest_segment(Run::REAL)
       expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
-        1, "Castle LoLoLo", 91940
+        1, 'Castle LoLoLo', 91_940
       ]
     end
 
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        4, 'Mt. DeDeDe', 236439
+        4, 'Mt. DeDeDe', 236_439
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq 127809
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 127_809
     end
 
     it 'reports its total playtime' do
-      expect(run.total_playtime_ms(Run::REAL)).to eq 2870185
+      expect(run.total_playtime_ms(Run::REAL)).to eq 2_870_185
     end
 
     it 'reports no history using fast parsing' do
@@ -257,24 +257,24 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, 'Hole 1', 30349],
-        [1, 'Hole 2', 42742],
-        [2, 'Hole 3', 35263],
-        [3, 'Hole 4', 25164],
-        [4, 'Hole 5', 34341],
-        [5, 'Hole 6', 34972],
-        [6, 'Hole 7', 20754],
-        [7, 'Hole 8', 41221],
-        [8, 'Hole 9', 43621],
-        [9, 'Hole 10', 28661],
-        [10, 'Hole 11', 37146],
-        [11, 'Hole 12', 62913],
-        [12, 'Hole 13', 41539],
-        [13, 'Hole 14', 35332],
-        [14, 'Hole 15', 36653],
-        [15, 'Hole 16', 31277],
-        [16, 'Hole 17', 37631],
-        [17, 'Hole 18', 66083]
+        [0, 'Hole 1', 30_349],
+        [1, 'Hole 2', 42_742],
+        [2, 'Hole 3', 35_263],
+        [3, 'Hole 4', 25_164],
+        [4, 'Hole 5', 34_341],
+        [5, 'Hole 6', 34_972],
+        [6, 'Hole 7', 20_754],
+        [7, 'Hole 8', 41_221],
+        [8, 'Hole 9', 43_621],
+        [9, 'Hole 10', 28_661],
+        [10, 'Hole 11', 37_146],
+        [11, 'Hole 12', 62_913],
+        [12, 'Hole 13', 41_539],
+        [13, 'Hole 14', 35_332],
+        [14, 'Hole 15', 36_653],
+        [15, 'Hole 16', 31_277],
+        [16, 'Hole 17', 37_631],
+        [17, 'Hole 18', 66_083]
       ]
     end
 
@@ -286,23 +286,23 @@ describe Run, type: :model do
     it 'accurately reports its shortest segment' do
       rss = run.shortest_segment(Run::REAL)
       expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
-        6, 'Hole 7', 20754
+        6, 'Hole 7', 20_754
       ]
     end
 
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        17, 'Hole 18', 66083
+        17, 'Hole 18', 66_083
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq 35992
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 35_992
     end
 
     it 'reports its total playtime' do
-      expect(run.total_playtime_ms(Run::REAL)).to eq 22450446
+      expect(run.total_playtime_ms(Run::REAL)).to eq 22_450_446
     end
 
     it 'reports no history using fast parsing' do
@@ -334,37 +334,37 @@ describe Run, type: :model do
 
       it 'has the correct realtime segments' do
         expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-          [0, "WatchYr<3Die", 191265],
-          [1, "Elevator Land", 73595],
-          [2, "Gross, Rats", 131065],
-          [3, "Try Not Falling?", 232498],
-          [4, "Men of the Faith", 147284],
-          [5, "Fuckin Celia", 118806],
-          [6, "Tr4p Haus", 171703],
-          [7, "Troubled Waters", 305158],
-          [8, "RNG Roulette", 215579],
-          [9, "Not At Fault", 246412],
-          [10, "Amateur Work", 377836],
-          [11, "Don't Mind Me", 67085],
-          [12, "H9 U Havelock", 123226],
+          [0, 'WatchYr<3Die', 191_265],
+          [1, 'Elevator Land', 73_595],
+          [2, 'Gross, Rats', 131_065],
+          [3, 'Try Not Falling?', 232_498],
+          [4, 'Men of the Faith', 147_284],
+          [5, 'Fuckin Celia', 118_806],
+          [6, 'Tr4p Haus', 171_703],
+          [7, 'Troubled Waters', 305_158],
+          [8, 'RNG Roulette', 215_579],
+          [9, 'Not At Fault', 246_412],
+          [10, 'Amateur Work', 377_836],
+          [11, "Don't Mind Me", 67_085],
+          [12, 'H9 U Havelock', 123_226]
         ]
       end
 
       it 'has the correct gametime segments' do
         expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::GAME)] }).to match_array [
-          [0, "WatchYr<3Die", 191265],
-          [1, "Elevator Land", 71271],
-          [2, "Gross, Rats", 127293],
-          [3, "Try Not Falling?", 220780],
-          [4, "Men of the Faith", 134083],
-          [5, "Fuckin Celia", 107779],
-          [6, "Tr4p Haus", 159324],
-          [7, "Troubled Waters", 287640],
-          [8, "RNG Roulette", 196420],
-          [9, "Not At Fault", 231033],
-          [10, "Amateur Work", 355115],
-          [11, "Don't Mind Me", 59727],
-          [12, "H9 U Havelock", 116235]
+          [0, 'WatchYr<3Die', 191_265],
+          [1, 'Elevator Land', 71_271],
+          [2, 'Gross, Rats', 127_293],
+          [3, 'Try Not Falling?', 220_780],
+          [4, 'Men of the Faith', 134_083],
+          [5, 'Fuckin Celia', 107_779],
+          [6, 'Tr4p Haus', 159_324],
+          [7, 'Troubled Waters', 287_640],
+          [8, 'RNG Roulette', 196_420],
+          [9, 'Not At Fault', 231_033],
+          [10, 'Amateur Work', 355_115],
+          [11, "Don't Mind Me", 59_727],
+          [12, 'H9 U Havelock', 116_235]
         ]
       end
     end
@@ -380,8 +380,8 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, 'Spiral Mountain', 211230],
-        [1, "Mumbo's Mountain", 808199]
+        [0, 'Spiral Mountain', 211_230],
+        [1, "Mumbo's Mountain", 808_199]
       ]
     end
 
@@ -392,19 +392,19 @@ describe Run, type: :model do
     it 'accurately reports its shortest segment' do
       rss = run.shortest_segment(Run::REAL)
       expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
-        0, 'Spiral Mountain', 211230
+        0, 'Spiral Mountain', 211_230
       ]
     end
 
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        1, "Mumbo's Mountain", 808199
+        1, "Mumbo's Mountain", 808_199
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq(509714)
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq(509_714)
     end
 
     it 'reports its total playtime' do
@@ -422,14 +422,14 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, "1-1", 32180],
-        [1, "1-2", 31470],
-        [2, "4-1", 37400],
-        [3, "4-2", 29390],
-        [4, "Pipe Jump City", 51030],
-        [5, "Jumping Koopas", 37030],
-        [6, "Count To 4", 35310],
-        [7, "Hammers of Fortune", 46079]
+        [0, '1-1', 32_180],
+        [1, '1-2', 31_470],
+        [2, '4-1', 37_400],
+        [3, '4-2', 29_390],
+        [4, 'Pipe Jump City', 51_030],
+        [5, 'Jumping Koopas', 37_030],
+        [6, 'Count To 4', 35_310],
+        [7, 'Hammers of Fortune', 46_079]
       ]
     end
 
@@ -437,20 +437,20 @@ describe Run, type: :model do
       let(:run) do
         r = FactoryBot.create(:llanfair_gered_run)
         r.parse_into_db
-      r.reload
+        r.reload
         r
       end
 
       it 'has the correct splits' do
         expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-          [0, "1-1", 32180],
-          [1, "1-2", 31470],
-          [2, "4-1", 37400],
-          [3, "4-2", 29390],
-          [4, "Pipe Jump City", 51030],
-          [5, "Jumping Koopas", 37030],
-          [6, "Count To 4", 35310],
-          [7, "Hammers of Fortune", 46079]
+          [0, '1-1', 32_180],
+          [1, '1-2', 31_470],
+          [2, '4-1', 37_400],
+          [3, '4-2', 29_390],
+          [4, 'Pipe Jump City', 51_030],
+          [5, 'Jumping Koopas', 37_030],
+          [6, 'Count To 4', 35_310],
+          [7, 'Hammers of Fortune', 46_079]
         ]
       end
 
@@ -470,17 +470,17 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, "Introduction", 85480],
-        [1, "Jimmy", 134200],
-        [2, "Mona", 124070],
-        [3, "Dribbles", 248240],
-        [4, "9-Volt", 142990],
-        [5, "Jimmy", 161370],
-        [6, "Dr.Crygonal", 157080],
-        [7, "Orbulon", 187269],
-        [8, "Kat", 221980],
-        [9, "Jimmy", 177609],
-        [10, "Wario", 234059]
+        [0, 'Introduction', 85_480],
+        [1, 'Jimmy', 134_200],
+        [2, 'Mona', 124_070],
+        [3, 'Dribbles', 248_240],
+        [4, '9-Volt', 142_990],
+        [5, 'Jimmy', 161_370],
+        [6, 'Dr.Crygonal', 157_080],
+        [7, 'Orbulon', 187_269],
+        [8, 'Kat', 221_980],
+        [9, 'Jimmy', 177_609],
+        [10, 'Wario', 234_059]
       ]
     end
 
@@ -500,22 +500,22 @@ describe Run, type: :model do
 
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
-        [0, "Hyrule Castle", 377060],
-        [1, "Eastern Palace", 353060],
-        [2, "Desert Palace", 467070],
-        [3, "Tower of hera", 478079],
-        [4, "Light World", 565099],
-        [5, "Dark Palace", 445070],
-        [6, "Dig", 459079],
-        [7, "Chest", 331050],
-        [8, "Thieves’ Town", 327159],
-        [9, "Skull Woods", 491400],
-        [10, "Ice Palace", 561750],
-        [11, "Misery Mire", 655769],
-        [12, "Swamp Palace", 599410],
-        [13, "Turtle Rock", 1115179],
-        [14, "Dark World", 686119],
-        [15, "Triforce", 133640]
+        [0, 'Hyrule Castle', 377_060],
+        [1, 'Eastern Palace', 353_060],
+        [2, 'Desert Palace', 467_070],
+        [3, 'Tower of hera', 478_079],
+        [4, 'Light World', 565_099],
+        [5, 'Dark Palace', 445_070],
+        [6, 'Dig', 459_079],
+        [7, 'Chest', 331_050],
+        [8, 'Thieves’ Town', 327_159],
+        [9, 'Skull Woods', 491_400],
+        [10, 'Ice Palace', 561_750],
+        [11, 'Misery Mire', 655_769],
+        [12, 'Swamp Palace', 599_410],
+        [13, 'Turtle Rock', 1_115_179],
+        [14, 'Dark World', 686_119],
+        [15, 'Triforce', 133_640]
       ]
     end
 

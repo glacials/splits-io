@@ -16,7 +16,6 @@ class Api::V4::ApplicationController < ActionController::Base
     write_methods = %w[POST PUT DELETE PATCH]
     if write_actions.include?(action_name) || write_methods.include?(request.method)
       render template: 'pages/read_only_mode'
-      return false
     end
   end
 
@@ -44,7 +43,7 @@ class Api::V4::ApplicationController < ActionController::Base
     response.set_header('Location', secure_uri.to_s)
 
     render status: 301, json: {
-      error: 'The Splits I/O API is only accessible over HTTPS.',
+      error: 'The Splits I/O API is only accessible over HTTPS.'
     }
   end
 
@@ -76,11 +75,11 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_run
-    if params[:historic] == '1'
-      @run = Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
-    else
-      @run = Run.includes(:game, :category, :user, :segments).find36(params[:run])
-    end
+    @run = if params[:historic] == '1'
+             Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
+           else
+             Run.includes(:game, :category, :user, :segments).find36(params[:run])
+           end
   rescue ActiveRecord::RecordNotFound
     render not_found(:run)
   end

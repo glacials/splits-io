@@ -3,7 +3,8 @@ class Api::V4::Convert::RunSerializer < Api::V4::ApplicationSerializer
   has_one :category, serializer: Api::V4::CategorySerializer
   has_many :runners, serializer: Api::V4::RunnerSerializer
 
-  attributes :id, :srdc_id, :time, :program, :attempts, :image_url, :video_url, :created_at, :updated_at, :splits, :history
+  attributes :id, :srdc_id, :time, :program, :attempts, :image_url, :video_url,
+             :created_at, :updated_at, :splits, :history
 
   def id
     nil
@@ -36,7 +37,6 @@ class Api::V4::Convert::RunSerializer < Api::V4::ApplicationSerializer
   def splits
     object.segments.map do |segment|
       segment.realtime_shortest_duration_ms = {duration: segment.realtime_shortest_duration_ms / 1000}
-      segment
       {
         name: segment.name,
         duration: (segment.realtime_duration_ms || 0).to_f / 1000,

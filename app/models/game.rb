@@ -19,7 +19,7 @@ class Game < ApplicationRecord
     term = term.strip
     return nil if term.blank?
     ids = where('LOWER(shortname) = LOWER(?)', term).or(where('name ILIKE ?', "%#{term}%")).pluck(:id)
-    ids = ids | GameAlias.where('name ILIKE ?', "%#{term}%").pluck(:game_id)
+    ids |= GameAlias.where('name ILIKE ?', "%#{term}%").pluck(:game_id)
     Game.where(id: ids)
   end
 
@@ -36,7 +36,7 @@ class Game < ApplicationRecord
   end
 
   def to_param
-    shortname || id.to_s || name.downcase.gsub('/', '')
+    shortname || id.to_s || name.downcase.delete('/')
   end
 
   def sync_with_srl
@@ -63,9 +63,7 @@ class Game < ApplicationRecord
   # game.
   def merge_into!(game)
     ApplicationRecord.transaction do
-      if shortname.present? && game.shortname.nil?
-        game.update(shortname: shortname)
-      end
+      game.update(shortname: shortname) if shortname.present? && game.shortname.nil?
 
       aliases.update_all(game_id: game.id)
 

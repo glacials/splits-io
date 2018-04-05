@@ -1,28 +1,24 @@
 module RunsHelper
   include ActionView::Helpers::DateHelper
 
-  TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange]
+  TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange].freeze
 
   def difference(run_a, run_b)
-    if run_a.nil? || run_b.nil?
-      return 0
-    end
+    return 0 if run_a.nil? || run_b.nil?
 
     run_a.duration_ms(Run::REAL) - run_b.duration_ms(Run::REAL)
   end
 
   def sob_difference(run_a, run_b)
-    if run_a.nil? || run_b.nil?
-      return 0
-    end
+    return 0 if run_a.nil? || run_b.nil?
 
     run_a.sum_of_best_ms(Run::REAL) - run_b.sum_of_best_ms(Run::REAL)
   end
 
   def difference_color(time)
-    if time == 0
+    if time.zero?
       'text-primary'
-    elsif time > 0
+    elsif time.positive?
       'text-danger'
     else
       'text-success'
@@ -36,30 +32,30 @@ module RunsHelper
         type: :current_user,
         source: current_user,
         runs: current_user.pbs,
-        cols: [:time, :name, :uploaded, :owner_controls, :rival],
-        description: "My Personal Bests"
+        cols: %i[timename uploaded owner_controls rival],
+        description: 'My Personal Bests'
       }.merge(sorting_info)
     when :pbs
       {
         type: :user,
         source: options[:user],
         runs: options[:user].pbs,
-        cols: [:time, :name, :uploaded],
-        description: "Personal Bests"
+        cols: %i[time name uploaded],
+        description: 'Personal Bests'
       }.merge(sorting_info)
     when :games
       {
         type: :games,
         source: options[:games],
         runs: Run.by_game(options[:games]).nonempty,
-        cols: [:runner, :time, :name, :uploaded]
+        cols: %i[runner time name uploaded]
       }.merge(sorting_info)
     when :category
       {
         type: :category,
         source: options[:category],
         runs: options[:category].runs.nonempty,
-        cols: [:runner, :time, :name, :uploaded]
+        cols: %i[runner time name uploaded]
       }.merge(sorting_info)
     else
       raise Error
@@ -67,15 +63,13 @@ module RunsHelper
   end
 
   def next_timeline_color(timeline_id)
-    if @next_index.blank?
-      @next_index = {}
-    end
+    @next_index = {} if @next_index.blank?
 
-    if @next_index[timeline_id].blank?
-      @next_index[timeline_id] = 0
-    else
-      @next_index[timeline_id] = (@next_index[timeline_id] + 1) % TIMELINE_COLORS.length
-    end
+    @next_index[timeline_id] = if @next_index[timeline_id].blank?
+                                 0
+                               else
+                                 (@next_index[timeline_id] + 1) % TIMELINE_COLORS.length
+                               end
 
     TIMELINE_COLORS[@next_index[timeline_id]]
   end
@@ -87,28 +81,24 @@ module RunsHelper
   def pretty_duration(seconds)
     ms = (seconds * 1000).floor
 
-    return "<span class=\"text-default\">#{format_milliseconds(ms)}</span>".html_safe
+    "<span class=\"text-default\">#{format_milliseconds(ms)}</span>".html_safe
   end
 
   def pretty_difference(my_ms, their_ms)
     diff_s = (my_ms / 1000) - (their_ms / 1000)
 
-    if diff_s < 0
+    if diff_s.negative?
       diff_s = diff_s.abs
       return "<span class=\"text-success\">-#{format_milliseconds(diff_s * 1000)}</span>".html_safe
     end
 
-    if diff_s > 0
-      return "<span class=\"text-danger\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
-    end
+    return "<span class=\"text-danger\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe if diff_s.positive?
 
-    return "<span class=\"text-warning\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
+    "<span class=\"text-warning\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
   end
 
   def format_milliseconds(milliseconds)
-    if milliseconds.nil?
-      return '-'
-    end
+    return '-' if milliseconds.nil?
 
     total_seconds = milliseconds / 1000
     total_minutes = total_seconds / 60
@@ -118,7 +108,7 @@ module RunsHelper
     minutes = total_minutes % 60
     hours   = total_hours
 
-    "%02d:%02d:%02d" % [hours, minutes, seconds]
+    format('%02d:%02d:%02d', hours, minutes, seconds)
   end
 
   private
