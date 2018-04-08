@@ -15,7 +15,7 @@ html
     = render partial: 'shared/twitter_card'
     = content_for(:head)
   body data-controller=controller_name data-action=action_name
-    #gonvars = include_gon
+    #gonvars = Gon::Base.render_data
     #dropzone
       #dropzone-overlay.header style='border: none;' data-turbolinks-permanent=true
         h1#droplabel.inverted drop anywhere

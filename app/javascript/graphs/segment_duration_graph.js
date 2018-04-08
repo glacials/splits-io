@@ -4,7 +4,7 @@ Exporting(Highcharts)
 
 const build_segment_graph = function(segment) {
   const url = new URL(window.location.href)
-  const duration_string = `${url.searchParams.get('timing') || 'real'}time_duration_ms`
+  const duration_string = `${url.searchParams.get('timing') || gon.run.default_timing}time_duration_ms`
 
   let graph_data = []
   const non_zero_values = segment.histories.filter((attempt) => attempt[duration_string] > 0)

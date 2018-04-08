@@ -53,7 +53,7 @@ $(function() {
     }
   })
 
-  if (document.getElementById('run-timer').dataset.timer === 'livesplit') {
+  if (gon.run.timer === 'livesplit') {
     for (const toggler of document.getElementsByClassName('segment-graph-toggler')) {
       toggler.addEventListener('click', function(event) {
         event.preventDefault()
