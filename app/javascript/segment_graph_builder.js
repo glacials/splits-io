@@ -7,7 +7,7 @@ $(function() {
     return
   }
 
-  let spinners = []
+  const spinners = []
 
   for(const graphHolder of graphHolders) {
     const spinner = new Spinner({
