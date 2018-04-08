@@ -39,7 +39,7 @@ $(function() {
     }
     throw new Error('Request for run from api failed')
   })
-    
+
   runJSON.then(function(json) {
     spinners.forEach(function(spinner) {
       spinner.stop()
