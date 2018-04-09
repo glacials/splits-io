@@ -188,7 +188,8 @@ module UnparsedRun
           histories << SegmentHistory.new(
             segment_id: ids[i],
             attempt_number: history[0].to_i,
-            realtime_duration_ms: history[1][:realtime].nil? ? nil : history[1][:realtime] * 1000
+            realtime_duration_ms: history[1][:realtime].nil? ? nil : history[1][:realtime] * 1000,
+            gametime_duration_ms: history[1][:gametime].nil? ? nil : history[1][:gametime] * 1000
           )
         end
       end
