@@ -174,7 +174,12 @@ class RunsController < ApplicationController
     @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
 
-    gon.run = {id: @run.id36, splits: @run.collapsed_segments(timing)}
+    gon.run = {
+      id: @run.id36,
+      splits: @run.collapsed_segments(timing),
+      timer: @run.timer,
+      default_timing: @run.default_timing
+    }
 
     gon.run['user'] = if @run.user.nil?
                         nil

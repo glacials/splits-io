@@ -1,7 +1,6 @@
 import {build_pb_graph} from "graphs/pb_graph.js"
 import {build_segment_history_mean_graph} from "graphs/segment_history_mean_graph.js"
 import {build_run_druation_graph} from "graphs/run_duration_graph.js"
-import {build_segment_duration_graph} from "graphs/segment_duration_graph.js"
 import {build_reset_graph} from "graphs/reset_graph.js"
 import {Spinner} from 'spin.js'
 
@@ -54,8 +53,6 @@ $(function() {
       build_segment_history_mean_graph(run.run)
       $graph_holder.append(panel_builder($panel, 'run-duration-graph-highchart'))
       build_run_druation_graph(run.run)
-      $graph_holder.append(panel_builder($panel, 'segment-duration-graph-highchart'))
-      build_segment_duration_graph(run.run)
       $graph_holder.append(panel_builder($panel, 'reset-graph-highchart'))
       build_reset_graph(run.run)
     }

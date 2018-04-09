@@ -2,27 +2,19 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const build_segment_duration_graph = function(run) {
-  if ($('#segment-duration-graph-highchart').length === 0) {
-    return
-  }
-
+const build_segment_graph = function(segment) {
   const url = new URL(window.location.href)
-  const duration_string = `${url.searchParams.get('timing') || 'real'}time_duration_ms`
+  const duration_string = `${url.searchParams.get('timing') || gon.run.default_timing}time_duration_ms`
 
   let graph_data = []
-  run.segments.forEach(function(segment) {
-    const non_zero_values = segment.histories.filter((attempt) => attempt[duration_string] > 0)
-    graph_data.push({
-      name: segment.name,
-      data: non_zero_values.map(function(attempt) { return [attempt.attempt_number, attempt[duration_string]] }),
-      visible: false,
-      pointStart: 1
-    })
+  const non_zero_values = segment.histories.filter((attempt) => attempt[duration_string] > 0)
+  graph_data.push({
+    name: segment.name,
+    data: non_zero_values.map(function(attempt) { return ['Attempt #' + attempt.attempt_number, attempt[duration_string]] }),
+    pointStart: 1
   })
-  graph_data[0].visible = true
 
-  Highcharts.chart('segment-duration-graph-highchart', {
+  Highcharts.chart('segment-graph-holder-' + segment.id, {
     exporting: {
         chartOptions: {
             plotOptions: {
@@ -36,10 +28,16 @@ const build_segment_duration_graph = function(run) {
         fallbackToExportServer: false
     },
     chart: {
-      zoomType: 'x'
+      borderRadius: 0,
+      borderWidth: 0,
+      plotBorderWidth: 0,
+      zoomType: 'xy'
+    },
+    legend: {
+      enabled: false
     },
     title: {
-      text: 'Segment Durations Over Time'
+      text: segment.name + ' Duration over Time'
     },
     plotOptions: {
       series: {
@@ -60,8 +58,9 @@ const build_segment_duration_graph = function(run) {
       }
     },
     yAxis: {
+      min: 0,
       title: {
-        text: 'Duration of History'
+        text: 'Duration of Segment'
       },
       labels: {
         formatter: function() { return moment.utc(moment.duration(this.value).asMilliseconds()).format('H:mm:ss') }
@@ -71,4 +70,4 @@ const build_segment_duration_graph = function(run) {
   })
 }
 
-export {build_segment_duration_graph}
+export {build_segment_graph}

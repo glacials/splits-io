@@ -38,11 +38,13 @@ ul.goals
   list-style: none
 
 .spinner
-  -webkit-animation: spin 4s linear infinite
-  -moz-animation: spin 4s linear infinite
-  animation: spin 4s linear infinite
+  animation: rotation 4s infinite linear
 
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
+@-webkit-keyframes rotation
+  from
+    -webkit-transform: rotate(0deg)
+  to
+    -webkit-transform: rotate(-359deg)
 
 .absolute
   position: absolute

@@ -1,5 +1,5 @@
 class Api::V4::SegmentSerializer < Api::V4::ApplicationSerializer
-  attributes  :name, :segment_number,
+  attributes  :id, :name, :segment_number,
               :realtime_start_ms, :realtime_end_ms, :realtime_duration_ms, :realtime_shortest_duration_ms,
               :realtime_gold, :realtime_reduced, :realtime_skipped,
               :gametime_start_ms, :gametime_end_ms, :gametime_duration_ms, :gametime_shortest_duration_ms,
