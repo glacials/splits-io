@@ -1,355 +1,236 @@
-# splits i/o API
-These docs are for the v3 API.
+# API v4
 
-## Jump to section
+## IDs
+Resources are identifyable *only* by the following attributes:
 
-### [Game Endpoints][game-endpoints]
-### [User Endpoints][user-endpoints]
-### [Run Endpoints][run-endpoints]
-### [User Authentication and Authorization][auth]
+| Resource type | Key attribute | Description of key attribute | Examples of key attribute             |
+|:--------------|:--------------|:-----------------------------|:--------------------------------------|
+| Run           | ID            | A base 36 number             | 1b, 3nm, 1vr                          |
+| Runner        | Name          | A Twitch username            | glacials, batedurgonnadie, snarfybobo |
+| Game          | Shortname     | An SRL abbreviation          | sms, sm64, portal                     |
+| Category      | ID            | A base 10 number             | 312, 1456, 11                         |
 
-[game-endpoints]: #game-endpoints-1
-[user-endpoints]: #user-endpoints-1
-[run-endpoints]: #run-endpoints-1
-[auth]: #user-authentication-and-authorization-1
+Your code shouldn't care too much about what these attributes actually are, as they're all represented as unique
+strings. But of course as a human it's nice to be able to glean some meaning out of them.
 
-## Pagination
-Routes that return array resources are paginated to 20 items per page. To get a specific page of results, add `?page=N`
-to your API hit. The default page is page 1. You'll find pagination info in the HTTP headers of every paginated response
-under the `Link`, `Total`, and `Per-Page` fields.
-
-## Overview of routes
-Base URL is **https://splits.io/api/v3**.
-
-### Game Endpoints Overview
-Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or Splits I/O base 10 `id`s (which you can discover in other
-routes).
-
-```http
-GET /games?search=:term
-GET /games/:id
-GET /games/:game_id/runs
-GET /games/:game_id/categories/:id
-GET /games/:game_id/categories/:category_id/runs
-```
-
-### User Endpoints Overview
-User ids are Twitch usernames or Splits I/O base 10 `id`s.
-
-```http
-GET /users/:id
-GET /users/:user_id/runs
-GET /users/:user_id/pbs
-GET /users/:user_id/games/:game_id/categories/:category_id/runs
-GET /users/:user_id/games/:game_id/categories/:category_id/pb
-GET /users/:user_id/games/:game_id/categories/:category_id/prediction
-```
-
-### Run Endpoints Overview
-Run ids are Splits I/O base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
-
-```http
-GET /runs/:id
-DELETE /runs/:id
-POST /runs
-```
-
-## Route details
-
-### Game Endpoints
-Game ids are SRL shortnames (e.g. `sms`, `oot`, etc.) or Splits I/O base 10 `id`s (which you can discover in other
-routes).
-
-#### `GET /games?search=:term`
-Returns games with names matching `.*:term.*` or shortnames exactly equaling `:term` (in no guaranteed order).
-
-##### Example request
+## Run
 ```bash
-curl https://splits.io/api/v3/games?search=sonic
+curl https://splits.io/api/v4/runs/10x
+curl https://splits.io/api/v4/runs/10x?historic=1
 ```
+A Run maps 1:1 to an uploaded splits file.
 
-##### Example response
-*(see the `/games/:id` endpoint for the game format)*
-```json
-{
-  "games": [
-  {
-    "id": 969,
-      "name": "Sonic 2006",
-      "shortname": null,
-      ...
-  },
-  {
-    "id": 172,
-    "name": "Sonic Adventure 2 Battle",
-    "shortname": "sa2b",
-    ...
-  },
-  ...
-  {
-    "id": 752,
-    "name": "Sonic Unleashed (360/PS3)",
-    "shortname": "su360",
-    ...
-  }
-  ]
-}
-```
+| Field                     | Type                                         | Can it be null?                                       | Description                                                                                                                                                                                                                                   |
+|--------------------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`                      | string                                       | never                                                 | Unique ID for identifying the run on Splits I/O. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
+| `srdc_id`                 | string                                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                         |
+| `realtime_duration_ms`    | number                                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                 |
+| `realtime_sum_of_best_ms` | number                                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                              |
+| `gametime_duration_ms`    | number                                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                 |
+| `gametime_sum_of_best_ms` | number                                       | never                                                 | Gametime sum of best in milliseconds of the run.                                                                                                                                                                                              |
+| `default_timing`          | string                                       | never                                                 | The timing used for the run.  Will be either `real` or `game`.                                                                                                                                                                                |
+| `program`                 | string                                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                             |
+| `attempts`                | number                                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                        |
+| `image_url`               | string                                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits I/O.                                                                                           |
+| `created_at`              | string                                       | never                                                 | The time and date at which this run's source file was uploaded to Splits I/O. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
+| `updated_at`              | string                                       | never                                                 | The time and date at which this run was most recently modified on Splits I/O (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
+| `video_url`               | string                                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                           |
+| `game`                    | Game object (see Game section)               | when unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                           |
+| `category`                | Category object (see Category section)       | when unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                       |
+| `runners`                 | array of Runner objects (see Runner section) | never                                                 | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                    |
+| `segments`                | array of Segment objects                     | never                                                 | The associated segments for the run.
 
-#### `GET /games/:id`
-Returns information about a game.
+If a `historic=1` param is included in the request, one additional field will be present:
 
-##### Example request
+| Field          | Type                                         | Null when...                                          | Description                                                                                                                                                                                                                                   |
+|---------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `histories`    | array of History objects                     | never                                                 | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.     |
+
+Segment objects have the following format.
+
+| Field                           | Type          | Can it be null? | Description                                                                                                                                                                                                                                                        |
+|--------------------------------:|:--------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `name`                          | string        | never           | Name of the segment. This value is an exact copy of timers' fields.                                                                                                                                                                                                |
+| `segment_number`                | number        | never           | The segment number of the run. (This value starts at 0)                                                                                                                                                                                                            |
+| `realtime_start_ms`             | number        | never           | The total elapsed time of the run at the moment when this segment was started in realtime. Provided in milliseconds.                                                                                                                                               |
+| `realtime_duration_ms`          | number        | never           | Realtime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
+| `realtime_end_ms`               | number        | never           | The total elapsed time of the run at the moment when this segment was finished in realtime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
+| `realtime_shortest_duration_ms` | number        | when not known  | The shortest duration the runner has ever gotten on this segment in realtime.  Provided in milliseconds                                                                                                                                                            |
+| `realtime_gold`                 | boolean       | never           | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in realtime. This field is shorthand for `realtime_duration_ms == realtime_shortest_duration_ms`.                                                                 |
+| `realtime_skipped`              | boolean       | never           | Whether or not this split was skipped in realtime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
+| `realtime_reduced`              | boolean       | never           | Whether or not this segment was "reduced" in realtime; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
+| `gametime_start_ms`             | number        | never           | The total elapsed time of the run at the moment when this segment was started in gametime. Provided in milliseconds.                                                                                                                                               |
+| `gametime_duration_ms`          | number        | never           | Gametime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
+| `gametime_end_ms`               | number        | never           | The total elapsed time of the run at the moment when this segment was finished in gametime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
+| `gametime_shortest_duration_ms` | number        | when not known  | The shortest duration the runner has ever gotten on this segment in gametime.  Provided in milliseconds                                                                                                                                                            |
+| `gametime_gold`                 | boolean       | never           | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in gametime. This field is shorthand for `duration == best`.                                                                                                      |
+| `gametime_skipped`              | boolean       | never           | Whether or not this split was skipped in gametime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
+| `gametime_reduced`              | boolean       | never           | Whether or not this segment was "reduced" in gametime; that is, had its duration affected by previous splits being skipped.
+
+If a `historic=1` param is included in the request, one additional field will be present:
+
+| Field          | Type                                         | Null when...                                          | Description                                                                                                                                                                                                                                   |
+|---------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `histories`    | array of History objects                     | never                                                 | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.     |
+
+History objects have the following format.
+
+| Field                  | Type                                         | Null when...                                          | Description                                              |
+|-----------------------:|:---------------------------------------------|:------------------------------------------------------|:---------------------------------------------------------|
+| `attempt_number`       | number                                       | never                                                 | The correpsonding attempt number this attempt was.       |
+| `realtime_duration_ms` | number                                       | never                                                 | The realtime duration this attempt took in milliseconds. |
+| `gametime_duration_ms` | number                                       | never                                                 | The gametime duration this attempt took in milliseconds. |
+
+A note when passing `historic=1` along with your request: Adding historical data to the response can take a long time to
+render, so please only request it if you are actually using it. Be prepared for your request to time out for runs that
+have a lot of historical information present.
+
+If an `Accept` header is present, Splits I/O will try to render the run file in the format specified rather than JSON. A full list of valid values is located below.
+If the `Accept` header is valid, the `Content-Type` header in the response will be set appropriately and the run will be rendered in the specified format, if
+an invalid `Accept` header is supplied, the response `Content-Type` header will be `application/json`, and the status code will be a 406.
+In the 406 reponse there will be an array of values that can be rendered.
+
+| `Accept` Headers Supported       | Return Format      | Return `Content-Type`                 |
+|---------------------------------:|:-------------------|:---------------------------------     |
+| None                             | JSON               | `application/json`                    |
+| `application/json`               | JSON               | `application/json`                    |
+| `application/wsplit`             | WSplit             | `application/wsplit`                  |
+| `application/time-split-tracker` | Time Split Tracker | `application/time-split-tracker`      |
+| `application/splitterz`          | SplitterZ          | `application/splitterz`               |
+| `application/livesplit`          | LiveSplit          | `application/livesplit`               |
+| `application/urn`                | Urn                | `application/urn`                     |
+| `application/llanfair-gered`     | Llanfair-Gered     | `application/llanfair-gered`          |
+| `application/original-timer`     | Original Run File  | One of the following `Content-Type`'s |
+
+If the accept header is `application/original-timer` then the original file uploaded will be returned as is. Thus it is possible to get back
+any of the following `Content-Type`s.
+* `application/shitsplit`
+* `application/splitty`
+* `application/llanfair2`
+* `application/facesplit`
+* `application/portal-2-live-timer`
+* `application/llanfair-gered`
+* `application/llanfair`
+* `application/urn`
+* `application/livesplit`
+* `application/splitterz`
+* `application/time-split-tracker`
+* `application/wsplit`
+
+## Runner
 ```bash
-curl https://splits.io/api/v3/games/sms
+curl https://splits.io/api/v4/runners/glacials
+curl https://splits.io/api/v4/runners/glacials/runs
+curl https://splits.io/api/v4/runners/glacials/pbs
+curl https://splits.io/api/v4/runners/glacials/games
+curl https://splits.io/api/v4/runners/glacials/categories
 ```
-##### Example response
-*(see the `/games/:game_id/categories/:id` endpoint for the category format)*
-```json
-{
-  "game": {
-    "id": 15,
-    "name": "Super Mario Sunshine",
-    "shortname": "sms",
-    "created_at": "2014-04-18T06:28:59.764Z",
-    "updated_at": "2015-02-01T21:33:44.460Z",
-    "categories": [ ... ]
-  }
-}
-```
-#### `GET /games/:game_id/runs`
-Returns all runs for a game. This route is [paginated](#pagination).
+A Runner is a user who has at least one run tied to their account. Users with zero runs are not discoverable using the
+API.
 
-##### Example request
+| Field        | Type   | Can it be null? | Description                                                                                                                |
+|-------------:|:-------|:----------------|:---------------------------------------------------------------------------------------------------------------------------|
+| `twitch_id`  | string | never           | The numeric Twitch ID of the user.                                                                                         |
+| `name`       | string | never           | The Twitch name of the user.                                                                                               |
+| `avatar`     | string | never           | The Twitch avatar of the user.                                                                                             |
+| `created_at` | string | never           | The time and date at which this user first authenticated with Splits I/O. This field conforms to [ISO 8601][iso8601].      |
+| `updated_at` | string | never           | The time and date at which this user was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
+
+## Game
 ```bash
-curl https://splits.io/api/v3/games/sms/runs
+curl https://splits.io/api/v4/games
+curl https://splits.io/api/v4/games/sms
+curl https://splits.io/api/v4/games/sms/categories
+curl https://splits.io/api/v4/games/sms/runs
+curl https://splits.io/api/v4/games/sms/runners
 ```
+Most timers allow users to specify a "game" field. A Game is a collection of information about the video game specified
+in this field. Games have at least one run and have an associated shortname, usually scraped from SRD or SRDC, but
+sometimes specified manually. If a game does not have an associated shortname, it is not a Game.
 
-##### Example response
-*(see the `/runs/:id` endpoint for the run format)*
-```json
-{
-  "runs": [ ... ]
-}
-```
+| Field        | Type                                             | Can it be null? | Description                                                                                                                          |
+|-------------:|:-------------------------------------------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------|
+| `name`       | string                                           | never           | The full title of the game, like "Super Mario Sunshine".                                                                             |
+| `shortname`  | string                                           | when not known  | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or Speedrun.com. |
+| `created_at` | string                                           | never           | The time and date at which this game was created on Splits I/O. This field conforms to [ISO 8601][iso8601].                          |
+| `updated_at` | string                                           | never           | The time and date at which this game was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601].           |
+| `categories` | array of Category objects (see Category section) | never           | The known speedrun categories for this game.                                                                                         |
 
-#### `GET /games/:game_id/categories/:id`
-Returns information about a category.
-
-##### Example request
+## Category
 ```bash
-curl https://splits.io/api/v3/games/sms/categories/852
+curl https://splits.io/api/v4/categories/40
+curl https://splits.io/api/v4/categories/40/runners
+curl https://splits.io/api/v4/categories/40/runs
 ```
+Some timers allow users to specify a "category" or similar field (any%, 100%, MST, etc.). A Category is a collection of
+information about the type of run performed, more specific than a Game. Each Category belongs to a Game. Any number of
+Categories can be associated with a Game.
 
-##### Example response
-```json
-{
-  "category": {
-    "id": 852,
-    "name": "Any%",
-    "created_at": "2015-01-08T02:53:19.867Z",
-    "updated_at": "2015-02-01T21:33:44.440Z"
-  }
-}
-```
+| Field        | Type   | Can it be null? | Description                                                                                                                    |
+|-------------:|:-------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------|
+| `id`         | string | never           | The numeric ID of the category.                                                                                                |
+| `name`       | string | never           | The name of the category.                                                                                                      |
+| `created_at` | string | never           | The time and date at which this category was created on Splits I/O. This field conforms to [ISO 8601][iso8601].                |
+| `updated_at` | string | never           | The time and date at which this category was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
 
-#### `GET /games/:game_id/categories/:category_id/runs`
-Returns all runs for a category. This route is [paginated](#pagination).
-
-##### Example request
+## Uploading
 ```bash
-curl https://splits.io/api/v3/games/sms/categories/70/runs
+curl -X POST https://splits.io/api/v4/runs # then...
+curl -X POST https://s3.amazonaws.com/splits.io --form file=@/path/to/file # some fields not shown; see below
 ```
+Uploading runs is a two-step process. Our long-term storage for runs is on [S3][s3], so in the first request you'll tell
+Splits I/O that you're about to upload a run, then in the second you'll upload it directly to S3 using some parameters
+returned from the first. The two-request system is faster for you (we don't have to receive your whole run then make you
+wait for us to put it on S3) and more resilient for us (we don't have to spend a bunch of CPU time waiting on uploads).
 
-##### Example response
-*(see the `/runs/:id` endpoint for the run format)*
-```json
-{
-  "runs": [ ... ]
-}
-```
-
-### User Endpoints
-User ids are Twitch usernames (which we call `name`) or Splits I/O base 10 `id`s.
-
-#### `GET /users/:id`
-Returns information about a user.
-
-##### Example request
-```bash
-curl https://splits.io/api/v3/users/glacials
-```
-
-##### Example response
-```json
-{
-  "user": {
-    "id": 1,
-    "twitch_id": 29798286,
-    "name": "glacials",
-    "avatar": "https://static-cdn.jtvnw.net/jtv_user_pictures/glacials-profile_image-dc04543f973cfddc-300x300.png",
-    "created_at": "2014-03-09T19:00:43.640Z",
-    "updated_at": "2015-02-01T18:53:03.397Z"
-  }
-}
-```
-
-#### `GET /users/:user_id/runs`
-Returns all of a user's runs. This route is [paginated](#pagination).
-
-##### Example request
-```bash
-curl https://splits.io/api/v3/users/glacials/runs
-```
-
-##### Example response
-*(see the `/runs/:id` endpoint for the run format)*
-```json
-{
-  "runs": [ ... ]
-}
-```
-
-#### `GET /users/:user_id/pbs`
-Returns all of a user's PBs (one per category). Because of an unnoticed mistake and my desire to not change this endpoint without bumping version, this route is **not** paginated. You can expect it to be in v4, but v3 will remain unpaginated.
-
-##### Example request
-```bash
-curl https://splits.io/api/v3/users/glacials/pbs
-```
-
-##### Example response
-*(see the `/runs/:id` endpoint for the run format)*
-```json
-{
-  "pbs": [ ... ]
-}
-```
-#### `GET /users/:user_id/games/:game_id/categories/:category_id/runs`
-Returns all of a user's runs for a game/category. This route is [paginated](#pagination).
-
-##### Example request
-```bash
-curl https://splits.io/api/v3/users/glacials/games/sms/categories/852/runs
-```
-
-##### Example response
-*(see the `/runs/:id` endpoint for the run format)*
-```json
-{
-  "runs": [ ... ]
-}
-```
-
-#### `GET /users/:user_id/games/:game_id/categories/:category_id/pb`
-Returns a user's PB for a game/category.
-
-##### Example request
-```bash
-curl https://splits.io/api/v3/users/glacials/games/sms/categories/852/pb
-```
-
-##### Example response
-*(see the `/runs/:id` for this format)*
-```json
-{
-  "run": { ...  }
-}
-```
-
-#### `GET /users/:user_id/games/:game_id/categories/:category_id/prediction`
-Returns a prediction of this user's next run of this category. Predictions use per-split smoothed moving averages for
-all recorded run history of the user for this category. The response for this endpoint looks like a response to a
-normal "get run" endpoint, but has a `null` id.
-
-### Run Endpoints
-Run ids are Splits I/O base 36 ids. These are the strings you see in user-friendly run URLs like `splits.io/36s`.
-
-#### `GET /runs/:id`
-Returns a run.
-
-##### Example request
-```bash
-curl https://splits.io/api/v3/runs/c6
-```
-
-##### Example response
-```json
-{
-  "run": {
-    "id": 438,
-    "path": "/c6",
-    "name": "Sonic Colors",
-    "program": "wsplit",
-    "image_url": null,
-    "created_at": "2014-03-09T19:07:46.483Z",
-    "updated_at": "2016-01-27T15:42:02.834Z",
-    "video_url": null,
-    "splits": [
-      {
-        "name": "Rotatatron",
-        "duration": 501.7,
-        "finish_time": 501.7,
-        "best": {
-          "duration": 462.85
-        },
-        "history": null,
-        "gold": false,
-        "skipped": false,
-        "reduced": false
-      },
-      ...
-      {
-        "name": "Epilogue",
-        "duration": 44.719999999999345,
-        "finish_time": 5083.74,
-        "best": {
-          "duration": 44.7199999999993
-        },
-        "history": null,
-        "gold": true,
-        "skipped": false,
-        "reduced": false
-      }
-    ],
-    "attempts": 9,
-    "sum_of_best": 5009.42,
-    "user": { ... }
-    "game": { ... }
-    "category": { ... },
-    "time": 5083.74
-  }
-}
-```
-
-#### `DELETE /runs/:id`
-Deletes this run (requires authentication).
-
-#### `POST /runs`
-Upload a new run. If you want to allow an account to claim ownership of this run, you should inspect the response for a
-`uris.claim_uri` and send the user who should own the run there. If they're logged in, their account will automatically
-claim ownership of the run, then they'll be immediately redirected to the `uris.public_uri`.
-
-##### Example request
-```bash
-curl -iX POST --form file=@/path/to/splits_file.lss https://splits.io/api/v3/runs
-```
-
-##### Example response
+The first request will return a body like
 ```json
 {
   "status": 201,
-  "message": "Run created.",
+  "message": "Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.",
+  "id": "rez",
+  "claim_token": "pBeUPBM9IaWqbaF11ocUksXS",
   "uris": {
-    "api_uri": "https://splits.io/api/v3/runs/36y",
-    "public_uri": "https://splits.io/36y",
-    "claim_uri": "https://splits.io/36y?claim_token=03a1adb08ec85d5b00374a70"
+    "api_uri": "https://splits.io/api/v4/runs/rez",
+    "public_uri": "https://splits.io/rez",
+    "claim_uri": "https://splits.io/rez?claim_token=pBeUPBM9IaWqbaF11ocUksXS"
+  },
+  "presigned_request": {
+    "method": "POST",
+    "uri": "https://s3.amazonaws.com/splits.io",
+    "fields": {
+      "key": "splits/rez",
+      "policy": "gibberish",
+      "x-amz-credential": "other gibberish",
+      "x-amz-algorithm": "more gibberish",
+      "x-amz-date": "even more gibberish",
+      "x-amz-signature": "most gibberish",
+    }
   }
 }
 ```
+The above example would have your second request look like
+```bash
+curl -X POST https://s3.amazonaws.com/splits.io \
+  --form key="splits/rez" \
+  --form policy="gibberish" \
+  --form x-amz-credential="other gibberish" \
+  --form x-amz-algorithm="more gibberish" \
+  --form x-amz-date="even more gibberish" \
+  --form x-amz-signature="most gibberish" \
+  --form file=@/path/to/file
+```
+This is called a presigned request. Each field above -- except `file`, that's yours -- is directly copied from the
+response of the first request. You don't need to inspect or care about the contents of the fields, as long as you
+include them. They serve as authorization for you to upload a file to S3 with Splits I/O's permission.
+
+Each presigned request can only be successfully made once, and expires if not made within an hour.
+
+[s3]: https://aws.amazon.com/s3
 
 ## User Authentication and Authorization
-If you want to upload runs for a user (e.g. from within a timer), you have two options. If you only need to know who a user is on Splits I/O, skip to advanced.
+If you want to upload, disown, or delete runs for a user (e.g. from within a timer), you have two options.
+If you only need to know who a user is on Splits I/O, skip to advanced.
 
 ### Simple option
 Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
@@ -365,8 +246,8 @@ This is the easier method to implement, but has some flaws:
 
 ### Advanced option
 The advanced option is a standard OAuth2 flow. You can request permission from the user to upload runs to their account
-on their behalf. If they accept, you will receive an OAuth token which you can include in your run upload requests in
-order to create the run as that user.
+on their behalf. If they accept, you will receive an OAuth token which you can include in your run requests in
+order to perform actions as that user.
 
 The following instructions go into naive-case details about implementing this OAuth support in your application. If you
 want to learn more about OAuth or need general OAuth troubleshooting help, you can [research OAuth2
@@ -382,6 +263,16 @@ GET https://splits.io/oauth/token/info?access_token=YOUR_TOKEN
 ```
 
 [oauth2-simplified]: https://aaronparecki.com/oauth-2-simplified/
+
+
+#### Scopes
+Below is a list of all the possible scopes your application can request along with a brief description. You can specify
+multiple scopes by separating them with spaces in the auth token request.
+
+| Scope        | Description                                  | Endpoints                                                                                                           |
+|--------------|:---------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
+| `upload_run` | Upload runs on behalf of the user            | `POST https://splits.io/api/v4/runs`                                                                                |
+| `delete_run` | Delete or disown runs on behalf of the user  | `DELETE https://splits.io/api/v4/runs/:run_id` and `DELETE https://splits.io/api/v4/runs/:run_id/user` respectively |
 
 #### Example 1: My application is a local program that runs on the user's computer
 If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
@@ -552,3 +443,27 @@ using a secure API request.
 [1]: https://splits.io/settings
 [rfc6749-6]: https://tools.ietf.org/html/rfc6749#section-6
 
+
+
+## Converting
+```bash
+curl -X POST https://splits.io/api/v4/convert?format=livesplit --form file=@/path/to/file
+```
+When converting between timer formats, the file and program parameters must be included. If you are converting a
+LiveSplit file and would like to include the history, then the `historic=1` parameter can also be included.  The JSON
+format is outputted as described above in the form of a .json file.
+
+## FAQ
+
+### Why are IDs strings?
+IDs are opaque. To you, the consumer, it doesn't matter what the actual number itself is because the only purpose it
+serves is be given back to Splits I/O later. You don't need to look inside it, you don't need to perform arithmetic on
+it, you don't need it rounded or floored or rid of leading zeroes. You don't need to do any numbery things to them. And
+in fact if you do do numbery things to them, even accidentally, there's a good chance you've broken them in the process.
+
+It doesn't matter that on Splits I/O's end they happen to be auto-incrementing base 10 numbers, because none of that
+matters to you. By giving you a number type, we'd be implying that it did. Strings are opaque. Strings are what you'd
+end up casting your IDs to anyway in order to hit the API with them again. So let's just take the negligible hit and
+save you a step.
+
+[iso8601]: https://en.wikipedia.org/wiki/ISO_8601

@@ -1,6 +1,6 @@
 class Api::V4::RunsController < Api::V4::ApplicationController
   before_action :set_run, only: [:show, :update, :destroy]
-  before_action :verify_ownership!, only: [:update, :destroy]
+  before_action :verify_ownership!, only: [:update]
 
   before_action :find_accept_header, only: [:show]
 
@@ -13,6 +13,10 @@ class Api::V4::RunsController < Api::V4::ApplicationController
         doorkeeper_authorize! :upload_run
       end
     end
+  end
+
+  before_action only: [:destroy] do
+    doorkeeper_authorize! :delete_run
   end
 
   def show
@@ -87,7 +91,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
   def destroy
     if @run.destroy
-      head 204
+      head 205
     else
       head 500
     end

@@ -221,7 +221,7 @@ describe Api::V4::RunsController do
   end
 
   describe '#destroy' do
-    context 'with no claim token' do
+    context 'when given an invalid OAuth token' do
       context 'on an existing run' do
         let(:run) { create(:run) }
         subject { delete :destroy, params: {run: run.id36} }
@@ -240,21 +240,43 @@ describe Api::V4::RunsController do
       end
     end
 
-    context 'with a non-matching claim token' do
-      let(:run) { create(:run, claim_token: correct_claim_token) }
-      subject { delete :destroy, params: {run: run.id36, claim_token: incorrect_claim_token} }
+    context 'when given a valid OAuth token with no scopes' do
+      let(:run) { create(:run) }
+      subject { delete :destroy, params: {run: run.id36} }
 
       it 'returns a 403' do
+        application = Doorkeeper::Application.create(
+          name: 'Test Application',
+          redirect_uri: 'http://localhost:3000/',
+          owner: create(:user)
+        )
+        authorization = Doorkeeper::AccessToken.create(application_id: application.id, resource_owner_id: create(:user))
+        auth_header = "Bearer #{authorization.token}"
+        request.headers['Authorization'] = auth_header
+
         expect(subject).to have_http_status 403
       end
     end
 
-    context 'with a matching claim token' do
-      let(:run) { create(:run, claim_token: correct_claim_token) }
-      subject { delete :destroy, params: {run: run.id36, claim_token: correct_claim_token} }
+    context 'when given a valid OAuth token with an delete_run scope' do
+      let(:run) { create(:run) }
+      subject { delete :destroy, params: {run: run.id36} }
 
-      it 'returns a 204' do
-        expect(subject).to have_http_status 204
+      it 'returns a 205' do
+        application = Doorkeeper::Application.create(
+          name: 'Test Application',
+          redirect_uri: 'http://localhost:3000/',
+          owner: create(:user)
+        )
+        authorization = Doorkeeper::AccessToken.create(
+          application_id: application.id,
+          resource_owner_id: create(:user),
+          scopes: 'delete_run'
+        )
+        auth_header = "Bearer #{authorization.token}"
+        request.headers['Authorization'] = auth_header
+
+        expect(subject).to have_http_status 205
       end
     end
   end
