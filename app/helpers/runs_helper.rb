@@ -32,7 +32,7 @@ module RunsHelper
         type: :current_user,
         source: current_user,
         runs: current_user.pbs,
-        cols: %i[timename uploaded owner_controls rival],
+        cols: %i[time name uploaded owner_controls rival],
         description: 'My Personal Bests'
       }.merge(sorting_info)
     when :pbs
