@@ -185,6 +185,7 @@ module UnparsedRun
         return nil if seg.indexed_history.nil?
 
         seg.indexed_history.each do |history|
+          next unless history[0].to_i.positive?
           histories << SegmentHistory.new(
             segment_id: ids[i],
             attempt_number: history[0].to_i,
