@@ -4,6 +4,8 @@ meta name='twitter:domain' content=request.host_with_port
 - if @run.present?
   - if @run.game.to_s.present?
     meta name='twitter:title' content=@run.game
+  - else
+    meta name='twitter:title' content='(no title)'
   - if @run.category.to_s.present?
     meta name='twitter:description' content=@run.category
   - if @run.image_url.present?
