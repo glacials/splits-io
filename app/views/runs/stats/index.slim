@@ -118,5 +118,5 @@ article#stats
               span = format_milliseconds(@run.total_playtime_ms(timing))
             - else
               span.time -
-  = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits}
+  = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits, timing: timing}
   #graph-holder

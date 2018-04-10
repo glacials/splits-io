@@ -1,7 +1,7 @@
 .panel.panel-default
   .panel-heading
     | Segment Information
-    .pull-right 
+    .pull-right
       - if run.attempts.nil? || run.attempts.zero?
         strike ↓ download segment history csv
         small.tip-html< title="Segment history is not available for this run" = "(?)"
@@ -35,7 +35,7 @@
             td.align-right colspan=99
               i no segment history available
         - else
-          - history_times = segment.histories.map(&:realtime_duration_ms).compact
+          - history_times = segment.histories.map { |attempt| attempt.duration_ms(timing) }.compact
           tr
             td.align-right = segment.segment_number + 1
             td.align-left = segment.name.present? ? segment.name : '-'
