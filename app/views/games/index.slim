@@ -14,7 +14,7 @@ article#games
     h4 Games
     table.table.table-striped
       tbody
-        - @games.order(:shortname, :name).each do |game|
+        - @games.each do |game|
           tr
             td
               = link_to game, game_path(game), class: 'game-link'

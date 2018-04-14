@@ -57,6 +57,7 @@ class GamesController < ApplicationController
   end
 
   def set_games
-    @games = @query.present? ? Game.search(@query).includes(:categories) : []
+    return [] if @query.blank?
+    @games = Game.search(@query).order(:shortname, :name).includes(:categories)
   end
 end

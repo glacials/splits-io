@@ -1,6 +1,7 @@
 require 'speedrunslive'
 
 class Game < ApplicationRecord
+  include PgSearch
   include SRLGame
 
   validates :name, presence: true
@@ -14,12 +15,18 @@ class Game < ApplicationRecord
 
   scope :named, -> { where.not(name: nil) }
   scope :shortnamed, -> { where.not(shortname: nil) }
+  pg_search_scope :search_both_names,
+                  against: [:name, :shortname],
+                  using: {
+                    tsearch: {},
+                    trigram: {only: :name}
+                  }
 
   def self.search(term)
     term = term.strip
     return nil if term.blank?
-    ids = where('LOWER(shortname) = LOWER(?)', term).or(where('name ILIKE ?', "%#{term}%")).pluck(:id)
-    ids |= GameAlias.where('name ILIKE ?', "%#{term}%").pluck(:game_id)
+    ids = search_both_names(term).pluck(:id)
+    ids |= GameAlias.search_for_name(term).pluck(:game_id)
     Game.where(id: ids)
   end
 

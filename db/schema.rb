@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180321063749) do
+ActiveRecord::Schema.define(version: 20180414015639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "citext"
   enable_extension "uuid-ossp"
+  enable_extension "pg_trgm"
 
   create_table "authie_sessions", id: :serial, force: :cascade do |t|
     t.string "token"

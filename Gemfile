@@ -71,6 +71,7 @@ gem 'aws-sdk-rails'
 gem 'aws-sdk-s3'
 gem 'fakes3'
 gem 'pg'
+gem 'pg_search'
 
 # errors+logging
 gem 'newrelic_rpm'
