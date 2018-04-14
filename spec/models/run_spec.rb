@@ -177,7 +177,7 @@ describe Run, type: :model do
     end
 
     it 'reports its total playtime' do
-      expect(run.total_playtime_ms(Run::REAL)).to eq 77_743_500
+      expect(run.total_playtime_ms(Run::REAL)).to eq 77_066_934
     end
 
     it 'reports no history using fast parsing' do
@@ -370,7 +370,7 @@ describe Run, type: :model do
 
       it 'has the correct realtime segment histories for the last segment' do
         expect(run.segments.last.histories.map { |s| s.duration_ms(Run::REAL) }).to match_array [
-          0, 126_778, 126_655, 124_846, 155_191, 140_486, 122_007, 143_338, 132_288, 123_207, 177_090, 164_684, 145_047,
+          126_655, 124_846, 155_191, 140_486, 122_007, 143_338, 132_288, 123_207, 177_090, 164_684, 145_047,
           123_260, 125_012, 147_050, 126_685, 128_863, 141_873, 141_239, 157_672, 136_347, 145_621, 139_113, 148_362,
           146_256, 125_921, 123_539, 129_806, 138_700, 141_579, 149_764
         ]
@@ -378,7 +378,7 @@ describe Run, type: :model do
 
       it 'has the correct gametime segment histories for the last segment' do
         expect(run.segments.last.histories.map { |s| s.duration_ms(Run::GAME) }).to match_array [
-          121_211, 0, 120_240, 117_973, 143_557, 129_113, 115_471, 129_568, 120_883, 116_759, 153_910, 140_808, 129_495,
+          120_240, 117_973, 143_557, 129_113, 115_471, 129_568, 120_883, 116_759, 153_910, 140_808, 129_495,
           115_616, 119_535, 118_088, 120_402, 121_371, 125_620, 129_508, 138_559, 125_248, 129_562, 120_974, 134_318,
           128_583, 118_413, 117_208, 119_309, 126_549, 135_392, 136_609
         ]
