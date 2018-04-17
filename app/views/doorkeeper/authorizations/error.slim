@@ -4,11 +4,11 @@
 - else
   article
     .row
-      .col-md-6.col-md-offset-3
-        .panel.panel-default
-          .panel-heading
+      .col-lg-6.offset-lg-3
+        .card
+          .card-header.text-white
             b Authorization Request Error
-          .panel-body
+          .card-body
             p
               big = t('doorkeeper.authorizations.error.title')
             p = @pre_auth.error_response.body[:error_description]

@@ -1,18 +1,18 @@
 - title "settings"
 article
   .row
-    .col-md-6.col-md-offset-3
-      .panel.panel-default
-        .panel-heading Authorization Code Created
-        .panel-body
+    .col-lg-6.offset-lg-3
+      .card
+        .card-header.text-white Authorization Code Created
+        .card-body
           p It works! Here's your authorization code.
           p
             .input-group
               input.form-control id="code" type='text' value=params[:code] readonly=1
               .input-group-btn
-                .btn.btn-default.clipboard-btn data-clipboard-target="#code"
-                  .glyphicon.glyphicon-copy#copy
-                  .glyphicon.glyphicon-ok#copied style='display: none;'
+                .btn.btn-primary.clipboard-btn data-clipboard-target="#code"
+                  span#copy = icon("fas", "copy")
+                  span#copied style='display: none;' = icon ("fas", "check")
           coffee:
             clipboard = new Clipboard('.clipboard-btn')
             clipboard.on('success', (e) ->

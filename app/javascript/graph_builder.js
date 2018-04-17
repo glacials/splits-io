@@ -10,10 +10,10 @@ $(function() {
     return
   }
 
-  const $panel = $('<div />').addClass('panel panel-default').append($('<div />').addClass('panel-body'))
-  const $info_panel = panel_builder($panel, 'graph-info')
-  $info_panel.prepend($('<div />').addClass('panel-title'))
-  $info_panel.find('.panel-title').append($('<h1 />').addClass('center').text('Loading graph data'))
+  const $card = $('<div />').addClass('card my-3').append($('<div />').addClass('card-body'))
+  const $info_card = card_builder($card, 'graph-info')
+  $info_card.prepend($('<div />').addClass('card-title'))
+  $info_card.find('.card-title').append($('<h1 />').addClass('center').text('Loading graph data'))
   const spinner = new Spinner({
     lines: 3,
     length: 15,
@@ -29,7 +29,7 @@ $(function() {
     hwaccel: true,
     position: 'relative'
   })
-  $graph_holder.append($info_panel)
+  $graph_holder.append($info_card)
   spinner.spin(document.getElementById('graph-holder').getElementsByClassName('panel-body')[0])
 
   fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
@@ -46,25 +46,25 @@ $(function() {
   .then(function(run) {
     spinner.stop()
     $graph_holder.empty()
-    $graph_holder.append(panel_builder($panel, 'pb-graph-highchart'))
+    $graph_holder.append(card_builder($card, 'pb-graph-highchart'))
     build_pb_graph(run.run)
     if (run.run.program === 'livesplit') {
-      $graph_holder.append(panel_builder($panel, 'segment-history-graph-highchart'))
+      $graph_holder.append(card_builder($card, 'segment-history-graph-highchart'))
       build_segment_history_mean_graph(run.run)
-      $graph_holder.append(panel_builder($panel, 'run-duration-graph-highchart'))
+      $graph_holder.append(card_builder($card, 'run-duration-graph-highchart'))
       build_run_druation_graph(run.run)
-      $graph_holder.append(panel_builder($panel, 'reset-graph-highchart'))
+      $graph_holder.append(card_builder($card, 'reset-graph-highchart'))
       build_reset_graph(run.run)
     }
   })
   .catch(function(error) {
     spinner.stop()
-    $graph_holder.find('.panel-title').find('h1').text('Error retrieving data for graphs')
+    $graph_holder.find('.card-title').find('h1').text('Error retrieving data for graphs')
   })
 })
 
-const panel_builder = function($panel, id_string) {
-  const $panel_clone = $panel.clone()
-  $panel_clone.find('.panel-body').append($('<div />').prop('id', id_string))
-  return $panel_clone
+const card_builder = function($card, id_string) {
+  const $card_clone = $card.clone()
+  $card_clone.find('.card-body').append($('<div />').prop('id', id_string))
+  return $card_clone
 }

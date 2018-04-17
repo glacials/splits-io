@@ -5,10 +5,10 @@
   center
     i No runs matched!
 - else
-  .panel.panel-default
+  .card
     - if description.present?
-      .panel-heading = description
-    table.panel-body.table.table-striped.table-hover
+      .card-header.text-white = description
+    table.card-body.table.table-striped.table-hover.mb-0
       thead
         tr
           - if cols.include?(:owner_controls)
@@ -32,11 +32,11 @@
             - if cols.include?(:owner_controls)
               td.align-right
                 .dropdown
-                  .dropdown-toggle.kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown} x
+                  .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown} x
                   ul.dropdown-menu.red role=:menu aria={labelledby: "dropdown_#{run.id36}"}
                     li role=:presentation
-                      = link_to 'Disown', '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-header'
-                      = link_to 'Delete', '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-header'
+                      = link_to 'Disown', '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-header text-white'
+                      = link_to 'Delete', '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-header text-white'
             - if cols.include?(:runner)
               td.align-right
                 - if run.user && run.user.name
@@ -57,7 +57,7 @@
                     - rival_run = rival.pb_for(run.category)
                     = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
                       = pretty_difference(run.duration_ms(Run::REAL), rival_run.duration_ms(Run::REAL))
-                      |  against 
+                      |  against
                       = rival
                       - if rival.silver_patron?
                         .gold-split title='Patron'
@@ -65,5 +65,5 @@
                     = link_to '+', new_rivalry_path(category: run.category)
             - if cols.include?(:uploaded)
               td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
-    .center
-      = paginate(runs, theme: 'twitter-bootstrap-3')
+    .mx-auto
+      = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')
