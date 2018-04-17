@@ -3,6 +3,7 @@ $ ->
     if !file?
       $("#droplabel").html "that looks like an empty file :("
       window.isUploading = false
+      window.hideSpinner()
       return
     options = options or bulk: false
     $.ajax

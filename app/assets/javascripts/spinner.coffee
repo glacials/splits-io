@@ -18,4 +18,4 @@ $ ->
     ).spin()
     document.body.appendChild window.spinner.el
 
-  window.hideSpinner = -> window.spinner.stop
+  window.hideSpinner = -> window.spinner.stop()
