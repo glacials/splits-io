@@ -60,7 +60,7 @@ class Runs::StatsController < Runs::ApplicationController
         next if segment.histories.empty?
 
         attempt_number = 1
-        segment.histories.order(attempt_number: :asc).each do |h|
+        segment.histories.sort_by(&:attempt_number).each do |h|
           while h.attempt_number > attempt_number
             row << ''
             attempt_number += 1
