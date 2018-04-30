@@ -15,39 +15,40 @@
 article
   .row
     .col-lg-6
-      .card
+      .card.mb-3
         .card-header.text-white Edit Game/Category
         .card-body
           = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-            .col-lg-6
-              = f.collection_select( \
-                :game, \
-                Game.where.not(shortname: nil).order(:name), \
-                :shortname, \
-                :name, \
-                { \
-                  selected: @run.game.try(:shortname), \
-                  include_blank: true \
-                }, \
-                onchange: 'update_category_selector(this.value)', \
-                class: 'form-control' \
-              )
-            .col-lg-4
-              = f.collection_select( \
-                :category, \
-                @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order('count(runs.id) desc') : [], \
-                :id, \
-                :name, \
-                { \
-                  selected: @run.category.try(:id) \
-                }, \
-                class: 'form-control' \
-              )
-            .col-lg-2
-              = f.submit 'Save', id: 'game_category_submit', class: 'btn btn-success'
+            .form-row
+              .col-lg-6
+                = f.collection_select( \
+                  :game, \
+                  Game.where.not(shortname: nil).order(:name), \
+                  :shortname, \
+                  :name, \
+                  { \
+                    selected: @run.game.try(:shortname), \
+                    include_blank: true \
+                  }, \
+                  onchange: 'update_category_selector(this.value)', \
+                  class: 'form-control' \
+                )
+              .col-lg-4
+                = f.collection_select( \
+                  :category, \
+                  @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order('count(runs.id) desc') : [], \
+                  :id, \
+                  :name, \
+                  { \
+                    selected: @run.category.try(:id) \
+                  }, \
+                  class: 'form-control' \
+                )
+              .col-lg-2
+                = f.submit 'Save', id: 'game_category_submit', class: 'btn btn-success'
 
     .col-lg-6
-      .card
+      .card.mb-3
         .card-header.text-white Edit Video Proof
         .card-body
           = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
@@ -90,12 +91,12 @@ article
                 = f.hidden_field(:archived, value: false)
                 .btn-group
                   = f.submit 'List Run', class: 'btn btn-info'
-                  button.btn.btn-info.disabled Unlisted
+                  button.btn.btn-info.disabled.text-white Unlisted
             - else
               = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
                 = f.hidden_field(:archived, value: true)
                 .btn-group
-                  button.btn.btn-info.disabled Listed
+                  button.btn.btn-info.disabled.text-white Listed
                   = f.submit 'Unlist Run', class: 'btn btn-info'
 
     - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
@@ -111,12 +112,12 @@ article
                   = f.hidden_field(:default_timing, value: 'real')
                   .btn-group
                     = f.submit 'Realtime', class: 'btn btn-info'
-                    button.btn.btn-info.disabled Gametime
+                    button.btn.btn-info.disabled.text-white Gametime
               - else
                 = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
                   = f.hidden_field(:default_timing, value: 'game')
                   .btn-group
-                    button.btn.btn-info.disabled Realtime
+                    button.btn.btn-info.disabled.text-white Realtime
                     = f.submit 'Gametime', class: 'btn btn-info'
 
 article#danger-zone.danger

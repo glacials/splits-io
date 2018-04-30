@@ -65,7 +65,7 @@ html
                     span> = icon("fas", "user")
                     span = current_user
                     span.caret
-                  ul.dropdown-menu role='menu'
+                  ul.dropdown-menu.mt-0.border-top-0 role='menu'
                     li.nav-item
                       - if !current_user.patron?
                         = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank', class: "dropdown-item"
