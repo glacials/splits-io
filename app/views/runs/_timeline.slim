@@ -3,7 +3,7 @@
   article
     .alert.alert-warning This run doesn't have any game time segments.
 - else
-  .timeline-background
+  .timeline-background.mt-3
     .timeline
       - run.collapsed_segments(timing).each.with_index do |segment, index|
         .pure-u.split id="#{run.id36}-split-#{index}" class=next_timeline_color(run.id36) style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; z-index: #{index}"

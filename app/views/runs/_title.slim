@@ -2,7 +2,7 @@ h3
   = run.to_s
 - if run.completed?(Run::REAL) && run.completed?(Run::GAME)
   = render partial: 'runs/timing_switch', locals: {timing: timing}
-h5
+h5.mt-3
   div = format_milliseconds(run.duration_ms(timing))
   - if run.user.try(:name)
     small
@@ -46,15 +46,15 @@ h6
       | &bull;
       =<> link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
 article#claim-prompt style='display: none;'
-  .col-md-6.col-md-offset-3
-    .panel.panel-primary
-      .panel-heading
+  .col-lg-6.offset-lg-3
+    .card
+      .card-header.text-white
         | Claim This Run Like a Broken Headlight
         button#dismiss-claim-prompt type='button' class='close'
           span aria-hidden='true'
-            .glyphicon.glyphicon-remove
+            span = icon("fas", "times")
           span class='sr-only' Close
-      .panel-body
+      .card-body
         - if current_user.nil?
           p
             a href='/auth/twitch' Sign in
@@ -66,7 +66,7 @@ article#claim-prompt style='display: none;'
             b = current_user.twitch_display_name
             | ).
           p
-            .col-md-12
-              .col-md-4.col-md-offset-4
+            .col-lg-12
+              .col-lg-4.offset-lg-4
                 a.btn.btn-success.btn-block#claim-prompt-button href='#'
                   b Claim!

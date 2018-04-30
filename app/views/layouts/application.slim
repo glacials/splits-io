@@ -26,73 +26,68 @@ html
           h2
             | failures:
           span#failed-uploads<
-      nav.navbar.navbar-default
+      nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.mb-4
         .container
-          .navbar-header
-            button.navbar-toggle.collapsed type='button' data-toggle='collapse' data-target='#global-nav'
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.navbar-brand href=root_path
-              img.logo src='/logo.svg' width='20' height='20'
-              span Splits I/O
+          a.navbar-brand href=root_path
+            img.logo src='/logo.svg' width='20' height='20'
+            span Splits I/O
+          button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
+            span.navbar-toggler-icon
           .collapse.navbar-collapse#global-nav
-            ul.nav.navbar-nav
-              li class=('active' if on_page[:upload])
-                a href=new_run_path
-                  .glyphicon.glyphicon-cloud-upload>
+            ul.navbar-nav.mr-auto
+              li.nav-item. class=('active' if on_page[:upload])
+                a.nav-link.px-3 href=new_run_path
+                  span> = icon("fas", "cloud-upload-alt")
                   | Upload
-              li class=('active' if on_page[:rivalries])
-                a href=rivalries_path
-                  .glyphicon.glyphicon-scale>
+              li.nav-item class=('active' if on_page[:rivalries])
+                a.nav-link.px-3 href=rivalries_path
+                  span> = icon("fas", "weight")
                   | My Rivals
               - if ENV['READ_ONLY_MODE'] == '1'
-                li
-                  a href=read_only_mode_path
+                li.nav-item
+                  a.nav-link.px-3 href=read_only_mode_path
                     span.text-warning Read-Only Mode Active
-              li class=('active' if on_page[:faq])
-                a href=faq_path FAQ
-            .col-sm-3.col-md-3
-              = form_for(:game, method: :get, url: games_path, html: {class: 'navbar-form', role: 'search'}) do |f|
+              li.nav-item class=('active' if on_page[:faq])
+                a.nav-link.px-3 href=faq_path FAQ
+              = form_for(:game, method: :get, url: games_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
                 .input-group
                   = f.text_field(:q, name: :q, class: 'form-control', value: @query, placeholder: 'Search')
                   .input-group-btn
-                    = button_tag(type: 'submit', class: 'btn btn-default', name: nil) do
-                      i.glyphicon.glyphicon-search
+                    = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
+                      = icon("fas", "search")
             ul.nav.navbar-nav.navbar-right
-              li style='background-color: #768AD4;'
-                a href='https://discord.gg/yGaxX39' target='_blank'
+              li.nav-item style='background-color: #768AD4;'
+                a.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
                   img src='/discord.svg' height='20'
               - if logged_in?
-                li.dropdown class=('active' if on_page[:profile])
-                  a.dropdown-toggle href='#' data-toggle='dropdown' role='button' aria-expanded='false'
-                    .glyphicon.glyphicon-user>
+                li.nav-item.dropdown class=('active' if on_page[:profile])
+                  a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
+                    span> = icon("fas", "user")
                     span = current_user
                     span.caret
-                  ul.dropdown-menu role='menu'
-                    li
+                  ul.dropdown-menu.mt-0.border-top-0 role='menu'
+                    li.nav-item
                       - if !current_user.patron?
-                        = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank'
-                      = link_to 'Profile', user_path(current_user)
-                      = link_to 'Settings', settings_path
-                      = link_to 'Tools', tools_path
-                      = link_to 'Sign Out', session_path(auth_session), method: :delete
+                        = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank', class: "dropdown-item"
+                      = link_to 'Profile', user_path(current_user), class: "dropdown-item"
+                      = link_to 'Settings', settings_path, class: "dropdown-item"
+                      = link_to 'Tools', tools_path, class: "dropdown-item"
+                      = link_to 'Sign Out', session_path(auth_session), method: :delete, class: "dropdown-item"
               - else
-                li
-                  a href='/auth/twitch' Sign Up
-                li
-                  a href='/auth/twitch' Sign In
+                li.nav-item
+                  a.nav-link.px-3 href='/auth/twitch' Sign Up
+                li.nav-item
+                  a.nav-link.px-3 href='/auth/twitch' Sign In
       = render partial: 'shared/ad'
       header#header = yield(:header)
       article
         .row
-          .col-md-12
+          .col-lg-12
             #alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
       = yield
       footer#footer
         = yield(:footer)
-        small.pull-right style='text-align: right;'
+        small.float-right style='text-align: right;'
           span by glacials :]
           br
           a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' target=:_blank api

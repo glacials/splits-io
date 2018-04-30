@@ -9,29 +9,30 @@ article data-turbolinks-temporary=true
     center
       i Not enough data in this category to display a sum-of-best leaderboard.
   - else
-    table.table.table-striped
-      thead
-        tr
-          th
-          th.align-left Runner
-          th.align-left Sum of best
-          th.align-left
-            small PB
-          th.align-left
-            small
-              | Potential save
-              a.tip< title='(PB - sum of best)'
-      tbody
-        - i = 0
-        - runners.each do |runner|
-          - pb = runner.pb_for(@category)
-          tr id=[:run, pb.id]
-            td.align-right = i += 1
-            td.align-left = link_to runner, runner, class: 'user-link'
-            td.align-left = format_milliseconds(pb.sum_of_best_ms(Run::REAL))
-            td.align-left
-              small = link_to format_milliseconds(pb.duration_ms(Run::REAL)), pb
-            td.align-left
-              small = format_milliseconds(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
-  center
-    small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'
+    .card
+      table.card-body.table.table-striped.mb-0
+        thead
+          tr
+            th
+            th.align-left Runner
+            th.align-left Sum of best
+            th.align-left
+              small PB
+            th.align-left
+              small
+                | Potential save
+                a.tip< title='(PB - sum of best)'
+        tbody
+          - i = 0
+          - runners.each do |runner|
+            - pb = runner.pb_for(@category)
+            tr id=[:run, pb.id]
+              td.align-right = i += 1
+              td.align-left = link_to runner, runner, class: 'user-link'
+              td.align-left = format_milliseconds(pb.sum_of_best_ms(Run::REAL))
+              td.align-left
+                small = link_to format_milliseconds(pb.duration_ms(Run::REAL)), pb
+              td.align-left
+                small = format_milliseconds(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
+    center
+      small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'

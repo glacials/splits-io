@@ -3,23 +3,23 @@
 
 - content_for(:header) do
   - if @run.game.present? && @run.category.present?
-    ul.breadcrumb
-      li = link_to "Games", games_path
-      li = link_to @run.game, game_path(@run.game)
-      li = link_to @run.category, game_category_path(@run.game, @run.category)
-      li = link_to @run.id36, run_path(@run)
-      li = link_to "Statistics", run_stats_path(@run)
+    ol.breadcrumb
+      li.breadcrumb-item = link_to "Games", games_path
+      li.breadcrumb-item = link_to @run.game, game_path(@run.game)
+      li.breadcrumb-item = link_to @run.category, game_category_path(@run.game, @run.category)
+      li.breadcrumb-item = link_to @run.id36, run_path(@run)
+      li.breadcrumb-item.active = link_to "Statistics", run_stats_path(@run)
   = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article#stats
-  .panel.panel-default
-    .panel-heading
+  .card.mb-3
+    .card-header.text-white
       | Run Information
-      .pull-right
+      .float-right
         a href=run_history_csv_path(@run) ↓ download run history csv
-    table.panel-body.table.table-striped.table-hover
+    table.card-body.table.table-striped.table-hover.mb-0
       tbody
         tr
           td
@@ -119,4 +119,4 @@ article#stats
             - else
               span.time -
   = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits, timing: timing}
-  #graph-holder
+  .mt-3#graph-holder

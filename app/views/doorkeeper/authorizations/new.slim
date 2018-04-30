@@ -4,11 +4,11 @@
 - else
   article
     .row
-      .col-md-6.col-md-offset-3
-        .panel.panel-default
-          .panel-heading
+      .col-lg-6.offset-lg-3
+        .card
+          .card-header
             b #{@pre_auth.client.name} is requesting partial access to your Splits I/O account
-          .panel-body
+          .card-body
             p
               span Hey
               b< #{current_user.twitch_display_name}
@@ -28,9 +28,9 @@
               span You can always revoke
               span.text-info<> #{@pre_auth.client.name}'s
               span permissions later.
-          .panel-footer
+          .card-footer
             .row
-              .col-md-6
+              .col-lg-6
                 = form_for oauth_authorization_path, method: :post do |f|
                   = hidden_field_tag :client_id, @pre_auth.client.uid
                   = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
@@ -38,11 +38,11 @@
                   = hidden_field_tag :response_type, @pre_auth.response_type
                   = hidden_field_tag :scope, @pre_auth.scope
                   = submit_tag t('doorkeeper.authorizations.buttons.authorize'), class: 'btn btn-info btn-lg btn-block'
-              .col-md-6
+              .col-lg-6
                 = form_for oauth_authorization_path, method: :delete do |f|
                   = hidden_field_tag :client_id, @pre_auth.client.uid
                   = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
                   = hidden_field_tag :state, @pre_auth.state
                   = hidden_field_tag :response_type, @pre_auth.response_type
                   = hidden_field_tag :scope, @pre_auth.scope
-                  = submit_tag t('doorkeeper.authorizations.buttons.deny'), class: 'btn btn-default btn-lg btn-block'
+                  = submit_tag t('doorkeeper.authorizations.buttons.deny'), class: 'btn btn-primary btn-lg btn-block'
