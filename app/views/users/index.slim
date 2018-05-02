@@ -1,14 +1,17 @@
-- title 'games'
+- title 'Users'
 - content_for(:header) do
   ol.breadcrumb
-    li.breadcrumb-item.active = link_to "Games", games_path
+    li.breadcrumb-item.active = link_to "Users", users_path
   h2 Games
+
 article#search
-  = form_for(:game, method: :get, url: games_path) do |f|
-    .input-group.col-lg-6
-      = f.text_field(:q, name: :q, placeholder: "e.g. #{placeholder.name}, or #{placeholder.shortname}", class: 'form-control', autofocus: @query.blank?, value: @query)
-      span.input-group-append
-        = f.submit('Search', class: 'btn btn-primary', name: nil)
+  = form_for(:search, method: :get, url: search_path) do |f|
+    .form-row
+      .input-group.col-lg-6
+        = f.hidden_field(:search_type, name: :search_type, value: 'user')
+        = f.text_field(:q, name: :q, class: 'form-control', autofocus: @query.blank?, value: @query)
+        span.input-group-append
+          = f.submit('Search', class: 'btn btn-primary', name: nil)
 article#games
   - if @games.present?
     h4 Games

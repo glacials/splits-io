@@ -36,9 +36,9 @@ SplitsIO::Application.routes.draw do
 
   get  '/convert',    to: 'converts#new'
 
-  get '/search',        to: redirect('/games') # all deprecated, use GET /games
-  get '/search/:q',     to: redirect('/games?q=%{q}')
-  get '/search(?q=:q)', to: redirect('/games?q=%{q}')
+  get '/search',        to: 'search#index'
+  get '/search/:q',     to: 'search#index'
+  get '/search(?q=:q)', to: 'search#index'
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:run/download/:timer',         to: 'runs#download', as: :download
