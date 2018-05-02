@@ -7,7 +7,7 @@
     - if @user.silver_patron?
       .gold-split title='Patron'
   h6
-    a href=@user.uri target=:_blank = @user.uri.to_s.gsub('http://www.', '')
+    a target='_blank' href=@user.uri = @user.uri.to_s.gsub('https://www.', '')
   h6
     - @user.games.named.each do |game|
       => link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
