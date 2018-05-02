@@ -3,7 +3,7 @@
     = current_user.follows.that_run(category).find_each do |potential_rival|
       = link_to rivalries_path(category: category, target: potential_rival), method: :post, class: 'list-group-item'
         .media style='margin: .5em 0;'
-          .pull-left
+          .float-left
             img src=potential_rival.avatar height=64 width=64
           .media-body
             h4.media-heading

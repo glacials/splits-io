@@ -2,7 +2,7 @@
   - if @user.follows.present?
     h4 Recent PBs By People You Follow
     .row
-      .col-md-6
+      .col-lg-6
         .list-group
           - Run.includes(:game, :category, :user).where( \
             user: current_user.follows \
@@ -13,10 +13,10 @@
               current_user.runs?(run.category) ? compare_path(current_user.pb_for(run.category), run) : run_path(run) \
             )
               .media style='margin: .5em 0;'
-                .pull-left href=user_path(run.user)
+                .float-left href=user_path(run.user)
                   img src=run.user.avatar height=64 width=64
                 .media-body
-                  .pull-right = pretty_timestamp(run.created_at)
+                  .float-right = pretty_timestamp(run.created_at)
                   div
                     = run.user
                     - if run.user.silver_patron?

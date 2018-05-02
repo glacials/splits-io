@@ -1,6 +1,6 @@
-.panel.panel-default
-  .panel-heading Segments
-  table.panel-body.table.table-striped.table-hover
+.card
+  .card-header.text-white Segments
+  table.card-body.table.table-striped.table-hover.mb-0
     thead
       tr
         th.align-right #
@@ -58,5 +58,5 @@
             a.segment-graph-toggler href='#' data-segment=segment.id data-collapsed='1' View History
           tr.collapsed
             td colspan='999' style='margin: 0; padding: 0;'
-              .panel.panel-default style='border: none; margin: 0; padding: 0;'
-                .panel-body.segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
+              .card.border-0.m-0.p-0
+                .card-body.segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id

@@ -3,10 +3,10 @@
   h2 Tools
 article
   - if current_user.present? && current_user.gold_patron?
-    .col-md-12
-      .panel.panel-default
-        .panel-heading Permalink Redirectors!
-        .panel-body
+    .col-lg-12
+      .card.mb-3
+        .card-header.text-white Permalink Redirectors!
+        .card-body
           p Thanks for being a patron! You get access to permalink redirectors, which are static links that will always
             redirect to your current PB for a given game and category. Here they are:
           table.table
@@ -30,29 +30,31 @@ article
               code
                 | /compare/&lt;another_run&gt;
               | !
-  .col-md-6
-    .panel.panel-default
-      .panel-heading Twitch Panel Builder
-      .panel-body
-        p This will assemble your PBs into a Markdown table for use in a Twitch panel (or elsewhere). You should be able to
-          copy+paste the output into a panel with no additional editing on your part.
-        - if current_user.present?
-          p
-            = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-default', target: :_blank
-          small
-            | order:
-            =< link_to 'alphabetically', user_panels_path(current_user, by: :name, order: :asc)
-            | ,
-            =< link_to 'newest first', user_panels_path(current_user, by: :created_at, order: :desc)
-            | ,
-            =< link_to 'oldest first', user_panels_path(current_user, by: :created_at, order: :asc)
-        - else
-          p
-            button.btn.btn-default.disabled You need to be signed in
-  .col-md-6
-    .panel.panel-default
-      .panel-heading Splits Converter
-      .panel-body
-        p You can download uploaded splits in any exportable format we support, but if you need to convert splits and don't
-          care about storing them, you can use this tool.
-        p = link_to 'Convert splits to other timer formats', convert_path, class: 'btn btn-default'
+
+  .row
+    .col-lg-6
+      .card.mb-3
+        .card-header.text-white Twitch Panel Builder
+        .card-body
+          p This will assemble your PBs into a Markdown table for use in a Twitch panel (or elsewhere). You should be able to
+            copy+paste the output into a panel with no additional editing on your part.
+          - if current_user.present?
+            p
+              = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-default', target: :_blank
+            small
+              | order:
+              =< link_to 'alphabetically', user_panels_path(current_user, by: :name, order: :asc)
+              | ,
+              =< link_to 'newest first', user_panels_path(current_user, by: :created_at, order: :desc)
+              | ,
+              =< link_to 'oldest first', user_panels_path(current_user, by: :created_at, order: :asc)
+          - else
+            p
+              button.btn.btn-primary.disabled You need to be signed in
+    .col-lg-6
+      .card.mb-3
+        .card-header.text-white Splits Converter
+        .card-body
+          p You can download uploaded splits in any exportable format we support, but if you need to convert splits and don't
+            care about storing them, you can use this tool.
+          p = link_to 'Convert splits to other timer formats', convert_path, class: 'btn btn-default'

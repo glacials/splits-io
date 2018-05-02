@@ -1,13 +1,13 @@
-.panel.panel-default
-  .panel-heading
+.card.mb-3
+  .card-header.text-white
     | Segment Information
-    .pull-right
+    .float-right
       - if run.attempts.nil? || run.attempts.zero?
         strike ↓ download segment history csv
         small.tip-html< title="Segment history is not available for this run" = "(?)"
       - else
         a href=segment_history_csv_path ↓ download segment history csv
-  table.panel-body.table.table-striped.table-hover
+  table.card-body.table.table-striped.table-hover.mb-0
     thead
       tr
         th.align-right #

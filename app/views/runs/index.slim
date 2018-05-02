@@ -16,7 +16,7 @@
       | the splits
 article
   .row
-    .col-md-12
+    .col-lg-12
       - if logged_in?
         - if current_user.runs.present?
           = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
