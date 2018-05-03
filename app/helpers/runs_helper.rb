@@ -57,13 +57,6 @@ module RunsHelper
         runs: options[:category].runs.nonempty,
         cols: %i[runner time name uploaded]
       }.merge(sorting_info)
-    when :users
-      {
-        type: :users,
-        source: options[:users],
-        runs: Run.by_user(options[:users]).nonempty,
-        cols: %i[runner time name uploaded]
-      }.merge(sorting_info)
     else
       raise Error
     end

@@ -29,3 +29,8 @@ article#search-results
                   - when :users
                     = link_to obj, user_path(obj), class: 'game-link'
                     small.float-right = obj.games.pluck(:shortname).compact.uniq.join(', ')
+
+article#runs
+  - if @results[:games].present?
+    h4 Runs
+    = render partial: 'shared/run_table', locals: table_locals(:games, games: @results[:games])
