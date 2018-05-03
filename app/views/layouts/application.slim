@@ -51,11 +51,6 @@ html
                 a.nav-link.px-3 href=faq_path FAQ
               = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
                 .input-group
-                  select.input-group-addon name='search_type'
-                    option value='game' selected=('true' if @search_type == 'game')
-                      | Game
-                    option value='user' selected=('true' if @search_type == 'user')
-                      | User
                   = f.text_field(:q, name: :q, class: 'form-control', value: @query, placeholder: 'Search')
                   .input-group-btn
                     = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
