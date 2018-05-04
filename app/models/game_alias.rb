@@ -10,10 +10,13 @@
 # if you need to, which performs two queries. It is safe to expect that a Game#name will also be represented as a
 # GameAlias#name.
 class GameAlias < ApplicationRecord
+  include PgSearch
   belongs_to :game, dependent: :destroy
 
   validates_uniqueness_of :name
   validates_presence_of :name
+
+  pg_search_scope :search_for_name, against: [:name], using: :trigram
 
   def to_s
     name

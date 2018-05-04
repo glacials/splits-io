@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include PgSearch
   include AuthenticatingUser
   include RivalUser
   include TwitchUser
@@ -25,9 +26,12 @@ class User < ApplicationRecord
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
+  pg_search_scope :search_for_name, against: [:name, :twitch_display_name], using: :trigram
 
   def self.search(term)
-    where(User.arel_table[:name].matches("%#{term}%")).joins(:runs).uniq.order(:name)
+    term = term.strip
+    return nil if term.blank?
+    search_for_name(term)
   end
 
   def avatar

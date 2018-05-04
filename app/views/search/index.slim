@@ -1,0 +1,36 @@
+- title 'Search'
+- content_for(:header) do
+  ol.breadcrumb
+    li.breadcrumb-item = link_to "Search", search_path
+  h2 Search
+
+article#search
+  = form_for(:search, method: :get, url: search_path) do |f|
+    .form-row
+      .input-group.col-lg-6
+        = f.text_field(:q, name: :q, autofocus: @query.blank?, value: @query, class: 'form-control')
+        span.input-group-append
+          = f.submit('Search', class: 'btn btn-primary', name: nil)
+
+article#search-results
+  - @results.each do |search_type, results|
+    - if results.present?
+      h4 = search_type.to_s.capitalize
+      .card.mb-3
+        table.card-body.table.table-striped.mb-0
+          tbody
+            - results.each do |obj|
+              tr
+                td
+                  - case search_type
+                  - when :games
+                    = link_to obj, game_path(obj), class: 'game-link'
+                    small.float-right = obj.categories.pluck(:name).join(', ')
+                  - when :users
+                    = link_to obj, user_path(obj), class: 'game-link'
+                    small.float-right = obj.games.pluck(:shortname).compact.uniq.join(', ')
+
+article#runs
+  - if @results[:games].present?
+    h4 Runs
+    = render partial: 'shared/run_table', locals: table_locals(:games, games: @results[:games])

@@ -49,7 +49,7 @@ html
                     span.text-warning Read-Only Mode Active
               li.nav-item class=('active' if on_page[:faq])
                 a.nav-link.px-3 href=faq_path FAQ
-              = form_for(:game, method: :get, url: games_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
+              = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
                 .input-group
                   = f.text_field(:q, name: :q, class: 'form-control', value: @query, placeholder: 'Search')
                   .input-group-btn

@@ -36,9 +36,9 @@ SplitsIO::Application.routes.draw do
 
   get  '/convert',    to: 'converts#new'
 
-  get '/search',        to: redirect('/games') # all deprecated, use GET /games
-  get '/search/:q',     to: redirect('/games?q=%{q}')
-  get '/search(?q=:q)', to: redirect('/games?q=%{q}')
+  get '/search',        to: 'search#index'
+  get '/search(?q=:q)', to: 'search#index'
+  get '/search/:q',     to: redirect('/search?q=%{q}')
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:run/download/:timer',         to: 'runs#download', as: :download
@@ -68,7 +68,8 @@ SplitsIO::Application.routes.draw do
 
   get '/users/:user/pbs/:game/:category(/*trailing_path)', to: 'users/pbs#show', as: :user_pb
 
-  get   '/games',            to: 'games#index', as: :games
+  get   '/games',            to: redirect('/search')
+  get   '/games(?q=:q)',     to: redirect('/search?q=%{q}')
   get   '/games/:game',      to: 'games#show',  as: :game
   get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
   patch '/games/:game',      to: 'games#update'

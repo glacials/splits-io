@@ -1,11 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show, :edit, :update]
   before_action :authorize, only: [:edit, :update]
-  before_action :set_query, only: [:index]
-  before_action :set_games, only: [:index]
-
-  def index
-  end
 
   def show
     @on_game_page = true
@@ -50,13 +45,5 @@ class GamesController < ApplicationController
     @game = Game.find_by(shortname: params[:game]) || Game.find_by(id: params[:game])
 
     redirect_to games_path(q: params[:game]) if @game.nil?
-  end
-
-  def set_query
-    @query = params[:q].strip if params[:q].present?
-  end
-
-  def set_games
-    @games = @query.present? ? Game.search(@query).includes(:categories) : []
   end
 end
