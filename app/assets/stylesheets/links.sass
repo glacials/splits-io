@@ -14,6 +14,9 @@
   &:hover
     color: $green
 
-.external-link
-  &:hover
-    color: #000
+a[target="_blank"]:not(.carbon-img):not(.discord):after, a[href^="mailto:"]:after
+  content: '\f35d'
+  font-family: 'Font Awesome 5 Free'
+  font-size: 0.8em
+  font-weight: 900
+  padding-left: 0.5em

@@ -26,10 +26,7 @@ article#stats
             span Timer
           td
             - program = Run.program(@run.program)
-            span = program
-            span< = "("
-            span = link_to "website", program.website, target: :_blank
-            span = ")"
+            a target='_blank' href=program.website = program
         tr
           td
             span Uploaded

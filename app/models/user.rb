@@ -39,7 +39,7 @@ class User < ApplicationRecord
   end
 
   def uri
-    URI.parse("http://www.twitch.tv/#{name}")
+    URI.parse("https://www.twitch.tv/#{name}")
   end
 
   def to_param

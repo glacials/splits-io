@@ -34,7 +34,10 @@ article
     h4 Why no &lt;other timer&gt;?
     p Depends. Maybe we don't know that it exists, or maybe we do but it's so niche that it's not super high priority.
       You can check on the timers we're aware of here:
-      #{link_to 'github.com/glacials/splits-io/labels/parsing', 'https://github.com/glacials/splits-io/labels/parsing'}.
+    p = link_to \
+        'github.com/glacials/splits-io/labels/parsing',\
+        'https://github.com/glacials/splits-io/labels/parsing',\
+        target: '_blank'
     p If you don't see your timer there, we don't know about it -- remember to bop that Fo- er, New Issue button and
       add it.
     p If you build support for your timer yourself, we'll happily merge in your code!
@@ -63,11 +66,11 @@ article
       load into memory and parse. This happens to LiveSplit files with a very large
     code style='display: block; margin: 1em; white-space: nowrap;'
       | (# attempts) * (# splits in the run)
-    p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like
-      #{link_to 'predictions', 'https://github.com/glacials/splits-io/blob/master/docs/api.md#get-usersuser_idgamesgame_idcategoriescategory_idprediction'}).
+    p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like stats!).
     p It's my own fault that Splits I/O's handling of this is not as optimized as it should be, and I'm actively working
       to solve it, but it's not a one-stop bug fix. To see how it's going and what specifically is being planned, you
-      can check Splits I/O's #{link_to 'speed', 'https://github.com/glacials/splits-io/labels/speed'} label on GitHub.
+      can check Splits I/O's #{link_to 'speed', 'https://github.com/glacials/splits-io/labels/speed', target: '_blank'}
+      label on GitHub.
     p As a temporary solution, you can manually strip history before uploading by making a copy of your splits, opening
       the copy in LiveSplit, and resetting all of your best segments (drag-select the whole column and press Delete).
       This will remove all split history; you should notice a sizeable decrease in file size, and consequently the file
@@ -89,22 +92,31 @@ article
 
   .project
     h4 LiveSplit
-    small #{link_to 'source', 'https://github.com/LiveSplit/LiveSplit'}, #{link_to 'website', 'http://livesplit.org/'}
+    small
+      = link_to 'source', 'https://github.com/LiveSplit/LiveSplit', target: '_blank'
+      span ,
+      = link_to 'website', 'http://livesplit.org/', target: '_blank'
     p LiveSplit is developed by two really cool people who decided to open source the whole thing around 1.4.
 
   .project
     h4 WSplit
-    small #{link_to 'source', 'https://github.com/nitrofski/wsplit'}
+    small = link_to 'source', 'https://github.com/nitrofski/wsplit', target: '_blank'
     p Nitrofski is WSplit's maintainer and open sourced the program in 2014.
 
   .project
     h4 PB Tracker
-    small #{link_to 'source', 'https://github.com/rggibson/pb-tracker'}, #{link_to 'website', 'http://www.pbtracker.net/'}
+    small
+      = link_to 'source', 'https://github.com/rggibson/pb-tracker', target: '_blank'
+      span ,
+      = link_to 'website', 'http://www.pbtracker.net/', target: '_blank'
     p PB Tracker is Splits I/O's spiritual sister, preferring a you-curated, diary-style progress tracking system to
       Splits I/O's more automated "give me all your splits" attitude.
 
   .project
     h4 SaltyBot
-    small #{link_to 'source', 'https://github.com/batedurgonnadie/salty_bot'}, #{link_to 'website', 'https://leagueofnewbs.com/twitch/salty'}
+    small
+      = link_to 'source', 'https://github.com/batedurgonnadie/salty_bot', target: '_blank'
+      span ,
+      = link_to 'website', 'https://leagueofnewbs.com/twitch/salty', target: '_blank'
     p Salty is a speedrunning-heavy chat bot that hooks into several services to expose race status, PB splits, and WR
       info, among other things.
