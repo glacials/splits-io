@@ -8,8 +8,8 @@ article
       - rival_pb = rivalry.to_user.pb_for(rivalry.category)
       - if user_pb.present? && rival_pb.present?
         .list-group-item
-          .row
-            a href=compare_path(user_pb, rival_pb)
+          a href=compare_path(user_pb, rival_pb)
+            .row
               .col-lg-1
                 img src=rivalry.to_user.avatar height='64' width='64'
               .col-lg-3
@@ -27,13 +27,14 @@ article
                     span> sum of best:
                     span
                        = pretty_difference(user_pb.sum_of_best_ms(Run::REAL), rival_pb.sum_of_best_ms(Run::REAL))
-            = button_to rivalry_path(rivalry), \
-              method: :delete, \
-              class: 'btn btn-primary', \
-              data: { \
-                confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?" \
-              }
-              small
-                | X
+              .col-lg-2
+                = button_to rivalry_path(rivalry), \
+                  method: :delete, \
+                  class: 'btn btn-primary', \
+                  data: { \
+                    confirm: "Delete your rivalry with #{rivalry.to_user} in #{rivalry.game} #{rivalry.category}?" \
+                  }
+                  small
+                    | X
         hr
     h5 = link_to '+ Add or replace a rival', new_rivalry_path

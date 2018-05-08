@@ -13,7 +13,7 @@
               current_user.runs?(run.category) ? compare_path(current_user.pb_for(run.category), run) : run_path(run) \
             )
               .media style='margin: .5em 0;'
-                .float-left href=user_path(run.user)
+                .float-left.mr-3 href=user_path(run.user)
                   img src=run.user.avatar height=64 width=64
                 .media-body
                   .float-right = pretty_timestamp(run.created_at)
