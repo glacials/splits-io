@@ -129,6 +129,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
+    daemons (1.2.6)
     dalli (2.7.7)
     datetime_picker_rails (0.0.7)
       momentjs-rails (>= 2.8.1)
@@ -456,6 +457,7 @@ DEPENDENCIES
   bootswatch
   cancancan
   coffee-rails
+  daemons
   dalli
   delayed_job_active_record
   descriptive_statistics

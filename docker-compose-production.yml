@@ -9,3 +9,9 @@ services:
       - .:/app
     ports:
       - 3000:3000
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile-production
+    command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec bin/delayed_job run -n 2"
+    ports: []
