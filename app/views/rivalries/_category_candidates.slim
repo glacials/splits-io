@@ -6,6 +6,6 @@
         - empty = false
         a.list-group-item href=new_rivalry_path(category: category)
           p = "#{category.game} #{category}"
-          p = current_user.follows.that_run(category).join(' ')
+          p = current_user.followed_users.that_run(category).join(' ')
 - if empty
   i none found

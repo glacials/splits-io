@@ -26,6 +26,9 @@ class RunsController < ApplicationController
   end
 
   def index
+    return if current_user.nil?
+    return unless current_user.follows_checked_at.nil? || current_user.follows_checked_at + 1.day < Time.now.utc
+    current_user.delay.sync_follows!
   end
 
   def new

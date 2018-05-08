@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414015639) do
+ActiveRecord::Schema.define(version: 20180508193227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,15 @@ ActiveRecord::Schema.define(version: 20180414015639) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.bigint "from_user_id"
+    t.bigint "to_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_user_id"], name: "index_follows_on_from_user_id"
+    t.index ["to_user_id"], name: "index_follows_on_to_user_id"
   end
 
   create_table "game_aliases", id: :serial, force: :cascade do |t|
@@ -249,6 +258,7 @@ ActiveRecord::Schema.define(version: 20180414015639) do
     t.string "avatar"
     t.boolean "permagold"
     t.string "twitch_display_name"
+    t.datetime "follows_checked_at"
     t.index ["email"], name: "index_users_on_email"
     t.index ["name"], name: "index_users_on_name"
   end

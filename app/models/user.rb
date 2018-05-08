@@ -11,6 +11,9 @@ class User < ApplicationRecord
   has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_rivalries, class_name: 'Rivalry', foreign_key: :to_user_id, dependent: :destroy
 
+  has_many :follows, foreign_key: :from_user_id, dependent: :destroy
+  has_many :incoming_follows, class_name: 'Follow', foreign_key: :to_user_id, dependent: :destroy
+
   has_one  :patreon, class_name: 'PatreonUser', dependent: :destroy
 
   has_many :applications, class_name: 'Doorkeeper::Application', foreign_key: :owner_id
@@ -66,6 +69,10 @@ class User < ApplicationRecord
 
   def to_s
     twitch_display_name || name || 'somebody'
+  end
+
+  def followed_users
+    User.where(id: follows.map(&:to_user_id))
   end
 
   def should_see_ads?
