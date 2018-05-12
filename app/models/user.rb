@@ -11,8 +11,8 @@ class User < ApplicationRecord
   has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_rivalries, class_name: 'Rivalry', foreign_key: :to_user_id, dependent: :destroy
 
-  has_many :follows, foreign_key: :from_user_id, dependent: :destroy
-  has_many :incoming_follows, class_name: 'Follow', foreign_key: :to_user_id, dependent: :destroy
+  has_many :twitch_user_follows, foreign_key: :from_user_id, dependent: :destroy
+  has_many :twitch_user_followers, class_name: 'TwitchUserFollow', foreign_key: :to_user_id, dependent: :destroy
 
   has_one  :patreon, class_name: 'PatreonUser', dependent: :destroy
 
@@ -71,8 +71,8 @@ class User < ApplicationRecord
     twitch_display_name || name || 'somebody'
   end
 
-  def followed_users
-    User.where(id: follows.map(&:to_user_id))
+  def twitch_followed_users
+    User.joins(:twitch_user_followers).where(twitch_user_follows: {from_user_id: id})
   end
 
   def should_see_ads?

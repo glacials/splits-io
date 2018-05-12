@@ -72,15 +72,6 @@ ActiveRecord::Schema.define(version: 20180508193227) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "follows", force: :cascade do |t|
-    t.bigint "from_user_id"
-    t.bigint "to_user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["from_user_id"], name: "index_follows_on_from_user_id"
-    t.index ["to_user_id"], name: "index_follows_on_to_user_id"
-  end
-
   create_table "game_aliases", id: :serial, force: :cascade do |t|
     t.integer "game_id"
     t.citext "name"
@@ -248,6 +239,15 @@ ActiveRecord::Schema.define(version: 20180508193227) do
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
+  create_table "twitch_user_follows", force: :cascade do |t|
+    t.bigint "from_user_id"
+    t.bigint "to_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_user_id"], name: "index_twitch_user_follows_on_from_user_id"
+    t.index ["to_user_id"], name: "index_twitch_user_follows_on_to_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "email", default: ""
     t.datetime "created_at"
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 20180508193227) do
     t.string "avatar"
     t.boolean "permagold"
     t.string "twitch_display_name"
-    t.datetime "follows_checked_at"
+    t.datetime "twitch_user_follows_checked_at"
     t.index ["email"], name: "index_users_on_email"
     t.index ["name"], name: "index_users_on_name"
   end
