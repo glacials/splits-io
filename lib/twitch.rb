@@ -22,12 +22,10 @@ class Twitch
 
   module Follows
     def self.followed_ids(id)
-      Rails.cache.fetch([:twitch, :follows, id]) do
-        JSON.parse(
-          get(id)
-        )['follows'].map do |follow|
-          follow['channel']['_id']
-        end
+      JSON.parse(
+        get(id)
+      )['follows'].map do |follow|
+        follow['channel']['_id']
       end
     end
 
