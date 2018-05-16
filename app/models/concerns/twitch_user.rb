@@ -11,9 +11,9 @@ module TwitchUser
         current_followed_users = User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id))
         old_followed_users = twitch_followed_users
 
-        (current_followed_users - old_followed_users).each do |u|
-          TwitchUserFollow.create!(from_user: self, to_user: u)
-        end
+        TwitchUserFollow.import((current_followed_users - old_followed_users).map do |u|
+          TwitchUserFollow.new(from_user: self, to_user: u)
+        end)
 
         (old_followed_users - current_followed_users).each do |u|
           TwitchUserFollow.find(from_user: self, to_user: u).destroy
