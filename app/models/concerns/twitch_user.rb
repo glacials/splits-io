@@ -6,6 +6,7 @@ module TwitchUser
 
   included do
     def sync_twitch_follows!
+      success = false
       ActiveRecord::Base.transaction do
         current_followed_users = User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id))
         old_followed_users = twitch_followed_users
@@ -18,8 +19,9 @@ module TwitchUser
           TwitchUserFollow.find(from_user: self, to_user: u).destroy
         end
 
-        update(twitch_user_follows_checked_at: Time.now.utc)
+        success = true
       end
+      update(twitch_user_follows_checked_at: nil) unless success
     end
 
     def twitch_sync!
