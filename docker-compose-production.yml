@@ -13,5 +13,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-production
-    command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec bin/delayed_job run -n 2"
+    command: bash -c "rm -f /app/tmp/pids/delayed*.pid && ruby bin/delayed_job run -n 2"
     ports: []
