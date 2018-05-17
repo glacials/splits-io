@@ -1,6 +1,6 @@
 .col-md-6
   .list-group
-    = current_user.follows.that_run(category).find_each do |potential_rival|
+    = current_user.twitch_followed_users.that_run(category).find_each do |potential_rival|
       = link_to rivalries_path(category: category, target: potential_rival), method: :post, class: 'list-group-item'
         .media style='margin: .5em 0;'
           .float-left

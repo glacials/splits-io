@@ -13,11 +13,11 @@ RSpec.describe 'rivalries/_user_candidates' do
     allow(controller).to receive(:current_user).and_return(user)
 
     users = double
-    allow(users).to receive(:follows).and_return(users)
+    allow(users).to receive(:twitch_followed_users).and_return(users)
     allow(users).to receive(:that_run).and_return(users)
     allow(users).to receive(:find_each).and_yield(follow)
 
-    allow(user).to receive(:follows).and_return(users)
+    allow(user).to receive(:twitch_followed_users).and_return(users)
 
     render(
       partial: 'rivalries/user_candidates', locals: {

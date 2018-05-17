@@ -1,11 +1,11 @@
 - cache [:follows, @user] do
-  - if @user.follows.present?
+  - if @user.twitch_followed_users.present?
     h4 Recent PBs By People You Follow
     .row
       .col-lg-6
         .list-group
           - Run.includes(:game, :category, :user).where( \
-            user: current_user.follows \
+            user: current_user.twitch_followed_users \
           ).where.not( \
             games: {name: [nil, ""]} \
           ).order('runs.created_at DESC').limit(10).each do |run|

@@ -13,6 +13,7 @@ services:
       - db
       - s3
       - webpacker
+      - worker
     links:
       - s3:s3.localhost
       - webpacker:webpacker.localhost
@@ -35,3 +36,12 @@ services:
       - 3035:3035
     expose:
       - "3035"
+  worker:
+    build: .
+    command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work"
+    ports: []
+    depends_on:
+      - db
+      - s3
+    links:
+      - s3:s3.localhost

@@ -22,22 +22,25 @@ class Twitch
 
   module Follows
     def self.followed_ids(id)
-      Rails.cache.fetch([:twitch, :follows, id]) do
-        JSON.parse(
-          get(id)
-        )['follows'].map do |follow|
-          follow['channel']['_id']
+      cursor = nil
+      ids = []
+      loop do
+        response = JSON.parse(get(id, cursor))
+        response['follows'].each do |follow|
+          ids << follow['channel']['_id']
         end
+        cursor = response['_cursor']
+        break if cursor.nil?
       end
     end
 
     class << self
-      def get(id)
-        route(id).get(Twitch.headers)
+      def get(id, cursor)
+        route(id, cursor).get(Twitch.headers)
       end
 
-      def route(id)
-        User.route(id)['/follows/channels?limit=100']
+      def route(id, cursor)
+        User.route(id)["/follows/channels?limit=100&cursor=#{cursor}"]
       end
     end
   end

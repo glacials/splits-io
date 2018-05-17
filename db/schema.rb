@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414015639) do
+ActiveRecord::Schema.define(version: 20180516090856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -239,6 +239,15 @@ ActiveRecord::Schema.define(version: 20180414015639) do
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
+  create_table "twitch_user_follows", force: :cascade do |t|
+    t.bigint "from_user_id"
+    t.bigint "to_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_user_id"], name: "index_twitch_user_follows_on_from_user_id"
+    t.index ["to_user_id"], name: "index_twitch_user_follows_on_to_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "email", default: ""
     t.datetime "created_at"
@@ -249,8 +258,10 @@ ActiveRecord::Schema.define(version: 20180414015639) do
     t.string "avatar"
     t.boolean "permagold"
     t.string "twitch_display_name"
+    t.datetime "twitch_user_follows_checked_at"
     t.index ["email"], name: "index_users_on_email"
     t.index ["name"], name: "index_users_on_name"
+    t.index ["twitch_id"], name: "index_users_on_twitch_id"
   end
 
   add_foreign_key "game_aliases", "games", on_delete: :cascade

@@ -5,10 +5,23 @@ module TwitchUser
   extend ActiveSupport::Concern
 
   included do
-    def follows
-      Rails.cache.fetch([:db, :follows, self], expires_in: 1.hour) do
-        User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id)).joins(:runs).group('users.id')
+    def sync_twitch_follows!
+      success = false
+      ActiveRecord::Base.transaction do
+        current_followed_users = User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id))
+        old_followed_users = twitch_followed_users
+
+        TwitchUserFollow.import((current_followed_users - old_followed_users).map do |u|
+          TwitchUserFollow.new(from_user: self, to_user: u)
+        end)
+
+        (old_followed_users - current_followed_users).each do |u|
+          TwitchUserFollow.find(from_user: self, to_user: u).destroy
+        end
+
+        success = true
       end
+      update(twitch_user_follows_checked_at: nil) unless success
     end
 
     def twitch_sync!

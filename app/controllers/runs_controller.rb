@@ -12,6 +12,8 @@ class RunsController < ApplicationController
   before_action :warn_about_deprecated_url, only: [:show], if: -> { request.path == "/#{@run.nick}" }
   before_action :attempt_to_claim,          only: [:show], if: -> { params[:claim_token].present? }
 
+  before_action :maybe_update_followers, only: [:index]
+
   def show
     if params['reparse'] == '1'
       @run.parse_into_db
@@ -241,5 +243,13 @@ class RunsController < ApplicationController
     end
 
     redirect_to run_path(@run)
+  end
+
+  def maybe_update_followers
+    return if current_user.nil?
+    return unless current_user.twitch_user_follows_checked_at.nil? \
+      || current_user.twitch_user_follows_checked_at + 1.day < Time.now.utc
+    current_user.delay.sync_twitch_follows!
+    current_user.update(twitch_user_follows_checked_at: Time.now.utc)
   end
 end
