@@ -5,7 +5,11 @@ module SpeedrunDotCom
 
   class Run
     def self.runner_id(id)
-      res = get(id)
+      begin
+        res = get(id)
+      rescue RestClient::NotFound
+        return nil
+      end
       body = JSON.parse(res.body)
 
       body['data']['players'][0]['id']
@@ -22,7 +26,7 @@ module SpeedrunDotCom
 
     def self.url_from_id(id)
       return nil if id.blank?
-      "http://www.speedrun.com/run/#{id}"
+      "https://www.speedrun.com/run/#{id}"
     end
 
     class << self
@@ -40,10 +44,16 @@ module SpeedrunDotCom
 
   class User
     def self.twitch_login(id)
-      res = get(id)
+      begin
+        res = get(id)
+      rescue RestClient::NotFound
+        return nil
+      end
       body = JSON.parse(res.body)
+      url = body.try(:[], 'data').try(:[], 'twitch').try(:[], 'uri')
+      return nil if url.nil?
 
-      Twitch::User.login_from_url(body['data']['twitch']['uri'])
+      Twitch::User.login_from_url(url)
     end
 
     class << self
@@ -61,7 +71,7 @@ module SpeedrunDotCom
 
   class << self
     def route
-      RestClient::Resource.new('http://speedrun.com/api/v1')
+      RestClient::Resource.new('https://speedrun.com/api/v1')
     end
   end
 end

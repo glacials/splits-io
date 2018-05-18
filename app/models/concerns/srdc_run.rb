@@ -18,6 +18,7 @@ module SRDCRun
       return if srdc_id.nil? || user.present?
 
       srdc_runner_id = SpeedrunDotCom::Run.runner_id(srdc_id)
+      return if srdc_runner_id.nil?
       twitch_login = SpeedrunDotCom::User.twitch_login(srdc_runner_id)
       return if twitch_login.blank?
 
