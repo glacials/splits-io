@@ -60,8 +60,6 @@ module SpeedrunDotCom
   end
 
   class << self
-    private
-
     def route
       RestClient::Resource.new('http://speedrun.com/api/v1')
     end

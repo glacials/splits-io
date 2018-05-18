@@ -32,6 +32,7 @@ class Twitch
         cursor = response['_cursor']
         break if cursor.nil?
       end
+      ids
     end
 
     class << self
