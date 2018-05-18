@@ -5,7 +5,11 @@ module SpeedrunDotCom
 
   class Run
     def self.runner_id(id)
-      res = get(id)
+      begin
+        res = get(id)
+      rescue RestClient::NotFound
+        return nil
+      end
       body = JSON.parse(res.body)
 
       body['data']['players'][0]['id']
@@ -40,7 +44,11 @@ module SpeedrunDotCom
 
   class User
     def self.twitch_login(id)
-      res = get(id)
+      begin
+        res = get(id)
+      rescue RestClient::NotFound
+        return nil
+      end
       body = JSON.parse(res.body)
 
       Twitch::User.login_from_url(body['data']['twitch']['uri'])
