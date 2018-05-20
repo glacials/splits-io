@@ -56,7 +56,6 @@ SplitsIO::Application.routes.draw do
 
   get    '/users/:user',         to: 'users#show', as: :user
   delete '/users/:user',         to: 'users#destroy'
-  get    '/users/:user/follows', to: 'users#follows'
 
   get    '/rivals',               to: redirect('/rivalries')
   get    '/rivalries',            to: 'rivalries#index',   as: :rivalries

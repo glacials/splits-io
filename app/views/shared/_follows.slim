@@ -1,31 +1,30 @@
-- cache [:follows, @user] do
-  - if @user.twitch_followed_users.present?
-    h4 Recent PBs By People You Follow
-    .row
-      .col-lg-6
-        .list-group
-          - Run.includes(:game, :category, :user).where( \
-            user: current_user.twitch_followed_users \
-          ).where.not( \
-            games: {name: [nil, ""]} \
-          ).order('runs.created_at DESC').limit(10).each do |run|
-            a.list-group-item href=( \
-              current_user.runs?(run.category) ? compare_path(current_user.pb_for(run.category), run) : run_path(run) \
-            )
-              .media style='margin: .5em 0;'
-                .float-left.mr-3 href=user_path(run.user)
-                  img src=run.user.avatar height=64 width=64
-                .media-body
-                  .float-right = pretty_timestamp(run.created_at)
-                  div
-                    = run.user
-                    - if run.user.silver_patron?
-                      .gold-split title='Patron'
-                  div = "#{run.game} #{run.category}"
-                  div
-                    = format_milliseconds(run.duration_ms(Run::REAL))
-                    - if current_user.runs?(run.category)
-                      - user_pb = current_user.pb_for(run.category)
-                      = " ("
-                      = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
-                      = ")"
+- if current_user.twitch_followed_users.present?
+  h4 Recent PBs By People You Follow
+  .row
+    .col-lg-6
+      .list-group
+        - Run.includes(:game, :category, :user).where( \
+          user: current_user.twitch_followed_users \
+        ).where.not( \
+          games: {name: [nil, ""]} \
+        ).order('runs.created_at DESC').limit(10).each do |run|
+          a.list-group-item href=( \
+            current_user.runs?(run.category) ? compare_path(current_user.pb_for(run.category), run) : run_path(run) \
+          )
+            .media style='margin: .5em 0;'
+              .float-left.mr-3 href=user_path(run.user)
+                img src=run.user.avatar height=64 width=64
+              .media-body
+                .float-right = pretty_timestamp(run.created_at)
+                div
+                  = run.user
+                  - if run.user.silver_patron?
+                    .gold-split title='Patron'
+                div = "#{run.game} #{run.category}"
+                div
+                  = format_milliseconds(run.duration_ms(Run::REAL))
+                  - if current_user.runs?(run.category)
+                    - user_pb = current_user.pb_for(run.category)
+                    = " ("
+                    = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
+                    = ")"
