@@ -29,3 +29,4 @@ article
         p Not sure what Splits I/O is about? #{link_to 'Roll the dice', random_path} to visit a random run.
 - if logged_in?
   article#follows
+    = render partial: 'shared/follows'

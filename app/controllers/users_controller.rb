@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :destroy, :follows]
+  before_action :set_user, only: [:show, :destroy]
   before_action :verify_ownership, only: [:destroy]
 
   def show
@@ -10,10 +10,6 @@ class UsersController < ApplicationController
     current_user.destroy
     auth_session.invalidate!
     redirect_to root_path, alert: 'Your account has been deleted. Go have fun outside :)'
-  end
-
-  def follows
-    render partial: 'shared/follows'
   end
 
   private
