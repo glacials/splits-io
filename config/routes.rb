@@ -100,6 +100,10 @@ SplitsIO::Application.routes.draw do
   delete '/:run',                           to: 'runs#destroy'
 
   namespace :api do
+    namespace :webhooks do
+      post '/patreon', to: 'patreon#create'
+    end
+
     namespace :v4 do
       match '(/*a(/*b(/*c(/*d))))', via: [:options], to: 'application#options'
 
