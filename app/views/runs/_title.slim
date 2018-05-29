@@ -1,9 +1,8 @@
-h3
+h1
   = run.to_s
 - if run.completed?(Run::REAL) && run.completed?(Run::GAME)
   = render partial: 'runs/timing_switch', locals: {timing: timing}
-h5.mt-3
-  div = format_milliseconds(run.duration_ms(timing))
+h4.mt-3
   - if run.user.try(:name)
     small
       span by #{link_to run.user, user_path(run.user), class: 'stealth-link user-link'}

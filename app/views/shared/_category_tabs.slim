@@ -1,4 +1,4 @@
-ul#popular-categories.nav.nav-tabs
+ul.nav.nav-bordered
   - (game.popular_categories | [current_category]).each do |category|
     - is_current_category = category == current_category ? 'active' : ''
     li.nav-item

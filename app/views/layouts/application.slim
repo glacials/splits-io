@@ -9,7 +9,10 @@ html
     = render partial: 'shared/rollbarjs'
     = javascript_pack_tag 'application'
     = javascript_include_tag 'application'
+    = javascript_include_tag '/assets/toolkit.min.js'
+    = javascript_include_tag 'https://unpkg.com/tippy.js/dist/tippy.all.min.js'
     = stylesheet_link_tag :application, media: :all
+    = stylesheet_link_tag '/assets/toolkit-inverse.min.css'
     = csrf_meta_tag
     = render partial: 'shared/favicons'
     = render partial: 'shared/twitter_card'
@@ -26,7 +29,7 @@ html
           h2
             | failures:
           span#failed-uploads<
-      nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.mb-4
+      nav.navbar.navbar-expand-lg.navbar-dark.mb-4
         .container
           a.navbar-brand href=root_path
             img.logo src='/logo.svg' width='20' height='20'
@@ -65,14 +68,14 @@ html
                     span> = icon("fas", "user")
                     span = current_user
                     span.caret
-                  ul.dropdown-menu.mt-0.border-top-0 role='menu'
+                  ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
                     li.nav-item
                       - if !current_user.patron?
-                        = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank', class: "dropdown-item"
-                      = link_to 'Profile', user_path(current_user), class: "dropdown-item"
-                      = link_to 'Settings', settings_path, class: "dropdown-item"
-                      = link_to 'Tools', tools_path, class: "dropdown-item"
-                      = link_to 'Sign Out', session_path(auth_session), method: :delete, class: "dropdown-item"
+                        = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank', class: 'dropdown-item text-secondary'
+                      = link_to 'Profile', user_path(current_user), class: 'dropdown-item text-secondary'
+                      = link_to 'Settings', settings_path, class: 'dropdown-item text-secondary'
+                      = link_to 'Tools', tools_path, class: 'dropdown-item text-secondary'
+                      = link_to 'Sign Out', session_path(auth_session), method: :delete, class: 'dropdown-item text-secondary'
               - else
                 li.nav-item
                   a.nav-link.px-3 href='/auth/twitch' Sign Up

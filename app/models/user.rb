@@ -54,7 +54,11 @@ class User < ApplicationRecord
   end
 
   def pb_for(category)
-    runs.where(category: category).order(:realtime_duration_ms).first
+    runs.where(category: category).order(realtime_duration_ms: :asc).first
+  end
+
+  def previous_upload_for(category)
+    runs.where(category: category).order(created_at: :desc).second
   end
 
   def pbs

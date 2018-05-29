@@ -73,7 +73,7 @@ SplitsIO::Application.routes.draw do
   get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
   patch '/games/:game',      to: 'games#update'
 
-  post '/games/:game/aliases', to: 'game_aliases#create', as: :game_aliases
+  post '/games/:game/aliases', to: 'games/aliases#create', as: :game_aliases
 
   get '/games/:game/categories',           to: redirect('/games/%{game}')
   get '/games/:game/categories/:category', to: 'games/categories#show', as: :game_category
