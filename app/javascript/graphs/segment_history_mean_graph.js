@@ -44,7 +44,7 @@ const build_segment_history_mean_graph = function(run) {
       text: 'Split History Mean vs Golds'
     },
     subtitle: {
-      text: 'Calculated: Mean Of Each Segments History - Segment Gold'
+      text: 'Calculated: (Mean Of Each Segment\'s History - Segment Gold)'
     },
     tooltip: {
       pointFormat: 'Time Save: {point.y:.1f}s',

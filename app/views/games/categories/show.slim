@@ -1,20 +1,51 @@
 - title @game.name
 - content_for(:header) do
-  ol.breadcrumb
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
     li.breadcrumb-item = link_to "Games", games_path
     li.breadcrumb-item = link_to @category.game, game_path(@category.game)
     - unless @on_game_page
       li.breadcrumb-item = link_to @category, game_category_path(@game, @category)
-  h3 = @category.game
+  h1 = @category.game
+  - if @game.aliases.where.not(name: @game.name).present?
+    h6 Also known as:
+    ul
+      - @game.aliases.where.not(name: @game.name).each do |game_alias|
+        li = game_alias
   h6
     ul.run-options
+      - if @game.srl_uri.present?
+        li = link_to image_tag(asset_path("srl.png")), @game.srl_uri
       - if can?(:edit, @game)
-        li = link_to 'edit', edit_game_path(@game)
-  - if @game.srl_uri.present?
-    = link_to image_tag(asset_path("srl.png")), @game.srl_uri
+        li
+          a.btn.btn-outline-success href=edit_game_path(@game)
+            i.fas.fa-edit>
+            span Edit
 
 article data-turbolinks-temporary=true
-  = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
-  = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
+  .row
+    .col-sm-3.mb-3
+      .statcard.p-3
+        h3.statcard-number = @game.users.count
+        span.statcard-desc = 'Runner'.pluralize(@game.users.count)
+    .col-sm-3.mb-3
+      .statcard.p-3
+        h3.statcard-number = @game.runs.count
+        span.statcard-desc = 'Run'.pluralize(@game.runs.count)
+    .col-sm-3.mb-3
+      .statcard.p-3
+        h3.statcard-number = @game.categories.count
+        span.statcard-desc = 'Category'.pluralize(@game.categories.count)
+    - if @game.runs.any?
+      .col-sm-3.mb-3
+        .statcard.p-3
+          h3.statcard-number = time_ago_in_words(@game.runs.order(created_at: :desc).first.created_at)
+          span.statcard-desc
+            span> Time since
+            = link_to('last run', @game.runs.order(created_at: :desc).first, class: 'text-muted')
+  .card
+    .card-header
+      = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
+    = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
   center
     small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'

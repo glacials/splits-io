@@ -1,6 +1,7 @@
 - title 'Search'
 - content_for(:header) do
-  ol.breadcrumb
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
     li.breadcrumb-item = link_to "Search", search_path
   h2 Search
 
@@ -16,7 +17,7 @@ article#search-results
   - @results.each do |search_type, results|
     - if results.present?
       h4 = search_type.to_s.capitalize
-      .card.mb-3
+      .card.mb-3.shadow
         table.card-body.table.table-striped.mb-0
           tbody
             - results.each do |obj|
@@ -33,4 +34,4 @@ article#search-results
 article#runs
   - if @results[:games].present?
     h4 Runs
-    = render partial: 'shared/run_table', locals: table_locals(:games, games: @results[:games])
+    .card.shadow = render partial: 'shared/run_table', locals: table_locals(:games, games: @results[:games])

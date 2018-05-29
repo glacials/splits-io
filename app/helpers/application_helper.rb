@@ -28,4 +28,18 @@ module ApplicationHelper
       why_darkmode: request.path == why_darkmode_path
     }
   end
+
+  def user_badge(user)
+    classes = ["badge"]
+    title = nil
+    if user.silver_patron?
+      classes << "badge-warning"
+      classes << "tip-top"
+      title = "#{user} is a Splits I/O Patron!"
+    else
+      classes << "badge-secondary"
+    end
+
+    "<a class=\"#{classes.join(' ')}\" href=\"#{user_path(user)}\" #{"title='#{title}'" if title.present?}>#{user}</a>".html_safe
+  end
 end

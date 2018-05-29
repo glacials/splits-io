@@ -62,6 +62,25 @@ module RunsHelper
     end
   end
 
+  def th_sorter(name, param_name)
+    classes = []
+    if params[:by] == param_name
+      case params[:order]
+      when 'desc'
+        classes << 'headerSortUp'
+      when 'asc'
+        classes << 'headerSortDown'
+      end
+    end
+
+    p = request.query_parameters.merge(
+      by: param_name,
+      order: (params[:by] == param_name && params[:order] == 'asc') ? 'desc' : 'asc'
+    ).to_param
+
+    link_to name, "?#{p}", class: classes.join(' ')
+  end
+
   def next_timeline_color(timeline_id)
     @next_index = {} if @next_index.blank?
 
@@ -97,7 +116,7 @@ module RunsHelper
     "<span class=\"text-warning\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
   end
 
-  def format_milliseconds(milliseconds)
+  def format_ms(milliseconds)
     return '-' if milliseconds.nil?
 
     total_seconds = milliseconds / 1000
@@ -109,6 +128,33 @@ module RunsHelper
     hours   = total_hours
 
     format('%02d:%02d:%02d', hours, minutes, seconds)
+  end
+
+  def format_milliseconds(milliseconds)
+    format_ms(milliseconds)
+  end
+
+  def format_ms_casual(milliseconds)
+    return '-' if milliseconds.nil?
+
+    total_seconds = milliseconds / 1000
+    total_minutes = total_seconds / 60
+    total_hours   = total_minutes / 60
+
+    seconds = total_seconds % 60
+    minutes = total_minutes % 60
+    hours   = total_hours
+
+    if hours.zero?
+      if minutes.zero?
+        if seconds.zero?
+          return "#{milliseconds}ms"
+        end
+        return "#{seconds.to_i}s"
+      end
+      return "#{minutes.to_i}m #{seconds.to_i}s"
+    end
+    return "#{hours.to_i}h #{minutes.to_i}m"
   end
 
   private

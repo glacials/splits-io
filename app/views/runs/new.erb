@@ -1,5 +1,9 @@
 <% title "upload" %>
 <% content_for(:header) do %>
+  <ol class="breadcrumb shadow">
+    <li class="breadcrumb-item"><%= link_to "Splits I/O", root_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Upload", new_run_path %></li>
+  </ol>
   <% # We don't need this, but LiveSplit does until their next release. Without it, sharing via LiveSplit breaks. %>
   <meta content="" name='<meta content="" name="csrf-token" />' />
   <h2>drop it like it's hot</h2>

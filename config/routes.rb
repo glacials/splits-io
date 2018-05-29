@@ -34,11 +34,10 @@ SplitsIO::Application.routes.draw do
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
-  get  '/convert',    to: 'converts#new'
+  get  '/convert', to: 'converts#new'
 
-  get '/search',        to: 'search#index'
-  get '/search(?q=:q)', to: 'search#index'
-  get '/search/:q',     to: redirect('/search?q=%{q}')
+  get '/search',    to: 'search#index'
+  get '/search/:q', to: redirect('/search?q=%{q}')
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:run/download/:timer',         to: 'runs#download', as: :download
@@ -54,14 +53,14 @@ SplitsIO::Application.routes.draw do
 
   resources :sessions, only: [:destroy]
 
-  get    '/users/:user',         to: 'users#show', as: :user
-  delete '/users/:user',         to: 'users#destroy'
+  get    '/users/:user', to: 'users#show', as: :user
+  delete '/users/:user', to: 'users#destroy'
 
-  get    '/rivals',               to: redirect('/rivalries')
-  get    '/rivalries',            to: 'rivalries#index',   as: :rivalries
-  get    '/rivalries/new',        to: 'rivalries#new',     as: :new_rivalry
-  post   '/rivalries',            to: 'rivalries#create'
-  delete '/rivalries/:rivalry',   to: 'rivalries#destroy', as: :rivalry
+  get    '/rivals',             to: redirect('/rivalries')
+  get    '/rivalries',          to: 'rivalries#index',   as: :rivalries
+  get    '/rivalries/new',      to: 'rivalries#new',     as: :new_rivalry
+  post   '/rivalries',          to: 'rivalries#create'
+  delete '/rivalries/:rivalry', to: 'rivalries#destroy', as: :rivalry
 
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 
@@ -73,7 +72,7 @@ SplitsIO::Application.routes.draw do
   get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
   patch '/games/:game',      to: 'games#update'
 
-  post '/games/:game/aliases', to: 'game_aliases#create', as: :game_aliases
+  post '/games/:game/aliases', to: 'games/aliases#create', as: :game_aliases
 
   get '/games/:game/categories',           to: redirect('/games/%{game}')
   get '/games/:game/categories/:category', to: 'games/categories#show', as: :game_category
@@ -82,9 +81,9 @@ SplitsIO::Application.routes.draw do
     to: 'games/categories/leaderboards/sum_of_bests#index',
     as: :game_category_sum_of_bests
 
-  resources :tools, only: [:index]
+  get '/tools', to: 'tools#index'
 
-  get    '/settings',                           to: 'settings#index',       as: :settings
+  get    '/settings', to: 'settings#index',       as: :settings
 
   get    '/settings/applications/new',            to: 'applications#new',                as: :new_application
   post   '/settings/applications',                to: 'applications#create',             as: :applications
@@ -114,7 +113,7 @@ SplitsIO::Application.routes.draw do
       get '/games/:game/runners',    to: 'games/runners#index'
       get '/games/:game/runs',       to: 'games/runs#index'
 
-      get '/categories/:category', to: 'categories#show', as: 'category'
+      get '/categories/:category',         to: 'categories#show', as: 'category'
       get '/categories/:category/runners', to: 'categories/runners#index'
       get '/categories/:category/runs',    to: 'categories/runs#index'
 
