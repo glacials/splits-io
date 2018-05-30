@@ -4,12 +4,14 @@
 - content_for(:header) do
   - if @run.game.present? && @run.category.present?
     ol.breadcrumb
+      li.breadcrumb-item = link_to "Games", games_path
       li.breadcrumb-item = link_to @run.game, game_path(@run.game)
       li.breadcrumb-item = link_to @run.category, game_category_path(@run.game, @run.category)
       li.breadcrumb-item = link_to @run.id36, run_path(@run)
       li.breadcrumb-item.active Edit
   = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
+= render partial: 'runs/quick_stats', locals: {run: @run, timing: timing}
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article

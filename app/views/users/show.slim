@@ -1,5 +1,8 @@
 - title @user.name
 - content_for(:header) do
+  ol.breadcrumb
+    li.breadcrumb-item Users
+    li.breadcrumb-item = link_to @user, user_path(@user)
   h2
     span style="margin-right: .5em;"
       img src=@user.avatar width=50 height=50

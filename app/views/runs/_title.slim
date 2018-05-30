@@ -5,9 +5,11 @@ h1
 h4.mt-3
   - if run.user.try(:name)
     small
-      span by #{link_to run.user, user_path(run.user), class: 'stealth-link user-link'}
-      - if run.user.silver_patron?
-        .gold-split title='Patron'
+      span> by
+      span = user_badge(run.user)
+      .badge
+        i.fas.fa-check>
+        span Personal Best
 
 ul.run-options
   li
@@ -23,36 +25,40 @@ ul.run-options
     - if run.category
       - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
         li
-          a href=compare_path(current_user.pb_for(run.category), run)
-            button.btn.btn-outline-light
-              i.fas.fa-chart-bar
-              span Compare to mine
+          a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
+            i.fas.fa-chart-bar>
+            span Compare to mine
       - if run.pb?
         - if run.belongs_to?(current_user) && run.category.best_known_run(timing).present?
           li
-            a href=compare_path(run, run.category.best_known_run(timing))
-              button.btn.btn-outline-success Compare to best on site
-        li
-          button.btn.btn-outline-light
-            i.fas.fa-fighter-jet>
-            span Personal best
+            a.btn.btn-outline-success  href=compare_path(run, run.category.best_known_run(timing))
+              i.fas.fa-chart-bar>
+              span Compare to Best on Site
+  li
+    a.btn.btn-outline-success href=run_stats_path(run, params: {timing: params[:timing]})
+      i.fas.fa-chart-pie>
+      span Stats
   - if run.srdc_id.present?
     li
-      button.btn.btn-outline-primary = link_to 'Speedrun.com', run.srdc_url
+      a.btn.btn-outline-light target='_blank' href=run.srdc_url
+        i.fas.fa-trophy>
+        span Speedrun.com
   - if run.video_url.present?
+    - uri = URI.parse(run.video_url)
     li
-      button.btn.btn-outline-primary = link_to 'Video', run.video_url
-  li
-    a href=run_stats_path(run, params: {timing: params[:timing]})
-      button.btn.btn-outline-success
-        i.fas.fa-chart-pie>
-        span Stats
+      a.btn.btn-outline-light target='_blank' href=run.video_url
+        - if uri.host.match?(/^(www\.)?(twitch\.tv)$/)
+          i.fab.fa-twitch>
+        - elsif uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
+          i.fab.fa-youtube>
+        - else
+          i.fas.fa-video>
+        span Video
   - if can?(:edit, run)
     li
-      a href=edit_run_path(run)
-        button.btn.btn-outline-primary
-          i.fas.fa-edit>
-          span Edit
+      a.btn.btn-outline-success href=edit_run_path(run)
+        i.fas.fa-edit>
+        span Edit
   - if run.user.nil?
     li#claim-nav-link-container style='display: none;'
       - if current_user.present?

@@ -8,9 +8,10 @@
       li.breadcrumb-item = link_to @run.game, game_path(@run.game)
       li.breadcrumb-item = link_to @run.category, game_category_path(@run.game, @run.category)
       li.breadcrumb-item = link_to @run.id36, run_path(@run)
-      li.breadcrumb-item.active = link_to "Statistics", run_stats_path(@run)
+      li.breadcrumb-item.active = link_to "Stats", run_stats_path(@run)
   = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
+= render partial: 'runs/quick_stats', locals: {run: @run, timing: timing}
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article#stats
