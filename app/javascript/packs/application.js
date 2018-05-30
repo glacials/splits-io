@@ -16,7 +16,6 @@ import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
 import * as Cookies from "js-cookie"
-import "tipsy"
 import "jquery.turbolinks"
 
 global.moment = moment

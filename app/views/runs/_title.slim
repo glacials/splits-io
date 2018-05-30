@@ -8,42 +8,58 @@ h4.mt-3
       span by #{link_to run.user, user_path(run.user), class: 'stealth-link user-link'}
       - if run.user.silver_patron?
         .gold-split title='Patron'
-h6
 
-  ul.run-options
+ul.run-options
+  li
+    button#download-link.btn.btn-outline-success.dropdown-toggle href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'
+      i.fas.fa-download>
+      span Download
+    .dropdown-menu.bg-dark aria-labelledby='download-link'
+      - timer = Run.program(run.timer)
+      a.dropdown-item.text-secondary href=download_path(run, timer.to_sym) = timer
+      a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank' LiveSplit One
+      - (Run.exportable_programs - [Run.program(run.timer)]).each do |timer|
+        a.dropdown-item.text-secondary href=download_path(run, timer.to_sym) = timer
+    - if run.category
+      - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
+        li
+          a href=compare_path(current_user.pb_for(run.category), run)
+            button.btn.btn-outline-light
+              i.fas.fa-chart-bar
+              span Compare to mine
+      - if run.pb?
+        - if run.belongs_to?(current_user) && run.category.best_known_run(timing).present?
+          li
+            a href=compare_path(run, run.category.best_known_run(timing))
+              button.btn.btn-outline-success Compare to best on site
+        li
+          button.btn.btn-outline-light
+            i.fas.fa-fighter-jet>
+            span Personal best
+  - if run.srdc_id.present?
     li
-      a.fake-link#download-link onclick='toggle_download_menu()' ↓ download
-      - if run.category
-        - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
-          li = link_to 'compare to my pb', compare_path(current_user.pb_for(run.category), run)
-        - if run.best_known?(timing)
-          li ✓ best on record
-        - elsif run.pb?
-          - if run.belongs_to?(current_user) && run.category.best_known_run(timing).present?
-            li = link_to 'compare to best on record', compare_path(run, run.category.best_known_run(timing))
-          li ✓ pb
-    - if run.srdc_id.present?
-      li = link_to 'speedrun.com', run.srdc_url
-    - if run.video_url.present?
-      li = link_to 'proof', run.video_url
-    li = link_to 'stats', run_stats_path(run, params: {timing: params[:timing]})
-    - if can?(:edit, run)
-      li = link_to 'edit', edit_run_path(run)
-    - if run.user.nil?
-      li#claim-nav-link-container style='display: none;'
-        - if current_user.present?
-          = link_to "claim", '#', id: 'claim-nav-link', data: {confirm: "Claim this run as #{current_user.twitch_display_name}?"}
-        - else
-          = link_to "sign in to claim", '/auth/twitch'
+      button.btn.btn-outline-primary = link_to 'Speedrun.com', run.srdc_url
+  - if run.video_url.present?
+    li
+      button.btn.btn-outline-primary = link_to 'Video', run.video_url
+  li
+    a href=run_stats_path(run, params: {timing: params[:timing]})
+      button.btn.btn-outline-success
+        i.fas.fa-chart-pie>
+        span Stats
+  - if can?(:edit, run)
+    li
+      a href=edit_run_path(run)
+        button.btn.btn-outline-primary
+          i.fas.fa-edit>
+          span Edit
+  - if run.user.nil?
+    li#claim-nav-link-container style='display: none;'
+      - if current_user.present?
+        = link_to "claim", '#', id: 'claim-nav-link', data: {confirm: "Claim this run as #{current_user.twitch_display_name}?"}
+      - else
+        = link_to "sign in to claim", '/auth/twitch'
 
-  div#download-menu
-    - timer = Run.program(run.timer)
-    => link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
-    | &bull;
-    =<> link_to 'LiveSplit One', "https://one.livesplit.org/#/splits-io/#{run.id36}", target: '_blank'
-    - (Run.exportable_programs - [Run.program(run.timer)]).each do |timer|
-      | &bull;
-      =<> link_to timer.to_s, download_path(run, timer.to_sym), onclick: 'hide_download_menu()'
 article#claim-prompt style='display: none;'
   .col-lg-6.offset-lg-3
     .card

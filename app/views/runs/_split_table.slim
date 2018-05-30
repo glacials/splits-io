@@ -55,8 +55,9 @@
             - else
               td.align-right = format_milliseconds(segment.end_ms(timing))
           td.align-right
-            a.segment-graph-toggler href='#' data-segment=segment.id data-collapsed='1' View History
+            a.segment-graph-toggler.btn.btn-outline-primary href='#' data-segment=segment.id data-collapsed='1'
+              | View History
           tr.collapsed
             td colspan='999' style='margin: 0; padding: 0;'
               .card.border-0.m-0.p-0
-                .card-body.segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
+                .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
