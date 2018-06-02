@@ -1,16 +1,15 @@
 class Api::Webhooks::PatreonController < ApplicationController
   before_action :set_patreon_user
-  before_action :set_pledge_cents
   before_action :verify_signature
 
   def create
     case request.headers['X-Patreon-Event']
     when 'pledges:create'
-      @platreon_user.update(pledge_cents: pledge_cents, pledge_created_at: pledge_created_at)
+      @patreon_user.update(pledge_cents: pledge_cents, pledge_created_at: pledge_created_at)
     when 'pledges:update'
-      @platreon_user.update(pledge_cents: pledge_cents)
+      @patreon_user.update(pledge_cents: pledge_cents)
     when 'pledges:delete'
-      @platreon_user.update(pledge_cents: 0)
+      @patreon_user.update(pledge_cents: 0)
     else
       Rollbar.warn("Unknown Patreon webhook #{request.headers['X-Patreon-Event']}")
     end
