@@ -16,7 +16,7 @@ module TwitchUser
         end)
 
         (old_followed_users - current_followed_users).each do |u|
-          TwitchUserFollow.find(from_user: self, to_user: u).destroy
+          TwitchUserFollow.find_by(from_user: self, to_user: u).destroy
         end
 
         success = true
