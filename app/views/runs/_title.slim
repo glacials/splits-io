@@ -1,15 +1,12 @@
-h1
-  = run.to_s
-- if run.completed?(Run::REAL) && run.completed?(Run::GAME)
-  = render partial: 'runs/timing_switch', locals: {timing: timing}
-h4.mt-3
+h1 = run.to_s
+h5
   - if run.user.try(:name)
-    small
-      span> by
-      span = user_badge(run.user)
-      .badge
-        i.fas.fa-check>
-        span Personal Best
+    span> by
+    span = user_badge(run.user)
+    .badge
+      i.fas.fa-check>
+      span Personal Best
+  = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
 
 ul.run-options
   li

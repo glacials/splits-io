@@ -15,6 +15,8 @@ class RunValidator < ActiveModel::Validator
   def validate_video_url(record)
     record.video_url = nil if record.video_url.try(:strip) == ''
 
+    return if record.video_url.nil?
+
     uri = URI.parse(record.video_url)
 
     if uri.host.nil?
