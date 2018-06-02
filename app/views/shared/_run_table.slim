@@ -62,4 +62,4 @@
             - if cols.include?(:uploaded)
               td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
   .mx-auto
-    = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')
+    = paginate(runs, remote: true, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')

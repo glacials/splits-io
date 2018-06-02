@@ -21,7 +21,7 @@ article
     .col-lg-12
       - if logged_in?
         - if current_user.runs.present?
-          .card = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
+          .card.shadow = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
         - else
           .jumbotron
             h4 Drag and drop as many runs as you want right here
