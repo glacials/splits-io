@@ -1,5 +1,8 @@
 - title 'about'
 - content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
+    li.breadcrumb-item = link_to "FAQ", faq_path
   h2 faq + friends
 article
   h3 faq

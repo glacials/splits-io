@@ -1,7 +1,7 @@
 - title @user.name
 - content_for(:header) do
-  ol.breadcrumb
-    li.breadcrumb-item Users
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
     li.breadcrumb-item = link_to @user, user_path(@user)
   h2
     span style="margin-right: .5em;"

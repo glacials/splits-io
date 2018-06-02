@@ -1,5 +1,8 @@
 - title "settings"
 - content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to 'Splits I/O', root_path
+    li.breadcrumb-item = link_to 'Settings', settings_path
   h2 Settings
 - if current_user.nil?
   article You need to be signed in to view this page.

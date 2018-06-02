@@ -1,6 +1,10 @@
 - title 'Set a rival'
 - content_for(:header) do
-  h2 appoint a rival
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
+    li.breadcrumb-item = link_to 'Rivals', rivalries_path
+    li.breadcrumb-item = link_to 'Add', new_rivalry_path
+  h2 Appoint a Rival
   - if @category.present?
     h5
       = link_to @category.game, @category.game, class: 'stealth-link game-link'
