@@ -23,11 +23,12 @@ dependencies. The one downside is that you must first install Docker!
 
 ### First run
 The first time you run Splits I/O with Docker is the best, because you'll have time to get a coffee! Yum! After the
-first run, it will be much quicker (on Linux, docker commands may need to be prefixed with sudo).
+first run, it will be much quicker.
 ```sh
-docker-compose up
+make
 ```
-Once the output looks settled, you're good to go! Access [localhost:3000][localhost] in your browser.
+Once the output looks settled, you're good to go! Access [localhost:3000][localhost] in your browser. The first page
+load after a new build may also take a minute.
 
 [localhost]: http://localhost:3000/
 
@@ -40,10 +41,11 @@ http://localhost:3000/auth/twitch/callback
 ```
 Twitch will give you a client ID and a client secret. Open `Dockerfile` and find the spots to fill in. Then run
 ```sh
-git update-index --skip-worktree Dockerfile # to avoid accidentally committing your changes
-docker-compose build
+make build
 ```
 before starting the server again and you're set!
+
+*Note: Never commit your client ID or secret!*
 
 ### Debugging
 #### Getting up and running
@@ -53,21 +55,29 @@ out everything (even if the only thing preventing you from setting up is better 
 
 #### Working with the code
 If you have the app up and running but are looking for insight into debugging your own changes, you can access a Rails
-console with
+console inside the Docker container with
 ```sh
-docker-compose run web rails console
+make console
 ```
 
 ### Running tests
-To run tests, use
+To run tests from inside the Docker container, use
 ```sh
-docker-compose run -e RAILS_ENV=test web rspec
+make test
 ```
+
+### Running Rubocop
+We use [Rubocop][rubocop] for code cleanliness and styling. To run it against changed files, commit your changes and run
+```sh
+make rubocop
+```
+
+[rubocop]: https://github.com/rubocop-hq/rubocop
 
 ### Updating gems or Docker
 If you change the Dockerfile or Gemfile, you'll need to run
 ```sh
-docker-compose build
+make build
 ```
 to rebuild the Docker image for your changes to apply.
 
@@ -76,7 +86,7 @@ to rebuild the Docker image for your changes to apply.
 Splits I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`. To upgrade it,
 run
 ```sh
-docker-compose run web bundle exec rake update_lsc
+make update_lsc
 ```
 and commit the changes.
 
