@@ -4,7 +4,7 @@
 - content_for(:header) do
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to "Splits I/O", root_path
-  - if @run.game.present? && @run.category.present?
+    - if @run.game.present? && @run.category.present?
       li.breadcrumb-item = link_to "Games", games_path
       li.breadcrumb-item = link_to @run.game, game_path(@run.game)
       li.breadcrumb-item = link_to @run.category, game_category_path(@run.game, @run.category)
