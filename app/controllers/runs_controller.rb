@@ -1,4 +1,3 @@
-require 'htmlentities'
 require 'uri'
 
 require 'speedrundotcom'
