@@ -61,13 +61,13 @@ class Game < ApplicationRecord
   def popular_categories
     categories.joins(:runs).group('categories.id')
               .having('count(runs.id) >= ' + (Run.where(category: categories).count * 0.05).to_s)
-              .order('count(runs.id) desc')
+              .order(Arel.sql('count(runs.id) desc'))
   end
 
   def unpopular_categories
     categories.joins(:runs).group('categories.id')
               .having('count(runs.id) < ' + (Run.where(category: categories).count * 0.05).to_s)
-              .order('count(runs.id) desc')
+              .order(Arel.sql('count(runs.id) desc'))
   end
 
   # merge_into! changes ownership of all of this game's categories and aliases to the given game, then destroys this
