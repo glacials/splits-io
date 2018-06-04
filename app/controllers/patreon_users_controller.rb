@@ -52,7 +52,7 @@ class PatreonUsersController < ApplicationController
   end
 
   def unlink
-    current_user.patreon.destroy
+    current_user.patreon.try(:destroy)
 
     redirect_to settings_path, notice: 'Patreon account unlinked :)'
   end

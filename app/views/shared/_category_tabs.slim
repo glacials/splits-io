@@ -3,9 +3,9 @@ ul#popular-categories.nav.nav-tabs
     - is_current_category = category == current_category ? 'active' : ''
     li.nav-item
       - if link_type == :sum_of_best
-        = link_to category, game_category_sum_of_bests_path(game, category), class: "nav-link #{is_current_category}"
+        = link_to(category, game_category_sum_of_bests_path(game, category), class: "nav-link #{is_current_category}")
       - else
-        = link_to category, game_category_path(game, category), class: "nav-link #{is_current_category}"
+        = link_to(category, game_category_path(game, category), class: "nav-link #{is_current_category}")
   - if (game.unpopular_categories - [current_category]).present?
     li.nav-item.dropdown
       a.nav-link.dropdown-toggle data-toggle='dropdown' href='#' aria-expanded='false' role='button'
