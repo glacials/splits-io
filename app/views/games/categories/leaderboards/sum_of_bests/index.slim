@@ -29,10 +29,10 @@ article data-turbolinks-temporary=true
             tr id=[:run, pb.id]
               td.align-right = i += 1
               td.align-left = link_to runner, runner, class: 'user-link'
-              td.align-left = format_milliseconds(pb.sum_of_best_ms(Run::REAL))
+              td.align-left = format_ms(pb.sum_of_best_ms(Run::REAL))
               td.align-left
-                small = link_to format_milliseconds(pb.duration_ms(Run::REAL)), pb
+                small = link_to format_ms(pb.duration_ms(Run::REAL)), pb
               td.align-left
-                small = format_milliseconds(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
+                small = format_ms(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
     center
       small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'

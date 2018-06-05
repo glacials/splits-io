@@ -15,12 +15,12 @@
           = '???'
       span
         - if from_user_pb.present?
-          = link_to(format_milliseconds(from_user_pb.duration_ms(timing)), from_user_pb, class: 'stealth-link run-link')
+          = link_to(format_ms(from_user_pb.duration_ms(timing)), from_user_pb, class: 'stealth-link run-link')
         - else
           = '-'
       small< pb
       br
-      span = format_milliseconds(from_user_pb.sum_of_best_ms(timing)) || '0'
+      span = format_ms(from_user_pb.sum_of_best_ms(timing)) || '0'
       small< sum of best
   .media.col-lg-2 style='text-align: center; margin: .5em 0;'
     .media-body
@@ -38,10 +38,10 @@
           '???'
       span
         - if to_user_pb.present?
-          = link_to(format_milliseconds(to_user_pb.duration_ms(timing)), to_user_pb, class: 'stealth-link run-link')
+          = link_to(format_ms(to_user_pb.duration_ms(timing)), to_user_pb, class: 'stealth-link run-link')
         - else
           = '-'
       small< pb
       br
-      span = format_milliseconds(to_user_pb.sum_of_best_ms(timing)) || '0'
+      span = format_ms(to_user_pb.sum_of_best_ms(timing)) || '0'
       small< sum of best

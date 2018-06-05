@@ -5,7 +5,7 @@ article data-turbolinks-temporary=true
     .col-sm-3
       .statcard.p-3
         h2.statcard-number
-          span> = format_milliseconds(run.duration_ms(timing))
+          span> = format_ms(run.duration_ms(timing))
           - if previous_upload.present?
             - if run.duration_ms(timing) <= previous_upload.duration_ms(timing)
               small.delta-indicator.delta-negative.text-success.tip-top title='Since last PB'
@@ -17,14 +17,14 @@ article data-turbolinks-temporary=true
     .col-sm-3
       .statcard.p-3
         h3.statcard-number
-          span> = format_milliseconds(run.sum_of_best_ms(timing))
+          span> = format_ms(run.sum_of_best_ms(timing))
           - if previous_upload.present?
             small.delta-indicator.delta-negative.text-success.tip-top title='Since last PB'
               = format_ms_casual(previous_upload.sum_of_best_ms(timing) - run.sum_of_best_ms(timing))
         span.statcard-desc = 'Sum of best'
     .col-sm-3
       .statcard.p-3
-        h3.statcard-number = format_milliseconds(run.duration_ms(timing) - run.sum_of_best_ms(timing))
+        h3.statcard-number = format_ms(run.duration_ms(timing) - run.sum_of_best_ms(timing))
         span.statcard-desc Potential timesave
     .col-sm-3
       .statcard.p-3
@@ -42,7 +42,7 @@ article data-turbolinks-temporary=true
     .col-sm-3
       .statcard.p-3
         h3.statcard-number
-          span = format_milliseconds(run.total_playtime_ms(timing))
+          span = format_ms(run.total_playtime_ms(timing))
           - if previous_upload.present?
             small.delta-indicator.delta-positive.text-success.tip-top title='Since last PB'
               = format_ms_casual(run.total_playtime_ms(timing) - previous_upload.total_playtime_ms(timing))

@@ -34,4 +34,7 @@ article#search-results
 article#runs
   - if @results[:games].present?
     h4 Runs
-    .card.shadow = render partial: 'shared/run_table', locals: table_locals(:games, games: @results[:games])
+    .card.shadow = render partial: 'shared/run_table', locals: { \
+      runs: Run.by_game(@results[:games]).nonempty.unarchived, \
+      cols: %i[runner timer name uploaded] \
+    }.merge(sorting_info)

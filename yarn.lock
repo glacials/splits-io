@@ -5589,6 +5589,12 @@ tiny-emitter@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.0.2.tgz#82d27468aca5ade8e5fd1e6d22b57dd43ebdfb7c"
 
+tippy.js@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-2.5.2.tgz#01de112a80219032a3cf06ac2d29a4d69480705d"
+  dependencies:
+    popper.js "^1.14.3"
+
 to-arraybuffer@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz#7d229b1fcc637e466ca081180836a7aabff83f43"

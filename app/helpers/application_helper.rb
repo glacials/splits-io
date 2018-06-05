@@ -4,42 +4,35 @@ module ApplicationHelper
   end
 
   def order_runs(runs)
-    col = case params[:by]
-          when 'created_at'
-            'created_at'
-          when 'time'
-            'realtime_duration_ms'
-          when 'user_id'
-            'user_id'
-          end
-
-    dir = params[:order].to_sym if col && %w[asc desc].include?(params[:order])
-    runs.order((col || 'created_at') => (dir || 'desc'))
+    dir = %w[asc desc].include?(params[:order]) ? params[:order] : 'desc'
+    runs.order(by(params[:by]) => dir)
   end
 
-  def on_page
-    {
-      index: request.path == root_path,
-      upload: request.path == new_run_path,
-      games: request.path.match(games_path),
-      rivalries: current_user.present? && request.path == rivalries_path,
-      faq: request.path == faq_path,
-      profile: logged_in? && [user_path(current_user), tools_path].include?(request.path),
-      why_darkmode: request.path == why_darkmode_path
-    }
+  def on_a_profile_page?
+    current_user.present? && [user_path(current_user), settings_path, tools_path].include?(request.path)
   end
 
   def user_badge(user)
-    classes = ["badge"]
+    classes = ['badge']
     title = nil
     if user.silver_patron?
-      classes << "badge-warning"
-      classes << "tip-top"
+      classes << 'badge-warning'
+      classes << 'tip-top'
       title = "#{user} is a Splits I/O Patron!"
     else
-      classes << "badge-secondary"
+      classes << 'badge-secondary'
     end
 
-    "<a class=\"#{classes.join(' ')}\" href=\"#{user_path(user)}\" #{"title='#{title}'" if title.present?}>#{user}</a>".html_safe
+    link_to(user, user_path(user), class: classes.join(' '), title: title)
+  end
+
+  private
+
+  def by(param)
+    {
+      'created_at' => :created_at,
+      'time'       => :realtime_duration_ms,
+      'user_id'    => :user_id
+    }[param] || :created_at
   end
 end

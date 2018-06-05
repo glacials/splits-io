@@ -152,7 +152,7 @@ article#danger-zone.danger
                         big Delete
                       small
                         = "#{@run} in "
-                        = format_milliseconds(@run.realtime_duration_ms)
+                        = format_ms(@run.realtime_duration_ms)
         .col-lg-6
           .card
             .card-header.text-white Disown
@@ -172,4 +172,4 @@ article#danger-zone.danger
                         big Disown
                       small
                         = "#{@run} in "
-                        = format_milliseconds(@run.realtime_duration_ms)
+                        = format_ms(@run.realtime_duration_ms)

@@ -12,7 +12,7 @@ SplitsIO::Application.routes.draw do
     resources :patreon_users
     resources :rivalries
 
-    root to: "runs#index"
+    root to: 'runs#index'
   end
 
   use_doorkeeper do
@@ -78,8 +78,8 @@ SplitsIO::Application.routes.draw do
   get '/games/:game/categories/:category', to: 'games/categories#show', as: :game_category
 
   get '/games/:game/categories/:category/leaderboards/sum_of_bests',
-    to: 'games/categories/leaderboards/sum_of_bests#index',
-    as: :game_category_sum_of_bests
+      to: 'games/categories/leaderboards/sum_of_bests#index',
+      as: :game_category_sum_of_bests
 
   get '/tools', to: 'tools#index'
 
@@ -90,12 +90,12 @@ SplitsIO::Application.routes.draw do
   delete '/settings/applications/:application',   to: 'applications#destroy',            as: :application
   delete '/settings/authorizations/:application', to: 'authorized_applications#destroy', as: :authorization
 
-  get    '/:run/edit',                      to: 'runs#edit',        as: :edit_run
-  get    '/:run/stats',                     to: 'runs/stats#index', as: :run_stats
+  get    '/:run/edit',                      to: 'runs#edit',                      as: :edit_run
+  get    '/:run/stats',                     to: 'runs/stats#index',               as: :run_stats
   get    '/:run/stats/run_history.csv',     to: 'runs/stats#run_history_csv',     as: :run_history_csv
   get    '/:run/stats/segment_history.csv', to: 'runs/stats#segment_history_csv', as: :segment_history_csv
+  get    '/:run',                           to: 'runs#show',                      as: :run
   patch  '/:run',                           to: 'runs#update'
-  get    '/:run',                           to: 'runs#show',        as: :run
   delete '/:run',                           to: 'runs#destroy'
 
   namespace :api do
@@ -138,7 +138,7 @@ SplitsIO::Application.routes.draw do
 
     namespace :v3 do
       match '(/*a(/*b(/*c(/*d))))', via: [:options], to: 'application#options'
-      resources :games, only: [:index, :show] do
+      resources :games, only: %i[index show] do
         resources :runs, only: [:index], module: :games
         resources :categories, only: [:show], module: :games do
           resources :runs, only: [:index], module: :categories
@@ -158,7 +158,7 @@ SplitsIO::Application.routes.draw do
         resources :pbs, only: [:index], module: :users
       end
 
-      resources :runs, only: [:show, :create, :destroy] do
+      resources :runs, only: %i[show create destroy] do
         member do
           post :disown
         end

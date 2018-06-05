@@ -10,7 +10,7 @@
   h5
     big
       a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@comparison_run)
-        = format_milliseconds(@comparison_run.duration_ms(timing))
+        = format_ms(@comparison_run.duration_ms(timing))
     => ' by'
     - if @comparison_run.user.present?
       = link_to @comparison_run.user, user_path(@comparison_run.user), class: 'stealth-link user-link'
@@ -28,7 +28,7 @@ hr style='margin: .5em; opacity: 0.25'
   h5
     big
       a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@run)
-        = format_milliseconds(@run.duration_ms(timing))
+        = format_ms(@run.duration_ms(timing))
     => ' by'
     - if @run.user
       = link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'
@@ -53,7 +53,7 @@ hr style='margin: .5em; opacity: 0.25'
     p
       = 'This will get you to a '
       span class=('short' if @run.short?)
-        = format_milliseconds(@run.duration_ms(timing) - improvements.map { |i| i[:time_difference] / 2 }.sum)
+        = format_ms(@run.duration_ms(timing) - improvements.map { |i| i[:time_difference] / 2 }.sum)
       = ', then we\'ll go from there.'
       - if @comparison_run.user.present?
         p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.uri.to_s, target: :_blank}!

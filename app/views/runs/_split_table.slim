@@ -19,11 +19,11 @@
             - if segment.skipped?(timing) || segment.reduced?(timing)
               span.time -
             - else
-              span = format_milliseconds(segment.duration_ms(timing))
+              span = format_ms(segment.duration_ms(timing))
           - if segment.skipped?(timing)
             td.align-right.time.align-middle
           - else
-            td.align-right.align-middle = format_milliseconds(segment.end_ms(timing))
+            td.align-right.align-middle = format_ms(segment.end_ms(timing))
           td.align-right
             a.segment-graph-toggler.btn.btn-secondary href='#' data-segment=segment.id data-collapsed='1'
               | View History

@@ -9,10 +9,7 @@ html
     = render partial: 'shared/rollbarjs'
     = javascript_pack_tag 'application'
     = javascript_include_tag 'application'
-    = javascript_include_tag '/assets/toolkit.min.js'
-    = javascript_include_tag 'https://unpkg.com/tippy.js/dist/tippy.all.min.js'
     = stylesheet_link_tag :application, media: :all
-    = stylesheet_link_tag '/assets/toolkit-inverse.min.css'
     = csrf_meta_tag
     = render partial: 'shared/favicons'
     = render partial: 'shared/twitter_card'
@@ -37,11 +34,11 @@ html
           span.navbar-toggler-icon
         .collapse.navbar-collapse#global-nav
           ul.navbar-nav.mr-auto
-            li.nav-item. class=('active' if on_page[:upload])
+            li.nav-item class=('active' if request.path == new_run_path)
               a.nav-link.px-3 href=new_run_path
                 span> = icon("fas", "cloud-upload-alt")
                 | Upload
-            li.nav-item class=('active' if on_page[:rivalries])
+            li.nav-item class=('active' if request.path == rivalries_path)
               a.nav-link.px-3 href=rivalries_path
                 span> = icon("fas", "weight")
                 | My Rivals
@@ -49,7 +46,7 @@ html
               li.nav-item
                 a.nav-link.px-3 href=read_only_mode_path
                   span.text-warning Read-Only Mode Active
-            li.nav-item class=('active' if on_page[:faq])
+            li.nav-item class=('active' if request.path == faq_path)
               a.nav-link.px-3 href=faq_path
                 span> = icon('fas', 'info-circle')
                 | FAQ
@@ -64,7 +61,7 @@ html
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
                 img src='/discord.svg' height='20'
             - if logged_in?
-              li.nav-item.dropdown class=('active' if on_page[:profile])
+              li.nav-item.dropdown class=('active' if on_a_profile_page?)
                 a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
                   span> = icon("fas", "user")
                   span = current_user

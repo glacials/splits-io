@@ -29,7 +29,7 @@ class User < ApplicationRecord
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
-  pg_search_scope :search_for_name, against: [:name, :twitch_display_name], using: :trigram
+  pg_search_scope :search_for_name, against: %i[name twitch_display_name], using: :trigram
 
   def self.search(term)
     term = term.strip

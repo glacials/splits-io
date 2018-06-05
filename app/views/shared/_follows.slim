@@ -22,7 +22,7 @@
                     .gold-split title='Patron'
                 div = "#{run.game} #{run.category}"
                 div
-                  = format_milliseconds(run.duration_ms(Run::REAL))
+                  = format_ms(run.duration_ms(Run::REAL))
                   - if current_user.runs?(run.category)
                     - user_pb = current_user.pb_for(run.category)
                     = " ("

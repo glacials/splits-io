@@ -46,6 +46,9 @@ article data-turbolinks-temporary=true
   .card
     .card-header
       = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
-    = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
+    = render partial: 'shared/run_table', locals: { \
+      runs: @category.runs.nonempty.unarchived, \
+      cols: %i[runner time name uploaded], \
+    }.merge(sorting_info)
   center
     small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'

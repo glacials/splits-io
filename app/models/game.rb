@@ -17,7 +17,7 @@ class Game < ApplicationRecord
   scope :named, -> { where.not(name: nil) }
   scope :shortnamed, -> { where.not(shortname: nil) }
   pg_search_scope :search_both_names,
-                  against: [:name, :shortname],
+                  against: %i[name shortname],
                   using: {
                     tsearch: {},
                     trigram: {only: :name}
@@ -60,30 +60,28 @@ class Game < ApplicationRecord
   end
 
   def popular_categories
-    categories.joins(:runs).group('categories.id').having('count(runs.id) >= ' + (Run.where(category: categories).count * 0.05).to_s).order('count(runs.id) desc')
+    categories.joins(:runs).group('categories.id').having(
+      "count(runs.id) >= #{Run.where(category: categories).count * 0.05}"
+    ).order('count(runs.id) desc')
   end
 
   def unpopular_categories
-    categories.joins(:runs).group('categories.id').having('count(runs.id) < ' + (Run.where(category: categories).count * 0.05).to_s).order('count(runs.id) desc')
+    categories.joins(:runs).group('categories.id').having(
+      "count(runs.id) < #{Run.where(category: categories).count * 0.05}"
+    ).order('count(runs.id) desc')
   end
 
-  # merge_into! changes ownership of all of this game's categories and aliases to the given game, then destroys this
-  # game.
+  # merge_into! changes ownership of this game's categories and aliases to the given game, then destroys this game.
   def merge_into!(game)
     ApplicationRecord.transaction do
-      game.update(shortname: shortname) if shortname.present? && game.shortname.nil?
-
-      aliases.update_all(game_id: game.id)
+      game.update(shortname: game.shortname || shortname)
+      aliases.update_all(game: game)
 
       categories.each do |category|
-        equivalent_category = game.categories.find_by(name: category.name)
-
-        if equivalent_category.present?
-          category.merge_into!(equivalent_category)
-        else
-          category.update(game: game)
-        end
+        equiv = game.categories.find_by(name: category.name)
+        equiv ? category.merge_into!(equiv) : category.update(game: game)
       end
+
       destroy
     end
   end

@@ -13,8 +13,8 @@
               .call-to-action = next_butt_kick_sentence
             - run = potential_rival.pb_for(category)
             - timing = run.default_timing
-            span = format_milliseconds(run.duration_ms(timing))
+            span = format_ms(run.duration_ms(timing))
             small< pb
             br
-            span = format_milliseconds(run.sum_of_best_ms(timing))
+            span = format_ms(run.sum_of_best_ms(timing))
             small< sum of best

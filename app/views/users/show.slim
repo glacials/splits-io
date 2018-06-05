@@ -15,4 +15,8 @@
     - @user.games.named.each do |game|
       => link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
 article
-  = render partial: 'shared/run_table', locals: table_locals(:pbs, user: @user)
+  = render partial: 'shared/run_table', locals: { \
+    runs: @user.pbs, \
+    cols: %i[time name uploaded], \
+    description: 'Personal Bests' \
+  }.merge(sorting_info)
