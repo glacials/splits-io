@@ -29,7 +29,7 @@ services:
       - "4569"
   webpacker:
     build: .
-    command: bash -c "yarn install && bundle exec bin/webpack-dev-server"
+    command: bash -c "yarn install && ruby bin/webpack-dev-server"
     volumes:
       - .:/app
     ports:

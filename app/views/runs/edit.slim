@@ -36,7 +36,7 @@ article
               .col-lg-4
                 = f.collection_select( \
                   :category, \
-                  @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order('count(runs.id) desc') : [], \
+                  @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order(Arel.sql('count(runs.id) desc')) : [], \
                   :id, \
                   :name, \
                   { \
