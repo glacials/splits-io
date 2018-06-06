@@ -69,7 +69,6 @@ gem 'activerecord-import'
 gem 'arel'
 gem 'aws-sdk-rails'
 gem 'aws-sdk-s3'
-gem 'fakes3'
 gem 'pg'
 gem 'pg_search'
 
@@ -79,9 +78,6 @@ gem 'newrelic_rpm'
 # external communication
 gem 'httparty'
 gem 'rest-client'
-
-# heroku
-gem 'platform-api'
 
 # javascript
 gem 'coffee-rails'
@@ -93,13 +89,13 @@ gem 'nilify_blanks'
 # parsing
 gem 'descriptive_statistics'
 gem 'moving_average'
-gem 'nokogiri'
 
 # server/environment
 gem 'puma'
 gem 'rails', '~> 5'
 
 # speediness
+gem 'bootsnap'
 gem 'dalli'
 gem 'turbolinks', github: 'rails/turbolinks'
 
@@ -107,10 +103,8 @@ gem 'turbolinks', github: 'rails/turbolinks'
 gem 'bootstrap'
 gem 'bootstrap4-kaminari-views'
 gem 'bootswatch'
-gem 'flat-ui-rails'
 gem 'font-awesome-sass', '~> 5.0.9'
 gem 'gon'
-gem 'htmlentities'
 gem 'kaminari'
 gem 'purecss-rails', github: 'glacials/purecss-rails'
 gem 'sass-rails'

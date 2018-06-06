@@ -28,6 +28,9 @@ run:
 console:
 	$(docker-compose) run web rails console
 
+gems:
+	$(docker-compose) run web bundle install
+
 update_lsc:
 	$(docker-compose) run web bundle exec rake update_lsc
 
