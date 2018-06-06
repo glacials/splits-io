@@ -17,7 +17,7 @@ build:
 	$(docker-compose) build
 
 lint:
-	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop
+	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
 
 test:
 	$(docker-compose) run -e RAILS_ENV=test web rspec
@@ -27,9 +27,6 @@ run:
 
 console:
 	$(docker-compose) run web rails console
-
-gems:
-	$(docker-compose) run web bundle install
 
 update_lsc:
 	$(docker-compose) run web bundle exec rake update_lsc

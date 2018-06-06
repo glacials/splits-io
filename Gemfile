@@ -92,7 +92,7 @@ gem 'moving_average'
 
 # server/environment
 gem 'puma'
-gem 'rails', '~> 5'
+gem 'rails', '~> 5.2'
 
 # speediness
 gem 'bootsnap'

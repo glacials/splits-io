@@ -31,7 +31,7 @@ class Api::Webhooks::PatreonController < ApplicationController
   end
 
   def verify_signature
-    throw(:abort) if request.headers['X-Patreon-Signature'] != digest(request.body)
+    throw(:abort) if request.headers['X-Patreon-Signature'] != digest(request.body.read)
   end
 
   def digest(data)
