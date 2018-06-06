@@ -6,7 +6,7 @@ module TwitchUser
 
   def sync_twitch_follows!
     ActiveRecord::Base.transaction do
-      TwitchUserFollow.where(from_user: self, to_user: (twitch_followed_users - current_followed_users)).delete_all!
+      TwitchUserFollow.where(from_user: self, to_user: (twitch_followed_users - current_followed_users)).delete_all
 
       TwitchUserFollow.import!((current_followed_users - twitch_followed_users).map do |u|
         TwitchUserFollow.new(from_user: self, to_user: u)

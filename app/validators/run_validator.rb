@@ -18,7 +18,9 @@ class RunValidator < ActiveModel::Validator
       return
     end
 
-    record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.' unless valid_domain?(url)
+    unless valid_domain?(record.video_url)
+      record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
+    end
   rescue URI::InvalidURIError
     record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
   end

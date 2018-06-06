@@ -66,10 +66,10 @@ To run tests from inside the Docker container, use
 make test
 ```
 
-### Running Rubocop
+### Linting
 We use [Rubocop][rubocop] for code cleanliness and styling. To run it against changed files, commit your changes and run
 ```sh
-make rubocop
+make lint
 ```
 
 [rubocop]: https://github.com/rubocop-hq/rubocop

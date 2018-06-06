@@ -10,12 +10,12 @@
 import "jquery"
 import "jquery-ujs"
 import "bootstrap"
-import "bootstrap-toggle"
 import "moment"
 import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
 import * as Cookies from "js-cookie"
+import tippy from "tippy.js"
 import "jquery.turbolinks"
 
 global.moment = moment
@@ -23,10 +23,7 @@ global._ = underscore
 global.Spinner = Spinner
 global.Clipboard = clipboard
 global.Cookies = Cookies
-
-$(function() {
-    $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle()
-});
+global.tippy = tippy
 
 import "../convert"
 import "../highchart_theme.js"
