@@ -59,8 +59,8 @@ class Category < ApplicationRecord
   def merge_into!(category)
     return if category.nil?
     ApplicationRecord.transaction do
-      runs.update_all(category: category)
-      rivalries.update_all(category: category)
+      runs.update_all(category_id: category.id)
+      rivalries.update_all(category_id: category.id)
       destroy
     end
   end

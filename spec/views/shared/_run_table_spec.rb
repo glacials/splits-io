@@ -6,7 +6,13 @@ end
 
 RSpec.describe 'shared/_run_table' do
   it 'renders the run table' do
-    render(partial: 'shared/run_table', locals: table_locals(:games, games: [FactoryBot.create(:game)]))
+    render(
+      partial: 'shared/run_table',
+      locals: {
+        runs: FactoryBot.create(:game).runs,
+        cols: %i[runner time name uploaded]
+      }
+    )
 
     expect(view).to render_template('shared/_run_table')
   end

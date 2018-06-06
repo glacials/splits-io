@@ -75,7 +75,7 @@ class Game < ApplicationRecord
   def merge_into!(game)
     ApplicationRecord.transaction do
       game.update(shortname: game.shortname || shortname)
-      aliases.update_all(game: game)
+      aliases.update_all(game_id: game.id)
 
       categories.each do |category|
         equiv = game.categories.find_by(name: category.name)

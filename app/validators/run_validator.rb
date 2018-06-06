@@ -12,7 +12,7 @@ class RunValidator < ActiveModel::Validator
   end
 
   def validate_video_url(record)
-    record.video_url.strip!
+    record.video_url.try(:strip!)
     if record.video_url.blank?
       record.video_url = nil
       return
@@ -26,8 +26,7 @@ class RunValidator < ActiveModel::Validator
   end
 
   def valid_domain?(url)
-    URI.parse(url).tap do |uri|
-      uri.host.present? && uri.host.match?(/^(www\.)?(twitch\.tv|youtube\.com|youtu\.be)$/)
-    end
+    uri = URI.parse(url)
+    uri.host.present? && uri.host.match?(/^(www\.)?(twitch\.tv|youtube\.com|youtu\.be)$/)
   end
 end
