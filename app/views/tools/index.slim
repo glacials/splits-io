@@ -12,18 +12,19 @@ article
         .card-body
           p Thanks for being a patron! You get access to permalink redirectors, which are static links that will always
             redirect to your current PB for a given game and category. Here they are:
-          table.table
-            th Game
-            th Category
-            th Redirector
-            - current_user.games.each do |game|
-              - current_user.categories.where(game: game).each do |category|
-                tr
-                  td = game.name
-                  td = category.name
-                  td
-                    a target='_blank' href=user_pb_path(current_user, game, category)
-                      = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
+          .table-responsive
+            table.table
+              th Game
+              th Category
+              th Redirector
+              - current_user.games.each do |game|
+                - current_user.categories.where(game: game).each do |category|
+                  tr
+                    td = game.name
+                    td = category.name
+                    td
+                      a target='_blank' href=user_pb_path(current_user, game, category)
+                        = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
           p
             small
               | Hint: Like with any run, you can add relative paths to the ends of these, like
