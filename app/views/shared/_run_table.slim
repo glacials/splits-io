@@ -20,9 +20,9 @@
           - if cols.include?(:name)
             th Game + Category
           - if cols.include?(:rival)
-            th.header.align-right Rival
+            th.align-right Rival
           - if cols.include?(:uploaded)
-            th.header.align-right = th_sorter('Uploaded', 'created_at')
+            th.align-right = th_sorter('Uploaded', 'created_at')
       tbody
         - runs.includes(:user).each do |run|
           tr id="run_#{run.id36}"

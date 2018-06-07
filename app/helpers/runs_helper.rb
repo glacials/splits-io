@@ -26,7 +26,7 @@ module RunsHelper
   def th_sorter(name, param_name)
     p = request.query_parameters.merge(by: param_name, order: th_by(param_name)).to_param
 
-    return link_to(name, "?#{p}", class: th_class(param_name)) if params[:by] == param_name
+    return link_to(name, "?#{p}", class: th_class(name, param_name)) if params[:by] == param_name
 
     link_to(name, "?#{p}")
   end
@@ -35,7 +35,7 @@ module RunsHelper
     params[:by] == param_name && params[:order] == 'asc' ? 'desc' : 'asc'
   end
 
-  def th_class(param_name)
+  def th_class(name, param_name)
     if params[:by] == param_name
       return link_to(name, "?#{p}", class: params[:order] == 'desc' ? 'headerSortUp' : 'headerSortDown')
     end
