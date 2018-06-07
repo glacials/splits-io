@@ -3,13 +3,14 @@
   h2 Fastest sum of best
   h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
 article data-turbolinks-temporary=true
-  = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
-  - runners = @category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc')
-  - if runners.empty?
-    center
-      i Not enough data in this category to display a sum-of-best leaderboard.
-  - else
-    .card
+  .card
+    .card-header
+      = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
+    - runners = @category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc')
+    - if runners.empty?
+      center
+        i Not enough data in this category to display a sum-of-best leaderboard.
+    - else
       table.card-body.table.table-striped.mb-0
         thead
           tr
@@ -34,5 +35,5 @@ article data-turbolinks-temporary=true
                 small = link_to format_ms(pb.duration_ms(Run::REAL)), pb
               td.align-left
                 small = format_ms(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
-    center
-      small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'
+      center
+        small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'
