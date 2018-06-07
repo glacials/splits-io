@@ -36,5 +36,5 @@ article#runs
     h4 Runs
     .card.shadow = render partial: 'shared/run_table', locals: { \
       runs: Run.by_game(@results[:games]).nonempty.unarchived, \
-      cols: %i[runner timer name uploaded] \
+      cols: %i[runner time name uploaded] \
     }.merge(sorting_info)
