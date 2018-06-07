@@ -23,7 +23,6 @@ global._ = underscore
 global.Spinner = Spinner
 global.Clipboard = clipboard
 global.Cookies = Cookies
-global.tippy = tippy
 
 import "../convert"
 import "../highchart_theme.js"
