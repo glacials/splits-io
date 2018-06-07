@@ -7,9 +7,10 @@
         th.align-left Name
         th.align-right Duration
         th.align-right Finished At
-        th.align-right History
+        - if run.segments.any? { |segment| segment.histories.any? }
+          th.align-right History
     tbody
-      - run.segments.each_with_index do |segment, index|
+      - run.segments.includes(:histories).each_with_index do |segment, index|
         tr
           td.align-right.align-middle = index + 1
           td.align-left.align-middle = segment.name.presence || '-'
@@ -21,13 +22,14 @@
             - else
               span = format_ms(segment.duration_ms(timing))
           - if segment.skipped?(timing)
-            td.align-right.time.align-middle
+            td.align-right.time.align-middle -
           - else
             td.align-right.align-middle = format_ms(segment.end_ms(timing))
-          td.align-right
-            a.segment-graph-toggler.btn.btn-secondary href='#' data-segment=segment.id data-collapsed='1'
-              | View History
-          tr.collapsed
-            td colspan='999' style='margin: 0; padding: 0;'
-              .card.border-0.m-0.p-0
-                .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
+          - if segment.histories.any?
+            td.align-right
+              a.segment-graph-toggler.btn.btn-secondary href='#' data-segment=segment.id data-collapsed='1'
+                | View History
+            tr.collapsed
+              td colspan='999' style='margin: 0; padding: 0;'
+                .card.border-0.m-0.p-0
+                  .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
