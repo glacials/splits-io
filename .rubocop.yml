@@ -28,7 +28,13 @@ Style/EmptyMethod:
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
 
+Metrics/AbcSize:
+  Max: 20
+
 Metrics/BlockLength:
   ExcludedMethods:
     - draw
     - namespace
+
+Rails:
+  Enabled: true
