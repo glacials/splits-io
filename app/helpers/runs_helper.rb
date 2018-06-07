@@ -85,7 +85,7 @@ module RunsHelper
   def format_ms_casual(milliseconds)
     return '-' if milliseconds.nil?
     time = explode_ms(milliseconds)
-    time.drop_while { |_, unit| unit.zero? }.first(2).to_h.map { |k, v| "#{v}#{k}" }.join(' ')
+    time.drop_while { |_, unit| unit.zero? }.first(2).to_h.map { |k, v| "#{v.to_i}#{k}" }.join(' ')
   end
 
   def sorting_info
@@ -102,8 +102,8 @@ module RunsHelper
 
   # explode_ms returns a hash with the components of the given duration separated out. The returned hash is guaranteed
   # to be ordered by component size descending (hours before minutes, etc.).
-  def explode_ms(milliseconds)
-    total_seconds = milliseconds / 1000
+  def explode_ms(total_milliseconds)
+    total_seconds = total_milliseconds / 1000
     total_minutes = total_seconds / 60
     total_hours   = total_minutes / 60
 
@@ -111,7 +111,7 @@ module RunsHelper
       h:  total_hours,
       m:  total_minutes % 60,
       s:  total_seconds % 60,
-      ms: milliseconds
+      ms: total_milliseconds % 1000
     }
   end
 end
