@@ -15,7 +15,6 @@ import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
 import * as Cookies from "js-cookie"
-import tippy from "tippy.js"
 import "jquery.turbolinks"
 
 global.moment = moment
@@ -28,3 +27,4 @@ import "../convert"
 import "../highchart_theme.js"
 import "../graph_builder.js"
 import "../segment_graph_builder.js"
+import "../tooltips.js"

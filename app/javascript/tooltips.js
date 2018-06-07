@@ -1,3 +1,5 @@
+import tippy from "tippy.js"
+
 $(function() {
   tippy(".gold-split", {placement: "left"})
   tippy(".tip", {placement: "right"})
