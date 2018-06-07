@@ -1,10 +1,10 @@
 - title @user.name
 - content_for(:header) do
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to "Splits I/O", root_path
+    li.breadcrumb-item = link_to 'Splits I/O', root_path
     li.breadcrumb-item = link_to @user, user_path(@user)
   h2
-    span style="margin-right: .5em;"
+    span style='margin-right: .5em;'
       img src=@user.avatar width=50 height=50
     span = @user
     - if @user.silver_patron?
@@ -15,8 +15,11 @@
     - @user.games.named.each do |game|
       => link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
 article
-  = render partial: 'shared/run_table', locals: { \
-    runs: @user.pbs, \
-    cols: %i[time name uploaded], \
-    description: 'Personal Bests' \
-  }.merge(sorting_info)
+  .row
+    .col-lg-12
+      .card.shadow
+        = render partial: 'shared/run_table', locals: { \
+          runs: @user.pbs, \
+          cols: %i[time name uploaded], \
+          description: 'Personal Bests' \
+        }.merge(sorting_info)
