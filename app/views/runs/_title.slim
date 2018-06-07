@@ -25,12 +25,11 @@ ul.run-options
           a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
             i.fas.fa-chart-bar>
             span Compare to mine
-      - if run.pb?
-        - if run.belongs_to?(current_user) && run.category.best_known_run(timing).present?
-          li
-            a.btn.btn-outline-success  href=compare_path(run, run.category.best_known_run(timing))
-              i.fas.fa-chart-bar>
-              span Compare to Best on Site
+      - if run.belongs_to?(current_user) && run != (run.category.best_known_run(timing) || run)
+        li
+          a.btn.btn-outline-success  href=compare_path(run, run.category.best_known_run(timing))
+            i.fas.fa-chart-bar>
+            span Compare to Best on Site
   li
     a.btn.btn-outline-success href=run_stats_path(run, params: {timing: params[:timing]})
       i.fas.fa-chart-pie>
