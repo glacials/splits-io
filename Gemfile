@@ -102,7 +102,6 @@ gem 'turbolinks', github: 'rails/turbolinks'
 # views
 gem 'bootstrap'
 gem 'bootstrap4-kaminari-views'
-gem 'bootswatch'
 gem 'font-awesome-sass', '~> 5.0.9'
 gem 'gon'
 gem 'kaminari'
