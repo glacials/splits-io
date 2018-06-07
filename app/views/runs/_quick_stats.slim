@@ -18,10 +18,11 @@ article data-turbolinks-temporary=true
             small.delta-indicator.delta-negative.text-success.tip-top title='Since last PB'
               = format_ms_casual(previous_upload.sum_of_best_ms(timing) - run.sum_of_best_ms(timing))
         span.statcard-desc = 'Sum of best'
-    .col-sm-3
-      .statcard.p-3
-        h3.statcard-number = format_ms(run.duration_ms(timing) - run.sum_of_best_ms(timing))
-        span.statcard-desc Potential timesave
+    - if run.duration_ms(timing) >= run.sum_of_best_ms(timing)
+      .col-sm-3
+        .statcard.p-3
+          h3.statcard-number = format_ms(run.duration_ms(timing) - run.sum_of_best_ms(timing))
+          span.statcard-desc Potential timesave
     .col-sm-3
       .statcard.p-3
         h3.statcard-number = Run.program(run.timer)
