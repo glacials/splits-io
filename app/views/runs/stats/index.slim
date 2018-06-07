@@ -49,13 +49,13 @@ article#stats
           tr.tip title="This run has no gold splits recorded"
             td
               span Total potential timesave
-              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
+              small.tip-right< title="<code>PB - sum of best</code>" = "(?)"
             td -
         - else
           tr
             td
               span Total potential timesave
-              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
+              small.tip-right< title="<code>PB - sum of best</code>" = "(?)"
             td = format_ms(@run.duration_ms(timing) - @run.sum_of_best_ms(timing))
         tr
           td
