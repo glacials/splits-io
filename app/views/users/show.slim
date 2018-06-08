@@ -6,9 +6,7 @@
   h2
     span style='margin-right: .5em;'
       img src=@user.avatar width=50 height=50
-    span = @user
-    - if @user.silver_patron?
-      .gold-split title='Patron'
+    span = user_badge(@user)
   h6
     a target='_blank' href=@user.uri = @user.uri.to_s.gsub('https://www.', '')
   h6

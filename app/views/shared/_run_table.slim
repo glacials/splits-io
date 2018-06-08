@@ -34,13 +34,7 @@
                     = link_to '<i class="fas fa-eraser"></i> Disown'.html_safe, '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-item text-danger'
                     = link_to '<i class="fas fa-trash"></i> Delete'.html_safe, '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-item text-danger'
             - if cols.include?(:runner)
-              td.align-right
-                - if run.user && run.user.name
-                  = link_to run.user, user_path(run.user), class: 'user-link'
-                  - if run.user.silver_patron?
-                    .gold-split title='Patron'
-                - else
-                  | -
+              td.align-right = user_badge(run.user)
             - if cols.include?(:time)
               td.align-right = format_ms(run.realtime_duration_ms)
             - if cols.include?(:name)
@@ -54,9 +48,7 @@
                     = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
                       = pretty_difference(run.duration_ms(Run::REAL), rival_run.duration_ms(Run::REAL))
                       '  against
-                      = rival
-                      - if rival.silver_patron?
-                        .gold-split title='Patron'
+                      = user_badge(rival)
                   - elsif run.category.present?
                     = link_to '+', new_rivalry_path(category: run.category)
             - if cols.include?(:uploaded)

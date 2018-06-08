@@ -16,10 +16,7 @@
                 img src=run.user.avatar height=64 width=64
               .media-body
                 .float-right = pretty_timestamp(run.created_at)
-                div
-                  = run.user
-                  - if run.user.silver_patron?
-                    .gold-split title='Patron'
+                div = user_badge(run.user)
                 div = "#{run.game} #{run.category}"
                 div
                   = format_ms(run.duration_ms(Run::REAL))

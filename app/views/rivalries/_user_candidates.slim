@@ -7,9 +7,7 @@
             img src=potential_rival.avatar height=64 width=64
           .media-body
             h4.media-heading
-              = potential_rival.name
-              - if potential_rival.silver_patron?
-                .gold-split title='Patron'
+              = user_badge(potential_rival)
               .call-to-action = next_butt_kick_sentence
             - run = potential_rival.pb_for(category)
             - timing = run.default_timing

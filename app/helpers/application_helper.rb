@@ -13,6 +13,8 @@ module ApplicationHelper
   end
 
   def user_badge(user)
+    return '???' if user.nil?
+
     classes = ['badge']
     title = nil
     if user.silver_patron?
