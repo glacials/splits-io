@@ -30,7 +30,7 @@ article data-turbolinks-temporary=true
               - pb = runner.pb_for(@category)
               tr id=[:run, pb.id]
                 td.align-right = i += 1
-                td.align-left = link_to runner, runner, class: 'user-link'
+                td.align-left = user_badge(runner)
                 td.align-left = format_ms(pb.sum_of_best_ms(Run::REAL))
                 td.align-left
                   small = link_to format_ms(pb.duration_ms(Run::REAL)), pb
