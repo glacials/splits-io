@@ -10,7 +10,7 @@ $(function() {
     return
   }
 
-  const $card = $('<div />').addClass('card my-3').append($('<div />').addClass('card-body'))
+  const $card = $('<div />').addClass('card my-3').append($('<div />').addClass('card-body m-0 p-0'))
   const $info_card = card_builder($card, 'graph-info')
   $info_card.prepend($('<div />').addClass('card-title'))
   $info_card.find('.card-title').append($('<h1 />').addClass('center').text('Loading graph data'))
@@ -30,7 +30,7 @@ $(function() {
     position: 'relative'
   })
   $graph_holder.append($info_card)
-  spinner.spin(document.getElementById('graph-holder').getElementsByClassName('panel-body')[0])
+  spinner.spin(document.getElementById('graph-holder').getElementsByClassName('card-body')[0])
 
   fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
     headers: {
