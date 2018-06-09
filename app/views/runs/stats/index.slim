@@ -50,13 +50,15 @@ article#stats
             tr.tip title="This run has no gold splits recorded"
               td
                 span Total potential timesave
-                small.tip-right< title="<code>PB - sum of best</code>" = "(?)"
+                span.tip-right< title="<code>PB - sum of best</code>"
+                  = icon('fas', 'fa-question-circle')
               td -
           - else
             tr
               td
                 span Total potential timesave
-                small.tip-right< title="<code>PB - sum of best</code>" = "(?)"
+                span.tip-right< title="<code>PB - sum of best</code>"
+                  = icon('fas', 'question-circle')
               td = format_ms(@run.duration_ms(timing) - @run.sum_of_best_ms(timing))
           tr
             td

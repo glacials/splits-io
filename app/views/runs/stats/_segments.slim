@@ -4,7 +4,8 @@
     .float-right
       - if run.attempts.nil? || run.attempts.zero?
         strike ↓ download segment history csv
-        small.tip-right< title="Segment history is not available for this run" = "(?)"
+        span.tip-top< title="Segment history is not available for this run"
+          = icon('fas', 'question-circle')
       - else
         a href=segment_history_csv_path ↓ download segment history csv
   .table-responsive
@@ -15,18 +16,22 @@
           th.align-left Name
           th.align-right
             span Standard deviation
-            small.tip-right< title="A low standard deviation indicates consistency" = "(?)"
+            span.tip-top< title="A low standard deviation indicates consistency"
+              = icon('fas', 'question-circle')
           th.align-right Best
           th.align-right Mean
           th.align-right
             span Median
-            small.tip-right< title="50% of this runner's times on this segment are faster than this time" = "(?)"
+            small.tip-top< title="50% of this runner's times on this segment are faster than this time"
+              = icon('fas', 'question-circle')
           th.align-right
             span 90th percentile
-            small.tip-right< title="90% of this runner's times on this segment are faster than this time" = "(?)"
+            small.tip-top< title="90% of this runner's times on this segment are faster than this time"
+              = icon('fas', 'question-circle')
           th.align-right
             span 99th percentile
-            small.tip-right< title="99% of this runner's times on this segment are faster than this time" = "(?)"
+            small.tip-top< title="99% of this runner's times on this segment are faster than this time"
+              = icon('fas', 'question-circle')
       tbody
         - run.segments.includes(:histories).each do |segment|
           - if segment.histories.nil? || segment.histories.length == 0
