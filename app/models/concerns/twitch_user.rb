@@ -8,6 +8,7 @@ module TwitchUser
     ActiveRecord::Base.transaction do
       current_followed_users = User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id))
 
+      # If TwitchUserFollow is changed to have child records or destroy callbacks, change this to destroy_all
       TwitchUserFollow.where(from_user: self, to_user: (twitch_followed_users - current_followed_users)).delete_all
 
       TwitchUserFollow.import!((current_followed_users - twitch_followed_users).map do |u|
