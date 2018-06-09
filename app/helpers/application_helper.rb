@@ -28,6 +28,12 @@ module ApplicationHelper
     link_to(user, user_path(user), class: classes.join(' '), title: title)
   end
 
+  def game_badge(game)
+    return '???' if game.nil?
+
+    link_to(game.shortname, game_path(game), class: 'badge badge-primary', title: game.name)
+  end
+
   private
 
   def by(param)

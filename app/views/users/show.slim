@@ -8,10 +8,13 @@
       img src=@user.avatar width=50 height=50
     span = user_badge(@user)
   h6
-    a target='_blank' href=@user.uri = @user.uri.to_s.gsub('https://www.', '')
+    = link_to( \
+      image_tag(asset_path('twitch.svg'), size: '20x20') + " #{@user.twitch_display_name}", \
+      @user.uri.to_s, class: 'btn btn-dark', target: '_blank' \
+    )
   h6
     - @user.games.named.each do |game|
-      => link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
+      => link_to(game.shortname || game.name, game, class: 'badge badge-primary', title: game.name)
 article
   .row
     .col-lg-12
