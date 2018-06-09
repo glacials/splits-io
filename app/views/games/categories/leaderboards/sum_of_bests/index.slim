@@ -36,5 +36,5 @@ article data-turbolinks-temporary=true
                   small = link_to format_ms(pb.duration_ms(Run::REAL)), pb
                 td.align-left
                   small = format_ms(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
-      center
-        small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'
+  center
+    small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'
