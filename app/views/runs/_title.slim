@@ -17,7 +17,7 @@ ul.run-options
       - timer = Run.program(run.timer)
       a.dropdown-item.text-secondary href=download_path(run, timer.to_sym) = timer
       a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank' LiveSplit One
-      - (Run.exportable_programs - [Run.program(run.timer)]).each do |timer|
+      - (Run.exportable_programs - [timer]).each do |timer|
         a.dropdown-item.text-secondary href=download_path(run, timer.to_sym) = timer
     - if run.category
       - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
