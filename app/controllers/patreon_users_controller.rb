@@ -78,7 +78,7 @@ class PatreonUsersController < ApplicationController
   end
 
   def link_success_msg
-    'You\'re now linked with Patreon! If you\'re a patron, your benefits have been activated :)'
+    "You're now linked with Patreon! If you're a patron, your benefits have been activated :)"
   end
 
   def link_failure_msg
