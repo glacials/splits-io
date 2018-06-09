@@ -8,7 +8,7 @@
           th.align-left Name
           th.align-right Duration
           th.align-right Finished At
-          - if run.segments.any? { |segment| segment.histories.any? }
+          - if run.segments.includes(:histories).any? { |segment| segment.histories.any? }
             th.align-right History
       tbody
         - run.segments.includes(:histories).each_with_index do |segment, index|
