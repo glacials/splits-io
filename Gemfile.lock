@@ -76,7 +76,7 @@ GEM
       momentjs-rails (~> 2.8)
       sass-rails (~> 5.0)
       selectize-rails (~> 0.6)
-    api-pagination (4.8.0)
+    api-pagination (4.7.0)
     arel (9.0.0)
     ast (2.4.0)
     authie (3.1.5)
@@ -443,7 +443,7 @@ DEPENDENCIES
   active_model_serializers
   activerecord-import
   administrate
-  api-pagination
+  api-pagination (= 4.7)
   arel
   authie
   aws-sdk-rails
