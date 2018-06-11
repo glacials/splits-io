@@ -9,9 +9,6 @@
       li.breadcrumb-item = link_to(@category, game_category_path(@category.game, @category))
   - if @category.present?
     h2 Choose a Rival
-    h5
-      = link_to @category.game, @category.game, class: 'stealth-link game-link'
-      =< link_to @category, game_category_path(@category.game, @category), class: 'stealth-link category-link'
   - else
     h2 Choose a Game and Category
     p Here are the games and categories that both you and someone you follow on Twitch run. Click one to appoint a rival
