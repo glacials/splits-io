@@ -3,7 +3,7 @@
   - current_user.categories.each do |category|
     - if current_user.twitch_followed_users.that_run(category).present?
       - empty = false
-      .list-group
+      .list-group.m-3
         a.list-group-header href=new_rivalry_path(category: category) = "#{category.game} #{category}"
         .list-group-body
           .list-group.item
