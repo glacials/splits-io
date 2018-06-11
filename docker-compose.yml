@@ -1,6 +1,9 @@
 version: '2'
 services:
   web:
+    environment:
+      - TWITCH_CLIENT_ID
+      - TWITCH_CLIENT_SECRET
     build:
       context: .
       dockerfile: Dockerfile

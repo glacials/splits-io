@@ -38,12 +38,15 @@ Use this redirect URI when asked:
 ```http
 http://localhost:3000/auth/twitch/callback
 ```
-Twitch will give you a client ID and a client secret. Open `Dockerfile` and find the spots to fill in. Then run
+Twitch will give you a client ID and a client secret. Put them in `.env` in the same format as `.example.env`. Then run
 ```sh
-git update-index --skip-worktree Dockerfile # to avoid accidentally committing your changes
+source .env
 docker-compose build
 ```
 before starting the server again and you're set!
+
+(If you want to do the source step automatically in the future, use something
+like [`autoenv`](https://github.com/kennethreitz/autoenv).)
 
 ### Debugging
 #### Getting up and running

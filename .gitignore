@@ -26,5 +26,6 @@
 yarn-debug.log*
 yarn-error.log*
 .yarn-integrity
+.env
 
 .DS_Store
