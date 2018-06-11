@@ -1,0 +1,36 @@
+h1 = @category.game
+- if @category.game.aliases.where.not(name: @category.game.name).present?
+  h6 Also known as:
+  ul
+    - @category.game.aliases.where.not(name: @category.game.name).each do |game_alias|
+      li = game_alias
+h6
+  ul.run-options
+    - if @category.game.srl_uri.present?
+      li = link_to(image_tag(asset_path("srl.png")), @category.game.srl_uri, target: '_blank', class: 'btn btn-dark')
+    - if can?(:edit, @category.game)
+      li
+        a.btn.btn-outline-success href=edit_game_path(@category.game)
+          i.fas.fa-edit>
+          span Edit
+article data-turbolinks-temporary=true
+  .row
+    .col-sm-3.mb-3
+      .statcard.p-3
+        h3.statcard-number = @game.users.count
+        span.statcard-desc = 'Runner'.pluralize(@game.users.count)
+    .col-sm-3.mb-3
+      .statcard.p-3
+        h3.statcard-number = @game.runs.count
+        span.statcard-desc = 'Run'.pluralize(@game.runs.count)
+    .col-sm-3.mb-3
+      .statcard.p-3
+        h3.statcard-number = @game.categories.count
+        span.statcard-desc = 'Category'.pluralize(@game.categories.count)
+    - if @game.runs.any?
+      .col-sm-3.mb-3
+        .statcard.p-3
+          h3.statcard-number = time_ago_in_words(@game.runs.order(created_at: :desc).first.created_at)
+          span.statcard-desc
+            span> Time since
+            = link_to('last run', @game.runs.order(created_at: :desc).first, class: 'text-muted')
