@@ -2,9 +2,10 @@ h1 = run.to_s
 h5
   span> by
   span = user_badge(run.user)
-  .badge
-    i.fas.fa-check>
-    span Personal Best
+  - if run.pb?
+    .badge
+      i.fas.fa-check>
+      span Personal Best
   = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
 
 ul.run-options
