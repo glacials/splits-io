@@ -11,6 +11,7 @@
     li.breadcrumb-item.active = link_to @run.id36, run_path(@run)
   = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
+= render partial: 'runs/claim'
 = render partial: 'runs/quick_stats', locals: {run: @run, timing: timing}
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
