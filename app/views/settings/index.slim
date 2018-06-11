@@ -121,7 +121,7 @@
                                   span#copied style='display: none;' = icon("fas", "check")
                           td
                             - if (Time.now - 24.hours) > application.created_at
-                              i Hidden forever
+                              button.btn.btn-secondary.btn-block disabled=true Hidden forever
                             - else
                               .input-group
                                 input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1

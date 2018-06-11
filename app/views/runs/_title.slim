@@ -1,11 +1,10 @@
 h1 = run.to_s
 h5
-  - if run.user.try(:name)
-    span> by
-    span = user_badge(run.user)
-    .badge
-      i.fas.fa-check>
-      span Personal Best
+  span> by
+  span = user_badge(run.user)
+  .badge
+    i.fas.fa-check>
+    span Personal Best
   = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
 
 ul.run-options
