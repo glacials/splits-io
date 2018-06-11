@@ -139,8 +139,8 @@
                                 e.trigger.children[1].style.display = 'none'
                               , 4000)
                             )
-                          td
-                            small = button_to application_path(application), class: 'btn btn-primary', method: :delete, \
+                          td.border-danger.border-left
+                            = button_to application_path(application), class: 'btn btn-outline-danger', method: :delete, \
                               data: { \
                                 confirm: "Really delete #{application.name}? This will also revoke all \
                                           #{application.access_tokens.count} authorizations and invalidate the associated \
