@@ -1,6 +1,7 @@
 - title 'Search'
 - content_for(:header) do
-  ol.breadcrumb
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
     li.breadcrumb-item = link_to "Search", search_path
   h2 Search
 
@@ -16,21 +17,25 @@ article#search-results
   - @results.each do |search_type, results|
     - if results.present?
       h4 = search_type.to_s.capitalize
-      .card.mb-3
-        table.card-body.table.table-striped.mb-0
-          tbody
-            - results.each do |obj|
-              tr
-                td
-                  - case search_type
-                  - when :games
-                    = link_to obj, game_path(obj), class: 'game-link'
-                    small.float-right = obj.categories.pluck(:name).join(', ')
-                  - when :users
-                    = link_to obj, user_path(obj), class: 'game-link'
-                    small.float-right = obj.games.pluck(:shortname).compact.uniq.join(', ')
-
+      .card.mb-3.shadow
+        .card-body.p-0
+          .table-responsive
+            table.card-body.table.table-striped.mb-0
+              tbody
+                - results.each do |obj|
+                  tr
+                    td
+                      - case search_type
+                      - when :games
+                        = link_to obj, game_path(obj), class: 'game-link'
+                        small.float-right = obj.categories.pluck(:name).join(', ')
+                      - when :users
+                        = link_to obj, user_path(obj), class: 'game-link'
+                        small.float-right = obj.games.pluck(:shortname).compact.uniq.join(', ')
 article#runs
   - if @results[:games].present?
     h4 Runs
-    = render partial: 'shared/run_table', locals: table_locals(:games, games: @results[:games])
+    .card.shadow = render partial: 'shared/run_table', locals: { \
+      runs: Run.by_game(@results[:games]).nonempty.unarchived, \
+      cols: %i[runner time name uploaded] \
+    }.merge(sorting_info)

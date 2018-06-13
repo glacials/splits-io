@@ -50,7 +50,7 @@ gem 'administrate'
 
 # api
 gem 'active_model_serializers'
-gem 'api-pagination'
+gem 'api-pagination', '= 4.7'
 gem 'jbuilder'
 
 # authentication
@@ -92,7 +92,7 @@ gem 'moving_average'
 
 # server/environment
 gem 'puma'
-gem 'rails', '~> 5'
+gem 'rails', '~> 5.2'
 
 # speediness
 gem 'bootsnap'
@@ -102,7 +102,6 @@ gem 'turbolinks', github: 'rails/turbolinks'
 # views
 gem 'bootstrap'
 gem 'bootstrap4-kaminari-views'
-gem 'bootswatch'
 gem 'font-awesome-sass', '~> 5.0.9'
 gem 'gon'
 gem 'kaminari'

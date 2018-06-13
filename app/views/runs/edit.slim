@@ -2,14 +2,17 @@
 - timing = params[:timing] || @run.default_timing
 
 - content_for(:header) do
-  - if @run.game.present? && @run.category.present?
-    ol.breadcrumb
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
+    - if @run.game.present? && @run.category.present?
+      li.breadcrumb-item = link_to "Games", games_path
       li.breadcrumb-item = link_to @run.game, game_path(@run.game)
       li.breadcrumb-item = link_to @run.category, game_category_path(@run.game, @run.category)
-      li.breadcrumb-item = link_to @run.id36, run_path(@run)
-      li.breadcrumb-item.active Edit
+    li.breadcrumb-item = link_to @run.id36, run_path(@run)
+    li.breadcrumb-item.active = link_to 'Edit', edit_run_path(@run)
   = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
+= render partial: 'runs/quick_stats', locals: {run: @run, timing: timing}
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article
@@ -23,7 +26,7 @@ article
               .col-lg-6
                 = f.collection_select( \
                   :game, \
-                  Game.where.not(shortname: nil).order(:name), \
+                  Game.shortnamed.order(:name), \
                   :shortname, \
                   :name, \
                   { \
@@ -71,7 +74,10 @@ article
       .card
         .card-header.text-white Reparse
         .card-body
-          p This button forces Splits I/O to reparse your run's original file. This can sometimes resolve bugs.
+          p This button forces Splits I/O to reparse your run's original file, repopulating your on-site splits and
+            stats. This can sometimes resolve bugs, but may revert your run's game and category if you've previously made
+            changes to them on this page.
+          p This is not reversible.
           center
             a.btn.btn-primary href=edit_run_path(@run, reparse: '1') Reparse
 
@@ -85,6 +91,7 @@ article
             link and is still owned by and credited to you.
           p A run will become unlisted automatically when you beat its time, but you can also manually change that
             status here.
+          p This is reversible.
           center
             - if @run.archived?
               = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
@@ -106,6 +113,7 @@ article
           .card-body
             p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
               However, you can set the default behavior for this run here.
+            p This is reversible.
             center
               - if @run.default_timing == 'game'
                 = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
@@ -131,9 +139,11 @@ article#danger-zone.danger
             .card-body
               .row
                 .col-lg-12
-                  | Existing permalinks will be permanently broken and your run, its information, and the original file will all be destroyed. The URL
-                  code #{run_url(@run).split('//')[1]}
-                  |  will never be reclaimed.
+                  p
+                    | Existing permalinks will be broken and your run, its information, and the original file will all be destroyed. The URL
+                    code<> #{run_url(@run).split('//')[1]}
+                    |  will not be reclaimed; it will 404 forever.
+                  p This is not reversible.
               .row
                 .col-lg-12
                   center
@@ -142,17 +152,18 @@ article#danger-zone.danger
                         big Delete
                       small
                         = "#{@run} in "
-                        = format_milliseconds(@run.realtime_duration_ms)
+                        = format_ms(@run.realtime_duration_ms)
         .col-lg-6
           .card
             .card-header.text-white Disown
             .card-body
               .row
                 .col-lg-12
-                  p The run will continue to exist and be accessible, but it will no longer be attributed to you. It will appear as
-                    anonymously uploaded.
-                  p If you disown a run, you will never be able to reclaim it, and consequently you will not be able to delete it at
-                    a later time.
+                  p Your run will continue to exist and be accessible, but it will no longer be attributed to you. It
+                    will appear as anonymously uploaded.
+                  p If you disown a run you will never be able to reclaim it, and consequently you will not be able to
+                    delete it at a later time.
+                  p This is not reversible.
               .row
                 .col-lg-12
                   center
@@ -161,4 +172,4 @@ article#danger-zone.danger
                         big Disown
                       small
                         = "#{@run} in "
-                        = format_milliseconds(@run.realtime_duration_ms)
+                        = format_ms(@run.realtime_duration_ms)

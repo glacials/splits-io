@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :patreon_users
     resources :rivalries
 
-    root to: "runs#index"
+    root to: 'runs#index'
   end
 
   use_doorkeeper do
@@ -34,11 +34,10 @@ Rails.application.routes.draw do
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
 
-  get  '/convert',    to: 'converts#new'
+  get  '/convert', to: 'converts#new'
 
-  get '/search',        to: 'search#index'
-  get '/search(?q=:q)', to: 'search#index'
-  get '/search/:q',     to: redirect('/search?q=%{q}')
+  get '/search',    to: 'search#index'
+  get '/search/:q', to: redirect('/search?q=%{q}')
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:run/download/:timer',         to: 'runs#download', as: :download
@@ -54,14 +53,14 @@ Rails.application.routes.draw do
 
   resources :sessions, only: [:destroy]
 
-  get    '/users/:user',         to: 'users#show', as: :user
-  delete '/users/:user',         to: 'users#destroy'
+  get    '/users/:user', to: 'users#show', as: :user
+  delete '/users/:user', to: 'users#destroy'
 
-  get    '/rivals',               to: redirect('/rivalries')
-  get    '/rivalries',            to: 'rivalries#index',   as: :rivalries
-  get    '/rivalries/new',        to: 'rivalries#new',     as: :new_rivalry
-  post   '/rivalries',            to: 'rivalries#create'
-  delete '/rivalries/:rivalry',   to: 'rivalries#destroy', as: :rivalry
+  get    '/rivals',             to: redirect('/rivalries')
+  get    '/rivalries',          to: 'rivalries#index',   as: :rivalries
+  get    '/rivalries/new',      to: 'rivalries#new',     as: :new_rivalry
+  post   '/rivalries',          to: 'rivalries#create'
+  delete '/rivalries/:rivalry', to: 'rivalries#destroy', as: :rivalry
 
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 
@@ -73,30 +72,30 @@ Rails.application.routes.draw do
   get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
   patch '/games/:game',      to: 'games#update'
 
-  post '/games/:game/aliases', to: 'game_aliases#create', as: :game_aliases
+  post '/games/:game/aliases', to: 'games/aliases#create', as: :game_aliases
 
   get '/games/:game/categories',           to: redirect('/games/%{game}')
   get '/games/:game/categories/:category', to: 'games/categories#show', as: :game_category
 
   get '/games/:game/categories/:category/leaderboards/sum_of_bests',
-    to: 'games/categories/leaderboards/sum_of_bests#index',
-    as: :game_category_sum_of_bests
+      to: 'games/categories/leaderboards/sum_of_bests#index',
+      as: :game_category_sum_of_bests
 
-  resources :tools, only: [:index]
+  get '/tools', to: 'tools#index'
 
-  get    '/settings',                           to: 'settings#index',       as: :settings
+  get    '/settings', to: 'settings#index',       as: :settings
 
   get    '/settings/applications/new',            to: 'applications#new',                as: :new_application
   post   '/settings/applications',                to: 'applications#create',             as: :applications
   delete '/settings/applications/:application',   to: 'applications#destroy',            as: :application
   delete '/settings/authorizations/:application', to: 'authorized_applications#destroy', as: :authorization
 
-  get    '/:run/edit',                      to: 'runs#edit',        as: :edit_run
-  get    '/:run/stats',                     to: 'runs/stats#index', as: :run_stats
+  get    '/:run/edit',                      to: 'runs#edit',                      as: :edit_run
+  get    '/:run/stats',                     to: 'runs/stats#index',               as: :run_stats
   get    '/:run/stats/run_history.csv',     to: 'runs/stats#run_history_csv',     as: :run_history_csv
   get    '/:run/stats/segment_history.csv', to: 'runs/stats#segment_history_csv', as: :segment_history_csv
+  get    '/:run',                           to: 'runs#show',                      as: :run
   patch  '/:run',                           to: 'runs#update'
-  get    '/:run',                           to: 'runs#show',        as: :run
   delete '/:run',                           to: 'runs#destroy'
 
   namespace :api do
@@ -114,7 +113,7 @@ Rails.application.routes.draw do
       get '/games/:game/runners',    to: 'games/runners#index'
       get '/games/:game/runs',       to: 'games/runs#index'
 
-      get '/categories/:category', to: 'categories#show', as: 'category'
+      get '/categories/:category',         to: 'categories#show', as: 'category'
       get '/categories/:category/runners', to: 'categories/runners#index'
       get '/categories/:category/runs',    to: 'categories/runs#index'
 
@@ -139,7 +138,7 @@ Rails.application.routes.draw do
 
     namespace :v3 do
       match '(/*a(/*b(/*c(/*d))))', via: [:options], to: 'application#options'
-      resources :games, only: [:index, :show] do
+      resources :games, only: %i[index show] do
         resources :runs, only: [:index], module: :games
         resources :categories, only: [:show], module: :games do
           resources :runs, only: [:index], module: :categories
@@ -159,7 +158,7 @@ Rails.application.routes.draw do
         resources :pbs, only: [:index], module: :users
       end
 
-      resources :runs, only: [:show, :create, :destroy] do
+      resources :runs, only: %i[show create destroy] do
         member do
           post :disown
         end

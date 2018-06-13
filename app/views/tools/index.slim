@@ -1,5 +1,8 @@
 - title "tools"
 - content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to 'Splits I/O', root_path
+    li.breadcrumb-item = link_to 'Tools', tools_path
   h2 Tools
 article
   - if current_user.present? && current_user.gold_patron?
@@ -9,18 +12,19 @@ article
         .card-body
           p Thanks for being a patron! You get access to permalink redirectors, which are static links that will always
             redirect to your current PB for a given game and category. Here they are:
-          table.table
-            th Game
-            th Category
-            th Redirector
-            - current_user.games.each do |game|
-              - current_user.categories.where(game: game).each do |category|
-                tr
-                  td = game.name
-                  td = category.name
-                  td
-                    a target='_blank' href=user_pb_path(current_user, game, category)
-                      = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
+          .table-responsive
+            table.table
+              th Game
+              th Category
+              th Redirector
+              - current_user.games.each do |game|
+                - current_user.categories.where(game: game).each do |category|
+                  tr
+                    td = game.name
+                    td = category.name
+                    td
+                      a target='_blank' href=user_pb_path(current_user, game, category)
+                        = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
           p
             small
               | Hint: Like with any run, you can add relative paths to the ends of these, like
@@ -40,7 +44,7 @@ article
             copy+paste the output into a panel with no additional editing on your part.
           - if current_user.present?
             p
-              = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-default', target: :_blank
+              = link_to 'Export PBs for use in Twitch', user_panels_path(current_user), class: 'btn btn-dark', target: :_blank
             small
               | order:
               =< link_to 'alphabetically', user_panels_path(current_user, by: :name, order: :asc)
@@ -50,11 +54,11 @@ article
               =< link_to 'oldest first', user_panels_path(current_user, by: :created_at, order: :asc)
           - else
             p
-              button.btn.btn-primary.disabled You need to be signed in
+              button.btn.btn-dark.disabled You need to be signed in
     .col-lg-6
       .card.mb-3
         .card-header.text-white Splits Converter
         .card-body
           p You can download uploaded splits in any exportable format we support, but if you need to convert splits and don't
             care about storing them, you can use this tool.
-          p = link_to 'Convert splits to other timer formats', convert_path, class: 'btn btn-default'
+          p = link_to 'Convert splits to other timer formats', convert_path, class: 'btn btn-dark'

@@ -1,0 +1,16 @@
+- if run.completed?(Run::REAL) && run.completed?(Run::GAME)
+  - if timing == Run::REAL
+    a.badge.badge-dark.tip-right title='Recorded in realtime & gametime — click to switch' href='?timing=game'
+      i.fas.fa-globe.text-success>
+      i.fas.fa-gamepad
+  - if timing == Run::GAME
+    a.badge.badge-dark.tip-right title='Recorded in realtime & gametime — click to switch' href='?timing=real'
+      i.fas.fa-globe>
+      i.fas.fa-gamepad.text-success
+- else
+  - if run.completed?(Run::REAL)
+    .badge.tip-right title='Recorded in realtime'
+      i.fas.fa-globe
+  - if run.completed?(Run::GAME)
+    .badge.tip-right title='Recorded in gametime'
+      i.fas.fa-gamepad

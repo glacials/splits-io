@@ -1,20 +1,20 @@
 - title @game.name
 - content_for(:header) do
-  ol.breadcrumb
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
     li.breadcrumb-item = link_to "Games", games_path
     li.breadcrumb-item = link_to @category.game, game_path(@category.game)
     - unless @on_game_page
       li.breadcrumb-item = link_to @category, game_category_path(@game, @category)
-  h3 = @category.game
-  h6
-    ul.run-options
-      - if can?(:edit, @game)
-        li = link_to 'edit', edit_game_path(@game)
-  - if @game.srl_uri.present?
-    = link_to image_tag(asset_path("srl.png")), @game.srl_uri
+  = render partial: 'games/categories/title', locals: {category: @category}
 
 article data-turbolinks-temporary=true
-  = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
-  = render partial: 'shared/run_table', locals: table_locals(:category, category: @category)
+  .card
+    .card-header
+      = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
+    = render partial: 'shared/run_table', locals: { \
+      runs: @category.runs.nonempty.unarchived, \
+      cols: %i[runner time name uploaded], \
+    }.merge(sorting_info)
   center
     small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'

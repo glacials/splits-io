@@ -1,5 +1,5 @@
 module RivalriesHelper
-  BUTT_KICK_SENTENCES = %w[
+  BUTT_KICK_SENTENCES = %q[
     'kick their butt'
     'kick a butt'
     'gently connect a foot with a butt'

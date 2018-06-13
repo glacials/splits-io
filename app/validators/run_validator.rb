@@ -7,21 +7,26 @@ class RunValidator < ActiveModel::Validator
   private
 
   def validate_default_timing(record)
-    unless %w[real game].include?(record.default_timing)
-      record.errors[:base] << 'Default timing must be either "real" or "game".'
-    end
+    return if %w[real game].include?(record.default_timing)
+    record.errors[:base] << 'Default timing must be either "real" or "game".'
   end
 
   def validate_video_url(record)
-    record.video_url = nil if record.video_url.try(:strip) == ''
-    return if record.video_url.nil?
+    record.video_url.try(:strip!)
+    if record.video_url.blank?
+      record.video_url = nil
+      return
+    end
 
-    URI.parse(record.video_url).tap do |uri|
-      unless uri.host.match?(/^(www\.)?(twitch\.tv|youtube\.com|youtu\.be)$/)
-        record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
-      end
+    unless valid_domain?(record.video_url)
+      record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
     end
   rescue URI::InvalidURIError
     record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
+  end
+
+  def valid_domain?(url)
+    uri = URI.parse(url)
+    uri.host.present? && uri.host.match?(/^(www\.)?(twitch\.tv|youtube\.com|youtu\.be)$/)
   end
 end

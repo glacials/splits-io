@@ -76,14 +76,14 @@ GEM
       momentjs-rails (~> 2.8)
       sass-rails (~> 5.0)
       selectize-rails (~> 0.6)
-    api-pagination (4.7.1)
+    api-pagination (4.7.0)
     arel (9.0.0)
     ast (2.4.0)
     authie (3.1.5)
-    autoprefixer-rails (8.5.2)
+    autoprefixer-rails (8.6.1)
       execjs
     aws-eventstream (1.0.0)
-    aws-partitions (1.90.0)
+    aws-partitions (1.91.0)
     aws-sdk-core (3.21.2)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
@@ -118,9 +118,6 @@ GEM
     bootstrap4-kaminari-views (1.0.0)
       kaminari (>= 0.13)
       rails (>= 3.1)
-    bootswatch (4.1.1)
-      autoprefixer-rails (>= 6.0.3)
-      sass (>= 3.5.2)
     builder (3.2.3)
     callsite (0.0.11)
     cancancan (2.2.0)
@@ -163,7 +160,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.23)
+    ffi (1.9.25)
     font-awesome-sass (5.0.13)
       sassc (>= 1.11)
     foreman (0.84.0)
@@ -198,6 +195,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
+    jaro_winkler (1.5.1)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -259,7 +257,7 @@ GEM
     multipart-post (2.0.0)
     nenv (0.3.0)
     netrc (0.11.0)
-    newrelic_rpm (5.1.0.344)
+    newrelic_rpm (5.2.0.345)
     nilify_blanks (1.3.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -352,7 +350,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rollbar (2.16.0)
+    rollbar (2.16.2)
       multi_json
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
@@ -375,7 +373,8 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
-    rubocop (0.56.0)
+    rubocop (0.57.1)
+      jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5)
       powerpack (~> 0.1)
@@ -428,7 +427,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
-    unicode-display_width (1.3.3)
+    unicode-display_width (1.4.0)
     webpacker (3.5.3)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
@@ -444,7 +443,7 @@ DEPENDENCIES
   active_model_serializers
   activerecord-import
   administrate
-  api-pagination
+  api-pagination (= 4.7)
   arel
   authie
   aws-sdk-rails
@@ -454,7 +453,6 @@ DEPENDENCIES
   bootsnap
   bootstrap
   bootstrap4-kaminari-views
-  bootswatch
   cancancan
   coffee-rails
   daemons
@@ -488,7 +486,7 @@ DEPENDENCIES
   pry-rails
   puma
   purecss-rails!
-  rails (~> 5)
+  rails (~> 5.2)
   rails-controller-testing
   rails-erd
   rest-client

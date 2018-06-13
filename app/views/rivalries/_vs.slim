@@ -1,47 +1,41 @@
-- from_user_pb = rivalry.from_user.pb_for(rivalry.category)
-- to_user_pb = rivalry.to_user.pb_for(rivalry.category)
-- timing = params[:timing] || from_user_pb.default_timing
-.vs
-  .media.col-lg-5 style='text-align: left; margin: .5em 0'
-    .float-left
-      img src=rivalry.from_user.avatar height=64 width=64
-    .media-body
-      h4.media-heading
-        - if rivalry.from_user.present?
-          = link_to rivalry.from_user, rivalry.from_user, class: 'stealth-link user-link'
-          - if rivalry.from_user.silver_patron?
-            .gold-split title='Patron'
+.row
+  .col-lg-5.col-md-5
+    .card
+      = image_tag(rivalry.from_user.avatar, class: 'card-img-top')
+      .card-body
+        h5 = rivalry.from_user.twitch_display_name
+      .card-footer
+        - run = rivalry.from_user.pb_for(rivalry.category)
+        - timing = params[:timing] || run.default_timing
+        - if run.present?
+          span = format_ms(run.duration_ms(timing))
         - else
-          = '???'
-      span
-        - if from_user_pb.present?
-          = link_to(format_milliseconds(from_user_pb.duration_ms(timing)), from_user_pb, class: 'stealth-link run-link')
+          span = '-'
+        small< Personal Best
+        br
+        - if run.present?
+          span = format_ms(run.sum_of_best_ms(timing))
+          small< Sum of Best
         - else
-          = '-'
-      small< pb
-      br
-      span = format_milliseconds(from_user_pb.sum_of_best_ms(timing)) || '0'
-      small< sum of best
-  .media.col-lg-2 style='text-align: center; margin: .5em 0;'
-    .media-body
-      h4.media-heading vs.
-  .media.col-lg-5 style='text-align: left; margin: .5em 0;'
-    .float-left
-      img src=rivalry.to_user.avatar height=64 width=64
-    .media-body
-      h4.media-heading
-        - if rivalry.to_user.present?
-          = link_to rivalry.to_user, rivalry.to_user, class: 'stealth-link user-link'
-          - if rivalry.to_user.silver_patron?
-            .gold-split title='Patron'
+          span = '-'
+  .col-lg-2.col-md-2
+    h4 vs.
+  .col-lg-5.col-md-5
+    .card
+      = image_tag(rivalry.to_user.avatar, class: 'card-img-top')
+      .card-body
+        h5 = rivalry.to_user.twitch_display_name
+      .card-footer
+        - run = rivalry.to_user.pb_for(rivalry.category)
+        - timing = params[:timing] || run.default_timing
+        - if run.present?
+          span = format_ms(run.duration_ms(timing))
         - else
-          '???'
-      span
-        - if to_user_pb.present?
-          = link_to(format_milliseconds(to_user_pb.duration_ms(timing)), to_user_pb, class: 'stealth-link run-link')
+          span = '-'
+        small< Personal Best
+        br
+        - if run.present?
+          span = format_ms(run.sum_of_best_ms(timing))
+          small< Sum of Best
         - else
-          = '-'
-      small< pb
-      br
-      span = format_milliseconds(to_user_pb.sum_of_best_ms(timing)) || '0'
-      small< sum of best
+          span = '-'

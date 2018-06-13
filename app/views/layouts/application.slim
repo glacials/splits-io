@@ -26,58 +26,59 @@ html
           h2
             | failures:
           span#failed-uploads<
-      nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.mb-4
-        .container
-          a.navbar-brand href=root_path
-            img.logo src='/logo.svg' width='20' height='20'
-            span Splits I/O
-          button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
-            span.navbar-toggler-icon
-          .collapse.navbar-collapse#global-nav
-            ul.navbar-nav.mr-auto
-              li.nav-item. class=('active' if on_page[:upload])
-                a.nav-link.px-3 href=new_run_path
-                  span> = icon("fas", "cloud-upload-alt")
-                  | Upload
-              li.nav-item class=('active' if on_page[:rivalries])
-                a.nav-link.px-3 href=rivalries_path
-                  span> = icon("fas", "weight")
-                  | My Rivals
-              - if ENV['READ_ONLY_MODE'] == '1'
-                li.nav-item
-                  a.nav-link.px-3 href=read_only_mode_path
-                    span.text-warning Read-Only Mode Active
-              li.nav-item class=('active' if on_page[:faq])
-                a.nav-link.px-3 href=faq_path FAQ
-              = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
-                .input-group
-                  = f.text_field(:q, name: :q, class: 'form-control', value: @query, placeholder: 'Search')
-                  .input-group-btn
-                    = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
-                      = icon("fas", "search")
-            ul.nav.navbar-nav.navbar-right
-              li.nav-item style='background-color: #768AD4;'
-                a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
-                  img src='/discord.svg' height='20'
-              - if logged_in?
-                li.nav-item.dropdown class=('active' if on_page[:profile])
-                  a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
-                    span> = icon("fas", "user")
-                    span = current_user
-                    span.caret
-                  ul.dropdown-menu.mt-0.border-top-0 role='menu'
-                    li.nav-item
-                      - if !current_user.patron?
-                        = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank', class: "dropdown-item"
-                      = link_to 'Profile', user_path(current_user), class: "dropdown-item"
-                      = link_to 'Settings', settings_path, class: "dropdown-item"
-                      = link_to 'Tools', tools_path, class: "dropdown-item"
-                      = link_to 'Sign Out', session_path(auth_session), method: :delete, class: "dropdown-item"
-              - else
-                li.nav-item
-                  a.nav-link.px-3 href='/auth/twitch' Sign Up
-                li.nav-item
-                  a.nav-link.px-3 href='/auth/twitch' Sign In
+      nav.navbar.navbar-expand-lg.navbar-dark
+        a.navbar-brand href=root_path
+          img.logo src='/logo.svg' width='20' height='20'
+          span Splits I/O
+        button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
+          span.navbar-toggler-icon
+        .collapse.navbar-collapse#global-nav
+          ul.navbar-nav.mr-auto
+            li.nav-item class=('active' if request.path == new_run_path)
+              a.nav-link.px-3 href=new_run_path
+                span> = icon("fas", "cloud-upload-alt")
+                | Upload
+            li.nav-item class=('active' if request.path == rivalries_path)
+              a.nav-link.px-3 href=rivalries_path
+                span> = icon("fas", "weight")
+                | My Rivals
+            - if ENV['READ_ONLY_MODE'] == '1'
+              li.nav-item
+                a.nav-link.px-3 href=read_only_mode_path
+                  span.text-warning Read-Only Mode Active
+            li.nav-item class=('active' if request.path == faq_path)
+              a.nav-link.px-3 href=faq_path
+                span> = icon('fas', 'info-circle')
+                | FAQ
+            = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
+              .input-group
+                = f.text_field(:q, name: :q, class: 'form-control', value: @query, placeholder: 'Search')
+                .input-group-btn
+                  = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
+                    = icon("fas", "search")
+          ul.nav.navbar-nav
+            li.nav-item style='background-color: #768AD4;'
+              a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
+                img src='/discord.svg' height='20'
+            - if logged_in?
+              li.nav-item.dropdown class=('active' if on_a_profile_page?)
+                a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
+                  span> = icon("fas", "user")
+                  span = current_user
+                  span.caret
+                ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
+                  li.nav-item
+                    - if !current_user.patron?
+                      = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank', class: 'dropdown-item text-secondary'
+                    = link_to 'Profile', user_path(current_user), class: 'dropdown-item text-secondary'
+                    = link_to 'Settings', settings_path, class: 'dropdown-item text-secondary'
+                    = link_to 'Tools', tools_path, class: 'dropdown-item text-secondary'
+                    = link_to 'Sign Out', session_path(auth_session), method: :delete, class: 'dropdown-item text-secondary'
+            - else
+              li.nav-item
+                a.nav-link.px-3 href='/auth/twitch' Sign Up
+              li.nav-item
+                a.nav-link.px-3 href='/auth/twitch' Sign In
       = render partial: 'shared/ad'
       header#header = yield(:header)
       article

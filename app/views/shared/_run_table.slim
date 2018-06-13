@@ -5,27 +5,24 @@
   center
     i No runs matched!
 - else
-  .card
-    - if description.present?
-      .card-header.text-white = description
+  - if description.present?
+    .card-header.text-white = description
+  .table-responsive
     table.card-body.table.table-striped.table-hover.mb-0
       thead
         tr
           - if cols.include?(:owner_controls)
-            th.align-right
+            th.header.align-right
           - if cols.include?(:runner)
-            th.align-right
-              = link_to "Runner", "?#{request.query_parameters.merge(by: :user_id, order: (params[:by] == 'user_id' && params[:order] == 'asc') ? :desc : :asc).to_param}"
+            th.header.align-right = th_sorter('Runner', 'user_id')
           - if cols.include?(:time)
-            th.align-right
-              = link_to "Time", "?#{request.query_parameters.merge(by: :time, order: (params[:by] == 'time' && params[:order] == 'asc') ? :desc : :asc).to_param}"
+            th.header.align-right = th_sorter('Time', 'time')
           - if cols.include?(:name)
             th Game + Category
           - if cols.include?(:rival)
             th.align-right Rival
           - if cols.include?(:uploaded)
-            th.align-right
-              = link_to "Uploaded", "?#{request.query_parameters.merge(by: :created_at, order: (params[:by] == 'created_at' && params[:order] == 'desc') ? :asc : :desc).to_param}"
+            th.align-right = th_sorter('Uploaded', 'created_at')
       tbody
         - runs.includes(:user).each do |run|
           tr id="run_#{run.id36}"
@@ -33,20 +30,13 @@
               td.align-right
                 .dropdown
                   .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown} x
-                  ul.dropdown-menu.red role=:menu aria={labelledby: "dropdown_#{run.id36}"}
-                    li role=:presentation
-                      = link_to 'Disown', '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-header text-white'
-                      = link_to 'Delete', '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-header text-white'
+                  .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
+                    = link_to '<i class="fas fa-eraser"></i> Disown'.html_safe, '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-item text-danger'
+                    = link_to '<i class="fas fa-trash"></i> Delete'.html_safe, '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-item text-danger'
             - if cols.include?(:runner)
-              td.align-right
-                - if run.user && run.user.name
-                  = link_to run.user, user_path(run.user), class: 'user-link'
-                  - if run.user.silver_patron?
-                    .gold-split title='Patron'
-                - else
-                  | -
+              td.align-right = user_badge(run.user)
             - if cols.include?(:time)
-              td.align-right = format_milliseconds(run.realtime_duration_ms)
+              td.align-right = format_ms(run.realtime_duration_ms)
             - if cols.include?(:name)
               td = link_to run, run_path(run), class: 'run-link'
             - if cols.include?(:rival)
@@ -58,12 +48,10 @@
                     = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
                       = pretty_difference(run.duration_ms(Run::REAL), rival_run.duration_ms(Run::REAL))
                       '  against
-                      = rival
-                      - if rival.silver_patron?
-                        .gold-split title='Patron'
+                      = user_badge(rival)
                   - elsif run.category.present?
                     = link_to '+', new_rivalry_path(category: run.category)
             - if cols.include?(:uploaded)
               td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
-    .mx-auto
-      = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')
+  .mx-auto
+    = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')

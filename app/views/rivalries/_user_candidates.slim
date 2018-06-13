@@ -1,20 +1,14 @@
-.col-md-6
-  .list-group
-    = current_user.twitch_followed_users.that_run(category).find_each do |potential_rival|
-      = link_to rivalries_path(category: category, target: potential_rival), method: :post, class: 'list-group-item'
-        .media style='margin: .5em 0;'
-          .float-left
-            img src=potential_rival.avatar height=64 width=64
-          .media-body
-            h4.media-heading
-              = potential_rival.name
-              - if potential_rival.silver_patron?
-                .gold-split title='Patron'
-              .call-to-action = next_butt_kick_sentence
-            - run = potential_rival.pb_for(category)
-            - timing = run.default_timing
-            span = format_milliseconds(run.duration_ms(timing))
-            small< pb
-            br
-            span = format_milliseconds(run.sum_of_best_ms(timing))
-            small< sum of best
+= current_user.twitch_followed_users.that_run(category).find_each do |potential_rival|
+  .col-md-3
+    .card = link_to(rivalries_path(category: category, target: potential_rival), method: :post)
+      = image_tag(potential_rival.avatar, class: 'card-img-top')
+      .card-body
+        h5 = potential_rival.twitch_display_name
+      .card-footer
+        - run = potential_rival.pb_for(category)
+        - timing = run.default_timing
+        span = format_ms(run.duration_ms(timing))
+        small< Personal Best
+        br
+        span = format_ms(run.sum_of_best_ms(timing))
+        small< Sum of Best

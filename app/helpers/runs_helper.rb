@@ -1,17 +1,15 @@
 module RunsHelper
   include ActionView::Helpers::DateHelper
 
-  TIMELINE_COLORS = [:blue, :purple, :green, :yellow, :red, :orange].freeze
+  TIMELINE_COLORS = %i[blue purple green yellow red orange].freeze
 
   def difference(run_a, run_b)
     return 0 if run_a.nil? || run_b.nil?
-
     run_a.duration_ms(Run::REAL) - run_b.duration_ms(Run::REAL)
   end
 
   def sob_difference(run_a, run_b)
     return 0 if run_a.nil? || run_b.nil?
-
     run_a.sum_of_best_ms(Run::REAL) - run_b.sum_of_best_ms(Run::REAL)
   end
 
@@ -25,41 +23,24 @@ module RunsHelper
     end
   end
 
-  def table_locals(table_type, options = {})
-    case table_type
-    when :my_pbs
-      {
-        type: :current_user,
-        source: current_user,
-        runs: current_user.pbs,
-        cols: %i[time name uploaded owner_controls rival],
-        description: 'My Personal Bests'
-      }.merge(sorting_info)
-    when :pbs
-      {
-        type: :user,
-        source: options[:user],
-        runs: options[:user].pbs,
-        cols: %i[time name uploaded],
-        description: 'Personal Bests'
-      }.merge(sorting_info)
-    when :games
-      {
-        type: :games,
-        source: options[:games],
-        runs: Run.by_game(options[:games]).nonempty,
-        cols: %i[runner time name uploaded]
-      }.merge(sorting_info)
-    when :category
-      {
-        type: :category,
-        source: options[:category],
-        runs: options[:category].runs.nonempty,
-        cols: %i[runner time name uploaded]
-      }.merge(sorting_info)
-    else
-      raise Error
+  def th_sorter(name, param_name)
+    p = request.query_parameters.merge(by: param_name, order: th_by(param_name)).to_param
+
+    return link_to(name, "?#{p}", class: th_class(name, param_name)) if params[:by] == param_name
+
+    link_to(name, "?#{p}")
+  end
+
+  def th_by(param_name)
+    params[:by] == param_name && params[:order] == 'asc' ? 'desc' : 'asc'
+  end
+
+  def th_class(name, param_name)
+    if params[:by] == param_name
+      return link_to(name, "?#{p}", class: params[:order] == 'desc' ? 'headerSortUp' : 'headerSortDown')
     end
+
+    link_to(name, "?#{p}")
   end
 
   def next_timeline_color(timeline_id)
@@ -81,37 +62,31 @@ module RunsHelper
   def pretty_duration(seconds)
     ms = (seconds * 1000).floor
 
-    "<span class=\"text-default\">#{format_milliseconds(ms)}</span>".html_safe
+    "<span class=\"text-default\">#{format_ms(ms)}</span>".html_safe
   end
 
   def pretty_difference(my_ms, their_ms)
-    diff_s = (my_ms / 1000) - (their_ms / 1000)
+    diff_ms = (my_ms - their_ms)
 
-    if diff_s.negative?
-      diff_s = diff_s.abs
-      return "<span class=\"text-success\">-#{format_milliseconds(diff_s * 1000)}</span>".html_safe
-    end
+    return "<span class=\"text-success\">-#{format_ms_casual(diff_ms.abs)}</span>".html_safe if diff_ms.negative?
 
-    return "<span class=\"text-danger\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe if diff_s.positive?
+    return "<span class=\"text-danger\">+#{format_ms_casual(diff_ms)}</span>".html_safe if diff_ms.positive?
 
-    "<span class=\"text-warning\">+#{format_milliseconds(diff_s * 1000)}</span>".html_safe
+    "<span class=\"text-warning\">+#{format_ms_casual(diff_ms)}</span>".html_safe
   end
 
-  def format_milliseconds(milliseconds)
+  def format_ms(milliseconds)
     return '-' if milliseconds.nil?
+    time = explode_ms(milliseconds)
 
-    total_seconds = milliseconds / 1000
-    total_minutes = total_seconds / 60
-    total_hours   = total_minutes / 60
-
-    seconds = total_seconds % 60
-    minutes = total_minutes % 60
-    hours   = total_hours
-
-    format('%02d:%02d:%02d', hours, minutes, seconds)
+    format('%02d:%02d:%02d', time[:h], time[:m], time[:s])
   end
 
-  private
+  def format_ms_casual(milliseconds)
+    return '-' if milliseconds.nil?
+    time = explode_ms(milliseconds)
+    time.drop_while { |_, unit| unit.zero? }.first(2).to_h.map { |k, v| "#{v.to_i}#{k}" }.join(' ')
+  end
 
   def sorting_info
     {
@@ -120,6 +95,23 @@ module RunsHelper
         params[:by],
         params[:order]
       ]
+    }
+  end
+
+  private
+
+  # explode_ms returns a hash with the components of the given duration separated out. The returned hash is guaranteed
+  # to be ordered by component size descending (hours before minutes, etc.).
+  def explode_ms(total_milliseconds)
+    total_seconds = total_milliseconds / 1000
+    total_minutes = total_seconds / 60
+    total_hours   = total_minutes / 60
+
+    {
+      h:  total_hours,
+      m:  total_minutes % 60,
+      s:  total_seconds % 60,
+      ms: total_milliseconds % 1000
     }
   end
 end

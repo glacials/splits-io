@@ -40,9 +40,9 @@ class Category < ApplicationRecord
   end
 
   def autodetect_shortname
-    shortname = {
+    {
       'any%' => 'anypct',
-      '100%' => '100pct',
+      '100%' => '100pct'
     }[name.try(:downcase)]
   end
 
@@ -54,9 +54,10 @@ class Category < ApplicationRecord
     runs.count * 10 >= game.runs.count
   end
 
-  # merge_into! changes ownership of all of this category's runs and rivalries to the given category, then destroys this
-  # category.
+  # merge_into! changes ownership of this category's runs and rivalries to the given category, then destroys this
+  # category. Does nothing if the given category is nil.
   def merge_into!(category)
+    return if category.nil?
     ApplicationRecord.transaction do
       runs.update_all(category_id: category.id)
       rivalries.update_all(category_id: category.id)

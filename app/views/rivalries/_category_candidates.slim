@@ -1,11 +1,16 @@
 - empty = true
 .col-lg-6
-  .list-group
-    - current_user.categories.each do |category|
-      - if current_user.twitch_followed_users.that_run(category).present?
-        - empty = false
-        a.list-group-item href=new_rivalry_path(category: category)
-          p = "#{category.game} #{category}"
-          p = current_user.twitch_followed_users.that_run(category).join(' ')
+  - current_user.categories.each do |category|
+    - if current_user.twitch_followed_users.that_run(category).present?
+      - empty = false
+      .list-group.m-3
+        a.list-group-header href=new_rivalry_path(category: category) = "#{category.game} #{category}"
+        .list-group-body
+          .list-group.item
+            .card
+              .col-md-6
+                span> Run by:
+                - current_user.twitch_followed_users.that_run(category).each do |user|
+                  => user_badge(user)
 - if empty
   i none found

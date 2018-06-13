@@ -2,15 +2,17 @@
 - timing = params[:timing] || @run.default_timing
 
 - content_for(:header) do
-  - if @run.game.present? && @run.category.present?
-    ol.breadcrumb
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to "Splits I/O", root_path
+    - if @run.game.present? && @run.category.present?
       li.breadcrumb-item = link_to "Games", games_path
       li.breadcrumb-item = link_to @run.game, game_path(@run.game)
       li.breadcrumb-item = link_to @run.category, game_category_path(@run.game, @run.category)
-      li.breadcrumb-item = link_to @run.id36, run_path(@run)
-      li.breadcrumb-item.active = link_to "Statistics", run_stats_path(@run)
+    li.breadcrumb-item = link_to @run.id36, run_path(@run)
+    li.breadcrumb-item.active = link_to "Stats", run_stats_path(@run)
   = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
+= render partial: 'runs/quick_stats', locals: {run: @run, timing: timing}
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article#stats
@@ -19,101 +21,104 @@ article#stats
       | Run Information
       .float-right
         a href=run_history_csv_path(@run) ↓ download run history csv
-    table.card-body.table.table-striped.table-hover.mb-0
-      tbody
-        tr
-          td
-            span Timer
-          td
-            - program = Run.program(@run.program)
-            a target='_blank' href=program.website = program
-        tr
-          td
-            span Uploaded
-          td title=@run.created_at = "#{time_ago_in_words(@run.created_at)} ago"
-        - has_sob = @run.sum_of_best_ms(timing).present? && @run.sum_of_best_ms(timing) != 0
-        - has_attempts = @run.duration_ms(timing).present? && @run.duration_ms(timing) != 0
-        - if !has_sob
-          tr.tip title="This run has no gold splits recorded"
-            td
-              span Sum of best
-            td -
-        - else
+    .table-responsive
+      table.card-body.table.table-striped.table-hover.mb-0
+        tbody
           tr
             td
-              span Sum of best
-            td = format_milliseconds(@run.sum_of_best_ms(timing))
-        - if !has_sob || !has_attempts
-          tr.tip title="This run has no gold splits recorded"
+              span Timer
             td
-              span Total potential timesave
-              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
-            td -
-        - else
+              - program = Run.program(@run.program)
+              a target='_blank' href=program.website = program
           tr
             td
-              span Total potential timesave
-              small.tip-html< title="<code>PB - sum of best</code>" = "(?)"
-            td = format_milliseconds(@run.duration_ms(timing) - @run.sum_of_best_ms(timing))
-        tr
-          td
-            span Attempt
-          td = @run.attempts || '-'
-        tr
-          td
-            span Splits
-          td = @run.segments.size
-        tr
-          td
-            span Missed splits this run
-          td = @run.skipped_splits(timing).size
-        tr
-          td
-            span Exact run duration
-          td #{@run.duration_ms(timing).to_f / 1000}s
-        tr
-          td
-            span Shortest segment
-          td
-            - if @run.collapsed_segments(timing).size > 0
-              | #{@run.shortest_segment(timing).name} (
-              span = format_milliseconds(@run.shortest_segment(timing).duration_ms(timing))
-              | )
-            - else
-              span.time -
-        tr
-          td
-            span Longest segment
-          td
-            - if @run.longest_segment(timing).present?
-              | #{@run.longest_segment(timing).name} (
-              span = format_milliseconds(@run.longest_segment(timing).duration_ms(timing))
-              | )
-            - else
-              span.time -
-        tr
-          td
-            span Mean segment length
-          td
-            - if @run.collapsed_segments(timing).size > 0
-              span = format_milliseconds(@run.duration_ms(timing) / @run.collapsed_segments(timing).size)
-            - else
-              span.time -
-        tr
-          td
-            span Median segment length
-          td
-            - if @run.collapsed_segments(timing).size > 0
-              span = format_milliseconds(@run.median_segment_duration_ms(timing))
-            - else
-              span.time -
-        tr
-          td
-            span Total Playtime
-          td
-            - if @run.total_playtime_ms(timing) != 0
-              span = format_milliseconds(@run.total_playtime_ms(timing))
-            - else
-              span.time -
+              span Uploaded
+            td title=@run.created_at = "#{time_ago_in_words(@run.created_at)} ago"
+          - has_sob = @run.sum_of_best_ms(timing).present? && @run.sum_of_best_ms(timing) != 0
+          - has_attempts = @run.duration_ms(timing).present? && @run.duration_ms(timing) != 0
+          - if !has_sob
+            tr.tip title="This run has no gold splits recorded"
+              td
+                span Sum of best
+              td -
+          - else
+            tr
+              td
+                span Sum of best
+              td = format_ms(@run.sum_of_best_ms(timing))
+          - if !has_sob || !has_attempts
+            tr.tip title="This run has no gold splits recorded"
+              td
+                span Total potential timesave
+                span.tip-right< title="<code>PB - sum of best</code>"
+                  = icon('fas', 'fa-question-circle')
+              td -
+          - else
+            tr
+              td
+                span Total potential timesave
+                span.tip-right< title="<code>PB - sum of best</code>"
+                  = icon('fas', 'question-circle')
+              td = format_ms(@run.duration_ms(timing) - @run.sum_of_best_ms(timing))
+          tr
+            td
+              span Attempt
+            td = @run.attempts || '-'
+          tr
+            td
+              span Splits
+            td = @run.segments.size
+          tr
+            td
+              span Missed splits this run
+            td = @run.skipped_splits(timing).size
+          tr
+            td
+              span Exact run duration
+            td #{@run.duration_ms(timing).to_f / 1000}s
+          tr
+            td
+              span Shortest segment
+            td
+              - if @run.collapsed_segments(timing).size > 0
+                | #{@run.shortest_segment(timing).name} (
+                span = format_ms(@run.shortest_segment(timing).duration_ms(timing))
+                | )
+              - else
+                span.time -
+          tr
+            td
+              span Longest segment
+            td
+              - if @run.longest_segment(timing).present?
+                | #{@run.longest_segment(timing).name} (
+                span = format_ms(@run.longest_segment(timing).duration_ms(timing))
+                | )
+              - else
+                span.time -
+          tr
+            td
+              span Mean segment length
+            td
+              - if @run.collapsed_segments(timing).size > 0
+                span = format_ms(@run.duration_ms(timing) / @run.collapsed_segments(timing).size)
+              - else
+                span.time -
+          tr
+            td
+              span Median segment length
+            td
+              - if @run.collapsed_segments(timing).size > 0
+                span = format_ms(@run.median_segment_duration_ms(timing))
+              - else
+                span.time -
+          tr
+            td
+              span Total Playtime
+            td
+              - if @run.total_playtime_ms(timing) != 0
+                span = format_ms(@run.total_playtime_ms(timing))
+              - else
+                span.time -
   = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits, timing: timing}
   .mt-3#graph-holder

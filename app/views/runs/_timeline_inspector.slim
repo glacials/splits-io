@@ -6,8 +6,8 @@
       .bar
         p
       .title = segment.name
-      div #{format_milliseconds(segment.duration_ms(timing))} duration
-      div #{format_milliseconds(segment.end_ms(timing))} finished
+      div #{format_ms(segment.duration_ms(timing))} duration
+      div #{format_ms(segment.end_ms(timing))} finished
       .save
         - unless segment.gold?(timing) || run.has_skipped_splits?(timing) || !run.has_golds?(timing) || segment.duration_ms(timing) == segment.shortest_duration_ms(timing)
           | #{(segment.duration_ms(timing) - segment.shortest_duration_ms(timing)) / 1000}s potential save

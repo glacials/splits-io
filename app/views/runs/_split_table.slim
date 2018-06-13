@@ -1,62 +1,36 @@
-.card
+.card.shadow
   .card-header.text-white Segments
-  table.card-body.table.table-striped.table-hover.mb-0
-    thead
-      tr
-        th.align-right #
-        th.align-left Name
-        - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
-          th.align-right Realtime Duration
-          th.align-right Gametime Duration
-          th.align-right Realtime Finished At
-          th.align-right Gametime Finished At
-        - else
+  .table-responsive
+    table.card-body.table.table-striped.table-hover.mb-0
+      thead
+        tr
+          th.align-right #
+          th.align-left Name
           th.align-right Duration
           th.align-right Finished At
-        th.align-right History
-    tbody
-      - run.segments.each_with_index do |segment, index|
-        tr
-          td.align-right= index + 1
-          td.align-left= segment.name.presence || '-'
-          - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
-            td.align-right
-              - if segment.gold?(Run::REAL)
-                .gold-split title='Gold'
-              - if segment.skipped?(Run::REAL) || segment.reduced?(Run::REAL)
-                span.time -
-              - else
-                span = format_milliseconds(segment.duration_ms(Run::REAL))
-            td.align-right
-              - if segment.gold?(Run::GAME)
-                .gold-split title='Gold'
-              - if segment.skipped?(Run::GAME) || segment.reduced?(Run::GAME)
-                span.time -
-              - else
-                span = format_milliseconds(segment.duration_ms(Run::GAME))
-            - if segment.skipped?(Run::REAL)
-              td.align-right.time -
-            - else
-              td.align-right = format_milliseconds(segment.end_ms(Run::REAL))
-            - if segment.skipped?(Run::GAME)
-              td.align-right.time -
-            - else
-              td.align-right = format_milliseconds(segment.end_ms(Run::GAME))
-          - else
-            td.align-right
+          - if run.segments.includes(:histories).any? { |segment| segment.histories.any? }
+            th.align-right History
+      tbody
+        - run.segments.includes(:histories).each_with_index do |segment, index|
+          tr
+            td.align-right.align-middle = index + 1
+            td.align-left.align-middle = segment.name.presence || '-'
+            td.align-right.align-middle
               - if segment.gold?(timing)
                 .gold-split title='Gold'
               - if segment.skipped?(timing) || segment.reduced?(timing)
                 span.time -
               - else
-                span = format_milliseconds(segment.duration_ms(timing))
+                span = format_ms(segment.duration_ms(timing))
             - if segment.skipped?(timing)
-              td.align-right.time -
+              td.align-right.time.align-middle -
             - else
-              td.align-right = format_milliseconds(segment.end_ms(timing))
-          td.align-right
-            a.segment-graph-toggler href='#' data-segment=segment.id data-collapsed='1' View History
-          tr.collapsed
-            td colspan='999' style='margin: 0; padding: 0;'
-              .card.border-0.m-0.p-0
-                .card-body.segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
+              td.align-right.align-middle = format_ms(segment.end_ms(timing))
+            - if segment.histories.any?
+              td.align-right
+                a.segment-graph-toggler.btn.btn-secondary href='#' data-segment=segment.id data-collapsed='1'
+                  | View History
+              tr.collapsed
+                td colspan='999' style='margin: 0; padding: 0;'
+                  .card.border-0.m-0.p-0
+                    .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id

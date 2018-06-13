@@ -1,15 +1,25 @@
 - title @user.name
 - content_for(:header) do
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to 'Splits I/O', root_path
+    li.breadcrumb-item = link_to @user, user_path(@user)
   h2
-    span style="margin-right: .5em;"
+    span style='margin-right: .5em;'
       img src=@user.avatar width=50 height=50
-    span = @user
-    - if @user.silver_patron?
-      .gold-split title='Patron'
+    span = user_badge(@user)
   h6
-    a target='_blank' href=@user.uri = @user.uri.to_s.gsub('https://www.', '')
+    a.btn.btn-dark target='_blank' href=@user.uri.to_s
+      => icon('fab', 'twitch')
+      span = @user.twitch_display_name
   h6
     - @user.games.named.each do |game|
-      => link_to game.shortname || game.name.downcase, game, class: 'game-link stealth-link'
+      => link_to(game.shortname || game.name, game, class: 'badge badge-primary', title: game.name)
 article
-  = render partial: 'shared/run_table', locals: table_locals(:pbs, user: @user)
+  .row
+    .col-lg-12
+      .card.shadow
+        = render partial: 'shared/run_table', locals: { \
+          runs: @user.pbs, \
+          cols: %i[time name uploaded], \
+          description: 'Personal Bests' \
+        }.merge(sorting_info)

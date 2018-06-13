@@ -1,0 +1,25 @@
+article#claim-prompt style='display: none;'
+  .col-lg-6.offset-lg-3
+    .card
+      .card-header.text-white
+        | Claim This Run Like a Broken Headlight
+        button#dismiss-claim-prompt type='button' class='close'
+          span aria-hidden='true'
+            span = icon("fas", "times")
+          span class='sr-only' Close
+      .card-body
+        - if current_user.nil?
+          p
+            a href='/auth/twitch' Sign in
+            span< to claim this run.
+        - else
+          p You uploaded this run while logged out.
+          p
+            | You can claim it to your account if you'd like (
+            b = current_user.twitch_display_name
+            | ).
+          p
+            .col-lg-12
+              .col-lg-4.offset-lg-4
+                a.btn.btn-success.btn-block#claim-prompt-button href='#'
+                  b Claim!

@@ -1,38 +1,43 @@
 - title 'Sum of bests leaderboard'
 - content_for(:header) do
-  h2 Fastest sum of best
-  h4 = link_to @category.game, game_path(@game), class: 'stealth-link game-link'
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to('Splits I/O', root_path)
+    li.breadcrumb-item = link_to('Games', games_path)
+    li.breadcrumb-item = link_to(@category.game, game_path(@category.game))
+    li.breadcrumb-item = link_to(@category, game_category_path(@category.game, @category))
+    li.breadcrumb-item = link_to('Sum of Best Leaderboard', game_category_sum_of_bests_path(@category.game, @category))
+  = render partial: 'games/categories/title', locals: {category: @category}
+
 article data-turbolinks-temporary=true
-  = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
-  - runners = @category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc')
-  - if runners.empty?
-    center
-      i Not enough data in this category to display a sum-of-best leaderboard.
-  - else
-    .card
-      table.card-body.table.table-striped.mb-0
-        thead
-          tr
-            th
-            th.align-left Runner
-            th.align-left Sum of best
-            th.align-left
-              small PB
-            th.align-left
-              small
+  .card
+    .card-header
+      = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :sum_of_best}
+    - runners = @category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc')
+    - if runners.empty?
+      center
+        i Not enough data in this category to display a sum-of-best leaderboard.
+    - else
+      .table-responsive
+        table.card-body.table.table-striped.mb-0
+          thead
+            tr
+              th
+              th.align-left Runner
+              th.align-left Sum of Best
+              th.align-left PB
+              th.align-left
                 | Potential save
-                a.tip< title='(PB - sum of best)'
-        tbody
-          - i = 0
-          - runners.each do |runner|
-            - pb = runner.pb_for(@category)
-            tr id=[:run, pb.id]
-              td.align-right = i += 1
-              td.align-left = link_to runner, runner, class: 'user-link'
-              td.align-left = format_milliseconds(pb.sum_of_best_ms(Run::REAL))
-              td.align-left
-                small = link_to format_milliseconds(pb.duration_ms(Run::REAL)), pb
-              td.align-left
-                small = format_milliseconds(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
-    center
-      small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'
+                span.tip< title='<code>(PB - sum of best)</code>'
+                  = icon('fas', 'question-circle')
+          tbody
+            - i = 0
+            - runners.each do |runner|
+              - pb = runner.pb_for(@category)
+              tr id=[:run, pb.id]
+                td.align-right = i += 1
+                td.align-left = user_badge(runner)
+                td.align-left = format_ms(pb.sum_of_best_ms(Run::REAL))
+                td.align-left = link_to format_ms(pb.duration_ms(Run::REAL)), pb
+                td.align-left = format_ms(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
+  center
+    small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'

@@ -1,7 +1,0 @@
-input#toggle-timing type='checkbox' checked=(timing == Run::REAL) data-toggle='toggle' data-on='<i class="far fa-clock"></i> Realtime' data-off='<i class="far fa-clock"></i> Gametime' data-size='small' data-style='ios' data-onstyle='success' data-offstyle='info' data-width=110
-- if timing == Run::REAL
-  javascript:
-    $("#toggle-timing").change(function() { Turbolinks.visit("?timing=game"); });
-- else
-  javascript:
-    $("#toggle-timing").change(function() { Turbolinks.visit("?timing=real"); });

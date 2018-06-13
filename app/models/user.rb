@@ -29,7 +29,7 @@ class User < ApplicationRecord
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
-  pg_search_scope :search_for_name, against: [:name, :twitch_display_name], using: :trigram
+  pg_search_scope :search_for_name, against: %i[name twitch_display_name], using: :trigram
 
   def self.search(term)
     term = term.strip
@@ -37,8 +37,9 @@ class User < ApplicationRecord
     search_for_name(term)
   end
 
+  # avatar returns the user's avatar, or a default avatar if the user has not set one. It cannot return nil.
   def avatar
-    return nil if read_attribute(:avatar).nil?
+    return "https://splits.io/logo.svg" if read_attribute(:avatar).nil?
 
     URI.parse(read_attribute(:avatar) || '').tap do |uri|
       uri.scheme = 'https'
@@ -54,7 +55,11 @@ class User < ApplicationRecord
   end
 
   def pb_for(category)
-    runs.where(category: category).order(:realtime_duration_ms).first
+    runs.where(category: category).order(realtime_duration_ms: :asc).first
+  end
+
+  def previous_upload_for(category)
+    runs.where(category: category).order(created_at: :desc).second
   end
 
   def pbs

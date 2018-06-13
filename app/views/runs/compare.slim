@@ -1,23 +1,25 @@
 - title @run
 - timing = params[:timing] || @run.default_timing
-- short_run = @run.short? || @comparison_run.short?
 
 - content_for(:header) do
-  h3
-    = link_to @run.game, game_path(@run.game), class: 'stealth-link game-link'
-    =>
-    = link_to @run.category, game_category_path(@run.game, @run.category), class: 'stealth-link category-link'
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to('Splits I/O', root_path)
+    - if @run.game.present?
+      li.breadcrumb-item = link_to('Games', games_path)
+      li.breadcrumb-item = link_to(@run.game, game_path(@run.game))
+      - if @run.category.present?
+        li.breadcrumb-item = link_to(@run.category, game_category_path(@run.game, @run.category))
+    li.breadcrumb-item = link_to(@run.id36, run_path(@run))
+    li.breadcrumb-item
+      span> vs.
+      span = link_to(@comparison_run.id36, run_path(@comparison_run))
+  h3 #{@run.game} #{@run.category}
   h5
     big
       a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@comparison_run)
-        = format_milliseconds(@comparison_run.duration_ms(timing))
+        = format_ms(@comparison_run.duration_ms(timing))
     => ' by'
-    - if @comparison_run.user.present?
-      = link_to @comparison_run.user, user_path(@comparison_run.user), class: 'stealth-link user-link'
-      - if @comparison_run.user.silver_patron?
-        .gold-split title='Patron'
-    - else
-      | unknown
+    = user_badge(@comparison_run.user)
 
 - time_scale = [@run.duration_ms(timing), @comparison_run.duration_ms(timing)].max
 = render partial: 'timeline', locals: {run: @comparison_run, scale_to: time_scale, timing: timing}
@@ -28,14 +30,9 @@ hr style='margin: .5em; opacity: 0.25'
   h5
     big
       a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@run)
-        = format_milliseconds(@run.duration_ms(timing))
+        = format_ms(@run.duration_ms(timing))
     => ' by'
-    - if @run.user
-      = link_to @run.user, user_path(@run.user), class: 'stealth-link user-link'
-      - if @run.user.silver_patron?
-        .gold-split title='Patron'
-    - else
-      | unknown
+    = user_badge(@run.user)
 
 = render partial: 'timeline_inspector', locals: {run: @comparison_run, scale_to: time_scale, overlap: true, timing: timing}
 = render partial: 'timeline_inspector', locals: {run: @run, scale_to: time_scale, timing: timing}
@@ -53,7 +50,7 @@ hr style='margin: .5em; opacity: 0.25'
     p
       = 'This will get you to a '
       span class=('short' if @run.short?)
-        = format_milliseconds(@run.duration_ms(timing) - improvements.map { |i| i[:time_difference] / 2 }.sum)
+        = format_ms(@run.duration_ms(timing) - improvements.map { |i| i[:time_difference] / 2 }.sum)
       = ', then we\'ll go from there.'
       - if @comparison_run.user.present?
         p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.uri.to_s, target: :_blank}!

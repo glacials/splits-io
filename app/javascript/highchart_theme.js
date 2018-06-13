@@ -11,7 +11,7 @@ Highcharts.theme = {
     "rgba(243, 123, 29, 1)"
   ],
   chart: {
-    backgroundColor: '#32383e',
+    backgroundColor: 'none',
     style: {
      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
    },

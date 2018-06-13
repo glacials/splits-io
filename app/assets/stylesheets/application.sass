@@ -3,11 +3,7 @@
 @import "purecss/grids-responsive"
 @import "purecss/menus"
 @import headings
-@import "bootswatch/slate/variables"
 @import bootstrap
-@import "bootstrap-toggle/css/bootstrap-toggle"
-@import "bootswatch/slate/bootswatch"
-@import "tipsy/src/stylesheets/tipsy"
 @import "font-awesome-sprockets"
 @import "font-awesome"
 
@@ -15,7 +11,6 @@
 
 @import ads
 @import article
-@import badges
 @import code
 @import faq
 @import footer
@@ -29,6 +24,8 @@
 @import tips
 @import times
 @import toggle
+
+@import vendor/toolkit-inverse.min
 
 hr
   border-top: 1px dashed #ddd
@@ -62,16 +59,6 @@ tr[href]
 h2 small
   font-size: 0.5em
   display: block
-
-#download-menu
-  visibility: hidden
-  float: left
-  margin: 0
-  white-space: nowrap
-  width: 0
-
-#download-link
-  width: 50%
 
 a
   &:link.twitch-signin img

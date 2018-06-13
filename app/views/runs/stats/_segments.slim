@@ -4,44 +4,50 @@
     .float-right
       - if run.attempts.nil? || run.attempts.zero?
         strike ↓ download segment history csv
-        small.tip-html< title="Segment history is not available for this run" = "(?)"
+        span.tip-top< title="Segment history is not available for this run"
+          = icon('fas', 'question-circle')
       - else
         a href=segment_history_csv_path ↓ download segment history csv
-  table.card-body.table.table-striped.table-hover.mb-0
-    thead
-      tr
-        th.align-right #
-        th.align-left Name
-        th.align-right
-          span Standard deviation
-          small.tip-html< title="A low standard deviation indicates consistency" = "(?)"
-        th.align-right Best
-        th.align-right Mean
-        th.align-right
-          span Median
-          small.tip-html< title="50% of this runner's times on this segment are faster than this time" = "(?)"
-        th.align-right
-          span 90th percentile
-          small.tip-html< title="90% of this runner's times on this segment are faster than this time" = "(?)"
-        th.align-right
-          span 99th percentile
-          small.tip-html< title="99% of this runner's times on this segment are faster than this time" = "(?)"
-    tbody
-      - run.segments.includes(:histories).each do |segment|
-        - if segment.histories.nil? || segment.histories.length == 0
-          tr
-            td.align-right= segment.segment_number + 1
-            td.align-left= segment.name.present? ? segment.name : '-'
-            td.align-right colspan=99
-              i no segment history available
-        - else
-          - history_times = segment.histories.map { |attempt| attempt.duration_ms(timing) }.compact
-          tr
-            td.align-right = segment.segment_number + 1
-            td.align-left = segment.name.present? ? segment.name : '-'
-            td.align-right = format_milliseconds(history_times.standard_deviation)
-            td.align-right = format_milliseconds(segment.realtime_shortest_duration_ms)
-            td.align-right = format_milliseconds(history_times.mean)
-            td.align-right = format_milliseconds(history_times.median)
-            td.align-right = format_milliseconds(history_times.percentile(90))
-            td.align-right = format_milliseconds(history_times.percentile(99))
+  .table-responsive
+    table.card-body.table.table-striped.table-hover.mb-0
+      thead
+        tr
+          th.align-right #
+          th.align-left Name
+          th.align-right
+            span Standard deviation
+            span.tip-top< title="A low standard deviation indicates consistency"
+              = icon('fas', 'question-circle')
+          th.align-right Best
+          th.align-right Mean
+          th.align-right
+            span Median
+            small.tip-top< title="50% of this runner's times on this segment are faster than this time"
+              = icon('fas', 'question-circle')
+          th.align-right
+            span 90th percentile
+            small.tip-top< title="90% of this runner's times on this segment are faster than this time"
+              = icon('fas', 'question-circle')
+          th.align-right
+            span 99th percentile
+            small.tip-top< title="99% of this runner's times on this segment are faster than this time"
+              = icon('fas', 'question-circle')
+      tbody
+        - run.segments.includes(:histories).each do |segment|
+          - if segment.histories.nil? || segment.histories.length == 0
+            tr
+              td.align-right= segment.segment_number + 1
+              td.align-left= segment.name.present? ? segment.name : '-'
+              td.align-right colspan=99
+                i no segment history available
+          - else
+            - history_times = segment.histories.map { |attempt| attempt.duration_ms(timing) }.compact
+            tr
+              td.align-right = segment.segment_number + 1
+              td.align-left = segment.name.present? ? segment.name : '-'
+              td.align-right = format_ms(history_times.standard_deviation)
+              td.align-right = format_ms(segment.realtime_shortest_duration_ms)
+              td.align-right = format_ms(history_times.mean)
+              td.align-right = format_ms(history_times.median)
+              td.align-right = format_ms(history_times.percentile(90))
+              td.align-right = format_ms(history_times.percentile(99))

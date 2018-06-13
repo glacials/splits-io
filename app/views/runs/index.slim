@@ -1,5 +1,7 @@
-- title "hello"
+- title 'Hi!'
 - content_for(:header) do
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to 'Splits I/O', root_path
   - if current_user.try(:avatar).present?
     h2
       span style="margin-right: .5em;"
@@ -19,7 +21,12 @@ article
     .col-lg-12
       - if logged_in?
         - if current_user.runs.present?
-          = render partial: 'shared/run_table', locals: table_locals(:my_pbs)
+          .card.shadow
+            = render partial: 'shared/run_table', locals: { \
+              runs: current_user.pbs, \
+              cols: %i[time name uploaded owner_controls rival], \
+              description: 'My Personal Bests' \
+            }.merge(sorting_info)
         - else
           .jumbotron
             h4 Drag and drop as many runs as you want right here

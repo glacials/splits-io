@@ -2,6 +2,7 @@ LineLength:
   Max: 120
 AllCops:
   Include:
+    - '**/*.rb'
     - Rakefile
     - config.ru
   Exclude:
@@ -11,6 +12,7 @@ AllCops:
     - lib/parser/LiveSplitCore.rb
     - bin/**/*
     - node_modules/**/*
+    - config/routes.rb
 Documentation:
   Enabled: false
 
@@ -25,3 +27,14 @@ Style/EmptyMethod:
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - draw
+    - namespace
+
+Rails:
+  Enabled: true

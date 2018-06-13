@@ -1,30 +1,21 @@
 - if current_user.twitch_followed_users.present?
   h4 Recent PBs By People You Follow
-  .row
-    .col-lg-6
-      .list-group
-        - Run.includes(:game, :category, :user).where( \
-          user: current_user.twitch_followed_users \
-        ).where.not( \
-          games: {name: [nil, ""]} \
-        ).order('runs.created_at DESC').limit(10).each do |run|
-          a.list-group-item href=( \
-            current_user.runs?(run.category) ? compare_path(current_user.pb_for(run.category), run) : run_path(run) \
-          )
-            .media style='margin: .5em 0;'
-              .float-left.mr-3 href=user_path(run.user)
-                img src=run.user.avatar height=64 width=64
-              .media-body
-                .float-right = pretty_timestamp(run.created_at)
-                div
-                  = run.user
-                  - if run.user.silver_patron?
-                    .gold-split title='Patron'
-                div = "#{run.game} #{run.category}"
-                div
-                  = format_milliseconds(run.duration_ms(Run::REAL))
-                  - if current_user.runs?(run.category)
-                    - user_pb = current_user.pb_for(run.category)
-                    = " ("
-                    = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
-                    = ")"
+  .col-md-6
+    - Run.includes(:game, :category, :user).where(user: current_user.twitch_followed_users).where.not(games: {name: [nil, ""]}).order('runs.created_at DESC').limit(10).each do |run|
+      = link_to(run, class: 'list-group-item list-group-action flex-columnfalign-items-start bg-dark')
+        .row
+          .col-md-2
+            = image_tag(run.user.avatar, size: '70x70')
+          .col-md-10
+            .d-flex.w-100.justify-content-between
+              h5.mb-1 = run.user.name
+              small.text-muted = pretty_timestamp(run.created_at)
+            p.mb-1
+              = "#{run.game} #{run.category}"
+              div
+                = format_ms(run.duration_ms(Run::REAL))
+                - if current_user.runs?(run.category)
+                  - user_pb = current_user.pb_for(run.category)
+                  = " ("
+                  = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
+                  = ")"
