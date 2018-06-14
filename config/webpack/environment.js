@@ -17,7 +17,6 @@ environment.plugins.prepend(
     clipboard: 'clipboard',
     tipsy: 'tipsy',
     "jquery.turbolink": "jquery.turbolinks",
-    "bootstrap-toggle": "bootstrap-toggle"
   })
 )
 
@@ -29,7 +28,6 @@ const aliasConfig = module.exports = {
       clipboard: 'clipboard/dist/clipboard',
       tipsy: 'tipsy/src/javascripts/jquery.tipsy',
       "jquery.turbolinks": 'jquery.turbolinks/vendor/assets/javascripts/jquery.turbolinks',
-      "bootstrap-toggle": 'bootstrap-toggle/js/bootstrap-toggle'
     }
   }
 }

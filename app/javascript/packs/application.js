@@ -9,7 +9,6 @@
 
 import "jquery"
 import "jquery-ujs"
-import "bootstrap"
 import "moment"
 import "underscore"
 import {Spinner} from "spin.js"
