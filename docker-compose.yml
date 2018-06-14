@@ -40,6 +40,9 @@ services:
     expose:
       - "3035"
   worker:
+    environment:
+      - TWITCH_CLIENT_ID
+      - TWITCH_CLIENT_SECRET
     build: .
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work"
     ports: []
