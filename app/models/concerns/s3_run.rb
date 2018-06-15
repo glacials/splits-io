@@ -32,5 +32,19 @@ module S3Run
       puts 'run stored in s3 :)'
       true
     end
+
+    def repack_llanfair_run
+      return unless program == 'llanfair'
+
+      file_text = $s3_bucket_internal.object("splits/#{s3_filename}").get.body.read
+      return unless file_text[0] == '['
+
+      binary_file = file_text[1..-1].split(', ').map(&:to_i).pack('C*')
+      $s3_bucket_internal.put_object(
+        key: "splits/#{s3_filename}",
+        body: binary_file
+      )
+      parse_into_db
+    end
   end
 end
