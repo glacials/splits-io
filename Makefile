@@ -10,7 +10,7 @@ endif
 
 docker-compose := docker-compose
 ifeq ($(detectedOS),Linux)
-  docker-compose := sudo docker-compose
+  docker-compose := sudo -E docker-compose
 endif
 
 build:
