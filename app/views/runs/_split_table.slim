@@ -28,9 +28,9 @@
               td.align-right.align-middle = format_ms(segment.end_ms(timing))
             - if segment.histories.any?
               td.align-right
-                a.segment-graph-toggler.btn.btn-secondary href='#' data-segment=segment.id data-collapsed='1'
-                  | View History
-              tr.collapsed
+                a.segment-graph-toggler.text-light href='#' data-segment=segment.id data-collapsed='1'
+                  = icon('fas', 'chart-pie')
+              tr hidden=true
                 td colspan='999' style='margin: 0; padding: 0;'
                   .card.border-0.m-0.p-0
                     .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id

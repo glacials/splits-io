@@ -57,13 +57,14 @@ $(function() {
     for (const toggler of document.getElementsByClassName('segment-graph-toggler')) {
       toggler.addEventListener('click', function(event) {
         event.preventDefault()
-        document.querySelector(
-          '.segment-graph-holder[data-segment="' + event.target.dataset.segment + '"]'
-        ).closest('tr').classList.toggle('collapsed')
+        const row = document.querySelector(
+          '.segment-graph-holder[data-segment="' + toggler.dataset.segment + '"]'
+        ).closest('tr')
+        row.hidden = !row.hidden
         if (event.target.dataset.generated !== '1') {
           event.target.dataset.generated = '1'
           runJSON.then(function(json) {
-            const segment = json.run.segments.filter(segment => (segment.id === event.target.dataset.segment))[0]
+            const segment = json.run.segments.filter(segment => (segment.id === toggler.dataset.segment))[0]
             build_segment_graph(segment)
           })
         }
