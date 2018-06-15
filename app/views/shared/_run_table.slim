@@ -29,7 +29,8 @@
             - if cols.include?(:owner_controls)
               td.align-right
                 .dropdown
-                  .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown} x
+                  .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
+                    = icon('fas', 'bars')
                   .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
                     = link_to '<i class="fas fa-eraser"></i> Disown'.html_safe, '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-item text-danger'
                     = link_to '<i class="fas fa-trash"></i> Delete'.html_safe, '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-item text-danger'
@@ -50,7 +51,8 @@
                       '  against
                       = user_badge(rival)
                   - elsif run.category.present?
-                    = link_to '+', new_rivalry_path(category: run.category)
+                    = link_to new_rivalry_path(category: run.category)
+                      .text-success = icon('fas', 'plus')
             - if cols.include?(:uploaded)
               td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
   .mx-auto
