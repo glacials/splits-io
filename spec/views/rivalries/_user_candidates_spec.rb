@@ -10,7 +10,7 @@ RSpec.describe 'rivalries/_user_candidates' do
     FactoryBot.create(:run, category: category, user: user)
     FactoryBot.create(:run, category: category, user: follow)
 
-    allow(controller).to receive(:current_user).and_return(user)
+    allow(view).to receive(:current_user).and_return(user)
 
     users = double
     allow(users).to receive(:twitch_followed_users).and_return(users)

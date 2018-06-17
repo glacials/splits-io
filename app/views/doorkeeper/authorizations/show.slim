@@ -12,7 +12,7 @@ article
               .input-group-btn
                 .btn.btn-primary.clipboard-btn data-clipboard-target="#code"
                   span#copy = icon("fas", "copy")
-                  span#copied style='display: none;' = icon ("fas", "check")
+                  span#copied style='display: none;' = icon("fas", "check")
           coffee:
             clipboard = new Clipboard('.clipboard-btn')
             clipboard.on('success', (e) ->
