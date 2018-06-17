@@ -16,7 +16,7 @@ article#claim-prompt style='display: none;'
           p You uploaded this run while logged out.
           p
             | You can claim it to your account if you'd like (
-            b = current_user.twitch_display_name
+            b = current_user.to_s
             | ).
           p
             .col-lg-12
