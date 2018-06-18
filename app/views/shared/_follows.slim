@@ -1,21 +1,21 @@
 - if current_user.twitch_followed_users.present?
   h4 Recent PBs By People You Follow
-  .col-md-6
-    - Run.includes(:game, :category, :user).where(user: current_user.twitch_followed_users).where.not(games: {name: [nil, ""]}).order('runs.created_at DESC').limit(10).each do |run|
-      = link_to(run, class: 'list-group-item list-group-action flex-columnfalign-items-start bg-dark')
-        .row
-          .col-md-2
-            = image_tag(run.user.avatar, size: '70x70')
-          .col-md-10
-            .d-flex.w-100.justify-content-between
-              h5.mb-1 = run.user.name
-              small.text-muted = pretty_timestamp(run.created_at)
-            p.mb-1
-              = "#{run.game} #{run.category}"
-              div
-                = format_ms(run.duration_ms(Run::REAL))
-                - if current_user.runs?(run.category)
-                  - user_pb = current_user.pb_for(run.category)
-                  = " ("
-                  = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
-                  = ")"
+  .card.col-md-6.p-0
+    .list-group
+      - Run.includes(:game, :category, :user).where(user: current_user.twitch_followed_users).where.not(games: {name: [nil, ""]}).order('runs.created_at DESC').limit(10).each do |run|
+        = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start')
+          .media
+            = image_tag(run.user.avatar, size: '70x70', class: 'mr-3')
+            .media-body
+              .d-flex.w-100.justify-content-between
+                h5.mb-1 = run.user
+                = pretty_timestamp(run.created_at)
+              p.mb-1
+                = "#{run.game} #{run.category}"
+                div
+                  = format_ms(run.duration_ms(Run::REAL))
+                  - if current_user.runs?(run.category)
+                    - user_pb = current_user.pb_for(run.category)
+                    = " ("
+                    = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
+                    = ")"
