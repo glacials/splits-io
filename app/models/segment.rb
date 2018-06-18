@@ -42,6 +42,18 @@ class Segment < ApplicationRecord
     end
   end
 
+  def first?
+    segment_number.zero?
+  end
+
+  def last?
+    segment_number == run.segments.count - 1
+  end
+
+  def second_half?(timing)
+    (end_ms(timing) - (duration_ms(timing) / 2)) > (run.duration_ms(timing) / 2)
+  end
+
   def gold?(timing)
     case timing
     when Run::REAL

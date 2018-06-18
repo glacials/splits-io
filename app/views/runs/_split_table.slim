@@ -11,9 +11,9 @@
           - if run.segments.includes(:histories).any? { |segment| segment.histories.any? }
             th.align-right History
       tbody
-        - run.segments.includes(:histories).each_with_index do |segment, index|
+        - run.segments.includes(:histories).each do |segment|
           tr
-            td.align-right.align-middle = index + 1
+            td.align-right.align-middle = segment.segment_number + 1
             td.align-left.align-middle = segment.name.presence || '-'
             td.align-right.align-middle
               - if segment.gold?(timing)
