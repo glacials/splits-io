@@ -1,4 +1,4 @@
-FROM ruby:2.4.2
+FROM ruby:2.5.1
 
 # Setup for current nodejs
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
