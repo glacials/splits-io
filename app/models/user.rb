@@ -76,7 +76,7 @@ class User < ApplicationRecord
   end
 
   def rivals
-    User.joins('INNER JOIN rivalries ON rivalries.to_user_id = users.id AND rivalries.from_user_id = 1')
+    User.joins('INNER JOIN rivalries ON rivalries.to_user_id = users.id AND rivalres.from_user_id = ' + id)
         .select('users.*, rivalries.category_id')
   end
 
