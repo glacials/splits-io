@@ -44,7 +44,7 @@
               td.align-right
                 small
                   - rival = run.user.rivals.detect { |r| r.category_id == run.category_id }
-                  - if rival.present? && rival.pb_for(run.category)
+                  - if rival.present? && rival.pb_for(run.category).present?
                     - rival_run = rival.pb_for(run.category)
                     = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
                       = pretty_difference(run.duration_ms(Run::REAL), rival_run.duration_ms(Run::REAL))
