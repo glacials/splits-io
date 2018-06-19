@@ -35,5 +35,5 @@ article
         p To upload several files at once, #{link_to 'sign in', '/auth/twitch'} first.
         p Not sure what Splits I/O is about? #{link_to 'Roll the dice', random_path} to visit a random run.
 - if logged_in?
-  article#follows
+  article
     = render partial: 'shared/follows'
