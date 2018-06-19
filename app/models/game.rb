@@ -6,11 +6,11 @@ class Game < ApplicationRecord
 
   validates :name, presence: true
 
-  has_many :categories
+  has_many :categories, dependent: :destroy
   has_many :runs, through: :categories
   has_many :users, -> { distinct }, through: :runs
   has_many :runners, -> { distinct }, through: :runs, class_name: 'User'
-  has_many :aliases, class_name: 'GameAlias'
+  has_many :aliases, class_name: 'GameAlias', dependent: :destroy
 
   after_create :create_initial_alias
 
