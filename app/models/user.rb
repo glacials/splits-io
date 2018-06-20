@@ -75,11 +75,6 @@ class User < ApplicationRecord
     twitch_display_name || name || 'somebody'
   end
 
-  def rivals
-    User.joins('INNER JOIN rivalries ON rivalries.to_user_id = users.id AND rivalries.from_user_id = ', id.to_s)
-        .select('users.*, rivalries.category_id')
-  end
-
   def twitch_followed_users
     User.joins(:twitch_user_followers).where(twitch_user_follows: {from_user_id: id})
   end
