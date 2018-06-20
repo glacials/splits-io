@@ -4,7 +4,7 @@ class User < ApplicationRecord
   include RivalUser
   include TwitchUser
 
-  has_many :runs, dependent: :destroy
+  has_many :runs
   has_many :categories, -> { distinct }, through: :runs
   has_many :games, -> { distinct }, through: :runs
 
@@ -39,9 +39,9 @@ class User < ApplicationRecord
 
   # avatar returns the user's avatar, or a default avatar if the user has not set one. It cannot return nil.
   def avatar
-    return 'https://splits.io/logo.svg' if self[:avatar].nil?
+    return 'https://splits.io/logo.svg' if read_attribute(:avatar).nil?
 
-    URI.parse(self[:avatar] || '').tap do |uri|
+    URI.parse(read_attribute(:avatar) || '').tap do |uri|
       uri.scheme = 'https'
     end.to_s
   end
@@ -63,8 +63,8 @@ class User < ApplicationRecord
   end
 
   def pbs
-    Run.where(user: self).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
-       .union(Run.where(user: self, category: nil))
+    runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
+        .union_all(runs.by_category(nil))
   end
 
   def runs?(category)
@@ -76,7 +76,7 @@ class User < ApplicationRecord
   end
 
   def rivals
-    User.joins('INNER JOIN rivalries ON rivalries.to_user_id = users.id AND rivalries.from_user_id = ' + id.to_s)
+    User.joins('INNER JOIN rivalries ON rivalries.to_user_id = users.id AND rivalries.from_user_id = ', id.to_s)
         .select('users.*, rivalries.category_id')
   end
 
