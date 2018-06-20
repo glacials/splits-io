@@ -11,8 +11,6 @@
     table.card-body.table.table-striped.table-hover.mb-0
       thead
         tr
-          - if cols.include?(:owner_controls)
-            th.header.align-right
           - if cols.include?(:runner)
             th.header.align-right = th_sorter('Runner', 'user_id')
           - if cols.include?(:time)
@@ -23,17 +21,11 @@
             th.align-right Rival
           - if cols.include?(:uploaded)
             th.align-right = th_sorter('Uploaded', 'created_at')
+          - if cols.include?(:owner_controls)
+            th.header.align-right
       tbody
         - runs.includes(:user).each do |run|
           tr id="run_#{run.id36}"
-            - if cols.include?(:owner_controls)
-              td.align-right
-                .dropdown
-                  .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
-                    = icon('fas', 'bars')
-                  .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
-                    = link_to '<i class="fas fa-eraser"></i> Disown'.html_safe, '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-item text-danger'
-                    = link_to '<i class="fas fa-trash"></i> Delete'.html_safe, '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-item text-danger'
             - if cols.include?(:runner)
               td.align-right = user_badge(run.user)
             - if cols.include?(:time)
@@ -55,5 +47,13 @@
                       .text-success = icon('fas', 'plus')
             - if cols.include?(:uploaded)
               td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
+            - if cols.include?(:owner_controls)
+              td
+                .dropleft.text-center
+                  .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
+                    = icon('fas', 'ellipsis-v')
+                  .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
+                    = link_to '<i class="fas fa-eraser"></i> Disown'.html_safe, '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-item text-danger'
+                    = link_to '<i class="fas fa-trash"></i> Delete'.html_safe, '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-item text-danger'
   .mx-auto
     = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')
