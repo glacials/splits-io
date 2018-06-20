@@ -65,6 +65,7 @@ gem 'cancancan'
 gem 'doorkeeper'
 
 # db
+gem 'active_record_union'
 gem 'activerecord-import'
 gem 'arel'
 gem 'aws-sdk-rails'

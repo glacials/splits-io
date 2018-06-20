@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   # avatar returns the user's avatar, or a default avatar if the user has not set one. It cannot return nil.
   def avatar
-    return "https://splits.io/logo.svg" if read_attribute(:avatar).nil?
+    return 'https://splits.io/logo.svg' if read_attribute(:avatar).nil?
 
     URI.parse(read_attribute(:avatar) || '').tap do |uri|
       uri.scheme = 'https'
@@ -63,9 +63,8 @@ class User < ApplicationRecord
   end
 
   def pbs
-    runs.where(
-      id: categories.map { |category| pb_for(category).id10 } | runs.where(category: nil).pluck(:id)
-    )
+    runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
+        .union_all(runs.by_category(nil))
   end
 
   def runs?(category)

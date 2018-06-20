@@ -9,7 +9,7 @@
       span Splits I/O
   - else
     h2 Splits I/O
-  - if logged_in? && current_user.runs.present?
+  - if logged_in? && current_user.runs.any?
     h5 Want some jelly with these PBs?
   - else
     h5
@@ -20,7 +20,7 @@ article
   .row
     .col-lg-12
       - if logged_in?
-        - if current_user.runs.present?
+        - if current_user.runs.any?
           .card.shadow
             = render partial: 'shared/run_table', locals: { \
               runs: current_user.pbs, \
