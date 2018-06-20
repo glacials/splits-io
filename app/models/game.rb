@@ -10,7 +10,7 @@ class Game < ApplicationRecord
   has_many :runs, through: :categories
   has_many :users, -> { distinct }, through: :runs
   has_many :runners, -> { distinct }, through: :runs, class_name: 'User'
-  has_many :aliases, class_name: 'GameAlias', dependent: :restrict_with_exception
+  has_many :aliases, class_name: 'GameAlias'
 
   after_create :create_initial_alias
 
