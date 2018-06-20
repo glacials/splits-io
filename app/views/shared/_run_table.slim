@@ -49,7 +49,7 @@
               td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
             - if cols.include?(:owner_controls)
               td
-                .dropdown.text-center
+                .dropleft.text-center
                   .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
                     = icon('fas', 'ellipsis-v')
                   .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
