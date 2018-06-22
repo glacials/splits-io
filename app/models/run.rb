@@ -27,6 +27,7 @@ class Run < ApplicationRecord
 
   after_create :refresh_game
   after_create :discover_runner
+  after_create :push_age
 
   validates_with RunValidator
 
@@ -184,6 +185,18 @@ class Run < ApplicationRecord
       realtime_sum_of_best_ms
     when Run::GAME
       gametime_sum_of_best_ms
+    end
+  end
+
+  def push_age
+    60.times do |i|
+      RunChannel.delay(run_at: Time.now + (i + 1).minutes).broadcast_time_since_upload(id36)
+    end
+    24.times do |i|
+      RunChannel.delay(run_at: Time.now + (i + 1).hours).broadcast_time_since_upload(id36)
+    end
+    30.times do |i|
+      RunChannel.delay(run_at: Time.now + (i + 1).days).broadcast_time_since_upload(id36)
     end
   end
 end
