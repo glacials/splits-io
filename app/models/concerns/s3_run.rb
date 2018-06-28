@@ -4,6 +4,19 @@ module S3Run
   extend ActiveSupport::Concern
 
   included do
+    class RunTooLarge < StandardError; end
+    def file
+      file = $s3_bucket_internal.object("splits/#{s3_filename}")
+
+      return nil unless file.exists?
+
+      raise RunTooLarge if file.content_length >= (100 * 1024 * 1024) # 100 MiB
+
+      file.get.body.read
+    rescue Aws::S3::Errors::AccessDenied, Aws::S3::Errors::Forbidden
+      nil
+    end
+
     def in_s3?
       file = $s3_bucket_internal.object("splits/#{s3_filename}")
       file.exists?

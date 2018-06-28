@@ -4,6 +4,24 @@ module CompletedRun
   extend ActiveSupport::Concern
 
   included do
+    def duration_ms(time_type = default_time_type)
+      case time_type
+      when Run::REAL
+        realtime_duration_ms
+      when Run::GAME
+        gametime_duration_ms
+      end
+    end
+
+    def sum_of_best_ms(time_type = default_time_type)
+      case time_type
+      when Run::REAL
+        realtime_sum_of_best_ms
+      when Run::GAME
+        gametime_sum_of_best_ms
+      end
+    end
+
     def splits
       segments
     end
