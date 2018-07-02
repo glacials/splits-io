@@ -75,6 +75,7 @@ gem 'pg_search'
 
 # errors+logging
 gem 'newrelic_rpm'
+gem 'skylight'
 
 # external communication
 gem 'httparty'
