@@ -3,12 +3,12 @@
 ## IDs
 Resources are identifyable *only* by the following attributes:
 
-| Resource type | Key attribute | Description of key attribute | Examples of key attribute             |
-|:--------------|:--------------|:-----------------------------|:--------------------------------------|
-| Run           | ID            | A base 36 number             | 1b, 3nm, 1vr                          |
-| Runner        | Name          | A Twitch username            | glacials, batedurgonnadie, snarfybobo |
-| Game          | Shortname     | An SRL abbreviation          | sms, sm64, portal                     |
-| Category      | ID            | A base 10 number             | 312, 1456, 11                         |
+| Resource type        | Key attribute | Description of key attribute | Examples of key attribute             |
+|:---------------------|:--------------|:-----------------------------|:--------------------------------------|
+| [Run][run]           | ID            | A base 36 number             | 1b, 3nm, 1vr                          |
+| [Runner][runner]     | Name          | A Twitch username            | glacials, batedurgonnadie, snarfybobo |
+| [Game][game]         | Shortname     | An SRL abbreviation          | sms, sm64, portal                     |
+| [Category][category] | ID            | A base 10 number             | 312, 1456, 11                         |
 
 Your code shouldn't care too much about what these attributes actually are, as they're all represented as unique
 strings. But of course as a human it's nice to be able to glean some meaning out of them.
@@ -20,25 +20,25 @@ curl https://splits.io/api/v4/runs/10x?historic=1
 ```
 A Run maps 1:1 to an uploaded splits file.
 
-| Field                     | Type                                         | Can it be null?                                       | Description                                                                                                                                                                                                                                   |
-|--------------------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`                      | string                                       | never                                                 | Unique ID for identifying the run on Splits I/O. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
-| `srdc_id`                 | string                                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                         |
-| `realtime_duration_ms`    | number                                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                 |
-| `realtime_sum_of_best_ms` | number                                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                              |
-| `gametime_duration_ms`    | number                                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                 |
-| `gametime_sum_of_best_ms` | number                                       | never                                                 | Gametime sum of best in milliseconds of the run.                                                                                                                                                                                              |
-| `default_timing`          | string                                       | never                                                 | The timing used for the run.  Will be either `real` or `game`.                                                                                                                                                                                |
-| `program`                 | string                                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                             |
-| `attempts`                | number                                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                        |
-| `image_url`               | string                                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits I/O.                                                                                           |
-| `created_at`              | string                                       | never                                                 | The time and date at which this run's source file was uploaded to Splits I/O. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
-| `updated_at`              | string                                       | never                                                 | The time and date at which this run was most recently modified on Splits I/O (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
-| `video_url`               | string                                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                           |
-| `game`                    | Game object (see Game section)               | when unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                           |
-| `category`                | Category object (see Category section)       | when unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                       |
-| `runners`                 | array of Runner objects (see Runner section) | never                                                 | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                    |
-| `segments`                | array of Segment objects                     | never                                                 | The associated segments for the run.
+| Field                     | Type                         | Can it be null?                                       | Description                                                                                                                                                                                                                                   |
+|--------------------------:|:-----------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`                      | string                       | never                                                 | Unique ID for identifying the run on Splits I/O. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
+| `srdc_id`                 | string                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                         |
+| `realtime_duration_ms`    | number                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                 |
+| `realtime_sum_of_best_ms` | number                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                              |
+| `gametime_duration_ms`    | number                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                 |
+| `gametime_sum_of_best_ms` | number                       | never                                                 | Gametime sum of best in milliseconds of the run.                                                                                                                                                                                              |
+| `default_timing`          | string                       | never                                                 | The timing used for the run.  Will be either `real` or `game`.                                                                                                                                                                                |
+| `program`                 | string                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                             |
+| `attempts`                | number                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                        |
+| `image_url`               | string                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits I/O.                                                                                           |
+| `created_at`              | string                       | never                                                 | The time and date at which this run's source file was uploaded to Splits I/O. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
+| `updated_at`              | string                       | never                                                 | The time and date at which this run was most recently modified on Splits I/O (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
+| `video_url`               | string                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                           |
+| `game`                    | [Game][game]                 | when unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                           |
+| `category`                | [Category][cagegory]         | when unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                       |
+| `runners`                 | array of [Runners][runner]   | never                                                 | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                    |
+| `segments`                | array of [Segments][segment] | never                                                 | The associated segments for the run.
 
 If a `historic=1` param is included in the request, one additional field will be present:
 
@@ -46,7 +46,8 @@ If a `historic=1` param is included in the request, one additional field will be
 |---------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `histories`    | array of History objects                     | never                                                 | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.     |
 
-Segment objects have the following format.
+### Segment
+Segment objects have the following format:
 
 | Field                           | Type          | Can it be null? | Description                                                                                                                                                                                                                                                        |
 |--------------------------------:|:--------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -119,6 +120,7 @@ any of the following `Content-Type`s.
 
 ## Runner
 ```bash
+curl https://splits.io/api/v4/runners?search=glacials
 curl https://splits.io/api/v4/runners/glacials
 curl https://splits.io/api/v4/runners/glacials/runs
 curl https://splits.io/api/v4/runners/glacials/pbs
@@ -128,33 +130,34 @@ curl https://splits.io/api/v4/runners/glacials/categories
 A Runner is a user who has at least one run tied to their account. Users with zero runs are not discoverable using the
 API.
 
-| Field        | Type   | Can it be null? | Description                                                                                                                |
-|-------------:|:-------|:----------------|:---------------------------------------------------------------------------------------------------------------------------|
-| `twitch_id`  | string | never           | The numeric Twitch ID of the user.                                                                                         |
-| `name`       | string | never           | The Twitch name of the user.                                                                                               |
-| `avatar`     | string | never           | The Twitch avatar of the user.                                                                                             |
-| `created_at` | string | never           | The time and date at which this user first authenticated with Splits I/O. This field conforms to [ISO 8601][iso8601].      |
-| `updated_at` | string | never           | The time and date at which this user was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
+| Field          | Type   | Can it be null? | Description                                                                                                                |
+|---------------:|:-------|:----------------|:---------------------------------------------------------------------------------------------------------------------------|
+| `twitch_id`    | string | never           | The numeric Twitch ID of the user.                                                                                         |
+| `name`         | string | never           | The Twitch name of the user.                                                                                               |
+| `display_name` | string | never           | The Twitch display name of the user.                                                                                               |
+| `avatar`       | string | never           | The Twitch avatar of the user.                                                                                             |
+| `created_at`   | string | never           | The time and date at which this user first authenticated with Splits I/O. This field conforms to [ISO 8601][iso8601].      |
+| `updated_at`   | string | never           | The time and date at which this user was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
 
 ## Game
 ```bash
-curl https://splits.io/api/v4/games
+curl https://splits.io/api/v4/games?search=mario
 curl https://splits.io/api/v4/games/sms
 curl https://splits.io/api/v4/games/sms/categories
 curl https://splits.io/api/v4/games/sms/runs
 curl https://splits.io/api/v4/games/sms/runners
 ```
 Most timers allow users to specify a "game" field. A Game is a collection of information about the video game specified
-in this field. Games have at least one run and have an associated shortname, usually scraped from SRD or SRDC, but
-sometimes specified manually. If a game does not have an associated shortname, it is not a Game.
+in this field. By definition, Games have at least one run and have an associated shortname, usually scraped from SRL or SRDC, but
+sometimes specified manually.
 
-| Field        | Type                                             | Can it be null? | Description                                                                                                                          |
-|-------------:|:-------------------------------------------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------|
-| `name`       | string                                           | never           | The full title of the game, like "Super Mario Sunshine".                                                                             |
-| `shortname`  | string                                           | when not known  | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or Speedrun.com. |
-| `created_at` | string                                           | never           | The time and date at which this game was created on Splits I/O. This field conforms to [ISO 8601][iso8601].                          |
-| `updated_at` | string                                           | never           | The time and date at which this game was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601].           |
-| `categories` | array of Category objects (see Category section) | never           | The known speedrun categories for this game.                                                                                         |
+| Field        | Type                            | Can it be null? | Description                                                                                                                          |
+|-------------:|:--------------------------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------|
+| `name`       | string                          | never           | The full title of the game, like "Super Mario Sunshine".                                                                             |
+| `shortname`  | string                          | when not known  | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or Speedrun.com. |
+| `created_at` | string                          | never           | The time and date at which this game was created on Splits I/O. This field conforms to [ISO 8601][iso8601].                          |
+| `updated_at` | string                          | never           | The time and date at which this game was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601].           |
+| `categories` | array of [Categories][category] | never           | The known speedrun categories for this game.                                                                                         |
 
 ## Category
 ```bash
@@ -263,7 +266,6 @@ GET https://splits.io/oauth/token/info?access_token=YOUR_TOKEN
 ```
 
 [oauth2-simplified]: https://aaronparecki.com/oauth-2-simplified/
-
 
 #### Scopes
 Below is a list of all the possible scopes your application can request along with a brief description. You can specify
@@ -443,8 +445,6 @@ using a secure API request.
 [1]: https://splits.io/settings
 [rfc6749-6]: https://tools.ietf.org/html/rfc6749#section-6
 
-
-
 ## Converting
 ```bash
 curl -X POST https://splits.io/api/v4/convert?format=livesplit --form file=@/path/to/file
@@ -467,3 +467,9 @@ end up casting your IDs to anyway in order to hit the API with them again. So le
 save you a step.
 
 [iso8601]: https://en.wikipedia.org/wiki/ISO_8601
+
+[run]: #run
+[segment]: #segment
+[runner]: #runner
+[game]: #game
+[category]: #category

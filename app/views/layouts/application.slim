@@ -52,10 +52,10 @@ html
                 | FAQ
             = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
               .input-group
-                = f.text_field(:q, name: :q, class: 'form-control', value: @query, placeholder: 'Search')
-                .input-group-btn
+                = f.text_field(:q, name: :q, class: 'form-control search', value: @query, placeholder: 'Search...')
+                .input-group-append
                   = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
-                    = icon("fas", "search")
+                    = icon('fas', 'search')
           ul.nav.navbar-nav
             li.nav-item style='background-color: #768AD4;'
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'

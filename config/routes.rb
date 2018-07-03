@@ -106,8 +106,8 @@ Rails.application.routes.draw do
     namespace :v4 do
       match '(/*a(/*b(/*c(/*d))))', via: [:options], to: 'application#options'
 
-      get '/games',       to: 'games#index'
-      get '/games/:game', to: 'games#show', as: 'game'
+      get '/games',       to: 'games#index', as: 'games'
+      get '/games/:game', to: 'games#show',  as: 'game'
 
       get '/games/:game/categories', to: 'games/categories#index'
       get '/games/:game/runners',    to: 'games/runners#index'
@@ -117,7 +117,8 @@ Rails.application.routes.draw do
       get '/categories/:category/runners', to: 'categories/runners#index'
       get '/categories/:category/runs',    to: 'categories/runs#index'
 
-      get '/runners/:runner', to: 'runners#show', as: 'runner'
+      get '/runners',         to: 'runners#index', as: 'runners'
+      get '/runners/:runner', to: 'runners#show',  as: 'runner'
 
       get '/runners/:runner/pbs',        to: 'runners/pbs#index'
       get '/runners/:runner/runs',       to: 'runners/runs#index'
