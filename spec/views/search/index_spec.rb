@@ -14,9 +14,24 @@ RSpec.describe 'search/index' do
     it 'renders the index template' do
       assign(
         :results,
-        games: [FactoryBot.create_list(:game, 5, :with_categories, :with_runs)],
-        users: [FactoryBot.create_list(:user, 5, :with_runs)]
+        games: FactoryBot.create_list(:game, 5, :with_categories, :with_runs),
+        users: FactoryBot.create_list(:user, 5, :with_runs)
       )
+      render
+
+      expect(view).to render_template('search/index')
+    end
+  end
+
+  context 'with runs results' do
+    it 'renders the index template' do
+      assign(
+        :results,
+        runs: FactoryBot.create_list(:run, 5)
+      )
+      render
+
+      expect(view).to render_template('search/index')
     end
   end
 end

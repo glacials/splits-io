@@ -24,7 +24,7 @@
           - if cols.include?(:owner_controls)
             th.header.align-right
       tbody
-        - runs.includes(:user, :game, :category).each do |run|
+        - runs.includes(:user, category: [:game]).each do |run|
           tr id="run_#{run.id36}"
             - if cols.include?(:runner)
               td.align-right = user_badge(run.user)
