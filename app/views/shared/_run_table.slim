@@ -1,7 +1,7 @@
 - description ||= nil
 - cols ||= [:runner, :time, :name, :rival, :uploaded]
-- runs = order_runs(runs).page(params[:page])
-- if runs.blank?
+- runs = order_runs(runs).page(params[:page]).includes(:user, :game)
+- unless runs.any?
   center
     i No runs matched!
 - else
@@ -24,7 +24,7 @@
           - if cols.include?(:owner_controls)
             th.header.align-right
       tbody
-        - runs.includes(:user, category: [:game]).each do |run|
+        - runs.each do |run|
           tr id="run_#{run.id36}"
             - if cols.include?(:runner)
               td.align-right = user_badge(run.user)
