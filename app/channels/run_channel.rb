@@ -11,6 +11,8 @@ class RunChannel < ApplicationCable::Channel
         run,
         time_since_upload: ApplicationController.render(partial: 'runs/time_since_upload', locals: {run: run})
       )
+    rescue ActiveRecord::RecordNotFound # If the run has been deleted since we scheduled this job, noop
+      nil
     end
   end
 end
