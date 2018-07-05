@@ -51,3 +51,5 @@ services:
       - s3
     links:
       - s3:s3.localhost
+  redis:
+    image: redis

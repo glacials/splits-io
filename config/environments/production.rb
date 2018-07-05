@@ -92,4 +92,5 @@ Rails.application.configure do
 
   config.use_ssl = ENV['USE_SSL'].present? ? (ENV['USE_SSL'] == '1') : true
   config.read_only = false
+  config.action_cable.allowed_request_origins = ['https://splits.io', 'https://*.splits.io']
 end

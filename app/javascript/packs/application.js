@@ -22,6 +22,10 @@ global.Spinner = Spinner
 global.Clipboard = clipboard
 global.Cookies = Cookies
 
+import "../cable.js"
+global.App = this.App
+import "../cable/subscriptions/run.js"
+
 import "../convert"
 import "../highchart_theme.js"
 import "../graph_builder.js"

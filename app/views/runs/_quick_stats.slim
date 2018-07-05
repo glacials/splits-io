@@ -47,5 +47,6 @@ article data-turbolinks-temporary=true
           span.statcard-desc Life playtime
     .col-sm-3
       .statcard.p-3
-        h3.statcard-number title=run.created_at = time_ago_in_words(run.created_at)
+        h3.statcard-number#time-since-upload title=run.created_at
+          = render partial: 'runs/time_since_upload', locals: {run: run}
         span.statcard-desc Time since upload

@@ -341,6 +341,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    redis (4.0.1)
     request_store (1.4.1)
       rack (>= 1.4)
     rest-client (2.0.2)
@@ -490,11 +491,12 @@ DEPENDENCIES
   rails (~> 5.2)
   rails-controller-testing
   rails-erd
+  redis
   rest-client
   rollbar
   rspec-rails
   rubocop
-  sass-rails
+  sass-rails (~> 5.0.7)
   simplecov
   skylight
   slim

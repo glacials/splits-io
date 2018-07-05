@@ -15,6 +15,8 @@ class Run < ApplicationRecord
   REAL = 'real'.freeze
   GAME = 'game'.freeze
 
+  ALLOWED_PROGRAM_METHODS = %i[to_s to_sym file_extension website content_type].freeze
+
   belongs_to :user
   belongs_to :category
   has_one :game, through: :category
@@ -27,6 +29,7 @@ class Run < ApplicationRecord
 
   after_create :refresh_game
   after_create :discover_runner
+  after_create :publish_aging
 
   validates_with RunValidator
 
@@ -35,7 +38,9 @@ class Run < ApplicationRecord
   scope :nonempty, -> { where('realtime_duration_ms != 0') }
   scope :owned, -> { where.not(user: nil) }
   scope :unarchived, -> { where(archived: false) }
-  scope :categorized, -> { joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil}) }
+  scope :categorized, lambda {
+    joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil})
+  }
 
   class << self
     def programs
@@ -58,26 +63,8 @@ class Run < ApplicationRecord
     end
 
     def program_from_attribute(func_name, value)
-      Run.programs.map do |prg|
-        case func_name
-        when :to_s
-          prg_value = prg.to_s
-        when :to_sym
-          prg_value = prg.to_sym
-        when :file_extension
-          prg_value = prg.file_extension
-        when :website
-          prg_value = prg.website
-        when :content_type
-          prg_value = prg.content_type
-        when :exportable
-          prg_value = prg.exportable
-        else
-          raise 'not a valid attribute'
-        end
-        return prg if prg_value == value
-      end
-      nil
+      raise 'not a valid attribute' unless ALLOWED_PROGRAM_METHODS.include?(func_name)
+      Run.programs.find { |program| program.send(func_name) == value }
     end
 
     alias find10 find
@@ -114,43 +101,23 @@ class Run < ApplicationRecord
   end
 
   def to_s
-    return "#{game.name} #{category.name}" if game.present? && category.present?
-    return game.name if game.present?
-
-    '(no title)'
+    return '(no title)' if game.blank?
+    game.name + (category.present? ? " #{category.name}" : '')
   end
 
   def path
     "/#{to_param}"
   end
 
-  CATEGORY_ALIASES = {
-    'Any% (NG+)' => 'Any% NG+',
-    'Any% (New Game+)' => 'Any% NG+',
-    'Any %' => 'Any%',
-    'All Skills No OOB' => 'All Skills no OOB no TA' # for ori_de
-  }.freeze
-
   def populate_category(game_string, category_string)
-    category_string = CATEGORY_ALIASES.fetch(category_string, category_string)
+    category_string = Category.global_aliases.fetch(category_string, category_string)
 
-    if category.blank? && game_string.present? && category_string.present?
-      game = Game.from_name!(game_string)
-      self.category = game.categories.where('lower(name) = lower(?)', category_string).first_or_create(name: category_string)
-    end
-  end
+    return if category.present? || game_string.blank? || category_string.blank?
 
-  class RunTooLarge < StandardError; end
-  def file
-    file = $s3_bucket_internal.object("splits/#{s3_filename}")
-
-    return nil unless file.exists?
-
-    raise RunTooLarge if file.content_length >= (100 * 1024 * 1024) # 100 MiB
-
-    file.get.body.read
-  rescue Aws::S3::Errors::AccessDenied, Aws::S3::Errors::Forbidden
-    nil
+    game = Game.from_name!(game_string)
+    self.category = game.categories.where('lower(name) = lower(?)', category_string).first_or_create(
+      name: category_string
+    )
   end
 
   def refresh_game
@@ -169,21 +136,17 @@ class Run < ApplicationRecord
     "#{to_param}.#{timer.file_extension}"
   end
 
-  def duration_ms(time_type = default_time_type)
-    case time_type
-    when Run::REAL
-      realtime_duration_ms
-    when Run::GAME
-      gametime_duration_ms
-    end
+  def publish_aging
+    publish_age_every(:minute, 60)
+    publish_age_every(:hour, 24)
+    publish_age_every(:day, 30)
   end
 
-  def sum_of_best_ms(time_type = default_time_type)
-    case time_type
-    when Run::REAL
-      realtime_sum_of_best_ms
-    when Run::GAME
-      gametime_sum_of_best_ms
+  private
+
+  def publish_age_every(time, limit)
+    limit.times do |i|
+      RunChannel.delay(run_at: Time.now.utc + (i + 1).send(time)).broadcast_time_since_upload(id36)
     end
   end
 end

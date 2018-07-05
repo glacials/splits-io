@@ -1,0 +1,3 @@
+// This line is in a partial because it is rendered over Action Cable periodically after the run page is already
+// rendered. See RunChannel#broadcast_time_since_upload for more info.
+= time_ago_in_words(run.created_at)

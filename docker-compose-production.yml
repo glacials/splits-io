@@ -15,3 +15,5 @@ services:
       dockerfile: Dockerfile-production
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && ruby bin/delayed_job run -n 2"
     ports: []
+  redis:
+    image: redis

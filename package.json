@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "3.4",
+    "actioncable": "^5.2.0",
     "caniuse-lite": "^1.0.30000792",
     "clipboard": "^1.7.1",
     "coffee-loader": "^0.9.0",
