@@ -24,11 +24,10 @@ class Game < ApplicationRecord
                   }
 
   def self.search(term)
-    term = term.strip
-    return nil if term.blank?
-    ids = search_both_names(term).pluck(:id)
-    ids |= GameAlias.search_for_name(term).pluck(:game_id)
-    Game.where(id: ids)
+    term.strip!
+    return Game.none if term.blank?
+
+    Game.joins(:aliases).merge(GameAlias.search_for_name(term))
   end
 
   def self.from_name(name)
