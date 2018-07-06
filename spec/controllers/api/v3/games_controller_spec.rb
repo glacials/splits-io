@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe Api::V3::GamesController do
-  let(:game) { FactoryBot.create(:game, name: 'Mario is Missing!') }
+  let(:game) { FactoryBot.create(:game) }
 
   describe '#index' do
     context 'when given a search term which yields results' do
-      subject(:response) { get(:index, params: {search: 'mario'}) }
+      subject(:response) { get(:index, params: {search: game.name}) }
       subject(:body) { JSON.parse(response.body)['games'] }
 
       it 'returns an expected response code' do
