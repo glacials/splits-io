@@ -9,11 +9,61 @@ services:
       - .:/app
     ports:
       - 3000:3000
+    environment:
+      - ASSET_HOST
+      - AWS_ACCESS_KEY_ID
+      - AWS_REGION
+      - AWS_SECRET_KEY
+      - BUNDLE_WITHOUT
+      - DATABASE_URL
+      - ENABLE_ADS
+      - NEW_RELIC_LICENSE_KEY
+      - NODE_ENV
+      - PATREON_CLIENT_ID
+      - PATREON_CLIENT_SECRET
+      - PATREON_WEBHOOK_SECRET
+      - RACK_ENV
+      - RAILS_SERVE_STATIC_FILES
+      - RAILS_SKIP_ASSET_COMPILATION
+      - RAILS_SKIP_MIGRATIONS
+      - READ_ONLY_MODE
+      - ROLLBAR_ACCESS_TOKEN
+      - S3_BUCKET
+      - SECRET_KEY_BASE
+      - SKYLIGHT_AUTHENTICATION
+      - SITE_TITLE
+      - TWITCH_CLIENT_ID
+      - TWITCH_CLIENT_SECRET
   worker:
     build:
       context: .
       dockerfile: Dockerfile-production
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && ruby bin/delayed_job run -n 2"
     ports: []
+    environment:
+      - ASSET_HOST
+      - AWS_ACCESS_KEY_ID
+      - AWS_REGION
+      - AWS_SECRET_KEY
+      - BUNDLE_WITHOUT
+      - DATABASE_URL
+      - ENABLE_ADS
+      - NEW_RELIC_LICENSE_KEY
+      - NODE_ENV
+      - PATREON_CLIENT_ID
+      - PATREON_CLIENT_SECRET
+      - PATREON_WEBHOOK_SECRET
+      - RACK_ENV
+      - RAILS_SERVE_STATIC_FILES
+      - RAILS_SKIP_ASSET_COMPILATION
+      - RAILS_SKIP_MIGRATIONS
+      - READ_ONLY_MODE
+      - ROLLBAR_ACCESS_TOKEN
+      - S3_BUCKET
+      - SECRET_KEY_BASE
+      - SKYLIGHT_AUTHENTICATION
+      - SITE_TITLE
+      - TWITCH_CLIENT_ID
+      - TWITCH_CLIENT_SECRET
   redis:
     image: redis

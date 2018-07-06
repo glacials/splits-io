@@ -16,7 +16,7 @@ RUN bundle install -j "$(expr "$(getconf _NPROCESSORS_ONLN)" - 1)"
 COPY package.json yarn.lock ./
 RUN yarn install
 
-# Play with these if you want
+# Play with these if you want, remember to `make build` after
 ENV SITE_TITLE "Splits I/O (Local)"
 ENV READ_ONLY_MODE 0
 ENV ENABLE_ADS 0

@@ -1,9 +1,6 @@
 version: '2'
 services:
   web:
-    environment:
-      - TWITCH_CLIENT_ID
-      - TWITCH_CLIENT_SECRET
     build:
       context: .
       dockerfile: Dockerfile
@@ -20,6 +17,9 @@ services:
     links:
       - s3:s3.localhost
       - webpacker:webpacker.localhost
+    environment:
+      - TWITCH_CLIENT_ID
+      - TWITCH_CLIENT_SECRET
   db:
     image: postgres
     volumes:
