@@ -5,7 +5,7 @@ $(function() {
   $('.search').typeahead({
     minLength: 3,
     classNames: {
-      input: 'text-light',
+      input: 'text-light bg-default',
       hint: 'text-muted',
       menu: 'dropdown-menu bg-dark',
       selectable: 'dropdown-item text-secondary',
