@@ -76,14 +76,7 @@ $(function() {
       header: '<div class="dropdown-header"><h5>Runners</h5></div>',
       suggestion: Handlebars.compile(`
         <a href="/users/{{name}}" class="dropdown-item">
-          <div class="row align-middle">
-            <span class="col-md-6">
-              <img class="card-img" src="{{avatar}}">
-            </span>
-            <span class="col-md-6 align-middle">
-              {{display_name}}
-            </span>
-          </div>
+          {{display_name}}
         </a>
       `)
     }
