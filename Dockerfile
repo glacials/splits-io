@@ -17,7 +17,7 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 # Play with these if you want
-ENV SITE_TITLE Splits I/O (Local)
+ENV SITE_TITLE "Splits I/O (Local)"
 ENV READ_ONLY_MODE 0
 ENV ENABLE_ADS 0
 
