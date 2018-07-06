@@ -26,7 +26,7 @@ html
           h2
             | failures:
           span#failed-uploads<
-      nav.navbar.navbar-expand-lg.navbar-dark
+      nav.navbar.navbar-expand-md.navbar-dark
         a.navbar-brand href=root_path
           img.logo src='/logo.svg' width='20' height='20'
           span Splits I/O
@@ -57,7 +57,7 @@ html
                   = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
                     = icon('fas', 'search')
           ul.nav.navbar-nav
-            li.nav-item style='background-color: #768AD4;'
+            li.nav-item
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
                 img src='/discord.svg' height='20'
             - if logged_in?
