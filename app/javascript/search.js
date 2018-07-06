@@ -1,7 +1,7 @@
 import Bloodhound from 'typeahead.js'
 import Handlebars from 'handlebars'
 
-$(function() {
+document.addEventListener('turbolinks:load', function() {
   $('.search').typeahead({
     minLength: 3,
     classNames: {

@@ -99,7 +99,7 @@ gem 'rails', '~> 5.2'
 # speediness
 gem 'bootsnap'
 gem 'dalli'
-gem 'turbolinks', github: 'rails/turbolinks'
+gem 'turbolinks'
 
 # views
 gem 'bootstrap4-kaminari-views'

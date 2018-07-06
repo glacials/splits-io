@@ -4,7 +4,7 @@ import {build_run_druation_graph} from "graphs/run_duration_graph.js"
 import {build_reset_graph} from "graphs/reset_graph.js"
 import {Spinner} from 'spin.js'
 
-$(function() {
+document.addEventListener('turbolinks:load', function() {
   const $graph_holder = $('#graph-holder');
   if ($graph_holder.length === 0) {
     return

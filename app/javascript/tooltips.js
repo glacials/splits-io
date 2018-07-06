@@ -1,6 +1,6 @@
 import tippy from "tippy.js"
 
-$(function() {
+document.addEventListener('turbolinks:load', function() {
   tippy(".gold-split", {placement: "left"})
   tippy(".tip", {placement: "right"})
   tippy(".tip-top", {placement: "top"})

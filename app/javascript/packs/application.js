@@ -28,6 +28,7 @@ import "../cable/subscriptions/run.js"
 
 import "../convert.js"
 import "../highchart_theme.js"
+import "../gon.js"
 import "../graph_builder.js"
 import "../search.js"
 import "../segment_graph_builder.js"

@@ -1,7 +1,7 @@
 import {build_segment_graph} from "graphs/segment_duration_graph.js"
 import {Spinner} from 'spin.js'
 
-$(function() {
+document.addEventListener('turbolinks:load', function() {
   const graphHolders = document.getElementsByClassName('segment-graph-holder')
   if(graphHolders.length === 0) {
     return

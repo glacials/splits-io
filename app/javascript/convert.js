@@ -1,6 +1,6 @@
 import {saveAs} from "file-saver";
 
-$(() => {
+document.addEventListener('turbolinks:load', function() {
   $("form#convert").submit((evt) => {
     evt.preventDefault();
     let formData = new FormData();
@@ -33,5 +33,5 @@ $(() => {
         $("#droplabel").text(`Error converting: ${xhr.responseJSON.message}`);
       }
     });
-  });
-});
+  })
+})

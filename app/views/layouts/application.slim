@@ -7,7 +7,6 @@ html
     link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
-    = Gon::Base.render_data
     = javascript_pack_tag 'application'
     = javascript_include_tag 'application'
     = stylesheet_link_tag :application, media: :all
@@ -16,6 +15,7 @@ html
     = render partial: 'shared/twitter_card'
     = content_for(:head)
   body data-controller=controller_name data-action=action_name
+    = Gon::Base.render_data
     #dropzone
       #dropzone-overlay.header style='border: none;' data-turbolinks-permanent=true
         h1#droplabel.inverted drop anywhere

@@ -1,6 +1,6 @@
 import ActionCable from 'actioncable'
 
-(function() {
-  this.App || (this.App = {});
-  App.cable = ActionCable.createConsumer();
-}).call(window)
+document.addEventListener('turbolinks:load', function() {
+  window.App || (window.App = {})
+  window.App.cable || (window.App.cable = ActionCable.createConsumer())
+})
