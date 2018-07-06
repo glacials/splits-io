@@ -58,7 +58,7 @@ document.addEventListener('turbolinks:load', function() {
       toggler.addEventListener('click', function(event) {
         event.preventDefault()
         const row = document.querySelector(
-          '.segment-graph-holder[data-segment="' + toggler.dataset.segment + '"]'
+          `.segment-graph-holder[data-segment="${toggler.dataset.segment}"]`
         ).closest('tr')
         row.hidden = !row.hidden
         if (event.target.dataset.generated !== '1') {

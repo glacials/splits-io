@@ -9,7 +9,7 @@ services:
       - .:/app
     ports:
       - 3000:3000
-    environment:
+    environment: # Remember to add new vars both here and below in the worker container
       - ASSET_HOST
       - AWS_ACCESS_KEY_ID
       - AWS_REGION
@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile-production
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && ruby bin/delayed_job run -n 2"
     ports: []
-    environment:
+    environment: # Remember to add new vars both here and above in the web container
       - ASSET_HOST
       - AWS_ACCESS_KEY_ID
       - AWS_REGION

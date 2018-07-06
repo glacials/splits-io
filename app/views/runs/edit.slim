@@ -33,7 +33,7 @@ article
                     selected: @run.game.try(:shortname), \
                     include_blank: true \
                   }, \
-                  onchange: 'update_category_selector(this.value)', \
+                  id: 'game-selector', \
                   class: 'form-control' \
                 )
               .col-lg-4
@@ -45,10 +45,11 @@ article
                   { \
                     selected: @run.category.try(:id) \
                   }, \
+                  id: 'category-selector', \
                   class: 'form-control' \
                 )
               .col-lg-2
-                = f.submit 'Save', id: 'game_category_submit', class: 'btn btn-success'
+                = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
 
     .col-lg-6
       .card.mb-3
