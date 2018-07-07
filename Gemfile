@@ -70,6 +70,7 @@ gem 'activerecord-import'
 gem 'arel'
 gem 'aws-sdk-rails'
 gem 'aws-sdk-s3'
+gem 'order_as_specified'
 gem 'pg'
 gem 'pg_search'
 

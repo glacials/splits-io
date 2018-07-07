@@ -272,6 +272,8 @@ GEM
       omniauth (~> 1.2)
     omniauth-twitch (0.2.0)
       omniauth-oauth2 (~> 1.1)
+    order_as_specified (1.4)
+      activerecord (>= 5.0.0)
     parallel (1.12.1)
     parser (2.5.1.0)
       ast (~> 2.4.0)
@@ -478,6 +480,7 @@ DEPENDENCIES
   omniauth
   omniauth-oauth2
   omniauth-twitch
+  order_as_specified
   patreon (< 0.3.0)
   pg
   pg_search

@@ -4,6 +4,8 @@ class Game < ApplicationRecord
   include PgSearch
   include SRLGame
 
+  extend OrderAsSpecified
+
   validates :name, presence: true
 
   has_many :categories, dependent: :destroy
@@ -27,7 +29,8 @@ class Game < ApplicationRecord
     term.strip!
     return Game.none if term.blank?
 
-    Game.shortnamed.where(id: Game.joins(:aliases).merge(GameAlias.search_for_name(term)).pluck(:id)).distinct
+    ids = Game.joins(:aliases).merge(GameAlias.search_for_name(term)).pluck(:id)
+    Game.where(id: ids).order_as_specified(id: ids)
   end
 
   def self.from_name(name)
