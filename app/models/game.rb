@@ -29,7 +29,7 @@ class Game < ApplicationRecord
     term.strip!
     return Game.none if term.blank?
 
-    ids = Game.joins(:aliases).merge(GameAlias.search_for_name(term)).pluck(:id)
+    ids = Game.shortnamed.joins(:aliases).merge(GameAlias.search_for_name(term)).pluck(:id)
     Game.where(id: ids).order_as_specified(id: ids)
   end
 
