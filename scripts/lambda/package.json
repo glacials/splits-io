@@ -1,0 +1,25 @@
+{
+  "name": "splitsio-lambda",
+  "repository": "glacials/splits-io",
+  "description": "Lambda jobs for splits.io",
+  "license": "MIT",
+  "main": "index.js",
+  "config": {
+    "AWS_ACCESS_KEY_ID": "AKIAJTCHGBZ76LMKIVEA",
+    "AWS_SECRET_ACCESS_KEY": "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",
+    "AWS_REGION": "us-east-1"
+  },
+  "scripts": {
+    "build": "docker run -v \"$PWD\":/var/task lambci/lambda:build-nodejs6.10",
+    "docker": "docker run -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e DATABASE_URL=$DATABASE_URL -v \"$PWD\":/var/task lambci/lambda:nodejs6.10 index.handler '{\"Records\": [{\"eventVersion\": \"2.0\",\"eventTime\": \"1970-01-01T00:00:00.000Z\",\"requestParameters\": {\"sourceIPAddress\": \"127.0.0.1\"},\"s3\": {\"configurationId\": \"testConfigRule\",\"object\": {\"eTag\": \"0123456789abcdef0123456789abcdef\",\"sequencer\": \"0A1B2C3D4E5F678901\",\"key\": \"splits/0002e7ae-4002-4b12-9ac7-6aa566d39bc3\",\"size\": 1024},\"bucket\": {\"arn\": \"\",\"name\": \"splits.io\",\"ownerIdentity\": {\"principalId\": \"EXAMPLE\"}},\"s3SchemaVersion\": \"1.0\"},\"responseElements\": {\"x-amz-id-2\": \"EXAMPLE123/5678abcdefghijklambdaisawesome/mnopqrstuvwxyzABCDEFGH\",\"x-amz-request-id\": \"EXAMPLE123456789\"},\"awsRegion\": \"us-east-1\",\"eventName\": \"ObjectCreated:Put\",\"userIdentity\": {\"principalId\": \"EXAMPLE\"},\"eventSource\": \"aws:s3\"}]}'"
+  },
+  "dependencies": {
+    "ffi": "^2.2.0",
+    "node-fetch": "^2.1.2",
+    "node-gyp": "^3.6.2",
+    "pg": "^7.4.0"
+  },
+  "engines": {
+    "node": "6.10"
+  }
+}

@@ -101,6 +101,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :webhooks do
       post '/patreon', to: 'patreon#create'
+      post '/parse',   to: 'parse#create'
     end
 
     namespace :v4 do
