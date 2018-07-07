@@ -1,10 +1,10 @@
 document.addEventListener('turbolinks:load', function() {
-  for(el of document.getElementsByClassName('split')) {
+  Array.from(document.getElementsByClassName('split')).forEach(function(el) {
     el.addEventListener('mouseover', function() {
-      document.getElementById(`${el.id.split('-')[0]}-inspect-${el.id.split('-')[2]}`).style.display = null
+      document.getElementById(`${el.id.split('-')[0]}-inspect-${el.id.split('-')[2]}`).style.visibility = 'visible'
     })
     el.addEventListener('mouseout', function() {
-      document.getElementById(`${el.id.split('-')[0]}-inspect-${el.id.split('-')[2]}`).style.display = 'none'
+      document.getElementById(`${el.id.split('-')[0]}-inspect-${el.id.split('-')[2]}`).style.visibility = 'hidden'
     })
-  }
+  })
 })

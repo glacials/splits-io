@@ -6,6 +6,10 @@ document.addEventListener('turbolinks:load', function() {
   const loading = document.createElement('option')
   loading.text = 'Loading...'
 
+  if(gameSelect === null) {
+    return
+  }
+
   gameSelect.addEventListener('change', function(event) {
     saveButton.disabled = true
     categorySelect.disabled = true

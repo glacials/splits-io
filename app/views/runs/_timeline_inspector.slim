@@ -2,7 +2,7 @@
 - overlap ||= false
 .timeline style="margin-top: .75em;" class=(overlap ? 'absolute' : '')
   - run.collapsed_segments(timing).each_with_index do |segment, index|
-    .pure-u.inspect id="#{run.id36}-inspect-#{index}" style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; opacity: 0;"
+    .pure-u.inspect id="#{run.id36}-inspect-#{index}" style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; visibility: hidden;"
       .bar
         p
       div class="#{"mx-2" if segment.first? || segment.last?} #{"second-half" if segment.second_half?(timing)}"
