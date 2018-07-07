@@ -27,7 +27,7 @@ class Game < ApplicationRecord
     term.strip!
     return Game.none if term.blank?
 
-    Game.where(id: Game.joins(:aliases).merge(GameAlias.search_for_name(term)).pluck(:id).uniq)
+    Game.shortnamed.where(id: Game.joins(:aliases).merge(GameAlias.search_for_name(term)).pluck(:id)).distinct
   end
 
   def self.from_name(name)
