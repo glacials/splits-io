@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Api::V3::GamesController do
-  let(:game) { FactoryBot.create(:game) }
+  let(:game) { FactoryBot.create(:game, shortname: 'anything') }
 
   describe '#index' do
     context 'when given a search term which yields results' do
