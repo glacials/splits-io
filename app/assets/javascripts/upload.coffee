@@ -60,7 +60,7 @@ $ ->
     )).then ->
       window.location = "/"
 
-
+document.addEventListener('turbolinks:load', () ->
   $("#dropzone").on "dragenter", (evt) ->
     evt.preventDefault()
     evt.stopPropagation()
@@ -93,3 +93,4 @@ $ ->
 
   $(document).keyup (evt) ->
     $("#dropzone-overlay").fadeOut 125  if not window.isUploading and evt.keyCode is 27
+)
