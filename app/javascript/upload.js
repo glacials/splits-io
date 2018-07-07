@@ -117,3 +117,15 @@ document.addEventListener('turbolinks:load', function() {
     }
   })
 })
+
+document.addEventListener('turbolinks:load', function() {
+  const form = document.getElementById('upload')
+  if(form === null) {
+    return
+}
+  form.addEventListener('change', function() {
+    window.showSpinner("#000")
+    window.isUploading = true
+    upload(document.getElementById('file').files[0])
+  })
+})
