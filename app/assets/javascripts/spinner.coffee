@@ -17,5 +17,3 @@ $ ->
       zIndex: 2e9
     ).spin()
     document.body.appendChild window.spinner.el
-
-  window.hideSpinner = -> window.spinner.stop()

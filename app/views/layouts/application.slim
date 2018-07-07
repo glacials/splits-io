@@ -17,15 +17,15 @@ html
   body data-controller=controller_name data-action=action_name
     = Gon::Base.render_data
     #dropzone
-      #dropzone-overlay.header style='border: none;' data-turbolinks-permanent=true
-        h1#droplabel.inverted drop anywhere
-        #multiupload style='display: none;'
+      #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
+        h1#droplabel.inverted Drop anywhere!
+        #multiupload
           h2
-            | successes:
-            span#successful-uploads<
+            span#successful-uploads> 0
+            | uploaded
           h2
-            | failures:
-          span#failed-uploads<
+            span#failed-uploads> 0
+            | failures
       nav.navbar.navbar-expand-md.navbar-dark
         a.navbar-brand href=root_path
           img.logo src='/logo.svg' width='20' height='20'
