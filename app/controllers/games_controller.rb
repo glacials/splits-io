@@ -45,5 +45,6 @@ class GamesController < ApplicationController
     @game = Game.find_by(shortname: params[:game]) || Game.find_by(id: params[:game])
 
     redirect_to games_path(q: params[:game]) if @game.nil?
+    redirect_to game_path(@game) if @game.shortname.present? && params[:game] == @game.id.to_s
   end
 end
