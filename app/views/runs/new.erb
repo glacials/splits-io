@@ -6,8 +6,8 @@
   </ol>
   <% # We don't need this, but LiveSplit does until their next release. Without it, sharing via LiveSplit breaks. %>
   <meta content="" name='<meta content="" name="csrf-token" />' />
-  <h2>drop it like it's hot</h2>
-  <h5>drag your splits onto this page, or any page</h5>
+  <h2>Drop it like it's hot</h2>
+  <h5>Drag your splits onto this page, or any page.</h5>
 <% end %>
 <article>
   <form id="upload" method="post" enctype="multipart/form-data">
@@ -18,7 +18,10 @@
 </article>
 <article>
   <h5>
-    want to just convert splits instead of storing them?
-    try the <%= link_to "convert page", convert_path %> then.
+    Have multiple files? Forget the form&mdash;drag and drop them onto the page all at once.
+  </h5>
+  <h5>
+    Want to just convert splits instead of storing them?
+    Try the <%= link_to "convert page", convert_path %>.
   </h5>
 </article>
