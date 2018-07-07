@@ -21,6 +21,7 @@ class RunsController < ApplicationController
     end
 
     @run.parse_into_db if @run.parsed_at.nil?
+    @run.reload
 
     # Catch bad runs
     render :cant_parse, status: 500 if @run.timer.nil?
@@ -230,10 +231,10 @@ class RunsController < ApplicationController
         return
       end
 
-      if current_user.nil?
-        redirect_to run_path(@run)
-        return
-      end
+      # Let JavaScript deal with saving the claim token to local storage then fixing the URL, in case the user wants to
+      # claim the run later. This is required for uploads from e.g. LiveSplit to be claimable later.
+      # (app/javascript/run_claim.js)
+      return if current_user.nil?
 
       @run.update(
         user: current_user,

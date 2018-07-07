@@ -9,8 +9,6 @@ const upload = function(file, options) {
   return fetch('/api/v4/runs', {method: 'POST', credentials: 'include'}).then(function(splitsioResponse) {
     return splitsioResponse.json()
   }).then(function(splitsioResponse) {
-    localStorage.setItem(`claim_tokens/${splitsioResponse.id}`, splitsioResponse.claim_token)
-
     const formData = new FormData()
     for(const [k, v] of Object.entries(splitsioResponse.presigned_request.fields)) {
       formData.append(k, v)

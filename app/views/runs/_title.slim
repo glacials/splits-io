@@ -56,7 +56,7 @@ ul.run-options
         => icon('fas', 'edit')
         span Edit
   - if run.user.nil?
-    li#claim-nav-link-container style='display: none;'
+    li#claim-nav-link-container hidden=true
       - if current_user.present?
         a#claim-nav-link.btn.btn-outline-success href='#' data-confirm="Claim this run as #{current_user}?"
           => icon('fas', 'user-check')

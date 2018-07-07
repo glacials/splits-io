@@ -14,7 +14,7 @@ Your code shouldn't care too much about what these attributes actually are, as t
 strings. But of course as a human it's nice to be able to glean some meaning out of them.
 
 ## Run
-```bash
+```sh
 curl https://splits.io/api/v4/runs/10x
 curl https://splits.io/api/v4/runs/10x?historic=1
 ```
@@ -119,7 +119,7 @@ any of the following `Content-Type`s.
 * `application/wsplit`
 
 ## Runner
-```bash
+```sh
 curl https://splits.io/api/v4/runners?search=glacials
 curl https://splits.io/api/v4/runners/glacials
 curl https://splits.io/api/v4/runners/glacials/runs
@@ -140,7 +140,7 @@ API.
 | `updated_at`   | string | never           | The time and date at which this user was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
 
 ## Game
-```bash
+```sh
 curl https://splits.io/api/v4/games?search=mario
 curl https://splits.io/api/v4/games/sms
 curl https://splits.io/api/v4/games/sms/categories
@@ -160,7 +160,7 @@ sometimes specified manually.
 | `categories` | array of [Categories][category] | never           | The known speedrun categories for this game.                                                                                         |
 
 ## Category
-```bash
+```sh
 curl https://splits.io/api/v4/categories/40
 curl https://splits.io/api/v4/categories/40/runners
 curl https://splits.io/api/v4/categories/40/runs
@@ -177,7 +177,7 @@ Categories can be associated with a Game.
 | `updated_at` | string | never           | The time and date at which this category was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
 
 ## Uploading
-```bash
+```sh
 curl -X POST https://splits.io/api/v4/runs # then...
 curl -X POST https://s3.amazonaws.com/splits.io --form file=@/path/to/file # some fields not shown; see below
 ```
@@ -213,7 +213,7 @@ The first request will return a body like
 }
 ```
 The above example would have your second request look like
-```bash
+```sh
 curl -X POST https://s3.amazonaws.com/splits.io \
   --form key="splits/rez" \
   --form policy="gibberish" \
@@ -237,15 +237,12 @@ If you only need to know who a user is on Splits I/O, skip to advanced.
 
 ### Simple option
 Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
-in when they visit it, their account will automatically claim the run.
+in when they visit it, their account will automatically claim the run. If they are not logged in, their browser will
+save the claim token in LocalStorage and show a prompt allowing them to claim the run after logging in, immediately or
+at any later time.
 
-This is the easier method to implement, but has some flaws:
-
-- The user must open the run in their web browser. If you prefer to upload runs in the background, this method isn't for
-  you.
-- If there are network or browser issues when the user's browser tries to load the run, it won't be claimed.
-- If the user isn't logged in when their browser opens, the run will remain unclaimed. Neither your application nor the
-  user will receive any indication of this.
+This is the far easier method to implement, but the user must open the run in their web browser for it to become theirs.
+If you prefer to upload runs in the background, this method isn't for you.
 
 ### Advanced option
 The advanced option is a standard OAuth2 flow. You can request permission from the user to upload runs to their account
@@ -446,7 +443,7 @@ using a secure API request.
 [rfc6749-6]: https://tools.ietf.org/html/rfc6749#section-6
 
 ## Converting
-```bash
+```sh
 curl -X POST https://splits.io/api/v4/convert?format=livesplit --form file=@/path/to/file
 ```
 When converting between timer formats, the file and program parameters must be included. If you are converting a
