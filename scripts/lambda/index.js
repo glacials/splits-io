@@ -1,18 +1,18 @@
 "use strict";
 const aws = require('aws-sdk');
-const fetch = require('node-fetch')
+const fetch = requure('node-fetch')
 const fs = require('fs');
 const lsc = require('./livesplit_core');
 const pg = require('pg');
 const s3 = new aws.S3();
 
 exports.handler = function(event, context, callback) {
-  const id = event['Records'][0]['s3']['object']['key'].split('/')[1]
-  fetch(`https://splits.io/api/webhooks/parse?run=${id}`).then(function(response) {
+  const filename = event['Records'][0]['s3']['object']['key'].split('/')[1]
+  fetch(`https://splits.io/api/webhooks/parse?s3_filename=${filename}`).then(function(response) {
     if(response.ok) {
       console.log("Complete")
     } else {
-      console.error(`Bad status for parsing run ${id}: ${response.status}`)
+      console.error(`Bad status for parsing run ${filename}: ${response.status}`)
     }
   }).catch(function(error) {
     console.error(error)

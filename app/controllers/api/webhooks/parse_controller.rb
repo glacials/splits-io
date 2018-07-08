@@ -8,7 +8,7 @@ class Api::Webhooks::ParseController < ApplicationController
   private
 
   def set_run
-    @run = Run.find36(params[:run])
+    @run = Run.find_by(s3_filename: params[:s3_filename])
   rescue ActiveRecord::RecordNotFound
     render :not_found
   end
