@@ -8,7 +8,7 @@ const s3 = new aws.S3()
 
 exports.handler = function(event, context, callback) {
   const filename = event['Records'][0]['s3']['object']['key'].split('/')[1]
-  fetch(`https://internal.splits.io/api/webhooks/parse?s3_filename=${filename}`).then(function(response) {
+  fetch(`https://splits.io/api/webhooks/parse?s3_filename=${filename}`, {method: 'POST'}).then(function(response) {
     if(response.ok) {
       console.log("Complete")
     } else {
