@@ -46,7 +46,7 @@
               td.align-right = segment.segment_number + 1
               td.align-left = segment.name.present? ? segment.name : '-'
               td.align-right = format_ms(history_times.standard_deviation)
-              td.align-right = format_ms(segment.realtime_shortest_duration_ms)
+              td.align-right = format_ms(segment.shortest_duration_ms(timing))
               td.align-right = format_ms(history_times.mean)
               td.align-right = format_ms(history_times.median)
               td.align-right = format_ms(history_times.percentile(90))
