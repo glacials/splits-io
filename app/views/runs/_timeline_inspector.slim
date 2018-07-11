@@ -9,6 +9,8 @@
         div = segment.name
         .text-light-50 #{format_ms(segment.duration_ms(timing))} duration
         .text-light-50 #{format_ms(segment.end_ms(timing))} finished
-        .text-success
-          - unless segment.gold?(timing) || run.has_skipped_splits?(timing) || !run.has_golds?(timing) || segment.duration_ms(timing) == segment.shortest_duration_ms(timing)
+        - if segment.gold?(timing) || run.has_skipped_splits?(timing) || !run.has_golds?(timing) || segment.duration_ms(timing) == segment.shortest_duration_ms(timing)
+          .text-gold Best!
+        - else
+          .text-success
             | #{format_ms_casual(segment.duration_ms(timing) - segment.shortest_duration_ms(timing), 1)} potential save
