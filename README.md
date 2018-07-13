@@ -140,10 +140,11 @@ image ([public/logo.svg][logo]), run
 ```sh
 docker-compose run web rails generate favicon
 ```
-Config for this generation is at `config/favicon.json`.
+Config for this generation is at [`config/favicon.json`][favicon-config].
 
 [favicon-generator]: https://realfavicongenerator.net/
 [logo]: public/logo.svg
+[favicon-config]: config/favicon.json
 
 ## Library Information
 ### LiveSplit Core
