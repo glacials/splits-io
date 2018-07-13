@@ -38,6 +38,9 @@ group :development, :hot do
   # tests
   gem 'guard', require: false
   gem 'guard-rspec', require: false
+
+  # views
+  gem 'rails_real_favicon'
 end
 
 group :production do

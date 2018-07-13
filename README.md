@@ -53,43 +53,6 @@ before starting the server again and you're set!
 (If you want to do the source step automatically in the future, use something
 like [`autoenv`](https://github.com/kennethreitz/autoenv).)
 
-## Infrastructure
-Splits I/O is built in Ruby on Rails, but has some help from other pieces of infrastructure:
-```
-Production
-
-+---------------------------------------------------------------------------------+
-| AWS Auto Scaling Group (usually at 1)                                           |
-+---------------------------------------------------------------------------------+   +----------------+
-| AWS Target Group                                                                |   | AWS RDS        |
-| +--------------------------------------+ +------------------------------------+ |   | +------------+ |
-| | AWS EC2 Instance                     | | AWS EC2 Instance                   | |-->| | PostgreSQL | |
-| | +----------------------------------+ | | +--------------------------------+ | |   | +------------+ |
-| | | Docker                           | | | | Docker                         | | |   +----------------+
-| | | +------------------+ +-------+   | | | | +------------------+ +-------+ | | |
-| | | | Rails (& worker) | | Redis |   | | | | | Rails (& worker) | | Redis | | | |-------------------------\
-| | | +------------------+ +-------+   | | | | +------------------+ +-------+ | | |                         |
-| | | | livesplit-core   |             | | | | | livesplit-core   |           | | |                         |
-| | | +------------------+             | | | | +------------------+           | | |                         |
-| | +----------------------------------+ | | +--------------------------------+ | |                         |
-| +--------------------------------------+ +------------------------------------+ |       New file trigger  V
-+---------------------------------------------------------------------------------+   +------------+ | +--------+
-| AWS Application Load Balancer                                                   |<--| AWS Lambda |<--| AWS S3 |
-+---------------------------------------------------------------------------------+ | +------------+   +--------+
-                                       ^  |                      Lambda tells Rails to parse               ^
-                                 HTTPS |  | WebSockets                                                     |
-                                       |  V                                                                |
-                                     +------+                                                              |
-                                     | User |--------------------------------------------------------------/
-                                     +------+        Upload run using presigned S3 POST from Rails
-```
-Rails will synchronously parse any unparsed run before rendering it, but the asynchronous Lambda job is the preferred
-way for runs to be parsed because it still catches unvisited runs (e.g. in the case of a multi-file upload via
-drag-and-drop).
-
-In development PostgreSQL and S3 are also Docker containers (see [docker-compose.yml][docker-compose.yml]). Lambda is
-not yet implemented in development mode.
-
 ### Debugging
 #### Getting Up and Running
 If you're having trouble getting Splits I/O running at all using the above instructions, please make a GitHub issue so
@@ -130,6 +93,57 @@ If you want to reset from scratch, you can run
 make clean
 ```
 which will run `docker-compose down`, resetting your local database and any Docker image builds.
+
+## Things You Probably Don't Need to Know
+### Infrastructure
+Splits I/O is built in Ruby on Rails, but has some help from other pieces of infrastructure.
+```
+Production
+
++---------------------------------------------------------------------------------+
+| AWS Auto Scaling Group (usually at 1)                                           |
++---------------------------------------------------------------------------------+   +----------------+
+| AWS Target Group                                                                |   | AWS RDS        |
+| +--------------------------------------+ +------------------------------------+ |   | +------------+ |
+| | AWS EC2 Instance                     | | AWS EC2 Instance                   | |-->| | PostgreSQL | |
+| | +----------------------------------+ | | +--------------------------------+ | |   | +------------+ |
+| | | Docker                           | | | | Docker                         | | |   +----------------+
+| | | +------------------+ +-------+   | | | | +------------------+ +-------+ | | |
+| | | | Rails (& worker) | | Redis |   | | | | | Rails (& worker) | | Redis | | | |-------------------------\
+| | | +------------------+ +-------+   | | | | +------------------+ +-------+ | | |                         |
+| | | | livesplit-core   |             | | | | | livesplit-core   |           | | |                         |
+| | | +------------------+             | | | | +------------------+           | | |                         |
+| | +----------------------------------+ | | +--------------------------------+ | |                         |
+| +--------------------------------------+ +------------------------------------+ |       New file trigger  V
++---------------------------------------------------------------------------------+   +------------+ | +--------+
+| AWS Application Load Balancer                                                   |<--| AWS Lambda |<--| AWS S3 |
++---------------------------------------------------------------------------------+ | +------------+   +--------+
+                                       ^  |                      Lambda tells Rails to parse               ^
+                                 HTTPS |  | WebSockets                                                     |
+                                       |  V                                                                |
+                                     +------+                                                              |
+                                     | User |--------------------------------------------------------------/
+                                     +------+        Upload run using presigned S3 POST from Rails
+```
+Rails will synchronously parse any unparsed run before rendering it, but the asynchronous Lambda job is the preferred
+way for runs to be parsed because it still catches unvisited runs (e.g. in the case of a multi-file upload via
+drag-and-drop).
+
+In development PostgreSQL and S3 are also Docker containers (see [docker-compose.yml][docker-compose.yml]). Lambda is
+not yet implemented in development mode.
+
+[docker-compose.yml]: docker-compose.yml
+
+### Favicons
+Favicons are generated by [Favicon Generator][favicon-generator] and its Rails gem. To generate favicons from the source
+image ([public/logo.svg][logo]), run
+```sh
+docker-compose run web rails generate favicon
+```
+Config for this generation is at `config/favicon.json`.
+
+[favicon-generator]: https://realfavicongenerator.net/
+[logo]: public/logo.svg
 
 ## Library Information
 ### LiveSplit Core

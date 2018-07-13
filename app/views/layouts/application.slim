@@ -11,7 +11,7 @@ html
     = javascript_include_tag 'application'
     = stylesheet_link_tag :application, media: :all
     = csrf_meta_tag
-    = render partial: 'shared/favicons'
+    = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
     = content_for(:head)
   body data-controller=controller_name data-action=action_name
