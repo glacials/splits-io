@@ -28,14 +28,15 @@ article data-turbolinks-temporary=true
         h3.statcard-number = Run.program(run.timer)
         span.statcard-desc = link_to('Timer', Run.program(run.timer).website, target: '_blank', class: 'text-muted')
   .row
-    .col-sm-3
-      .statcard.p-3
-        h3.statcard-number
-          span> = run.attempts
-          - if previous_upload.present? && run.attempts > previous_upload.attempts
-            small.delta-indicator.delta-positive.tip-top title='Since last PB'
-              = run.attempts - previous_upload.attempts
-        span.statcard-desc = 'Attempt'.pluralize(run.attempts)
+    - if run.attempts.present?
+      .col-sm-3
+        .statcard.p-3
+          h3.statcard-number
+            span> = run.attempts
+            - if previous_upload.try(:attempts).present? && run.attempts > previous_upload.attempts
+              small.delta-indicator.delta-positive.tip-top title='Since last PB'
+                = run.attempts - previous_upload.attempts
+          span.statcard-desc = 'Attempt'.pluralize(run.attempts)
     - if run.total_playtime_ms(timing) > 0
       .col-sm-3
         .statcard.p-3
