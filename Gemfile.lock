@@ -348,7 +348,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rollbar (2.16.2)
+    rollbar (2.16.3)
       multi_json
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
