@@ -3,6 +3,11 @@ This is an AWS Lambda job which is triggered automatically by AWS CodePipeline w
 then hits an endpoint in Rollbar that tells it the revision hash for the deployed commit, so that Rollbar can smartly
 link directly to error-causing lines in GitHub.
 
+## Building
+```sh
+npm install
+```
+
 ## Running
 To run this job locally for testing, run
 ```sh

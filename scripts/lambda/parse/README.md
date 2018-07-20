@@ -10,6 +10,11 @@ the upload finishes, which lets Rails know it's okay to parse.
 In the future, it is possible this job may also do the parsing itself, which would lighten the memory and CPU load on
 Rails boxes. It has some rudimentary LiveSplit Core support at the moment, but it is not being used in production.
 
+## Building
+```sh
+npm install
+```
+
 ## Running
 To run this job locally for testing, run
 ```sh
