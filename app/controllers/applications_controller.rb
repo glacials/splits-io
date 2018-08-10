@@ -1,5 +1,6 @@
 class ApplicationsController < ApplicationController
-  before_action :set_application, only: [:destroy]
+  before_action :set_application, only: [:edit, :update, :destroy]
+
   def new
   end
 
@@ -11,6 +12,40 @@ class ApplicationsController < ApplicationController
     else
       error_text = @application.errors.full_messages.to_sentence
       redirect_to new_application_path, alert: ":( Failed to create application: #{error_text.chomp('.')}."
+    end
+  end
+
+  def edit
+    if cannot?(:edit, @application)
+      render :forbidden, status: 403
+      return
+    end
+  end
+
+  def update
+    if cannot?(:edit, @application)
+      render :forbidden, status: 403
+      return
+    end
+
+    if params[:reset_secret] == '1'
+      if @application.update(
+        secret: Doorkeeper::OAuth::Helpers::UniqueToken.generate,
+        secret_generated_at: Time.now
+      )
+        redirect_to(application_path(@application), notice: "Secret reset! :O Don't lose it this time!")
+      else
+        error_text = @application.errors.full_messages.to_sentence
+        redirect_to application_path(@application), alert: ":( Failed to reset secret: #{error_text.chomp('.')}."
+      end
+      return
+    end
+
+    if @application.update(application_params[:doorkeeper_application])
+      redirect_to(application_path(@application), notice: "Application saved! :D")
+    else
+      error_text = @application.errors.full_messages.to_sentence
+      redirect_to application_path(@application), alert: ":( Failed to update application: #{error_text.chomp('.')}."
     end
   end
 

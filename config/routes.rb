@@ -85,10 +85,13 @@ Rails.application.routes.draw do
 
   get    '/settings', to: 'settings#index',       as: :settings
 
-  get    '/settings/applications/new',            to: 'applications#new',                as: :new_application
-  post   '/settings/applications',                to: 'applications#create',             as: :applications
-  delete '/settings/applications/:application',   to: 'applications#destroy',            as: :application
-  delete '/settings/authorizations/:application', to: 'authorized_applications#destroy', as: :authorization
+  post   '/settings/applications',                   to: 'applications#create',                                  as: :applications
+  get    '/settings/applications/new',               to: 'applications#new',                                     as: :new_application
+  get    '/settings/applications/:application',      to: redirect('/settings/applications/%{application}/edit'), as: :application
+  get    '/settings/applications/:application/edit', to: 'applications#edit',                                    as: :edit_application
+  patch  '/settings/applications/:application',      to: 'applications#update'
+  delete '/settings/applications/:application',      to: 'applications#destroy'
+  delete '/settings/authorizations/:application',    to: 'authorized_applications#destroy',                      as: :authorization
 
   get    '/:run/edit',                      to: 'runs#edit',                      as: :edit_run
   get    '/:run/stats',                     to: 'runs/stats#index',               as: :run_stats

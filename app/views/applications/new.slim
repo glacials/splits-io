@@ -1,4 +1,10 @@
 - title "New Application"
+- content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to('Splits I/O', root_path)
+    li.breadcrumb-item = link_to('Settings', settings_path)
+    li.breadcrumb-item = link_to('Developer Applications', settings_path(anchor: 'applications'))
+    li.breadcrumb-item = link_to('New', new_application_path)
 - if current_user.nil?
   article You need to be signed in to view this page.
 - else
@@ -18,7 +24,10 @@
               .row
                 .col-lg-8
                   = f.text_field(:redirect_uri, class: 'form-control', placeholder: 'Redirect URI (include http:// or https://)')
-                .col-lg-4 If you haven't created a page for Splits I/O to redirect users back to yet, put "debug" here.
+                .col-lg-4
+                  span If you haven't created a page for Splits I/O to redirect users back to yet, put
+                  code<> debug
+                  span here and change it later.
             p
               .row
                 .col-lg-8
