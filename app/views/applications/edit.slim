@@ -1,4 +1,4 @@
-- title "Edit Application"
+- title 'Edit Application'
 - content_for(:header)
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to('Splits I/O', root_path)
@@ -25,7 +25,7 @@
             .row
               .col-lg-8
                 .input-group
-                  - if (Time.now - 24.hours) > @application.secret_generated_at
+                  - if (Time.now.utc - 24.hours) > @application.secret_generated_at
                     input.form-control type='text' value="<Hidden forever>" disabled=true
                   - else
                     input.form-control.border-warning type='text' value=@application.secret disabled=true

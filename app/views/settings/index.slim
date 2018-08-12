@@ -1,4 +1,4 @@
-- title "Settings"
+- title 'Settings'
 - content_for(:header)
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to('Splits I/O', root_path)
@@ -120,7 +120,7 @@
                                   span#copy = icon('fas', 'copy')
                                   span#copied style='display: none;' = icon('fas', 'check')
                           td
-                            - if (Time.now - 24.hours) > application.secret_generated_at
+                            - if (Time.now.utc - 24.hours) > application.secret_generated_at
                               button.btn.btn-secondary.btn-block disabled=true Hidden forever
                             - else
                               .input-group
