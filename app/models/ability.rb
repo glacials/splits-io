@@ -4,8 +4,8 @@ class Ability
   def initialize(user)
     user ||= User.new
     grant_anon_perms
-    grant_normal_perms(user)
-    grant_admin_perms(user) if user.id == 1
+    grant_user_perms(user)
+    grant_admin_perms if user.id == 1
   end
 
   private
@@ -17,7 +17,7 @@ class Ability
     can(%i[create read], User)
   end
 
-  def grant_normal_perms(user)
+  def grant_user_perms(user)
     can(%i[create read update destroy], Run,                     user_id:      user.id)
     can(%i[create read update destroy], Rivalry,                 from_user_id: user.id)
     can(%i[create read update destroy], Doorkeeper::Application, owner_id:     user.id)

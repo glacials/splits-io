@@ -30,13 +30,16 @@
                   - else
                     input.form-control.border-warning type='text' value=@application.secret disabled=true
                   .input-group-append
-                    = button_to(application_path(@application), class: 'btn btn-warning', method: :patch, \
-                      params: {reset_secret: '1'}, \
+                    = link_to( \
+                      application_path(@application, reset_secret: '1'), \
+                      class: 'btn btn-warning', \
+                      method: :patch, \
                       data: { \
                         confirm: "Really reset the client secret for #{@application.name}? This will invalidate \
                         the current secret, preventing it from being used. Existing user authorizations will not \
                         be affected." \
-                      })
+                      } \
+                    )
                       span = icon('fas', 'skull')
                       span< Reset Client Secret
               .col-lg-4
