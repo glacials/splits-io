@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_08_032830) do
+ActiveRecord::Schema.define(version: 2018_08_10_055852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(version: 2018_07_08_032830) do
     t.datetime "updated_at", null: false
     t.integer "owner_id"
     t.string "owner_type"
+    t.datetime "secret_generated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end

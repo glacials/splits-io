@@ -3,17 +3,30 @@ class Ability
 
   def initialize(user)
     user ||= User.new
+    grant_anon_perms
+    grant_user_perms(user)
+    grant_admin_perms if user.id == 1
+  end
 
-    can :read, [Run, Category, Game, User]
+  private
 
-    can [:update, :create, :destroy], Run, user_id: user.id
-    cannot [:update, :create, :destroy], Run, user_id: nil
-    can [:read, :update, :create, :destroy], Rivalry, from_user_id: user.id
-    can [:destroy], Doorkeeper::Application, owner_id: user.id
+  def grant_anon_perms
+    can(%i[create read], Run)
+    can(%i[create read], Category)
+    can(%i[create read], Game)
+    can(%i[create read], User)
+  end
 
-    if user.id == 1
-      can [:update, :destroy, :merge], Game
-      can [:update, :destroy], Run
-    end
+  def grant_user_perms(user)
+    can(%i[create read update destroy], Run,                     user_id:      user.id)
+    can(%i[create read update destroy], Rivalry,                 from_user_id: user.id)
+    can(%i[create read update destroy], Doorkeeper::Application, owner_id:     user.id)
+
+    cannot(%i[create update destroy], Run, user_id: nil)
+  end
+
+  def grant_admin_perms
+    can(%i[update destroy merge], Game)
+    can(%i[update destroy],       Run)
   end
 end
