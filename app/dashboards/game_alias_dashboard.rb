@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class GameAliasDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -10,7 +10,7 @@ class GameAliasDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     game: Field::BelongsTo,
     id: Field::Number,
-    name: Field::String.with_options(searchable: false),
+    name: Field::String.with_options(searchable: false)
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -18,26 +18,26 @@ class GameAliasDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :game,
-    :id,
-    :name,
+  COLLECTION_ATTRIBUTES = %i[
+    game
+    id
+    name
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :game,
-    :id,
-    :name,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    game
+    id
+    name
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :game,
-    :name,
+  FORM_ATTRIBUTES = %i[
+    game
+    name
   ].freeze
 
   # Overwrite this method to customize how game aliases are displayed

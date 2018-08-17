@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class CategoryDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -15,7 +15,7 @@ class CategoryDashboard < Administrate::BaseDashboard
     name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    shortname: Field::String,
+    shortname: Field::String
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -23,35 +23,35 @@ class CategoryDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :game,
-    :name,
-    :shortname,
-    :runs,
+  COLLECTION_ATTRIBUTES = %i[
+    game
+    name
+    shortname
+    runs
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :id,
-    :game,
-    :name,
-    :shortname,
-    :created_at,
-    :updated_at,
-    :runs,
-    :rivalries,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    id
+    game
+    name
+    shortname
+    created_at
+    updated_at
+    runs
+    rivalries
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :game,
-    :runs,
-    :rivalries,
-    :name,
-    :shortname,
+  FORM_ATTRIBUTES = %i[
+    game
+    runs
+    rivalries
+    name
+    shortname
   ].freeze
 
   # Overwrite this method to customize how categories are displayed
