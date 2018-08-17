@@ -5,7 +5,7 @@ module SRLGame
 
   included do
     def srl_uri
-      return nil unless shortname.present?
+      return nil if shortname.blank?
 
       URI::HTTP.build(
         host: 'speedrunslive.com',

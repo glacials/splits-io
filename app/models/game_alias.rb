@@ -13,8 +13,8 @@ class GameAlias < ApplicationRecord
   include PgSearch
   belongs_to :game, dependent: :destroy
 
-  validates_uniqueness_of :name
-  validates_presence_of :name
+  validates :name, uniqueness: true
+  validates :name, presence: true
 
   pg_search_scope :search_for_name, against: [:name], using: :trigram
 

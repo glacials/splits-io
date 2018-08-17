@@ -1,5 +1,5 @@
 class Rivalry < ApplicationRecord
-  validates_uniqueness_of :category, scope: :from_user_id
+  validates :category, uniqueness: {scope: :from_user_id}
 
   belongs_to :category
   belongs_to :from_user, class_name: 'User'

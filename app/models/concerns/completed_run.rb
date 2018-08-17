@@ -67,7 +67,7 @@ module CompletedRun
     end
 
     def time
-      read_attribute(:time).to_f
+      self[:time].to_f
     end
 
     def has_golds?(timing)

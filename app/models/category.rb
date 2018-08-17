@@ -7,7 +7,7 @@ class Category < ApplicationRecord
   before_create :autodetect_shortname
 
   def self.global_aliases
-    return {
+    {
       'Any% (NG+)' => 'Any% NG+',
       'Any% (New Game+)' => 'Any% NG+',
       'Any %' => 'Any%',
