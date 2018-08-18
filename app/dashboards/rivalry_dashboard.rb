@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class RivalryDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -9,12 +9,12 @@ class RivalryDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     category: Field::BelongsTo,
-    from_user: Field::BelongsTo.with_options(class_name: "User"),
-    to_user: Field::BelongsTo.with_options(class_name: "User"),
+    from_user: Field::BelongsTo.with_options(class_name: 'User'),
+    to_user: Field::BelongsTo.with_options(class_name: 'User'),
     game: Field::HasOne,
     id: Field::Number,
     from_user_id: Field::Number,
-    to_user_id: Field::Number,
+    to_user_id: Field::Number
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -22,35 +22,35 @@ class RivalryDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :from_user,
-    :to_user,
-    :game,
-    :category,
+  COLLECTION_ATTRIBUTES = %i[
+    from_user
+    to_user
+    game
+    category
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :id,
-    :from_user,
-    :to_user,
-    :game,
-    :category,
-    :from_user_id,
-    :to_user_id,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    id
+    from_user
+    to_user
+    game
+    category
+    from_user_id
+    to_user_id
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :category,
-    :from_user,
-    :to_user,
-    :game,
-    :from_user_id,
-    :to_user_id,
+  FORM_ATTRIBUTES = %i[
+    category
+    from_user
+    to_user
+    game
+    from_user_id
+    to_user_id
   ].freeze
 
   # Overwrite this method to customize how rivalries are displayed

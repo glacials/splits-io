@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class PatreonUserDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -17,7 +17,7 @@ class PatreonUserDashboard < Administrate::BaseDashboard
     pledge_cents: Field::Number,
     pledge_created_at: Field::DateTime,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -25,39 +25,39 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :user,
-    :full_name,
-    :pledge_cents,
-    :pledge_created_at,
+  COLLECTION_ATTRIBUTES = %i[
+    user
+    full_name
+    pledge_cents
+    pledge_created_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :user,
-    :id,
-    :access_token,
-    :refresh_token,
-    :full_name,
-    :patreon_id,
-    :pledge_cents,
-    :pledge_created_at,
-    :created_at,
-    :updated_at,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    user
+    id
+    access_token
+    refresh_token
+    full_name
+    patreon_id
+    pledge_cents
+    pledge_created_at
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :user,
-    :access_token,
-    :refresh_token,
-    :full_name,
-    :patreon_id,
-    :pledge_cents,
-    :pledge_created_at,
+  FORM_ATTRIBUTES = %i[
+    user
+    access_token
+    refresh_token
+    full_name
+    patreon_id
+    pledge_cents
+    pledge_created_at
   ].freeze
 
   # Overwrite this method to customize how patreon users are displayed

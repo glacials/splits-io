@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class SegmentHistoryDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -15,7 +15,7 @@ class SegmentHistoryDashboard < Administrate::BaseDashboard
     realtime_duration_ms: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    gametime_duration_ms: Field::Number,
+    gametime_duration_ms: Field::Number
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -23,35 +23,35 @@ class SegmentHistoryDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :segment,
-    :run,
-    :id,
-    :attempt_number,
+  COLLECTION_ATTRIBUTES = %i[
+    segment
+    run
+    id
+    attempt_number
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :segment,
-    :run,
-    :id,
-    :attempt_number,
-    :realtime_duration_ms,
-    :created_at,
-    :updated_at,
-    :gametime_duration_ms,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    segment
+    run
+    id
+    attempt_number
+    realtime_duration_ms
+    created_at
+    updated_at
+    gametime_duration_ms
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :segment,
-    :run,
-    :attempt_number,
-    :realtime_duration_ms,
-    :gametime_duration_ms,
+  FORM_ATTRIBUTES = %i[
+    segment
+    run
+    attempt_number
+    realtime_duration_ms
+    gametime_duration_ms
   ].freeze
 
   # Overwrite this method to customize how segment histories are displayed

@@ -1,4 +1,4 @@
-require "administrate/base_dashboard"
+require 'administrate/base_dashboard'
 
 class RunDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
@@ -31,7 +31,7 @@ class RunDashboard < Administrate::BaseDashboard
     parsed_at: Field::DateTime,
     gametime_duration_ms: Field::Number,
     gametime_sum_of_best_ms: Field::Number,
-    default_timing: Field::String,
+    default_timing: Field::String
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -39,67 +39,67 @@ class RunDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :user,
-    :category,
-    :game,
-    :segments,
+  COLLECTION_ATTRIBUTES = %i[
+    user
+    category
+    game
+    segments
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :id,
-    :user,
-    :game,
-    :category,
-    :created_at,
-    :updated_at,
-    :parsed_at,
-    :realtime_duration_s,
-    :realtime_sum_of_best_s,
-    :realtime_duration_ms,
-    :realtime_sum_of_best_ms,
-    :gametime_duration_ms,
-    :gametime_sum_of_best_ms,
-    :default_timing,
-    :segments,
-    :image_url,
-    :program,
-    :claim_token,
-    :archived,
-    :video_url,
-    :attempts,
-    :srdc_id,
-    :s3_filename,
-    :nick,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    id
+    user
+    game
+    category
+    created_at
+    updated_at
+    parsed_at
+    realtime_duration_s
+    realtime_sum_of_best_s
+    realtime_duration_ms
+    realtime_sum_of_best_ms
+    gametime_duration_ms
+    gametime_sum_of_best_ms
+    default_timing
+    segments
+    image_url
+    program
+    claim_token
+    archived
+    video_url
+    attempts
+    srdc_id
+    s3_filename
+    nick
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :user,
-    :category,
-    :game,
-    :segments,
-    :nick,
-    :image_url,
-    :realtime_duration_s,
-    :program,
-    :claim_token,
-    :realtime_sum_of_best_s,
-    :archived,
-    :video_url,
-    :srdc_id,
-    :attempts,
-    :s3_filename,
-    :realtime_duration_ms,
-    :realtime_sum_of_best_ms,
-    :parsed_at,
-    :gametime_duration_ms,
-    :gametime_sum_of_best_ms,
-    :default_timing,
+  FORM_ATTRIBUTES = %i[
+    user
+    category
+    game
+    segments
+    nick
+    image_url
+    realtime_duration_s
+    program
+    claim_token
+    realtime_sum_of_best_s
+    archived
+    video_url
+    srdc_id
+    attempts
+    s3_filename
+    realtime_duration_ms
+    realtime_sum_of_best_ms
+    parsed_at
+    gametime_duration_ms
+    gametime_sum_of_best_ms
+    default_timing
   ].freeze
 
   # Overwrite this method to customize how runs are displayed
