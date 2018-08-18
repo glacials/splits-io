@@ -1,12 +1,12 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update]
-  before_action :authorize, only: [:edit, :update]
+  before_action :set_game, only: %i[show edit update]
+  before_action :authorize, only: %i[edit update]
 
   def show
     @on_game_page = true
     @category = @game.categories.joins(:runs).group('categories.id').order('count(runs.id) desc').first
     if @category.nil?
-      render :not_found, status: 404
+      render :not_found, status: :not_found
       return
     end
     render template: 'games/categories/show'

@@ -3,10 +3,10 @@ require 'uri'
 require 'speedrundotcom'
 
 class RunsController < ApplicationController
-  before_action :set_run,        only: [:show, :download, :destroy, :compare, :edit, :update]
+  before_action :set_run,        only: %i[show download destroy compare edit update]
   before_action :set_comparison, only: [:compare]
 
-  before_action :first_parse, only: [:show, :edit, :update, :download], if: -> { @run.parsed_at.nil? }
+  before_action :first_parse, only: %i[show edit update download], if: -> { @run.parsed_at.nil? }
 
   before_action :warn_about_deprecated_url, only: [:show], if: -> { request.path == "/#{@run.nick}" }
   before_action :attempt_to_claim,          only: [:show], if: -> { params[:claim_token].present? }
@@ -24,7 +24,7 @@ class RunsController < ApplicationController
     @run.reload
 
     # Catch bad runs
-    render :cant_parse, status: 500 if @run.timer.nil?
+    render :cant_parse, status: :internal_server_error if @run.timer.nil?
   end
 
   def index
@@ -35,7 +35,7 @@ class RunsController < ApplicationController
 
   def edit
     if cannot?(:edit, @run)
-      render :forbidden, status: 403
+      render :forbidden, status: :forbidden
       return
     end
 
@@ -48,7 +48,7 @@ class RunsController < ApplicationController
 
   def update
     if cannot?(:edit, @run)
-      render :forbidden, status: 403
+      render :forbidden, status: :forbidden
       return
     end
 
@@ -158,7 +158,7 @@ class RunsController < ApplicationController
 
   def destroy
     if cannot?(:destroy, @run)
-      render :forbidden, status: 403
+      render :forbidden, status: :forbidden
       return
     end
 
@@ -191,14 +191,14 @@ class RunsController < ApplicationController
 
     gon.scale_to = @run.duration_ms(timing)
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
-    render :not_found, status: 404
+    render :not_found, status: :not_found
   end
 
   def set_comparison
     return if params[:comparison_run].blank?
     @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
   rescue ActiveRecord::RecordNotFound
-    render :not_found, status: 404
+    render :not_found, status: :not_found
   end
 
   def first_parse

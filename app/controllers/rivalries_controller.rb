@@ -1,7 +1,7 @@
 class RivalriesController < ApplicationController
   before_action :set_rivalry,  only: [:destroy]
   before_action :set_target,   only: [:create]
-  before_action :set_category, only: [:new, :create], if: -> { params[:category].present? }
+  before_action :set_category, only: %i[new create], if: -> { params[:category].present? }
 
   def index
     if current_user.nil?

@@ -1,12 +1,12 @@
 class Runs::StatsController < Runs::ApplicationController
-  before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
+  before_action :set_run, only: %i[index run_history_csv segment_history_csv]
 
   def index
     @run.parse_into_db unless @run.parsed?
 
     # Catch bad runs
     if @run.timer.nil?
-      render 'runs/cant_parse', status: 500
+      render 'runs/cant_parse', status: :internal_server_error
       return
     end
 

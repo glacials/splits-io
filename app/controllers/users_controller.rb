@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :destroy]
+  before_action :set_user, only: %i[show destroy]
   before_action :verify_ownership, only: [:destroy]
 
   def show
@@ -19,6 +19,6 @@ class UsersController < ApplicationController
   end
 
   def verify_ownership
-    render :unauthorized, status: 401 unless @user == current_user
+    render :unauthorized, status: :unauthorized unless @user == current_user
   end
 end
