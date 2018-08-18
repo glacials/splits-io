@@ -11,12 +11,12 @@ class Api::V3::Games::CategoriesController < Api::V3::ApplicationController
   def set_game
     @game = Game.includes(:categories).find_by(shortname: params[:game_id]) || Game.includes(:categories).find(params[:game_id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "No game with shortname or id '#{params[:game_id]}' found."}
+    render status: :not_found, json: {status: 404, message: "No game with shortname or id '#{params[:game_id]}' found."}
   end
 
   def set_category
     @category = Category.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "No category with id '#{params[:id]}' found."}
+    render status: :not_found, json: {status: 404, message: "No category with id '#{params[:id]}' found."}
   end
 end

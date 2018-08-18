@@ -42,7 +42,7 @@ class Api::V4::ApplicationController < ActionController::Base
     secure_uri.scheme = 'https'
     response.set_header('Location', secure_uri.to_s)
 
-    render status: 301, json: {
+    render status: :moved_permanently, json: {
       error: 'The Splits I/O API is only accessible over HTTPS.'
     }
   end

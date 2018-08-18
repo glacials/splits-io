@@ -11,7 +11,7 @@ class Api::V3::Users::RunsController < Api::V3::ApplicationController
   def set_user
     @user = User.find_by(name: params[:user_id]) || User.find(params[:user_id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "User with name or id '#{params[:user_id]}' not found."}
+    render status: :not_found, json: {status: 404, message: "User with name or id '#{params[:user_id]}' not found."}
   end
 
   def set_runs

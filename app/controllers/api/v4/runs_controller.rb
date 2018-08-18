@@ -1,5 +1,5 @@
 class Api::V4::RunsController < Api::V4::ApplicationController
-  before_action :set_run, only: [:show, :update, :destroy]
+  before_action :set_run, only: %i[show update destroy]
   before_action :verify_ownership!, only: [:update]
 
   before_action :find_accept_header, only: [:show]
@@ -9,9 +9,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   before_action only: [:create] do
     if current_user.nil? # If a cookie is supplied, use it because we're probably on the website.
       # If an OAuth token is supplied, use it (and fail if it's invalid). Otherwise, upload anonymously.
-      if request.headers['Authorization'].present?
-        doorkeeper_authorize! :upload_run
-      end
+      doorkeeper_authorize! :upload_run if request.headers['Authorization'].present?
     end
   end
 
@@ -51,7 +49,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
     @run = Run.create(rp)
     unless @run.persisted?
-      render status: 400, json: {
+      render status: :bad_request, json: {
         status: 400,
         message: "Couldn't reserve run. Please try again."
       }
@@ -63,7 +61,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       content_length_range: 1..(25 * 1024 * 1024)
     )
 
-    render status: 201, location: api_v4_run_url(@run), json: {
+    render status: :created, location: api_v4_run_url(@run), json: {
       status: 201,
       message: 'Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.',
       id: @run.id36,
@@ -119,7 +117,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
 
     valid_accepts = Run.exportable_programs.map(&:content_type) << 'application/json'
     unless valid_accepts.include?(@accept_header)
-      render status: 406, json: {
+      render status: :not_acceptable, json: {
         status: 406,
         error: "Accept mime type #{@accept_header} not supported",
         valid_accepts: valid_accepts

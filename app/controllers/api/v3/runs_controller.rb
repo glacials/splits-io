@@ -1,12 +1,10 @@
 class Api::V3::RunsController < Api::V3::ApplicationController
-  before_action :set_run, only: [:show, :destroy, :disown]
-  before_action :verify_ownership!, only: [:destroy, :disown]
+  before_action :set_run, only: %i[show destroy disown]
+  before_action :verify_ownership!, only: %i[destroy disown]
 
   before_action only: [:create] do
     # If an OAuth token is supplied, use it (and fail if it's invalid). Otherwise, upload anonymously.
-    if request.headers['Authorization'].present?
-      doorkeeper_authorize! :upload_run
-    end
+    doorkeeper_authorize! :upload_run if request.headers['Authorization'].present?
   end
 
   def show
@@ -27,7 +25,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       body: params.require(:file)
     )
 
-    render status: 201, location: api_v3_run_url(@run), json: {
+    render status: :created, location: api_v3_run_url(@run), json: {
       status: 201,
       message: 'Run created.',
       id: @run.id36,
@@ -39,7 +37,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       }
     }
   rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordInvalid, PG::CharacterNotInRepertoire, ArgumentError
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: 400,
       message: "Invalid run file received. Make sure you're including a 'file' parameter in your request."
     }
@@ -64,7 +62,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   def set_run
     @run = Run.includes(:game, :category, :user, :histories, segments: [:histories]).find(params[:id].to_i(36))
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {
+    render status: :not_found, json: {
       status: 404,
       message: "Run with id '#{params[:id]}' not found."
     }
@@ -72,7 +70,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
 
   def verify_ownership!
     if cannot?(:edit, @run)
-      render status: 401, json: {
+      render status: :unauthorized, json: {
         status: 401,
         message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."
       }
