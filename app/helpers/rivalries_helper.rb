@@ -1,5 +1,5 @@
 module RivalriesHelper
-  BUTT_KICK_SENTENCES = %q[
+  BUTT_KICK_SENTENCES = "
     'kick their butt'
     'kick a butt'
     'gently connect a foot with a butt'
@@ -11,7 +11,7 @@ module RivalriesHelper
     'connect your foot with their butt'
     'connect their butt with your foot'
     'kick kick kick kick kick kick'
-  ].freeze
+  ".freeze
 
   def next_butt_kick_sentence
     @next_index = ((@next_index || -1) + 1) % BUTT_KICK_SENTENCES.length

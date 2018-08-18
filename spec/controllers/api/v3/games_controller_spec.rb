@@ -12,11 +12,10 @@ describe Api::V3::GamesController do
         expect(response).to have_http_status(200)
       end
 
-=begin # test fails for unknown reason. works fine outside of testing env
-      it 'returns with at least one result' do
-        expect(body.count).to be > 0
-      end
-=end
+      # # test fails for unknown reason. works fine outside of testing env
+      #       it 'returns with at least one result' do
+      #         expect(body.count).to be > 0
+      #       end
     end
 
     context 'when given a search term which does not yield results' do
@@ -44,7 +43,7 @@ describe Api::V3::GamesController do
 
   describe '#show' do
     let(:game) { FactoryBot.create(:game, :shortnamed) }
-    let(:returned_attributes) { [:id, :name, :shortname, :categories] }
+    let(:returned_attributes) { %i[id name shortname categories] }
 
     context 'when given an id' do
       context 'when the game exists' do
