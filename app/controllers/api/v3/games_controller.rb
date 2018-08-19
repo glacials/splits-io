@@ -3,7 +3,7 @@ class Api::V3::GamesController < Api::V3::ApplicationController
 
   def index
     if params[:search].blank?
-      render status: 400, json: {status: 400, message: 'You must supply a `search` term.'}
+      render status: :bad_request, json: {status: 400, message: 'You must supply a `search` term.'}
       return
     end
     @games = Game.search(params[:search]).includes(:categories)
@@ -19,6 +19,6 @@ class Api::V3::GamesController < Api::V3::ApplicationController
   def set_game
     @game = Game.includes(:categories).find_by(shortname: params[:id]) || Game.includes(:categories).find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "No game with shortname or id '#{params[:id]}' found."}
+    render status: :not_found, json: {status: 404, message: "No game with shortname or id '#{params[:id]}' found."}
   end
 end

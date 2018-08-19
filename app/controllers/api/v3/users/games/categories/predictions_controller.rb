@@ -31,7 +31,7 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
     end
     render json: {prediction: @prediction}
   rescue MovingAverage::Errors::InvalidTailError
-    render status: 404, json: {status: 404, message: "Not enough data on #{@user.name} to make a prediction."}
+    render status: :not_found, json: {status: 404, message: "Not enough data on #{@user.name} to make a prediction."}
   end
 
   private
@@ -39,19 +39,19 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
   def set_user
     @user = User.find_by(name: params[:user_id]) || User.find(params[:user_id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "User with name or id '#{params[:user_id]}' not found."}
+    render status: :not_found, json: {status: 404, message: "User with name or id '#{params[:user_id]}' not found."}
   end
 
   def set_game
     @game = Game.find_by(shortname: params[:game_id]) || Game.find(params[:game_id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {status: 404, message: "Game with shortname or id '#{params[:game_id]}' not found."}
+    render status: :not_found, json: {status: 404, message: "Game with shortname or id '#{params[:game_id]}' not found."}
   end
 
   def set_category
     @category = @game.categories.find(params[:category_id])
   rescue ActiveRecord::RecordNotFound
-    render status: 404, json: {
+    render status: :not_found, json: {
       status: 404,
       message: "Category with id '#{params[:category_id]}' not found for game '#{params[:game_id]}'."
     }
@@ -59,7 +59,7 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
 
   def set_prediction
     unless @user.runs?(@category)
-      render status: 404, json: {
+      render status: :not_found, json: {
         status: 404,
         message: "User with name or id '#{params[:user_id]}' doesn't run category '#{params[:category_id]}' for game '#{params[:game_id]}'."
       }

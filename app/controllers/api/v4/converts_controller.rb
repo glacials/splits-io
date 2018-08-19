@@ -19,7 +19,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
 
     @run.parse_into_db
     if @run.program.nil?
-      render status: 400, json: {
+      render status: :bad_request, json: {
         status: 400,
         message: 'Unable to parse that run.'
       }
@@ -59,13 +59,13 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     params.require(:format)
     supported = Run.exportable_programs.map(&:to_sym).map(&:to_s) + ['json']
     unless supported.map(&:to_s).include?(params[:format])
-      render status: 400, json: {
+      render status: :bad_request, json: {
         status: 400,
         message: "Convert supports the following output formats: #{supported.to_sentence}."
       }
     end
   rescue ActionController::ParameterMissing
-    render status: 400, json: {
+    render status: :bad_request, json: {
       status: 400,
       message: "Missing 'file' or 'format' parameter. Make sure to include both in your request."
     }
