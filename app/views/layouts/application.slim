@@ -89,13 +89,23 @@ html
       = yield
       footer#footer
         = yield(:footer)
-        small.float-right style='text-align: right;'
-          span by glacials :]
-          br
-          a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' target=:_blank api
-          span<> &bull;
-          a href='https://github.com/glacials/splits-io' target=:_blank source
-          span<> &bull;
-          a href='https://twitter.com/splitsio' target=:_blank twitter
-          span<> &bull;
-          a href='mailto:help@splits.io' help
+        .row
+          .col-md-6
+            - if PatreonUser.any?
+              small
+                a> href='https://www.patreon.com/glacials'
+                  span Thanks to our patrons!
+                p
+                  - User.joins(:patreon).where('patreon_users.pledge_cents > 0').each do |user|
+                    = user_badge(user)
+          .col-md-6
+            small.float-right style='text-align: right;'
+              span by glacials :]
+              br
+              a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' target=:_blank api
+              span<> &bull;
+              a href='https://github.com/glacials/splits-io' target=:_blank source
+              span<> &bull;
+              a href='https://twitter.com/splitsio' target=:_blank twitter
+              span<> &bull;
+              a href='mailto:help@splits.io' help
