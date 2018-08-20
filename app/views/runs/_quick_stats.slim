@@ -17,7 +17,7 @@ article data-turbolinks-temporary=true
           - if previous_upload.present? && run.sum_of_best_ms(timing) < previous_upload.sum_of_best_ms(timing)
             small.delta-indicator.delta-negative.text-success.tip-top title='Since last PB'
               = format_ms_casual(previous_upload.sum_of_best_ms(timing) - run.sum_of_best_ms(timing))
-        span.statcard-desc = 'Sum of best'
+        span.statcard-desc Sum of best
     - if run.duration_ms(timing) >= run.sum_of_best_ms(timing)
       .col-sm-3
         .statcard.p-3

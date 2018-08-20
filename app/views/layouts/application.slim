@@ -59,18 +59,19 @@ html
                     = icon('fas', 'search')
           ul.nav.navbar-nav
             li.nav-item
+              a.patreon.nav-link.px-3.border-0 href='https://www.patreon.com/glacials' target='_blank'
+                img src=asset_path('patreon.svg') height='20'
+            li.nav-item
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
-                img src='/discord.svg' height='20'
+                img src=asset_path('discord.svg') height='20'
             - if logged_in?
               li.nav-item.dropdown class=('active' if on_a_profile_page?)
                 a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
-                  span> = icon("fas", "user")
+                  span> = icon('fas', 'user')
                   span = current_user
                   span.caret
                 ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
                   li.nav-item
-                    - if !current_user.patron?
-                      = link_to 'Become a Patron!', 'https://www.patreon.com/glacials', target: '_blank', class: 'dropdown-item text-secondary'
                     = link_to 'Profile', user_path(current_user), class: 'dropdown-item text-secondary'
                     = link_to 'Settings', settings_path, class: 'dropdown-item text-secondary'
                     = link_to 'Tools', tools_path, class: 'dropdown-item text-secondary'
