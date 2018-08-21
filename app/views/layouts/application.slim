@@ -91,21 +91,20 @@ html
         = yield(:footer)
         .row
           .col-md-6
-            - if PatreonUser.any?
-              small
-                a> href='https://www.patreon.com/glacials'
-                  span Thanks to our patrons!
-                p
-                  - User.joins(:patreon).where('patreon_users.pledge_cents > 0').each do |user|
-                    = user_badge(user)
+            - if User.joins(:patreon).where('patreon_users.pledge_cents > 0').any?
+              a> href='https://www.patreon.com/glacials'
+                span Thanks to our patrons!
+              p
+                - User.joins(:patreon).where('patreon_users.pledge_cents > 0').each do |user|
+                  span.mr-1 = user_badge(user)
           .col-md-6
-            small.float-right style='text-align: right;'
-              span by glacials :]
+            .float-right style='text-align: right;'
+              span by Glacials :]
               br
-              a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' target=:_blank api
+              a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' API
               span<> &bull;
-              a href='https://github.com/glacials/splits-io' target=:_blank source
+              a href='https://github.com/glacials/splits-io' Source
               span<> &bull;
-              a href='https://twitter.com/splitsio' target=:_blank twitter
+              a href='https://twitter.com/splitsio' Twitter
               span<> &bull;
-              a href='mailto:help@splits.io' help
+              a href='mailto:help@splits.io' Email
