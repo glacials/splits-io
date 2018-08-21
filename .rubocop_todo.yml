@@ -1,0 +1,8 @@
+Style/GlobalVars:
+  Exclude:
+  - 'app/models/concerns/s3_run.rb'
+  - 'app/controllers/runs_controller.rb'
+  - 'app/controllers/api/v4/converts_controller.rb'
+  - 'app/controllers/api/v4/runs_controller.rb'
+  - 'app/controllers/api/v3/runs_controller.rb'
+  - 'spec/factories/run_factory.rb'
