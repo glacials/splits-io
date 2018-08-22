@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include PgSearch
   include AuthenticatingUser
   include RivalUser
+  include RunnerUser
   include TwitchUser
 
   has_many :runs

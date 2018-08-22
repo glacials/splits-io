@@ -21,6 +21,28 @@ article
     .col-lg-12
       - if logged_in?
         - if current_user.runs.any?
+          .row
+            .col-sm-3
+              .statcard.p-3
+                h2.statcard-number
+                  - bytes_used = current_user.s3_bytes_used
+                  - bytes_used_past_year = current_user.s3_bytes_used(since: 1.year.ago)
+                  span> = number_to_human_size(bytes_used)
+                  small.delta-indicator.delta-positive.tip-top title='Since last year'
+                    = number_to_human_size(bytes_used_past_year)
+                span.statcard-desc Space used
+            .col-sm-3
+              .statcard.p-3
+                h2.statcard-number
+                  span> = current_user.runs.count
+                  small.delta-indicator.delta-positive.tip-top title='Since last year'
+                    = current_user.runs.where(created_at: 1.year.ago..Time.now.utc).count
+                span.statcard-desc Runs stored
+            .col-sm-3
+              .statcard.p-3
+                h2.statcard-number
+                  span> title=current_user.created_at = time_ago_in_words(current_user.created_at)
+                span.statcard-desc Account age
           .card.shadow
             = render partial: 'shared/run_table', locals: { \
               runs: current_user.pbs, \
