@@ -11,7 +11,7 @@ RSpec.describe 'shared/_ad' do
     end
   end
 
-  context 'while logged into a non-gold account' do
+  context 'while logged into a non-patron account' do
     before { allow(view).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
     it 'renders the ad template' do
@@ -21,8 +21,8 @@ RSpec.describe 'shared/_ad' do
     end
   end
 
-  context 'while logged into a gold account' do
-    before { allow(view).to receive(:current_user).and_return(FactoryBot.build(:user, permagold: true)) }
+  context 'while logged into a patron account' do
+    before { allow(view).to receive(:current_user).and_return(FactoryBot.build(:patreon_user, pledge_cents: 200).user) }
 
     it 'renders the ad template' do
       render

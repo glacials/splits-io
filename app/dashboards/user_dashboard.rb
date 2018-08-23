@@ -14,14 +14,13 @@ class UserDashboard < Administrate::BaseDashboard
     rivalries: Field::HasMany,
     incoming_rivalries: Field::HasMany.with_options(class_name: 'Rivalry'),
     id: Field::Number,
-    email: Field::String,
+    email: Field::Email,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    twitch_token: Field::String,
+    twitch_token: Field::Password,
     twitch_id: Field::Number,
     name: Field::String,
     avatar: Field::String,
-    permagold: Field::Boolean,
     twitch_display_name: Field::String
   }.freeze
 
@@ -53,7 +52,6 @@ class UserDashboard < Administrate::BaseDashboard
     twitch_id
     name
     avatar
-    permagold
     twitch_display_name
   ].freeze
 
@@ -71,7 +69,6 @@ class UserDashboard < Administrate::BaseDashboard
     twitch_id
     name
     avatar
-    permagold
     twitch_display_name
   ].freeze
 

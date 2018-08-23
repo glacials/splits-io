@@ -15,12 +15,11 @@ class RunDashboard < Administrate::BaseDashboard
     id: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    parsed_at: Field::DateTime,
     nick: Field::String,
     image_url: Field::String,
-    realtime_duration_s: Field::String.with_options(searchable: false),
     program: Field::String,
-    claim_token: Field::String,
-    realtime_sum_of_best_s: Field::String.with_options(searchable: false),
+    claim_token: Field::Password,
     archived: Field::Boolean,
     video_url: Field::String,
     srdc_id: Field::String,
@@ -28,7 +27,6 @@ class RunDashboard < Administrate::BaseDashboard
     s3_filename: Field::String,
     realtime_duration_ms: Field::Number,
     realtime_sum_of_best_ms: Field::Number,
-    parsed_at: Field::DateTime,
     gametime_duration_ms: Field::Number,
     gametime_sum_of_best_ms: Field::Number,
     default_timing: Field::String
@@ -56,8 +54,6 @@ class RunDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     parsed_at
-    realtime_duration_s
-    realtime_sum_of_best_s
     realtime_duration_ms
     realtime_sum_of_best_ms
     gametime_duration_ms
