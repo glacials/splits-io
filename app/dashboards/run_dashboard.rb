@@ -39,7 +39,6 @@ class RunDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     user
-    category
     game
     segments
   ].freeze
@@ -77,14 +76,8 @@ class RunDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     user
     category
-    game
-    segments
     nick
     image_url
-    realtime_duration_s
-    program
-    claim_token
-    realtime_sum_of_best_s
     archived
     video_url
     srdc_id
@@ -92,7 +85,6 @@ class RunDashboard < Administrate::BaseDashboard
     s3_filename
     realtime_duration_ms
     realtime_sum_of_best_ms
-    parsed_at
     gametime_duration_ms
     gametime_sum_of_best_ms
     default_timing
