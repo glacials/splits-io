@@ -146,6 +146,10 @@ Config for this generation is at [`config/favicon.json`][favicon-config].
 [logo]: public/logo.svg
 [favicon-config]: config/favicon.json
 
+## Responsible Disclosure
+If you find a security vulnerability in Splits I/O, please email it to security@splits.io, as posting the vulnerability
+in public may allow malicious people to use it before it's able to be fixed.
+
 ## Library Information
 ### LiveSplit Core
 Splits I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`. To upgrade it,
