@@ -9,19 +9,18 @@ class UserDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     runs: Field::HasMany,
+    id: Field::Number,
     categories: Field::HasMany,
     games: Field::HasMany,
     rivalries: Field::HasMany,
     incoming_rivalries: Field::HasMany.with_options(class_name: 'Rivalry'),
-    id: Field::Number,
     email: Field::Email,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
-    twitch_token: Field::Password,
     twitch_id: Field::Number,
     name: Field::String,
     avatar: Field::String,
-    twitch_display_name: Field::String
+    twitch_display_name: Field::String,
+    created_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -39,37 +38,27 @@ class UserDashboard < Administrate::BaseDashboard
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
+    id
+    name
+    email
     runs
-    categories
-    games
     rivalries
     incoming_rivalries
-    id
-    email
-    created_at
-    updated_at
-    twitch_token
     twitch_id
-    name
     avatar
     twitch_display_name
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    runs
-    categories
-    games
-    rivalries
-    incoming_rivalries
-    email
-    twitch_token
-    twitch_id
     name
+    email
+    rivalries
     avatar
-    twitch_display_name
   ].freeze
 
   # Overwrite this method to customize how users are displayed

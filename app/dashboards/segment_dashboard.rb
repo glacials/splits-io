@@ -8,27 +8,27 @@ class SegmentDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    run: Field::BelongsTo,
-    histories: Field::HasMany.with_options(class_name: 'SegmentHistory'),
     id: Field::String.with_options(searchable: false),
-    segment_number: Field::Number,
-    realtime_duration_ms: Field::Number,
-    realtime_start_ms: Field::Number,
-    realtime_end_ms: Field::Number,
-    realtime_shortest_duration_ms: Field::Number,
+    run: Field::BelongsTo,
     name: Field::String,
-    realtime_gold: Field::Boolean,
+    segment_number: Field::Number.with_options(prefix: '#'),
+    realtime_duration_ms: Field::Number.with_options(suffix: 'ms'),
+    realtime_start_ms: Field::Number.with_options(suffix: 'ms'),
+    realtime_end_ms: Field::Number.with_options(suffix: 'ms'),
+    realtime_shortest_duration_ms: Field::Number.with_options(suffix: 'ms'),
+    realtime_gold: Field::Boolean.with_options(suffix: 'ms'),
     realtime_reduced: Field::Boolean,
     realtime_skipped: Field::Boolean,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
-    gametime_start_ms: Field::Number,
-    gametime_end_ms: Field::Number,
-    gametime_duration_ms: Field::Number,
-    gametime_shortest_duration_ms: Field::Number,
-    gametime_gold: Field::Boolean,
+    gametime_start_ms: Field::Number.with_options(suffix: 'ms'),
+    gametime_end_ms: Field::Number.with_options(suffix: 'ms'),
+    gametime_duration_ms: Field::Number.with_options(suffix: 'ms'),
+    gametime_shortest_duration_ms: Field::Number.with_options(suffix: 'ms'),
+    gametime_gold: Field::Boolean.with_options(suffix: 'ms'),
     gametime_reduced: Field::Boolean,
-    gametime_skipped: Field::Boolean
+    gametime_skipped: Field::Boolean,
+    histories: Field::HasMany.with_options(class_name: 'SegmentHistory', limit: 10),
+    created_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -37,29 +37,26 @@ class SegmentDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
-    run
-    histories
     id
+    run
     segment_number
+    histories
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    run
-    histories
     id
+    run
+    name
     segment_number
     realtime_duration_ms
     realtime_start_ms
     realtime_end_ms
     realtime_shortest_duration_ms
-    name
     realtime_gold
     realtime_reduced
     realtime_skipped
-    created_at
-    updated_at
     gametime_start_ms
     gametime_end_ms
     gametime_duration_ms
@@ -67,6 +64,9 @@ class SegmentDashboard < Administrate::BaseDashboard
     gametime_gold
     gametime_reduced
     gametime_skipped
+    histories
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -97,6 +97,6 @@ class SegmentDashboard < Administrate::BaseDashboard
   # across all pages of the admin dashboard.
   #
   def display_resource(segment)
-    segment
+    segment.name
   end
 end

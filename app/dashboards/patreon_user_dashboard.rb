@@ -10,8 +10,8 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     user: Field::BelongsTo,
     id: Field::String.with_options(searchable: false),
-    access_token: Field::String,
-    refresh_token: Field::String,
+    access_token: Field::Password,
+    refresh_token: Field::Password,
     full_name: Field::String,
     patreon_id: Field::String,
     pledge_cents: Field::Number,
@@ -35,10 +35,8 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    user
     id
-    access_token
-    refresh_token
+    user
     full_name
     patreon_id
     pledge_cents
@@ -51,9 +49,6 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    user
-    access_token
-    refresh_token
     full_name
     patreon_id
     pledge_cents

@@ -8,10 +8,10 @@ class SegmentHistoryDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    segment: Field::BelongsTo,
-    run: Field::HasOne,
     id: Field::String.with_options(searchable: false),
-    attempt_number: Field::Number,
+    run: Field::HasOne,
+    segment: Field::BelongsTo,
+    attempt_number: Field::Number.with_options(prefix: '#'),
     realtime_duration_ms: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -24,23 +24,22 @@ class SegmentHistoryDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
-    segment
     run
-    id
+    segment
     attempt_number
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    segment
-    run
     id
+    run
+    segment
     attempt_number
     realtime_duration_ms
+    gametime_duration_ms
     created_at
     updated_at
-    gametime_duration_ms
   ].freeze
 
   # FORM_ATTRIBUTES
