@@ -9,8 +9,8 @@
       li.breadcrumb-item = link_to(@run.game, game_path(@run.game))
       - if @run.category.present?
         li.breadcrumb-item = link_to(@run.category, game_category_path(@run.game, @run.category))
-    li.breadcrumb-item = link_to(@run.id36, run_path(@run))
     li.breadcrumb-item
+      span = link_to(@run.id36, run_path(@run))
       span> vs.
       span = link_to(@comparison_run.id36, run_path(@comparison_run))
   h3 #{@run.game} #{@run.category}

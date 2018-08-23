@@ -11,10 +11,10 @@ class Ability
   private
 
   def grant_anon_perms
-    can(%i[create read], Run)
-    can(%i[create read], Category)
-    can(%i[create read], Game)
     can(%i[create read], User)
+    can(%i[create read], Game)
+    can(%i[create read], Category)
+    can(%i[create read], Run)
   end
 
   def grant_user_perms(user)
@@ -26,7 +26,11 @@ class Ability
   end
 
   def grant_admin_perms
-    can(%i[update destroy merge], Game)
-    can(%i[update destroy],       Run)
+    can(%i[create read update destroy],       User)
+    can(%i[create read update destroy merge], Game)
+    can(%i[create read update destroy merge], Category)
+    can(%i[create read update destroy],       Run)
+    can(%i[create read update destroy],       Rivalry)
+    can(%i[create read update destroy],       Doorkeeper::Application)
   end
 end
