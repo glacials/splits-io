@@ -3,7 +3,7 @@
     .card
       = image_tag(rivalry.from_user.avatar, class: 'card-img-top')
       .card-body
-        h5 = rivalry.from_user.twitch_display_name
+        h5 = rivalry.from_user
       .card-footer
         - run = rivalry.from_user.pb_for(rivalry.category)
         - timing = params[:timing] || run.default_timing
@@ -24,7 +24,7 @@
     .card
       = image_tag(rivalry.to_user.avatar, class: 'card-img-top')
       .card-body
-        h5 = rivalry.to_user.twitch_display_name
+        h5 = rivalry.to_user
       .card-footer
         - run = rivalry.to_user.pb_for(rivalry.category)
         - timing = params[:timing] || run.default_timing

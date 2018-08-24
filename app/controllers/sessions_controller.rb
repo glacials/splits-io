@@ -2,23 +2,28 @@ class SessionsController < ApplicationController
   def create
     auth = request.env['omniauth.auth']
 
-    twitch_id = auth.uid
-    user = User.find_by(twitch_id: twitch_id) || User.new(twitch_id: twitch_id)
-
-    user.update(
-      name: auth.info.nickname,
-      twitch_display_name: auth.info.name,
-      email: auth.info.email,
-      avatar: auth.info.image,
-      twitch_token: auth.credentials.token
+    twitch_user = TwitchUser.find_or_initialize_by(twitch_id: auth.uid)
+    twitch_user.user = User.new if twitch_user.user.blank?
+    twitch_user.user.name = auth.info.nickname
+    twitch_user.assign_attributes(
+      access_token: auth.credentials.token,
+      name:         auth.info.nickname,
+      display_name: auth.info.name,
+      email:        auth.info.email,
+      avatar:       auth.info.image
     )
 
-    if user.errors.present?
+    if !twitch_user.user.save
       redirect_to redirect_path, alert: "Error: #{user.errors.full_messages.join(', ')}."
       return
     end
 
-    self.current_user = user
+    if !twitch_user.save
+      redirect_to redirect_path, alert: "Error: #{twitch_user.errors.full_messages.join(', ')}."
+      return
+    end
+
+    self.current_user = twitch_user.user
     auth_session.persist!
     redirect_to redirect_path, notice: "Signed in as #{current_user}. o/"
   end

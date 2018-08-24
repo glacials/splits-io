@@ -246,10 +246,10 @@ class RunsController < ApplicationController
   end
 
   def maybe_update_followers
-    return if current_user.nil?
-    return unless current_user.twitch_user_follows_checked_at.nil? \
-      || current_user.twitch_user_follows_checked_at + 1.day < Time.now.utc
-    current_user.delay.sync_twitch_follows!
-    current_user.update(twitch_user_follows_checked_at: Time.now.utc)
+    return if current_user.nil? || current_user.twitch.nil?
+    return unless current_user.twitch.follows_synced_at.nil? \
+      || current_user.twitch.follows_synced_at + 1.day < Time.now.utc
+    current_user.twitch.delay.sync_follows!
+    current_user.twitch.update(follows_synced_at: Time.now.utc)
   end
 end
