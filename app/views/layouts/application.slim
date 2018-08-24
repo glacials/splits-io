@@ -72,10 +72,18 @@ html
                   span.caret
                 ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
                   li.nav-item
-                    = link_to 'Profile', user_path(current_user), class: 'dropdown-item text-secondary'
-                    = link_to 'Settings', settings_path, class: 'dropdown-item text-secondary'
-                    = link_to 'Tools', tools_path, class: 'dropdown-item text-secondary'
-                    = link_to 'Sign Out', session_path(auth_session), method: :delete, class: 'dropdown-item text-secondary'
+                    a.dropdown-item.text-secondary href=user_path(current_user)
+                      => icon('fas', 'user-circle')
+                      span Profile
+                    a.dropdown-item.text-secondary href=settings_path
+                      => icon('fas', 'sliders-h')
+                      span Settings
+                    a.dropdown-item.text-secondary href=tools_path
+                      => icon('fas', 'toolbox')
+                      span Tools
+                    a.dropdown-item.text-secondary href=session_path(auth_session) rel='nofollow' data-method='delete'
+                      => icon('fas', 'sign-out-alt')
+                      span Sign Out
             - else
               li.nav-item
                 a.nav-link.px-3 href='/auth/twitch' Sign Up

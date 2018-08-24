@@ -17,9 +17,8 @@
             .float-right
               i.btn.btn-primary.disabled Not unlinkable
           .card-footer
-            .row
-              .col-lg-12
-                a.btn.btn-primary href=current_user.uri target='_blank' Visit my Twitch channel
+            .float-right
+              a.btn.btn-primary href=current_user.uri Visit my Twitch channel
       .col-lg-6
         .card.mb-3
           .card-body style='background: rgba(230, 70, 26, 1.00); color: #fff;'
@@ -33,9 +32,9 @@
               .float-right
                 a.btn.btn-primary href='/auth/patreon/unlink' Unlink
           .card-footer
-            .row
+            .float-right
               .col-lg-6
-                a.btn.btn-primary> href='https://www.patreon.com/glacials' target='_blank' Visit the Splits I/O Patreon
+                a.btn.btn-primary> href='https://www.patreon.com/glacials' Visit the Splits I/O Patreon
               - if current_user.gold_patron?
                 .col-lg-6
                   a.btn.btn-success href=tools_path View my permalink redirectors
@@ -71,7 +70,7 @@
                           = button_to authorization_path(application.id), class: 'btn btn-primary', method: :delete, data: {\
                             confirm: "Really revoke permissions from #{application.name}?"\
                           }
-                            span = icon("fas", "times")
+                            span = icon('fas', 'times')
       .col-lg-12
         .card.mb-3
           a.card-header.text-white name='applications' My Developer Applications
