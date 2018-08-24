@@ -1,125 +1,189 @@
-- title 'about'
+- title 'FAQ'
 - content_for(:header)
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to "Splits I/O", root_path
-    li.breadcrumb-item = link_to "FAQ", faq_path
-  h2 faq + friends
+    li.breadcrumb-item = link_to 'Splits I/O', root_path
+    li.breadcrumb-item = link_to 'FAQ', faq_path
+  h2 FAQ and Friends
 article
-  h3 faq
+  h3 FAQ
+  .card.mb-4
+    h5.card-header Who made this?
+    .card-body
+      p Mostly me, Glacials. You can look me up in these places:
+      .card-group
+        .card.bg-dark
+          .card-body
+            h5.text-nowrap
+              img> src=asset_path('logo.svg') width='25' height='25'
+              span Glacials
+            a.btn.btn-outline-light.float-right href='https://splits.io/u/glacials' On Splits I/O
+        .card style='background: #6441a4'
+          .card-body
+            h5.text-nowrap
+              => icon('fab', 'twitch')
+              span Glacials
+            a.btn.btn-outline-light.float-right href='https://www.twitch.tv/glacials' On Twitch
+        .card style='background: #4ba0ec'
+          .card-body
+            h5.text-nowrap
+              => icon('fab', 'twitter')
+              span glcls
+            a.btn.btn-outline-light.float-right href='https://twitter.com/glcls' On Twitter
+        .card style='background: #4988ce'
+          .card-body
+            h5.text-nowrap
+              => icon('fab', 'mastodon')
+              span @glcls@boop.town
+            a.btn.btn-outline-light.float-right href='https://boop.town/@glcls' On Mastodon
+        .card style='background: #171515'
+          .card-body
+            h5.text-nowrap
+              => icon('fab', 'github')
+              span glacials
+            a.btn.btn-outline-light.float-right href='https://github.com/glacials' On GitHub
 
-  a name='who'
-  .question
-    h4 Who made this?
-    p Mostly me, Glacials. My thingies are over at
-      #{link_to 'twitch.tv/glacials', 'https://www.twitch.tv/glacials', target: :_blank} and at
-      #{link_to 'twitter.com/glcls', 'https://twitter.com/glcls', target: :_blank}.
+  .card.mb-4
+    h5.card-header Which programs can I upload splits from?
+    .card-body
+      p These ones:
+      .col-md-6
+        ul.list-group.mb-4
+          - Run.programs.each do |program|
+            li.list-group-item = program
+      p In LiveSplit, you can upload from within the program with a right click -> Share.
 
-  a name='timers'
-  .question
-    h4 Which programs can I upload splits from?
-    p #{Run.programs.to_sentence}.
-    p In LiveSplit, you can upload from within the program with a right click -> Share.
+  .card-deck
+    .card.mb-4
+      h5.card-header Is Splits I/O open source?
+      .card-body
+        p Yes, since the very beginning! Have a look or lend a hand on GitHub!
+      .card-footer
+        a.btn.btn-dark.text-light.float-right href='https://github.com/glacials/splits-io'
+          => icon('fab', 'github')
+          span Splits I/O on GitHub
 
-  a name='open-source'
-  .question
-    h4 Is Splits I/O open source?
-    p Yes!! Have a look or lend a hand at
-      #{link_to 'github.com/glacials/splits-io', 'https://github.com/glacials/splits-io', target: :_blank}.
+    .card.mb-4
+      h5.card-header Does Splits I/O have an API?
+      .card-body
+        p Yes as well!
+      .card-footer
+        a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/blob/master/docs/api.md' API Documentation
 
-  a name='api'
-  .question
-    h4 Does Splits I/O have an API?
-    p Yes as well!
-      #{link_to 'Here are the docs', 'https://github.com/glacials/splits-io/blob/master/docs/api.md', target: :_blank}.
+  .card.mb-4
+    h5.card-header Why no &lt;other timer&gt;?
+    .card-body
+      p Depends. Maybe we don't know that it exists, or maybe we do but it's so niche that it's not super high priority.
+        You can check on the timers we're aware of on GitHub. If you don't see your timer there, we don't know about it.
+      p We use livesplit-core for parsing runs from various programs.
+    .card-footer
+      a.btn.btn-dark.text-light.float-right.mx-2 href='https://github.com/glacials/splits-io/labels/parsing'
+        => icon('fab', 'github')
+        span Parsing label on GitHub
+      a.btn.btn-dark.text-light.float-right.mx-2 href='https://github.com/LiveSplit/livesplit-core'
+        => icon('fab', 'github')
+        span livesplit-core on GitHub
 
-  a name='other-timers'
-  .question
-    h4 Why no &lt;other timer&gt;?
-    p Depends. Maybe we don't know that it exists, or maybe we do but it's so niche that it's not super high priority.
-      You can check on the timers we're aware of here:
-    p = link_to \
-        'github.com/glacials/splits-io/labels/parsing',\
-        'https://github.com/glacials/splits-io/labels/parsing',\
-        target: '_blank'
-    p If you don't see your timer there, we don't know about it -- remember to bop that Fo- er, New Issue button and
-      add it.
-    p If you build support for your timer yourself, we'll happily merge in your code!
+  .card.mb-4
+    h5.card-header How are game/category chosen for my run?
+    .card-body
+      p If you use LiveSplit, we try to associate your splits with an existing game and category from SRL using the
+        corresponding LiveSplit fields. If we get it wrong or if you use another timer, you can manually edit your run's
+        game and category by pressing "edit" on your run's page, near the download link.
 
-  a name='games/categories'
-  .question
-    h4 How are game/category chosen for my run?
-    p If you use LiveSplit, we try to associate your splits with an existing game and category from SRL using the
-      corresponding LiveSplit fields. If we get it wrong or if you use another timer, you can manually edit your run's
-      game and category by pressing "edit" on your run's page, near the download link.
+  .card.mb-4
+    h5.card-header My speedgame doesn't have its own page with category tabs and all that, like other games do. What gives?
+    .card-body
+      p We give full game pages to any game that's on SRL. We call these games "shortnamed" -- that is, they're recognized
+        enough to have an SRL shortname (e.g. 'oot3d', 'airride', 'sleepingdogs').
+      p This isn't because we think all other games are lame or anything; shortnames just happen to make it much easier to
+        do bookkeeping. Once you get your game on SRL this process should happen automatically next time a run is
+        uploaded, but if it doesn't you can tweet at us or something and we can associate it manually.
+    .card-footer
+      a.btn.btn-primary.float-right href='https://twitter.com/splitsio'
+        => icon('fab', 'twitter')
+        span Splits I/O on Twitter
 
-  a name='shortnamed-games'
-  .question
-    h4 My speedgame doesn't have its own page with category tabs and all that, like other games do. What gives?
-    p We give full game pages to any game that's on SRL. We call these games "shortnamed" -- that is, they're recognized
-      enough to have an SRL shortname (e.g. 'oot3d', 'airride', 'sleepingdogs').
-    p This isn't because we think all other games are lame or anything; shortnames just happen to make it much easier to
-      do bookkeeping. Once you get your game on SRL this process should happen automatically next time a run is
-      uploaded, but if it doesn't you can #{link_to 'tweet at us', 'https://twitter.com/splitsio', target: :_blank} or
-      something and we can associate it manually.
+  .card.mb-4
+    h5.card-header I get "Error eating splits :(" when accessing or uploading my splits!
+    .card-body
+      p This error happens when the page request times out, which is typically a sign that your splits took too long to
+        load into memory and parse. This happens to LiveSplit files with a very large
+      code style='display: block; margin: 1em; white-space: nowrap;'
+        | (# attempts) * (# splits in the run)
+      p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like stats!).
+      p It's my own fault that Splits I/O's handling of this is not as optimized as it should be, and I'm actively working
+        to solve it, but it's not a one-stop bug fix. To see how it's going and what specifically is being planned, you
+        can check Splits I/O's "speed" label on GitHub.
+      p As a temporary solution, you can manually strip history before uploading by making a copy of your splits, opening
+        the copy in LiveSplit, and resetting all of your best segments (drag-select the whole column and press Delete).
+        This will remove all split history; you should notice a sizeable decrease in file size, and consequently the file
+        should upload to Splits I/O without a hitch.
+    .card-footer
+      a.btn.btn-dark.text-light.float-right.mx-2 href='https://github.com/glacials/splits-io/labels/speed'
+        => icon('fab', 'github')
+        span Speed label on GitHub
 
-  a name='parsing'
-  .question
-    h4 I get "Error eating splits :(" when accessing or uploading my splits!
-    p This error happens when the page request times out, which is typically a sign that your splits took too long to
-      load into memory and parse. This happens to LiveSplit files with a very large
-    code style='display: block; margin: 1em; white-space: nowrap;'
-      | (# attempts) * (# splits in the run)
-    p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like stats!).
-    p It's my own fault that Splits I/O's handling of this is not as optimized as it should be, and I'm actively working
-      to solve it, but it's not a one-stop bug fix. To see how it's going and what specifically is being planned, you
-      can check Splits I/O's #{link_to 'speed', 'https://github.com/glacials/splits-io/labels/speed', target: '_blank'}
-      label on GitHub.
-    p As a temporary solution, you can manually strip history before uploading by making a copy of your splits, opening
-      the copy in LiveSplit, and resetting all of your best segments (drag-select the whole column and press Delete).
-      This will remove all split history; you should notice a sizeable decrease in file size, and consequently the file
-      should upload to Splits I/O without a hitch.
+  .card
+    h5.card-header Help! Splits I/O kidnapped my sister!!
+    .card-body
+      p You can always email help@splits.io with issues! Or if you'd prefer, you can post them at the GitHub issues
+        page! But maybe you should call the police first!
+    .card-footer
+      a.btn.btn-primary.text-light.float-right.mx-2 href='mailto:help@splits.io'
+        => icon('fa', 'envelope')
+        span Email Splits I/O
 
-  a name='help!!!'
-  .question
-    h4 Help! Splits I/O kidnapped my sister!!
-    p
-      | You can always email
-      a<> href="mailto:help@splits.io" help@splits.io
-      | with issues! Or if you'd prefer, you can post them at the GitHub issues page! But maybe you should call the
-        police first!
-
-article
+article.mt-4
   h3
-    | open source friends
-    small< <3
+    => icon('fa', 'heart')
+    span Open Source Friends
 
-  .project
-    h4 LiveSplit
-    small
-      = link_to 'source', 'https://github.com/LiveSplit/LiveSplit', target: '_blank'
-      span ,
-      = link_to 'website', 'http://livesplit.org/', target: '_blank'
-    p LiveSplit is developed by two really cool people who decided to open source the whole thing around 1.4.
+  .card-deck.mb-4
+    .card
+      h4.card-header LiveSplit
+      .card-body
+        p The most powerful and popular timer, LiveSplit is developed by two really cool people who decided to open
+          source the whole thing around 1.4.
+        p In a magical display of the power of open source, the parsing component of Splits I/O is even powered by
+          LiveSplit code.
+      .card-footer
+        .btn-group.float-right
+          a.btn.btn-dark href='https://github.com/LiveSplit/LiveSplit'
+            => icon('fab', 'github')
+            span Source
+          a.btn.btn-primary href='https://livesplit.org' Website
 
-  .project
-    h4 WSplit
-    small = link_to 'source', 'https://github.com/nitrofski/wsplit', target: '_blank'
-    p Nitrofski is WSplit's maintainer and open sourced the program in 2014.
+    .card
+      h4.card-header WSplit
+      .card-body
+        p An old god of speedrunning timers, WSplit is the simple and sturdy timer that's stood the test of time.
+          Nitrofski is WSplit's maintainer and open sourced the program in 2014.
+      .card-footer
+        a.btn.btn-dark.float-right href='https://github.com/nitrofski/wsplit'
+          => icon('fab', 'github')
+          span Source
 
-  .project
-    h4 PB Tracker
-    small
-      = link_to 'source', 'https://github.com/rggibson/pb-tracker', target: '_blank'
-      span ,
-      = link_to 'website', 'http://www.pbtracker.net/', target: '_blank'
-    p PB Tracker is Splits I/O's spiritual sister, preferring a you-curated, diary-style progress tracking system to
-      Splits I/O's more automated "give me all your splits" attitude.
+  .card-deck
+    .card
+      h4.card-header PB Tracker
+      .card-body
+        p PB Tracker is Splits I/O's spiritual sister, preferring a you-curated, diary-style progress tracking system to
+          Splits I/O's more automated "give me all your splits" attitude.
+      .card-footer
+        .btn-group.float-right
+          a.btn.btn-dark href='https://github.com/rggibson/pb-tracker'
+            => icon('fab', 'github')
+            span Source
+          a.btn.btn-primary href='http://www.pbtracker.net/' Website
 
-  .project
-    h4 SaltyBot
-    small
-      = link_to 'source', 'https://github.com/batedurgonnadie/salty_bot', target: '_blank'
-      span ,
-      = link_to 'website', 'https://leagueofnewbs.com/twitch/salty', target: '_blank'
-    p Salty is a speedrunning-heavy chat bot that hooks into several services to expose race status, PB splits, and WR
-      info, among other things.
+    .card
+      h4.card-header SaltyBot
+      .card-body
+        p Salty is a speedrunning-heavy chat bot that hooks into several services to expose race status, PB splits, and WR
+          info, among other things.
+      .card-footer
+        .btn-group.float-right
+          a.btn.btn-dark href='https://github.com/batedurdonnadie/salty_bot'
+            => icon('fab', 'github')
+            span Source
+          a.btn.btn-primary href='http://leagueofnewbs.com/twitch/salty' Website
