@@ -16,9 +16,10 @@ class MoveTwitchDataOutOfUsers < ActiveRecord::Migration[5.2]
     User.find_each do |user|
       TwitchUser.create(
         user:              user,
-        access_token:      user.twitch_token,
-        display_name:      user.twitch_display_name,
         twitch_id:         user.twitch_id,
+        access_token:      user.twitch_token,
+        name:              user.name,
+        display_name:      user.twitch_display_name,
         email:             user.email,
         avatar:            user.avatar,
         follows_synced_at: user.twitch_user_follows_checked_at || 100.years.ago
