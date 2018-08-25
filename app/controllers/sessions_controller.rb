@@ -13,12 +13,12 @@ class SessionsController < ApplicationController
       avatar:       auth.info.image
     )
 
-    if !twitch_user.user.save
+    unless twitch_user.user.save
       redirect_to redirect_path, alert: "Error: #{user.errors.full_messages.join(', ')}."
       return
     end
 
-    if !twitch_user.save
+    unless twitch_user.save
       redirect_to redirect_path, alert: "Error: #{twitch_user.errors.full_messages.join(', ')}."
       return
     end
