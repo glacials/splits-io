@@ -18,7 +18,6 @@ class UserDashboard < Administrate::BaseDashboard
     twitch: Field::BelongsTo,
     name: Field::String,
     avatar: Field::String,
-    twitch_display_name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
   }.freeze
@@ -30,7 +29,6 @@ class UserDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     name
-    twitch_display_name
     email
     runs
   ].freeze
