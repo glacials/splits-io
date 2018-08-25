@@ -8,159 +8,159 @@
   article You need to be signed in to view this page.
 - else
   article
-    .row
-      .col-lg-6
-        .card.mb-3
-          .card-body style='background: rgba(100, 65, 164, 1); color: #fff;'
-            span> ✓ Linked with Twitch as
-            b> = current_user
+    .card-deck.mb-3
+      .card
+        .card-body style='background: rgba(100, 65, 164, 1); color: #fff;'
+          span ✓ Linked with #{icon('fab', 'twitch')} Twitch as
+          b< = current_user
+          .float-right
+            i.btn.btn-light.disabled Not unlinkable
+        .card-footer
+          .float-right
+            a.btn.btn-primary href=current_user.uri Visit my Twitch channel
+      .card
+        .card-body style='background: rgba(230, 70, 26, 1.00); color: #fff;'
+          - if current_user.patreon.nil?
+            span> ✗ Not linked with #{icon('fab', 'patreon')} Patreon
             .float-right
-              i.btn.btn-primary.disabled Not unlinkable
-          .card-footer
+              a.btn.btn-outline-light href='/auth/patreon' Link with Patreon
+          - else
+            span ✓ Linked with #{icon('fab', 'patreon')} Patreon as
+            b< = current_user.patreon.full_name
             .float-right
-              a.btn.btn-primary href=current_user.uri Visit my Twitch channel
-      .col-lg-6
-        .card.mb-3
-          .card-body style='background: rgba(230, 70, 26, 1.00); color: #fff;'
-            - if current_user.patreon.nil?
-              span> ✗ Not linked with Patreon
-              .float-right
-                a.btn.btn-primary href='/auth/patreon' Link
-            - else
-              span> ✓ Linked with Patreon as
-              b> = current_user.patreon.full_name
-              .float-right
-                a.btn.btn-primary href='/auth/patreon/unlink' Unlink
-          .card-footer
-            .float-right
-              .col-lg-6
-                a.btn.btn-primary> href='https://www.patreon.com/glacials' Visit the Splits I/O Patreon
-              - if current_user.gold_patron?
-                .col-lg-6
-                  a.btn.btn-success href=tools_path View my permalink redirectors
-      .col-lg-12
-        .card.mb-3
-          .card-header.text-white Authorized Applications
-          .card-body
-            - if current_user.access_tokens.count == 0
-              i There are no applications authorized to use your account.
-            - else
-              p These applications have partial access to your account.
-              .table-responsive
-                table.table.table-striped.table-hover.mb-0
-                  thead
-                    tr
-                      th Name
-                      th Permissions granted
-                      th Authorized
-                      th
-                  tbody
-                    - Doorkeeper::Application.authorized_for(current_user).each do |application|
-                      - auth = Doorkeeper::AccessToken.find_by(resource_owner_id: current_user, application: application)
-                      tr
-                        td
-                          big = application.name
-                        td
-                          ul
-                            - auth.scopes.all.each do |scope|
-                              li = scope_to_sentence(scope)
-                        td
-                          div title=auth.created_at #{time_ago_in_words(auth.created_at)} ago
-                        td
-                          = button_to authorization_path(application.id), class: 'btn btn-primary', method: :delete, data: {\
-                            confirm: "Really revoke permissions from #{application.name}?"\
-                          }
-                            span = icon('fas', 'times')
-      .col-lg-12
-        .card.mb-3
-          a.card-header.text-white name='applications' My Developer Applications
-          .card-body
+              a.btn.btn-light href='/auth/patreon/unlink' Unlink
+        .card-footer
+          .float-right
             .btn-group
-              a.btn.btn-primary href='/settings/applications/new'
-                span> = icon('fas', 'plus')
-                | Create Application
-              a.btn.btn-primary target='_blank' href='https://github.com/glacials/splits-io/blob/master/docs/api.md#user-authentication-and-authorization'
-                span> = icon('fas', 'file')
-                | View Documentation
-            - if current_user.applications.empty?
-              article
-                p If you're a developer of another application like a timer, you can use this section to let your users
-                  authorize you to upload runs on their behalf.
-                p If you're not a developer, you can ignore this section.
-            - else
-              p
-                .table-responsive
-                  table.table.table-striped.table-hover.mb-0
-                    thead
-                      tr
-                        th Name
-                        th Active Tokens
-                        th Redirect URI
-                        th Client ID
-                        th
-                          span> Client Secret &mdash;
-                          small.text-warning
-                            span = icon('fas', 'clock')
-                            span< Hides forever after 24 hours
-                        th
-                    tbody
-                      - current_user.applications.each do |application|
-                        tr
-                          td
-                            big = application.name
-                          td = application.access_tokens.count
-                          td
-                            code = application.redirect_uri
-                          td
-                            .input-group
-                              input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1
-                              .input-group-append
-                                .btn.btn-primary.clipboard-btn data-clipboard-target="#client-id-#{application.uid}"
-                                  span#copy = icon('fas', 'copy')
-                                  span#copied style='display: none;' = icon('fas', 'check')
-                          td
-                            - if (Time.now.utc - 24.hours) > application.secret_generated_at
-                              button.btn.btn-secondary.btn-block disabled=true Hidden forever
-                            - else
-                              .input-group
-                                input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1
-                                .input-group-append
-                                  .btn.btn-primary.clipboard-btn data-clipboard-target="#client-secret-#{application.uid}"
-                                    span#copy = icon('fas', 'copy')
-                                    span#copied style='display: none;' = icon('fas', 'check')
-                          coffee:
-                            clipboard = new Clipboard('.clipboard-btn')
-                            clipboard.on('success', (e) ->
-                              e.trigger.children[0].style.display = 'none'
-                              e.trigger.children[1].style.display = 'inline-block'
-                              setTimeout(->
-                                e.trigger.children[0].style.display = 'inline-block'
-                                e.trigger.children[1].style.display = 'none'
-                              , 4000)
-                            )
-                          td
-                            a.btn.btn-outline-success href=edit_application_path(application)
-                              span = icon('fas', 'edit')
-                          td.border-danger.border-left
-                            = button_to(application_path(application), class: 'btn btn-outline-danger', method: :delete, \
-                              data: { \
-                                confirm: "Really delete #{application.name}? This will also revoke all \
-                                          #{application.access_tokens.count} authorizations and invalidate the associated \
-                                          tokens." \
-                              })
-                              span = icon('fas', 'times')
-  article
-    .row
-      .col-lg-12
-        .card
-          .card-header.bg-danger.text-white Delete My Account
+              a.btn.btn-primary> href='https://www.patreon.com/glacials' Visit the Splits I/O Patreon
+              - if current_user.gold_patron?
+                a.btn.btn-secondary href=tools_path View my permalink redirectors
+    .card.mb-3
+      .card-header.text-white Authorized Applications
+      .card-body
+        - if current_user.access_tokens.count == 0
+          i There are no applications authorized to use your account.
+        - else
+          p These applications have partial access to your account.
+          .table-responsive
+            table.table.table-striped.table-hover.mb-0
+              thead
+                tr
+                  th Name
+                  th Permissions granted
+                  th Authorized
+                  th
+              tbody
+                - Doorkeeper::Application.authorized_for(current_user).each do |application|
+                  - auth = Doorkeeper::AccessToken.find_by(resource_owner_id: current_user, application: application)
+                  tr
+                    td
+                      big = application.name
+                    td
+                      ul
+                        - auth.scopes.all.each do |scope|
+                          li = scope_to_sentence(scope)
+                    td
+                      div title=auth.created_at #{time_ago_in_words(auth.created_at)} ago
+                    td
+                      = button_to authorization_path(application.id), class: 'btn btn-primary', method: :delete, data: {\
+                        confirm: "Really revoke permissions from #{application.name}?"\
+                      }
+                        span = icon('fas', 'times')
+    .card.mb-3
+      a.card-header.text-white name='applications' My Developer Applications
+      .card-body
+        .btn-group
+          a.btn.btn-primary href='/settings/applications/new'
+            => icon('fas', 'plus')
+            span Create Application
+          a.btn.btn-secondary target='_blank' href='https://github.com/glacials/splits-io/blob/master/docs/api.md#user-authentication-and-authorization'
+            => icon('fas', 'file')
+            span View Documentation
+        - if current_user.applications.empty?
+          article
+            p If you're a developer of another application like a timer, you can use this section to let your users
+              authorize you to upload runs on their behalf.
+            p If you're not a developer, you can ignore this section.
+        - else
+          p
+            .table-responsive
+              table.table.table-striped.table-hover.mb-0
+                thead
+                  tr
+                    th Name
+                    th Active Tokens
+                    th Redirect URI
+                    th Client ID
+                    th
+                      span> Client Secret &mdash;
+                      small.text-warning
+                        span = icon('fas', 'clock')
+                        span< Hides forever after 24 hours
+                    th
+                tbody
+                  - current_user.applications.each do |application|
+                    tr
+                      td
+                        big = application.name
+                      td = application.access_tokens.count
+                      td
+                        code = application.redirect_uri
+                      td
+                        .input-group
+                          input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1
+                          .input-group-append
+                            .btn.btn-primary.clipboard-btn data-clipboard-target="#client-id-#{application.uid}"
+                              span#copy = icon('fas', 'copy')
+                              span#copied style='display: none;' = icon('fas', 'check')
+                      td
+                        - if (Time.now.utc - 24.hours) > application.secret_generated_at
+                          button.btn.btn-secondary.btn-block disabled=true Hidden forever
+                        - else
+                          .input-group
+                            input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1
+                            .input-group-append
+                              .btn.btn-primary.clipboard-btn data-clipboard-target="#client-secret-#{application.uid}"
+                                span#copy = icon('fas', 'copy')
+                                span#copied style='display: none;' = icon('fas', 'check')
+                      coffee:
+                        clipboard = new Clipboard('.clipboard-btn')
+                        clipboard.on('success', (e) ->
+                          e.trigger.children[0].style.display = 'none'
+                          e.trigger.children[1].style.display = 'inline-block'
+                          setTimeout(->
+                            e.trigger.children[0].style.display = 'inline-block'
+                            e.trigger.children[1].style.display = 'none'
+                          , 4000)
+                        )
+                      td
+                        a.btn.btn-outline-success href=edit_application_path(application)
+                          span = icon('fas', 'edit')
+                      td.border-danger.border-left
+                        = button_to(application_path(application), class: 'btn btn-outline-danger', method: :delete, \
+                          data: { \
+                            confirm: "Really delete #{application.name}? This will also revoke all \
+                                      #{application.access_tokens.count} authorizations and invalidate the associated \
+                                      tokens." \
+                          })
+                          span = icon('fas', 'times')
+    #delete.accordian
+      .card
+        #delete-header.card-header
+          h5.mb-0
+            button.btn.btn-link type='button' data-toggle='collapse' data-target='#delete-body' aria-expanded='true' aria-controls='delete-body'
+              span Delete My Account
+        #delete-body.collapse aria-labelledby='delete-header' data-parent='delete'
           .card-body
-            p
-              b Change your name on Twitch? Just log out and log back in to Splits I/O for it to take effect.
+            .alert.alert-warning
+              b Wait!
+              span< Change your name on Twitch and just want it ported here? Just log out and log back in to Splits I/O
+                    for it to take effect.
             p If you like, you can permanently delete your account on Splits I/O. You can recreate it later by signing in with
               Twitch again, but it will be a fresh account with no runs.
-            p You can choose to cascade this deletion to all your runs, or to disown them instead. Disowned runs do not belong to
-              any user and will not be claimable, even if you recreate your account. Your name will not appear on them.
+            p You can choose to cascade this deletion to all your runs, or to disown them instead. Disowned runs do not
+              belong to any user and will not be claimable, even if you recreate your account. Your name will not appear
+              on them and Splits I/O will not remember that they belonged to you, even internally.
             p This is a hard delete. No one can restore your account if you change your mind.
             .row
               .col-lg
