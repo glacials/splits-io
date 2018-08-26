@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       name:         auth.info.nickname,
       display_name: auth.info.name,
       email:        auth.info.email,
-      avatar:       auth.info.image
+      avatar:       auth.info.image || TwitchUser.default_avatar
     )
 
     unless twitch_user.user.save

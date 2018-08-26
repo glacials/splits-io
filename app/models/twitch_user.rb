@@ -38,9 +38,7 @@ class TwitchUser < ApplicationRecord
     raise e
   end
 
-  private
-
-  def default_avatar
+  def self.default_avatar
     'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
   end
 end
