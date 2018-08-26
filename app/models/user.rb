@@ -37,13 +37,8 @@ class User < ApplicationRecord
     search_for_name(term)
   end
 
-  # avatar returns the user's avatar, or a default avatar if the user has not set one. It cannot return nil.
   def avatar
-    return 'https://splits.io/logo.svg' if self[:avatar].nil?
-
-    URI.parse(self[:avatar] || '').tap do |uri|
-      uri.scheme = 'https'
-    end.to_s
+    twitch.avatar
   end
 
   def uri

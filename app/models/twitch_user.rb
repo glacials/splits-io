@@ -3,6 +3,12 @@ require 'twitch'
 class TwitchUser < ApplicationRecord
   belongs_to :user
 
+  def avatar
+    URI.parse(read_attribute(:avatar)).tap do |uri|
+      uri.scheme = 'https'
+    end.to_s
+  end
+
   def sync!
     body = JSON.parse(Twitch::User.get(twitch_id))
 
