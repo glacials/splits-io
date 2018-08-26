@@ -203,12 +203,10 @@ class RunsController < ApplicationController
 
   def first_parse
     @run.parse_into_db
+    return unless @run.parsed_at.nil?
 
-    if @run.parsed_at.nil?
-      @run.destroy
-      redirect_to cant_parse_path
-      return
-    end
+    @run.destroy
+    redirect_to cant_parse_path
   end
 
   def warn_about_deprecated_url
@@ -220,29 +218,31 @@ class RunsController < ApplicationController
   end
 
   def attempt_to_claim
-    if @run.user.nil?
-      if @run.claim_token.nil?
-        redirect_to run_path(@run), alert: 'This run is not claimable.'
-        return
-      end
-
-      if @run.claim_token != params[:claim_token]
-        redirect_to run_path(@run), alert: 'Invalid claim token.'
-        return
-      end
-
-      # Let JavaScript deal with saving the claim token to local storage then fixing the URL, in case the user wants to
-      # claim the run later. This is required for uploads from e.g. LiveSplit to be claimable later.
-      # (app/javascript/run_claim.js)
-      return if current_user.nil?
-
-      @run.update(
-        user: current_user,
-        claim_token: nil
-      )
+    # Owned run
+    if @run.user.present?
+      redirect_to run_path(@run)
+      return
     end
 
-    redirect_to run_path(@run)
+    # Unowned but unclaimable run
+    if @run.claim_token.nil?
+      redirect_to run_path(@run), alert: 'This run is not claimable, as it has been previously claimed then disowned.'
+      return
+    end
+
+    # Unowned and claimable run, but bad claim token
+    if @run.claim_token != params[:claim_token]
+      redirect_to run_path(@run), alert: 'Could not claim this run with that token. Do you have your URLs mixed up?'
+      return
+    end
+
+    # Unowned and claimable run with a good claim token, but user isn't logged in
+    # Don't redirect here; JavaScript will save the claim token to local storage and do the redirect. This will give the
+    # user UI to claim the run if they log in later (see app/javascript/run_claim.js).
+    return if current_user.nil?
+
+    # Unowned and claimable run with a good claim token and a logged-in user :)
+    @run.update(user: current_user, claim_token: nil)
   end
 
   def maybe_update_followers

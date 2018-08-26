@@ -36,5 +36,8 @@ Metrics/BlockLength:
     - draw
     - namespace
 
+Metrics/MethodLength:
+  Max: 20
+
 Rails:
   Enabled: true
