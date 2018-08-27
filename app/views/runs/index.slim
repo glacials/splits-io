@@ -6,9 +6,9 @@
     h2
       span style="margin-right: .5em;"
         img src=current_user.avatar width=50 height=50
-      span Splits I/O
+      span = ENV['SITE_TITLE'] || 'Splits I/O'
   - else
-    h2 Splits I/O
+    h2 = ENV['SITE_TITLE'] || 'Splits I/O'
   - if logged_in? && current_user.runs.any?
     h5 Want some jelly with these PBs?
   - else
