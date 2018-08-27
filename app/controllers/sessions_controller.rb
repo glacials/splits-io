@@ -1,8 +1,13 @@
 class SessionsController < ApplicationController
   def create
     twitch_user = TwitchUser.from_auth(request.env['omniauth.auth'])
+    if twitch_user.errors.any?
+      redirect_to redirect_path, alert: "Couldn't sign in: #{twitch_user.errors.full_messages.to_sentence} :("
+      return
+    end
+
     sign_in(twitch_user.user)
-    redirect_to redirect_path, notice: "Signed in as #{current_user}. o/"
+    redirect_to redirect_path, notice: "'Hoy!! o/ Signed in as #{current_user}."
   end
 
   def destroy

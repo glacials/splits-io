@@ -5,8 +5,14 @@ class TwitchUser < ApplicationRecord
 
   def self.from_auth(auth)
     twitch_user = TwitchUser.find_or_initialize_by(twitch_id: auth.uid)
+
     twitch_user.user = User.new if twitch_user.user.blank?
     twitch_user.user.name = auth.info.nickname
+    unless twitch_user.user.save
+      twitch_user.errors.add(:user, twitch_user.user.errors.full_messages)
+      return twitch_user
+    end
+
     twitch_user.assign_attributes(
       access_token: auth.credentials.token,
       name:         auth.info.nickname,
@@ -14,7 +20,7 @@ class TwitchUser < ApplicationRecord
       email:        auth.info.email,
       avatar:       auth.info.image || TwitchUser.default_avatar
     )
-    self.errors.add(twitch_user.user.errors) unless twitch_user.user.save
+    twitch_user.save
     twitch_user
   end
 
