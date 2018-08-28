@@ -48,9 +48,12 @@ class TwitchUser < ApplicationRecord
       current_followed_users = User.where(twitch_id: Twitch::Follows.followed_ids(twitch_id))
 
       # If TwitchUserFollow is changed to have child records or destroy callbacks, change this to destroy_all
-      TwitchUserFollow.where(from_user: user, to_user: (twitch_followed_users - current_followed_users)).delete_all
+      TwitchUserFollow.where(
+        from_user: user,
+        to_user: (user.twitch_followed_users - current_followed_users)
+      ).delete_all
 
-      TwitchUserFollow.import!((current_followed_users - twitch_followed_users).map do |u|
+      TwitchUserFollow.import!((current_followed_users - user.twitch_followed_users).map do |u|
         TwitchUserFollow.new(from_user: user, to_user: u)
       end)
     end
