@@ -13,11 +13,11 @@ class MoveTwitchDataOutOfUsers < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    User.find_each do |user|
+    User.where(twitch_user_id: nil).find_each do |user|
       TwitchUser.create(
         user:              user,
         twitch_id:         user.twitch_id,
-        access_token:      user.twitch_token,
+        access_token:      user.twitch_token || '', # Not sure why there are NULLs, but we still want the constraint
         name:              user.name,
         display_name:      user.twitch_display_name || user.name,
         email:             user.email,
