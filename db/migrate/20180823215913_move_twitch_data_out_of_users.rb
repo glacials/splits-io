@@ -21,7 +21,7 @@ class MoveTwitchDataOutOfUsers < ActiveRecord::Migration[5.2]
         name:              user.name,
         display_name:      user.twitch_display_name,
         email:             user.email,
-        avatar:            user.avatar || TwitchUser.default_avatar,
+        avatar:            user[:avatar] || TwitchUser.default_avatar,
         follows_synced_at: user.twitch_user_follows_checked_at || 100.years.ago
       )
     end
