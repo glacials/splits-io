@@ -19,7 +19,7 @@ class PatreonUsersController < ApplicationController
       refresh_token: tokens['refresh_token']
     )
 
-    redirect_to(settings_path, res.present? ? success_msg : failure_msg)
+    redirect_to(settings_path, res.present? ? link_success_msg : link_failure_msg)
   end
 
   def unlink
@@ -82,6 +82,6 @@ class PatreonUsersController < ApplicationController
   end
 
   def link_failure_msg
-    'There was an issue connecting your Patreon account. Please try again.'
+    'There was an issue connecting your Patreon account! Please try again.'
   end
 end
