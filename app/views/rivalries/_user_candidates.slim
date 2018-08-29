@@ -3,7 +3,7 @@
     .card = link_to(rivalries_path(category: category, target: potential_rival), method: :post)
       = image_tag(potential_rival.avatar, class: 'card-img-top')
       .card-body
-        h5 = potential_rival.twitch_display_name
+        h5 = potential_rival
       .card-footer
         - run = potential_rival.pb_for(category)
         - timing = run.default_timing

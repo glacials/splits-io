@@ -3,7 +3,6 @@ class User < ApplicationRecord
   include AuthenticatingUser
   include RivalUser
   include RunnerUser
-  include TwitchUser
 
   has_many :runs
   has_many :categories, -> { distinct }, through: :runs
@@ -16,6 +15,7 @@ class User < ApplicationRecord
   has_many :twitch_user_followers, class_name: 'TwitchUserFollow', foreign_key: :to_user_id, dependent: :destroy
 
   has_one  :patreon, class_name: 'PatreonUser', dependent: :destroy
+  has_one  :twitch,  class_name: 'TwitchUser',  dependent: :destroy
 
   has_many :applications, class_name: 'Doorkeeper::Application', foreign_key: :owner_id
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -25,12 +25,11 @@ class User < ApplicationRecord
     user.runs.update_all(user_id: nil)
   end
 
-  validates :twitch_id, presence: true
   validates :name, presence: true
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
-  pg_search_scope :search_for_name, against: %i[name twitch_display_name], using: :trigram
+  pg_search_scope :search_for_name, against: :name, using: :trigram
 
   def self.search(term)
     term = term.strip
@@ -38,13 +37,8 @@ class User < ApplicationRecord
     search_for_name(term)
   end
 
-  # avatar returns the user's avatar, or a default avatar if the user has not set one. It cannot return nil.
   def avatar
-    return 'https://splits.io/logo.svg' if self[:avatar].nil?
-
-    URI.parse(self[:avatar] || '').tap do |uri|
-      uri.scheme = 'https'
-    end.to_s
+    twitch.avatar
   end
 
   def uri
@@ -73,7 +67,7 @@ class User < ApplicationRecord
   end
 
   def to_s
-    twitch_display_name || name || 'somebody'
+    twitch.try(:display_name) || name || 'somebody'
   end
 
   def twitch_followed_users

@@ -1,26 +1,13 @@
 class SessionsController < ApplicationController
   def create
-    auth = request.env['omniauth.auth']
-
-    twitch_id = auth.uid
-    user = User.find_by(twitch_id: twitch_id) || User.new(twitch_id: twitch_id)
-
-    user.update(
-      name: auth.info.nickname,
-      twitch_display_name: auth.info.name,
-      email: auth.info.email,
-      avatar: auth.info.image,
-      twitch_token: auth.credentials.token
-    )
-
-    if user.errors.present?
-      redirect_to redirect_path, alert: "Error: #{user.errors.full_messages.join(', ')}."
+    twitch_user = TwitchUser.from_auth(request.env['omniauth.auth'])
+    if twitch_user.errors.any?
+      redirect_to redirect_path, alert: "Couldn't sign in: #{twitch_user.errors.full_messages.to_sentence} :("
       return
     end
 
-    self.current_user = user
-    auth_session.persist!
-    redirect_to redirect_path, notice: "Signed in as #{current_user}. o/"
+    sign_in(twitch_user.user)
+    redirect_to redirect_path, notice: "'Hoy!! o/ Signed in as #{current_user}."
   end
 
   def destroy
@@ -33,6 +20,11 @@ class SessionsController < ApplicationController
   end
 
   private
+
+  def sign_in(user)
+    self.current_user = user
+    auth_session.persist!
+  end
 
   def redirect_path
     request.env['omniauth.origin'] || cookies.delete('return_to') || root_path

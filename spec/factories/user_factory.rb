@@ -1,7 +1,10 @@
 FactoryBot.define do
   factory :user do
-    name SecureRandom.uuid
-    twitch_id 0
+    name { SecureRandom.uuid }
+
+    after(:create) do |user|
+      FactoryBot.create(:twitch_user, user: user)
+    end
 
     trait :with_runs do
       after(:create) do |user|

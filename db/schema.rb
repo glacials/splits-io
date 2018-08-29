@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_23_052120) do
+ActiveRecord::Schema.define(version: 2018_08_23_215913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_trgm"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
@@ -250,19 +251,26 @@ ActiveRecord::Schema.define(version: 2018_08_23_052120) do
     t.index ["to_user_id"], name: "index_twitch_user_follows_on_to_user_id"
   end
 
+  create_table "twitch_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "access_token", null: false
+    t.string "name", null: false
+    t.string "display_name", null: false
+    t.string "twitch_id", null: false
+    t.string "email"
+    t.string "avatar", null: false
+    t.datetime "follows_synced_at", default: "1918-08-27 04:16:53", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["twitch_id"], name: "index_twitch_users_on_twitch_id", unique: true
+    t.index ["user_id"], name: "index_twitch_users_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
-    t.string "email", default: ""
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "twitch_token"
-    t.integer "twitch_id"
     t.string "name"
-    t.string "avatar"
-    t.string "twitch_display_name"
-    t.datetime "twitch_user_follows_checked_at"
-    t.index ["email"], name: "index_users_on_email"
     t.index ["name"], name: "index_users_on_name"
-    t.index ["twitch_id"], name: "index_users_on_twitch_id"
   end
 
   add_foreign_key "game_aliases", "games", on_delete: :cascade
@@ -273,4 +281,5 @@ ActiveRecord::Schema.define(version: 2018_08_23_052120) do
   add_foreign_key "segment_histories", "segments", on_delete: :cascade
   add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "splits", "runs"
+  add_foreign_key "twitch_users", "users"
 end
