@@ -13,7 +13,8 @@ class MoveTwitchDataOutOfUsers < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    User.where(twitch_user_id: nil).find_each do |user|
+    User.find_each do |user|
+      next if user.twitch.present?
       TwitchUser.create(
         user:              user,
         twitch_id:         user.twitch_id,
