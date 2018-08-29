@@ -8,13 +8,12 @@ class MoveTwitchDataOutOfUsers < ActiveRecord::Migration[5.2]
       t.string   :twitch_id,         null: false, index: {unique: true}
       t.string   :email,             null: true
       t.string   :avatar,            null: false
-      t.datetime :follows_synced_at, null: false, default: 100.years.ago
+      t.datetime :follows_synced_at, null: false, default: Time.new(1970)
 
       t.timestamps
     end
 
-    User.find_each do |user|
-      next if user.twitch.present?
+    User.left_outer_joins(:twitch).where(twitch_users: {user_id: nil}).find_each do |user|
       TwitchUser.create(
         user:              user,
         twitch_id:         user.twitch_id,
@@ -23,7 +22,7 @@ class MoveTwitchDataOutOfUsers < ActiveRecord::Migration[5.2]
         display_name:      user.twitch_display_name || user.name,
         email:             user.email,
         avatar:            user[:avatar] || TwitchUser.default_avatar,
-        follows_synced_at: user.twitch_user_follows_checked_at || 100.years.ago
+        follows_synced_at: user.twitch_user_follows_checked_at || Time.new(1970)
       )
     end
 

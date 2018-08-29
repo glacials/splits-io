@@ -259,7 +259,7 @@ ActiveRecord::Schema.define(version: 2018_08_23_215913) do
     t.string "twitch_id", null: false
     t.string "email"
     t.string "avatar", null: false
-    t.datetime "follows_synced_at", default: "1918-08-27 04:16:53", null: false
+    t.datetime "follows_synced_at", default: "1970-01-01 00:00:00", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["twitch_id"], name: "index_twitch_users_on_twitch_id", unique: true
