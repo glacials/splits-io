@@ -46,7 +46,7 @@ class TwitchUser < ApplicationRecord
   def sync_follows!
     ActiveRecord::Base.transaction do
       current_followed_users = User.joins(:twitch).where(
-        twitch_user: {twitch_id: Twitch::Follows.followed_ids(twitch_id)}
+        twitch_users: {twitch_id: Twitch::Follows.followed_ids(twitch_id)}
       )
 
       # If TwitchUserFollow is changed to have child records or destroy callbacks, change this to destroy_all
