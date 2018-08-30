@@ -58,7 +58,7 @@ class TwitchUser < ApplicationRecord
       end)
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
-    update(follows_synced_at: nil)
+    update(follows_synced_at: Time.new(1970))
     raise e
   end
 
