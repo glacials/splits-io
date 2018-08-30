@@ -6,7 +6,7 @@ RSpec.describe 'shared/_follows' do
   it 'renders the follows template' do
     follow = FactoryBot.create(:user, :with_runs)
     allow(view).to receive(:current_user).and_return(user)
-    allow(user).to receive(:twitch_followed_users).and_return(follow)
+    allow(user).to receive(:twitch_follows).and_return(follow)
 
     render
 

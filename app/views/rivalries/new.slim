@@ -22,7 +22,7 @@
       article.showcase
         = render partial: 'vs', locals: {rivalry: rivalry}
   article.nowrap
-    - if current_user.twitch_followed_users.that_run(@category).empty?
+    - if current_user.twitch_follows.that_run(@category).empty?
       .alert.alert-warning Sorry, nobody you follow on Twitch has submitted runs for this category.
       p Here are some categories that have rivals waiting for you:
       = render partial: 'category_candidates'

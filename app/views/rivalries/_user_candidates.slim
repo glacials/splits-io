@@ -1,4 +1,4 @@
-= current_user.twitch_followed_users.that_run(category).find_each do |potential_rival|
+= current_user.twitch_follows.that_run(category).find_each do |potential_rival|
   .col-md-3
     .card = link_to(rivalries_path(category: category, target: potential_rival), method: :post)
       = image_tag(potential_rival.avatar, class: 'card-img-top')

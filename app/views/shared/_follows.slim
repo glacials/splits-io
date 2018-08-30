@@ -1,8 +1,8 @@
-- if current_user.twitch_followed_users.present?
+- if current_user.twitch_follows.present?
   h4 Recent PBs By People You Follow
   .card.col-md-6.p-0
     .list-group
-      - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_followed_users).where.not(games: {name: [nil, ""]}).order('runs.created_at DESC').limit(10)
+      - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_follows).where.not(games: {name: [nil, ""]}).order('runs.created_at DESC').limit(10)
       - user_runs = current_user.pbs.where(category_id: followed_runs.map(&:category_id))
       - followed_runs.each do |run|
         = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start')

@@ -25,7 +25,7 @@ RSpec.describe 'rivalries/new' do
       allow(view).to receive(:current_user).and_return(user)
 
       users = double
-      allow(users).to receive(:twitch_followed_users).and_return(follow)
+      allow(users).to receive(:twitch_follows).and_return(follow)
 
       render
 
