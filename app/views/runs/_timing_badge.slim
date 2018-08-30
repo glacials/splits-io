@@ -1,16 +1,14 @@
 - if run.completed?(Run::REAL) && run.completed?(Run::GAME)
   - if timing == Run::REAL
     a.badge.badge-dark.tip-right title='Recorded in realtime & gametime — click to switch' href='?timing=game'
-      i.fas.fa-globe.text-success>
-      i.fas.fa-gamepad
+      span.text-success => icon('fas', 'globe-americas')
+      = icon('fas', 'gamepad')
   - if timing == Run::GAME
     a.badge.badge-dark.tip-right title='Recorded in realtime & gametime — click to switch' href='?timing=real'
-      i.fas.fa-globe>
-      i.fas.fa-gamepad.text-success
+      => icon('fas', 'globe-americas')
+      span.text-success = icon('fas', 'gamepad')
 - else
   - if run.completed?(Run::REAL)
-    .badge.tip-right title='Recorded in realtime'
-      i.fas.fa-globe
+    .badge.tip-right title='Recorded in realtime' = icon('fas', 'globe-americas')
   - if run.completed?(Run::GAME)
-    .badge.tip-right title='Recorded in gametime'
-      i.fas.fa-gamepad
+    .badge.tip-right title='Recorded in gametime' = icon('fas', 'gamepad')

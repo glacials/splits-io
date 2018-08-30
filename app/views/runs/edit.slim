@@ -16,161 +16,145 @@
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 article
-  .row
-    .col-lg-6
-      .card.mb-3
-        .card-header.text-white Edit Game/Category
-        .card-body
-          = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-            .form-row
-              .col-lg-6
-                = f.collection_select( \
-                  :game, \
-                  Game.shortnamed.order(:name), \
-                  :shortname, \
-                  :name, \
-                  { \
-                    selected: @run.game.try(:shortname), \
-                    include_blank: true \
-                  }, \
-                  id: 'game-selector', \
-                  class: 'form-control' \
-                )
-              .col-lg-4
-                = f.collection_select( \
-                  :category, \
-                  @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order(Arel.sql('count(runs.id) desc')) : [], \
-                  :id, \
-                  :name, \
-                  { \
-                    selected: @run.category.try(:id) \
-                  }, \
-                  id: 'category-selector', \
-                  class: 'form-control' \
-                )
-              .col-lg-2
-                = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
+  .card-deck.mb-4
+    .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+      h5.card-header Edit Game/Category
+      .card-body
+        .form-row
+          .col-md-6.my-1
+            label.sr-only for='game-selector'
+            = f.collection_select( \
+              :game, \
+              Game.shortnamed.order(:name), \
+              :shortname, \
+              :name, \
+              { \
+                selected: @run.game.try(:shortname), \
+                include_blank: true \
+              }, \
+              id: 'game-selector', \
+              class: 'form-control' \
+            )
+          .col-md-6.my-1
+            label.sr-only for='category-selector'
+            = f.collection_select( \
+              :category, \
+              @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order(Arel.sql('count(runs.id) desc')) : [], \
+              :id, \
+              :name, \
+              { \
+                selected: @run.category.try(:id) \
+              }, \
+              id: 'category-selector', \
+              class: 'form-control' \
+            )
+      .card-footer: .float-right.mb-2 = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
 
-    .col-lg-6
-      .card.mb-3
-        .card-header.text-white Edit Video Proof
-        .card-body
-          = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-            .input-group
-              = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
-              span.input-group-btn
-                = f.submit 'Save', class: 'btn btn-success'
+  .card-deck.mb-4
+    .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+      h5.card-header Edit Video Proof
+      .card-body = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
+      .card-footer: .float-right.mb-2 = f.submit 'Save', class: 'btn btn-success'
 
-    .col-lg-6
-      .card
-        .card-header.text-white Edit Speedrun.com Link
-        .card-body
-          = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-            .input-group
-              = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
-              .input-group-btn
-                = f.submit 'Save', class: 'btn btn-success'
+    .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+      h5.card-header Edit Speedrun.com Link
+      .card-body = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
+      .card-footer: .float-right.mb-2 = f.submit 'Save', class: 'btn btn-success'
 
-    .col-lg-6
-      .card
-        .card-header.text-white Reparse
-        .card-body
-          p This button forces Splits I/O to reparse your run's original file, repopulating your on-site splits and
-            stats. This can sometimes resolve bugs, but may revert your run's game and category if you've previously made
-            changes to them on this page.
-          p This is not reversible.
-          center
-            a.btn.btn-primary href=edit_run_path(@run, reparse: '1') Reparse
+  .card-deck.mb-4
+    .card
+      h5.card-header Reparse
+      .card-body
+        p This button forces Splits I/O to reparse your run's original file, repopulating your on-site splits and
+          stats. This can sometimes resolve bugs, but may revert your run's game and category if you've previously made
+          changes to them on this page.
+        p This is not reversible.
+      .card-footer
+        .float-right: a.btn.btn-warning href=edit_run_path(@run, reparse: '1') Reparse
 
-article
-  .row
-    .col-lg-6
-      .card
-        .card-header.text-white List/Unlist
-        .card-body
-          p An unlisted run isn't shown in category listings, search results, etc. but can still be viewed with a direct
-            link and is still owned by and credited to you.
-          p A run will become unlisted automatically when you beat its time, but you can also manually change that
-            status here.
-          p This is reversible.
-          center
-            - if @run.archived?
-              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-                = f.hidden_field(:archived, value: false)
-                .btn-group
-                  = f.submit 'List Run', class: 'btn btn-info'
-                  button.btn.btn-info.disabled.text-white Unlisted
-            - else
-              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-                = f.hidden_field(:archived, value: true)
-                .btn-group
-                  button.btn.btn-info.disabled.text-white Listed
-                  = f.submit 'Unlist Run', class: 'btn btn-info'
+    .card
+      h5.card-header List/Unlist
+      .card-body
+        p An unlisted run isn't shown in category listings, search results, etc. but can still be viewed with a direct
+          link and is still owned by and credited to you.
+        p A run will become unlisted automatically when you beat its time, but you can also manually change that
+          status here.
+        p This is reversible.
+      .card-footer
+        .float-right
+          - if @run.archived?
+            = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+              = f.hidden_field(:archived, value: false)
+              .btn-group
+                = f.submit 'Change to Listed', class: 'btn btn-info'
+                button.btn.btn-info.disabled.text-white
+                  => icon('fas', 'minus-circle')
+                  ' Unlisted
+          - else
+            = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+              = f.hidden_field(:archived, value: true)
+              .btn-group
+                button.btn.btn-info.disabled.text-white
+                  => icon('fas', 'globe-americas')
+                  ' Listed
+                = f.submit 'Change to Unlisted', class: 'btn btn-info'
 
     - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
-      .col-lg-6
-        .card
-          .card-header.text-white Realtime / Gametime
-          .card-body
-            p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
-              However, you can set the default behavior for this run here.
-            p This is reversible.
-            center
-              - if @run.default_timing == 'game'
-                = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-                  = f.hidden_field(:default_timing, value: 'real')
-                  .btn-group
-                    = f.submit 'Realtime', class: 'btn btn-info'
-                    button.btn.btn-info.disabled.text-white Gametime
-              - else
-                = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-                  = f.hidden_field(:default_timing, value: 'game')
-                  .btn-group
-                    button.btn.btn-info.disabled.text-white Realtime
-                    = f.submit 'Gametime', class: 'btn btn-info'
-
-article#danger-zone.danger
-  .card
-    .card-header.bg-danger.text-white Set My Run Free
-    .card-body
-      .row
-        .col-lg-6
-          .card
-            .card-header.text-white Delete
-            .card-body
-              .row
-                .col-lg-12
-                  p
-                    | Existing permalinks will be broken and your run, its information, and the original file will all be destroyed. The URL
-                    code<> #{run_url(@run).split('//')[1]}
-                    |  will not be reclaimed; it will 404 forever.
-                  p This is not reversible.
-              .row
-                .col-lg-12
-                  center
-                    = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'button btn btn-danger', style: 'margin: 1em;'
-                      div
-                        big Delete
-                      small
-                        = "#{@run} in "
-                        = format_ms(@run.realtime_duration_ms)
-        .col-lg-6
-          .card
-            .card-header.text-white Disown
-            .card-body
-              .row
-                .col-lg-12
-                  p Your run will continue to exist and be accessible, but it will no longer be attributed to you. It
-                    will appear as anonymously uploaded.
-                  p If you disown a run you will never be able to reclaim it, and consequently you will not be able to
-                    delete it at a later time.
-                  p This is not reversible.
-              .row
-                .col-lg-12
-                  center
-                    = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'button btn btn-danger', style: 'margin: 1em;'
-                      div
-                        big Disown
-                      small
-                        = "#{@run} in "
-                        = format_ms(@run.realtime_duration_ms)
+      .card
+        h5.card-header Realtime / Gametime
+        .card-body
+          p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
+            However, you can set the default behavior for this run here.
+          p This is reversible.
+        .card-footer
+          .float-right
+            - if @run.default_timing == 'game'
+              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+                = f.hidden_field(:default_timing, value: 'real')
+                .btn-group
+                  = f.submit 'Change to Realtime', class: 'btn btn-info'
+                  button.btn.btn-info.disabled.text-white
+                    => icon('fas', 'gamepad')
+                    ' Gametime
+            - else
+              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+                = f.hidden_field(:default_timing, value: 'game')
+                .btn-group
+                  button.btn.btn-info.disabled.text-white
+                    => icon('fas', 'globe-americas')
+                    ' Realtime
+                  = f.submit 'Change to Gametime', class: 'btn btn-info'
+article
+  #delete.accordian
+    .card
+      #delete-header.card-header
+        h5.mb-0
+          button.btn.btn-link type='button' data={toggle: 'collapse', target: '#delete-body'} aria={expanded: true, controls: 'delete-body'}
+            ' Set My Run Free
+      #delete-body.collapse aria={labelledby: 'delete-header'} data={parent: 'delete'}
+        .card-body
+          .card-deck
+            .card
+              h5.card-header Delete
+              .card-body
+                p
+                  | Existing permalinks will be broken and your run, its information, and the original file will all be destroyed. The URL
+                  code<> #{run_url(@run).split('//')[1]}
+                  |  will not be reclaimed; it will 404 forever.
+                p This is not reversible.
+              .card-footer
+                .float-right
+                  = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'btn btn-danger'
+                    | Delete
+            .card
+              h5.card-header Disown
+              .card-body
+                p Your run will continue to exist and be accessible, but it will no longer be attributed to you. It
+                  will appear as anonymously uploaded.
+                p If you disown a run you will never be able to reclaim it, and consequently you will not be able to
+                  delete it at a later time.
+                p This is not reversible.
+              .card-footer
+                .float-right
+                  = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'btn btn-warning'
+                    | Disown
