@@ -2,60 +2,58 @@
 - content_for(:header) do
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to 'Splits I/O', root_path
-  - if current_user.try(:avatar).present?
-    h2
-      span style="margin-right: .5em;"
-        img src=current_user.avatar width=50 height=50
-      span = ENV['SITE_TITLE'] || 'Splits I/O'
-  - else
-    h2 = ENV['SITE_TITLE'] || 'Splits I/O'
-  - if logged_in? && current_user.runs.any?
-    h5 Want some jelly with these PBs?
-  - else
-    h5
-      | upload
-      u<> all
-      | the splits
 article
-  .row
-    .col-lg-12
-      - if logged_in?
-        - if current_user.runs.any?
-          .row
-            .col-sm-3
-              .statcard.p-3
-                h2.statcard-number
-                  - bytes_used = current_user.s3_bytes_used
-                  - bytes_used_past_year = current_user.s3_bytes_used(since: 1.year.ago)
-                  span> = number_to_human_size(bytes_used)
-                  small.delta-indicator.delta-positive.tip-top title='Since last year'
-                    = number_to_human_size(bytes_used_past_year)
-                span.statcard-desc Space used
-            .col-sm-3
-              .statcard.p-3
-                h2.statcard-number
-                  span> = current_user.runs.count
-                  small.delta-indicator.delta-positive.tip-top title='Since last year'
-                    = current_user.runs.where(created_at: 1.year.ago..Time.now.utc).count
-                span.statcard-desc Runs stored
-            .col-sm-3
-              .statcard.p-3
-                h2.statcard-number
-                  span> title=current_user.created_at = time_ago_in_words(current_user.created_at)
-                span.statcard-desc Account age
-          .card.shadow
-            = render partial: 'shared/run_table', locals: { \
-              runs: current_user.pbs, \
-              cols: %i[time name uploaded owner_controls rival], \
-              description: 'My Personal Bests' \
-            }.merge(sorting_info)
-        - else
-          .jumbotron
-            h4 Drag and drop as many runs as you want right here
-      - else
-        p Save your splits to a file using your favorite splitting program, then drag that file anywhere on this page.
-        p To upload several files at once, #{link_to 'sign in', '/auth/twitch'} first.
-        p Not sure what Splits I/O is about? #{link_to 'Roll the dice', random_path} to visit a random run.
+  - if logged_in? && current_user.runs.any?
+      .row
+        .col-sm-3
+          .statcard.p-3
+            h2.statcard-number
+              - bytes_used = current_user.s3_bytes_used
+              - bytes_used_past_year = current_user.s3_bytes_used(since: 1.year.ago)
+              span> = number_to_human_size(bytes_used)
+              small.delta-indicator.delta-positive.tip-top title='Since last year'
+                = number_to_human_size(bytes_used_past_year)
+            span.statcard-desc Space used
+        .col-sm-3
+          .statcard.p-3
+            h2.statcard-number
+              span> = current_user.runs.count
+              small.delta-indicator.delta-positive.tip-top title='Since last year'
+                = current_user.runs.where(created_at: 1.year.ago..Time.now.utc).count
+            span.statcard-desc Runs stored
+        .col-sm-3
+          .statcard.p-3
+            h2.statcard-number
+              span> title=current_user.created_at = time_ago_in_words(current_user.created_at)
+            span.statcard-desc Account age
+      .card.shadow
+        = render partial: 'shared/run_table', locals: { \
+          runs: current_user.pbs, \
+          cols: %i[time name uploaded owner_controls rival], \
+          description: 'My Personal Bests' \
+        }.merge(sorting_info)
+  - else
+    .card
+      .card-body
+        h2 Drag and drop run files here
+        p.lead
+          ' From LiveSplit, WSplit, Llanfair, or many others.
+        p
+          ' Splits I/O parses and stores your splits to give you insight into how to improve your runs, both now
+          ' and in the future as you upload more PBs. See 99th percentiles, standard deviations, and charts of all your
+          ' past times on a per-split basis.
+        - unless logged_in?
+          .alert.alert-info
+            b> Run several games?
+            ' Logged-in users can drag-and-drop any number of run files at once.
+      .card-footer
+        .float-right
+          a.btn.btn-primary.mx-2 href=faq_path(anchor: 'programs')
+            => icon('fas', 'stopwatch')
+            ' All Supported Timers
+          a.btn.btn-primary.mx-2 href=random_path
+            => icon('fas', 'dice')
+            ' Randomizer
 - if logged_in?
   article
     = render partial: 'shared/follows'

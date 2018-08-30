@@ -6,8 +6,12 @@
   h2 FAQ and Friends
 article
   h3 FAQ
+
+  a name='who'
   .card.mb-4
-    h5.card-header Who made this?
+    h5.card-header
+      | Who made Splits I/O?
+      .float-right: a.text-muted data={turbolinks: false} href='#who' name='who' ¶
     .card-body
       p Glacials. You can look him up in these places:
       .card-group
@@ -15,36 +19,39 @@ article
           .card-body
             h4.text-nowrap
               img> src=asset_path('logo.svg') width='25' height='25'
-              span Glacials
+              | Glacials
             a.btn.btn-outline-light.float-right href='https://splits.io/u/glacials' On Splits I/O
         .card style='background: #6441a4'
           .card-body
             h4.text-nowrap
               => icon('fab', 'twitch')
-              span Glacials
+              | Glacials
             a.btn.btn-outline-light.float-right href='https://www.twitch.tv/glacials' On Twitch
         .card style='background: #4ba0ec'
           .card-body
             h4.text-nowrap
               => icon('fab', 'twitter')
-              span glcls
+              | glcls
             a.btn.btn-outline-light.float-right href='https://twitter.com/glcls' On Twitter
       .card-group
         .card style='background: #4988ce'
           .card-body
             h4.text-nowrap
               => icon('fab', 'mastodon')
-              span @glcls@boop.town
+              | @glcls@boop.town
             a.btn.btn-outline-light.float-right href='https://boop.town/@glcls' On Mastodon
         .card style='background: #171515'
           .card-body
             h4.text-nowrap
               => icon('fab', 'github')
-              span glacials
+              | glacials
             a.btn.btn-outline-light.float-right href='https://github.com/glacials' On GitHub
 
+  a name='programs'
   .card.mb-4
-    h5.card-header Which programs can I upload splits from?
+    h5.card-header
+      | Which programs can I upload splits from?
+      .float-right: a.text-muted data={turbolinks: false} href='#programs' name='programs' ¶
     .card-body
       p These ones:
       .col-md-6
@@ -52,26 +59,36 @@ article
           - Run.programs.each do |program|
             li.list-group-item = program
       p In LiveSplit, you can upload from within the program with a right click -> Share.
+      .alert.alert-info
+        b> Just so you know:
+        ' Some of Splits I/O's detailed statistics, charts, and other features that rely on historical data only work on
+        ' runs recorded with LiveSplit, as LiveSplit is currently the only timer that collects this data.
 
   .card-deck
     .card.mb-4
-      h5.card-header Is Splits I/O open source?
+      h5.card-header
+        | Is Splits I/O open source?
+        .float-right: a.text-muted data={turbolinks: false} href='#source' name='source' ¶
       .card-body
         p Yes, since the very beginning! Have a look or lend a hand on GitHub!
       .card-footer
         a.btn.btn-dark.text-light.float-right href='https://github.com/glacials/splits-io'
           => icon('fab', 'github')
-          span Splits I/O on GitHub
+          | Splits I/O on GitHub
 
     .card.mb-4
-      h5.card-header Does Splits I/O have an API?
+      h5.card-header
+        | Does Splits I/O have an API?
+        .float-right: a.text-muted data={turbolinks: false} href='#api' name='api' ¶
       .card-body
         p Yes as well!
       .card-footer
         a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/blob/master/docs/api.md' API Documentation
 
   .card.mb-4
-    h5.card-header Why no &lt;other timer&gt;?
+    h5.card-header
+      | Why no &lt;other timer&gt;?
+      .float-right: a.text-muted data={turbolinks: false} href='#othertimers' name='othertimers' ¶
     .card-body
       p Depends. Maybe we don't know that it exists, or maybe we do but it's so niche that it's not super high priority.
         You can check on the timers we're aware of on GitHub. If you don't see your timer there, we don't know about it.
@@ -79,20 +96,24 @@ article
     .card-footer
       a.btn.btn-dark.text-light.float-right.mx-2 href='https://github.com/glacials/splits-io/labels/parsing'
         => icon('fab', 'github')
-        span Parsing label on GitHub
+        | Parsing label on GitHub
       a.btn.btn-dark.text-light.float-right.mx-2 href='https://github.com/LiveSplit/livesplit-core'
         => icon('fab', 'github')
-        span livesplit-core on GitHub
+        | livesplit-core on GitHub
 
   .card.mb-4
-    h5.card-header How are game/category chosen for my run?
+    h5.card-header
+      | How are game/category chosen for my run?
+      .float-right: a.text-muted data={turbolinks: false} href='#choosing' name='choosing' ¶
     .card-body
       p If you use LiveSplit, we try to associate your splits with an existing game and category from SRL using the
         corresponding LiveSplit fields. If we get it wrong or if you use another timer, you can manually edit your run's
         game and category by pressing "edit" on your run's page, near the download link.
 
   .card.mb-4
-    h5.card-header My speedgame doesn't have its own page with category tabs and all that, like other games do. What gives?
+    h5.card-header
+      | My speedgame doesn't have its own page with category tabs and all that, like other games do. What gives?
+      .float-right: a.text-muted data={turbolinks: false} href='#shortnames' name='shortnames' ¶
     .card-body
       p We give full game pages to any game that's on SRL. We call these games "shortnamed" -- that is, they're recognized
         enough to have an SRL shortname (e.g. 'oot3d', 'airride', 'sleepingdogs').
@@ -102,10 +123,12 @@ article
     .card-footer
       a.btn.btn-primary.float-right href='https://twitter.com/splitsio'
         => icon('fab', 'twitter')
-        span Splits I/O on Twitter
+        | Splits I/O on Twitter
 
   .card.mb-4
-    h5.card-header I get "Error eating splits :(" when accessing or uploading my splits!
+    h5.card-header
+      | I get "Error eating splits :(" when accessing or uploading my splits!
+      .float-right: a.text-muted data={turbolinks: false} href='#errors' name='errors' ¶
     .card-body
       p This error happens when the page request times out, which is typically a sign that your splits took too long to
         load into memory and parse. This happens to LiveSplit files with a very large
@@ -122,22 +145,25 @@ article
     .card-footer
       a.btn.btn-dark.text-light.float-right.mx-2 href='https://github.com/glacials/splits-io/labels/speed'
         => icon('fab', 'github')
-        span Speed label on GitHub
+        | Speed label on GitHub
 
   .card
-    h5.card-header Help! Splits I/O kidnapped my sister!!
+    h5.card-header
+      | Help! Splits I/O kidnapped my sister!!
+      .float-right: a.text-muted data={turbolinks: false} href='#ohno' name='ohno' ¶
     .card-body
       p You can always email help@splits.io with issues! Or if you'd prefer, you can post them at the GitHub issues
         page! But maybe you should call the police first!
     .card-footer
       a.btn.btn-primary.text-light.float-right.mx-2 href='mailto:help@splits.io'
         => icon('fa', 'envelope')
-        span Email Splits I/O
+        | Email Splits I/O
 
 article.mt-4
   h3
     => icon('fa', 'heart')
-    span Open Source Friends
+    | Open Source Friends
+    .float-right: a.text-muted data={turbolinks: false} href='#friends' name='friends' ¶
 
   .card-deck.mb-4
     .card
@@ -151,7 +177,7 @@ article.mt-4
         .btn-group.float-right
           a.btn.btn-dark href='https://github.com/LiveSplit/LiveSplit'
             => icon('fab', 'github')
-            span Source
+            | Source
           a.btn.btn-primary href='https://livesplit.org' Website
 
     .card
@@ -162,7 +188,7 @@ article.mt-4
       .card-footer
         a.btn.btn-dark.float-right href='https://github.com/nitrofski/wsplit'
           => icon('fab', 'github')
-          span Source
+          | Source
 
   .card-deck
     .card
@@ -174,7 +200,7 @@ article.mt-4
         .btn-group.float-right
           a.btn.btn-dark href='https://github.com/rggibson/pb-tracker'
             => icon('fab', 'github')
-            span Source
+            | Source
           a.btn.btn-primary href='http://www.pbtracker.net/' Website
 
     .card
@@ -186,5 +212,5 @@ article.mt-4
         .btn-group.float-right
           a.btn.btn-dark href='https://github.com/batedurdonnadie/salty_bot'
             => icon('fab', 'github')
-            span Source
+            | Source
           a.btn.btn-primary href='http://leagueofnewbs.com/twitch/salty' Website
