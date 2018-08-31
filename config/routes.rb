@@ -33,8 +33,7 @@ Rails.application.routes.draw do
   get  '/upload',     to: 'runs#new',        as: :new_run
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random
-
-  get  '/convert', to: 'converts#new'
+  get  '/convert',    to: redirect('/upload')
 
   get '/search',    to: 'search#index'
   get '/search/:q', to: redirect('/search?q=%{q}')

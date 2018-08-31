@@ -1,15 +1,15 @@
-- title(@run)
+- content_for(:title, @run)
 - timing = params[:timing] || @run.default_timing
 
 - content_for(:header) do
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to "Splits I/O", root_path
+    li.breadcrumb-item = link_to(site_title, root_path)
     - if @run.game.present? && @run.category.present?
-      li.breadcrumb-item = link_to "Games", games_path
-      li.breadcrumb-item = link_to @run.game, game_path(@run.game)
-      li.breadcrumb-item = link_to @run.category, game_category_path(@run.game, @run.category)
-    li.breadcrumb-item = link_to @run.id36, run_path(@run)
-    li.breadcrumb-item.active = link_to 'Edit', edit_run_path(@run)
+      li.breadcrumb-item = link_to('Games', games_path)
+      li.breadcrumb-item = link_to(@run.game, game_path(@run.game))
+      li.breadcrumb-item = link_to(@run.category, game_category_path(@run.game, @run.category))
+    li.breadcrumb-item = link_to(@run.id36, run_path(@run))
+    li.breadcrumb-item.active = link_to('Edit', edit_run_path(@run))
   = render partial: 'runs/title', locals: {run: @run, timing: timing}
 
 = render partial: 'runs/quick_stats', locals: {run: @run, timing: timing}
@@ -48,18 +48,18 @@ article
               id: 'category-selector', \
               class: 'form-control' \
             )
-      .card-footer: .float-right.mb-2 = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
 
   .card-deck.mb-4
     .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
       h5.card-header Edit Video Proof
       .card-body = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
-      .card-footer: .float-right.mb-2 = f.submit 'Save', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-success'
 
     .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
       h5.card-header Edit Speedrun.com Link
       .card-body = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
-      .card-footer: .float-right.mb-2 = f.submit 'Save', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-success'
 
   .card-deck.mb-4
     .card

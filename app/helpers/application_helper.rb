@@ -1,6 +1,6 @@
 module ApplicationHelper
-  def title(page_title)
-    content_for(:title, page_title.to_s)
+  def site_title
+    ENV['SITE_TITLE'] || 'Splits I/O'
   end
 
   def order_runs(runs)

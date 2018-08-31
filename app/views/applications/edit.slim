@@ -1,7 +1,7 @@
-- title 'Edit Application'
+- content_for(:title, 'Edit Application')
 - content_for(:header)
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to('Splits I/O', root_path)
+    li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('Settings', settings_path)
     li.breadcrumb-item = link_to('Developer Applications', settings_path(anchor: 'applications'))
     li.breadcrumb-item = link_to(@application.name, application_path(@application))

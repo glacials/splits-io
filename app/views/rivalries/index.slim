@@ -1,8 +1,8 @@
-- title 'Rivalries'
+- content_for(:title, 'Rivalries')
 - content_for(:header) do
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to "Splits I/O", root_path
-    li.breadcrumb-item = link_to "Rivals", rivalries_path
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Rivals', rivalries_path)
   h2 Rivals
 article
   .list-group

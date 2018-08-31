@@ -1,8 +1,8 @@
-- title "tools"
+- content_for(:title, 'Tools')
 - content_for(:header)
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to 'Splits I/O', root_path
-    li.breadcrumb-item = link_to 'Tools', tools_path
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Tools', tools_path)
   h2 Tools
 article
   - if current_user.present? && current_user.gold_patron?

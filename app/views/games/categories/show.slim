@@ -1,9 +1,9 @@
-- title @game.name
+- content_for(:title, @game)
 - content_for(:header) do
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to "Splits I/O", root_path
-    li.breadcrumb-item = link_to "Games", games_path
-    li.breadcrumb-item = link_to @category.game, game_path(@category.game)
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Games', games_path)
+    li.breadcrumb-item = link_to(@category.game, game_path(@category.game))
     - unless @on_game_page
       li.breadcrumb-item = link_to @category, game_category_path(@game, @category)
   = render partial: 'games/categories/title', locals: {category: @category}

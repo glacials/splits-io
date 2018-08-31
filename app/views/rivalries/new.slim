@@ -1,9 +1,9 @@
-- title 'Set a rival'
+- content_for(:title, 'Set a Rival')
 - content_for(:header) do
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to "Splits I/O", root_path
-    li.breadcrumb-item = link_to 'Rivals', rivalries_path
-    li.breadcrumb-item = link_to 'Add', new_rivalry_path
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Rivals', rivalries_path)
+    li.breadcrumb-item = link_to('Add', new_rivalry_path)
     - if @category.present?
       li.breadcrumb-item = link_to(@category.game, game_path(@category.game))
       li.breadcrumb-item = link_to(@category, game_category_path(@category.game, @category))
