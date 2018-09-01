@@ -45,9 +45,28 @@
             tr
               td.align-right = segment.segment_number + 1
               td.align-left = segment.name.present? ? segment.name : '-'
-              td.align-right = format_ms(history_times.standard_deviation)
+              - if history_times.standard_deviation > history_times.mean / 2
+                td.align-right.text-danger.tip-top(
+                  title="#{segment.name}'s standard deviation is very high. Practice it to get more consistent."
+                )
+                  big
+                    b = format_ms(history_times.standard_deviation)
+              - else
+                td.align-right = format_ms(history_times.standard_deviation)
               td.align-right = format_ms(segment.shortest_duration_ms(timing))
-              td.align-right = format_ms(history_times.mean)
+              - if history_times.mean > 2 * segment.shortest_duration_ms(timing)
+                td.align-right.text-info.tip-top(
+                  title="#{segment.name}'s mean is more than twice as long as its best."
+                )
+                  big: b = format_ms(history_times.mean)
+              - else
+                td.align-right = format_ms(history_times.mean)
               td.align-right = format_ms(history_times.median)
-              td.align-right = format_ms(history_times.percentile(90))
+              - if history_times.percentile(90) > history_times.median * 2
+                td.align-right.text-warning.tip-top(
+                  title="#{segment.name}'s 90th is much worse than its median! This segment could have a trick that needs practice."
+                )
+                  big: b = format_ms(history_times.percentile(90))
+              - else
+                td.align-right = format_ms(history_times.percentile(90))
               td.align-right = format_ms(history_times.percentile(99))
