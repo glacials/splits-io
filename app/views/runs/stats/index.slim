@@ -21,7 +21,9 @@ article#stats
     .card-header.text-white
       | Run Information
       .float-right
-        a href=run_history_csv_path(@run) ↓ download run history csv
+        a> href=run_history_csv_path(@run) ↓ download run history csv
+        ' /
+        a< href=segment_history_csv_path(@run) ↓ download segment history csv
     .table-responsive
       table.card-body.table.table-striped.table-hover.mb-0
         tbody
@@ -121,5 +123,4 @@ article#stats
                 span = format_ms(@run.total_playtime_ms(timing))
               - else
                 span.time -
-  = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits, timing: timing}
   .mt-3#graph-holder
