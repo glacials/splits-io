@@ -1,10 +1,10 @@
-- title @game.name
+- content_for(:title, @game)
 - content_for(:header) do
   ol.breadcrumb.shadow
-    li.breadcrumb-item = link_to "Splits I/O", root_path
-    li.breadcrumb-item = link_to "Games", games_path
-    li.breadcrumb-item = link_to @game, game_path(@game)
-    li.breadcrumb-item = link_to 'Edit', edit_game_path(@game)
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Games', games_path)
+    li.breadcrumb-item = link_to(@game, game_path(@game))
+    li.breadcrumb-item = link_to('Edit', edit_game_path(@game))
   h3 Edit game
   h5 #{link_to @game, @game, class: 'stealth-link game-link'}
 article

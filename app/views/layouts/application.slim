@@ -2,7 +2,7 @@ doctype html
 html
   head
     title
-      = "#{ENV['SITE_TITLE'] || 'Splits I/O'}: "
+      => "#{site_title}:"
       = yield(:title) || 'A website'
     link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
@@ -30,18 +30,18 @@ html
       nav.navbar.navbar-expand-md.navbar-dark
         a.navbar-brand href=root_path
           img.logo src='/logo.svg' width='20' height='20'
-          span Splits I/O
+          .d-none.d-xl-inline = site_title
         button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
           span.navbar-toggler-icon
         .collapse.navbar-collapse#global-nav
           ul.navbar-nav.mr-auto
             li.nav-item class=('active' if request.path == new_run_path)
               a.nav-link.px-3 href=new_run_path
-                span> = icon("fas", "cloud-upload-alt")
+                span> = icon('fas', 'cloud-upload-alt')
                 | Upload
             li.nav-item class=('active' if request.path == rivalries_path)
               a.nav-link.px-3 href=rivalries_path
-                span> = icon("fas", "weight")
+                span> = icon('fas', 'weight')
                 | My Rivals
             - if ENV['READ_ONLY_MODE'] == '1'
               li.nav-item
@@ -61,7 +61,7 @@ html
             li.nav-item
               a.patreon.nav-link.px-3.border-0 href='https://www.patreon.com/glacials' target='_blank'
                 img src=asset_path('patreon.svg') height='20'
-            li.nav-item
+            li.nav-item.d-none.d-lg-inline
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
                 img src=asset_path('discord.svg') height='20'
             - if logged_in?
@@ -74,27 +74,24 @@ html
                   li.nav-item
                     a.dropdown-item.text-secondary href=user_path(current_user)
                       => icon('fas', 'user-circle')
-                      span Profile
+                      ' Profile
                     a.dropdown-item.text-secondary href=settings_path
                       => icon('fas', 'sliders-h')
-                      span Settings
+                      ' Settings
                     a.dropdown-item.text-secondary href=tools_path
                       => icon('fas', 'toolbox')
-                      span Tools
+                      ' Tools
                     a.dropdown-item.text-secondary href=session_path(auth_session) rel='nofollow' data-method='delete'
                       => icon('fas', 'sign-out-alt')
-                      span Sign Out
+                      ' Sign Out
             - else
-              li.nav-item
-                a.nav-link.px-3 href='/auth/twitch' Sign Up
-              li.nav-item
-                a.nav-link.px-3 href='/auth/twitch' Sign In
+              li.nav-item: a.nav-link.px-3 href='/auth/twitch' Sign Up
+              li.nav-item: a.nav-link.px-3 href='/auth/twitch' Sign In
       = render partial: 'shared/ad'
       header#header = yield(:header)
       article
-        .row
-          .col-lg-12
-            #alerts data-turbolinks-temporary=true = render partial: 'shared/alerts'
+        .row: .col-lg-12: #alerts data-turbolinks-temporary=true
+          = render partial: 'shared/alerts'
       = yield
       footer#footer
         = yield(:footer)
