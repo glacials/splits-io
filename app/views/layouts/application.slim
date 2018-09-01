@@ -30,18 +30,18 @@ html
       nav.navbar.navbar-expand-md.navbar-dark
         a.navbar-brand href=root_path
           img.logo src='/logo.svg' width='20' height='20'
-          = site_title
+          .d-none.d-xl-inline = site_title
         button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
           span.navbar-toggler-icon
         .collapse.navbar-collapse#global-nav
           ul.navbar-nav.mr-auto
             li.nav-item class=('active' if request.path == new_run_path)
               a.nav-link.px-3 href=new_run_path
-                span> = icon("fas", "cloud-upload-alt")
+                span> = icon('fas', 'cloud-upload-alt')
                 | Upload
             li.nav-item class=('active' if request.path == rivalries_path)
               a.nav-link.px-3 href=rivalries_path
-                span> = icon("fas", "weight")
+                span> = icon('fas', 'weight')
                 | My Rivals
             - if ENV['READ_ONLY_MODE'] == '1'
               li.nav-item
@@ -61,7 +61,7 @@ html
             li.nav-item
               a.patreon.nav-link.px-3.border-0 href='https://www.patreon.com/glacials' target='_blank'
                 img src=asset_path('patreon.svg') height='20'
-            li.nav-item
+            li.nav-item.d-none.d-lg-inline
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
                 img src=asset_path('discord.svg') height='20'
             - if logged_in?
