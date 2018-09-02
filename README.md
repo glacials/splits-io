@@ -146,6 +146,21 @@ Config for this generation is at [`config/favicon.json`][favicon-config].
 [logo]: public/logo.svg
 [favicon-config]: config/favicon.json
 
+### Theme
+Splits I/O runs [Bootstrap 4][bootstrap] on a paid theme called [Dashboard][dashboard]. Its license does not allow its
+source to be included in this repository; however there are three modifications we make to the source before producing
+the included final build. This is within the terms of the license.
+
+- In `/v4/scss/variables.scss`:
+	- Change `$theme-colors[primary]` to `#489BE7`
+	- Change `$theme-colors[success]` to `#6EE588`
+	- Change `$theme-colors[warning]` to `#F5BA46`
+
+These new colors match those in the Splits I/O logo.
+
+[bootstrap]: https://getbootstrap.com/
+[dashboard]: https://themes.getbootstrap.com/product/dashboard/
+
 ## Responsible Disclosure
 If you find a security vulnerability in Splits I/O, please email it to security@splits.io, as posting the vulnerability
 in public may allow malicious people to use it before it's able to be fixed.
