@@ -10,6 +10,8 @@
         th.align-right Stats
     tbody
       - run.segments.includes(:histories).each do |segment|
+        - history_times = segment.histories.limit(100).map { |attempt| attempt.duration_ms(timing) }.compact
+        - danger = history_times.standard_deviation > history_times.mean / 2
         tr
           td.align-right.align-middle = segment.segment_number + 1
           td.align-left.align-middle = segment.name.presence || '-'
@@ -27,14 +29,15 @@
           - if segment.histories.any?
             td.align-right
               a.segment-graph-toggler.text-light href='#' data-segment=segment.id data-collapsed='1'
-                .text-primary = icon('fas', 'chart-pie')
+                - if danger
+                  .text-danger = icon('fas', 'chart-pie')
+                - else
+                  .text-primary = icon('fas', 'chart-pie')
             tr hidden=true
               td colspan='999' style='margin: 0; padding: 0;'
-                - history_times = segment.histories.order(created_at: :desc).limit(100).map { |attempt| attempt.duration_ms(timing) }.compact
-                - previous_upload = run.user.try(:previous_upload_for, run.category)
                 .card.border-0.m-0.p-0.bg-primary
                   .card-group
-                    - if history_times.standard_deviation > history_times.mean / 2
+                    - if danger
                       .card.bg-danger: .card-body
                         h6.card-title
                           ' Standard deviation
@@ -43,7 +46,7 @@
                               title="A high standard deviation like this indicates inconsistency. You should practice this segment!"
                             )
                               = icon('fas', 'exclamation-triangle')
-                        h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i)
+                        h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i, 1)
                     - else
                       .card: .card-body
                         h6.card-title
@@ -53,7 +56,7 @@
                               title="By definition, 68% of your attempts are within one standard deviation of the mean, 95% within two, and 99% within three. Aim to lower this."
                             )
                               = icon('fas', 'question-circle')
-                        h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i)
+                        h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i, 1)
                     .card: .card-body
                       h6.card-title Mean
                       h4.card-subtitle = format_ms(history_times.mean)

@@ -38,7 +38,7 @@ const build_segment_graph = function(segment) {
       enabled: false
     },
     title: {
-      text: segment.name + ' Duration over Time'
+      text: 'Segment Duration over Time'
     },
     plotOptions: {
       series: {
