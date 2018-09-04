@@ -30,6 +30,30 @@
           "minimum": 0
         }
       }
+    },
+    "runTime": {
+      "type": "object",
+      "title": "Run Time",
+      "description": "Run Time represents a moment inside a run, and indicates the duration of the run so far at that moment. It holds a realtime run duration so far and a gametime run duration so far.",
+      "additionalProperties": false,
+      "properties": {
+        "realtimeMS": {
+          "type": "number",
+          "title": "Realtime (Milliseconds)",
+          "description": "Realtime (Milliseconds) is a duration of a run so far in milliseconds.",
+          "examples": [123456, 36000000],
+          "multipleOf": 1,
+          "minimum": 0
+        },
+        "gametimeMS": {
+          "type": "number",
+          "title": "Gametime (Milliseconds)",
+          "description": "Gametime (Milliseconds) is a duration a run so far in milliseconds.",
+          "examples": [123456, 36000000],
+          "multipleOf": 1,
+          "minimum": 0
+        }
+      }
     }
   },
   "properties": {
@@ -347,18 +371,18 @@
             "description": "Name is the runner-provided name of this segment",
             "examples": ["World 1-2", "Epilogue", "Bottle"]
           },
-          "duration": {"$ref": "#/definitions/duration"},
+          "endedAt": {"$ref": "#/definitions/runTime"},
           "bestDuration": {"$ref": "#/definitions/duration"},
           "isSkipped": {
             "type": "boolean",
             "title": "Is Skipped",
-            "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Duration is ignored and the next segment's Duration will be treated as invalid for historical purposes (but may still used for display purposes).",
+            "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Ended At is ignored.",
             "default": false
           },
           "isReset": {
             "type": "boolean",
             "title": "Is Reset",
-            "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Durations for this run are ignored.",
+            "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Ended Ats for this run are ignored.",
             "default": false
           },
           "histories": {
@@ -378,17 +402,17 @@
                   "title": "Attempt Number",
                   "description": "Attempt Number is the number of lifetime attempts the runner will have made on this category after this one. Generally these attempt numbers should correspond to those in Attempts -> History, although a number given here may not be present there if the run was reset before completion."
                 },
-                "duration": {"$ref": "#/definitions/duration"},
+                "endedAt": {"$ref": "#/definitions/runTime"},
                 "isSkipped": {
                   "type": "boolean",
                   "title": "Is Skipped",
-                  "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Duration is ignored and the next segment's Duration will be treated as invalid for historical purposes (but may still used for display purposes).",
+                  "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Ended At is ignored.",
                   "default": false
                 },
                 "isReset": {
                   "type": "boolean",
                   "title": "Is Reset",
-                  "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Durations for this run are ignored.",
+                  "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Ended Ats for this run are ignored.",
                   "default": false
                 }
               }
