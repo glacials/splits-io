@@ -355,6 +355,12 @@
             "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Duration is ignored and the next segment's Duration will be treated as invalid for historical purposes (but may still used for display purposes).",
             "default": false
           },
+          "isReset": {
+            "type": "boolean",
+            "title": "Is Reset",
+            "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Durations for this run are ignored.",
+            "default": false
+          },
           "histories": {
             "type": "array",
             "title": "Histories",
@@ -372,7 +378,19 @@
                   "title": "Attempt Number",
                   "description": "Attempt Number is the number of lifetime attempts the runner will have made on this category after this one. Generally these attempt numbers should correspond to those in Attempts -> History, although a number given here may not be present there if the run was reset before completion."
                 },
-                "duration": {"$ref": "#/definitions/duration"}
+                "duration": {"$ref": "#/definitions/duration"},
+                "isSkipped": {
+                  "type": "boolean",
+                  "title": "Is Skipped",
+                  "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Duration is ignored and the next segment's Duration will be treated as invalid for historical purposes (but may still used for display purposes).",
+                  "default": false
+                },
+                "isReset": {
+                  "type": "boolean",
+                  "title": "Is Reset",
+                  "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Durations for this run are ignored.",
+                  "default": false
+                }
               }
             }
           }
