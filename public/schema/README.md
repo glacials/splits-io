@@ -21,7 +21,7 @@ The schema is large, but many fields are optional -- a run at its heart resemble
   "segments": [
     {
       "name":         "Cap",
-      "duration":     {"realtimeMS": 143123},
+      "endedAt":      {"realtimeMS": 143123},
       "bestDuration": {"realtimeMS": 141167}
     }
   ]
