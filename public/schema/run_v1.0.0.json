@@ -14,7 +14,7 @@
       "additionalProperties": false,
       "properties": {
         "realtimeMS": {
-          "type": "number",
+          "type": "integer",
           "title": "Realtime (Milliseconds)",
           "description": "Realtime (Milliseconds) is a duration of milliseconds in real-world time.",
           "examples": [123456, 36000000],
@@ -22,7 +22,7 @@
           "minimum": 0
         },
         "gametimeMS": {
-          "type": "number",
+          "type": "integer",
           "title": "Gametime (Milliseconds)",
           "description": "Gametime (Milliseconds) is a duration of milliseconds in game-world time.",
           "examples": [123456, 36000000],
@@ -101,7 +101,7 @@
       "additionalProperties": false,
       "properties": {
         "total": {
-          "type": "number",
+          "type": "integer",
           "title": "Total",
           "description": "Total holds the total number of attempts for this category.",
           "examples": [1, 12, 241, 1023],
@@ -121,7 +121,7 @@
             "additionalProperties": false,
             "properties": {
               "attemptNumber": {
-                "type": "number",
+                "type": "integer",
                 "title": "Attempt Number",
                 "description": "Attempt Number is the number of lifetime attempts the runner will have made after this one. The Attempt Number for an attempt is a label, not an index; the first attempt for a category has an Attempt Number of 1 (not 0)."
               },
@@ -368,7 +368,7 @@
               "additionalProperties": false,
               "properties": {
                 "attemptNumber": {
-                  "type": "number",
+                  "type": "integer",
                   "title": "Attempt Number",
                   "description": "Attempt Number is the number of lifetime attempts the runner will have made on this category after this one. Generally these attempt numbers should correspond to those in Attempts -> History, although a number given here may not be present there if the run was reset before completion."
                 },
