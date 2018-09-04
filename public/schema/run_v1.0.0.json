@@ -14,7 +14,7 @@
       "additionalProperties": false,
       "properties": {
         "realtimeMS": {
-          "type": "integer",
+          "type": "number",
           "title": "Realtime (Milliseconds)",
           "description": "Realtime (Milliseconds) is a duration of milliseconds in real-world time.",
           "examples": [123456, 36000000],
@@ -22,7 +22,7 @@
           "minimum": 0
         },
         "gametimeMS": {
-          "type": "integer",
+          "type": "number",
           "title": "Gametime (Milliseconds)",
           "description": "Gametime (Milliseconds) is a duration of milliseconds in game-world time.",
           "examples": [123456, 36000000],
