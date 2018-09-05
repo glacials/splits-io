@@ -22,7 +22,7 @@ dependencies. The one downside is that you must first install Docker!
 * [Docker][docker-download]
 * [Docker Compose][docker-compose-download] (Mac and Windows include this in the Docker install)
 
-[docker-download]: https://www.docker.com/community-edition#/download
+[docker-download]: https://store.docker.com/search?type=edition&offering=community
 [docker-compose-download]: https://docs.docker.com/compose/install/
 
 ### First Run
