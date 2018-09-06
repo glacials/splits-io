@@ -26,7 +26,7 @@ node_modules
 yarn-debug.log*
 yarn-error.log*
 .yarn-integrity
-.env   # autoenv
-.envrc # direnv
+.env
+.envrc
 
 .DS_Store
