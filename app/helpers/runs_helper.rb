@@ -86,7 +86,7 @@ module RunsHelper
   # unit types to display, e.g. a num_units of 3 will show something like "3m 2s 123ms". Returned times are truncated,
   # not rounded.
   def format_ms_casual(milliseconds, num_units = 2)
-    return '-' if milliseconds.nil?
+    return '-' if milliseconds.nil? || milliseconds.zero?
     time = explode_ms(milliseconds)
     time.drop_while { |_, unit| unit.zero? }.first(num_units).to_h.map { |k, v| "#{v.to_i}#{k}" }.join(' ')
   end
