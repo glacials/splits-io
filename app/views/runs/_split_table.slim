@@ -1,3 +1,4 @@
+- segments = run.segments.includes(:recent_histories)
 .card.shadow
   .card-header.text-white Segments
   .table-responsive: table.card-body.table.table-striped.mb-0
@@ -6,10 +7,11 @@
       th.align-left Name
       th.align-right Duration
       th.align-right Finished At
-      - if run.segments.includes(:histories).any? { |segment| segment.histories.any? }
+      - if segments.any? { |segment| segment.recent_histories.any? }
         th.align-right Stats
     tbody
-      - run.segments.includes(:histories).each do |segment|
+      - run.segments.includes(:recent_histories).each do |segment|
+        - has_history = segment.recent_histories.any?
         tr
           td.align-right.align-middle = segment.segment_number + 1
           td.align-left.align-middle = segment.name.presence || '-'
@@ -24,8 +26,8 @@
             td.align-right.time.align-middle -
           - else
             td.align-right.align-middle = format_ms(segment.end_ms(timing))
-          - if segment.histories.any?
-            - history_times = segment.histories.order(attempt_number: :desc).limit(100).map { |attempt| attempt.duration_ms(timing) }.compact
+          - if has_history
+            - history_times = segment.recent_histories.map { |attempt| attempt.duration_ms(timing) }.compact
             - danger = history_times.standard_deviation > history_times.mean / 2
             td.align-right
               a.segment-graph-toggler.text-light href='#' data-segment=segment.id data-collapsed='1'
@@ -33,7 +35,7 @@
                   .text-danger = icon('fas', 'chart-pie')
                 - else
                   .text-primary = icon('fas', 'chart-pie')
-        - if segment.histories.any?
+        - if has_history
           tr hidden=true
             td colspan='999' style='margin: 0; padding: 0;'
               .card.border-0.m-0.p-0.bg-primary
