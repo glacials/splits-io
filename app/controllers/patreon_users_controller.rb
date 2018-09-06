@@ -19,7 +19,7 @@ class PatreonUsersController < ApplicationController
       refresh_token: tokens['refresh_token']
     )
 
-    redirect_to(settings_path, res.present? ? link_success_msg : link_failure_msg)
+    redirect_to(settings_path, res.present? ? {notice: link_success_msg} : {alert: link_failure_msg})
   end
 
   def unlink
