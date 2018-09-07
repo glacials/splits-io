@@ -33,11 +33,12 @@ const build_segment_graph = function(segment) {
       plotBorderWidth: 0,
       zoomType: 'xy'
     },
+    colors: ['#fff'],
     legend: {
       enabled: false
     },
     title: {
-      text: segment.name + ' Duration over Time'
+      text: 'Segment Duration over Time'
     },
     plotOptions: {
       series: {
@@ -49,16 +50,20 @@ const build_segment_graph = function(segment) {
       crosshairs: true,
       pointFormatter: function() {
         let time = moment.utc(moment.duration(this.y).asMilliseconds()).format('H:mm:ss')
-        return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${time}</b><br/>`
+        return `<span style="color: #fff">\u25CF</span> ${this.series.name}: <b>${time}</b><br/>`
       }
     },
     xAxis: {
+      allowDecimals: false,
+      lineColor: '#fff',
       title: {
         text: 'Attempt Number'
       }
     },
     yAxis: {
+      gridLineColor: 'rgba(1, 1, 1, 0.3)',
       min: 0,
+      tickColor: 'rgba(1, 1, 1, 0.3)',
       title: {
         text: 'Duration of Segment'
       },

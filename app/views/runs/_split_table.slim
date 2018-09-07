@@ -1,36 +1,142 @@
+- segments = run.segments.includes(:recent_histories)
 .card.shadow
   .card-header.text-white Segments
-  .table-responsive
-    table.card-body.table.table-striped.table-hover.mb-0
-      thead
+  .table-responsive: table.card-body.table.table-striped.mb-0
+    thead: tr
+      th.align-right #
+      th.align-left Name
+      th.align-right Duration
+      th.align-right Finished At
+      - if segments.any? { |segment| segment.recent_histories.any? }
+        th.align-right Stats
+    tbody
+      - run.segments.includes(:recent_histories).each do |segment|
+        - has_history = segment.recent_histories.any?
         tr
-          th.align-right #
-          th.align-left Name
-          th.align-right Duration
-          th.align-right Finished At
-          - if run.segments.includes(:histories).any? { |segment| segment.histories.any? }
-            th.align-right History
-      tbody
-        - run.segments.includes(:histories).each do |segment|
-          tr
-            td.align-right.align-middle = segment.segment_number + 1
-            td.align-left.align-middle = segment.name.presence || '-'
-            td.align-right.align-middle
-              - if segment.gold?(timing)
-                .gold-split title='Gold'
-              - if segment.skipped?(timing) || segment.reduced?(timing)
-                span.time -
-              - else
-                span = format_ms(segment.duration_ms(timing))
-            - if segment.skipped?(timing)
-              td.align-right.time.align-middle -
+          td.align-right.align-middle = segment.segment_number + 1
+          td.align-left.align-middle = segment.name.presence || '-'
+          td.align-right.align-middle
+            - if segment.gold?(timing)
+              .gold-split title='Gold'
+            - if segment.skipped?(timing) || segment.reduced?(timing)
+              span.time -
             - else
-              td.align-right.align-middle = format_ms(segment.end_ms(timing))
-            - if segment.histories.any?
-              td.align-right
-                a.segment-graph-toggler.text-light href='#' data-segment=segment.id data-collapsed='1'
-                  = icon('fas', 'chart-pie')
-              tr hidden=true
-                td colspan='999' style='margin: 0; padding: 0;'
-                  .card.border-0.m-0.p-0
-                    .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
+              span = format_ms(segment.duration_ms(timing))
+          - if segment.skipped?(timing)
+            td.align-right.time.align-middle -
+          - else
+            td.align-right.align-middle = format_ms(segment.end_ms(timing))
+          - if has_history
+            - history_times = segment.recent_histories.map { |attempt| attempt.duration_ms(timing) }.compact
+            - danger = history_times.standard_deviation > history_times.mean / 2
+            td.align-right
+              a.segment-graph-toggler.text-light href='#' data-segment=segment.id data-collapsed='1'
+                - if danger
+                  .text-danger = icon('fas', 'chart-pie')
+                - else
+                  .text-primary = icon('fas', 'chart-pie')
+        - if has_history
+          tr hidden=true
+            td colspan='999' style='margin: 0; padding: 0;'
+              .card.border-0.m-0.p-0.bg-primary
+                .card-group
+                  - if danger
+                    .card.bg-danger: .card-body
+                      h6.card-title
+                        ' Standard deviation
+                        - if run.belongs_to?(current_user)
+                          small.tip-right(
+                            title="A high standard deviation like this indicates inconsistency. You should practice
+                            this segment!"
+                          ) = icon('fas', 'exclamation-triangle')
+                        - else
+                          small.tip-right( title="A high standard deviation like this indicates inconsistency!")
+                            = icon('fas', 'exclamation-triangle')
+                      h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i, 1)
+                  - else
+                    .card: .card-body
+                      h6.card-title
+                        ' Standard deviation
+                        - if run.belongs_to?(current_user)
+                          small.tip-right(
+                            title="By definition, 68% of your attempts are within one standard deviation of the mean,
+                            95% within two, and 99% within three. Aim to lower this."
+                          ) = icon('fas', 'question-circle')
+                        - else
+                          small.tip-right(
+                            title="By definition, 68% of #{run.user || 'the runner'}'s attempts are within one
+                            standard deviation of the mean, 95% within two, and 99% within three."
+                          ) = icon('fas', 'question-circle')
+                      h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i, 1)
+                  .card: .card-body
+                    h6.card-title Mean
+                    h4.card-subtitle = format_ms(history_times.mean)
+                  .card: .card-body
+                    - if run.belongs_to?(current_user)
+                      .float-right.tip-left.text-light(
+                        title="All stats based on your last 100 runs."
+                      ) = icon('fas', 'info-circle')
+                    - else
+                      .float-right.tip-left.text-light(
+                        title="All stats based on #{run.user || 'the runner'}'s last 100 runs."
+                      ) = icon('fas', 'info-circle')
+                    h6.card-title Best
+                    h4.card-subtitle = format_ms(segment.shortest_duration_ms(timing))
+                .card-group
+                  .card: .card-body
+                    h6.card-title
+                      ' 10th percentile
+                      - if run.belongs_to?(current_user)
+                        small.tip-top(
+                          title="Only 10% of your attempts are faster than this time. Treat this number like a relaxed
+                          best&mdash;aim to beat it."
+                        ) = icon('fas', 'question-circle')
+                      - else
+                        small.tip-top(
+                          title="10% of #{run.user || 'the runner'}'s attempts are faster than this time. This number
+                          is basically a relaxed best."
+                        ) = icon('fas', 'question-circle')
+                    h4.card-subtitle = format_ms(history_times.percentile(10))
+                  .card: .card-body
+                    h6.card-title
+                      ' Median
+                      - if run.belongs_to?(current_user)
+                        small.tip-top(
+                          title="50% of your attempts are faster than this time. This is the time you'd expect to get
+                          in a marathon or no-reset run."
+                        ) = icon('fas', 'question-circle')
+                      - else
+                        small.tip-top(
+                          title="50% of #{run.user || 'the runner'}'s attempts are faster than this time. This is the
+                          time they'd expect to get in a marathon or no-reset run."
+                        ) = icon('fas', 'question-circle')
+                    h4.card-subtitle = format_ms(history_times.median)
+                  .card: .card-body
+                    h6.card-title
+                      ' 90th percentile
+                      - if run.belongs_to?(current_user)
+                        small.tip-top(
+                          title="90% of your attempts are faster than this time. You can see this as your worst time
+                          excluding fantastic blunders."
+                        ) = icon('fas', 'question-circle')
+                      - else
+                        small.tip-top(
+                          title="90% of #{run.user || 'the runner'}'s attempts are faster than this time. You can see
+                          this as their worst time excluding fantastic blunders."
+                        ) = icon('fas', 'question-circle')
+                    h4.card-subtitle = format_ms(history_times.percentile(90))
+                  .card: .card-body
+                    h6.card-title
+                      ' 99th percentile
+                      - if run.belongs_to?(current_user)
+                        small.tip-top(
+                          title="99% of your attempts are faster than this time. All attempts but your absolute worst
+                          fit under this umbrella."
+                        ) = icon('fas', 'question-circle')
+                      - else
+                        small.tip-top(
+                          title="99% of #{run.user || 'the runner'}'s attempts are faster than this time. All attempts
+                          but their absolute worst fit under this umbrella."
+                        ) = icon('fas', 'question-circle')
+                    h4.card-subtitle = format_ms(history_times.percentile(99))
+                .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id

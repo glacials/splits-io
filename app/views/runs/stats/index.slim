@@ -18,10 +18,7 @@
 
 article#stats
   .card.mb-3
-    .card-header.text-white
-      | Run Information
-      .float-right
-        a href=run_history_csv_path(@run) ↓ download run history csv
+    h5.card-header Run Information
     .table-responsive
       table.card-body.table.table-striped.table-hover.mb-0
         tbody
@@ -121,5 +118,12 @@ article#stats
                 span = format_ms(@run.total_playtime_ms(timing))
               - else
                 span.time -
-  = render partial: 'runs/stats/segments', locals: {run: @run, short: @run.short?, splits: @raw_splits, timing: timing}
+      .card-footer.clearfix
+        .float-right
+          a.btn.btn-primary.mr-3 href=run_history_csv_path(@run)
+            => icon('fas', 'download')
+            | Run History CSV
+          a.btn.btn-primary href=segment_history_csv_path(@run)
+            => icon('fas', 'download')
+            | Segment History CSV
   .mt-3#graph-holder
