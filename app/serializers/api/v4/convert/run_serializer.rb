@@ -19,7 +19,7 @@ class Api::V4::Convert::RunSerializer < Api::V4::ApplicationSerializer
   end
 
   def history
-    object.histories
+    object.histories.order(attempt_number: :asc)
   end
 
   def attempts
@@ -35,7 +35,7 @@ class Api::V4::Convert::RunSerializer < Api::V4::ApplicationSerializer
   end
 
   def splits
-    object.segments.map do |segment|
+    object.segments.order(segment_number: :asc).map do |segment|
       segment.realtime_shortest_duration_ms = {duration: segment.realtime_shortest_duration_ms / 1000}
       {
         name: segment.name,

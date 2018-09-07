@@ -2,7 +2,7 @@ class Segment < ApplicationRecord
   belongs_to :run
   # dependent: :delete_all requires there be no child items that need to be deleted
   # If SegmentHistory is changed to have child records, change this back to just :destroy
-  has_many :histories, class_name: 'SegmentHistory', dependent: :delete_all
+  has_many :histories, -> { order(attempt_number: :asc) }, class_name: 'SegmentHistory', dependent: :delete_all
 
   def start_ms(timing)
     case timing
