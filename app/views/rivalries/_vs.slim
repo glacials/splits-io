@@ -1,7 +1,7 @@
 .row
   .col-lg-5.col-md-5
     .card
-      = image_tag(rivalry.from_user.avatar, class: 'card-img-top')
+      = image_tag(rivalry.from_user.avatar, skip_pipeline: true, class: 'card-img-top')
       .card-body
         h5 = rivalry.from_user
       .card-footer
@@ -22,7 +22,7 @@
     h4 vs.
   .col-lg-5.col-md-5
     .card
-      = image_tag(rivalry.to_user.avatar, class: 'card-img-top')
+      = image_tag(rivalry.to_user.avatar, skip_pipeline: true, class: 'card-img-top')
       .card-body
         h5 = rivalry.to_user
       .card-footer
