@@ -23,8 +23,11 @@
             td.align-right.time.align-middle -
           - else
             td.align-right.align-middle = format_ms(segment.end_ms(timing))
-          - histories = segment.histories.order(attempt_number: :desc)
-          - history_times = histories.map { |history| history.duration_ms(timing) }.compact
+          - history_times = segment.histories.where.not( \
+              Run.duration_type(timing) => 0 \
+            ).where.not( \
+              Run.duration_type(timing) => nil \
+            ).order(attempt_number: :desc).pluck(Run.duration_type(timing))
           td.align-right
             - if history_times.present?
               - danger = history_times.standard_deviation > history_times.mean / 2

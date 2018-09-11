@@ -71,6 +71,19 @@ class Run < ApplicationRecord
     def find36(id36)
       find10(id36.to_i(36))
     end
+
+    # duration_type is a timing helper for use in queries. e.g. Run.where.not(duration_type(timing) => 0)
+    def duration_type(timing)
+      case timing
+      when REAL
+        :realtime_duration_ms
+      when GAME
+        :gametime_duration_ms
+      else
+        Rollbar.error("Invalid timing #{timing}")
+        :realtime_duration_ms
+      end
+    end
   end
 
   alias id10 id
