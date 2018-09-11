@@ -2,7 +2,7 @@ class Api::Webhooks::ParseController < ApplicationController
   before_action :set_run, only: [:create]
 
   def create
-    return if @run.parsed_at.present?
+    return if @run.nil? || @run.parsed_at.present?
     @run.parse_into_db
     head :ok
   end

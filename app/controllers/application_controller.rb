@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
     end
 
     params[:page] = params[:page].to_i
-    bad if params[:page] < 1
+    bad_request if params[:page] < 1
   end
 
   def auth_session_error
