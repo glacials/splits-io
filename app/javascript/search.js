@@ -1,6 +1,10 @@
 import Bloodhound from 'typeahead.js'
 import Handlebars from 'handlebars'
 
+document.addEventListener("turbolinks:before-cache", function() {
+  $('.search').typeahead('destroy')
+})
+
 document.addEventListener('turbolinks:load', function() {
   $('.search').typeahead({
     minLength: 3,
