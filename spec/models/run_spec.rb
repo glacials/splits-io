@@ -180,14 +180,10 @@ describe Run, type: :model do
       expect(run.total_playtime_ms(Run::REAL)).to eq 77_066_934
     end
 
-    it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:realtime_history]).to be_nil
-    end
-
     it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        6911.142264, 6261.793028, 6123.664793, 5944.515932, 5694.823834, 5410.111128, 5746.188845, 5390.459671,
-        5258.001018, 5236.112894, 5102.848171, 5126.404809, 5055.563029
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+        6911142, 6261793, 6123664, 5944515, 5694823, 5410111, 5746188,
+        5390459, 5258001, 5236112, 5102848, 5126404, 5055563
       ]
     end
   end
@@ -236,13 +232,9 @@ describe Run, type: :model do
       expect(run.total_playtime_ms(Run::REAL)).to eq 2_870_185
     end
 
-    it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:realtime_history]).to be_nil
-    end
-
     it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        823.17308
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+        823173
       ]
     end
   end
@@ -305,14 +297,10 @@ describe Run, type: :model do
       expect(run.total_playtime_ms(Run::REAL)).to eq 22_450_446
     end
 
-    it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:realtime_history]).to be_nil
-    end
-
     it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        912.296, 859.304, 801.458, 755.249, 793.755, 744.211, 741.924, 815.122, 761.782, 696.49, 710.935, 727.007,
-        715.404, 730.922, 705.515, 728.286, 714.258, 705.742, 691.061, 685.671
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+        912296, 859304, 801458, 755249, 793755, 744211, 741924, 815122, 761782, 696490, 710935, 727007,
+        715404, 730922, 705515, 728286, 714258, 705742, 691061, 685671
       ]
     end
 
