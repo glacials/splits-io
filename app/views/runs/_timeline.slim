@@ -9,4 +9,4 @@
         .pure-u.split id="#{run.id36}-split-#{index}" class=next_timeline_color(run.id36) style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; z-index: #{index}"
           .p-2
             .text-light = segment.name.presence || '-'
-            .text-light-50 = format_ms(segment.duration_ms(timing))
+            .text-light-50 = format_ms(segment.duration_ms(timing), precise: run.short?(timing))

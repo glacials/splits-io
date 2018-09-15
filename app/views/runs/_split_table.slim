@@ -18,11 +18,11 @@
             - if segment.skipped?(timing) || segment.reduced?(timing)
               span.time -
             - else
-              span = format_ms(segment.duration_ms(timing))
+              span = format_ms(segment.duration_ms(timing), precise: run.short?(timing))
           - if segment.skipped?(timing)
             td.align-right.time.align-middle -
           - else
-            td.align-right.align-middle = format_ms(segment.end_ms(timing))
+            td.align-right.align-middle = format_ms(segment.end_ms(timing), precise: run.short?(timing))
           - history_times = segment.histories.where.not( \
               Run.duration_type(timing) => 0 \
             ).where.not( \
@@ -71,7 +71,7 @@
                       h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i, 1)
                   .card: .card-body
                     h6.card-title Mean
-                    h4.card-subtitle = format_ms(history_times.mean)
+                    h4.card-subtitle = format_ms(history_times.mean, precise: run.short?(timing))
                   .card: .card-body
                     - if run.belongs_to?(current_user)
                       .float-right.tip-left.text-light(
@@ -82,7 +82,7 @@
                         title="Stats based on #{run.user || 'the runner'}'s last 100 runs."
                       ) = icon('fas', 'info-circle')
                     h6.card-title Best
-                    h4.card-subtitle = format_ms(segment.shortest_duration_ms(timing))
+                    h4.card-subtitle = format_ms(segment.shortest_duration_ms(timing), precise: run.short?(timing))
                 .card-group
                   .card: .card-body
                     h6.card-title
@@ -97,7 +97,7 @@
                           title="10% of #{run.user || 'the runner'}'s attempts are faster than this time. This number
                           is basically a relaxed best."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_times.percentile(10))
+                    h4.card-subtitle = format_ms(history_times.percentile(10), precise: run.short?(timing))
                   .card: .card-body
                     h6.card-title
                       ' Median
@@ -111,7 +111,7 @@
                           title="50% of #{run.user || 'the runner'}'s attempts are faster than this time. This is the
                           time they'd expect to get in a marathon or no-reset run."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_times.median)
+                    h4.card-subtitle = format_ms(history_times.median, precise: run.short?(timing))
                   .card: .card-body
                     h6.card-title
                       ' 90th percentile
@@ -125,7 +125,7 @@
                           title="90% of #{run.user || 'the runner'}'s attempts are faster than this time. You can see
                           this as their worst time excluding fantastic blunders."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_times.percentile(90))
+                    h4.card-subtitle = format_ms(history_times.percentile(90), precise: run.short?(timing))
                   .card: .card-body
                     h6.card-title
                       ' 99th percentile
@@ -139,5 +139,5 @@
                           title="99% of #{run.user || 'the runner'}'s attempts are faster than this time. All attempts
                           but their absolute worst fit under this umbrella."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_times.percentile(99))
+                    h4.card-subtitle = format_ms(history_times.percentile(99), precise: run.short?(timing))
                 .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id

@@ -8,8 +8,8 @@
         p
       div class="#{"mx-2" if segment == first || segment == last} #{"second-half" if segment.second_half?(timing)}"
         div = segment.name
-        .text-light-50 #{format_ms(segment.duration_ms(timing))} duration
-        .text-light-50 #{format_ms(segment.end_ms(timing))} finished
+        .text-light-50 #{format_ms(segment.duration_ms(timing), precise: run.short?(timing))} duration
+        .text-light-50 #{format_ms(segment.end_ms(timing), precise: run.short?(timing))} finished
         - if run.has_golds?(timing) && !run.has_skipped_splits?(timing)
           - if segment.gold?(timing)
             .text-gold New best!

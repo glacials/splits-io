@@ -49,8 +49,9 @@ module CompletedRun
       end
     end
 
-    def short?
-      time < 20.minutes
+    def short?(timing)
+      return false if duration_ms(timing).nil?
+      duration_ms(timing) < 20 * 60 * 1000
     end
 
     def best_known?(timing)

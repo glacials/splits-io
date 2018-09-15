@@ -16,7 +16,7 @@
   h3 #{@run.game} #{@run.category}
   h5
     big
-      a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@comparison_run)
+      a.stealth-link.run-link class=('short' if @run.short?(timing)) href=run_path(@comparison_run)
         = format_ms(@comparison_run.duration_ms(timing))
     => ' by'
     = user_badge(@comparison_run.user)
@@ -29,7 +29,7 @@ hr style='margin: .5em; opacity: 0.25'
 .container
   h5
     big
-      a.stealth-link.run-link class=('short' if @run.short?) href=run_path(@run)
+      a.stealth-link.run-link class=('short' if @run.short?(timing)) href=run_path(@run)
         = format_ms(@run.duration_ms(timing))
     => ' by'
     = user_badge(@run.user)
@@ -49,7 +49,7 @@ hr style='margin: .5em; opacity: 0.25'
         li Stop missing splits
     p
       = 'This will get you to a '
-      span class=('short' if @run.short?)
+      span class=('short' if @run.short?(timing))
         = format_ms(@run.duration_ms(timing) - improvements.map { |i| i[:time_difference] / 2 }.sum)
       = ', then we\'ll go from there.'
       - if @comparison_run.user.present?

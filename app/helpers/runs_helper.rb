@@ -75,10 +75,13 @@ module RunsHelper
     "<span class=\"text-warning\">+#{format_ms_casual(diff_ms)}</span>".html_safe
   end
 
-  def format_ms(milliseconds)
+  # format_ms accepts a number of milliseconds and returns a time like "HH:MM:SS". If precise is true, it returns a time
+  # like "HH:MM:SS.mmm" instead.
+  def format_ms(milliseconds, precise: false)
     return '-' if milliseconds.nil?
     time = explode_ms(milliseconds)
 
+    return format('%02d:%02d:%02d.%03d', time[:h], time[:m], time[:s], time[:ms]) if precise
     format('%02d:%02d:%02d', time[:h], time[:m], time[:s])
   end
 

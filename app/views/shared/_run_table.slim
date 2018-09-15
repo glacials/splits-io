@@ -46,7 +46,7 @@
                     = link_to new_rivalry_path(category: run.category)
                       .text-success = icon('fas', 'plus')
             - if cols.include?(:uploaded)
-              td.align-right.nowrap class=('short' if run.short?) title=run.created_at = "#{time_ago_in_words(run.created_at)} ago"
+              td.align-right.nowrap title=run.created_at #{time_ago_in_words(run.created_at)} ago
             - if cols.include?(:owner_controls)
               td
                 .dropleft.text-center

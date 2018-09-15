@@ -13,7 +13,7 @@ RSpec.describe 'runs/_split_table' do
       render(
         partial: 'runs/split_table',
         locals: {
-          short: run.short?,
+          short: run.short?(Run::REAL),
           run: run,
           timing: Run::REAL
         }
