@@ -180,14 +180,10 @@ describe Run, type: :model do
       expect(run.total_playtime_ms(Run::REAL)).to eq 77_066_934
     end
 
-    it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:realtime_history]).to be_nil
-    end
-
-    it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        6911.142264, 6261.793028, 6123.664793, 5944.515932, 5694.823834, 5410.111128, 5746.188845, 5390.459671,
-        5258.001018, 5236.112894, 5102.848171, 5126.404809, 5055.563029
+    it 'reports the correct history' do
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+        6_911_142, 6_261_793, 6_123_664, 5_944_515, 5_694_823, 5_410_111, 5_746_188,
+        5_390_459, 5_258_001, 5_236_112, 5_102_848, 5_126_404, 5_055_563
       ]
     end
   end
@@ -236,13 +232,9 @@ describe Run, type: :model do
       expect(run.total_playtime_ms(Run::REAL)).to eq 2_870_185
     end
 
-    it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:realtime_history]).to be_nil
-    end
-
-    it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        823.17308
+    it 'reports the correct history' do
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+        823_173
       ]
     end
   end
@@ -305,14 +297,10 @@ describe Run, type: :model do
       expect(run.total_playtime_ms(Run::REAL)).to eq 22_450_446
     end
 
-    it 'reports no history using fast parsing' do
-      expect(run.parse(fast: true)[:realtime_history]).to be_nil
-    end
-
-    it 'reports correct history when using slow parsing' do
-      expect(run.parse(fast: false)[:realtime_history]).to match_array [
-        912.296, 859.304, 801.458, 755.249, 793.755, 744.211, 741.924, 815.122, 761.782, 696.49, 710.935, 727.007,
-        715.404, 730.922, 705.515, 728.286, 714.258, 705.742, 691.061, 685.671
+    it 'reports the correct history' do
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+        912_296, 859_304, 801_458, 755_249, 793_755, 744_211, 741_924, 815_122, 761_782, 696_490,
+        710_935, 727_007, 715_404, 730_922, 705_515, 728_286, 714_258, 705_742, 691_061, 685_671
       ]
     end
 
