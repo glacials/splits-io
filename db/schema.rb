@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_27_170856) do
+ActiveRecord::Schema.define(version: 2018_09_17_211157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -186,6 +186,7 @@ ActiveRecord::Schema.define(version: 2018_08_27_170856) do
     t.bigint "gametime_duration_ms"
     t.bigint "gametime_sum_of_best_ms"
     t.string "default_timing", default: "real", null: false
+    t.bigint "pausetime_duration_ms"
     t.index ["category_id"], name: "index_runs_on_category_id"
     t.index ["s3_filename"], name: "index_runs_on_s3_filename"
     t.index ["user_id"], name: "index_runs_on_user_id"

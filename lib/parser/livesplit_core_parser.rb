@@ -8,6 +8,7 @@ class Parser
   def self.parse(run_string, fast: false)
     parse_result = LiveSplitCore::Run.parse(run_string, run_string.bytesize, '', false)
     return nil unless parse_result.parsed_successfully
+
     program = parse_result.timer_kind
     run = parse_result.unwrap
 
@@ -18,6 +19,7 @@ class Parser
       srdc_id: run.metadata.run_id,
       attempts: run.attempt_count,
       offset: run.offset.total_seconds,
+      pause_time: 0,
       history: nil,
       indexed_history: nil,
       realtime_history: nil,
@@ -34,6 +36,7 @@ class Parser
         attempt = run.attempt_history_index(i)
         attempt_id = attempt.index.to_i
         time = attempt.time()
+        pause_duration = attempt.pause_time.try(:total_seconds).try(:*, 1000) || 0
 
         run_object[:history] << {
           attempt_number: attempt_id,
@@ -45,6 +48,8 @@ class Parser
           run_object[:indexed_history][attempt_id] = time.real_time.try(:total_seconds)
           run_object[:realtime_history] << time.real_time.try(:total_seconds)
         end
+
+        run_object[:pause_time] += pause_duration
       end
     end
 

@@ -48,6 +48,7 @@ module UnparsedRun
           program: timer_used.to_s,
           attempts: parse_result[:attempts],
           srdc_id: srdc_id || parse_result[:srdc_id].presence,
+          pausetime_duration_ms: parse_result[:pause_time],
 
           realtime_duration_ms:    (splits.map(&:realtime_duration).sum || 0) * 1000,
           realtime_sum_of_best_ms: realtime_best_times,

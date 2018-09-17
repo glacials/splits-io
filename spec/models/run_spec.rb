@@ -186,6 +186,10 @@ describe Run, type: :model do
         5_390_459, 5_258_001, 5_236_112, 5_102_848, 5_126_404, 5_055_563
       ]
     end
+
+    it 'reports no paused time' do
+      expect(run.pausetime_duration_ms).to be(0)
+    end
   end
 
   context 'from LiveSplit 1.5' do
@@ -236,6 +240,10 @@ describe Run, type: :model do
       expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
         823_173
       ]
+    end
+
+    it 'reports no paused time' do
+      expect(run.pausetime_duration_ms).to be(0)
     end
   end
 
@@ -310,6 +318,10 @@ describe Run, type: :model do
       run.reload
 
       expect(run.histories.count).to eq(55)
+    end
+
+    it 'reports no paused time' do
+      expect(run.pausetime_duration_ms).to be(0)
     end
 
     context 'with game time' do

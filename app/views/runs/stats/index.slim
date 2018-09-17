@@ -112,10 +112,18 @@ article#stats
                 span.time -
           tr
             td
-              span Total Playtime
+              span Total playtime
             td
               - if @run.total_playtime_ms(timing) != 0
                 span = format_ms(@run.total_playtime_ms(timing))
+              - else
+                span.time -
+          tr
+            td
+              span Total pause time
+            td
+              - if @run.pausetime_duration_ms != 0
+                span = format_ms(@run.pausetime_duration_ms)
               - else
                 span.time -
       .card-footer.clearfix
