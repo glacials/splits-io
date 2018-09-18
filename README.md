@@ -6,8 +6,11 @@
 Splits I/O is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
 code. It's written in Ruby on Rails.
 
-Splits I/O currently supports splits from ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer, LlanfairGered,
-Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit.
+Splits I/O currently supports splits from any timer that supports the [Splits I/O exchange format][exchange], on top of
+ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer, LlanfairGered, Llanfair, Urn, LiveSplit, SplitterZ,
+TimeSplitTracker, and WSplit.
+
+[exchange]: ./public/schema
 
 ## API
 For full API documentation, see the [API readme][api-docs].
@@ -167,8 +170,8 @@ in public may allow malicious people to use it before it's able to be fixed.
 
 ## Library Information
 ### LiveSplit Core
-Splits I/O uses [livesplit-core][livesplit-core] for parsing. The parser is located in `lib/parser/*`. To upgrade it,
-run
+Splits I/O uses [livesplit-core][livesplit-core] for parsing runs. The parser is located in `lib/parser/*`. To upgrade
+it, run
 ```sh
 make update_lsc
 ```

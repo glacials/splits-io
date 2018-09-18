@@ -45,8 +45,8 @@ class Run < ApplicationRecord
   class << self
     def programs
       [
-        ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer,
-        LlanfairGered, Llanfair, Urn, LiveSplit, SplitterZ, TimeSplitTracker, WSplit
+        LiveSplit, Llanfair, LlanfairGered, Llanfair2, WSplit, TimeSplitTracker, Portal2LiveTimer, Urn, SplitterZ,
+        Splitty, FaceSplit, ShitSplit
       ]
     end
 

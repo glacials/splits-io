@@ -53,7 +53,8 @@ article
       | Which programs can I upload splits from?
       .float-right: a.text-muted data={turbolinks: false} href='#programs' name='programs' ¶
     .card-body
-      p These ones:
+      p Splits I/O can read splits from any timer that supports the Splits I/O Exchange Format, and additionally has
+        manual support for the following timers:
       .col-md-6
         ul.list-group.mb-4
           - Run.programs.each do |program|
@@ -63,6 +64,10 @@ article
         b> Just so you know:
         ' Some of Splits I/O's detailed statistics, charts, and other features that rely on historical data only work on
         ' runs recorded with LiveSplit, as LiveSplit is currently the only timer that collects this data.
+    .card-footer
+      a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/tree/master/public/schema'
+        => icon('fas', 'exchange-alt')
+        | Splits I/O Exchange Format
 
   .card-deck
     .card.mb-4
@@ -83,7 +88,9 @@ article
       .card-body
         p Yes as well!
       .card-footer
-        a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/blob/master/docs/api.md' API Documentation
+        a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/blob/master/docs/api.md'
+        => icon('fas', 'book')
+        | API Documentation
 
   .card.mb-4
     h5.card-header

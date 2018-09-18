@@ -1,5 +1,6 @@
-# Splits I/O JSON Schema
-The Splits I/O JSON Schema is a standard way of arranging run information in JSON.
+# Splits I/O Exchange Format
+The Splits I/O Exchange Format is a JSON schema denoting a standard way of arranging run information for passing between
+timers and other programs (like Splits I/O).
 
 [**Documentation**][1]
 
