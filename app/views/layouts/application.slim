@@ -2,8 +2,8 @@ doctype html
 html
   head
     title
-      => "#{site_title}:"
-      = yield(:title) || 'A website'
+      = yield(:title) || 'Hi!'
+      = " - #{site_title}"
     link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
     meta name='viewport' content='width=device-width, initial-scale=1'
@@ -85,8 +85,24 @@ html
                       => icon('fas', 'sign-out-alt')
                       ' Sign Out
             - else
-              li.nav-item: a.nav-link.px-3 href='/auth/twitch' Sign Up
-              li.nav-item: a.nav-link.px-3 href='/auth/twitch' Sign In
+              li.nav-item: a.nav-link.px-3 href='#' data={toggle: :modal, target: '#signin'} Sign In
+              #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
+                .modal-dialog role='document'
+                  .modal-content
+                    .modal-header.bg-primary
+                      h5.text-light Sign In
+                    .modal-body.bg-dark
+                      .row
+                        a.btn.mx-auto.text-white style='background: #5F459E' href='/auth/twitch'
+                          => icon('fab', 'twitch')
+                          ' Sign In with Twitch
+                      .row.text-light.m-2
+                        p Splits I/O accounts are based strictly on Twitch accounts. This makes the platform simpler to
+                          maintain, especially with regards to security.
+                        p
+                          ' We are
+                          a> href='https://github.com/glacials/splits-io/issues/396' working
+                          ' on adding more methods, including linkless accounts.
       = render partial: 'shared/ad'
       header#header = yield(:header)
       article
