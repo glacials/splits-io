@@ -18,6 +18,10 @@ services:
       - s3:s3.localhost
       - webpacker:webpacker.localhost
     environment:
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
+      - PATREON_CLIENT_ID
+      - PATREON_CLIENT_SECRET
       - TWITCH_CLIENT_ID
       - TWITCH_CLIENT_SECRET
     stdin_open: true
@@ -43,6 +47,10 @@ services:
       - "3035"
   worker:
     environment:
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
+      - PATREON_CLIENT_ID
+      - PATREON_CLIENT_SECRET
       - TWITCH_CLIENT_ID
       - TWITCH_CLIENT_SECRET
     build: .

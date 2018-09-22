@@ -19,6 +19,7 @@ class User < ApplicationRecord
 
   has_one  :patreon, class_name: 'PatreonUser', dependent: :destroy
   has_one  :twitch,  class_name: 'TwitchUser',  dependent: :destroy
+  has_one  :google,  class_name: 'GoogleUser',  dependent: :destroy
 
   has_many :applications,  class_name: 'Doorkeeper::Application', foreign_key: :owner_id
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
@@ -28,7 +29,10 @@ class User < ApplicationRecord
     user.runs.update_all(user_id: nil)
   end
 
+  NAME_REGEX = /[A-Za-z0-9_]+/.freeze
+
   validates :name, presence: true
+  validates_format_of :name, with: NAME_REGEX
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
@@ -41,15 +45,23 @@ class User < ApplicationRecord
   end
 
   def avatar
-    twitch.avatar
+    if twitch.present?
+      twitch.avatar
+    elsif google.present?
+      google.avatar
+    end
   end
 
   def uri
-    URI.parse("https://www.twitch.tv/#{name}")
+    if twitch.present?
+      URI.parse("https://www.twitch.tv/#{twitch.name}")
+    elsif google.present?
+      google.url
+    end
   end
 
   def to_param
-    name
+    name.downcase
   end
 
   def pb_for(category)
@@ -70,7 +82,7 @@ class User < ApplicationRecord
   end
 
   def to_s
-    twitch.try(:display_name) || name || 'somebody'
+    name || 'somebody'
   end
 
   def should_see_ads?

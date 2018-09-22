@@ -3,7 +3,7 @@
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
 article
-  - if logged_in? && current_user.runs.any?
+  - if current_user.present? && current_user.runs.any?
       .row
         .col-sm-3: .statcard.p-3
           h2.statcard-number
@@ -37,7 +37,7 @@ article
           ' Splits I/O parses and stores your splits to give you insight into how to improve your runs, both now
           ' and in the future as you upload more PBs. See 99th percentiles, standard deviations, and charts of all your
           ' past times on a per-split basis.
-        - unless logged_in?
+        - unless current_user.present?
           .alert.alert-info
             b> Run several games?
             ' Logged-in users can drag-and-drop any number of run files at once.
@@ -49,6 +49,6 @@ article
           a.btn.btn-primary.mx-2 href=random_path
             => icon('fas', 'dice')
             ' Randomizer
-- if logged_in?
+- if current_user.present?
   article
     = render partial: 'shared/follows'

@@ -3,13 +3,19 @@ require 'twitch'
 class TwitchUser < ApplicationRecord
   belongs_to :user
 
-  def self.from_auth(auth)
+  def self.from_auth(auth, current_user)
     twitch_user = TwitchUser.find_or_initialize_by(twitch_id: auth.uid)
+    twitch_user.user = [
+      current_user,
+      twitch_user.user,
+      User.joins(:google).find_by(google_users: {email: auth.info.email}),
+      User.new(name: auth.info.name)
+    ].compact.first
 
-    twitch_user.user = User.new if twitch_user.user.blank?
-    twitch_user.user.name = auth.info.nickname
     unless twitch_user.user.save
-      twitch_user.errors.add(:user, twitch_user.user.errors.full_messages)
+      twitch_user.user.errors.full_messages.each do |error|
+        twitch_user.errors.add(:user, error)
+      end
       return twitch_user
     end
 

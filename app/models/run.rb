@@ -88,6 +88,10 @@ class Run < ApplicationRecord
         :realtime_duration_ms
       end
     end
+
+    def random
+      Run.offset(rand(Run.count)).first
+    end
   end
 
   alias id10 id

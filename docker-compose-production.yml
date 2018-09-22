@@ -17,6 +17,8 @@ services:
       - BUNDLE_WITHOUT
       - DATABASE_URL
       - ENABLE_ADS
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
       - NEW_RELIC_LICENSE_KEY
       - NODE_ENV
       - PATREON_CLIENT_ID
@@ -48,6 +50,8 @@ services:
       - BUNDLE_WITHOUT
       - DATABASE_URL
       - ENABLE_ADS
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
       - NEW_RELIC_LICENSE_KEY
       - NODE_ENV
       - PATREON_CLIENT_ID

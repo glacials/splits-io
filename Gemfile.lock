@@ -267,6 +267,10 @@ GEM
     omniauth (1.8.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
+    omniauth-google-oauth2 (0.5.3)
+      jwt (>= 1.5)
+      omniauth (>= 1.1.1)
+      omniauth-oauth2 (>= 1.5)
     omniauth-oauth2 (1.5.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.2)
@@ -484,6 +488,7 @@ DEPENDENCIES
   newrelic_rpm
   nilify_blanks
   omniauth
+  omniauth-google-oauth2
   omniauth-oauth2
   omniauth-twitch
   order_as_specified
@@ -515,4 +520,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.2
+   1.16.4
