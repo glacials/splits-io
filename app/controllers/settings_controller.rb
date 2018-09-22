@@ -9,7 +9,7 @@ class SettingsController < ApplicationController
       redirect_to(settings_path, alert: "Error: #{current_user.errors.full_messages.to_sentence}.")
       return
     end
-    redirect_to(settings_path, notice: 'Username updated!')
+    redirect_to(settings_path, notice: 'Username updated! 👵➡🐱')
   end
 
   def destroy

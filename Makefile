@@ -25,6 +25,7 @@ build:
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
 	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > .seed
+	docker-compose run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
 
 lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion

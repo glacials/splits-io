@@ -20,6 +20,18 @@ class TwitchUsersController < ApplicationController
 
   def unlink
     current_user.twitch.try(:destroy)
-    redirect_to settings_path, notice: 'Twitch account unlinked.'
+    redirect_to settings_path, notice: 'Twitch account unlinked! 🙅🔗'
+  end
+
+  private
+
+  def sign_in(user)
+    self.current_user = user
+    auth_session.persist!
+  end
+
+  def redirect_path
+    request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
+>>>>>>> Google linking and sign in; username changes
   end
 end
