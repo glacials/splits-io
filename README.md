@@ -6,16 +6,17 @@
 Splits I/O is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
 code. It's written in Ruby on Rails.
 
-Splits I/O currently supports splits from any timer that supports the [Splits I/O exchange format][exchange], on top of
-ShitSplit, Splitty, Llanfair2, FaceSplit, Portal2LiveTimer, LlanfairGered, Llanfair, Urn, LiveSplit, SplitterZ,
-TimeSplitTracker, and WSplit.
+Splits I/O supports uploading splits from any timer that supports the [Splits I/O Exchange Format][exchange] plus many
+proprietary timer formats like LiveSplit, WSplit, Llanfair, and more. A full list of supported timers can be viewed in
+the [FAQ][faq].
 
-[exchange]: ./public/schema
+[exchange]: /public/schema
+[faq]: https://splits.io/faq#programs
 
 ## API
 For full API documentation, see the [API readme][api-docs].
 
-[api-docs]: ./docs/api.md
+[api-docs]: /docs/api.md
 
 ## Local Development
 Splits I/O runs on Docker, which makes it easy and consistent to set up and run on any machine despite any unusual

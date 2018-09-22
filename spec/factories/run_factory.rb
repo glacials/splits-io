@@ -10,6 +10,7 @@ FactoryBot.define do
     llanfair:                 {filename: 'llanfair'},
     llanfair_gered:           {filename: 'llanfair_gered.lfs'},
     llanfair_gered_with_refs: {filename: 'llanfair_gered_with_refs.lfs'},
+    splitsio_exchange:        {filename: 'splitsio_exchange/b.json'},
     wsplit:                   {filename: 'wsplit'},
     timesplittracker:         {filename: 'timesplittracker.txt'},
 

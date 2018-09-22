@@ -57,7 +57,7 @@ article
         manual support for the following timers:
       .col-md-6
         ul.list-group.mb-4
-          - Run.programs.each do |program|
+          - (Run.programs - [SplitsIO]).each do |program|
             li.list-group-item = program
       p In LiveSplit, you can upload from within the program with a right click -> Share.
       .alert.alert-info

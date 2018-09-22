@@ -1,0 +1,70 @@
+{
+  "_schemaVersion": "v1.0.0",
+  "links": <%= {
+    splitsioID: @run.id36
+  }.to_json.html_safe %>,
+  "timer": <%= {
+    shortname: Run.program(@run.timer).to_sym.to_s,
+    longname: Run.program(@run.timer).to_s,
+    website: Run.program(@run.timer).website,
+    version: ''
+  }.to_json.html_safe %>,
+  "attempts": <%= {
+    total: @run.attempts,
+    histories: @run.histories.map do |history|
+      {
+        attemptNumber: history.attempt_number,
+        duration: {
+          realtimeMS: history.duration_ms(Run::REAL),
+          gametimeMS: history.duration_ms(Run::GAME)
+        }
+      }
+    end
+  }.to_json.html_safe %>,
+  <% if @run.image_url.present? %>
+    "imageURL": "<%= @run.image_url %>",
+  <% end %>
+  <% if @run.video_url.present? %>
+    "videoURL": "<%= @run.video_url %>",
+  <% end %>
+  "game": {
+    "longname": "<%= @run.game.name %>",
+    <% if @run.game.shortname.present? %>
+      "shortname": "<%= @run.game.shortname %>",
+    <% end %>
+    "links": {
+      "splitsioID": "<%= @run.game.id %>"
+    }
+  },
+  "category": <%= {
+    longname: @run.category.name,
+    shortname: @run.category.shortname,
+    links: {
+      splitsioID: @run.category.id.to_s
+    }
+  }.to_json.html_safe %>,
+  "runners": <%= [
+    {
+      longname: @run.user.name,
+      shortname: @run.user.name,
+      links: {
+        splitsioID: @run.user.id.to_s,
+        twitchID: @run.user.twitch.twitch_id
+      }
+    }
+  ].to_json.html_safe %>,
+  "segments": <%= @run.segments.map do |segment|
+    {
+      name: segment.name,
+      endedAt: {
+        realtimeMS: segment.end_ms(Run::REAL),
+        gametimeMS: segment.end_ms(Run::GAME)
+      },
+      bestDuration: {
+        realtimeMS: segment.shortest_duration_ms(Run::REAL),
+        gametimeMS: segment.shortest_duration_ms(Run::GAME)
+      },
+      isSkipped: segment.skipped?(Run::REAL)
+    }
+  end.to_json.html_safe %>
+}
