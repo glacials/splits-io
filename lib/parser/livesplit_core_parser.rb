@@ -9,6 +9,17 @@ class Parser
     parse_result = LiveSplitCore::Run.parse(run_string, run_string.bytesize, '', false)
     return nil unless parse_result.parsed_successfully
     program = parse_result.timer_kind
+
+    if Run.program_from_attribute(:to_s, program).nil?
+      raise program
+    end
+
+    if parse_result.is_generic_timer && !Run.program_from_attribute(:to_s, program).exchangeable?
+      # We got a file in the exchange format, but the reported timer doesn't support the exchange format. Wipe the timer
+      # to stop from serving the exchange format when a user asks to download the file in the source timer's format.
+      program = ExchangeFormat.to_s
+    end
+
     run = parse_result.unwrap
 
     run_object = {

@@ -1,10 +1,10 @@
-module SplitsIO
+module ExchangeFormat
   def self.to_s
     'Splits I/O Exchange Format'
   end
 
   def self.to_sym
-    :splitsio
+    :exchange
   end
 
   def self.file_extension
@@ -19,7 +19,13 @@ module SplitsIO
     'application/splitsio'
   end
 
-  def self.exportable
+  def self.exportable?
+    true
+  end
+
+  # exchangeable? is true if the timer supports the Splits I/O Exchange Format for importing and exporting, false
+  # otherwise. See: https://github.com/glacials/splits-io/tree/master/public/schema
+  def self.exchangeable?
     true
   end
 end

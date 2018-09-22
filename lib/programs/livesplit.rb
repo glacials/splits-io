@@ -19,7 +19,13 @@ module LiveSplit
     'application/livesplit'
   end
 
-  def self.exportable
+  def self.exportable?
+    true
+  end
+
+  # exchangeable? is true if the timer supports the Splits I/O Exchange Format for importing and exporting, false
+  # otherwise. See: https://github.com/glacials/splits-io/tree/master/public/schema
+  def self.exchangeable?
     true
   end
 end
