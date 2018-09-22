@@ -46,7 +46,7 @@ class Run < ApplicationRecord
     def programs
       [
         SplitsIO, LiveSplit, Llanfair, LlanfairGered, Llanfair2, WSplit, TimeSplitTracker, Portal2LiveTimer, Urn,
-        SplitterZ, Splitty, FaceSplit, ShitSplit
+        SplitterZ, Splitty, FaceSplit, ShitSplit, Worstrun, SourceLiveTimer
       ]
     end
 
