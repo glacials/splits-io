@@ -1,10 +1,10 @@
 module SourceLiveTimer
   def self.to_s
-    'Source Live Timer'
+    'SourceLiveTimer'
   end
 
   def self.to_sym
-    :source_live_timer
+    :sourcelivetimer
   end
 
   def self.file_extension
