@@ -358,7 +358,7 @@
     "segments": {
       "type": "array",
       "title": "Segments",
-      "description": "Segments is an array of all segments for this run.",
+      "description": "Segments is an array of all segments for this run, ordered from first to last.",
       "items": {
         "type": "object",
         "title": "Segment",
