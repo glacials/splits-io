@@ -11,7 +11,7 @@ class Parser
     program = parse_result.timer_kind
 
     if Run.program_from_attribute(:to_s, program).nil?
-      raise program
+      program = ExchangeFormat.to_s
     end
 
     if parse_result.is_generic_timer && !Run.program_from_attribute(:to_s, program).exchangeable?
