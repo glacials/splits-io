@@ -43,7 +43,7 @@
       splitsioID: @run.category.id.to_s
     }
   }.to_json.html_safe %>,
-  "runners": <%= [
+  "runners": [<% if @run.user.present?
     {
       longname: @run.user.name,
       shortname: @run.user.name,
@@ -51,8 +51,8 @@
         splitsioID: @run.user.id.to_s,
         twitchID: @run.user.twitch.twitch_id
       }
-    }
-  ].to_json.html_safe %>,
+    }.to_json.html_safe
+  end %>],
   "segments": <%= @run.segments.map do |segment|
     {
       name: segment.name,

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe 'runs/urn' do
-  it 'renders the Urn template' do
+RSpec.describe 'runs/exchange' do
+  it 'renders the Splits I/O Exchange Format template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 
-    expect(view).to render_template('runs/urn')
+    expect(view).to render_template('runs/exchange')
   end
 end
 
@@ -33,6 +33,15 @@ RSpec.describe 'runs/timesplittracker' do
     render
 
     expect(view).to render_template('runs/timesplittracker')
+  end
+end
+
+RSpec.describe 'runs/urn' do
+  it 'renders the Urn template' do
+    assign(:run, FactoryBot.create(:run, :parsed))
+    render
+
+    expect(view).to render_template('runs/urn')
   end
 end
 

@@ -258,8 +258,8 @@ describe RunsController do
     let(:run) { FactoryBot.create(:run, :parsed) }
     let(:response) { get(:download, params: {run: run.id36, timer: timer}) }
 
-    context 'as Urn' do
-      let(:timer) { 'urn' }
+    context 'as the Splits I/O Exchange Format' do
+      let(:timer) { 'exchange' }
 
       it 'returns a 200' do
         expect(response).to have_http_status(200)
@@ -284,6 +284,14 @@ describe RunsController do
 
     context 'as Time Split Tracker' do
       let(:timer) { 'splitterz' }
+
+      it 'returns a 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'as Urn' do
+      let(:timer) { 'urn' }
 
       it 'returns a 200' do
         expect(response).to have_http_status(200)

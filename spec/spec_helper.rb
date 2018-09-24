@@ -1,5 +1,7 @@
-require 'simplecov'
 require 'json-schema-rspec'
+require 'pry'
+require 'simplecov'
+
 SimpleCov.start do
   add_filter '/lib/parser/'
 end
@@ -32,6 +34,8 @@ RSpec.configure do |config|
   config.include JSON::SchemaMatchers
   # schema file
   config.json_schemas = {
+    exchange: 'public/schema/run_v1.0.0.json',
+
     game: 'spec/support/views/api/v4/games/show.json',
     game_categories: 'spec/support/views/api/v4/games/categories/index.json',
     game_runners: 'spec/support/views/api/v4/games/runners/index.json',
