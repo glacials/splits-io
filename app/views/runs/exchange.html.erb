@@ -27,22 +27,26 @@
   <% if @run.video_url.present? %>
     "videoURL": "<%= @run.video_url %>",
   <% end %>
-  "game": {
-    "longname": "<%= @run.game.name %>",
-    <% if @run.game.shortname.present? %>
-      "shortname": "<%= @run.game.shortname %>",
-    <% end %>
-    "links": {
-      "splitsioID": "<%= @run.game.id %>"
-    }
-  },
-  "category": <%= {
-    longname: @run.category.name,
-    shortname: @run.category.shortname,
-    links: {
-      splitsioID: @run.category.id.to_s
-    }
-  }.to_json.html_safe %>,
+  <% if @run.game.present? %>
+    "game": {
+      "longname": "<%= @run.game.name %>",
+      <% if @run.game.shortname.present? %>
+        "shortname": "<%= @run.game.shortname %>",
+      <% end %>
+      "links": {
+        "splitsioID": "<%= @run.game.id %>"
+      }
+    },
+  <% end %>
+  <% if @run.category.present? %>
+    "category": <%= {
+      longname: @run.category.name,
+      shortname: @run.category.shortname,
+      links: {
+        splitsioID: @run.category.id.to_s
+      }
+    }.to_json.html_safe %>,
+  <% end %>
   "runners": [<% if @run.user.present?
     {
       longname: @run.user.name,
