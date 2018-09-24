@@ -1,4 +1,4 @@
-module FaceSplit
+module FloatingSpeedrunTimer
   def self.to_s
     'Floating Speedrun Timer'
   end
