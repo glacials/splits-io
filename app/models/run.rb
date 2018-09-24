@@ -45,13 +45,17 @@ class Run < ApplicationRecord
   class << self
     def programs
       [
-        LiveSplit, Llanfair, LlanfairGered, Llanfair2, WSplit, TimeSplitTracker, Portal2LiveTimer, Urn, SplitterZ,
-        Splitty, FaceSplit, ShitSplit
+        ExchangeFormat, LiveSplit, Llanfair, LlanfairGered, Llanfair2, WSplit, TimeSplitTracker, Portal2LiveTimer, Urn,
+        SplitterZ, Splitty, FaceSplit, ShitSplit, Worstrun, SourceLiveTimer
       ]
     end
 
     def exportable_programs
-      Run.programs.select(&:exportable)
+      Run.programs.select(&:exportable?)
+    end
+
+    def exchangeable_programs
+      Run.programs.select(&:exchangeable?)
     end
 
     def program(string_or_symbol)

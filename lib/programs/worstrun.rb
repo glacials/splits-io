@@ -1,22 +1,22 @@
-module Portal2LiveTimer
+module Worstrun
   def self.to_s
-    'Portal 2 Live Timer'
+    'worstrun'
   end
 
   def self.to_sym
-    :portal_2_live_timer
+    :worstrun
   end
 
   def self.file_extension
-    'csv'
+    'json'
   end
 
   def self.website
-    'https://bitbucket.org/nick_timkovich/portal-2-live-timer/wiki/Home'
+    'https://github.com/Muffindrake/worstrun'
   end
 
   def self.content_type
-    'application/portal-2-live-timer'
+    'application/worstrun'
   end
 
   def self.exportable?

@@ -1,22 +1,22 @@
-module Portal2LiveTimer
+module SourceLiveTimer
   def self.to_s
-    'Portal 2 Live Timer'
+    'SourceLiveTimer'
   end
 
   def self.to_sym
-    :portal_2_live_timer
+    :sourcelivetimer
   end
 
   def self.file_extension
-    'csv'
+    'sourcelivetimer'
   end
 
   def self.website
-    'https://bitbucket.org/nick_timkovich/portal-2-live-timer/wiki/Home'
+    'https://github.com/iVerb1/SourceLiveTimer'
   end
 
   def self.content_type
-    'application/portal-2-live-timer'
+    'application/source-live-timer'
   end
 
   def self.exportable?

@@ -1,4 +1,6 @@
 # API v4
+The Splits I/O API supports retrieving runs, runners, games, and categories, as well as uploading, disowning, and deleting
+runs. If you only want to upload runs, skip to [Uploading][uploading].
 
 ## IDs
 Resources are identifyable *only* by the following attributes:
@@ -87,21 +89,22 @@ render, so please only request it if you are actually using it. Be prepared for 
 have a lot of historical information present.
 
 If an `Accept` header is present, Splits I/O will try to render the run file in the format specified rather than JSON. A full list of valid values is located below.
-If the `Accept` header is valid, the `Content-Type` header in the response will be set appropriately and the run will be rendered in the specified format, if
+If the `Accept` header is valid, the `Content-Type` header in the response will be set appropriately and the run will be rendered in the specified format. If
 an invalid `Accept` header is supplied, the response `Content-Type` header will be `application/json`, and the status code will be a 406.
 In the 406 reponse there will be an array of values that can be rendered.
 
-| `Accept` Headers Supported       | Return Format      | Return `Content-Type`                 |
-|---------------------------------:|:-------------------|:---------------------------------     |
-| None                             | JSON               | `application/json`                    |
-| `application/json`               | JSON               | `application/json`                    |
-| `application/wsplit`             | WSplit             | `application/wsplit`                  |
-| `application/time-split-tracker` | Time Split Tracker | `application/time-split-tracker`      |
-| `application/splitterz`          | SplitterZ          | `application/splitterz`               |
-| `application/livesplit`          | LiveSplit          | `application/livesplit`               |
-| `application/urn`                | Urn                | `application/urn`                     |
-| `application/llanfair-gered`     | Llanfair-Gered     | `application/llanfair-gered`          |
-| `application/original-timer`     | Original Run File  | One of the following `Content-Type`'s |
+| `Accept` Headers Supported       | Return Format              | Return `Content-Type`                 |
+|---------------------------------:|:---------------------------|:--------------------------------------|
+| None                             | JSON                       | `application/json`                    |
+| `application/json`               | JSON                       | `application/json`                    |
+| `application/splitsio`           | Splits I/O Exchange Format | `application/splitsio`                |
+| `application/wsplit`             | WSplit                     | `application/wsplit`                  |
+| `application/time-split-tracker` | Time Split Tracker         | `application/time-split-tracker`      |
+| `application/splitterz`          | SplitterZ                  | `application/splitterz`               |
+| `application/livesplit`          | LiveSplit                  | `application/livesplit`               |
+| `application/urn`                | Urn                        | `application/urn`                     |
+| `application/llanfair-gered`     | Llanfair-Gered             | `application/llanfair-gered`          |
+| `application/original-timer`     | Original Run File          | One of the following `Content-Type`'s |
 
 If the accept header is `application/original-timer` then the original file uploaded will be returned as is. Thus it is possible to get back
 any of the following `Content-Type`s.
@@ -114,8 +117,11 @@ any of the following `Content-Type`s.
 * `application/llanfair`
 * `application/urn`
 * `application/livesplit`
+* `application/source-live-timer`
+* `application/splitsio`
 * `application/splitterz`
 * `application/time-split-tracker`
+* `application/worstrun`
 * `application/wsplit`
 
 ## Runner
@@ -231,11 +237,19 @@ Each presigned request can only be successfully made once, and expires if not ma
 
 [s3]: https://aws.amazon.com/s3
 
+### File Format
+The preferred format for uploading run files is the [Splits I/O Exchange Format][exchange-format], which is a standard
+JSON schema not specific to any one timer. Splits I/O also knows how to parse some proprietary timer formats via
+livesplit-core, all documented in the [FAQ][faq].
+
+[exchange-format]: /public/schema
+[faq]: https://splits.io/faq#programs
+
 ## User Authentication and Authorization
 If you want to upload, disown, or delete runs for a user (e.g. from within a timer), you have two options.
 If you only need to know who a user is on Splits I/O, skip to advanced.
 
-### Simple option
+### Simple Option
 Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
 in when they visit it, their account will automatically claim the run. If they are not logged in, their browser will
 save the claim token in LocalStorage and show a prompt allowing them to claim the run after logging in, immediately or
@@ -244,7 +258,7 @@ at any later time.
 This is the far easier method to implement, but the user must open the run in their web browser for it to become theirs.
 If you prefer to upload runs in the background, this method isn't for you.
 
-### Advanced option
+### Advanced Option
 The advanced option is a standard OAuth2 flow. You can request permission from the user to upload runs to their account
 on their behalf. If they accept, you will receive an OAuth token which you can include in your run requests in
 order to perform actions as that user.
@@ -470,3 +484,4 @@ save you a step.
 [runner]: #runner
 [game]: #game
 [category]: #category
+[uploading]: #uploading

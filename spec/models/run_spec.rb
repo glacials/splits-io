@@ -527,4 +527,54 @@ describe Run, type: :model do
       expect(run.total_playtime_ms(Run::REAL)).to eq 0
     end
   end
+
+  context 'from the Splits I/O Exchange Format' do
+    let(:run) do
+      r = FactoryBot.create(:splitsio_exchange_run)
+      r.parse_into_db
+      r.reload
+      r.reload
+      r
+    end
+
+    it 'has the correct splits' do
+      expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
+        [0, "1", 8247],
+        [1, "2", 2115],
+        [2, "3", 6014],
+        [3, "4", 6766],
+        [4, "5", 3172],
+        [5, "6", 5785],
+        [6, "7", 4189],
+        [7, "8", 3935],
+        [8, "9", 5792],
+        [9, "10", 6317],
+        [10, "11", 4719],
+        [11, "12", 2649],
+        [12, "13", 6549],
+        [13, "14", 2077],
+        [14, "15", 1207],
+        [15, "16", 5542],
+        [16, "17", 1385],
+        [17, "18", 13882],
+        [18, "19", 9668],
+        [19, "20", 5644],
+        [20, "21", 3582],
+        [21, "22", 5649],
+        [22, "23", 5329],
+        [23, "24", 5394],
+        [24, "25", 5614],
+        [25, "26", 8805],
+        [26, "27", 4104],
+        [27, "28", 9506],
+        [28, "29", 15657],
+        [29, "30", 4756],
+        [30, "31", 6542]
+      ]
+    end
+
+    it 'reports its total playtime' do
+      expect(run.total_playtime_ms(Run::REAL)).to eq 0
+    end
+  end
 end

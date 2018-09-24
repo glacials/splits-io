@@ -1,31 +1,31 @@
-module Portal2LiveTimer
+module ExchangeFormat
   def self.to_s
-    'Portal 2 Live Timer'
+    'Splits I/O Exchange Format'
   end
 
   def self.to_sym
-    :portal_2_live_timer
+    :exchange
   end
 
   def self.file_extension
-    'csv'
+    'json'
   end
 
   def self.website
-    'https://bitbucket.org/nick_timkovich/portal-2-live-timer/wiki/Home'
+    'https://github.com/glacials/splits-io/tree/master/public/schema'
   end
 
   def self.content_type
-    'application/portal-2-live-timer'
+    'application/splitsio'
   end
 
   def self.exportable?
-    false
+    true
   end
 
   # exchangeable? is true if the timer supports the Splits I/O Exchange Format for importing and exporting, false
   # otherwise. See: https://github.com/glacials/splits-io/tree/master/public/schema
   def self.exchangeable?
-    false
+    true
   end
 end

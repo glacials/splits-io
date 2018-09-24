@@ -6,6 +6,9 @@ module LiveSplitCore
         extend FFI::Library
         ffi_lib File.expand_path('../liblivesplit_core.so', __FILE__)
     
+        attach_function :Analysis_calculate_sum_of_best, [:pointer, :bool, :bool, :uint8], :pointer
+        attach_function :Analysis_calculate_total_playtime_for_run, [:pointer], :pointer
+        attach_function :Analysis_calculate_total_playtime_for_timer, [:pointer], :pointer
         attach_function :AtomicDateTime_drop, [:pointer], :void
         attach_function :AtomicDateTime_is_synchronized, [:pointer], :bool
         attach_function :AtomicDateTime_to_rfc2822, [:pointer], :string
@@ -67,6 +70,10 @@ module LiveSplitCore
         attach_function :DetailedTimerComponentState_comparison2_time, [:pointer], :string
         attach_function :DetailedTimerComponentState_icon_change, [:pointer], :string
         attach_function :DetailedTimerComponentState_segment_name, [:pointer], :string
+        attach_function :FuzzyList_new, [], :pointer
+        attach_function :FuzzyList_drop, [:pointer], :void
+        attach_function :FuzzyList_search, [:pointer, :string, :size_t], :string
+        attach_function :FuzzyList_push, [:pointer, :string], :void
         attach_function :GeneralLayoutSettings_default, [], :pointer
         attach_function :GeneralLayoutSettings_drop, [:pointer], :void
         attach_function :GraphComponent_new, [], :pointer
@@ -118,6 +125,7 @@ module LiveSplitCore
         attach_function :ParseRunResult_unwrap, [:pointer], :pointer
         attach_function :ParseRunResult_parsed_successfully, [:pointer], :bool
         attach_function :ParseRunResult_timer_kind, [:pointer], :string
+        attach_function :ParseRunResult_is_generic_timer, [:pointer], :bool
         attach_function :PossibleTimeSaveComponent_new, [], :pointer
         attach_function :PossibleTimeSaveComponent_drop, [:pointer], :void
         attach_function :PossibleTimeSaveComponent_into_generic, [:pointer], :pointer
@@ -152,6 +160,7 @@ module LiveSplitCore
         attach_function :Run_metadata, [:pointer], :pointer
         attach_function :Run_offset, [:pointer], :pointer
         attach_function :Run_len, [:pointer], :size_t
+        attach_function :Run_has_been_modified, [:pointer], :bool
         attach_function :Run_segment, [:pointer, :size_t], :pointer
         attach_function :Run_attempt_history_len, [:pointer], :size_t
         attach_function :Run_attempt_history_index, [:pointer, :size_t], :pointer
@@ -162,6 +171,7 @@ module LiveSplitCore
         attach_function :Run_push_segment, [:pointer, :pointer], :void
         attach_function :Run_set_game_name, [:pointer, :string], :void
         attach_function :Run_set_category_name, [:pointer, :string], :void
+        attach_function :Run_mark_as_modified, [:pointer], :void
         attach_function :RunEditor_new, [:pointer], :pointer
         attach_function :RunEditor_close, [:pointer], :pointer
         attach_function :RunEditor_state_as_json, [:pointer], :string
@@ -175,6 +185,13 @@ module LiveSplitCore
         attach_function :RunEditor_parse_and_set_attempt_count, [:pointer, :string], :bool
         attach_function :RunEditor_set_game_icon, [:pointer, :pointer, :size_t], :void
         attach_function :RunEditor_remove_game_icon, [:pointer], :void
+        attach_function :RunEditor_set_run_id, [:pointer, :string], :void
+        attach_function :RunEditor_set_region_name, [:pointer, :string], :void
+        attach_function :RunEditor_set_platform_name, [:pointer, :string], :void
+        attach_function :RunEditor_set_emulator_usage, [:pointer, :bool], :void
+        attach_function :RunEditor_set_variable, [:pointer, :string, :string], :void
+        attach_function :RunEditor_remove_variable, [:pointer, :string], :void
+        attach_function :RunEditor_clear_metadata, [:pointer], :void
         attach_function :RunEditor_insert_segment_above, [:pointer], :void
         attach_function :RunEditor_insert_segment_below, [:pointer], :void
         attach_function :RunEditor_remove_segments, [:pointer], :void
@@ -191,6 +208,7 @@ module LiveSplitCore
         attach_function :RunEditor_import_comparison, [:pointer, :pointer, :string], :bool
         attach_function :RunEditor_remove_comparison, [:pointer, :string], :void
         attach_function :RunEditor_rename_comparison, [:pointer, :string, :string], :bool
+        attach_function :RunEditor_move_comparison, [:pointer, :size_t, :size_t], :bool
         attach_function :RunEditor_clear_history, [:pointer], :void
         attach_function :RunEditor_clear_times, [:pointer], :void
         attach_function :RunEditor_clean_sum_of_best, [:pointer], :pointer
@@ -221,8 +239,8 @@ module LiveSplitCore
         attach_function :SeparatorComponent_drop, [:pointer], :void
         attach_function :SeparatorComponent_into_generic, [:pointer], :pointer
         attach_function :SettingValue_from_bool, [:bool], :pointer
-        attach_function :SettingValue_from_uint, [:uint64], :pointer
-        attach_function :SettingValue_from_int, [:int64], :pointer
+        attach_function :SettingValue_from_uint, [:uint32], :pointer
+        attach_function :SettingValue_from_int, [:int32], :pointer
         attach_function :SettingValue_from_string, [:string], :pointer
         attach_function :SettingValue_from_optional_string, [:string], :pointer
         attach_function :SettingValue_from_optional_empty_string, [], :pointer
@@ -296,6 +314,7 @@ module LiveSplitCore
         attach_function :Time_game_time, [:pointer], :pointer
         attach_function :Time_index, [:pointer, :uint8], :pointer
         attach_function :TimeSpan_from_seconds, [:double], :pointer
+        attach_function :TimeSpan_parse, [:string], :pointer
         attach_function :TimeSpan_drop, [:pointer], :void
         attach_function :TimeSpan_clone, [:pointer], :pointer
         attach_function :TimeSpan_total_seconds, [:pointer], :double
@@ -310,6 +329,7 @@ module LiveSplitCore
         attach_function :Timer_loading_times, [:pointer], :pointer
         attach_function :Timer_current_phase, [:pointer], :uint8
         attach_function :Timer_get_run, [:pointer], :pointer
+        attach_function :Timer_save_as_lss, [:pointer], :string
         attach_function :Timer_print_debug, [:pointer], :void
         attach_function :Timer_current_time, [:pointer], :pointer
         attach_function :Timer_replace_run, [:pointer, :pointer, :bool], :bool
@@ -320,6 +340,7 @@ module LiveSplitCore
         attach_function :Timer_skip_split, [:pointer], :void
         attach_function :Timer_undo_split, [:pointer], :void
         attach_function :Timer_reset, [:pointer, :bool], :void
+        attach_function :Timer_reset_and_set_attempt_as_pb, [:pointer], :void
         attach_function :Timer_pause, [:pointer], :void
         attach_function :Timer_resume, [:pointer], :void
         attach_function :Timer_toggle_pause, [:pointer], :void
@@ -334,6 +355,7 @@ module LiveSplitCore
         attach_function :Timer_resume_game_time, [:pointer], :void
         attach_function :Timer_set_game_time, [:pointer, :pointer], :void
         attach_function :Timer_set_loading_times, [:pointer, :pointer], :void
+        attach_function :Timer_mark_as_unmodified, [:pointer], :void
         attach_function :TimerComponent_new, [], :pointer
         attach_function :TimerComponent_drop, [:pointer], :void
         attach_function :TimerComponent_into_generic, [:pointer], :pointer
@@ -375,6 +397,93 @@ module LiveSplitCore
         attr_accessor :ptr
         def initialize(ptr)
             @ptr = ptr
+        end
+    end
+
+    # The analysis module provides a variety of functions for calculating
+    # information about runs.
+    class AnalysisRef
+        attr_accessor :handle
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The analysis module provides a variety of functions for calculating
+    # information about runs.
+    class AnalysisRefMut < AnalysisRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The analysis module provides a variety of functions for calculating
+    # information about runs.
+    class Analysis < AnalysisRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = Analysis.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        # Calculates the Sum of Best Segments for the timing method provided. This is
+        # the fastest time possible to complete a run of a category, based on
+        # information collected from all the previous attempts. This often matches up
+        # with the sum of the best segment times of all the segments, but that may not
+        # always be the case, as skipped segments may introduce combined segments that
+        # may be faster than the actual sum of their best segment times. The name is
+        # therefore a bit misleading, but sticks around for historical reasons. You
+        # can choose to do a simple calculation instead, which excludes the Segment
+        # History from the calculation process. If there's an active attempt, you can
+        # choose to take it into account as well. Can return nil.
+        # @param [RunRef] run
+        # @param [Boolean] simple_calculation
+        # @param [Boolean] use_current_run
+        # @param [Integer] method
+        # @return [TimeSpan, nil]
+        def self.calculate_sum_of_best(run, simple_calculation, use_current_run, method)
+            if run.handle.ptr == nil
+                raise "run is disposed"
+            end
+            result = TimeSpan.new(Native.Analysis_calculate_sum_of_best(run.handle.ptr, simple_calculation, use_current_run, method))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Calculates the total playtime of the passed Run.
+        # @param [RunRef] run
+        # @return [TimeSpan]
+        def self.calculate_total_playtime_for_run(run)
+            if run.handle.ptr == nil
+                raise "run is disposed"
+            end
+            result = TimeSpan.new(Native.Analysis_calculate_total_playtime_for_run(run.handle.ptr))
+            result
+        end
+        # Calculates the total playtime of the passed Timer.
+        # @param [TimerRef] timer
+        # @return [TimeSpan]
+        def self.calculate_total_playtime_for_timer(timer)
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = TimeSpan.new(Native.Analysis_calculate_total_playtime_for_timer(timer.handle.ptr))
+            result
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
         end
     end
 
@@ -1458,6 +1567,82 @@ module LiveSplitCore
         end
     end
 
+    # With a Fuzzy List, you can implement a fuzzy searching algorithm. The list
+    # stores all the items that can be searched for. With the `search` method you
+    # can then execute the actual fuzzy search which returns a list of all the
+    # elements found. This can be used to implement searching in a list of games.
+    class FuzzyListRef
+        attr_accessor :handle
+        # Searches for the pattern provided in the list. A list of all the
+        # matching elements is returned. The returned list has a maximum amount of
+        # elements provided to this method.
+        # @param [String] pattern
+        # @param [Integer] max
+        # @return [String]
+        def search(pattern, max)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.FuzzyList_search(@handle.ptr, pattern, max)
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # With a Fuzzy List, you can implement a fuzzy searching algorithm. The list
+    # stores all the items that can be searched for. With the `search` method you
+    # can then execute the actual fuzzy search which returns a list of all the
+    # elements found. This can be used to implement searching in a list of games.
+    class FuzzyListRefMut < FuzzyListRef
+        # Adds a new element to the list.
+        # @param [String] text
+        def push(text)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.FuzzyList_push(@handle.ptr, text)
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # With a Fuzzy List, you can implement a fuzzy searching algorithm. The list
+    # stores all the items that can be searched for. With the `search` method you
+    # can then execute the actual fuzzy search which returns a list of all the
+    # elements found. This can be used to implement searching in a list of games.
+    class FuzzyList < FuzzyListRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.FuzzyList_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = FuzzyList.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        # Creates a new Fuzzy List.
+        # @return [FuzzyList]
+        def self.create()
+            result = FuzzyList.new(Native.FuzzyList_new())
+            result
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # The general settings of the layout that apply to all components.
     class GeneralLayoutSettingsRef
         attr_accessor :handle
@@ -2196,13 +2381,26 @@ module LiveSplitCore
             result = Native.ParseRunResult_parsed_successfully(@handle.ptr)
             result
         end
-        # Accesses the name of the Parser that parsed the Run.
+        # Accesses the name of the Parser that parsed the Run. You may not call this
+        # if the Run wasn't parsed successfully.
         # @return [String]
         def timer_kind()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
             result = Native.ParseRunResult_timer_kind(@handle.ptr)
+            result
+        end
+        # Checks whether the Parser parsed a generic timer. Since a generic timer can
+        # have any name, it may clash with the specific timer formats that
+        # livesplit-core supports. With this function you can determine if a generic
+        # timer format was parsed, instead of one of the more specific timer formats.
+        # @return [Boolean]
+        def is_generic_timer()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.ParseRunResult_is_generic_timer(@handle.ptr)
             result
         end
         def initialize(ptr)
@@ -2760,6 +2958,16 @@ module LiveSplitCore
             result = Native.Run_len(@handle.ptr)
             result
         end
+        # Returns whether the Run has been modified and should be saved so that the
+        # changes don't get lost.
+        # @return [Boolean]
+        def has_been_modified()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.Run_has_been_modified(@handle.ptr)
+            result
+        end
         # Accesses a certain segment of this Run. You may not provide an out of bounds
         # index.
         # @param [Integer] index
@@ -2793,7 +3001,9 @@ module LiveSplitCore
             result = AttemptRef.new(Native.Run_attempt_history_index(@handle.ptr, index))
             result
         end
-        # Saves the Run as a LiveSplit splits file (*.lss).
+        # Saves a Run as a LiveSplit splits file (*.lss). If the run is actively in
+        # use by a timer, use the appropriate method on the timer instead, in order to
+        # properly save the current attempt as well.
         # @return [String]
         def save_as_lss()
             if @handle.ptr == nil
@@ -2866,6 +3076,14 @@ module LiveSplitCore
                 raise "this is disposed"
             end
             Native.Run_set_category_name(@handle.ptr, category)
+        end
+        # Marks the Run as modified, so that it is known that there are changes
+        # that should be saved.
+        def mark_as_modified()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.Run_mark_as_modified(@handle.ptr)
         end
         def initialize(ptr)
             @handle = LSCHandle.new ptr
@@ -3059,6 +3277,71 @@ module LiveSplitCore
             end
             Native.RunEditor_remove_game_icon(@handle.ptr)
         end
+        # Sets the speedrun.com Run ID of the run. You need to ensure that the
+        # record on speedrun.com matches up with the Personal Best of this run.
+        # This may be empty if there's no association.
+        # @param [String] name
+        def set_run_id(name)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_set_run_id(@handle.ptr, name)
+        end
+        # Sets the name of the region this game is from. This may be empty if it's
+        # not specified.
+        # @param [String] name
+        def set_region_name(name)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_set_region_name(@handle.ptr, name)
+        end
+        # Sets the name of the platform this game is run on. This may be empty if
+        # it's not specified.
+        # @param [String] name
+        def set_platform_name(name)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_set_platform_name(@handle.ptr, name)
+        end
+        # Specifies whether this speedrun is done on an emulator. Keep in mind
+        # that false may also mean that this information is simply not known.
+        # @param [Boolean] uses_emulator
+        def set_emulator_usage(uses_emulator)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_set_emulator_usage(@handle.ptr, uses_emulator)
+        end
+        # Sets the variable with the name specified to the value specified. A
+        # variable is an arbitrary key value pair storing additional information
+        # about the category. An example of this may be whether Amiibos are used
+        # in this category. If the variable doesn't exist yet, it is being
+        # inserted.
+        # @param [String] name
+        # @param [String] value
+        def set_variable(name, value)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_set_variable(@handle.ptr, name, value)
+        end
+        # Removes the variable with the name specified.
+        # @param [String] name
+        def remove_variable(name)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_remove_variable(@handle.ptr, name)
+        end
+        # Resets all the Metadata Information.
+        def clear_metadata()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_clear_metadata(@handle.ptr)
+        end
         # Inserts a new empty segment above the active segment and adjusts the
         # Run's history information accordingly. The newly created segment is then
         # the only selected segment and also the active segment.
@@ -3221,6 +3504,20 @@ module LiveSplitCore
                 raise "this is disposed"
             end
             result = Native.RunEditor_rename_comparison(@handle.ptr, old_name, new_name)
+            result
+        end
+        # Reorders the custom comparisons by moving the comparison with the source
+        # index specified to the destination index specified. Returns false if one
+        # of the indices is invalid. The indices are based on the comparison names of
+        # the Run Editor's state.
+        # @param [Integer] src_index
+        # @param [Integer] dst_index
+        # @return [Boolean]
+        def move_comparison(src_index, dst_index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.RunEditor_move_comparison(@handle.ptr, src_index, dst_index)
             result
         end
         # Clears out the Attempt History and the Segment Histories of all the
@@ -5069,6 +5366,17 @@ module LiveSplitCore
             result = TimeSpan.new(Native.TimeSpan_from_seconds(seconds))
             result
         end
+        # Parses a Time Span from a string. Returns nil if the time can't be
+        # parsed.
+        # @param [String] text
+        # @return [TimeSpan, nil]
+        def self.parse(text)
+            result = TimeSpan.new(Native.TimeSpan_parse(text))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
         def initialize(ptr)
             handle = LSCHandle.new ptr
             @handle = handle
@@ -5143,6 +5451,15 @@ module LiveSplitCore
                 raise "this is disposed"
             end
             result = RunRef.new(Native.Timer_get_run(@handle.ptr))
+            result
+        end
+        # Saves the Run in use by the Timer as a LiveSplit splits file (*.lss).
+        # @return [String]
+        def save_as_lss()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.Timer_save_as_lss(@handle.ptr)
             result
         end
         # Prints out debug information representing the whole state of the Timer. This
@@ -5262,6 +5579,15 @@ module LiveSplitCore
             end
             Native.Timer_reset(@handle.ptr, update_splits)
         end
+        # Resets the current attempt if there is one in progress. The splits are
+        # updated such that the current attempt's split times are being stored as
+        # the new Personal Best.
+        def reset_and_set_attempt_as_pb()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.Timer_reset_and_set_attempt_as_pb(@handle.ptr)
+        end
         # Pauses an active attempt that is not paused.
         def pause()
             if @handle.ptr == nil
@@ -5361,7 +5687,7 @@ module LiveSplitCore
             Native.Timer_resume_game_time(@handle.ptr)
         end
         # Sets the Game Time to the time specified. This also works if the Game
-        # Time is paused, which can be used as away of updating the Game Timer
+        # Time is paused, which can be used as a way of updating the Game Timer
         # periodically without it automatically moving forward. This ensures that
         # the Game Timer never shows any time that is not coming from the game.
         # @param [TimeSpanRef] time
@@ -5386,6 +5712,14 @@ module LiveSplitCore
                 raise "time is disposed"
             end
             Native.Timer_set_loading_times(@handle.ptr, time.handle.ptr)
+        end
+        # Marks the Run as unmodified, so that it is known that all the changes
+        # have been saved.
+        def mark_as_unmodified()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.Timer_mark_as_unmodified(@handle.ptr)
         end
         def initialize(ptr)
             @handle = LSCHandle.new ptr

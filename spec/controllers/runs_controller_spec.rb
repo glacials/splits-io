@@ -24,7 +24,7 @@ describe RunsController do
     let(:response) { get(:show, params: {run: id}) }
 
     context 'for a nonexisting run' do
-      let(:id) { '999' }
+      let(:id) { 'an impossible run id' }
 
       it 'returns a 404' do
         expect(response).to have_http_status(404)
