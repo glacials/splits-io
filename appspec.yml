@@ -8,3 +8,7 @@ hooks:
     - location: scripts/start_container.sh
       timeout: 600
       runas: root
+  ApplicationStop:
+    - location: scripts/stop_container.sh
+      timeout: 600
+      runas: root
