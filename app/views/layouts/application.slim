@@ -67,7 +67,10 @@ html
             - if logged_in?
               li.nav-item.dropdown class=('active' if on_a_profile_page?)
                 a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
-                  span> = icon('fas', 'user')
+                  - if current_user.avatar.present?
+                    img.mr-2 src=current_user.avatar width=20 height=20
+                  - else
+                    span> = icon('fas', 'user')
                   span = current_user
                   span.caret
                 ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
