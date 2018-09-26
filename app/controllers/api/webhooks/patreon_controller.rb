@@ -18,7 +18,9 @@ class Api::Webhooks::PatreonController < ApplicationController
   private
 
   def set_patreon_user
-    @patreon_user = PatreonUser.new(patreon_id: params[:data][:relationships][:patron][:data][:id])
+    @patreon_user = PatreonUser.find_by(patreon_id: params[:data][:relationships][:patron][:data][:id])
+
+    head(:no_content) if @patreon_user.nil?
   end
 
   def pledge_cents
@@ -31,7 +33,9 @@ class Api::Webhooks::PatreonController < ApplicationController
 
   def verify_signature
     return if request.headers['X-Patreon-Signature'] == digest(request.body.read)
+
     Rollbar.warn("Invalid signature from Patreon: #{request.headers['X-Patreon-Signature']}")
+    head(:bad_request)
   end
 
   def digest(data)
