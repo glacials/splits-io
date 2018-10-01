@@ -26,6 +26,7 @@ import "../cable.js"
 global.App = this.App
 import "../cable/subscriptions/run.js"
 
+import "../ad_cleanup.js"
 import "../convert.js"
 import "../highchart_theme.js"
 import "../gon.js"

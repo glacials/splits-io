@@ -1,6 +1,6 @@
 - if (current_user.nil? || current_user.should_see_ads?) && (ENV['ENABLE_ADS'] == '1')
   article
-    div#carbonads
+    div#carbonads-holder
       .card
         .card-body
           script async=true type="text/javascript" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=splitsio" id="_carbonads_js"
