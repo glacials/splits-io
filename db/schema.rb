@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_21_052308) do
+ActiveRecord::Schema.define(version: 2018_08_27_170856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -87,21 +87,6 @@ ActiveRecord::Schema.define(version: 2018_09_21_052308) do
     t.string "shortname"
     t.index ["name"], name: "index_games_on_name"
     t.index ["shortname"], name: "index_games_on_shortname"
-  end
-
-  create_table "google_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "google_id", null: false
-    t.string "access_token", null: false
-    t.datetime "access_token_expires_at", default: "1970-01-01 00:00:00", null: false
-    t.string "name", null: false
-    t.string "email", null: false
-    t.string "first_name", null: false
-    t.string "last_name", null: false
-    t.string "avatar", null: false
-    t.string "url", null: false
-    t.index ["google_id"], name: "index_google_users_on_google_id", unique: true
-    t.index ["user_id"], name: "index_google_users_on_user_id"
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
@@ -290,7 +275,6 @@ ActiveRecord::Schema.define(version: 2018_09_21_052308) do
   end
 
   add_foreign_key "game_aliases", "games", on_delete: :cascade
-  add_foreign_key "google_users", "users"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"
