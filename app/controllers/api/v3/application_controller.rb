@@ -3,7 +3,6 @@ class Api::V3::ApplicationController < ActionController::Base
 
   skip_before_action :set_browser_id
   skip_before_action :touch_auth_session
-  prepend_before_action :set_cors_headers
   before_action :force_ssl, if: :ssl_configured?
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
 
@@ -20,13 +19,6 @@ class Api::V3::ApplicationController < ActionController::Base
   end
 
   private
-
-  def set_cors_headers
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-    headers['Access-Control-Request-Method'] = '*'
-    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  end
 
   def force_ssl
     render status: :moved_permanently, json: {status: 301, message: 'API v3 hits must be over HTTPS.'} unless request.ssl?
