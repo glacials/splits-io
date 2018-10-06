@@ -3,7 +3,6 @@ class Api::V4::ApplicationController < ActionController::Base
 
   skip_before_action :set_browser_id
   skip_before_action :touch_auth_session
-  prepend_before_action :set_cors_headers
   before_action :force_ssl, if: -> { Rails.application.config.use_ssl }
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
 
@@ -20,15 +19,6 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   private
-
-  def set_cors_headers
-    headers.merge!(
-      'Access-Control-Allow-Origin' => '*',
-      'Access-Control-Allow-Methods' => '*',
-      'Access-Control-Request-Method' => '*',
-      'Access-Control-Allow-Headers' => 'origin, X-Requested-With, Content-Type, Accept, Authorization, X-Filename'
-    )
-  end
 
   def build_link_headers(links)
     links.map do |link|
