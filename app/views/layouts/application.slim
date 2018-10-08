@@ -8,9 +8,9 @@ html
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
-    = javascript_pack_tag 'application'
-    = javascript_include_tag 'application'
-    = stylesheet_link_tag :application, media: :all
+    = javascript_pack_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
+    = javascript_include_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
+    = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
