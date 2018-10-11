@@ -20,6 +20,8 @@ services:
     environment:
       - TWITCH_CLIENT_ID
       - TWITCH_CLIENT_SECRET
+    stdin_open: true
+    tty: true
   db:
     image: postgres
     volumes:
@@ -51,5 +53,7 @@ services:
       - s3
     links:
       - s3:s3.localhost
+    stdin_open: true
+    tty: true
   redis:
     image: redis
