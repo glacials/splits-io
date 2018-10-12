@@ -51,6 +51,7 @@ module CompletedRun
 
     def short?(timing)
       return false if duration_ms(timing).nil?
+
       duration_ms(timing) < 20 * 60 * 1000
     end
 
@@ -74,15 +75,6 @@ module CompletedRun
     def has_golds?(timing)
       segments.all? do |segment|
         segment.shortest_duration_ms(timing)
-      end
-    end
-
-    def total_playtime_ms(timing)
-      case timing
-      when Run::REAL
-        SegmentHistory.where(segment: segments).sum(:realtime_duration_ms)
-      when Run::GAME
-        SegmentHistory.where(segment: segments).sum(:gametime_duration_ms)
       end
     end
 

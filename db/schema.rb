@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(version: 2018_11_05_052729) do
     t.bigint "gametime_duration_ms"
     t.bigint "gametime_sum_of_best_ms"
     t.string "default_timing", default: "real", null: false
+    t.bigint "total_playtime_ms"
     t.index ["category_id"], name: "index_runs_on_category_id"
     t.index ["s3_filename"], name: "index_runs_on_s3_filename"
     t.index ["user_id"], name: "index_runs_on_user_id"
