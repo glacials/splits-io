@@ -81,5 +81,9 @@ module CompletedRun
     def completed?(timing)
       duration_ms(timing).present? && duration_ms(timing).positive?
     end
+
+    def total_playtime_ms
+      self[:total_playtime_ms] || SegmentHistory.where(segment: segments).sum(:realtime_duration_ms)
+    end
   end
 end
