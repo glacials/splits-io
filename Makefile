@@ -13,6 +13,10 @@ ifeq ($(detectedOS),Linux)
   docker-compose := sudo -E docker-compose
 endif
 
+ifeq ($(container),)
+  container := web
+endif
+
 build:
 	$(docker-compose) build
 
@@ -30,6 +34,10 @@ console:
 
 update_lsc:
 	$(docker-compose) run web bundle exec rake update_lsc
+
+attach:
+	@echo Do not use ctrl + c to exit this session, use ctrl + p then ctrl + q
+	docker attach $(shell docker ps | grep splits-io_$(container)_ | awk '{print $$1}')
 
 clean:
 	$(docker-compose) down
