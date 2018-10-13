@@ -70,6 +70,19 @@ console inside the Docker container with
 make console
 ```
 
+#### Attaching to a debugger
+If you use `binding.pry` anywhere in the code, once you hit the breakpoint specified use the command 
+```sh
+make attach
+```
+in another terminal window to attach to it.  To detach, make sure to exit the debug session then use the docker 
+attach escape sequence `ctrl + p` then `ctrl + q`.  
+
+If you need to attach to a container other than `web`, specify a container with the syntax
+```sh
+make attach container=worker
+```
+
 ### Running Tests
 To run tests from inside the Docker container, use
 ```sh
