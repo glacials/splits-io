@@ -17,6 +17,16 @@ module S3Run
       nil
     end
 
+    def save_locally
+      return if File.exist?("tmp/#{s3_filename}")
+
+      file = $s3_bucket_internal.object("splits/#{s3_filename}")
+      result = file.download_file("tmp/#{s3_filename}")
+      raise 'error downloading file from s3' unless result
+
+      result
+    end
+
     def in_s3?
       file = $s3_bucket_internal.object("splits/#{s3_filename}")
       file.exists?

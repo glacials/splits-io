@@ -13,10 +13,11 @@ module UnparsedRun
         segments.delete_all
         histories.delete_all
 
-        f = file
-        return false if f.nil?
+        save_locally
+        fd = File.open("tmp/#{s3_filename}")
 
-        parse_result = Parser.parse(f)
+        parse_result = Parser.parse(fd.fileno)
+        fd.close
         return false if parse_result.nil?
         return false if parse_result[:splits].blank?
 

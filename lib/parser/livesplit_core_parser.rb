@@ -5,9 +5,10 @@ rescue LoadError
 end
 
 class Parser
-  def self.parse(run_string, fast: false)
-    parse_result = LiveSplitCore::Run.parse(run_string, run_string.bytesize, '', false)
+  def self.parse(run_file_descriptor, fast: false)
+    parse_result = LiveSplitCore::Run.parse_file_handle(run_file_descriptor, '', false)
     return nil unless parse_result.parsed_successfully
+
     program = parse_result.timer_kind
 
     if Run.program_from_attribute(:to_s, program).nil?
