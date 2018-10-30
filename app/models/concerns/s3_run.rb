@@ -6,7 +6,10 @@ module S3Run
   included do
     class RunTooLarge < StandardError; end
     class RunDownloadError < StandardError; end
+
     def file
+      # If a block is passed in, a standard File object will be opened, passed to the block, and then closed
+      # If no block is passed, the file will be read into memory from S3 and returned as a string
       file = $s3_bucket_internal.object("splits/#{s3_filename}")
 
       return nil unless file.exists?
