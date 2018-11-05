@@ -3,6 +3,8 @@ require 'twitch'
 class TwitchUser < ApplicationRecord
   belongs_to :user
 
+  include AvatarSource
+
   def self.from_auth(auth, current_user)
     twitch_user = TwitchUser.find_or_initialize_by(twitch_id: auth.uid)
     twitch_user.user = [
@@ -24,16 +26,11 @@ class TwitchUser < ApplicationRecord
       name:         auth.info.nickname,
       display_name: auth.info.name,
       email:        auth.info.email,
-      avatar:       auth.info.image || TwitchUser.default_avatar
+      avatar:       auth.info.image || TwitchUser.default_avatar,
+      url:          auth.info.urls.Twitch
     )
     twitch_user.save
     twitch_user
-  end
-
-  def avatar
-    URI.parse(self[:avatar]).tap do |uri|
-      uri.scheme = 'https'
-    end.to_s
   end
 
   def sync!
@@ -43,7 +40,8 @@ class TwitchUser < ApplicationRecord
       twitch_id:    body['_id'],
       name:         body['name'].downcase,
       display_name: body['display_name'],
-      avatar:       URI.parse(body['logo'] || self.class.default_avatar).tap { |uri| uri.scheme = 'https' }.to_s
+      avatar:       URI.parse(body['logo'] || self.class.default_avatar).tap { |uri| uri.scheme = 'https' }.to_s,
+      url:          auth.info.urls.Twitch
     )
   rescue RestClient::ResourceNotFound
     nil

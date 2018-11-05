@@ -5,6 +5,10 @@ class SettingsController < ApplicationController
 
   def update
     current_user.update(name: params[:user][:name])
+    if current_user.errors.any?
+      redirect_to(settings_path, alert: "Error: #{current_user.errors.full_messages.to_sentence}.")
+      return
+    end
     redirect_to(settings_path, notice: 'Username updated!')
   end
 

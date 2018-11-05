@@ -52,8 +52,8 @@ hr style='margin: .5em; opacity: 0.25'
       span class=('short' if @run.short?(timing))
         = format_ms(@run.duration_ms(timing) - improvements.map { |i| i[:time_difference] / 2 }.sum)
       = ', then we\'ll go from there.'
-      - if @comparison_run.user.present?
-        p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.uri.to_s, target: :_blank}!
+      - if @comparison_run.user.try(:twitch).present?
+        p If you need help with strats, #{link_to "watch #{@comparison_run.user.name}", @comparison_run.user.twitch.url, target: :_blank}!
     p
       small
         | Please note:

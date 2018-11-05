@@ -1,6 +1,8 @@
 class GoogleUser < ApplicationRecord
   belongs_to :user
 
+  include AvatarSource
+
   def self.from_auth(auth, current_user)
     google_user = GoogleUser.find_or_initialize_by(google_id: auth.uid)
     google_user.user = [
@@ -30,24 +32,5 @@ class GoogleUser < ApplicationRecord
 
     google_user.save
     google_user
-  end
-
-  def avatar
-    URI.parse(self[:avatar]).tap do |uri|
-      uri.scheme = 'https'
-    end.to_s
-  end
-
-  def sync!
-    body = JSON.parse(Twitch::User.get(twitch_id))
-
-    update(
-      twitch_id:    body['_id'],
-      name:         body['name'].downcase,
-      display_name: body['display_name'],
-      avatar:       URI.parse(body['logo'] || self.class.default_avatar).tap { |uri| uri.scheme = 'https' }.to_s
-    )
-  rescue RestClient::ResourceNotFound
-    nil
   end
 end

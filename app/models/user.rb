@@ -29,10 +29,9 @@ class User < ApplicationRecord
     user.runs.update_all(user_id: nil)
   end
 
-  NAME_REGEX = /[A-Za-z0-9_]+/.freeze
+  NAME_REGEX = /\A[A-Za-z0-9_]+\z/.freeze
 
-  validates :name, presence: true
-  validates_format_of :name, with: NAME_REGEX
+  validates :name, presence: true, uniqueness: true, format: {with: NAME_REGEX}
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
@@ -45,19 +44,7 @@ class User < ApplicationRecord
   end
 
   def avatar
-    if twitch.present?
-      twitch.avatar
-    elsif google.present?
-      google.avatar
-    end
-  end
-
-  def uri
-    if twitch.present?
-      URI.parse("https://www.twitch.tv/#{twitch.name}")
-    elsif google.present?
-      google.url
-    end
+    [twitch, google].compact.map(&:avatar).first
   end
 
   def to_param

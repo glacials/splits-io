@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_26_051225) do
+ActiveRecord::Schema.define(version: 2018_11_05_052729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -278,6 +278,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_051225) do
     t.datetime "follows_synced_at", default: "1970-01-01 00:00:00", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "url", null: false
     t.index ["twitch_id"], name: "index_twitch_users_on_twitch_id", unique: true
     t.index ["user_id"], name: "index_twitch_users_on_user_id", unique: true
   end

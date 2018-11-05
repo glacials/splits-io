@@ -6,5 +6,6 @@ FactoryBot.define do
     avatar       { SecureRandom.uuid }
     twitch_id    { SecureRandom.uuid }
     access_token { SecureRandom.uuid }
+    url          { SecureRandom.uuid }
   end
 end

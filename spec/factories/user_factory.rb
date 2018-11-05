@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    name { SecureRandom.uuid }
+    name { SecureRandom.uuid.split('-')[0] }
 
     after(:create) do |user|
       FactoryBot.create(:twitch_user, user: user)
