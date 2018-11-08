@@ -52,9 +52,8 @@ Rails.application.routes.draw do
   get '/auth/twitch/unlink',   to: 'twitch_users#unlink'
 
   get '/auth/failure', to: 'sessions#failure'
-  get '/auth/:provider/callback', to: 'sessions#create'
 
-  resources :sessions, only: [:destroy]
+  delete '/sessions/:session', to: 'sessions#destroy'
 
   get '/users/:user', to: 'users#show',               as: :user
   get '/u/:user',     to: redirect('/users/%{user}'), as: :short_user

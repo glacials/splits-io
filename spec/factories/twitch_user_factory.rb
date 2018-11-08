@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :twitch_user do
-    user
+    user         { FactoryBot.build(:user) }
     name         { SecureRandom.uuid }
     display_name { SecureRandom.uuid }
     avatar       { SecureRandom.uuid }
