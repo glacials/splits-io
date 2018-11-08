@@ -38,4 +38,16 @@ describe TwitchUsersController do
         end
       end
     end
+
+  describe '#unlink' do
+    subject(:response) { get :unlink, params: {provider: 'google'} }
+
+    context 'when linked' do
+      expect(response).to redirect_to(settings_path)
+    end
+
+    context 'when not linked' do
+      expect(response).to redirect_to(settings_path)
+    end
   end
+end
