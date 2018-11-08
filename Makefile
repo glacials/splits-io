@@ -18,6 +18,7 @@ ifeq ($(container),)
 endif
 
 build:
+	[ ! -e .seeded ] && make seed && echo "# Do not delete this file. Its presence tells the splits-io Makefile to not re-seed data." > .seeded
 	$(docker-compose) build
 
 seed:
@@ -44,3 +45,4 @@ attach:
 
 clean:
 	$(docker-compose) down
+	rm -f .seeded

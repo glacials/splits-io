@@ -30,3 +30,6 @@ yarn-error.log*
 .envrc
 
 .DS_Store
+
+# the .seeded file prevents data from being seeded again; see Makefile
+.seeded
