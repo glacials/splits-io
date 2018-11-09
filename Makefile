@@ -19,6 +19,7 @@ endif
 
 build:
 	$(docker-compose) build
+	$(docker-compose) run web bundle install
 
 lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
