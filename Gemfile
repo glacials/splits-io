@@ -91,7 +91,6 @@ gem 'rest-client'
 gem 'coffee-rails'
 
 # models
-gem 'has_secure_token'
 gem 'nilify_blanks'
 
 # parsing

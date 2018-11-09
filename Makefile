@@ -1,6 +1,6 @@
 .PHONY: all build lint test run console update_lsc clean
 
-all: build lint test run
+all: build seed lint test run console update_lsc attach clean
 
 ifeq ($(OS),Windows_NT)
   detectedOS := Windows
@@ -18,11 +18,13 @@ ifeq ($(container),)
 endif
 
 build:
-	[ ! -e .seeded ] && make seed && echo "# Do not delete this file. Its presence tells the splits-io Makefile to not re-seed data." > .seeded
 	$(docker-compose) build
+	$(docker-compose) run web bundle install
+	@[ ! -e .seed ] && make seed || true
 
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
+	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > .seed
 
 lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
@@ -30,8 +32,8 @@ lint:
 test:
 	$(docker-compose) run -e RAILS_ENV=test web rspec
 
-run:
-	$(docker-compose) up
+run: # Run docker-compose up, but work around Ctrl-C sometimes not stopping containers. See https://github.com/docker/compose/issues/3317#issuecomment-416552656
+	bash -c "trap '$(docker-compose) stop' EXIT; $(docker-compose) up"
 
 console:
 	$(docker-compose) run web rails console
@@ -45,4 +47,4 @@ attach:
 
 clean:
 	$(docker-compose) down
-	rm -f .seeded
+	rm -f .seed

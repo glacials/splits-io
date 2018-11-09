@@ -149,7 +149,7 @@ GEM
     factory_bot_rails (4.10.0)
       factory_bot (~> 4.10.0)
       railties (>= 3.0.0)
-    faraday (0.12.2)
+    faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
     font-awesome-sass (5.3.1)
@@ -177,8 +177,6 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    has_secure_token (1.0.0)
-      activerecord (>= 3.0)
     hashie (3.5.7)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -202,7 +200,7 @@ GEM
       json-schema (~> 2.5)
       rspec
     jsonapi-renderer (0.2.0)
-    jwt (1.5.6)
+    jwt (2.1.0)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
@@ -219,7 +217,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.2.2)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.13)
@@ -253,14 +251,14 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     nio4r (2.3.1)
-    nokogiri (1.8.4)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
-    oauth2 (1.4.0)
-      faraday (>= 0.8, < 0.13)
-      jwt (~> 1.0)
+    oauth2 (1.4.1)
+      faraday (>= 0.8, < 0.16.0)
+      jwt (>= 1.0, < 3.0)
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
@@ -295,7 +293,7 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.2)
     puma (3.11.4)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-contrib (2.0.1)
       rack (~> 2.0)
     rack-cors (1.0.2)
@@ -476,7 +474,6 @@ DEPENDENCIES
   gon
   guard
   guard-rspec
-  has_secure_token
   httparty
   jbuilder
   json-schema
@@ -520,4 +517,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.4
+   1.16.6

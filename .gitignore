@@ -31,5 +31,5 @@ yarn-error.log*
 
 .DS_Store
 
-# the .seeded file prevents data from being seeded again; see Makefile
-.seeded
+# the .seed file prevents data from being seeded again; see Makefile
+.seed
