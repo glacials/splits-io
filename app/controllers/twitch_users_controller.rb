@@ -1,4 +1,6 @@
 class TwitchUsersController < ApplicationController
+  include Authenticatable
+
   def in
     auth = request.env['omniauth.auth']
     twitch_user = TwitchUser.from_auth(auth, current_user)
@@ -18,17 +20,6 @@ class TwitchUsersController < ApplicationController
 
   def unlink
     current_user.twitch.try(:destroy)
-    redirect_to settings_path, notice: 'Twitch account unlinked :)'
-  end
-
-  private
-
-  def sign_in(user)
-    self.current_user = user
-    auth_session.persist!
-  end
-
-  def redirect_path
-    request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
+    redirect_to settings_path, notice: 'Twitch account unlinked.'
   end
 end

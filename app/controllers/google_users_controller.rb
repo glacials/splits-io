@@ -1,4 +1,6 @@
 class GoogleUsersController < ApplicationController
+  include Authenticatable
+
   def in
     auth = request.env['omniauth.auth']
     google_user = GoogleUser.from_auth(auth, current_user)
@@ -18,17 +20,6 @@ class GoogleUsersController < ApplicationController
 
   def unlink
     current_user.google.try(:destroy)
-    redirect_to settings_path, notice: 'Google account unlinked :)'
-  end
-
-  private
-
-  def sign_in(user)
-    self.current_user = user
-    auth_session.persist!
-  end
-
-  def redirect_path
-    request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
+    redirect_to settings_path, notice: 'Google account unlinked.'
   end
 end
