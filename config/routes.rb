@@ -53,7 +53,7 @@ Rails.application.routes.draw do
 
   get '/auth/failure', to: 'sessions#failure'
 
-  delete '/sessions/:session', to: 'sessions#destroy'
+  delete '/sessions/:session', to: 'sessions#destroy', as: :session
 
   get '/users/:user', to: 'users#show',               as: :user
   get '/u/:user',     to: redirect('/users/%{user}'), as: :short_user
