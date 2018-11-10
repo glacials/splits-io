@@ -32,6 +32,5 @@ class TwitchUsersController < ApplicationController
 
   def redirect_path
     request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
->>>>>>> Google linking and sign in; username changes
   end
 end
