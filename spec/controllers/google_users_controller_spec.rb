@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe GoogleUsersController do
   describe '#in' do
-    subject(:response) { post :create, params: {provider: 'google'} }
+    subject(:response) { get :in, params: {provider: 'google'} }
 
     context 'when given a proper user' do
       let(:env) do
@@ -10,12 +10,16 @@ describe GoogleUsersController do
           'omniauth.auth' => double(
             uid: '29798286',
             info: double(
-              nickname: 'glacials',
-              name: 'Glacials',
               email: 'qhiiyr@gmail.com',
-              image: ''
+              first_name: 'Ben',
+              last_name: 'Carlsson',
+              image: '',
+              name: 'Glacials',
+              nickname: 'glacials',
+              urls: double(google: 'https://google.com/+bencarlsson')
             ),
             credentials: double(
+              expires_at: Time.now + 1.day,
               token: ''
             )
           )
@@ -33,7 +37,7 @@ describe GoogleUsersController do
       end
 
       context 'and no redirect path' do
-        it 'redirects to root' do
+        it 'redirects to /' do
           expect(response).to redirect_to('/')
         end
       end
@@ -42,13 +46,18 @@ describe GoogleUsersController do
 
   describe '#unlink' do
     subject(:response) { get :unlink, params: {provider: 'google'} }
+    before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
     context 'when linked' do
-      expect(response).to redirect_to(settings_path)
+      it 'redirects to /settings' do
+        expect(response).to redirect_to(settings_path)
+      end
     end
 
     context 'when not linked' do
-      expect(response).to redirect_to(settings_path)
+      it 'redirects to /settings' do
+        expect(response).to redirect_to(settings_path)
+      end
     end
   end
 end

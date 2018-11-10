@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe TwitchUsersController do
   describe '#in' do
-    subject(:response) { post :create, params: {provider: 'twitch'} }
+    subject(:response) { get :in, params: {provider: 'twitch'} }
 
     context 'when given a proper user' do
       let(:env) do
@@ -10,13 +10,17 @@ describe TwitchUsersController do
           'omniauth.auth' => double(
             uid: '29798286',
             info: double(
-              nickname: 'glacials',
-              name: 'Glacials',
               email: 'qhiiyr@gmail.com',
-              image: ''
+              first_name: 'Ben',
+              last_name: 'Carlsson',
+              image: '',
+              name: 'Glacials',
+              nickname: 'glacials',
+              urls: double(Twitch: 'https://www.twitch.tv/glacials')
             ),
             credentials: double(
-              token: ''
+              token: '',
+              expires_at: Time.now + 1.day
             )
           )
         }
@@ -33,21 +37,27 @@ describe TwitchUsersController do
       end
 
       context 'and no redirect path' do
-        it 'redirects to root' do
+        it 'redirects to /' do
           expect(response).to redirect_to('/')
         end
       end
     end
+  end
 
   describe '#unlink' do
     subject(:response) { get :unlink, params: {provider: 'google'} }
+    before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
     context 'when linked' do
-      expect(response).to redirect_to(settings_path)
+      it 'redirects to /settings' do
+        expect(response).to redirect_to(settings_path)
+      end
     end
 
     context 'when not linked' do
-      expect(response).to redirect_to(settings_path)
+      it 'redirects to /settings' do
+        expect(response).to redirect_to(settings_path)
+      end
     end
   end
 end
