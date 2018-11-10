@@ -1,0 +1,32 @@
+.card.mb-3
+  .card-header.text-white My Authorized Applications
+  .card-body
+    - if current_user.access_tokens.count == 0
+      i There are no applications authorized to use your account.
+    - else
+      p These applications have partial access to your account.
+      .table-responsive
+        table.table.table-striped.table-hover.mb-0
+          thead
+            tr
+              th Name
+              th Permissions granted
+              th Authorized
+              th
+          tbody
+            - Doorkeeper::Application.authorized_for(current_user).each do |application|
+              - auth = Doorkeeper::AccessToken.find_by(resource_owner_id: current_user, application: application)
+              tr
+                td
+                  big = application.name
+                td
+                  ul
+                    - auth.scopes.all.each do |scope|
+                      li = scope_to_sentence(scope)
+                td
+                  div title=auth.created_at #{time_ago_in_words(auth.created_at)} ago
+                td
+                  = button_to authorization_path(application.id), class: 'btn btn-primary', method: :delete, data: {\
+                    confirm: "Really revoke permissions from #{application.name}?"\
+                  }
+                    span = icon('fas', 'times')
