@@ -12,12 +12,15 @@ module ApplicationHelper
     current_user.present? && [user_path(current_user), settings_path, tools_path].include?(request.path)
   end
 
-  def user_badge(user)
+  # user_badge returns a stylized user link, with the gold patron border if the user is the right level of patron. If
+  # gold is true, a gold style is forced; if false, a non-gold style is forced; if nil, the user's patron status is
+  # checked and applied appropriately.
+  def user_badge(user, gold: nil)
     return '???' if user.nil?
 
     classes = ['badge']
     title = nil
-    if user.silver_patron?
+    if gold || (gold.nil? && user.silver_patron?)
       classes << 'badge-warning'
       classes << 'tip-top'
       title = "#{user} is a Splits I/O Patron!"
@@ -32,6 +35,10 @@ module ApplicationHelper
     return '???' if game.nil?
 
     link_to(game.shortname, game_path(game), class: 'badge badge-primary', title: game.name)
+  end
+
+  def patreon_url
+    'https://www.patreon.com/glacials'
   end
 
   private

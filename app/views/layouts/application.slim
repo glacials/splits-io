@@ -59,7 +59,7 @@ html
                     = icon('fas', 'search')
           ul.nav.navbar-nav
             li.nav-item
-              a.patreon.nav-link.px-3.border-0 href='https://www.patreon.com/glacials' target='_blank'
+              a.patreon.nav-link.px-3.border-0 href=patreon_url target='_blank'
                 img src=asset_path('patreon.svg') height='20'
             li.nav-item.d-none.d-lg-inline
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
@@ -120,7 +120,7 @@ html
         .row
           .col-md-6
             - if User.joins(:patreon).where('patreon_users.pledge_cents > 0').any?
-              a> href='https://www.patreon.com/glacials'
+              a> href=patreon_url
                 span Thanks to our patrons!
               p
                 - User.joins(:patreon).where('patreon_users.pledge_cents > 0').each do |user|
