@@ -5,43 +5,56 @@
     - if current_user.bronze_patron?
       .list-group-item
         .d-flex.w-100.justify-content-between
-          h5.mb1 = '(1/3) Turn Off Ads'
-          i.btn.btn-outline-success.disabled You've got no ads!
+          h5.mb1
+            span.text-success> ✓
+            ' No Ads
+          i.btn.btn-outline-light.disabled Complete!
         p.mb-1 Make the ad at the top of the page go away, but without feeling guilty about it.
     - else
       .list-group-item
         .d-flex.w-100.justify-content-between
-          h5.mb1 = '(1/3) Turn Off Ads'
-          a.btn.btn-outline-light href=patreon_url + $#{2 - pledge_cents / 100} / month
+          h5.mb1
+            span.text-danger> ✗
+            ' No Ads
+          a.btn.btn-primary href=patreon_url(checkout: :bronze) + $#{2 - pledge_cents / 100} / month
         p.mb-1 Make the ad at the top of the page go away, only without feeling guilty about it.
     - if current_user.silver_patron?
       .list-group-item
         .d-flex.w-100.justify-content-between
-          h5.mb1 = '(2/3) Gold Username'
-          i.btn.btn-outline-success.disabled href=patreon_url You're gold!
+          h5.mb1
+            span.text-success> ✓
+            ' Gold Username
+          i.btn.btn-outline-light.disabled Complete!
         p.mb-1
           ' Upgrade your #{user_badge(current_user, gold: false)} into a #{user_badge(current_user, gold: true)}
           ' everywhere on the site.
     - else
       .list-group-item
         .d-flex.w-100.justify-content-between
-          h5.mb1 = '(2/3) Gold Username'
-          a.btn.btn-outline-light href=patreon_url + $#{4 - pledge_cents / 100} / month
+          h5.mb1
+            span.text-danger> ✗
+            ' Gold Username
+          a.btn.btn-primary href=patreon_url(checkout: :silver) + $#{4 - pledge_cents / 100} / month
         p.mb-1
           ' Upgrade your #{user_badge(current_user, gold: false)} into a #{user_badge(current_user, gold: true)}
           ' everywhere on the site.
     - if current_user.gold_patron?
       .list-group-item
         .d-flex.w-100.justify-content-between
-          h5.mb1 = '(3/3) Permalink Redirectors'
-          i: a.btn.btn-outline-success href=tools_path You've got permalink redirectors!
+          h5.mb1
+            span.text-success> ✓
+            ' Permalink Redirectors
+          i: a.btn.btn-outline-light href=tools_path Triple complete!
         p.mb-1
           ' Get special static links that always redirect to your current PB, even when it improves.
     - else
       .list-group-item
         .d-flex.w-100.justify-content-between
-          h5.mb1 = '(3/3) Permalink Redirectors'
-          a.btn.btn-outline-light href=patreon_url + $#{6 - pledge_cents / 100} / month
+          h5.mb1
+            span.text-danger> ✗
+            ' Permalink Redirectors
+          a.btn.btn-primary href=patreon_url(checkout: :gold) + $#{6 - pledge_cents / 100} / month
         p.mb-1
           ' Get special static links that always redirect to your current PB, even when it improves.
-  .card-footer Any amount pledged also puts you in the footer of the site! 😍
+  .card-footer
+    p Any amount pledged also puts you in the footer of the site! 😍 See Patreon for how much the site costs to run.

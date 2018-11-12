@@ -37,7 +37,17 @@ module ApplicationHelper
     link_to(game.shortname, game_path(game), class: 'badge badge-primary', title: game.name)
   end
 
-  def patreon_url
+  # patreon_url returns the URL for the Splits I/O Patreon page. If checkout is true, it returns the URL for the
+  # checkout page -- use this if the UX of your situation implies the user already decided to contribute. If checkout is
+  # :bronze, :silver, or :gold, it returns the URL for the checkout flow for the corresponding tier (i.e. one click past
+  # a checkout of true; two clicks past the Splits I/O Patreon page).
+  def patreon_url(checkout: false)
+    return 'https://www.patreon.com/join/glacials/checkout?rid=493467' if checkout == :bronze
+    return 'https://www.patreon.com/join/glacials/checkout?rid=493468' if checkout == :silver
+    return 'https://www.patreon.com/join/glacials/checkout?rid=493469' if checkout == :gold
+
+    return 'https://www.patreon.com/join/glacials' if checkout
+
     'https://www.patreon.com/glacials'
   end
 

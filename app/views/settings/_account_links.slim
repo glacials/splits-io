@@ -5,7 +5,7 @@
         span> ✗ Not linked with Twitch
       .card-footer
         .float-right
-          a.btn.btn-outline-light href='/auth/twitch' Link with Twitch
+          a.btn.btn-twitch href='/auth/twitch' Link with Twitch
   - else
     .card.bg-twitch
       .card-body.text-light
@@ -14,7 +14,7 @@
       .card-footer
         .float-right
           - if current_user.google.present?
-            a.btn.btn-outline-light href='/auth/twitch/unlink' Unlink
+            a.btn.btn-outline-light.bg-google href='/auth/twitch/unlink' Unlink
           - else
             i.btn.btn-outline-light.disabled.tip-top(
               style='cursor: not-allowed'
@@ -26,7 +26,9 @@
         span> ✗ Not linked with Google
       .card-footer
         .float-right
-          a.btn.btn-outline-light href='/auth/google' Link with Google
+          a.btn.btn-google href='/auth/google'
+            => icon('fab', 'google')
+            | Link with Google
   - else
     .card.bg-google
       .card-body.text-light
@@ -47,7 +49,9 @@
         span> ✗ Not linked with Patreon
       .card-footer
         .float-right
-          a.btn.btn-outline-light.mr-2 href='/auth/patreon' Link with Patreon
+          a.btn.btn-patreon.mr-2 href='/auth/patreon'
+            => icon('fab', 'patreon')
+            | Link with Patreon
           a.btn.btn-light> href=patreon_url Visit
   - else
     .card.bg-patreon
@@ -56,5 +60,5 @@
         b< = current_user.patreon.full_name
       .card-footer
         .float-right
-          a.btn.btn-outline-light.mr-2 href='/auth/patreon/unlink' Unlink
-          a.btn.btn-light href=patreon_url Visit
+          a.btn.btn-light.mr-2 href='/auth/patreon/unlink' Unlink
+          a.btn.btn-outline-light href=patreon_url Visit
