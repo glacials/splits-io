@@ -25,6 +25,8 @@ ENV ENABLE_ADS 0
 ENV RAILS_ENV development
 ENV NODE_ENV development
 
+ENV RAILS_ROOT /app
+
 ENV S3_BUCKET splits-io
 ENV AWS_REGION local
 ENV AWS_ACCESS_KEY_ID beep

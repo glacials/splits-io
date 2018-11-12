@@ -28,9 +28,6 @@ group :development, :hot do
   gem 'better_errors'
   gem 'binding_of_caller'
 
-  # file watcher
-  gem 'listen'
-
   # pretty things
   gem 'rails-erd', require: false
   gem 'rubocop', require: false
