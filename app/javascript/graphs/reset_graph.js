@@ -3,7 +3,7 @@ import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
 const build_reset_graph = function(run) {
-  if ($("#reset-graph-highchart").length === 0) {
+  if (document.getElementById('reset-graph') === null) {
     return
   }
 
@@ -17,25 +17,19 @@ const build_reset_graph = function(run) {
     }
   })
 
-  Highcharts.chart('reset-graph-highchart', {
+  Highcharts.chart('reset-graph', {
     exporting: {
-        chartOptions: {
-            plotOptions: {
-                series: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            }
-        },
-        fallbackToExportServer: false
+      chartOptions: {
+        plotOptions: {
+          series: {
+            dataLabels: {enabled: true}
+          }
+        }
+      },
+      fallbackToExportServer: false
     },
-    chart: {
-      type: 'pie'
-    },
-    title: {
-      text: 'Resets Per Split'
-    },
+    chart: {type: 'pie'},
+    title: {text: 'Resets Per Split'},
     tooltip: {
       pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: {point.y} | {point.percentage:.1f}%',
     },
@@ -60,9 +54,7 @@ const build_reset_graph = function(run) {
       }
     },
     yAxis: {
-      title: {
-        text: 'Resets'
-      }
+      title: {text: 'Resets'}
     },
     series: [{
       name: 'Resets',
@@ -71,6 +63,5 @@ const build_reset_graph = function(run) {
     }]
   })
 }
-
 
 export {build_reset_graph}

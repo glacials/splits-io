@@ -49,7 +49,7 @@ const build_segment_graph = function(segment) {
       shared: true,
       crosshairs: true,
       pointFormatter: function() {
-        let time = moment.utc(moment.duration(this.y).asMilliseconds()).format('H:mm:ss')
+        let time = moment.duration(this.y).format('H:mm:ss')
         return `<span style="color: #fff">\u25CF</span> ${this.series.name}: <b>${time}</b><br/>`
       }
     },
@@ -68,7 +68,7 @@ const build_segment_graph = function(segment) {
         text: 'Duration of Segment'
       },
       labels: {
-        formatter: function() { return moment.utc(moment.duration(this.value).asMilliseconds()).format('H:mm:ss') }
+        formatter: function() { return moment.duration(this.value).format('H:mm:ss') }
       }
     },
     series: graph_data

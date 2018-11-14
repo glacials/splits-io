@@ -3,7 +3,7 @@ import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
 const build_pb_graph = function(run) {
-  if ($('#pb-graph-highchart').length === 0) {
+  if ($('#pb-graph').length === 0) {
     return
   }
 
@@ -21,44 +21,34 @@ const build_pb_graph = function(run) {
     graph_data.push([segment.name, time])
   })
 
-  Highcharts.chart('pb-graph-highchart', {
+  Highcharts.chart('pb-graph', {
     exporting: {
-        chartOptions: {
-            plotOptions: {
-                series: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            }
-        },
-        fallbackToExportServer: false
+      chartOptions: {
+        plotOptions: {
+          series: {
+            dataLabels: {enabled: true}
+          }
+        }
+      },
+      fallbackToExportServer: false
     },
     chart: {
       type: 'column',
       zoomType: 'x'
     },
-    title: {
-      text: 'PB vs Golds'
-    },
-    subtitle: {
-      text: 'Calculated: PB - Gold'
-    },
+    title: {text: 'PB vs Golds'},
+    subtitle: {text: 'Calculated: PB - Gold'},
     tooltip: {
       pointFormat: 'Time Save: {point.y:.1f}s',
       shared: true
     },
-    legend: {
-      enabled: false
-    },
+    legend: {enabled: false},
     xAxis: {
       categories: graph_data.map(function(seg) { return seg[0]; }),
       crosshair: true
     },
     yAxis: {
-      title: {
-        text: 'Possible Time Save (s)'
-      }
+      title: {text: 'Possible Time Save (s)'}
     },
     series: [{
       name: 'PB - Gold',
