@@ -9,7 +9,9 @@
 
 import "jquery"
 import "jquery-ujs"
+import PolynomialRegression from "../../../node_modules/js-polynomial-regression/dist/PolynomialRegression"
 import "moment"
+import "moment-duration-format"
 import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
@@ -21,6 +23,7 @@ global._ = underscore
 global.Spinner = Spinner
 global.Clipboard = clipboard
 global.Cookies = Cookies
+global.PolynomialRegression = PolynomialRegression
 
 import "../cable.js"
 global.App = this.App

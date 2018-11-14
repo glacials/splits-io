@@ -3565,6 +3565,11 @@ js-cookie@^2.2.0:
   resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
   integrity sha1-Gywnmm7s44ChIWi5JIUmWzWx7/s=
 
+js-polynomial-regression@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/js-polynomial-regression/-/js-polynomial-regression-0.9.0.tgz#6fae6bc76ec579e51a722459126611628c3b2e37"
+  integrity sha1-b65rx27FeeUaciRZEmYRYow7Ljc=
+
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
@@ -4083,6 +4088,11 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
   dependencies:
     minimist "0.0.8"
+
+moment-duration-format@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/moment-duration-format/-/moment-duration-format-2.2.2.tgz#b957612de26016c9ad9eb6087c054573e5127779"
+  integrity sha1-uVdhLeJgFsmtnrYIfAVFc+USd3k=
 
 moment@^2.20.1:
   version "2.22.1"
