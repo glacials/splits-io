@@ -3,7 +3,7 @@ import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
 const build_pb_graph = function(run) {
-  if ($('#pb-graph').length === 0) {
+  if (document.getElementById('pb-graph') === null) {
     return
   }
 
