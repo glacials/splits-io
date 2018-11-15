@@ -163,22 +163,6 @@ class Run < ApplicationRecord
     publish_age_every(:day, 30)
   end
 
-  def playtime_between_pbs
-    last_pb = nil
-    playtime_before_pb = {}
-
-    histories.where('realtime_duration_ms > 0').find_each do |history|
-      if last_pb.nil? || history.duration_ms(Run::REAL) < last_pb.duration_ms(Run::REAL)
-        playtime_before_pb[history] = histories.where(
-          'attempt_number > ? AND attempt_number <= ?', last_pb.try(:attempt_number) || 0, history.attempt_number
-        ).sum(:realtime_duration_ms)
-        last_pb = history
-      end
-    end
-
-    playtime_before_pb
-  end
-
   private
 
   def publish_age_every(time, limit)
