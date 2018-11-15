@@ -1,6 +1,6 @@
 .PHONY: all build lint test run console update_lsc clean
 
-all: build lint test run
+all: build seed lint test run console update_lsc attach clean
 
 ifeq ($(OS),Windows_NT)
   detectedOS := Windows
@@ -20,6 +20,11 @@ endif
 build:
 	$(docker-compose) build
 	$(docker-compose) run web bundle install
+	@[ ! -e .seed ] && make seed || true
+
+seed:
+	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
+	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > .seed
 
 lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
@@ -42,3 +47,4 @@ attach:
 
 clean:
 	$(docker-compose) down
+	rm -f .seed

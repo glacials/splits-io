@@ -7,10 +7,11 @@
     span style='margin-right: .5em;'
       img src=@user.avatar width=50 height=50
     span = user_badge(@user)
-  h6
-    a.btn.btn-dark target='_blank' href=@user.uri.to_s
-      => icon('fab', 'twitch')
-      span = @user
+  - if @user.twitch.present?
+    h6
+      a.btn.btn-dark target='_blank' href=@user.twitch.url
+        => icon('fab', 'twitch')
+        span = @user
   h6
     - @user.games.named.each do |game|
       => link_to(game.shortname || game.name, game, class: 'badge badge-primary', title: game.name)

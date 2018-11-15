@@ -41,19 +41,22 @@ Rails.application.routes.draw do
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
   get '/:run/download/:timer',         to: 'runs#download', as: :download
 
-  get '/u/:user', to: redirect('/users/%{user}') # deprecated; use GET /users/:user
-
   get '/auth/patreon',          to: 'patreon_users#out'
   get '/auth/patreon/callback', to: 'patreon_users#in'
   get '/auth/patreon/unlink',   to: 'patreon_users#unlink'
 
+  get '/auth/google/callback', to: 'google_users#in'
+  get '/auth/google/unlink',   to: 'google_users#unlink'
+
+  get '/auth/twitch/callback', to: 'twitch_users#in'
+  get '/auth/twitch/unlink',   to: 'twitch_users#unlink'
+
   get '/auth/failure', to: 'sessions#failure'
-  get '/auth/:provider/callback', to: 'sessions#create'
 
-  resources :sessions, only: [:destroy]
+  delete '/sessions/:session', to: 'sessions#destroy', as: :session
 
-  get    '/users/:user', to: 'users#show', as: :user
-  delete '/users/:user', to: 'users#destroy'
+  get '/users/:user', to: 'users#show',               as: :user
+  get '/u/:user',     to: redirect('/users/%{user}'), as: :short_user
 
   get    '/rivals',             to: redirect('/rivalries')
   get    '/rivalries',          to: 'rivalries#index',   as: :rivalries
@@ -82,7 +85,9 @@ Rails.application.routes.draw do
 
   get '/tools', to: 'tools#index'
 
-  get    '/settings', to: 'settings#index',       as: :settings
+  get  '/settings',   to: 'settings#index', as: :settings
+  post '/settings',   to: 'settings#update'
+  delete '/settings', to: 'settings#destroy'
 
   post   '/settings/applications',                   to: 'applications#create',                                  as: :applications
   get    '/settings/applications/new',               to: 'applications#new',                                     as: :new_application

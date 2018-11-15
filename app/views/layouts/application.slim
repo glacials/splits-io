@@ -64,7 +64,7 @@ html
             li.nav-item.d-none.d-lg-inline
               a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
                 img src=asset_path('discord.svg') height='20'
-            - if logged_in?
+            - if current_user.present?
               li.nav-item.dropdown class=('active' if on_a_profile_page?)
                 a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
                   - if current_user.avatar.present?
@@ -98,14 +98,17 @@ html
                       .row
                         a.btn.mx-auto.text-white style='background: #5F459E' href='/auth/twitch'
                           => icon('fab', 'twitch')
-                          ' Sign In with Twitch
+                          ' Sign in with Twitch
+                        a.btn.mx-auto.text-white style='background: #CF5747' href='/auth/google'
+                          => icon('fab', 'google')
+                          ' Sign in with Google
                       .row.text-light.m-2
-                        p Splits I/O accounts are based strictly on Twitch accounts. This makes the platform simpler to
+                        p Splits I/O accounts are based strictly on linked accounts. This makes the platform simpler to
                           maintain, especially with regards to security.
                         p
                           ' We are
                           a> href='https://github.com/glacials/splits-io/issues/396' working
-                          ' on adding more methods, including linkless accounts.
+                          ' on adding linkless accounts.
       = render partial: 'shared/ad'
       header#header = yield(:header)
       article

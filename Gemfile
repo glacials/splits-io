@@ -58,6 +58,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'authie'
 gem 'omniauth'
 gem 'omniauth-oauth2'
+gem 'omniauth-google-oauth2'
 gem 'omniauth-twitch'
 gem 'patreon', '< 0.3.0'
 

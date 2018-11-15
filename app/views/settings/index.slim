@@ -8,35 +8,102 @@
   article You need to be signed in to view this page.
 - else
   article
+    .card.mb-3: form action=settings_path method='POST'
+      .card-header.text-white My Username
+      .card-body
+        .row
+          .col-md-6
+            .mb-3: input.form-control type='text' name='user[name]' value=current_user.name
+            .card
+              .card-body
+                p
+                  ' Letters, numbers, underscores. (For nerds:
+                  code = User::NAME_REGEX.inspect
+                  | .)
+                p Capitalization matters for display, but URLs will always be lowercase.
+          .col-md-6: .alert.alert-warning
+            - sample_run = current_user.runs.last || Run.random
+            b Changing your username breaks these links:
+            ul
+              li: code: a href=user_path(current_user) = request.host_with_port + user_path(current_user)
+              li: code: a href=short_user_path(current_user) = request.host_with_port + short_user_path(current_user)
+              li
+                | permalink redirectors (patrons only)
+                - if current_user.runs.any?
+                  ' , e.g.
+                  code: a href=user_pb_path(sample_run.user, sample_run.game, sample_run.category)
+                    = request.host_with_port + user_pb_path(sample_run.user, sample_run.game, sample_run.category)
+            b These links are safe:
+            ul: li
+              | All standard permalinks, e.g.
+              code: a href=run_path(sample_run) = request.host_with_port + run_path(sample_run)
+            b> Changing only capitalization is safe
+            | and has none of the above effects.
+      .card-footer.clearfix: .float-right: input.btn.btn-success type='submit' value='Save'
     .card-deck.mb-3
-      .card
-        .card-body style='background: rgba(100, 65, 164, 1); color: #fff;'
-          span ✓ Linked with #{icon('fab', 'twitch')} Twitch as
-          b< = current_user
-          .float-right
-            i.btn.btn-light.disabled Not unlinkable
-        .card-footer
-          .float-right
-            a.btn.btn-primary href=current_user.uri Visit my Twitch channel
-      .card
-        .card-body style='background: rgba(230, 70, 26, 1.00); color: #fff;'
-          - if current_user.patreon.nil?
-            span> ✗ Not linked with #{icon('fab', 'patreon')} Patreon
+      - if current_user.twitch.nil?
+        .card.border-twitch
+          .card-body.text-light
+            span> ✗ Not linked with Twitch
+          .card-footer
             .float-right
-              a.btn.btn-outline-light href='/auth/patreon' Link with Patreon
-          - else
-            span ✓ Linked with #{icon('fab', 'patreon')} Patreon as
+              a.btn.btn-outline-light href='/auth/twitch' Link with Twitch
+      - else
+        .card.bg-twitch
+          .card-body.text-light
+            span ✓ Linked with Twitch as
+            b< = current_user.twitch.display_name
+          .card-footer
+            .float-right
+              - if current_user.google.present?
+                a.btn.btn-outline-light href='/auth/twitch/unlink' Unlink
+              - else
+                i.btn.btn-outline-light.disabled.tip-top(
+                  style='cursor: not-allowed'
+                  title='You need at least one link to be able to sign in! Link Google to unlink Twitch.'
+                ) Not unlinkable
+      - if current_user.google.nil?
+        .card.border-google
+          .card-body
+            span> ✗ Not linked with Google
+          .card-footer
+            .float-right
+              a.btn.btn-outline-light href='/auth/google' Link with Google
+      - else
+        .card.bg-google
+          .card-body.text-light
+            span ✓ Linked with Google as
+            b< = current_user.google.name
+          .card-footer
+            .float-right
+              - if current_user.twitch.present?
+                a.btn.btn-outline-light href='/auth/google/unlink' Unlink
+              - else
+                i.btn.btn-outline-light.disabled.tip-top(
+                  style='cursor: not-allowed'
+                  title='You need at least one link to be able to sign in! Link Twitch to unlink Google.'
+                ) Not unlinkable
+      - if current_user.patreon.nil?
+        .card.border-patreon
+          .card-body
+            span> ✗ Not linked with Patreon
+          .card-footer
+            .float-right
+              a.btn.btn-outline-light.mr-2 href='/auth/patreon' Link with Patreon
+              a.btn.btn-light> href='https://www.patreon.com/glacials' Visit
+      - else
+        .card.bg-patreon
+          .card-body.text-light
+            span ✓ Linked with Patreon as
             b< = current_user.patreon.full_name
+          .card-footer
             .float-right
-              a.btn.btn-light href='/auth/patreon/unlink' Unlink
-        .card-footer
-          .float-right
-            .btn-group
-              a.btn.btn-primary> href='https://www.patreon.com/glacials' Visit the Splits I/O Patreon
+              a.btn.btn-outline-light.mr-2 href='/auth/patreon/unlink' Unlink
+              a.btn.btn-light href='https://www.patreon.com/glacials' Visit
               - if current_user.gold_patron?
-                a.btn.btn-secondary href=tools_path View my permalink redirectors
+                a.btn.btn-secondary href=tools_path Redirectors
     .card.mb-3
-      .card-header.text-white Authorized Applications
+      .card-header.text-white My Authorized Applications
       .card-body
         - if current_user.access_tokens.count == 0
           i There are no applications authorized to use your account.
@@ -79,8 +146,8 @@
             span View Documentation
         - if current_user.applications.empty?
           article
-            p If you're a developer of another application like a timer, you can use this section to let your users
-              authorize you to upload runs on their behalf.
+            p If you're a developer of an application like a timer, you can use this section to upload runs on behalf of
+              your users.
             p If you're not a developer, you can ignore this section.
         - else
           p
@@ -152,10 +219,6 @@
               span Delete My Account
         #delete-body.collapse aria-labelledby='delete-header' data-parent='delete'
           .card-body
-            .alert.alert-warning
-              b Wait!
-              span< Change your name on Twitch and just want it ported here? Just log out and log back in to Splits I/O
-                    for it to take effect.
             p If you like, you can permanently delete your account on Splits I/O. You can recreate it later by signing in with
               Twitch again, but it will be a fresh account with no runs.
             p You can choose to cascade this deletion to all your runs, or to disown them instead. Disowned runs do not
@@ -165,13 +228,13 @@
             .row
               .col-lg
                 .center
-                  = button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be permanently deleted."}, params: {destroy_runs: '1'}, class: 'button btn btn-danger'
+                  = button_to settings_path, method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be permanently deleted."}, params: {destroy_runs: '1'}, class: 'button btn btn-danger'
                     div
                       big Delete my account
                     small Deleting #{current_user.runs.count} runs (#{current_user.pbs.count} PBs) across #{current_user.games.count} games with it
               .col-lg
                 .center
-                  = button_to user_path(current_user), method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be disowned."}, class: 'button btn btn-danger'
+                  = button_to settings_path, method: :delete, data: {confirm: "Really delete your account (#{current_user})? Your existing runs will be disowned."}, class: 'button btn btn-danger'
                     div
                       big Delete my account
                     small Keeping all runs, but anonymizing them permanently

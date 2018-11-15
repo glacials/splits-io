@@ -18,7 +18,7 @@ class MoveTwitchDataOutOfUsers < ActiveRecord::Migration[5.2]
         user:              user,
         twitch_id:         user.twitch_id,
         access_token:      user.twitch_token || '', # Not sure why there are NULLs, but we still want the constraint
-        name:              user.name,
+        name:              user.nickname,
         display_name:      user.twitch_display_name || user.name,
         email:             user.email,
         avatar:            user[:avatar] || TwitchUser.default_avatar,
