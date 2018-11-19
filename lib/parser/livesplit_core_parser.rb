@@ -39,8 +39,28 @@ class Parser
       realtime_history: nil,
       splits: [],
       realtime_time: 0,
-      gametime_time: 0
+      gametime_time: 0,
+      realtime_sum_of_best_ms: 0,
+      gametime_sum_of_best_ms: 0,
+      total_playtime_ms: 0
     }.tap { |run_tap| run_tap[:name] = "#{run_tap[:game]} #{run_tap[:category]}".strip }
+
+    realtime_sum_of_best = LiveSplitCore::Analysis.calculate_sum_of_best(run, false, false, 0)
+    gametime_sum_of_best = LiveSplitCore::Analysis.calculate_sum_of_best(run, false, false, 1)
+
+    unless realtime_sum_of_best.nil?
+      run_object[:realtime_sum_of_best_ms] = realtime_sum_of_best.total_seconds * 1000
+      realtime_sum_of_best.dispose
+    end
+
+    unless gametime_sum_of_best.nil?
+      run_object[:gametime_sum_of_best_ms] = gametime_sum_of_best.total_seconds * 1000
+      gametime_sum_of_best.dispose
+    end
+
+    total_playtime = LiveSplitCore::Analysis.calculate_total_playtime_for_run(run)
+    run_object[:total_playtime_ms] = total_playtime.total_seconds * 1000
+    total_playtime.dispose
 
     unless fast
       run_object[:history] = []

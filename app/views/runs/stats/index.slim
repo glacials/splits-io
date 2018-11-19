@@ -114,8 +114,8 @@ article#stats
             td
               span Total Playtime
             td
-              - if @run.total_playtime_ms(timing) != 0
-                span = format_ms(@run.total_playtime_ms(timing))
+              - if @run.total_playtime_ms != 0
+                span = format_ms(@run.total_playtime_ms)
               - else
                 span.time -
       .card-footer.clearfix

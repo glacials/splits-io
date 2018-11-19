@@ -32,13 +32,13 @@ article data-turbolinks-temporary=true
             small.delta-indicator.delta-positive.tip-top title='Since last PB'
               = run.attempts - previous_upload.attempts
         span.statcard-desc = 'Attempt'.pluralize(run.attempts)
-    - if run.total_playtime_ms(timing) > 0
+    - if run.total_playtime_ms > 0
       .col-sm-3: .statcard.p-3
         h3.statcard-number
-          span = format_ms(run.total_playtime_ms(timing))
-          - if previous_upload.present? && run.total_playtime_ms(timing) > previous_upload.total_playtime_ms(timing)
+          span = format_ms(run.total_playtime_ms)
+          - if previous_upload.present? && run.total_playtime_ms > previous_upload.total_playtime_ms
             small.delta-indicator.delta-positive.text-success.tip-top title='Since last PB'
-              = format_ms_casual(run.total_playtime_ms(timing) - previous_upload.total_playtime_ms(timing))
+              = format_ms_casual(run.total_playtime_ms - previous_upload.total_playtime_ms)
         span.statcard-desc Life playtime
     .col-sm-3: .statcard.p-3
       h3.statcard-number#time-since-upload title=run.created_at

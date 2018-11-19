@@ -46,7 +46,7 @@ FactoryBot.define do
     end
 
     trait :parsed do
-      parsed_at Time.now
+      parsed_at Time.now.utc
       program 'livesplit'
       after(:create) do |run|
         FactoryBot.create_list(:segment, 10, run: run)
@@ -54,6 +54,7 @@ FactoryBot.define do
       realtime_duration_ms 10_000
       realtime_sum_of_best_ms 9000
       realtime_sum_of_best_s 90
+      total_playtime_ms 10_000
     end
 
     trait :attemptless do
