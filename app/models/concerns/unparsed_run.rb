@@ -13,10 +13,13 @@ module UnparsedRun
         segments.delete_all
         histories.delete_all
 
-        f = file
-        return false if f.nil?
+        parse_result = nil
+        file do |f|
+          return false if f.nil?
 
-        parse_result = Parser.parse(f)
+          parse_result = Parser.parse(f.fileno)
+        end
+
         return false if parse_result.nil?
         return false if parse_result[:splits].blank?
 

@@ -5,14 +5,19 @@ rescue LoadError
 end
 
 class Parser
-  def self.parse(run_string, fast: false)
-    parse_result = LiveSplitCore::Run.parse(run_string, run_string.bytesize, '', false)
+  def self.parse(run, fast: false)
+    parse_result = if run.is_a?(Integer)
+                     # If integer, attempt to parse the file descriptor attached to the number
+                     LiveSplitCore::Run.parse_file_handle(run, '', false)
+                   else
+                     # Assume run is already read into a string and parse from memory
+                     LiveSplitCore::Run.parse(run, run.length, '', false)
+                   end
     return nil unless parse_result.parsed_successfully
+
     program = parse_result.timer_kind
 
-    if Run.program_from_attribute(:to_s, program).nil?
-      program = ExchangeFormat.to_s
-    end
+    program = ExchangeFormat.to_s if Run.program_from_attribute(:to_s, program).nil?
 
     if parse_result.is_generic_timer && !Run.program_from_attribute(:to_s, program).exchangeable?
       # We got a file in the exchange format, but the reported timer doesn't support the exchange format. Wipe the timer
