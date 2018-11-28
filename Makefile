@@ -18,10 +18,9 @@ ifeq ($(container),)
 endif
 
 build:
-	[ ! -e .seeded ] && make seed && echo "# Do not delete this file. Its presence tells the splits-io Makefile to not re-seed data." > .seeded
-	$(docker-compose) build
 	$(docker-compose) run web bundle install
-	@[ ! -e .seed ] && make seed || true
+	([ ! -e .seed ] && make seed && echo "# Do not delete this file. Its presence tells the splits-io Makefile to not re-seed data." > .seed) | true
+	$(docker-compose) build
 
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"

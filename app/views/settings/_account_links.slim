@@ -14,7 +14,7 @@
       .card-footer
         .float-right
           - if current_user.google.present?
-            a.btn.btn-outline-light.bg-google href='/auth/twitch/unlink' Unlink
+            a.btn.btn-outline-light href='/auth/twitch/unlink' Unlink
           - else
             i.btn.btn-outline-light.disabled.tip-top(
               style='cursor: not-allowed'
