@@ -130,7 +130,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     if timer == Run.program(@run.timer)
       @run.file
     else
-      render_to_string(file: "runs/#{timer.to_sym}.html.erb", layout: false)
+      render_to_string(file: "runs/exports/#{timer.to_sym}.html.erb", layout: false)
     end
   end
 

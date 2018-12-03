@@ -39,7 +39,6 @@ Rails.application.routes.draw do
   get '/search/:q', to: redirect('/search?q=%{q}')
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
-  get '/:run/download/:timer',         to: 'runs#download', as: :download
 
   get '/auth/patreon',          to: 'patreon_users#out'
   get '/auth/patreon/callback', to: 'patreon_users#in'
@@ -97,13 +96,15 @@ Rails.application.routes.draw do
   delete '/settings/applications/:application',      to: 'applications#destroy'
   delete '/settings/authorizations/:application',    to: 'authorized_applications#destroy',                      as: :authorization
 
-  get    '/:run/edit',                      to: 'runs#edit',                      as: :edit_run
-  get    '/:run/stats',                     to: 'runs/stats#index',               as: :run_stats
-  get    '/:run/stats/run_history.csv',     to: 'runs/stats#run_history_csv',     as: :run_history_csv
-  get    '/:run/stats/segment_history.csv', to: 'runs/stats#segment_history_csv', as: :segment_history_csv
-  get    '/:run',                           to: 'runs#show',                      as: :run
-  patch  '/:run',                           to: 'runs#update'
-  delete '/:run',                           to: 'runs#destroy'
+  get    '/:run/edit',                       to: 'runs#edit',                        as: :edit_run
+  get    '/:run',                            to: 'runs#show',                        as: :run
+  patch  '/:run',                            to: 'runs#update'
+  delete '/:run',                            to: 'runs#destroy'
+
+  get '/:run/export/history.csv',         to: 'runs/exports#history_csv',         as: :history_csv
+  get '/:run/export/segment_history.csv', to: 'runs/exports#segment_history_csv', as: :segment_history_csv
+  get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download
+  get '/:run/download/:timer',            to: 'runs/exports#timer' # deprecated
 
   namespace :api do
     namespace :webhooks do

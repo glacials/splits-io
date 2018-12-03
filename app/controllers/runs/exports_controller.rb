@@ -1,5 +1,6 @@
-class Runs::StatsController < Runs::ApplicationController
-  before_action :set_run, only: [:index, :run_history_csv, :segment_history_csv]
+class Runs::ExportsController < Runs::ApplicationController
+  before_action :set_run, only: [:index, :timer, :history_csv, :segment_history_csv]
+  before_action :first_parse, only: [:download], if: -> { @run.parsed_at.nil? }
 
   def index
     @run.parse_into_db unless @run.parsed?
@@ -17,7 +18,46 @@ class Runs::StatsController < Runs::ApplicationController
     }
   end
 
-  def run_history_csv
+  def timer
+    # Enable CORS for this endpoint so clients can download files; this should be an API endpoint but I'm not sure how I
+    # want the timer-specific views to belong to both an API namespace and a user namespace
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+
+    timer = Run.program(params[:timer])
+    if timer.nil?
+      redirect_to run_path(@run), alert: 'Unrecognized timer.'
+      return
+    end
+
+    begin
+      s3_file = $s3_bucket_internal.object("splits/#{@run.s3_filename}")
+
+      if timer == Run.program(@run.timer) && s3_file.exists?
+        redirect_to s3_file.presigned_url(
+          :get,
+          response_content_disposition: "attachment; filename=\"#{@run.filename}\""
+        )
+        return
+      end
+    rescue Aws::S3::Errors::Forbidden
+    end
+
+    send_data(
+      if timer == Run.program(@run.timer)
+        @run.file
+      else
+        render_to_string(params[:timer], layout: false)
+      end,
+      filename: @run.filename(timer: timer).to_s,
+      layout: false
+    )
+  end
+
+
+  def history_csv
     @run.parse_into_db unless @run.parsed?
 
     column_names = ['Attempt #', 'Realtime (ms)', 'Gametime (ms)']
@@ -29,14 +69,14 @@ class Runs::StatsController < Runs::ApplicationController
       end
     end
 
-    send_data(csv, filename: "#{@run.id36}_run_history.csv", layout: false)
+    send_data(csv, filename: "#{@run.id36}_history.csv", layout: false)
   end
 
   def segment_history_csv
     @run.parse_into_db unless @run.parsed?
 
     if @run.attempts.nil? || @run.attempts.zero?
-      redirect_to run_stats_path(@run), alert: 'Segment history is not available for this run.'
+      redirect_to run_path(@run), alert: 'Segment history is not available for this run.'
       return
     end
 

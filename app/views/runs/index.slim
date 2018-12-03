@@ -21,6 +21,12 @@ article
           h2.statcard-number
             span> title=current_user.created_at = time_ago_in_words(current_user.created_at)
           span.statcard-desc Account age
+      .card
+        h3.card-header What game do you want to improve at today?
+        .card-body
+          - current_user.games.limit(4).each do |game|
+            a href=game_path(game)
+              h5.col-md-3 = game
       .card.shadow
         = render partial: 'shared/run_table', locals: { \
           runs: current_user.pbs, \

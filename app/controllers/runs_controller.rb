@@ -3,10 +3,10 @@ require 'uri'
 require 'speedrundotcom'
 
 class RunsController < ApplicationController
-  before_action :set_run,        only: [:show, :download, :destroy, :compare, :edit, :update]
+  before_action :set_run,        only: [:show, :destroy, :compare, :edit, :update]
   before_action :set_comparison, only: [:compare]
 
-  before_action :first_parse, only: [:show, :edit, :update, :download], if: -> { @run.parsed_at.nil? }
+  before_action :first_parse, only: [:show, :edit, :update], if: -> { @run.parsed_at.nil? }
 
   before_action :warn_about_deprecated_url, only: [:show], if: -> { request.path == "/#{@run.nick}" }
   before_action :attempt_to_claim,          only: [:show], if: -> { params[:claim_token].present? }
@@ -113,45 +113,6 @@ class RunsController < ApplicationController
       end
     end
   end
-
-  def download
-    # Enable CORS for this endpoint so clients can download files; this should be an API endpoint but I'm not sure how I
-    # want the timer-specific views to belong to both an API namespace and a user namespace
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-    headers['Access-Control-Request-Method'] = '*'
-    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-
-    timer = Run.program(params[:timer])
-    if timer.nil?
-      redirect_to run_path(@run), alert: 'Unrecognized timer.'
-      return
-    end
-
-    begin
-      s3_file = $s3_bucket_internal.object("splits/#{@run.s3_filename}")
-
-      if timer == Run.program(@run.timer) && s3_file.exists?
-        redirect_to s3_file.presigned_url(
-          :get,
-          response_content_disposition: "attachment; filename=\"#{@run.filename}\""
-        )
-        return
-      end
-    rescue Aws::S3::Errors::Forbidden
-    end
-
-    send_data(
-      if timer == Run.program(@run.timer)
-        @run.file
-      else
-        render_to_string(params[:timer], layout: false)
-      end,
-      filename: @run.filename(timer: timer).to_s,
-      layout: false
-    )
-  end
-
   def random
     redirect_to Run.random
   end

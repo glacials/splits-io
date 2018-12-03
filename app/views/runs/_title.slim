@@ -12,13 +12,22 @@ ul.run-options
   li
     button#download-link.btn.btn-outline-success.dropdown-toggle href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'
       => icon('fas', 'download')
-      span Download
+      span Export
     .dropdown-menu.bg-dark aria-labelledby='download-link'
       - timer = Run.program(run.timer)
-      a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym) = timer
-      a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank' LiveSplit One
-      - (Run.exportable_programs - [timer]).each do |timer|
-        a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym) = timer
+      - (Run.exportable_programs).each do |timer|
+        a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
+          => icon('fas', 'download')
+          = timer
+      a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
+        => icon('fas', 'cloud')
+        | LiveSplit One
+      a.dropdown-item.text-secondary href=history_csv_path(run)
+        => icon('fas', 'file-download')
+        | CSV - Run History
+      a.dropdown-item.text-secondary href=segment_history_csv_path(run)
+        => icon('fas', 'file-download')
+        | CSV - Segment History
     - if run.category
       - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
         li
@@ -30,10 +39,6 @@ ul.run-options
           a.btn.btn-outline-success  href=compare_path(run, run.category.best_known_run(timing))
             => icon('fas', 'chart-bar')
             span Compare to Best on Site
-  li
-    a.btn.btn-outline-success href=run_stats_path(run, params: {timing: params[:timing]})
-      => icon('fas', 'chart-pie')
-      span Stats
   - if run.srdc_id.present?
     li
       a.btn.btn-outline-light target='_blank' href=run.srdc_url
