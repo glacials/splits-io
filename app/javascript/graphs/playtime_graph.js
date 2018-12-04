@@ -80,7 +80,7 @@ const build_playtime_graph = function(run) {
             const xdiff = moment.duration(this.x - cumulative_playtime)
 
             if (this.y >= last_pb.realtime_duration_ms) {
-              return `Regression analysis says <b>${x} hours</b> of attempts should get you around <b>${y}</b>`
+              return `Regression analysis says <b>${x} hours</b> of attempts should yield a <b>${y}</b>`
             }
             if (xdiff < 0) {
               return `<b>Too soon to say</b> 🤷`
