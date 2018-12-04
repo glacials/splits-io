@@ -17,6 +17,31 @@
 
 article
   = render partial: 'runs/split_table', locals: {\
-    run: @run,\
-    timing: timing\
+    run: @run, \
+    timing: timing \
   }
+  #graph-spinner
+    = render partial: 'shared/spinner'
+    h5.text-success.text-center Loading graphs
+  #graph-alert.alert.alert-danger.my-3 hidden=true
+  #graph-holder.pt-3 hidden=true
+    #segment-history-graph.card.my-3
+    #pb-graph.card.my-3
+    #run-duration-graph.card.my-3
+    #reset-graph.card.my-3
+    - if @run.user.try(:silver_patron?)
+      => icon('fas', 'lock-open')
+      | #{@run.user} is a Splits I/O patron, so the below section can be viewed.
+      #playtime-graph.card.my-3
+    - elsif @run.belongs_to?(current_user)
+      .my-3.d-flex.justify-content-between
+        span
+          ' Become a Splits I/O patron to unlock the below section. This graph uses your history to predict how many
+          ' attempts until your next PB.
+        span.text-secondary
+          span => icon('fas', 'lock')
+          span Only you can see this.
+      .card.my-3
+        #paywall-container
+          #paywall.bg-dark
+          #playtime-graph

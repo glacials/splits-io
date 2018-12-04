@@ -10,6 +10,7 @@
 import "jquery"
 import "jquery-ujs"
 import "moment"
+import "moment-duration-format"
 import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
