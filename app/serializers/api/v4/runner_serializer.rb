@@ -2,6 +2,7 @@ class Api::V4::RunnerSerializer < Api::V4::ApplicationSerializer
   attributes :twitch_id, :name, :display_name, :avatar, :created_at, :updated_at
 
   def twitch_id
+    return nil if object.twitch.nil?
     object.twitch.twitch_id.to_s
   end
 
