@@ -36,8 +36,8 @@ const build_pb_graph = function(run) {
       type: 'column',
       zoomType: 'x'
     },
-    title: {text: 'PB vs Golds'},
-    subtitle: {text: 'Calculated: PB - Gold'},
+    title: {text: 'Possible Time Save in PB'},
+    subtitle: {text: '(PB - Gold)'},
     tooltip: {
       pointFormat: 'Time Save: {point.y:.1f}s',
       shared: true

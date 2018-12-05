@@ -15,7 +15,7 @@ document.addEventListener('turbolinks:load', function() {
     if (response.ok) {
       return response.json()
     }
-    throw new Error('Request for run from api failed')
+    throw new Error('Request for run from API failed')
   }).then(function(run) {
     document.getElementById('graph-spinner').hidden = true
     document.getElementById('graph-holder').hidden = false

@@ -1,55 +1,55 @@
 require 'rails_helper'
 
-RSpec.describe 'runs/exchange' do
+RSpec.describe 'runs/exports/exchange' do
   it 'renders the Splits I/O Exchange Format template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 
-    expect(view).to render_template('runs/exchange')
+    expect(view).to render_template('runs/exports/exchange')
   end
 end
 
-RSpec.describe 'runs/livesplit' do
+RSpec.describe 'runs/exports/livesplit' do
   it 'renders the LiveSplit template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 
-    expect(view).to render_template('runs/livesplit')
+    expect(view).to render_template('runs/exports/livesplit')
   end
 end
 
-RSpec.describe 'runs/splitterz' do
+RSpec.describe 'runs/exports/splitterz' do
   it 'renders the SplitterZ template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 
-    expect(view).to render_template('runs/splitterz')
+    expect(view).to render_template('runs/exports/splitterz')
   end
 end
 
-RSpec.describe 'runs/timesplittracker' do
+RSpec.describe 'runs/exports/timesplittracker' do
   it 'renders the Time Split Tracker template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 
-    expect(view).to render_template('runs/timesplittracker')
+    expect(view).to render_template('runs/exports/timesplittracker')
   end
 end
 
-RSpec.describe 'runs/urn' do
+RSpec.describe 'runs/exports/urn' do
   it 'renders the Urn template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 
-    expect(view).to render_template('runs/urn')
+    expect(view).to render_template('runs/exports/urn')
   end
 end
 
-RSpec.describe 'runs/wsplit' do
+RSpec.describe 'runs/exports/wsplit' do
   it 'renders the WSplit template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 
-    expect(view).to render_template('runs/wsplit')
+    expect(view).to render_template('runs/exports/wsplit')
   end
 end

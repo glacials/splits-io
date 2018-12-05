@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'runs/_quick_stats' do
+RSpec.describe 'runs/_stats' do
   let(:run) do
     r = FactoryBot.create(:livesplit16_gametime_run)
     r.parse_into_db
@@ -9,30 +9,30 @@ RSpec.describe 'runs/_quick_stats' do
   end
 
   context 'with realtime timing' do
-    it 'renders the quick stats' do
+    it 'renders stats' do
       render(
-        partial: 'runs/quick_stats',
+        partial: 'runs/stats',
         locals: {
           run: run,
           timing: Run::REAL
         }
       )
 
-      expect(view).to render_template('runs/_quick_stats')
+      expect(view).to render_template('runs/_stats')
     end
   end
 
   context 'with gametime timing' do
-    it 'renders the quick stats' do
+    it 'renders stats' do
       render(
-        partial: 'runs/quick_stats',
+        partial: 'runs/stats',
         locals: {
           run: run,
           timing: Run::GAME
         }
       )
 
-      expect(view).to render_template('runs/_quick_stats')
+      expect(view).to render_template('runs/_stats')
     end
   end
 end
