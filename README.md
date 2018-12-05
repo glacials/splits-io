@@ -88,6 +88,10 @@ To run tests from inside the Docker container, use
 ```sh
 make test
 ```
+To run only specific tests, use
+```sh
+make test path=spec/path/to/test/file/or/dir
+```
 
 ### Linting
 We use [Rubocop][rubocop] for code cleanliness and styling. To run it against changed files, commit your changes and run

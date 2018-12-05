@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'runs/_stats' do
   let(:run) do
-    r = FactoryBot.create(:livesplit16_gametime_run)
+    r = FactoryBot.create(:livesplit14_gametime_run)
     r.parse_into_db
     r.reload
     r

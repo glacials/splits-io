@@ -31,7 +31,7 @@ lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
 
 test:
-	$(docker-compose) run -e RAILS_ENV=test web rspec
+	$(docker-compose) run -e RAILS_ENV=test web rspec $(path)
 
 run: # Run docker-compose up, but work around Ctrl-C sometimes not stopping containers. See https://github.com/docker/compose/issues/3317#issuecomment-416552656
 	bash -c "trap '$(docker-compose) stop' EXIT; $(docker-compose) up"
