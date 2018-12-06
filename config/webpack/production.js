@@ -1,3 +1,7 @@
+const merge = require('webpack-merge')
 const environment = require('./environment')
 
-module.exports = environment
+const config = environment.toWebpackConfig()
+config.devtool = 'sourcemap'
+
+module.exports = config
