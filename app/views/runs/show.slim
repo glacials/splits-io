@@ -40,14 +40,14 @@
       - elsif @run.belongs_to?(current_user)
         .my-3.d-flex.justify-content-between
           span
-            ' Become a patron to unlock the below graph, which uses regression analysis to predict how much practice
-            ' until you PB.
+            a.text-muted> href=patreon_url Become a patron
+            ' to unlock the below graph, which uses regression analysis to predict how many attempts until you PB.
           span.text-secondary
             span => icon('fas', 'lock')
             span Only you can see this.
         .card.my-3
           #paywall-container
-            /! Congrats! You found out how to pay for this feature in guilt instead of money.
+            /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
             #paywall.bg-dark
             #playtime-graph
       #run-duration-graph.card.my-3
