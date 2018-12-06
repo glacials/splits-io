@@ -30,5 +30,7 @@ document.addEventListener('turbolinks:load', function() {
     document.getElementById('graph-spinner').style.display = 'none'
     document.getElementById('graph-alert').textContent = 'Error loading graphs: ' + error
     document.getElementById('graph-alert').hidden = false
+
+    throw error
   })
 })
