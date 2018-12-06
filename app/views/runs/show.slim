@@ -29,6 +29,10 @@
       h5.text-success.text-center Loading graphs
     #graph-alert.alert.alert-danger.my-3 hidden=true
     #graph-holder hidden=true
+      #run-duration-graph.card.my-3
+      #pb-graph.card.my-3
+      #segment-history-graph.card.my-3
+      #reset-graph.card.my-3
       - if @run.user.try(:silver_patron?)
         .my-3
           span => icon('fas', 'lock-open')
@@ -50,7 +54,3 @@
             /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
             #paywall.bg-dark
             #playtime-graph
-      #run-duration-graph.card.my-3
-      #pb-graph.card.my-3
-      #segment-history-graph.card.my-3
-      #reset-graph.card.my-3
