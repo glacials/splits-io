@@ -104,7 +104,7 @@ const build_playtime_graph = function(run) {
     series: [{
       name: 'Life playtime at time of PB',
       data: playtime_between_pbs,
-      regression: true,
+      regression: playtime_between_pbs >= 2,
       regressionSettings: {
         name: 'Prediction',
         type: 'logarithmic',
