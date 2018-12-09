@@ -33,7 +33,7 @@
       #pb-graph.card.my-3
       #segment-history-graph.card.my-3
       #reset-graph.card.my-3
-      - if @run.user.try(:silver_patron?)
+      - if @run.user.try(:silver_patron?) || @run.user.admin?
         .my-3
           span => icon('fas', 'lock-open')
           - if @run.belongs_to?(current_user)

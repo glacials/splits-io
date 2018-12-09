@@ -99,4 +99,8 @@ class User < ApplicationRecord
 
     patreon.pledge_cents >= 600
   end
+
+  def admin?
+    twitch.try(:twitch_id) == '29798286' # Glacials
+  end
 end

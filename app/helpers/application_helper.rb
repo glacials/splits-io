@@ -12,20 +12,25 @@ module ApplicationHelper
     current_user.present? && [user_path(current_user), settings_path, tools_path].include?(request.path)
   end
 
-  # user_badge returns a stylized user link, with the gold patron border if the user is the right level of patron. If
-  # gold is true, a gold style is forced; if false, a non-gold style is forced; if nil, the user's patron status is
-  # checked and applied appropriately.
+  # user_badge returns a stylized user link is the following fashion:
+  #
+  # Red if admin
+  # Gold if patron OR gold=true
+  # Gray if non-admin non-patron OR gold=false
   def user_badge(user, gold: nil)
     return '???' if user.nil?
 
-    classes = ['badge']
+    classes = ['badge', 'badge-secondary']
     title = nil
+
     if gold || (gold.nil? && user.silver_patron?)
-      classes << 'badge-warning'
-      classes << 'tip-top'
+      classes = ['badge', 'badge-warning', 'tip-top']
       title = "#{user} is a Splits I/O Patron!"
-    else
-      classes << 'badge-secondary'
+    end
+
+    if gold.nil? && user.admin?
+      classes = ['badge', 'badge-danger', 'tip-top']
+      title = "#{user} is the creator of Splits I/O!"
     end
 
     link_to(user, user_path(user), class: classes.join(' '), title: title)

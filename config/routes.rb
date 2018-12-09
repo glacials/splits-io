@@ -96,10 +96,11 @@ Rails.application.routes.draw do
   delete '/settings/applications/:application',      to: 'applications#destroy'
   delete '/settings/authorizations/:application',    to: 'authorized_applications#destroy',                      as: :authorization
 
-  get    '/:run/edit',                       to: 'runs#edit',                        as: :edit_run
-  get    '/:run',                            to: 'runs#show',                        as: :run
-  patch  '/:run',                            to: 'runs#update'
-  delete '/:run',                            to: 'runs#destroy'
+  get    '/:run/edit',  to: 'runs#edit', as: :edit_run
+  get    '/:run',       to: 'runs#show', as: :run
+  get    '/:run/stats', to: redirect('/%{run}') # to support old links floating around the internet; RIP stats page
+  patch  '/:run',       to: 'runs#update'
+  delete '/:run',       to: 'runs#destroy'
 
   get '/:run/export/history.csv',         to: 'runs/exports#history_csv',         as: :history_csv
   get '/:run/export/segment_history.csv', to: 'runs/exports#segment_history_csv', as: :segment_history_csv
