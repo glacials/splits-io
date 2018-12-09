@@ -28,7 +28,7 @@ module ApplicationHelper
       title = "#{user} is a Splits I/O Patron!"
     end
 
-    if gold.nil? && user.admin?
+    if gold.nil? && user.try(:admin?)
       classes = ['badge', 'badge-danger', 'tip-top']
       title = "#{user} is the creator of Splits I/O!"
     end

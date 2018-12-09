@@ -9,15 +9,15 @@ article#claim-prompt hidden=true
       .card-body Sign in to claim this run.
       .card-footer
         .float-right
-          a.btn.btn-primary.mr-3 href='/auth/twitch' Sign Up
-          a.btn.btn-primary href='/auth/twitch' Sign In
+          a.btn.btn-primary.mr-3 href='#' data={toggle: :modal, target: '#signin'} Sign Up
+          a.btn.btn-primary href='#' data={toggle: :modal, target: '#signin'} Sign In
     - else
       .card-body
         p You uploaded this run while logged out.
         p
-          | You can claim it to your account if you'd like (
-          b = current_user.to_s
-          | ).
+          ' You can claim it as
+          b> = user_badge(current_user)
+          ' if you'd like.
       .card-footer
         .float-right
           a.btn.btn-success#claim-prompt-button href='#'

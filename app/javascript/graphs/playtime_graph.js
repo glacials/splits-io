@@ -9,12 +9,7 @@ const build_playtime_graph = function(run) {
     return
   }
 
-  let last_pb = null
-  let cumulative_playtime = 0
-  let playtime_between_pbs = []
-
-  let sorted_histories = run.histories
-  sorted_histories.sort(function(a, b) {
+  let attemptSort = function(a, b) {
     if (a.attempt_number < b.attempt_number) {
       return -1
     }
@@ -22,16 +17,22 @@ const build_playtime_graph = function(run) {
       return 1
     }
     return 0
-  })
+  }
 
-  sorted_histories.forEach(function(history) {
-    if (history.realtime_duration_ms <= 0) {
-      return
-    }
-    cumulative_playtime += history.realtime_duration_ms
-    if (last_pb === null || history.realtime_duration_ms < last_pb.realtime_duration_ms) {
-      playtime_between_pbs.push([cumulative_playtime, history.realtime_duration_ms])
-      last_pb = history
+  let lastPB = null
+  let playtime = 0
+  let playtimeBetweenPBs = []
+  let sortedAttempts = run.histories
+  sortedAttempts.sort(attemptSort)
+
+  sortedAttempts.filter(runAttempt => runAttempt.realtime_duration_ms > 0).forEach(function(runAttempt) {
+    if (lastPB === null || runAttempt.realtime_duration_ms < lastPB.realtime_duration_ms) {
+      playtime = run.segments.map(segment => segment.histories).flat().
+        filter(segmentAttempt => segmentAttempt.attempt_number <= runAttempt.attempt_number).
+        map(segmentAttempt => segmentAttempt.realtime_duration_ms).
+        reduce((playtime, segmentAttempt) => playtime + segmentAttempt, 0),
+      playtimeBetweenPBs.push([playtime, runAttempt.realtime_duration_ms])
+      lastPB = runAttempt
     }
   })
 
@@ -77,9 +78,9 @@ const build_playtime_graph = function(run) {
           pointFormatter: function() {
             const x = Math.trunc(moment.duration(this.x).asHours())
             const y = moment.duration(this.y).format('H:mm:ss')
-            const xdiff = moment.duration(this.x - cumulative_playtime)
+            const xdiff = moment.duration(this.x - playtime)
 
-            if (this.y >= last_pb.realtime_duration_ms) {
+            if (this.y >= lastPB.realtime_duration_ms) {
               return `Regression analysis says <b>${x} hours</b> of attempts should yield a <b>${y}</b>`
             }
             if (xdiff < 0) {
@@ -87,7 +88,7 @@ const build_playtime_graph = function(run) {
             }
 
             return `<b>Prediction:</b> PB should hit <b>${y}</b> after about <b>${Math.trunc(xdiff.asHours())} more
-              hours</b> of attempts<br />(about <b>${Math.trunc(xdiff.asMilliseconds() / last_pb.realtime_duration_ms)}
+              hours</b> of attempts<br />(about <b>${Math.trunc(xdiff.asMilliseconds() / lastPB.realtime_duration_ms)}
               </b>full attempts' worth)`
           }
         }
@@ -103,14 +104,14 @@ const build_playtime_graph = function(run) {
     },
     series: [{
       name: 'Life playtime at time of PB',
-      data: playtime_between_pbs,
-      regression: playtime_between_pbs.length >= 2,
+      data: playtimeBetweenPBs,
+      regression: playtimeBetweenPBs.length >= 2,
       regressionSettings: {
         name: 'Prediction',
         type: 'logarithmic',
         color: 'rgba(250, 200, 50, 1)',
         dashStyle: 'dot',
-        extrapolate: playtime_between_pbs.length
+        extrapolate: playtimeBetweenPBs.length
       }
     }]
   })

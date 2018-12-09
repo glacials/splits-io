@@ -14,20 +14,27 @@ ul.run-options
       => icon('fas', 'download')
       span Export
     .dropdown-menu.bg-dark aria-labelledby='download-link'
+      h6.dropdown-header Generic Formats
+      a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
+        => icon('fas', 'file-download')
+        = ExchangeFormat
+      h6.dropdown-header Local Timers
       - timer = Run.program(run.timer)
-      - (Run.exportable_programs).each do |timer|
+      - (Run.exportable_programs - [ExchangeFormat]).each do |timer|
         a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
           => icon('fas', 'download')
           = timer
+      h6.dropdown-header Online Timers
       a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
         => icon('fas', 'cloud')
         | LiveSplit One
+      h6.dropdown-header Raw Data
       a.dropdown-item.text-secondary href=history_csv_path(run)
-        => icon('fas', 'file-download')
-        | CSV - Run History
+        => icon('fas', 'file-csv')
+        | Run History
       a.dropdown-item.text-secondary href=segment_history_csv_path(run)
-        => icon('fas', 'file-download')
-        | CSV - Segment History
+        => icon('fas', 'file-csv')
+        | Segment History
     - if run.category
       - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
         li
