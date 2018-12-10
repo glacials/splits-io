@@ -9,6 +9,9 @@ const build_playtime_graph = function(run) {
     return
   }
 
+  const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
+  const duration = `${timing}time_duration_ms`
+
   let attemptSort = function(a, b) {
     if (a.attempt_number < b.attempt_number) {
       return -1
@@ -25,13 +28,13 @@ const build_playtime_graph = function(run) {
   let sortedAttempts = run.histories
   sortedAttempts.sort(attemptSort)
 
-  sortedAttempts.filter(runAttempt => runAttempt.realtime_duration_ms > 0).forEach(function(runAttempt) {
-    if (lastPB === null || runAttempt.realtime_duration_ms < lastPB.realtime_duration_ms) {
+  sortedAttempts.filter(runAttempt => runAttempt[duration] > 0).forEach(function(runAttempt) {
+    if (lastPB === null || runAttempt[duration] < lastPB[duration]) {
       playtime = run.segments.map(segment => segment.histories).flat().
         filter(segmentAttempt => segmentAttempt.attempt_number <= runAttempt.attempt_number).
-        map(segmentAttempt => segmentAttempt.realtime_duration_ms).
+        map(segmentAttempt => segmentAttempt[duration]).
         reduce((playtime, segmentAttempt) => playtime + segmentAttempt, 0),
-      playtimeBetweenPBs.push([playtime, runAttempt.realtime_duration_ms])
+      playtimeBetweenPBs.push([playtime, runAttempt[duration]])
       lastPB = runAttempt
     }
   })
@@ -80,7 +83,7 @@ const build_playtime_graph = function(run) {
             const y = moment.duration(this.y).format('H:mm:ss')
             const xdiff = moment.duration(this.x - playtime)
 
-            if (this.y >= lastPB.realtime_duration_ms) {
+            if (this.y >= lastPB[duration]) {
               return `Regression analysis says <b>${x} hours</b> of attempts should yield a <b>${y}</b>`
             }
             if (xdiff < 0) {
@@ -88,7 +91,7 @@ const build_playtime_graph = function(run) {
             }
 
             return `<b>Prediction:</b> PB should hit <b>${y}</b> after about <b>${Math.trunc(xdiff.asHours())} more
-              hours</b> of attempts<br />(about <b>${Math.trunc(xdiff.asMilliseconds() / lastPB.realtime_duration_ms)}
+              hours</b> of attempts<br />(about <b>${Math.trunc(xdiff.asMilliseconds() / lastPB[duration])}
               </b>full attempts' worth)`
           }
         }
