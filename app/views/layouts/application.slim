@@ -10,6 +10,7 @@ html
     = render partial: 'shared/rollbarjs'
     = javascript_pack_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
     = javascript_include_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
+    script src='https://player.twitch.tv/js/embed/v1.js'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
     = render partial: 'application/favicon'
@@ -96,10 +97,10 @@ html
                       h5.text-light Sign In
                     .modal-body.bg-dark
                       .row
-                        a.btn.mx-auto.text-white style='background: #5F459E' href='/auth/twitch'
+                        a.btn.btn-twitch.mx-auto href='/auth/twitch'
                           => icon('fab', 'twitch')
                           ' Sign in with Twitch
-                        a.btn.mx-auto.text-white style='background: #CF5747' href='/auth/google'
+                        a.btn.btn-google.mx-auto href='/auth/google'
                           => icon('fab', 'google')
                           ' Sign in with Google
                       .row.text-light.m-2

@@ -83,7 +83,7 @@ class RunsController < ApplicationController
 
     if params[@run.id36][:video_url]
       if @run.update(video_url: params[@run.id36][:video_url])
-        redirect_to edit_run_path(@run), notice: 'Proof saved.'
+        redirect_back(fallback_location: edit_run_path(@run), notice: 'Video saved! 📹')
       else
         redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
       end
@@ -139,10 +139,11 @@ class RunsController < ApplicationController
 
     gon.run = {
       id: @run.id36,
-      splits: @run.collapsed_segments(timing),
-      timer: @run.timer,
+
+      splits:         @run.collapsed_segments(timing),
+      timer:          @run.timer,
+      video_url:      @run.video_url,
       default_timing: @run.default_timing,
-      video_url: @run.video_url
     }
 
     gon.run['user'] = if @run.user.nil?

@@ -53,10 +53,10 @@ article
       .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
 
   .card-deck.mb-4
-    .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
-      h5.card-header Edit Video Proof
+    .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
+      h5.card-header Edit Video
       .card-body = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
-      .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right: .btn-group = f.submit 'Save', class: 'btn btn-success'
 
     .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
       h5.card-header Edit Speedrun.com Link

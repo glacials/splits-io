@@ -69,12 +69,15 @@ class Parser
       (0...run.attempt_history_len).each do |i|
         attempt = run.attempt_history_index(i)
         attempt_id = attempt.index.to_i
-        time = attempt.time()
+        time = attempt.time
 
         run_object[:history] << {
-          attempt_number: attempt_id,
+          attempt_number:       attempt_id,
+          realtime_duration_ms: time.real_time.try(:total_seconds).try(:*, 1000) || 0,
           gametime_duration_ms: time.game_time.try(:total_seconds).try(:*, 1000) || 0,
-          realtime_duration_ms: time.real_time.try(:total_seconds).try(:*, 1000) || 0
+
+          started_at: attempt.started && DateTime.parse(attempt.started.to_rfc3339),
+          ended_at:   attempt.ended   && DateTime.parse(attempt.ended.to_rfc3339)
         }
 
         if time.real_time.try(:total_seconds).present?

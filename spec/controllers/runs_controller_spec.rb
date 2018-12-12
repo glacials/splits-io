@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe RunsController do
+  before { allow(Twitch::Videos).to receive(:recent).and_return([]) }
+
   describe '#index' do
     let(:response) { get(:index) }
 
