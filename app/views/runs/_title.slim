@@ -8,53 +8,55 @@ h5
       span Personal Best
   = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
 
-ul.run-options
-  li
-    button#download-link.btn.btn-outline-success.dropdown-toggle href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'
-      => icon('fas', 'download')
-      span Export
-    .dropdown-menu.bg-dark aria-labelledby='download-link'
-      h6.dropdown-header Generic Formats
-      a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
-        => icon('fas', 'file-download')
-        = ExchangeFormat
-      h6.dropdown-header Local Timers
-      - timer = Run.program(run.timer)
-      - (Run.exportable_programs - [ExchangeFormat]).each do |timer|
-        a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
-          => icon('fas', 'download')
-          = timer
-      h6.dropdown-header Online Timers
-      a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
-        => icon('fas', 'cloud')
-        | LiveSplit One
-      h6.dropdown-header Raw Data
-      a.dropdown-item.text-secondary href=history_csv_path(run)
-        => icon('fas', 'file-csv')
-        | Run History
-      a.dropdown-item.text-secondary href=segment_history_csv_path(run)
-        => icon('fas', 'file-csv')
-        | Segment History
-    - if run.category
-      - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
-        li
-          a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
-            => icon('fas', 'chart-bar')
-            span Compare to Mine
-      - if run.belongs_to?(current_user) && run != (run.category.best_known_run(timing) || run)
-        li
-          a.btn.btn-outline-success  href=compare_path(run, run.category.best_known_run(timing))
-            => icon('fas', 'chart-bar')
-            span Compare to Best on Site
-  - if run.srdc_id.present?
-    li
-      a.btn.btn-outline-light target='_blank' href=run.srdc_url
+.btn-toolbar role='toolbar' aria={label: 'Run navigation'}
+  .btn-group.mr-2 role='group' aria={label: 'Run navigation'}
+    .btn-group role='group'
+      button#download-link.btn.btn-outline-light.dropdown-toggle href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'
+        => icon('fas', 'download')
+        span Export
+      .dropdown-menu.bg-dark aria-labelledby='download-link'
+        h6.dropdown-header Generic Formats
+        a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
+          => icon('fas', 'file-download')
+          = ExchangeFormat
+        h6.dropdown-header Local Timers
+        - timer = Run.program(run.timer)
+        - (Run.exportable_programs - [ExchangeFormat]).each do |timer|
+          a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
+            => icon('fas', 'download')
+            = timer
+        h6.dropdown-header Online Timers
+        a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
+          => icon('fas', 'cloud')
+          | LiveSplit One
+        h6.dropdown-header Raw Data
+        a.dropdown-item.text-secondary href=history_csv_path(run)
+          => icon('fas', 'file-csv')
+          | Run History
+        a.dropdown-item.text-secondary href=segment_history_csv_path(run)
+          => icon('fas', 'file-csv')
+          | Segment History
+        - if run.category
+          - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
+            a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
+              => icon('fas', 'chart-bar')
+              span Compare to Mine
+          - if run.belongs_to?(current_user) && run != (run.category.best_known_run(timing) || run)
+            a.btn.btn-outline-success  href=compare_path(run, run.category.best_known_run(timing))
+              => icon('fas', 'chart-bar')
+              span Compare to Best on Site
+    - if can?(:edit, run)
+      a.btn.btn-outline-light href=edit_run_path(run)
+        => icon('fas', 'edit')
+        span Edit
+  .btn-group.mr-2 role='group' aria={label: 'Related links'}
+    - if run.srdc_id.present?
+      a.btn.btn-outline-light href=run.srdc_url
         => icon('fas', 'trophy')
         span Speedrun.com
-  - if run.video_url.present?
-    - uri = URI.parse(run.video_url)
-    li
-      a.btn.btn-outline-light target='_blank' href=run.video_url
+    - if run.video_url.present?
+      - uri = URI.parse(run.video_url)
+      a.btn.btn-outline-light href=run.video_url
         - if uri.host.match?(/^(www\.)?(twitch\.tv)$/)
           => icon('fab', 'twitch')
         - elsif uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
@@ -62,16 +64,11 @@ ul.run-options
         - else
           => icon('fas', 'video')
         span Video
-  - if can?(:edit, run)
-    li
-      a.btn.btn-outline-success href=edit_run_path(run)
-        => icon('fas', 'edit')
-        span Edit
-  - if run.user.nil?
-    li#claim-nav-link-container hidden=true
-      - if current_user.present?
-        a#claim-nav-link.btn.btn-outline-success href='#' data-confirm="Claim this run as #{current_user}?"
-          => icon('fas', 'user-check')
-          span Claim
-      - else
-        button.btn.btn-outline-secondary disabled=true Sign In to Claim
+    - if run.user.nil?
+      #claim-nav-link-container hidden=true
+        - if current_user.present?
+          a#claim-nav-link.btn.btn-outline-success href='#' data-confirm="Claim this run as #{current_user}?"
+            => icon('fas', 'user-check')
+            span Claim
+        - else
+          button.btn.btn-outline-secondary disabled=true Sign In to Claim

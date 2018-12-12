@@ -141,7 +141,8 @@ class RunsController < ApplicationController
       id: @run.id36,
       splits: @run.collapsed_segments(timing),
       timer: @run.timer,
-      default_timing: @run.default_timing
+      default_timing: @run.default_timing,
+      video_url: @run.video_url
     }
 
     gon.run['user'] = if @run.user.nil?

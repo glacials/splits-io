@@ -18,7 +18,11 @@
 = render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
 
 .row.mx-1
-  .col-md-6.my-3
+  .col-md-6
+    - if @run.video_url.present? && URI.parse(@run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+        .card.my-3 style='padding-bottom: 56.25%'
+          script src='https://player.twitch.tv/js/embed/v1.js'
+          #twitch-player style='position: absolute; top: 0; right: 0; bottom: 0; left: 0'
     = render partial: 'runs/split_table', locals: {\
       run: @run, \
       timing: timing \
