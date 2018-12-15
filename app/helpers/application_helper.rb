@@ -12,28 +12,52 @@ module ApplicationHelper
     current_user.present? && [user_path(current_user), settings_path, tools_path].include?(request.path)
   end
 
-  # user_badge returns a stylized user link is the following fashion:
+  # user_badge returns a stylized user link in the following priority (high to low):
   #
-  # Red if admin
-  # Gold if patron OR gold=true
-  # Gray if non-admin non-patron OR gold=false
-  def user_badge(user, gold: nil)
+  # - Override color if override is not nil (gold, silver, standard)
+  # - Red if admin
+  # - Gold if $4+ patron
+  # - Silver if $2+ patron
+  # - Standard
+  def user_badge(user, override: nil)
+    raise "Invalid badge override" if ![nil, :standard, :silver, :gold].include?(override)
     return '???' if user.nil?
 
-    classes = ['badge', 'badge-secondary']
+    badge = 'badge-dark'
     title = nil
 
-    if gold || (gold.nil? && user.silver_patron?)
-      classes = ['badge', 'badge-warning', 'tip-top']
-      title = "#{user} is a Splits I/O Patron!"
+    if override.present?
+      badge = 'badge-dark' if override == :standard
+
+      if override == :gold
+        badge = 'badge-warning'
+        title = "#{user} is a Splits I/O patron!"
+      end
+
+      if override == :silver
+        badge = 'badge-secondary'
+        title = "#{user} is a Splits I/O patron!"
+      end
+
+      return link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title)
     end
 
-    if gold.nil? && user.try(:admin?)
-      classes = ['badge', 'badge-danger', 'tip-top']
+    if user.patron?
+      badge = 'badge-secondary'
+      title = "#{user} is a Splits I/O patron!"
+    end
+
+    if user.silver_patron?
+      badge = 'badge-warning'
+      title = "#{user} is a Splits I/O patron!"
+    end
+
+    if user.admin?
+      badge = 'badge-danger'
       title = "#{user} is the creator of Splits I/O!"
     end
 
-    link_to(user, user_path(user), class: classes.join(' '), title: title)
+    link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title)
   end
 
   def game_badge(game)

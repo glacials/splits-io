@@ -9,7 +9,10 @@
             span.text-success> ✓
             ' No Ads
           i.btn.btn-outline-light.disabled Complete!
-        p.mb-1 Make the ad at the top of the page go away, but without feeling guilty about it.
+        p.mb-1
+          ' Make the ad at the top of the page go away, but without feeling guilty about it. Comes with a
+          ' #{user_badge(current_user, override: :standard)} → #{user_badge(current_user, override: :silver)} username
+          ' upgrade.
     - else
       .list-group-item
         .d-flex.w-100.justify-content-between
@@ -17,27 +20,32 @@
             span.text-danger> ✗
             ' No Ads
           a.btn.btn-primary href=patreon_url(checkout: :bronze) + $#{2 - pledge_cents / 100} / month
-        p.mb-1 Make the ad at the top of the page go away, but without feeling guilty about it.
+        p.mb-1
+          ' Make the ad at the top of the page go away, but without feeling guilty about it. Comes with a
+          ' #{user_badge(current_user, override: :standard)} → #{user_badge(current_user, override: :silver)} username
+          ' upgrade.
     - if current_user.silver_patron?
       .list-group-item
         .d-flex.w-100.justify-content-between
           h5.mb1
             span.text-success> ✓
-            ' Gold Username
+            ' Practice-till-PB Regression Analysis
           i.btn.btn-outline-light.disabled Complete!
         p.mb-1
-          ' Upgrade your #{user_badge(current_user, gold: false)} into a #{user_badge(current_user, gold: true)}
-          ' everywhere on the site.
+          ' Regression analysis for how many hours of attempts you need to hit specific PBs. Comes with a
+          ' #{user_badge(current_user, override: :silver)} → #{user_badge(current_user, override: :gold)}
+          ' username upgrade.
     - else
       .list-group-item
         .d-flex.w-100.justify-content-between
           h5.mb1
             span.text-danger> ✗
-            ' Gold Username
+            ' Practice-till-PB Graph
           a.btn.btn-primary href=patreon_url(checkout: :silver) + $#{4 - pledge_cents / 100} / month
         p.mb-1
-          ' Upgrade your #{user_badge(current_user, gold: false)} into a #{user_badge(current_user, gold: true)}
-          ' everywhere on the site.
+          ' Regression analysis for how many hours of attempts you need to hit specific PBs. Comes with a
+          ' #{user_badge(current_user, override: :silver)} → #{user_badge(current_user, override: :gold)}
+          ' username upgrade.
     - if current_user.gold_patron?
       .list-group-item
         .d-flex.w-100.justify-content-between
@@ -57,4 +65,4 @@
         p.mb-1
           ' Get special static links that always redirect to your current PB, even when it improves.
   .card-footer
-    p Any amount pledged also puts you in the footer of the site! 😍 See Patreon for how much the site costs to run.
+    p All tiers also puts you in the footer of the site! 😍 See Patreon for how much the site costs to run.

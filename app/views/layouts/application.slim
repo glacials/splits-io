@@ -123,7 +123,7 @@ html
               a> href=patreon_url
                 span Thanks to our patrons!
               p
-                - User.joins(:patreon).where('patreon_users.pledge_cents > 0').each do |user|
+                - User.joins(:patreon).where('patreon_users.pledge_cents >= 200').each do |user|
                   span.mr-1 = user_badge(user)
           .col-md-6
             .float-right style='text-align: right;'
