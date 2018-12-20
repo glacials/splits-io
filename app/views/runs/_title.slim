@@ -94,15 +94,21 @@ h5
               p Splits I/O found the stream you PBed in! Click below to highlight it with 10s on either end of the
                 run.
               p You will have a chance to edit it before publishing.
-            .row: a.btn.btn-twitch.mx-auto.twitch(
-              target='_blank'
-              rel='noopener'
-              href=run.highlight_suggestion.url
-            )
-              => icon('fab', 'twitch')
-              ' Highlight at Twitch
+            .row: .btn-group.mx-auto
+              a.btn.btn-twitch.mx-auto.twitch(
+                target='_blank'
+                rel='noopener'
+                href=run.highlight_suggestion.url
+              )
+                => icon('fab', 'twitch')
+                ' Highlight at Twitch
+              .btn.btn-outline-twitch.tip-top(
+                title='Not taking you to the right page? Your video archive may have expired already.'
+              ) = icon('fas', 'question-circle')
             .row.text-light.m-2
               p Paste the link you get here:
               = f.text_field(:video_url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here')
           .modal-footer.bg-dark
-            = f.submit('Save', class: 'btn btn-success')
+            .float-right
+              .btn-group
+                = f.submit('Save', class: 'btn btn-success')

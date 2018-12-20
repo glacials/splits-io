@@ -47,17 +47,19 @@ class Twitch
   end
 
   module Videos
-    def self.recent(id, limit: 10)
-      JSON.parse(get(id))['data']
+    # recent returns recent videos on the channel of the given Twitch user ID. type can be :all, :upload, :archive, or
+    # :highlight.
+    def self.recent(id, type: :all)
+      JSON.parse(get(id, type))['data']
     end
 
     class << self
-      def get(id)
-        route(id).get(Twitch.headers)
+      def get(id, type)
+        route(id, type).get(Twitch.headers)
       end
 
-      def route(id)
-        Twitch.route["/videos?user_id=#{id}"]
+      def route(id, type)
+        return Twitch.route["/videos?user_id=#{id}&type=#{type}"]
       end
     end
   end

@@ -80,6 +80,9 @@ class Parser
           ended_at:   attempt.ended   && DateTime.parse(attempt.ended.to_rfc3339)
         }
 
+        # See https://github.com/glacials/splits-io/pull/474/files#r241242051
+        [attempt.started, attempt.ended].compact.each(&:dispose)
+
         if time.real_time.try(:total_seconds).present?
           run_object[:indexed_history][attempt_id] = time.real_time.try(:total_seconds)
           run_object[:realtime_history] << time.real_time.try(:total_seconds)

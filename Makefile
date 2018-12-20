@@ -19,9 +19,9 @@ endif
 
 build:
 	$(docker-compose) run web bundle install
+	$(docker-compose) build
 	$(docker-compose) run web rails db:migrate
 	([ ! -e .seed ] && make seed && echo "# Do not delete this file. Its presence tells the splits-io Makefile to not re-seed data." > .seed) | true
-	$(docker-compose) build
 
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"

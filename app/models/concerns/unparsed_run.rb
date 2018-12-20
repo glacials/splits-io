@@ -51,7 +51,7 @@ module UnparsedRun
           total_playtime_ms:       parse_result[:total_playtime_ms]
         )
 
-        HighlightSuggestion.new(run: self).hunt!
+        HighlightSuggestion.from_run(self)
       end
     end
 

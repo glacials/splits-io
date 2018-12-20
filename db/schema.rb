@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 2018_12_20_042225) do
     t.text "url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["run_id"], name: "index_highlight_suggestions_on_run_id"
+    t.index ["run_id"], name: "index_highlight_suggestions_on_run_id", unique: true
   end
 
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
