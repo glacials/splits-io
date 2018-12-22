@@ -4,6 +4,18 @@ module CompletedRun
   extend ActiveSupport::Concern
 
   included do
+    # duration returns the total duration of the run, from the beginning of the first segment to the end of the last
+    # segment.
+    def duration(timing = default_time_type)
+      case timing
+      when Run::REAL
+        Duration.new(realtime_duration_ms)
+      when Run::GAME
+        Duration.new(gametime_duration_ms)
+      end
+    end
+
+    # duration_ms is deprecated. Use duration instead, which returns a Duration type.
     def duration_ms(time_type = default_time_type)
       case time_type
       when Run::REAL
@@ -13,6 +25,19 @@ module CompletedRun
       end
     end
 
+    # sum_of_best returns the sum of all segments' fastest recorded times by the runner. In an ideal world with no
+    # variance or mistakes on hitting splits and no route changes that aren't also reflected in the splits, this time is
+    # the theoretical fastest time the runner has proven they can achieve in a perfect run.
+    def sum_of_best(timing = default_time_type)
+      case timing
+      when Run::REAL
+        Duration.new(realtime_sum_of_best_ms)
+      when Run::GAME
+        Duration.new(gametime_sum_of_best_ms)
+      end
+    end
+
+    # sum_of_best_ms is deprecated. Use sum_of_best instead, which returns a Duration type.
     def sum_of_best_ms(time_type = default_time_type)
       case time_type
       when Run::REAL
@@ -40,6 +65,16 @@ module CompletedRun
       end
     end
 
+    def median_segment_duration(timing)
+      case timing
+      when Run::REAL
+        Duration.new(segments.pluck(:realtime_duration_ms).median.truncate)
+      when Run::GAME
+        Duration.new(segments.pluck(:gametime_duration_ms).median.truncate)
+      end
+    end
+
+    # median_segment_duration_ms is deprecated. Use median_segment_duration instead, which returns a Duration type.
     def median_segment_duration_ms(timing)
       case timing
       when Run::REAL
@@ -72,6 +107,8 @@ module CompletedRun
       self[:time].to_f
     end
 
+    # has_golds? returns something truthy if the run includes fastest times recorded for every segment. If even one
+    # segment is missing a fastest time, it returns something falsey.
     def has_golds?(timing)
       segments.all? do |segment|
         segment.shortest_duration_ms(timing)
@@ -82,6 +119,13 @@ module CompletedRun
       duration_ms(timing).present? && duration_ms(timing).positive?
     end
 
+    # total_playtime returns the total amount of time logged in this game by this runner, according to the timer. This
+    # includes all partial and complete runs.
+    def total_playtime
+      Duration.new(self[:total_playtime_ms] || SegmentHistory.where(segment: segments).sum(:realtime_duration_ms))
+    end
+
+    # total_playtime_ms is deprecated. Use total_playtime instead, which returns a Duration type.
     def total_playtime_ms
       self[:total_playtime_ms] || SegmentHistory.where(segment: segments).sum(:realtime_duration_ms)
     end

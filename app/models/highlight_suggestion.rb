@@ -31,7 +31,7 @@ class HighlightSuggestion < ApplicationRecord
               uri.query = {
                 start: (pb.started_at - video_start - 10.seconds).to_i,
                 end: ((pb.started_at - video_start) + (pb.duration_ms(Run::REAL) / 1000) + 10.seconds).to_i,
-                title: "PB: #{run.game} #{run.category} in #{format_ms(run.duration_ms(run.default_timing))}"
+                title: "PB: #{run.game} #{run.category} in #{Duration.new(run.duration_ms(run.default_timing)).format}"
               }.to_query
             end
           )
@@ -41,31 +41,6 @@ class HighlightSuggestion < ApplicationRecord
       end
 
       nil
-    end
-
-    # format_ms accepts a number of milliseconds and returns a time like "HH:MM:SS". If precise is true, it returns a time
-    # like "HH:MM:SS.mmm" instead.
-    def format_ms(milliseconds, precise: false)
-      return '-' if milliseconds.nil?
-      time = explode_ms(milliseconds)
-
-      return format('%02d:%02d:%02d.%03d', time[:h], time[:m], time[:s], time[:ms]) if precise
-      format('%02d:%02d:%02d', time[:h], time[:m], time[:s])
-    end
-
-    # explode_ms returns a hash with the components of the given duration separated out. The returned hash is guaranteed
-    # to be ordered by component size descending (hours before minutes, etc.).
-    def explode_ms(total_milliseconds)
-      total_seconds = total_milliseconds / 1000
-      total_minutes = total_seconds / 60
-      total_hours   = total_minutes / 60
-
-      {
-        h:  total_hours,
-        m:  total_minutes % 60,
-        s:  total_seconds % 60,
-        ms: total_milliseconds % 1000
-      }
     end
   end
 end

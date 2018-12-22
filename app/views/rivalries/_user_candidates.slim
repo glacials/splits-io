@@ -7,8 +7,8 @@
       .card-footer
         - run = potential_rival.pb_for(category)
         - timing = run.default_timing
-        span = format_ms(run.duration_ms(timing))
+        span = Duration.new(run.duration_ms(timing)).format
         small< Personal Best
         br
-        span = format_ms(run.sum_of_best_ms(timing))
+        span = Duration.new(run.sum_of_best_ms(timing)).format
         small< Sum of Best
