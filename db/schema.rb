@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_05_052729) do
+ActiveRecord::Schema.define(version: 2018_12_20_042225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -104,6 +104,14 @@ ActiveRecord::Schema.define(version: 2018_11_05_052729) do
     t.index ["user_id"], name: "index_google_users_on_user_id"
   end
 
+  create_table "highlight_suggestions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "run_id", null: false
+    t.text "url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["run_id"], name: "index_highlight_suggestions_on_run_id", unique: true
+  end
+
   create_table "oauth_access_grants", id: :serial, force: :cascade do |t|
     t.integer "resource_owner_id", null: false
     t.integer "application_id", null: false
@@ -176,6 +184,8 @@ ActiveRecord::Schema.define(version: 2018_11_05_052729) do
     t.bigint "gametime_duration_ms"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "started_at"
+    t.datetime "ended_at"
     t.index ["run_id"], name: "index_run_histories_on_run_id"
   end
 
@@ -293,6 +303,7 @@ ActiveRecord::Schema.define(version: 2018_11_05_052729) do
 
   add_foreign_key "game_aliases", "games", on_delete: :cascade
   add_foreign_key "google_users", "users"
+  add_foreign_key "highlight_suggestions", "runs"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"

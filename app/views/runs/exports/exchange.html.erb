@@ -68,7 +68,18 @@
         realtimeMS: segment.shortest_duration_ms(Run::REAL),
         gametimeMS: segment.shortest_duration_ms(Run::GAME)
       },
-      isSkipped: segment.skipped?(Run::REAL)
+      isSkipped: segment.skipped?(Run::REAL),
+      histories: segment.histories.with_ends.map do |history|
+        {
+          attemptNumber: history.attempt_number,
+          endedAt: {
+            realtimeMS: history.realtime_end_ms,
+            gametimeMS: history.gametime_end_ms
+          },
+          isSkipped: history.duration_ms(Run::REAL).zero? && history.duration_ms(Run::GAME).zero?,
+          isReset: history.duration_ms(Run::REAL).nil? && history.duration_ms(Run::GAME).nil?
+        }
+      end
     }
   end.to_json.html_safe %>
 }

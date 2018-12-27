@@ -71,14 +71,15 @@ module UnparsedRun
 
       parsed_segments.each.with_index do |parsed_segment, i|
         segs << Segment.new(
-          run_id: id,
+          run_id:         id,
           segment_number: i,
-          name: parsed_segment.name,
+          name:           parsed_segment.name,
 
           realtime_start_ms:             (parsed_segment.realtime_start    || 0) * 1000,
           realtime_end_ms:               (parsed_segment.realtime_end      || 0) * 1000,
           realtime_duration_ms:          (parsed_segment.realtime_duration || 0) * 1000,
           realtime_shortest_duration_ms: (parsed_segment.realtime_best     || 0) * 1000,
+
           realtime_skipped: parsed_segment.realtime_skipped?,
           realtime_reduced: parsed_segment.realtime_reduced?,
           realtime_gold:    parsed_segment.realtime_gold?,
@@ -87,6 +88,7 @@ module UnparsedRun
           gametime_end_ms:               (parsed_segment.gametime_end      || 0) * 1000,
           gametime_duration_ms:          (parsed_segment.gametime_duration || 0) * 1000,
           gametime_shortest_duration_ms: (parsed_segment.gametime_best     || 0) * 1000,
+
           gametime_skipped: parsed_segment.gametime_skipped?,
           gametime_reduced: parsed_segment.gametime_reduced?,
           gametime_gold:    parsed_segment.gametime_gold?
