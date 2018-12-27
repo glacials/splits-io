@@ -27,7 +27,6 @@ class GoogleUser < ApplicationRecord
       last_name:               auth.info.last_name,
       email:                   auth.info.email,
       avatar:                  auth.info.image,
-      url:                     auth.info.urls.google
     )
 
     google_user.save
