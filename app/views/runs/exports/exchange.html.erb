@@ -76,7 +76,7 @@
             realtimeMS: history.realtime_end_ms,
             gametimeMS: history.gametime_end_ms
           },
-          isSkipped: history.duration_ms(Run::REAL).zero? && history.duration_ms(Run::GAME).zero?,
+          isSkipped: history.duration_ms(Run::REAL).try(:zero?) && history.duration_ms(Run::GAME).try(:zero?),
           isReset: history.duration_ms(Run::REAL).nil? && history.duration_ms(Run::GAME).nil?
         }
       end
