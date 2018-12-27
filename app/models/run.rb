@@ -24,7 +24,7 @@ class Run < ApplicationRecord
   # dependent: :delete_all requires there be no child records that need to be deleted
   # If RunHistory is changed to have child records, change this back to just :destroy
   has_many :histories, class_name: 'RunHistory', dependent: :delete_all
-  has_one :highlight_suggestion
+  has_one :highlight_suggestion, dependent: :destroy
 
   has_secure_token :claim_token
 
