@@ -6,8 +6,10 @@
 /db/*.sqlite3-journal
 
 # all logfiles and tempfiles.
-/log/*.log
-/tmp
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
 
 # uploaded runs, Twitch oauth credentials, etc.
 /private
