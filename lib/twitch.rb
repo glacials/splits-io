@@ -56,6 +56,7 @@ class Twitch
           response = get(id, type, cursor: cursor)
           raise StopIteration if response.code != 200
           body = JSON.parse(response.body)
+          raise StopIteration if body['data'].empty?
 
           cursor = body['pagination']['cursor']
           body['data'].each do |video|
@@ -74,7 +75,7 @@ class Twitch
         return Twitch.route["/videos?#{{
           user_id: id,
           type: type,
-          cursor: cursor
+          after: cursor
         }.to_query}"]
       end
     end
