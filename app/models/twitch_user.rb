@@ -33,20 +33,6 @@ class TwitchUser < ApplicationRecord
     twitch_user
   end
 
-  def sync!
-    body = JSON.parse(Twitch::User.get(twitch_id))
-
-    update(
-      twitch_id:    body['_id'],
-      name:         body['name'].downcase,
-      display_name: body['display_name'],
-      avatar:       URI.parse(body['logo'] || self.class.default_avatar).tap { |uri| uri.scheme = 'https' }.to_s,
-      url:          auth.info.urls.Twitch
-    )
-  rescue RestClient::ResourceNotFound
-    nil
-  end
-
   def sync_follows!
     ActiveRecord::Base.transaction do
       current_followed_users = User.joins(:twitch).where(

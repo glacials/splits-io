@@ -50,6 +50,8 @@ module UnparsedRun
 
           total_playtime_ms:       parse_result[:total_playtime_ms]
         )
+
+        HighlightSuggestion.from_run(self)
       end
     end
 
@@ -59,9 +61,13 @@ module UnparsedRun
       RunHistory.import(histories.map do |history|
         RunHistory.new(
           run_id: id,
-          attempt_number: history[:attempt_number],
+
+          attempt_number:       history[:attempt_number],
           realtime_duration_ms: history[:realtime_duration_ms],
-          gametime_duration_ms: history[:gametime_duration_ms]
+          gametime_duration_ms: history[:gametime_duration_ms],
+
+          started_at: history[:started_at],
+          ended_at:   history[:ended_at]
         )
       end)
     end

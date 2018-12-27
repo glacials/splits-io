@@ -10,8 +10,19 @@ class RunHistory < ApplicationRecord
     end
   end
 
-  def duration_ms(time_type)
-    case time_type
+  # duration returns the total duration of this attempt.
+  def duration(timing)
+    case timing
+    when Run::REAL
+      Duration.new(realtime_duration_ms)
+    when Run::GAME
+      Duration.new(gametime_duration_ms)
+    end
+  end
+
+  # duration_ms is deprecated. Use duration instead, which returns a Duration type.
+  def duration_ms(timing)
+    case timing
     when Run::REAL
       realtime_duration_ms
     when Run::GAME

@@ -8,13 +8,13 @@
         - run = rivalry.from_user.pb_for(rivalry.category)
         - timing = params[:timing] || run.default_timing
         - if run.present?
-          span = format_ms(run.duration_ms(timing))
+          span = Duration.new(run.duration_ms(timing)).format
         - else
           span = '-'
         small< Personal Best
         br
         - if run.present?
-          span = format_ms(run.sum_of_best_ms(timing))
+          span = Duration.new(run.sum_of_best_ms(timing)).format
           small< Sum of Best
         - else
           span = '-'
@@ -29,13 +29,13 @@
         - run = rivalry.to_user.pb_for(rivalry.category)
         - timing = params[:timing] || run.default_timing
         - if run.present?
-          span = format_ms(run.duration_ms(timing))
+          span = Duration.new(run.duration_ms(timing)).format
         - else
           span = '-'
         small< Personal Best
         br
         - if run.present?
-          span = format_ms(run.sum_of_best_ms(timing))
+          span = Duration.new(run.sum_of_best_ms(timing)).format
           small< Sum of Best
         - else
           span = '-'

@@ -36,19 +36,20 @@ h5
         a.dropdown-item.text-secondary href=segment_history_csv_path(run)
           => icon('fas', 'file-csv')
           | Segment History
-        - if run.category
-          - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
-            a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
-              => icon('fas', 'chart-bar')
-              span Compare to Mine
-          - if run.belongs_to?(current_user) && run != (run.category.best_known_run(timing) || run)
-            a.btn.btn-outline-success  href=compare_path(run, run.category.best_known_run(timing))
-              => icon('fas', 'chart-bar')
-              span Compare to Best on Site
+      - if run.category
+        - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
+          a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
+            => icon('fas', 'chart-bar')
+            span Compare
     - if can?(:edit, run)
-      a.btn.btn-outline-light href=edit_run_path(run)
-        => icon('fas', 'edit')
-        span Edit
+      - if request.path_info == edit_run_path(run)
+        a.btn.btn-outline-light href=run_path(run)
+          => icon('fas', 'hand-point-left')
+          span Back
+      - else
+        a.btn.btn-outline-light href=edit_run_path(run)
+          => icon('fas', 'edit')
+          span Edit
   .btn-group.mr-2 role='group' aria={label: 'Related links'}
     - if run.srdc_id.present?
       a.btn.btn-outline-light href=run.srdc_url
@@ -72,3 +73,42 @@ h5
             span Claim
         - else
           button.btn.btn-outline-secondary disabled=true Sign In to Claim
+  .btn-group.mr-2 role='group' aria={label: 'Calls to action'}
+    - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+      a.btn.btn-twitch.tip-top(
+        href='#'
+        data={toggle: :modal, target: '#highlight'}
+        title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
+      )
+        => icon('fab', 'twitch')
+        span Auto-Highlight Possible
+- if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+  #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
+    .modal-dialog role='document'
+      .modal-content
+        = form_for run, as: run.id36, url: run_path(run) do |f|
+          .modal-header.bg-primary
+            h5.text-light Auto-Highlight
+          .modal-body.bg-dark
+            .row.text-light.m-2
+              p Splits I/O found the stream you PBed in! Click below to highlight it with 10s on either end of the
+                run.
+              p You will have a chance to edit it before publishing.
+            .row: .btn-group.mx-auto
+              a.btn.btn-twitch.mx-auto.twitch(
+                target='_blank'
+                rel='noopener'
+                href=run.highlight_suggestion.url
+              )
+                => icon('fab', 'twitch')
+                ' Highlight at Twitch
+              .btn.btn-outline-twitch.tip-top(
+                title='Not taking you to the right page? Your video archive may have expired already.'
+              ) = icon('fas', 'question-circle')
+            .row.text-light.m-2
+              p Paste the link you get here:
+              = f.text_field(:video_url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here')
+          .modal-footer.bg-dark
+            .float-right
+              .btn-group
+                = f.submit('Save', class: 'btn btn-success')

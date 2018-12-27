@@ -69,13 +69,23 @@ class Parser
       (0...run.attempt_history_len).each do |i|
         attempt = run.attempt_history_index(i)
         attempt_id = attempt.index.to_i
-        time = attempt.time()
+        time = attempt.time
+
+        # See https://github.com/glacials/splits-io/pull/474/files#r241242051
+        attempt_started = attempt.started
+        attempt_ended = attempt.ended
 
         run_object[:history] << {
-          attempt_number: attempt_id,
+          attempt_number:       attempt_id,
+          realtime_duration_ms: time.real_time.try(:total_seconds).try(:*, 1000) || 0,
           gametime_duration_ms: time.game_time.try(:total_seconds).try(:*, 1000) || 0,
-          realtime_duration_ms: time.real_time.try(:total_seconds).try(:*, 1000) || 0
+
+          started_at: attempt_started && DateTime.parse(attempt_started.to_rfc3339),
+          ended_at:   attempt_ended   && DateTime.parse(attempt_ended.to_rfc3339)
         }
+
+        # See https://github.com/glacials/splits-io/pull/474/files#r241242051
+        [attempt_started, attempt_ended].compact.each(&:dispose)
 
         if time.real_time.try(:total_seconds).present?
           run_object[:indexed_history][attempt_id] = time.real_time.try(:total_seconds)

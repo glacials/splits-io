@@ -6,8 +6,10 @@
 /db/*.sqlite3-journal
 
 # all logfiles and tempfiles.
-/log/*.log
-/tmp
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
 
 # uploaded runs, Twitch oauth credentials, etc.
 /private
@@ -30,6 +32,3 @@ yarn-error.log*
 .envrc
 
 .DS_Store
-
-# the .seed file prevents data from being seeded again; see Makefile
-.seed

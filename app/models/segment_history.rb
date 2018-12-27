@@ -1,7 +1,7 @@
 class SegmentHistory < ApplicationRecord
   belongs_to :segment
   has_one :run, through: :segment
-
+  
   # with_ends modifies the returned SegmentHistories to have realtime_end_ms and gametime_end_ms fields, which represent
   # the duration into the attempt when that specific segment history ended.
   #
@@ -22,8 +22,19 @@ class SegmentHistory < ApplicationRecord
     ''')
   end
 
-  def duration_ms(time_type)
-    case time_type
+  # duration returns the duration of this segment.
+  def duration(timing)
+    case timing
+    when Run::REAL
+      Duration.new(realtime_duration_ms)
+    when Run::GAME
+      Duration.new(gametime_duration_ms)
+    end
+  end
+
+  # duration_ms is deprecated. Use duration instead, which returns a Duration type.
+  def duration_ms(timing)
+    case timing
     when Run::REAL
       realtime_duration_ms
     when Run::GAME

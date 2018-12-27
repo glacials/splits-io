@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe RunsController do
+  before { allow(Twitch::Videos).to receive(:recent).and_return([]) }
+
   describe '#index' do
     let(:response) { get(:index) }
 
@@ -168,6 +170,7 @@ describe RunsController do
 
         context 'by the user who owns the run' do
           before { allow(controller).to receive(:current_user).and_return(run.user) }
+          before { allow(Twitch::Videos).to receive(:recent).and_return([]) }
 
           it 'returns a 302' do
             expect(response).to have_http_status(302)

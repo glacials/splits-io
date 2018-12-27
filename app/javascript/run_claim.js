@@ -25,7 +25,7 @@ const activateClaimPrompt = function(claimToken) {
 }
 
 document.addEventListener('turbolinks:load', function() {
-  if(gon.run === undefined) {
+  if(gon.run === undefined || location.pathname.substr(location.pathname.lastIndexOf('/')) === '/edit') {
     return
   }
 
