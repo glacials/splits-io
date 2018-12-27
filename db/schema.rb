@@ -99,7 +99,6 @@ ActiveRecord::Schema.define(version: 2018_12_27_221646) do
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "avatar", null: false
-    t.string "url", null: false
     t.index ["google_id"], name: "index_google_users_on_google_id", unique: true
     t.index ["user_id"], name: "index_google_users_on_user_id"
   end
