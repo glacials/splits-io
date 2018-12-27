@@ -50,16 +50,32 @@ class Twitch
     # recent returns recent videos on the channel of the given Twitch user ID. type can be :all, :upload, :archive, or
     # :highlight.
     def self.recent(id, type: :all)
-      JSON.parse(get(id, type))['data']
+      cursor = nil
+      Enumerator.new do |yielder|
+        loop do
+          response = get(id, type, cursor: cursor)
+          raise StopIteration if response.code != 200
+          body = JSON.parse(response.body)
+
+          cursor = body['pagination']['cursor']
+          body['data'].each do |video|
+            yielder << video
+          end
+        end
+      end.lazy
     end
 
     class << self
-      def get(id, type)
-        route(id, type).get(Twitch.headers)
+      def get(id, type, cursor: nil)
+        route(id, type, cursor).get(Twitch.headers)
       end
 
-      def route(id, type)
-        return Twitch.route["/videos?user_id=#{id}&type=#{type}"]
+      def route(id, type, cursor)
+        return Twitch.route["/videos?#{{
+          user_id: id,
+          type: type,
+          cursor: cursor
+        }.to_query}"]
       end
     end
   end

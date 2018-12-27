@@ -77,7 +77,6 @@ module RunsHelper
 
   # format_ms is deprecated. Use Duration.new(milliseconds).format instead.
   def format_ms(milliseconds, precise: false)
-    logger.warn('format_ms is deprecated. Please use Duration.new(milliseconds).format instead.')
     Duration.new(milliseconds).format(precise: precise)
   end
 

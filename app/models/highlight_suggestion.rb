@@ -27,6 +27,7 @@ class HighlightSuggestion < ApplicationRecord
 
         if video_start - 30.seconds < pb.started_at && video_end + 30.seconds > pb.ended_at
           highlight_suggestion = create(
+            run: run,
             url: URI.parse("https://www.twitch.tv/#{run.user.twitch.name}/manager/highlighter/#{video['id']}").tap do |uri|
               uri.query = {
                 start: (pb.started_at - video_start - 10.seconds).to_i,
@@ -35,7 +36,7 @@ class HighlightSuggestion < ApplicationRecord
               }.to_query
             end
           )
-          delay(run_at: 60.days.from_now).destroy # 60 days is life of archives for Partners / Twitch Prime members
+          delay(run_at: video_start + 60.days).destroy # 60 days is life of archives for Partners / Twitch Prime members
           return highlight_suggestion
         end
       end
