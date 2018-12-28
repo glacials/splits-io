@@ -25,12 +25,15 @@ class Twitch
       cursor = nil
       ids = []
       loop do
-        response = JSON.parse(get(id, cursor))
-        response['data'].each do |follow|
+        response = get(id, cursor)
+        break if response.code != 200
+        body = JSON.parse(response.body)
+        break if body['data'].empty?
+
+        cursor = body['pagination']['cursor']
+        body['data'].each do |follow|
           ids << follow['to_id']
         end
-        cursor = response['pagination']['cursor']
-        break if cursor.nil?
       end
       ids
     end
@@ -41,7 +44,11 @@ class Twitch
       end
 
       def route(id, cursor)
-        Twitch.route["/users/follows?from_id=#{id}&after=#{cursor}"]
+        Twitch.route["/users/follows?#{{
+          from_id: id,
+          first: 100,
+          after: cursor
+      }.to_query}"]
       end
     end
   end
@@ -75,6 +82,7 @@ class Twitch
         return Twitch.route["/videos?#{{
           user_id: id,
           type: type,
+          first: 100,
           after: cursor
         }.to_query}"]
       end
