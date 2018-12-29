@@ -26,6 +26,10 @@ class Duration
     }.drop_while { |_, unit| unit.zero? }.first(num_units).to_h.map { |k, v| "#{v.to_i}#{k}" }.join(' ')
   end
 
+  def as_ms
+    @ms
+  end
+
   private
 
   def hours
