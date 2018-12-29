@@ -33,9 +33,7 @@
     #graph-alert.alert.alert-danger.my-3 hidden=true
     #graph-holder hidden=true
       #run-duration-graph.card.my-3
-      #pb-graph.card.my-3
-      #segment-history-graph.card.my-3
-      #reset-graph.card.my-3
+      #segment-graphs.card.my-3
       - if @run.histories.any?
         - if @run.user.try(:silver_patron?) || @run.user.try(:admin?)
           .my-3
