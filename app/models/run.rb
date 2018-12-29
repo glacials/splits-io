@@ -159,16 +159,16 @@ class Run < ApplicationRecord
   end
 
   def publish_aging
-    publish_age_every(:minute, 60)
-    publish_age_every(:hour, 24)
-    publish_age_every(:day, 30)
+    publish_age_every(1.minute, 60)
+    publish_age_every(1.hour, 24)
+    publish_age_every(1.day, 30)
   end
 
   private
 
-  def publish_age_every(time, limit)
-    limit.times do |i|
-      RunChannel.delay(run_at: Time.now.utc + (i + 1).send(time)).broadcast_time_since_upload(id36)
+  def publish_age_every(period, cycles)
+    cycles.times do |i|
+      RunChannel.delay(run_at: Time.now.utc + (period * (i + 1))).broadcast_time_since_upload(id36)
     end
   end
 end
