@@ -1,14 +1,15 @@
 'use strict'
 import Highcharts from 'highcharts'
+import {blue, purple, green, yellow, red, orange} from 'colors.js'
 
 Highcharts.theme = {
   colors: [
-    "rgba(14, 144, 210, 1)",
-    "rgba(128, 87, 165, 1)",
-    "rgba(94, 185, 94, 1)",
-    "rgba(250, 210, 50, 1)",
-    "rgba(221, 81, 76, 1)",
-    "rgba(243, 123, 29, 1)"
+    blue,
+    purple,
+    green,
+    yellow,
+    red,
+    orange
   ],
   chart: {
     backgroundColor: 'none',
