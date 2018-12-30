@@ -104,21 +104,21 @@ const buildSegmentGraphs = function(run) {
       gridLineColor: logoGreen
     }],
     series: [{
-      name: 'Difference of PB and Golds',
+      name: 'Difference of PB and Gold',
       data: pbData,
       color: logoYellow,
       tooltip: {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.1f}s</b><br/>'
       }
     }, {
-      name: 'Difference of Averages and Golds',
+      name: 'Difference of Average and Gold',
       data: meanData,
       color: logoBlue,
       tooltip: {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.1f}s</b><br/>'
       }
     }, {
-      name: 'Reset Percentage',
+      name: 'Reset Rate',
       data: resetData,
       color: logoGreen,
       tooltip: {
