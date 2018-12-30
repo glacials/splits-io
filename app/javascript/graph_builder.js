@@ -17,7 +17,7 @@ document.addEventListener('turbolinks:load', function() {
   }).then(function(run) {
     document.getElementById('graph-spinner').hidden = true
     document.getElementById('graph-holder').hidden = false
-    if (run.run.program === 'livesplit') {
+    if (run.run.histories.length !== 0) {
       build_run_duration_graph(run.run)
       buildSegmentGraphs(run.run)
       build_playtime_graph(run.run)
