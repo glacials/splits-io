@@ -10,3 +10,6 @@
           .p-2
             .text-light = segment.name.presence || '-'
             .text-light-50 = format_ms(segment.duration_ms(timing), precise: run.short?(timing))
+  - if run.video_url.present? && URI.parse(run.video_url).host.match?(/^(www\.)?twitch\.tv$/)
+    div
+      span#timeline-video-progress: span#timeline-video-caret = icon('fas', 'caret-up')

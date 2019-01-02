@@ -1,3 +1,5 @@
+const async = require('async')
+
 document.addEventListener('turbolinks:load', function() {
   const el = document.getElementById('twitch-player')
   if (el === null) {
@@ -16,5 +18,10 @@ document.addEventListener('turbolinks:load', function() {
       player.seek(parseInt(el.dataset.startMs / 1000 + 10))
       player.play()
     })
+  })
+
+  async.forever((next) => {
+    document.getElementById('timeline-video-progress').style.margin = `0 0 0 ${player.getCurrentTime() / player.getDuration() * 100}%`
+    setTimeout(() => next(), 100)
   })
 })
