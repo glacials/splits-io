@@ -2948,10 +2948,10 @@ hawk@~3.1.3:
     hoek "2.x.x"
     sntp "1.x.x"
 
-highcharts@^6.0.7:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-6.1.0.tgz#115a6ee10ad36a53d9913f1030c6d46da16c7cb5"
-  integrity sha512-YZotALyZD1xJixB8pNOKqBpmxV/NrOpMHQ3l7/CMB1hn5U7KRSviaeyv8/1MT7/rTgEFPOW85mdaFKFr2EfeAw==
+highcharts@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-7.0.1.tgz#0c6ad096559aca723bc95276bce02b9790c444e8"
+  integrity sha512-dB+BuvIt6q2e4M0MgBClOA5FbNqfOpq/hoqQOLBVBSCqXOoCHd2fgEPFuruuyTf6KqiaIKjbRJ4JZd1fImEBYg==
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
