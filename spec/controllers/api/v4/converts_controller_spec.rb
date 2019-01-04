@@ -25,7 +25,7 @@ describe Api::V4::ConvertsController do
         it 'has the correct splits' do
           expect(body['run']['splits'].map { |s| [s['name'], s['duration']] }).to eq [
             ['Spiral Mountain', 211.23],
-            ["Mumbo's Mountain", 808.199]
+            ["Mumbo's Mountain", 808.2]
           ]
         end
       end

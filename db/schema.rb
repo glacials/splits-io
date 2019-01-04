@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_27_221646) do
+ActiveRecord::Schema.define(version: 2019_01_04_033419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -148,7 +148,7 @@ ActiveRecord::Schema.define(version: 2018_12_27_221646) do
     t.datetime "updated_at", null: false
     t.integer "owner_id"
     t.string "owner_type"
-    t.datetime "secret_generated_at", default: -> { "now()" }, null: false
+    t.datetime "secret_generated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.boolean "confidential", default: true, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
@@ -195,10 +195,8 @@ ActiveRecord::Schema.define(version: 2018_12_27_221646) do
     t.string "nick"
     t.string "image_url"
     t.integer "category_id"
-    t.decimal "realtime_duration_s"
     t.string "program"
     t.string "claim_token"
-    t.decimal "realtime_sum_of_best_s"
     t.boolean "archived", default: false, null: false
     t.string "video_url"
     t.string "srdc_id"
@@ -285,7 +283,7 @@ ActiveRecord::Schema.define(version: 2018_12_27_221646) do
     t.string "twitch_id", null: false
     t.string "email"
     t.string "avatar", null: false
-    t.datetime "follows_synced_at", default: "1918-08-29 06:20:14", null: false
+    t.datetime "follows_synced_at", default: "1970-01-01 00:00:00", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "url", null: false

@@ -27,7 +27,7 @@ class Api::V3::Detail::RunSerializer < Api::V3::ApplicationSerializer
   end
 
   def sum_of_best
-    object.realtime_sum_of_best_s.to_f
+    object.realtime_sum_of_best_ms.to_f / 1000
   end
 
   def name
