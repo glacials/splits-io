@@ -48,7 +48,8 @@ module UnparsedRun
           gametime_duration_ms:    (splits.map(&:gametime_duration).sum || 0) * 1000,
           gametime_sum_of_best_ms: parse_result[:gametime_sum_of_best_ms],
 
-          total_playtime_ms:       parse_result[:total_playtime_ms]
+          total_playtime_ms: parse_result[:total_playtime_ms],
+          default_timing:    ((splits.map(&:realtime_duration).sum || 0) * 1000).zero? ? 'game' : 'real'
         )
 
         HighlightSuggestion.from_run(self)

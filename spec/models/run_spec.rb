@@ -38,6 +38,18 @@ describe Run, type: :model do
     end
   end
 
+  context 'with no realtime' do
+    let(:run) do
+      run = FactoryBot.create(:livesplit_no_realtime_run)
+      run.parse_into_db
+      run
+    end
+
+    it 'sets its timing to gametime' do
+      expect(run.default_timing).to eq Run::GAME
+    end
+  end
+
   context 'with a category' do
     context 'with other runs' do
       let(:category) { FactoryBot.create(:category) }

@@ -7,6 +7,7 @@ FactoryBot.define do
     livesplit15:              {filename: 'livesplit1.5.lss'},
     livesplit16:              {filename: 'livesplit1.6'},
     livesplit16_gametime:     {filename: 'livesplit1.6_gametime.lss'},
+    livesplit_no_realtime:    {filename: 'livesplit_no_realtime.lss'},
     llanfair:                 {filename: 'llanfair'},
     llanfair_gered:           {filename: 'llanfair_gered.lfs'},
     llanfair_gered_with_refs: {filename: 'llanfair_gered_with_refs.lfs'},
