@@ -4,7 +4,7 @@ Exporting(Highcharts)
 
 import 'vendor/highcharts-regression'
 
-const build_playtime_graph = function(run) {
+const build_playtime_graph = function(run, chartOptions = {}) {
   if (document.getElementById('playtime-graph') === null) {
     return
   }
@@ -41,7 +41,7 @@ const build_playtime_graph = function(run) {
 
   Highcharts.chart('playtime-graph', {
     exporting: {
-      chartOptions: {
+      chartOptions: Object.assign(chartOptions, {
         plotOptions: {
           series: {
             dataLabels: {enabled: true}
@@ -53,7 +53,7 @@ const build_playtime_graph = function(run) {
             }
           }
         }
-      },
+      }),
       fallbackToExportServer: false
     },
     chart: {

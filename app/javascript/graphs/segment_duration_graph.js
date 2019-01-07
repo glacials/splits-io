@@ -2,7 +2,7 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const build_segment_graph = function(segment) {
+const build_segment_graph = function(segment, chartOptions) {
   const url = new URL(window.location.href)
   const duration_string = `${url.searchParams.get('timing') || gon.run.default_timing}time_duration_ms`
 
@@ -16,16 +16,14 @@ const build_segment_graph = function(segment) {
 
   Highcharts.chart('segment-graph-holder-' + segment.id, {
     exporting: {
-        chartOptions: {
-            plotOptions: {
-                series: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                }
-            }
-        },
-        fallbackToExportServer: false
+      chartOptions: Object.assign(chartOptions, {
+        plotOptions: {
+          series: {
+            dataLabels: {enabled: true}
+          }
+        }
+      }),
+      fallbackToExportServer: false
     },
     chart: {
       borderRadius: 0,

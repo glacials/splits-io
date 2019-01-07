@@ -2,7 +2,7 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const build_reset_graph = function(run) {
+const build_reset_graph = function(run, chartOptions = {}) {
   if (document.getElementById('reset-graph') === null) {
     return
   }
@@ -19,13 +19,13 @@ const build_reset_graph = function(run) {
 
   Highcharts.chart('reset-graph', {
     exporting: {
-      chartOptions: {
+      chartOptions: Object.assign(chartOptions, {
         plotOptions: {
           series: {
             dataLabels: {enabled: true}
           }
         }
-      },
+      }),
       fallbackToExportServer: false
     },
     chart: {type: 'pie'},

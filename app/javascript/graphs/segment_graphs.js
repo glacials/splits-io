@@ -3,7 +3,7 @@ import Exporting from 'highcharts/modules/exporting'
 import {logoYellow, logoBlue, logoGreen} from '../colors.js'
 Exporting(Highcharts)
 
-const buildSegmentGraphs = function(run) {
+const buildSegmentGraphs = function(run, chartOptions) {
   if (document.getElementById('segment-graphs') === null) {
     return
   }
@@ -70,13 +70,13 @@ const buildSegmentGraphs = function(run) {
 
   Highcharts.chart('segment-graphs', {
     exporting: {
-      chartOptions: {
+      chartOptions: Object.assign(chartOptions, {
         plotOptions: {
           series: {
             dataLabels: {enabled: true}
           }
         }
-      },
+      }),
       fallbackToExportServer: false
     },
     chart: {

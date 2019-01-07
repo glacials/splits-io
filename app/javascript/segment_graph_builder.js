@@ -1,4 +1,5 @@
 import {build_segment_graph} from "graphs/segment_duration_graph.js"
+import {chartOptions} from "consts.js"
 import {Spinner} from 'spin.js'
 
 document.addEventListener('turbolinks:load', function() {
@@ -65,7 +66,7 @@ document.addEventListener('turbolinks:load', function() {
           event.target.dataset.generated = '1'
           runJSON.then(function(json) {
             const segment = json.run.segments.filter(segment => (segment.id === toggler.dataset.segment))[0]
-            build_segment_graph(segment)
+            build_segment_graph(segment, chartOptions)
           })
         }
       })

@@ -2,7 +2,7 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const build_run_duration_graph = function(run) {
+const build_run_duration_graph = function(run, chartOptions) {
   if (document.getElementById('run-duration-graph') === null ) {
     return
   }
@@ -23,13 +23,7 @@ const build_run_duration_graph = function(run) {
 
   Highcharts.chart('run-duration-graph', {
     exporting: {
-      chartOptions: {
-        plotOptions: {
-          series: {
-            dataLabels: {enabled: true}
-          }
-        }
-      },
+      chartOptions: chartOptions,
       fallbackToExportServer: false
     },
     chart: {zoomType: 'x'},
