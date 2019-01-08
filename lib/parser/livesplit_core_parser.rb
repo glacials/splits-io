@@ -25,6 +25,8 @@ class Parser
       program = ExchangeFormat.to_s
     end
 
+    key_error_lambda = ->(_hash, key) { raise KeyError, "#{key} not found" }
+
     run = parse_result.unwrap
     run_metadata = run.metadata
 
@@ -51,6 +53,8 @@ class Parser
       gametime_sum_of_best_ms: 0,
       total_playtime_ms: 0
     }
+    run_object.default_proc = key_error_lambda
+    run_object[:metadata].default_proc = key_error_lambda
 
     variables_iterator = run_metadata.variables
     until (variable = variables_iterator.next).nil?
@@ -76,8 +80,6 @@ class Parser
     total_playtime.dispose
 
     run_object[:history] = []
-    run_object[:indexed_history] = {}
-    run_object[:realtime_history] = []
     (0...run.attempt_history_len).each do |i|
       attempt = run.attempt_history_index(i)
       attempt_id = attempt.index.to_i
@@ -97,6 +99,7 @@ class Parser
 
         pause_duration_ms: attempt.pause_time.try(:total_seconds).try(:*, 1000) || 0
       }
+      run_object[:history].last.default_proc = key_error_lambda
 
       # See https://github.com/glacials/splits-io/pull/474/files#r241242051
       [attempt_started, attempt_ended].compact.each(&:dispose)
@@ -114,6 +117,7 @@ class Parser
         gametime_skipped: false,
         history: []
       }
+      split.default_proc = key_error_lambda
 
       split[:realtime_end_ms] = (segment.personal_best_split_time.real_time.try(:total_seconds) || 0) * 1000
       split[:realtime_duration_ms] = [0, split[:realtime_end_ms] - run_object[:realtime_duration_ms]].max
@@ -145,6 +149,7 @@ class Parser
           gametime_duration_ms: (history_element_time.game_time.try(:total_seconds) || 0) * 1000,
           realtime_duration_ms: (history_element_time.real_time.try(:total_seconds) || 0) * 1000
         }
+        split[:history].last.default_proc = key_error_lambda
       end
       history_iterator.dispose
 
