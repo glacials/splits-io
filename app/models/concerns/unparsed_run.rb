@@ -25,6 +25,11 @@ module UnparsedRun
 
         timer_used = Run.program_from_attribute(:to_s, parse_result[:program]).to_sym
 
+        default_timing = Run::REAL
+        if parse_result[:realtime_duration_ms].zero? && parse_result[:gametime_duration_ms].positive?
+          default_timing = Run::GAME
+        end
+
         populate_category(parse_result[:game], parse_result[:category]) if game.nil? || category.nil?
 
         splits = parse_result[:splits]
@@ -47,7 +52,7 @@ module UnparsedRun
           gametime_sum_of_best_ms: parse_result[:gametime_sum_of_best_ms],
 
           total_playtime_ms: parse_result[:total_playtime_ms],
-          default_timing:    ((splits.map(&:realtime_duration).sum || 0) * 1000).zero? ? 'game' : 'real'
+          default_timing:    default_timing
         )
 
         HighlightSuggestion.from_run(self)
