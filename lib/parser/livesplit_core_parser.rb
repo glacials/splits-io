@@ -25,8 +25,6 @@ class Parser
       program = ExchangeFormat.to_s
     end
 
-    key_error_lambda = ->(_hash, key) { raise KeyError, "#{key} not found" }
-
     run = parse_result.unwrap
     run_metadata = run.metadata
 
@@ -53,8 +51,6 @@ class Parser
       gametime_sum_of_best_ms: 0,
       total_playtime_ms: 0
     }
-    run_object.default_proc = key_error_lambda
-    run_object[:metadata].default_proc = key_error_lambda
 
     variables_iterator = run_metadata.variables
     until (variable = variables_iterator.next).nil?
@@ -97,9 +93,8 @@ class Parser
         started_at: attempt_started && DateTime.parse(attempt_started.to_rfc3339),
         ended_at:   attempt_ended   && DateTime.parse(attempt_ended.to_rfc3339),
 
-        pause_duration_ms: attempt.pause_time.try(:total_seconds).try(:*, 1000) || 0
+        pause_duration_ms: attempt.pause_time.try(:total_seconds).try(:*, 1000)
       }
-      run_object[:history].last.default_proc = key_error_lambda
 
       # See https://github.com/glacials/splits-io/pull/474/files#r241242051
       [attempt_started, attempt_ended].compact.each(&:dispose)
@@ -117,7 +112,6 @@ class Parser
         gametime_skipped: false,
         history: []
       }
-      split.default_proc = key_error_lambda
 
       split[:realtime_end_ms] = (segment.personal_best_split_time.real_time.try(:total_seconds) || 0) * 1000
       split[:realtime_duration_ms] = [0, split[:realtime_end_ms] - run_object[:realtime_duration_ms]].max
@@ -149,7 +143,6 @@ class Parser
           gametime_duration_ms: (history_element_time.game_time.try(:total_seconds) || 0) * 1000,
           realtime_duration_ms: (history_element_time.real_time.try(:total_seconds) || 0) * 1000
         }
-        split[:history].last.default_proc = key_error_lambda
       end
       history_iterator.dispose
 
@@ -159,6 +152,28 @@ class Parser
     end
 
     run.dispose
+    traverse(run_object)
     run_object
   end
+
+  def self.traverse(obj)
+    traverse_hash(obj)
+  end
+
+  def self.traverse_hash(hash)
+    hash.default_proc = ->(_hash, key) { raise KeyError, "#{key} not found" }
+    hash.each do |_key, value|
+      traverse_hash(value) if value.is_a?(Hash)
+      traverse_array(value) if value.is_a?(Array)
+    end
+  end
+
+  def self.traverse_array(array)
+    array.each do |value|
+      traverse_hash(value) if value.is_a?(Hash)
+      traverse_array(value) if value.is_a?(Array)
+    end
+  end
+
+  private_class_method :traverse, :traverse_hash, :traverse_array
 end
