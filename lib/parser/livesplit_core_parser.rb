@@ -152,28 +152,22 @@ class Parser
     end
 
     run.dispose
-    traverse(run_object)
+    add_default_proc!(run_object)
     run_object
   end
 
-  def self.traverse(obj)
-    traverse_hash(obj)
+  def self.add_default_proc!(obj)
+    traverse_enumerable(obj)
   end
 
-  def self.traverse_hash(hash)
-    hash.default_proc = ->(_hash, key) { raise KeyError, "#{key} not found" }
-    hash.each do |_key, value|
-      traverse_hash(value) if value.is_a?(Hash)
-      traverse_array(value) if value.is_a?(Array)
+  def self.traverse_enumerable(obj)
+    obj.default_proc = ->(_hash, key) { raise KeyError, "#{key} not found" } if obj.respond_to?(:default_proc=)
+    return unless obj.respond_to?(:each)
+
+    obj.each do |value|
+      traverse_enumerable(value)
     end
   end
 
-  def self.traverse_array(array)
-    array.each do |value|
-      traverse_hash(value) if value.is_a?(Hash)
-      traverse_array(value) if value.is_a?(Array)
-    end
-  end
-
-  private_class_method :traverse, :traverse_hash, :traverse_array
+  private_class_method :add_default_proc!, :traverse_enumerable
 end
