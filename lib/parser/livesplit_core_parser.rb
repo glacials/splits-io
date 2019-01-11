@@ -157,17 +157,13 @@ class Parser
   end
 
   def self.add_default_proc!(obj)
-    traverse_enumerable(obj)
-  end
-
-  def self.traverse_enumerable(obj)
     obj.default_proc = ->(_hash, key) { raise KeyError, "#{key} not found" } if obj.respond_to?(:default_proc=)
     return unless obj.respond_to?(:each)
 
     obj.each do |value|
-      traverse_enumerable(value)
+      add_default_proc!(value)
     end
   end
 
-  private_class_method :add_default_proc!, :traverse_enumerable
+  private_class_method :add_default_proc!
 end
