@@ -27,7 +27,6 @@ describe Api::V3::RunsController do
         category: category,
         to_s: 'Tron: Evolution Any% NG+',
         image_url: nil,
-        realtime_sum_of_best_s: 2,
         splits: [
           instance_double('Split', 'realtime_best' => 3, 'best=' => true)
         ],

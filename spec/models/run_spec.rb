@@ -212,7 +212,7 @@ describe Run, type: :model do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Green Greens', 99_390],
         [1, 'Castle LoLoLo', 91_940],
-        [2, 'Float Islands', 127_809],
+        [2, 'Float Islands', 127_810],
         [3, 'Bubbly Clouds', 195_180],
         [4, 'Mt. DeDeDe', 236_439]
       ]
@@ -237,7 +237,7 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq 127_809
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 127_810
     end
 
     it 'reports its total playtime' do
@@ -262,22 +262,22 @@ describe Run, type: :model do
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Hole 1', 30_349],
-        [1, 'Hole 2', 42_742],
-        [2, 'Hole 3', 35_263],
-        [3, 'Hole 4', 25_164],
+        [1, 'Hole 2', 42_743],
+        [2, 'Hole 3', 35_264],
+        [3, 'Hole 4', 25_165],
         [4, 'Hole 5', 34_341],
         [5, 'Hole 6', 34_972],
-        [6, 'Hole 7', 20_754],
+        [6, 'Hole 7', 20_755],
         [7, 'Hole 8', 41_221],
         [8, 'Hole 9', 43_621],
-        [9, 'Hole 10', 28_661],
+        [9, 'Hole 10', 28_662],
         [10, 'Hole 11', 37_146],
         [11, 'Hole 12', 62_913],
-        [12, 'Hole 13', 41_539],
+        [12, 'Hole 13', 41_540],
         [13, 'Hole 14', 35_332],
         [14, 'Hole 15', 36_653],
         [15, 'Hole 16', 31_277],
-        [16, 'Hole 17', 37_631],
+        [16, 'Hole 17', 37_632],
         [17, 'Hole 18', 66_083]
       ]
     end
@@ -290,7 +290,7 @@ describe Run, type: :model do
     it 'accurately reports its shortest segment' do
       rss = run.shortest_segment(Run::REAL)
       expect([rss.segment_number, rss.name, rss.duration_ms(Run::REAL)]).to match_array [
-        6, 'Hole 7', 20_754
+        6, 'Hole 7', 20_755
       ]
     end
 
@@ -338,15 +338,15 @@ describe Run, type: :model do
           [1, 'Elevator Land', 73_595],
           [2, 'Gross, Rats', 131_065],
           [3, 'Try Not Falling?', 232_498],
-          [4, 'Men of the Faith', 147_284],
+          [4, 'Men of the Faith', 147_285],
           [5, 'Fuckin Celia', 118_806],
           [6, 'Tr4p Haus', 171_703],
-          [7, 'Troubled Waters', 305_158],
-          [8, 'RNG Roulette', 215_579],
+          [7, 'Troubled Waters', 305_159],
+          [8, 'RNG Roulette', 215_580],
           [9, 'Not At Fault', 246_412],
           [10, 'Amateur Work', 377_836],
-          [11, "Don't Mind Me", 67_085],
-          [12, 'H9 U Havelock', 123_226]
+          [11, "Don't Mind Me", 67_086],
+          [12, 'H9 U Havelock', 123_227]
         ]
       end
 
@@ -356,15 +356,15 @@ describe Run, type: :model do
           [1, 'Elevator Land', 71_271],
           [2, 'Gross, Rats', 127_293],
           [3, 'Try Not Falling?', 220_780],
-          [4, 'Men of the Faith', 134_083],
+          [4, 'Men of the Faith', 134_084],
           [5, 'Fuckin Celia', 107_779],
           [6, 'Tr4p Haus', 159_324],
-          [7, 'Troubled Waters', 287_640],
+          [7, 'Troubled Waters', 287_641],
           [8, 'RNG Roulette', 196_420],
           [9, 'Not At Fault', 231_033],
           [10, 'Amateur Work', 355_115],
           [11, "Don't Mind Me", 59_727],
-          [12, 'H9 U Havelock', 116_235]
+          [12, 'H9 U Havelock', 116_236]
         ]
       end
 
@@ -397,7 +397,7 @@ describe Run, type: :model do
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Spiral Mountain', 211_230],
-        [1, "Mumbo's Mountain", 808_199]
+        [1, "Mumbo's Mountain", 808_200]
       ]
     end
 
@@ -415,12 +415,12 @@ describe Run, type: :model do
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        1, "Mumbo's Mountain", 808_199
+        1, "Mumbo's Mountain", 808_200
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq(509_714)
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq(509_715)
     end
 
     it 'reports its total playtime' do
@@ -445,7 +445,7 @@ describe Run, type: :model do
         [4, 'Pipe Jump City', 51_030],
         [5, 'Jumping Koopas', 37_030],
         [6, 'Count To 4', 35_310],
-        [7, 'Hammers of Fortune', 46_079]
+        [7, 'Hammers of Fortune', 46_080]
       ]
     end
 
@@ -466,7 +466,7 @@ describe Run, type: :model do
           [4, 'Pipe Jump City', 51_030],
           [5, 'Jumping Koopas', 37_030],
           [6, 'Count To 4', 35_310],
-          [7, 'Hammers of Fortune', 46_079]
+          [7, 'Hammers of Fortune', 46_080]
         ]
       end
 
@@ -493,10 +493,10 @@ describe Run, type: :model do
         [4, '9-Volt', 142_990],
         [5, 'Jimmy', 161_370],
         [6, 'Dr.Crygonal', 157_080],
-        [7, 'Orbulon', 187_269],
+        [7, 'Orbulon', 187_270],
         [8, 'Kat', 221_980],
-        [9, 'Jimmy', 177_609],
-        [10, 'Wario', 234_059]
+        [9, 'Jimmy', 177_610],
+        [10, 'Wario', 234_060]
       ]
     end
 
@@ -519,18 +519,18 @@ describe Run, type: :model do
         [0, 'Hyrule Castle', 377_060],
         [1, 'Eastern Palace', 353_060],
         [2, 'Desert Palace', 467_070],
-        [3, 'Tower of hera', 478_079],
-        [4, 'Light World', 565_099],
+        [3, 'Tower of hera', 478_080],
+        [4, 'Light World', 565_100],
         [5, 'Dark Palace', 445_070],
-        [6, 'Dig', 459_079],
+        [6, 'Dig', 459_080],
         [7, 'Chest', 331_050],
-        [8, 'Thieves’ Town', 327_159],
+        [8, 'Thieves’ Town', 327_160],
         [9, 'Skull Woods', 491_400],
         [10, 'Ice Palace', 561_750],
-        [11, 'Misery Mire', 655_769],
+        [11, 'Misery Mire', 655_770],
         [12, 'Swamp Palace', 599_410],
-        [13, 'Turtle Rock', 1_115_179],
-        [14, 'Dark World', 686_119],
+        [13, 'Turtle Rock', 1_115_180],
+        [14, 'Dark World', 686_120],
         [15, 'Triforce', 133_640]
       ]
     end
@@ -557,29 +557,29 @@ describe Run, type: :model do
         [3, '4', 6766],
         [4, '5', 3172],
         [5, '6', 5785],
-        [6, '7', 4189],
+        [6, '7', 4190],
         [7, '8', 3935],
-        [8, '9', 5792],
-        [9, '10', 6317],
+        [8, '9', 5793],
+        [9, '10', 6318],
         [10, '11', 4719],
-        [11, '12', 2649],
+        [11, '12', 2650],
         [12, '13', 6549],
-        [13, '14', 2077],
+        [13, '14', 2078],
         [14, '15', 1207],
         [15, '16', 5542],
-        [16, '17', 1385],
+        [16, '17', 1386],
         [17, '18', 13_882],
-        [18, '19', 9668],
+        [18, '19', 9669],
         [19, '20', 5644],
-        [20, '21', 3582],
-        [21, '22', 5649],
+        [20, '21', 3583],
+        [21, '22', 5650],
         [22, '23', 5329],
-        [23, '24', 5394],
+        [23, '24', 5395],
         [24, '25', 5614],
-        [25, '26', 8805],
+        [25, '26', 8806],
         [26, '27', 4104],
         [27, '28', 9506],
-        [28, '29', 15_657],
+        [28, '29', 15_658],
         [29, '30', 4756],
         [30, '31', 6542]
       ]

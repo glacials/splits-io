@@ -5,7 +5,7 @@ rescue LoadError
 end
 
 class Parser
-  def self.parse(run, fast: false)
+  def self.parse(run)
     parse_result = if run.is_a?(Integer)
                      # If integer, attempt to parse the file descriptor attached to the number
                      LiveSplitCore::Run.parse_file_handle(run, '', false)
@@ -26,24 +26,37 @@ class Parser
     end
 
     run = parse_result.unwrap
+    run_metadata = run.metadata
 
     run_object = {
       program: program,
       game: run.game_name,
+      game_icon: run.game_icon.presence,
       category: run.category_name,
-      srdc_id: run.metadata.run_id,
+      name: run.extended_name(false),
+      metadata: {
+        srdc_id: run_metadata.run_id.presence,
+        platform_name: run_metadata.platform_name.presence,
+        region_name: run_metadata.region_name.presence,
+        uses_emulator: run_metadata.uses_emulator,
+        variables: {}
+      },
       attempts: run.attempt_count,
-      offset: run.offset.total_seconds,
-      history: nil,
-      indexed_history: nil,
-      realtime_history: nil,
+      offset_ms: run.offset.total_seconds * 1000,
+      history: [],
       splits: [],
-      realtime_time: 0,
-      gametime_time: 0,
+      realtime_duration_ms: 0,
+      gametime_duration_ms: 0,
       realtime_sum_of_best_ms: 0,
       gametime_sum_of_best_ms: 0,
       total_playtime_ms: 0
-    }.tap { |run_tap| run_tap[:name] = "#{run_tap[:game]} #{run_tap[:category]}".strip }
+    }
+
+    variables_iterator = run_metadata.variables
+    until (variable = variables_iterator.next).nil?
+      run_object[:metadata][:variables][variable.name] = variable.value
+    end
+    variables_iterator.dispose
 
     realtime_sum_of_best = LiveSplitCore::Analysis.calculate_sum_of_best(run, false, false, 0)
     gametime_sum_of_best = LiveSplitCore::Analysis.calculate_sum_of_best(run, false, false, 1)
@@ -62,95 +75,95 @@ class Parser
     run_object[:total_playtime_ms] = total_playtime.total_seconds * 1000
     total_playtime.dispose
 
-    unless fast
-      run_object[:history] = []
-      run_object[:indexed_history] = {}
-      run_object[:realtime_history] = []
-      (0...run.attempt_history_len).each do |i|
-        attempt = run.attempt_history_index(i)
-        attempt_id = attempt.index.to_i
-        time = attempt.time
+    run_object[:history] = []
+    (0...run.attempt_history_len).each do |i|
+      attempt = run.attempt_history_index(i)
+      attempt_id = attempt.index.to_i
+      time = attempt.time
 
-        # See https://github.com/glacials/splits-io/pull/474/files#r241242051
-        attempt_started = attempt.started
-        attempt_ended = attempt.ended
+      # See https://github.com/glacials/splits-io/pull/474/files#r241242051
+      attempt_started = attempt.started
+      attempt_ended = attempt.ended
 
-        run_object[:history] << {
-          attempt_number:       attempt_id,
-          realtime_duration_ms: time.real_time.try(:total_seconds).try(:*, 1000) || 0,
-          gametime_duration_ms: time.game_time.try(:total_seconds).try(:*, 1000) || 0,
+      run_object[:history] << {
+        attempt_number:       attempt_id,
+        realtime_duration_ms: time.real_time.try(:total_seconds).try(:*, 1000) || 0,
+        gametime_duration_ms: time.game_time.try(:total_seconds).try(:*, 1000) || 0,
 
-          started_at: attempt_started && DateTime.parse(attempt_started.to_rfc3339),
-          ended_at:   attempt_ended   && DateTime.parse(attempt_ended.to_rfc3339)
-        }
+        started_at: attempt_started && DateTime.parse(attempt_started.to_rfc3339),
+        ended_at:   attempt_ended   && DateTime.parse(attempt_ended.to_rfc3339),
 
-        # See https://github.com/glacials/splits-io/pull/474/files#r241242051
-        [attempt_started, attempt_ended].compact.each(&:dispose)
+        pause_duration_ms: attempt.pause_time.try(:total_seconds).try(:*, 1000)
+      }
 
-        if time.real_time.try(:total_seconds).present?
-          run_object[:indexed_history][attempt_id] = time.real_time.try(:total_seconds)
-          run_object[:realtime_history] << time.real_time.try(:total_seconds)
-        end
-      end
+      # See https://github.com/glacials/splits-io/pull/474/files#r241242051
+      [attempt_started, attempt_ended].compact.each(&:dispose)
     end
 
     (0...run.len).each do |i|
       segment = run.segment(i)
-      split = Split.new
-      split.name = segment.name
+      split = {
+        segment_number: i,
+        name: segment.name,
+        icon: segment.icon.presence,
+        realtime_gold: false,
+        realtime_skipped: false,
+        gametime_gold: false,
+        gametime_skipped: false,
+        history: []
+      }
 
-      split.realtime_end = segment.personal_best_split_time.real_time.try(:total_seconds) || 0
-      split.realtime_duration = [0, split.realtime_end - run_object[:realtime_time]].max
-      split.realtime_start = split.realtime_end - split.realtime_duration
+      split[:realtime_end_ms] = (segment.personal_best_split_time.real_time.try(:total_seconds) || 0) * 1000
+      split[:realtime_duration_ms] = [0, split[:realtime_end_ms] - run_object[:realtime_duration_ms]].max
+      split[:realtime_start_ms] = split[:realtime_end_ms] - split[:realtime_duration_ms]
 
-      split.realtime_best = segment.best_segment_time.real_time.try(:total_seconds) || 0
-      split.realtime_skipped = split.realtime_duration.zero?
+      split[:realtime_best_ms] = (segment.best_segment_time.real_time.try(:total_seconds) || 0) * 1000
+      split[:realtime_skipped] = split[:realtime_duration_ms].zero?
 
-      if split.realtime_duration.positive? && split.realtime_duration.round(5) <= split.realtime_best.try(:round, 5)
-        split.realtime_gold = true
-      else
-        split.realtime_gold = false
+      if split[:realtime_duration_ms].positive?
+        split[:realtime_gold] = true if split[:realtime_duration_ms].round(5) <= split[:realtime_best_ms].try(:round, 5)
       end
 
-      if fast
-        split.realtime_history = nil
-        split.indexed_history  = nil
-      else
-        history_iterator = segment.segment_history.iter
-        split.indexed_history  = {}
-        split.realtime_history = []
-        until (history_element = history_iterator.next).nil?
-          history_element_id   = history_element.index
-          history_element_time = history_element.time
-          split.indexed_history[history_element_id] = {
-            gametime: history_element_time.game_time.try(:total_seconds) || 0,
-            realtime: history_element_time.real_time.try(:total_seconds) || 0
-          }
+      split[:gametime_end_ms] = (segment.personal_best_split_time.game_time.try(:total_seconds) || 0) * 1000
+      split[:gametime_duration_ms] = [0, split[:gametime_end_ms] - run_object[:gametime_duration_ms]].max
+      split[:gametime_start_ms] = split[:gametime_end_ms] - split[:gametime_duration_ms]
 
-          split.realtime_history << history_element_time.real_time.try(:total_seconds) || 0
-        end
-        history_iterator.dispose
+      split[:gametime_best_ms] = (segment.best_segment_time.game_time.try(:total_seconds) || 0) * 1000
+      split[:gametime_skipped] = split[:gametime_duration_ms].zero?
+
+      if split[:gametime_duration_ms].positive?
+        split[:gametime_gold] = true if split[:gametime_duration_ms].round(5) <= split[:gametime_best_ms].try(:round, 5)
       end
 
-      split.gametime_end = segment.personal_best_split_time.game_time.try(:total_seconds) || 0
-      split.gametime_duration = [0, split.gametime_end - run_object[:gametime_time]].max
-      split.gametime_start = split.gametime_end - split.gametime_duration
-
-      split.gametime_best = segment.best_segment_time.game_time.try(:total_seconds) || 0
-      split.gametime_skipped = split.gametime_duration.zero?
-
-      if split.gametime_duration.positive? && split.gametime_duration.round(5) <= split.gametime_best.try(:round, 5)
-        split.gametime_gold = true
-      else
-        split.gametime_gold = false
+      history_iterator = segment.segment_history.iter
+      until (history_element = history_iterator.next).nil?
+        history_element_time = history_element.time
+        split[:history] << {
+          attempt_number: history_element.index,
+          gametime_duration_ms: (history_element_time.game_time.try(:total_seconds) || 0) * 1000,
+          realtime_duration_ms: (history_element_time.real_time.try(:total_seconds) || 0) * 1000
+        }
       end
+      history_iterator.dispose
 
-      run_object[:realtime_time] += split.realtime_duration if split.realtime_duration.present?
-      run_object[:gametime_time] += split.gametime_duration if split.gametime_duration.present?
+      run_object[:realtime_duration_ms] += split[:realtime_duration_ms] if split[:realtime_duration_ms].present?
+      run_object[:gametime_duration_ms] += split[:gametime_duration_ms] if split[:gametime_duration_ms].present?
       run_object[:splits] << split
     end
 
     run.dispose
+    add_default_proc!(run_object)
     run_object
   end
+
+  def self.add_default_proc!(obj)
+    obj.default_proc = ->(_hash, key) { raise KeyError, "#{key} not found" } if obj.respond_to?(:default_proc=)
+    return unless obj.respond_to?(:each)
+
+    obj.each do |value|
+      add_default_proc!(value)
+    end
+  end
+
+  private_class_method :add_default_proc!
 end
