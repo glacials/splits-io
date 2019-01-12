@@ -34,6 +34,6 @@ class Api::V3::Detail::RunSerializer < Api::V3::ApplicationSerializer
   end
 
   def time
-    object.realtime_duration_ms / 1000
+    (object.realtime_duration_ms || 0).to_f / 1000
   end
 end
