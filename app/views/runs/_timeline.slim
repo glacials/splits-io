@@ -6,7 +6,7 @@
   .timeline-background.mt-3
     .timeline.shadow
       - run.collapsed_segments(timing).each.with_index do |segment, index|
-        .pure-u.split id="#{run.id36}-split-#{index}" data={start_ms: segment.start(timing).as_ms} class=next_timeline_color(run.id36) style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
+        .pure-u.split id="#{run.id36}-split-#{index}" data={start_ms: segment.start(timing).to_ms} class=next_timeline_color(run.id36) style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
           .p-2
             .text-light = segment.name.presence || '-'
             .text-light-50 = format_ms(segment.duration_ms(timing), precise: run.short?(timing))
