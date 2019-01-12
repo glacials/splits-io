@@ -6,7 +6,7 @@ module CompletedRun
   included do
     # duration returns the total duration of the run, from the beginning of the first segment to the end of the last
     # segment.
-    def duration(timing = default_time_type)
+    def duration(timing = default_timing)
       case timing
       when Run::REAL
         Duration.new(realtime_duration_ms)
@@ -16,8 +16,8 @@ module CompletedRun
     end
 
     # duration_ms is deprecated. Use duration instead, which returns a Duration type.
-    def duration_ms(time_type = default_time_type)
-      case time_type
+    def duration_ms(timing = default_timing)
+      case timing
       when Run::REAL
         realtime_duration_ms
       when Run::GAME
@@ -28,7 +28,7 @@ module CompletedRun
     # sum_of_best returns the sum of all segments' fastest recorded times by the runner. In an ideal world with no
     # variance or mistakes on hitting splits and no route changes that aren't also reflected in the splits, this time is
     # the theoretical fastest time the runner has proven they can achieve in a perfect run.
-    def sum_of_best(timing = default_time_type)
+    def sum_of_best(timing = default_timing)
       case timing
       when Run::REAL
         Duration.new(realtime_sum_of_best_ms)
@@ -38,8 +38,8 @@ module CompletedRun
     end
 
     # sum_of_best_ms is deprecated. Use sum_of_best instead, which returns a Duration type.
-    def sum_of_best_ms(time_type = default_time_type)
-      case time_type
+    def sum_of_best_ms(timing = default_timing)
+      case timing
       when Run::REAL
         realtime_sum_of_best_ms
       when Run::GAME
