@@ -2,40 +2,8 @@ require 'rails_helper'
 
 describe Api::V3::RunsController do
   describe '#show' do
-    let(:game) do
-      instance_double(
-        'Game',
-        name: 'Tron: Evolution',
-        read_attribute_for_serialization: self
-      )
-    end
-    let(:category) do
-      instance_double(
-        'Category',
-        game: game,
-        name: 'Any% NG+',
-        read_attribute_for_serialization: self
-      )
-    end
-    let(:run) do
-      instance_double(
-        'Run',
-        id: 10,
-        id36: 'a',
-        path: '/a',
-        game: game,
-        category: category,
-        to_s: 'Tron: Evolution Any% NG+',
-        image_url: nil,
-        splits: [
-          instance_double('Split', 'realtime_best' => 3, 'best=' => true)
-        ],
-        read_attribute_for_serialization: self
-      )
-      create(:run)
-    end
-
     context 'when given a valid id' do
+      let(:run) { FactoryBot.create(:run, :parsed) }
       subject(:response) { get :show, params: {id: run.id36} }
       subject(:body) { JSON.parse(response.body)['run'] }
 
