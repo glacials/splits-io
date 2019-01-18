@@ -14,6 +14,8 @@ class Game < ApplicationRecord
   has_many :runners, -> { distinct }, through: :runs, class_name: 'User'
   has_many :aliases, class_name: 'GameAlias'
 
+  has_one :srdc, class_name: 'SpeedrunDotComGame'
+
   after_create :create_initial_alias
 
   scope :named, -> { where.not(name: nil) }
@@ -46,15 +48,24 @@ class Game < ApplicationRecord
   end
 
   def to_param
-    shortname || id.to_s || name.downcase.delete('/')
+    srdc.try(:shortname) || shortname || id.to_s || name.downcase.delete('/')
   end
 
   def sync_with_srl
     return if shortname.present?
-    game = ::SpeedRunsLive.game(name)
+    game = SpeedRunsLive.game(name)
     return if game.nil?
 
     update(shortname: game['abbrev'])
+  end
+
+  def sync_with_srdc
+    if srdc.nil?
+      SpeedrunDotComGame.from_game!(self)
+      return
+    end
+
+    srdc.sync!
   end
 
   def to_s
@@ -73,7 +84,8 @@ class Game < ApplicationRecord
               .order(Arel.sql('count(runs.id) desc'))
   end
 
-  # merge_into! changes ownership of this game's categories and aliases to the given game, then destroys this game.
+  # merge_into! moves all categories, aliases, and runs over to the given game, then destroys this game. Use this when
+  # there are two Splits I/O games representing the same game, like "Tron Evolution" and "Tron: Evolution".
   def merge_into!(game)
     ApplicationRecord.transaction do
       game.update(shortname: game.shortname || shortname)

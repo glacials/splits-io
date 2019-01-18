@@ -7,6 +7,15 @@ h5
       => icon('fas', 'check')
       span Personal Best
   = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
+  - if run.srdc_id.present?
+    a.badge.badge-dark.tip title='See on Speedrun.com' href=run.srdc_url
+      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+    - if run.video_url.present?
+      - uri = URI.parse(run.video_url)
+      - if uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
+        a.badge.badge-dark.tip href=run.video_url title='Watch on YouTube' => icon('fab', 'youtube')
+      - elsif !uri.host.match?(/^(www\.)?(twitch\.tv)$/)
+        a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
 
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
   .btn-group.mr-2 role='group' aria={label: 'Run navigation'}
@@ -51,20 +60,6 @@ h5
           => icon('fas', 'edit')
           span Edit
   .btn-group.mr-2 role='group' aria={label: 'Related links'}
-    - if run.srdc_id.present?
-      a.btn.btn-outline-light href=run.srdc_url
-        => icon('fas', 'trophy')
-        span Speedrun.com
-    - if run.video_url.present?
-      - uri = URI.parse(run.video_url)
-      a.btn.btn-outline-light href=run.video_url
-        - if uri.host.match?(/^(www\.)?(twitch\.tv)$/)
-          => icon('fab', 'twitch')
-        - elsif uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
-          => icon('fab', 'youtube')
-        - else
-          => icon('fas', 'video')
-        span Video
     - if run.user.nil?
       #claim-nav-link-container hidden=true
         - if current_user.present?

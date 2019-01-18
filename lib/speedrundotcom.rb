@@ -42,6 +42,28 @@ module SpeedrunDotCom
     end
   end
 
+  class Game
+    def self.search(name)
+      JSON.parse(SpeedrunDotCom.route["/games?name=#{name}"].get.body)['data']
+    end
+
+    def self.from_id(id)
+      JSON.parse(SpeedrunDotCom.route["/games/#{id}"].get.body)['data']
+    end
+
+    class << self
+      private
+
+      def get(id)
+        route(id).get
+      end
+
+      def route
+        SpeedrunDotCom.route["/games"]
+      end
+    end
+  end
+
   class User
     def self.twitch_login(id)
       begin
@@ -71,7 +93,7 @@ module SpeedrunDotCom
 
   class << self
     def route
-      RestClient::Resource.new('https://speedrun.com/api/v1')
+      RestClient::Resource.new('https://www.speedrun.com/api/v1')
     end
   end
 end
