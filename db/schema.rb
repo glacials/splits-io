@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_14_230118) do
+ActiveRecord::Schema.define(version: 2019_01_19_192951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -259,6 +259,7 @@ ActiveRecord::Schema.define(version: 2019_01_14_230118) do
     t.boolean "show_ms", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "twitch_name"
     t.index ["game_id"], name: "index_speedrun_dot_com_games_on_game_id"
     t.index ["shortname"], name: "index_speedrun_dot_com_games_on_shortname"
   end

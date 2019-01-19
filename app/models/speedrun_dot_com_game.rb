@@ -17,6 +17,7 @@ class SpeedrunDotComGame < ApplicationRecord
   def from_result!(result)
     update(
       name:           result['names']['international'],
+      twitch_name:    result['names']['twitch'],
       shortname:      result['abbreviation'],
       url:            result['weblink'],
       favicon_url:    result['assets']['icon']['uri'],
