@@ -60,7 +60,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    administrate (0.10.0)
+    administrate (0.11.0)
       actionpack (>= 4.2, < 6.0)
       actionview (>= 4.2, < 6.0)
       activerecord (>= 4.2, < 6.0)
@@ -75,7 +75,7 @@ GEM
     arel (9.0.0)
     ast (2.4.0)
     authie (3.2.0)
-    autoprefixer-rails (9.1.3)
+    autoprefixer-rails (9.4.5)
       execjs
     aws-eventstream (1.0.0)
     aws-partitions (1.91.0)
@@ -114,6 +114,7 @@ GEM
     cancancan (2.2.0)
     case_transform (0.2)
       activesupport
+    chartkick (3.0.2)
     choice (0.2.0)
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -123,7 +124,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.3)
+    concurrent-ruby (1.1.4)
     crass (1.0.4)
     daemons (1.2.6)
     dalli (2.7.8)
@@ -142,7 +143,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.0.0)
       railties (>= 4.2)
-    erubi (1.7.1)
+    erubi (1.8.0)
     execjs (2.7.0)
     factory_bot (4.10.0)
       activesupport (>= 3.0.0)
@@ -163,6 +164,8 @@ GEM
       actionpack (>= 3.0)
       multi_json
       request_store (>= 1.0)
+    groupdate (4.1.1)
+      activesupport (>= 4.2)
     guard (2.14.2)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -182,7 +185,7 @@ GEM
       domain_name (~> 0.5)
     httparty (0.16.2)
       multi_xml (>= 0.5.2)
-    i18n (1.1.1)
+    i18n (1.5.2)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
     jbuilder (2.7.0)
@@ -235,7 +238,7 @@ GEM
     mime-types-data (3.2016.0521)
     mimemagic (0.3.2)
     mini_mime (1.0.1)
-    mini_portile2 (2.3.0)
+    mini_portile2 (2.4.0)
     minitest (5.11.3)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
@@ -251,8 +254,8 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     nio4r (2.3.1)
-    nokogiri (1.8.5)
-      mini_portile2 (~> 2.3.0)
+    nokogiri (1.10.1)
+      mini_portile2 (~> 2.4.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
@@ -340,10 +343,10 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
     rainbow (3.0.0)
-    rake (12.3.1)
+    rake (12.3.2)
     rb-fsevent (0.10.3)
-    rb-inotify (0.9.10)
-      ffi (>= 0.5.0, < 2)
+    rb-inotify (0.10.0)
+      ffi (~> 1.0)
     redis (4.0.1)
     request_store (1.4.1)
       rack (>= 1.4)
@@ -386,7 +389,7 @@ GEM
     ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
     rubyzip (1.2.2)
-    sass (3.7.2)
+    sass (3.7.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -400,7 +403,7 @@ GEM
     sassc (2.0.0)
       ffi (~> 1.9.6)
       rake
-    selectize-rails (0.12.5)
+    selectize-rails (0.12.6)
     shellany (0.0.1)
     simplecov (0.16.1)
       docile (~> 1.1)
@@ -424,7 +427,7 @@ GEM
     temple (0.8.0)
     thor (0.19.4)
     thread_safe (0.3.6)
-    tilt (2.0.8)
+    tilt (2.0.9)
     turbolinks (5.1.1)
       turbolinks-source (~> 5.1)
     turbolinks-source (5.1.0)
@@ -462,6 +465,7 @@ DEPENDENCIES
   bootsnap
   bootstrap4-kaminari-views
   cancancan
+  chartkick
   coffee-rails
   daemons
   dalli
@@ -472,6 +476,7 @@ DEPENDENCIES
   font-awesome-sass (~> 5.1)
   foreman
   gon
+  groupdate
   guard
   guard-rspec
   httparty

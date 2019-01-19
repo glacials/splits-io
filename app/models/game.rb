@@ -22,8 +22,9 @@ class Game < ApplicationRecord
   scope :shortnamed, -> { where.not(shortname: nil) }
   pg_search_scope :search_both_names,
                   against: %i[name shortname],
+                  ignoring: :accents,
                   using: {
-                    tsearch: {},
+                    tsearch: {prefix: true},
                     trigram: {only: :name}
                   }
 

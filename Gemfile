@@ -47,6 +47,8 @@ end
 
 # administration
 gem 'administrate'
+gem 'chartkick'
+gem 'groupdate'
 
 # api
 gem 'active_model_serializers'

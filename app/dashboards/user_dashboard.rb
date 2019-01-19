@@ -8,18 +8,16 @@ class UserDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    runs: Field::HasMany,
-    id: Field::Number,
-    categories: Field::HasMany,
-    games: Field::HasMany,
-    rivalries: Field::HasMany,
+    runs:               Field::HasMany,
+    id:                 Field::Number,
+    categories:         Field::HasMany,
+    games:              Field::HasMany,
+    rivalries:          Field::HasMany,
     incoming_rivalries: Field::HasMany.with_options(class_name: 'Rivalry'),
-    email: Field::Email,
-    twitch: Field::BelongsTo,
-    name: Field::String,
-    avatar: Field::String,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime
+    name:               Field::String,
+    avatar:             Field::String,
+    created_at:         Field::DateTime,
+    updated_at:         Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -29,7 +27,6 @@ class UserDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     name
-    email
     runs
   ].freeze
 

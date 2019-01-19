@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(version: 2019_01_19_192951) do
   create_table "game_aliases", id: :serial, force: :cascade do |t|
     t.integer "game_id"
     t.citext "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_game_aliases_on_game_id"
     t.index ["name"], name: "index_game_aliases_on_name", unique: true
   end
@@ -171,6 +173,8 @@ ActiveRecord::Schema.define(version: 2019_01_19_192951) do
     t.integer "category_id"
     t.integer "from_user_id"
     t.integer "to_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_rivalries_on_category_id"
     t.index ["from_user_id"], name: "index_rivalries_on_from_user_id"
     t.index ["to_user_id"], name: "index_rivalries_on_to_user_id"

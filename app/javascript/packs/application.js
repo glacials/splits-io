@@ -17,6 +17,11 @@ import "clipboard"
 import * as Cookies from "js-cookie"
 import "jquery.turbolinks"
 
+import Chartkick from "chartkick"
+window.Chartkick = Chartkick
+import Highcharts from "highcharts"
+Chartkick.addAdapter(Highcharts)
+
 global.moment = moment
 global._ = underscore
 global.Spinner = Spinner

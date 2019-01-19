@@ -27,7 +27,7 @@ document.addEventListener('turbolinks:load', function() {
       remote: {
         url: '/api/v4/games',
         prepare: function(query, settings) {
-          return Object.assign(settings, {url: encodeURI(`${settings.url}?search=${query}`)})
+          return Object.assign(settings, {url: encodeURI(`${settings.url}?search=${query.trim()}`)})
         },
         transform: function(response) {
           return response.games.map(function(game) {
@@ -62,7 +62,7 @@ document.addEventListener('turbolinks:load', function() {
       remote: {
         url: '/api/v4/runners',
         prepare: function(query, settings) {
-          return Object.assign(settings, {url: encodeURI(`${settings.url}?search=${query}`)})
+          return Object.assign(settings, {url: encodeURI(`${settings.url}?search=${query.trim()}`)})
         },
         transform: function(response) {
           return response.runners.map(function(runner) {
