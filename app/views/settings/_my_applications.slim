@@ -41,7 +41,10 @@
                     .input-group
                       input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1
                       .input-group-append
-                        .btn.btn-primary.clipboard-btn data-clipboard-target="#client-id-#{application.uid}"
+                        .btn.btn-primary.clipboard-btn.tip(
+                          data-clipboard-target="#client-id-#{application.uid}"
+                          title='Copy to clipboard'
+                        )
                           span#copy = icon('fas', 'copy')
                           span#copied style='display: none;' = icon('fas', 'check')
                   td
@@ -51,7 +54,10 @@
                       .input-group
                         input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1
                         .input-group-append
-                          .btn.btn-primary.clipboard-btn data-clipboard-target="#client-secret-#{application.uid}"
+                          .btn.btn-primary.clipboard-btn.tip(
+                            data-clipboard-target="#client-secret-#{application.uid}"
+                            title='Copy to clipboard'
+                          )
                             span#copy = icon('fas', 'copy')
                             span#copied style='display: none;' = icon('fas', 'check')
                   coffee:
@@ -65,13 +71,16 @@
                       , 4000)
                     )
                   td
-                    a.btn.btn-outline-success href=edit_application_path(application)
-                      span = icon('fas', 'edit')
-                  td.border-danger.border-left
-                    = button_to(application_path(application), class: 'btn btn-outline-danger', method: :delete, \
-                      data: { \
-                        confirm: "Really delete #{application.name}? This will also revoke all \
-                                  #{application.access_tokens.count} authorizations and invalidate the associated \
-                                  tokens." \
-                      })
-                      span = icon('fas', 'times')
+                    .btn-group
+                      a.btn.btn-outline-light.tip(
+                        href=edit_application_path(application)
+                        title="Edit #{application.name}"
+                      )
+                        span = icon('fas', 'edit')
+                      = link_to(application_path(application), class: 'btn btn-outline-light tip', method: :delete, \
+                        data: { \
+                          confirm: "Really delete #{application.name}? This will also revoke all \
+                                    #{application.access_tokens.count} authorizations and invalidate the associated \
+                                    tokens." \
+                        }, title: "Delete #{application.name}")
+                        span = icon('fas', 'times')
