@@ -9,6 +9,7 @@ class TwitchUserDashboard < Administrate::BaseDashboard
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
     id:                Field::String.with_options(searchable: false),
+    user_id:           Field::Number,
     user:              Field::BelongsTo,
     access_token:      Field::Password,
     twitch_id:         Field::String,
@@ -51,6 +52,7 @@ class TwitchUserDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
+    user_id
     follows_synced_at
   ].freeze
 
@@ -58,6 +60,6 @@ class TwitchUserDashboard < Administrate::BaseDashboard
   # across all pages of the admin dashboard.
   #
   def display_resource(twitch_user)
-    twitch_user.display_name
+    "#{twitch_user.user}'s Twitch user"
   end
 end

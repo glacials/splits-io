@@ -3,14 +3,20 @@ Rails.application.routes.draw do
     resources :games
     resources :game_aliases
     resources :categories
+    resources :speedrun_dot_com_games
 
     resources :runs
+    resources :run_histories
     resources :segments
     resources :segment_histories
+    resources :highlight_suggestions
+    resources :rivalries
 
     resources :users
+    resources :twitch_users
+    resources :twitch_user_follows
+    resources :google_users
     resources :patreon_users
-    resources :rivalries
 
     root to: 'runs#index'
   end

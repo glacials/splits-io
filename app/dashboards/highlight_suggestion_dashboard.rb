@@ -1,6 +1,6 @@
-require 'administrate/base_dashboard'
+require "administrate/base_dashboard"
 
-class PatreonUserDashboard < Administrate::BaseDashboard
+class HighlightSuggestionDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -8,17 +8,12 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    id:                Field::String.with_options(searchable: false),
-    user_id:           Field::Number,
-    user:              Field::BelongsTo,
-    access_token:      Field::Password,
-    refresh_token:     Field::Password,
-    full_name:         Field::String,
-    patreon_id:        Field::String,
-    pledge_cents:      Field::Number,
-    pledge_created_at: Field::DateTime,
-    created_at:        Field::DateTime,
-    updated_at:        Field::DateTime
+    run_id:     Field::Number,
+    run:        Field::BelongsTo,
+    id:         Field::String.with_options(searchable: false),
+    url:        Field::Text,
+    created_at: Field::DateTime,
+    updated_at: Field::DateTime,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -27,21 +22,16 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
-    user
-    full_name
-    pledge_cents
-    pledge_created_at
+    run
+    created_at
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
     id
-    user
-    full_name
-    patreon_id
-    pledge_cents
-    pledge_created_at
+    run
+    url
     created_at
     updated_at
   ].freeze
@@ -50,14 +40,14 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    user_id
-    pledge_cents
+    run_id
+    url
   ].freeze
 
-  # Overwrite this method to customize how patreon users are displayed
+  # Overwrite this method to customize how highlight suggestions are displayed
   # across all pages of the admin dashboard.
   #
-  def display_resource(patreon_user)
-    "#{patreon_user.user}'s Patreon user"
+  def display_resource(highlight_suggestion)
+    "#{highlight_suggestion.run.user}'s #{highlight_suggestion.run} highlight suggestion"
   end
 end

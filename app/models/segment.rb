@@ -143,4 +143,8 @@ class Segment < ApplicationRecord
       gametime_skipped?
     end
   end
+
+  def to_s
+    name
+  end
 end

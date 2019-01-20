@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_19_192951) do
+ActiveRecord::Schema.define(version: 2019_01_20_174533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 2019_01_19_192951) do
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "avatar", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["google_id"], name: "index_google_users_on_google_id", unique: true
     t.index ["user_id"], name: "index_google_users_on_user_id"
   end

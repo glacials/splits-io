@@ -73,7 +73,7 @@ class SegmentDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    run
+    run_id
     histories
     segment_number
     realtime_duration_ms

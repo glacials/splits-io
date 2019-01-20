@@ -1,6 +1,6 @@
-require 'administrate/base_dashboard'
+require "administrate/base_dashboard"
 
-class PatreonUserDashboard < Administrate::BaseDashboard
+class GoogleUserDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -8,17 +8,17 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    id:                Field::String.with_options(searchable: false),
-    user_id:           Field::Number,
-    user:              Field::BelongsTo,
-    access_token:      Field::Password,
-    refresh_token:     Field::Password,
-    full_name:         Field::String,
-    patreon_id:        Field::String,
-    pledge_cents:      Field::Number,
-    pledge_created_at: Field::DateTime,
-    created_at:        Field::DateTime,
-    updated_at:        Field::DateTime
+    id:                      Field::String.with_options(searchable: false),
+    user_id:                 Field::Number,
+    user:                    Field::BelongsTo,
+    google_id:               Field::String,
+    access_token:            Field::Password,
+    access_token_expires_at: Field::DateTime,
+    name:                    Field::String,
+    email:                   Field::String,
+    first_name:              Field::String,
+    last_name:               Field::String,
+    avatar:                  Field::String,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -28,22 +28,24 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     user
-    full_name
-    pledge_cents
-    pledge_created_at
+    first_name
+    last_name
+    email
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    id
     user
-    full_name
-    patreon_id
-    pledge_cents
-    pledge_created_at
-    created_at
-    updated_at
+    id
+    google_id
+    access_token
+    access_token_expires_at
+    name
+    email
+    first_name
+    last_name
+    avatar
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -51,13 +53,12 @@ class PatreonUserDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
     user_id
-    pledge_cents
   ].freeze
 
-  # Overwrite this method to customize how patreon users are displayed
+  # Overwrite this method to customize how google users are displayed
   # across all pages of the admin dashboard.
   #
-  def display_resource(patreon_user)
-    "#{patreon_user.user}'s Patreon user"
+  def display_resource(google_user)
+    "#{google_user.user}'s Google user"
   end
 end

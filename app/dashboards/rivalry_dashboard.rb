@@ -12,9 +12,7 @@ class RivalryDashboard < Administrate::BaseDashboard
     from_user: Field::BelongsTo.with_options(class_name: 'User'),
     to_user: Field::BelongsTo.with_options(class_name: 'User'),
     game: Field::HasOne,
-    id: Field::Number,
-    from_user_id: Field::Number,
-    to_user_id: Field::Number
+    id: Field::Number
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -38,20 +36,12 @@ class RivalryDashboard < Administrate::BaseDashboard
     to_user
     game
     category
-    from_user_id
-    to_user_id
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    category
-    from_user
-    to_user
-    game
-    from_user_id
-    to_user_id
   ].freeze
 
   # Overwrite this method to customize how rivalries are displayed
