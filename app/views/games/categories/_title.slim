@@ -5,14 +5,16 @@ h1 = @category.game
     - @category.game.aliases.where.not(name: @category.game.name).each do |game_alias|
       li = game_alias
 h6
-  ul.run-options
-    - if @category.game.srl_uri.present?
-      li = link_to(image_tag(asset_path("srl.png")), @category.game.srl_uri, target: '_blank', class: 'btn btn-dark')
-    - if can?(:edit, @category.game)
-      li
-        a.btn.btn-outline-light href=edit_game_path(@category.game)
-          i.fas.fa-edit>
-          span Edit
+  - if @category.game.srdc.try(:url).present?
+    a.btn.btn-dark.mr-2.tip href=@category.game.srdc.url title='See on Speedrun.com'
+      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+  - if @category.game.srl_uri.present?
+    a.btn.btn-dark.mr-2.tip href=@category.game.srl_uri title='See on SpeedRunsLive'
+      = image_tag(asset_path('srl.png'))
+  - if can?(:edit, @category.game)
+    a.btn.btn-outline-light href=edit_game_path(@category.game)
+      = icon('fas', 'edit')
+      span Edit
 article data-turbolinks-temporary=true
   .row
     .col-sm-3.mb-3

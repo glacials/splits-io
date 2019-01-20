@@ -42,7 +42,9 @@ class GamesController < ApplicationController
   end
 
   def set_game
-    @game = Game.find_by(shortname: params[:game]) || Game.find_by(id: params[:game])
+    @game = SpeedrunDotComGame.find_by(shortname: params[:game]).try(:game)
+    @game ||= Game.find_by(shortname: params[:game])
+    @game ||= Game.find_by(id: params[:game])
 
     if @game.nil?
       redirect_to games_path(q: params[:game])

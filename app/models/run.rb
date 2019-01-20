@@ -28,7 +28,6 @@ class Run < ApplicationRecord
 
   has_secure_token :claim_token
 
-  after_create :refresh_game
   after_create :discover_runner
   after_create :publish_aging
 
@@ -140,10 +139,13 @@ class Run < ApplicationRecord
     self.category = game.categories.where('lower(name) = lower(?)', category_string).first_or_create(
       name: category_string
     )
+
+    refresh_game
   end
 
   def refresh_game
     return if game.blank?
+    game.delay.sync_with_srdc
     game.delay.sync_with_srl
   end
 
