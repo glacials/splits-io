@@ -9,9 +9,10 @@ module Admin
     before_action :authenticate_admin
 
     def authenticate_admin
-      if (current_user.nil? || current_user.id != 1) && request.host_with_port != 'localhost:3000'
-        redirect_to root_path
-      end
+      return if request.host_with_port == 'localhost:3000'
+      return if current_user.present? && [1, 123].include?(current_user.id)
+
+      redirect_to root_path
     end
 
     # Override this value to specify the number of elements to display at a time

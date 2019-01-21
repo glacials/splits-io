@@ -17,10 +17,10 @@ import "clipboard"
 import * as Cookies from "js-cookie"
 import "jquery.turbolinks"
 
+// Using Google charts for now (a script tag in app/views/layouts/admin/application.slim) because Chartkick + Highcharts
+// doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
 import Chartkick from "chartkick"
 window.Chartkick = Chartkick
-import Highcharts from "highcharts"
-Chartkick.addAdapter(Highcharts)
 
 global.moment = moment
 global._ = underscore

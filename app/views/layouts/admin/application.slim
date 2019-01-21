@@ -21,6 +21,11 @@ head
   = csrf_meta_tags
 body
   = javascript_pack_tag 'application'
+
+  // Using Google charts for now because Chartkick + Highcharts doesn't seem to include axes, and tooltips don't include
+  // years (?) with no clear resolution
+  script src='https://www.gstatic.com/charts/loader.js'
+
   = render 'icons'
 
   div.app-container
