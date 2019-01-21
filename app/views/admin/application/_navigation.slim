@@ -5,8 +5,48 @@
 / for all resources in the admin dashboard,
 / as defined by the routes in the `admin/` namespace
 
+/ When adding a new model, insert it into this hierarchy. This determines only placement in the nav menu.
+- hierarchy = { \
+    games: { \
+      game_aliases:           {}, \
+      categories:             {}, \
+      speedrun_dot_com_games: {} \
+    }, \
+    runs: { \
+      run_histories:         {}, \
+      highlight_suggestions: {}, \
+      segments: { \
+        segment_histories: {} \
+      }, \
+    }, \
+    users: { \
+      rivalries: {}, \
+      google_users:  {}, \
+      patreon_users: {}, \
+      twitch_users: { \
+        twitch_user_follows: {} \
+      } \
+    } \
+  }
+
+ruby:
+  def render_nav(parent, children, size: 1.3)
+    link_to(
+      display_resource_name(parent),
+      [namespace, resource_index_route_key(parent)],
+      class: "navigation__link navigation__link--#{nav_link_state(parent)}",
+      style: "font-size: #{size}em",
+    ) + children.map do |child, grandchildren|
+      render_nav(child, grandchildren, size: size * 0.7)
+    end.join('').html_safe
+  end
+
 nav.navigation role='navigation'
-  - Administrate::Namespace.new(namespace).resources.each do |resource|
+  - hierarchy.each do |parent, children|
+    = render_nav(parent, children)
+
+  / Original nav menu, non-hierarchical but automatically generated
+  /- Administrate::Namespace.new(namespace).resources.each do |resource|
     = link_to( \
       display_resource_name(resource), \
       [namespace, resource_index_route_key(resource)], \
