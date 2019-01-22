@@ -16,23 +16,6 @@ class GamesController < ApplicationController
   end
 
   def update
-    shortname = params[@game.id.to_s][:shortname].presence
-
-    if @game.update(shortname: shortname)
-      redirect_to(
-        edit_game_path(@game),
-        notice: if shortname.present?
-                  "Saved! #{@game.name} now has the shortname '#{@game.shortname}'."
-                else
-                  "Saved! #{@game.name} no longer has a shortname."
-                end
-      )
-    else
-      redirect_to(
-        edit_game_path(@game),
-        alert: "Couldn't update #{@game.name}'s shortname to '#{@game.shortname}'."
-      )
-    end
   end
 
   private
@@ -42,14 +25,12 @@ class GamesController < ApplicationController
   end
 
   def set_game
-    @game = SpeedrunDotComGame.find_by(shortname: params[:game]).try(:game)
-    @game ||= Game.find_by(shortname: params[:game])
-    @game ||= Game.find_by(id: params[:game])
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) || Game.find_by(id: params[:game])
 
     if @game.nil?
       redirect_to games_path(q: params[:game])
       return
     end
-    redirect_to game_path(@game) if @game.shortname.present? && params[:game] == @game.id.to_s
+    redirect_to game_path(@game) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
   end
 end

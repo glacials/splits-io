@@ -27,11 +27,11 @@ article
             label.sr-only for='game-selector'
             = f.collection_select( \
               :game, \
-              Game.shortnamed.order(:name), \
+              SpeedrunDotComGame.order(:name), \
               :shortname, \
               :name, \
               { \
-                selected: @run.game.try(:shortname), \
+                selected: @run.game.try(:srdc).try(:shortname), \
                 include_blank: true \
               }, \
               id: 'game-selector', \

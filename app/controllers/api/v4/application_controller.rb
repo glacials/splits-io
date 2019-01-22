@@ -53,7 +53,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_game
-    @game = Game.find_by!(shortname: params[:game])
+    @game = Game.joins(:srdc).find_by!(speedrun_dot_com_games: {shortname: params[:game]})
   rescue ActiveRecord::RecordNotFound
     render not_found(:game)
   end

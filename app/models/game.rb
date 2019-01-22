@@ -2,7 +2,6 @@ require 'speedrunslive'
 
 class Game < ApplicationRecord
   include PgSearch
-  include SRLGame
 
   extend OrderAsSpecified
 
@@ -14,14 +13,14 @@ class Game < ApplicationRecord
   has_many :runners, -> { distinct }, through: :runs, class_name: 'User'
   has_many :aliases, class_name: 'GameAlias'
 
-  has_one :srdc, class_name: 'SpeedrunDotComGame'
+  has_one :srdc, class_name: 'SpeedrunDotComGame', dependent: :destroy
+  has_one :srl,  class_name: 'SpeedRunsLiveGame',  dependent: :destroy
 
   after_create :create_initial_alias
 
   scope :named, -> { where.not(name: nil) }
-  scope :shortnamed, -> { joins(:srdc).union(where.not(shortname: nil)) }
   pg_search_scope :search_both_names,
-                  against: %i[name shortname],
+                  against: %i[name],
                   ignoring: :accents,
                   using: {
                     tsearch: {prefix: true},
@@ -32,7 +31,7 @@ class Game < ApplicationRecord
     term.strip!
     return Game.none if term.blank?
 
-    ids = Game.shortnamed.joins(:aliases).merge(GameAlias.search_for_name(term)).pluck(:id)
+    ids = Game.joins(:srdc, :aliases).merge(GameAlias.search_for_name(term)).pluck(:id)
     Game.where(id: ids).order_as_specified(id: ids)
   end
 
@@ -49,15 +48,7 @@ class Game < ApplicationRecord
   end
 
   def to_param
-    srdc.try(:shortname) || shortname || id.to_s || name.downcase.delete('/')
-  end
-
-  def sync_with_srl
-    return if shortname.present?
-    game = SpeedRunsLive.game(name)
-    return if game.nil?
-
-    update(shortname: game['abbrev'])
+    srdc.try(:shortname) || id.to_s || name.downcase.delete('/')
   end
 
   def sync_with_srdc
@@ -67,6 +58,15 @@ class Game < ApplicationRecord
     end
 
     srdc.sync!
+  end
+
+  def sync_with_srl
+    if srl.nil?
+      SpeedRunsLiveGame.from_game!(self)
+      return
+    end
+
+    srl.sync!
   end
 
   def to_s
@@ -89,7 +89,6 @@ class Game < ApplicationRecord
   # there are two Splits I/O games representing the same game, like "Tron Evolution" and "Tron: Evolution".
   def merge_into!(game)
     ApplicationRecord.transaction do
-      game.update(shortname: game.shortname || shortname)
       aliases.update_all(game_id: game.id)
 
       categories.each do |category|

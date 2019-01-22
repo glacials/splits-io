@@ -8,8 +8,8 @@ h6
   - if @category.game.srdc.try(:url).present?
     a.btn.btn-dark.mr-2.tip href=@category.game.srdc.url title='See on Speedrun.com'
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-  - if @category.game.srl_uri.present?
-    a.btn.btn-dark.mr-2.tip href=@category.game.srl_uri title='See on SpeedRunsLive'
+  - if @category.game.srl.present?
+    a.btn.btn-dark.mr-2.tip href=@category.game.srl.url title='See on SpeedRunsLive'
       = image_tag(asset_path('srl.png'))
   - if can?(:edit, @category.game)
     a.btn.btn-outline-light href=edit_game_path(@category.game)

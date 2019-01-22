@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :game_aliases
     resources :categories
     resources :speedrun_dot_com_games
+    resources :speed_runs_live_games
 
     resources :runs
     resources :run_histories

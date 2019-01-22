@@ -12,6 +12,8 @@ class GameDashboard < Administrate::BaseDashboard
     categories: Field::HasMany,
     runs: Field::HasMany,
     aliases: Field::HasMany.with_options(class_name: 'GameAlias'),
+    srdc: Field::HasOne.with_options(class_name: 'SpeedrunDotComGame'),
+    srl: Field::HasOne.with_options(class_name: 'SpeedRunsLiveGame'),
     name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -39,6 +41,8 @@ class GameDashboard < Administrate::BaseDashboard
     name
     aliases
     categories
+    srdc
+    srl
     created_at
     updated_at
   ].freeze

@@ -1,19 +1,19 @@
 module Admin
-  class GamesController < Admin::ApplicationController
+  class SpeedRunsLiveGamesController < Admin::ApplicationController
     # To customize the behavior of this controller,
     # you can overwrite any of the RESTful actions. For example:
     #
     # def index
     #   super
-    #   @resources = Game.
+    #   @resources = SpeedrunDotComGame.
     #     page(params[:page]).
     #     per(10)
     # end
 
     # Define a custom finder by overriding the `find_resource` method:
-    def find_resource(param)
-      Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: param}) || Game.find_by!(id: param)
-    end
+    # def find_resource(param)
+    #   SpeedrunDotComGame.find_by!(slug: param)
+    # end
 
     # See https://administrate-prototype.herokuapp.com/customizing_controller_actions
     # for more information
