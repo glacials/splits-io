@@ -424,6 +424,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    strong_migrations (0.3.1)
+      activerecord (>= 3.2.0)
     temple (0.8.0)
     thor (0.19.4)
     thread_safe (0.3.6)
@@ -513,6 +515,7 @@ DEPENDENCIES
   simplecov
   skylight
   slim
+  strong_migrations
   turbolinks
   uglifier
   webpacker

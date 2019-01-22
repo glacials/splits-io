@@ -77,6 +77,7 @@ gem 'aws-sdk-s3'
 gem 'order_as_specified'
 gem 'pg'
 gem 'pg_search'
+gem 'strong_migrations'
 
 # errors+logging
 gem 'newrelic_rpm'
