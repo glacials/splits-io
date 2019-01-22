@@ -4,7 +4,7 @@ describe Api::V4::Games::RunsController do
   describe '#index' do
     context 'for an existing game' do
       let(:game) { create(:game, :with_runs, :shortnamed) }
-      subject { get :index, params: {game: game.shortname} }
+      subject { get :index, params: {game: game.srdc.try(:shortname)} }
 
       it 'retruns a 200' do
         expect(subject).to have_http_status 200

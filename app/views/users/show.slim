@@ -14,7 +14,7 @@
         span = @user
   h6
     - @user.games.named.each do |game|
-      => link_to(game.shortname || game.name, game, class: 'badge badge-primary', title: game.name)
+      => link_to(game.srdc.try(:shortname) || game.name, game, class: 'badge badge-primary', title: game.name)
 article
   .row
     .col-lg-12

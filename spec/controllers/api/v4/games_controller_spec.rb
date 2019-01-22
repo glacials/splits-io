@@ -7,7 +7,7 @@ describe Api::V4::GamesController do
   describe '#show' do
     context 'for an existing game' do
       let(:game) { create(:game, :shortnamed) }
-      subject { get :show, params: {game: game.shortname} }
+      subject { get :show, params: {game: game.srdc.shortname} }
 
       it 'returns a 200' do
         expect(subject).to have_http_status 200

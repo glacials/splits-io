@@ -30,8 +30,8 @@
   <% if @run.game.present? %>
     "game": {
       "longname": "<%= @run.game.name %>",
-      <% if @run.game.shortname.present? %>
-        "shortname": "<%= @run.game.shortname %>",
+      <% if @run.game.srdc.try(:shortname).present? %>
+        "shortname": "<%= @run.game.srdc.shortname %>",
       <% end %>
       "links": {
         "splitsioID": "<%= @run.game.id %>"

@@ -56,7 +56,12 @@ describe Api::V3::GamesController do
 
         it 'returns the game' do
           returned_attributes.each do |attribute|
-            expect(body[attribute.to_s]).to eq(game.send(attribute))
+            case attribute
+            when :shortname
+              expect(body[attribute.to_s]).to eq(game.srdc.try(:shortname))
+            else
+              expect(body[attribute.to_s]).to eq(game.send(attribute))
+            end
           end
         end
       end
@@ -87,7 +92,12 @@ describe Api::V3::GamesController do
 
         it 'returns the game' do
           returned_attributes.each do |attribute|
-            expect(body[attribute.to_s]).to eq(game.send(attribute))
+            case attribute
+            when :shortname
+              expect(body[attribute.to_s]).to eq(game.srdc.try(:shortname))
+            else
+              expect(body[attribute.to_s]).to eq(game.send(attribute))
+            end
           end
         end
       end

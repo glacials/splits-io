@@ -4,6 +4,6 @@ class Api::V4::GameSerializer < Api::V4::ApplicationSerializer
   attributes :name, :shortname, :created_at, :updated_at
 
   def shortname
-    object.srdc.shortname || object.srl.shortname
+    object.srdc.try(:shortname) || object.srl.try(:shortname)
   end
 end

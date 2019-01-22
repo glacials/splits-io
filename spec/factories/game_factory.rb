@@ -3,7 +3,9 @@ FactoryBot.define do
     name 'The Legend of Mario: Melee Crossing Transformed X/Y 4'
 
     trait :shortnamed do
-      shortname 'tlommctxy4'
+      after(:create) do |game|
+        FactoryBot.create(:speedrun_dot_com_game, game: game, shortname: 'tlommctxy4')
+      end
     end
 
     trait :with_categories do

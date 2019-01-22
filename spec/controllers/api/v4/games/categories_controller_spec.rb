@@ -4,7 +4,7 @@ describe Api::V4::Games::CategoriesController do
   describe '#index' do
     context 'for an existing game' do
       let(:game) { create(:game, :shortnamed, :with_categories) }
-      subject { get :index, params: {game: game.shortname} }
+      subject { get :index, params: {game: game.srdc.try(:shortname)} }
 
       it 'returns a 200' do
         expect(subject).to have_http_status 200
