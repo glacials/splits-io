@@ -21,12 +21,11 @@ build:
 	$(docker-compose) run web bundle install
 	$(docker-compose) build
 	$(docker-compose) run web rails db:migrate
-	@[ -e tmp/seed ] || make seed && echo "# Do not delete this file. Its presence tells the splits-io Makefile to not re-seed data." > tmp/seed
+	@[ -e tmp/seed ] || make seed
 
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
 	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > tmp/seed
-	docker-compose run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
 
 lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
