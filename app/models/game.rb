@@ -19,7 +19,7 @@ class Game < ApplicationRecord
   after_create :create_initial_alias
 
   scope :named, -> { where.not(name: nil) }
-  scope :shortnamed, -> { where.not(shortname: nil) }
+  scope :shortnamed, -> { joins(:srdc).union(where.not(shortname: nil)) }
   pg_search_scope :search_both_names,
                   against: %i[name shortname],
                   ignoring: :accents,
