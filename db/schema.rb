@@ -253,14 +253,16 @@ ActiveRecord::Schema.define(version: 2019_01_22_052742) do
 
   create_table "speed_runs_live_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id"
-    t.string "srl_id", null: false
+    t.string "srl_id"
     t.string "name", null: false
     t.string "shortname", null: false
     t.float "popularity"
     t.integer "popularity_rank"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_speed_runs_live_games_on_game_id"
+    t.index ["game_id"], name: "index_speed_runs_live_games_on_game_id", unique: true
+    t.index ["shortname"], name: "index_speed_runs_live_games_on_shortname", unique: true
+    t.index ["srl_id"], name: "index_speed_runs_live_games_on_srl_id", unique: true
   end
 
   create_table "speedrun_dot_com_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
