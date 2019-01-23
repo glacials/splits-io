@@ -33,12 +33,13 @@ a {
 .content {
 }
 
-img.logo {
+.logo {
   float: left;
-  height: 5em;
-  width: 5em;
-
   vertical-align: middle;
+}
+
+.logo img {
+  visibility: hidden;
 }
 
 </style>
@@ -48,7 +49,9 @@ img.logo {
     <div class="page">
       <div class="content-wrapper">
         <div class="content">
-          <a href="/"><img src="errorpage_assets/logo.svg" class="logo" /></a>
+          <div class="logo">
+            <a href="/"><img src="errorpage_assets/logo.png" id="image" width="100" height="100" /></a>
+          </div>
           Woops! Something went wrong on our end (500 error).<br />
           If this keeps happening, please let us know:<br /><br />
           <a href="mailto:bugs@splits.io">bugs@splits.io</a> |
@@ -57,5 +60,52 @@ img.logo {
         </div>
       </div>
     </div>
+    <script src="errorpage_assets/glfx.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.7.0/Tween.js"></script>
+    <script type="text/javascript">
+
+window.onload = function() {
+    // try to create a WebGL canvas (will fail if WebGL isn't supported)
+    try {
+        var canvas = fx.canvas();
+    } catch (e) {
+        alert(e);
+        return;
+    }
+
+    // convert the image to a texture
+    var image = document.getElementById('image');
+    var texture = canvas.texture(image);
+
+    // replace the image with the canvas
+    image.parentNode.insertBefore(canvas, image);
+    image.parentNode.removeChild(image);
+
+    function animate(time) {
+      requestAnimationFrame(animate);
+      TWEEN.update(time);
+    }
+    requestAnimationFrame(animate);
+
+    // y is unused; x is blur amount in pixels; duration is ms of the animation in each direction
+    var minBlur = {x: 30, y: 30};
+    var maxBlur = {x: 7, y: 7};
+    var duration = 20000;
+
+    var coords = Object.assign({}, minBlur);
+    var tweenBlur = new TWEEN.Tween(coords).to(maxBlur, duration).easing(TWEEN.Easing.Quadratic.Out).onUpdate(function() {
+      canvas.draw(texture).hexagonalPixelate(50, 50, coords.x).update();
+    }).start();
+    var tweenUnblur = new TWEEN.Tween(coords).to(minBlur, duration).easing(TWEEN.Easing.Quadratic.In).onUpdate(function() {
+      canvas.draw(texture).hexagonalPixelate(50, 50, coords.x).update();
+    });
+
+    tweenBlur.chain(tweenUnblur);
+    tweenUnblur.chain(tweenBlur);
+
+    image.style.display = 'block';
+};
+
+    </script>
   </body>
 </html>
