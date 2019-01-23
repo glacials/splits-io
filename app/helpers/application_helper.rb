@@ -63,7 +63,7 @@ module ApplicationHelper
   def game_badge(game)
     return '???' if game.nil?
 
-    link_to(game.shortname, game_path(game), class: 'badge badge-primary', title: game.name)
+    link_to(game.srdc.try(:shortname), game_path(game), class: 'badge badge-primary', title: game.name)
   end
 
   # patreon_url returns the URL for the Splits I/O Patreon page. If checkout is true, it returns the URL for the

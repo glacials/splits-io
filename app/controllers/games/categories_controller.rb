@@ -8,7 +8,7 @@ class Games::CategoriesController < ApplicationController
   private
 
   def set_game
-    @game = Game.where(shortname: params[:game]).or(Game.where(id: params[:game])).first
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) || Game.find_by(id: params[:game])
 
     not_found if @game.nil?
   end
@@ -19,6 +19,6 @@ class Games::CategoriesController < ApplicationController
     ).first
 
     not_found if @category.nil?
-    redirect_to game_category_path(@game, @category) if @game.shortname.present? && params[:game] == @game.id.to_s
+    redirect_to game_category_path(@game, @category) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
   end
 end

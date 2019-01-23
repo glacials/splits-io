@@ -22,7 +22,7 @@ class Users::PbsController < ApplicationController
   end
 
   def set_game
-    @game = Game.where(shortname: params[:game]).or(Game.where(id: params[:game])).first
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) || Game.find_by(id: params[:game])
 
     not_found if @game.nil?
   end

@@ -12,7 +12,7 @@ class Games::AliasesController < ApplicationController
       return
     end
 
-    if @game_to_merge.shortname.present? && @game.shortname.present?
+    if @game_to_merge.shortname.present? && @game.srdc.try(:shortname).present?
       redirect_to(
         edit_game_path(@game),
         alert: "Error: You're trying to merge two games with SRL links, which probably isn't right."

@@ -1,11 +1,57 @@
 <html>
   <head>
-    <title>splits i/o - 500 error</title>
+    <title>Error - Splits I/O</title>
+<style>
+body {
+  background-color: #252830;
+  background-image: url('errorpage_assets/bg.png');
+  color: #ccc;
+  font-family: monospace;
+}
+
+a {
+  color: #fff;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.content-wrapper {
+  width: 50%;
+  height: 50%;
+
+  display: flex;
+}
+
+.content {
+}
+
+img.logo {
+  float: left;
+  height: 5em;
+  width: 5em;
+
+  vertical-align: middle;
+}
+</style>
   </head>
   <body>
-    <pre>
-      Woops! Something went wrong on our end (500 error).
-      If this keeps happening, please let us know: bugs@splits.io
-    </pre>
+    <div class="page">
+      <div class="content-wrapper">
+        <div class="content">
+          <a href="/"><img src="errorpage_assets/logo.svg" class="logo" /></a>
+          Woops! Something went wrong on our end (500 error).<br />
+          If this keeps happening, please let us know:<br /><br />
+          <a href="mailto:bugs@splits.io">bugs@splits.io</a> |
+          <a href="https://twitter.com/splitsio">@splitsio</a> |
+          <a href="https://discord.gg/yGaxX39">Discord</a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
