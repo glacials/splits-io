@@ -19,13 +19,6 @@ class Game < ApplicationRecord
   after_create :create_initial_alias
 
   scope :named, -> { where.not(name: nil) }
-  pg_search_scope :search_both_names,
-                  against: %i[name],
-                  ignoring: :accents,
-                  using: {
-                    tsearch: {prefix: true},
-                    trigram: {only: :name}
-                  }
 
   def self.search(term)
     term.strip!

@@ -53,7 +53,7 @@
       shortname: @run.user.name,
       links: {
         splitsioID: @run.user.id.to_s,
-        twitchID: @run.user.twitch.twitch_id
+        twitchID: @run.user.twitch.try(:twitch_id)
       }
     }.to_json.html_safe
   end %>],

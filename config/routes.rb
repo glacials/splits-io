@@ -104,7 +104,7 @@ Rails.application.routes.draw do
   delete '/settings/authorizations/:application',    to: 'authorized_applications#destroy',                      as: :authorization
 
   get    '/:run/edit',  to: 'runs#edit', as: :edit_run
-  get    '/:run',       to: 'runs#show', as: :run
+  get    '/:run',       to: 'runs#show', as: :run, format: false # disable format so requests like /ads.txt don't render a run
   get    '/:run/stats', to: redirect('/%{run}') # to support old links floating around the internet; RIP stats page
   patch  '/:run',       to: 'runs#update'
   delete '/:run',       to: 'runs#destroy'

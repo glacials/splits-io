@@ -7,6 +7,8 @@ class SpeedRunsLiveGame < ApplicationRecord
     return game.srl if game.srl.present?
 
     result = SpeedRunsLive::Game.from_name(game.name)
+    return if result.nil?
+
     new(srl_id: result['id'], game: game).from_result!(result)
   end
 

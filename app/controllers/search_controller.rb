@@ -5,7 +5,7 @@ class SearchController < ApplicationController
     @results = {}
     return if @query.blank?
 
-    @results[:games] = Game.search(@query).order(:shortname, :name).includes(:categories)
+    @results[:games] = Game.search(@query).order(:name).includes(:categories)
     @results[:users] = User.search(@query).includes(:games)
   end
 

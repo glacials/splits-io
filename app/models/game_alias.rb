@@ -16,7 +16,12 @@ class GameAlias < ApplicationRecord
   validates :name, uniqueness: true
   validates :name, presence: true
 
-  pg_search_scope :search_for_name, against: [:name], using: :trigram
+  pg_search_scope :search_for_name,
+                  against: %i[name],
+                  using: {
+                    tsearch: {prefix: true},
+                    trigram: {only: :name}
+                  }
 
   def to_s
     name

@@ -43,7 +43,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     new_file = if params[:format] == 'json'
                  render_to_string(json: @run, serializer: Api::V4::Convert::RunSerializer)
                else
-                 render_to_string("runs/#{params[:format]}", layout: false)
+                 render_to_string("runs/exports/#{params[:format]}", layout: false)
                end
     send_data(
       new_file,

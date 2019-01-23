@@ -26,7 +26,7 @@ module SpeedrunDotCom
 
     def self.url_from_id(id)
       return nil if id.blank?
-      "https://www.speedrun.com/run/#{id}"
+      "https://www.speedrun.com/run/#{CGI.escape(id)}"
     end
 
     class << self
@@ -37,18 +37,18 @@ module SpeedrunDotCom
       end
 
       def route(id)
-        SpeedrunDotCom.route["/runs/#{id}"]
+        SpeedrunDotCom.route["/runs/#{CGI.escape(id)}"]
       end
     end
   end
 
   class Game
     def self.search(name)
-      JSON.parse(SpeedrunDotCom.route["/games?name=#{name}"].get.body)['data']
+      JSON.parse(SpeedrunDotCom.route["/games?name=#{CGI.escape(name)}"].get.body)['data']
     end
 
     def self.from_id(id)
-      JSON.parse(SpeedrunDotCom.route["/games/#{id}"].get.body)['data']
+      JSON.parse(SpeedrunDotCom.route["/games/#{CGI.escape(id)}"].get.body)['data']
     end
 
     class << self
@@ -86,7 +86,7 @@ module SpeedrunDotCom
       end
 
       def route(id)
-        SpeedrunDotCom.route["/users/#{id}"]
+        SpeedrunDotCom.route["/users/#{CGI.escape(id)}"]
       end
     end
   end
