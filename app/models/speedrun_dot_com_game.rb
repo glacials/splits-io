@@ -7,6 +7,8 @@ class SpeedrunDotComGame < ApplicationRecord
     return game.srdc if game.srdc.present?
 
     result = SpeedrunDotCom::Game.search(game.name).first
+    return if result.nil?
+
     new(srdc_id: result['id'], game: game).from_result!(result)
   end
 
