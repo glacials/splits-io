@@ -1,7 +1,7 @@
 class SpeedRunsLive
   class Game
     def self.from_shortname(shortname)
-      HTTParty.get(URI.parse("http://api.speedrunslive.com/games/#{shortname}"))
+      HTTParty.get(URI.parse("http://api.speedrunslive.com/games/#{CGI.escape(shortname)}"))
     rescue Errno::ETIMEDOUT
       nil
     end

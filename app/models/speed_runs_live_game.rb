@@ -15,6 +15,8 @@ class SpeedRunsLiveGame < ApplicationRecord
   end
 
   def from_result!(result)
+    return if result.nil? || result['errorCode'].present?
+
     update(
       name:            result['name'],
       shortname:       result['abbrev'],
