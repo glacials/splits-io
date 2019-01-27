@@ -24,12 +24,13 @@ module S3Run
         local_file = File.open(filename)
         yield local_file
         local_file.close
-        File.delete(filename)
       else
         file.get.body.read
       end
     rescue Aws::S3::Errors::AccessDenied, Aws::S3::Errors::Forbidden
       nil
+    ensure
+      File.delete(filename) if File.exist?(filename)
     end
 
     def in_s3?
