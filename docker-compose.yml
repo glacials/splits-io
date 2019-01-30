@@ -1,6 +1,7 @@
-version: '2'
+version: '3'
 services:
   web:
+    image: glacials/splitsio
     build:
       context: .
       dockerfile: Dockerfile
@@ -37,6 +38,7 @@ services:
     expose:
       - "4569"
   webpacker:
+    image: glacials/splitsio
     build: .
     command: bash -c "yarn install && ruby bin/webpack-dev-server"
     volumes:
@@ -46,6 +48,7 @@ services:
     expose:
       - "3035"
   worker:
+    image: glacials/splitsio
     environment:
       - GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET
