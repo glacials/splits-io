@@ -1,7 +1,8 @@
 FactoryBot.define do
   factory :rivalry do
     association :from_user, factory: :user
-    association :to_user, factory: :user
+    association :to_user,   factory: :user
+
     category
 
     after(:create) do |rivalry|

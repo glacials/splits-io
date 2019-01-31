@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :category do
     game
-    name 'Any%'
+    name { 'Any%' }
 
     trait :with_runs do
       after(:create) do |category|

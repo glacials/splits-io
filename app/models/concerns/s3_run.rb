@@ -30,7 +30,7 @@ module S3Run
     rescue Aws::S3::Errors::AccessDenied, Aws::S3::Errors::Forbidden
       nil
     ensure
-      File.delete(filename) if File.exist?(filename)
+      File.delete(filename) if filename.present? && File.exist?(filename)
     end
 
     def in_s3?
