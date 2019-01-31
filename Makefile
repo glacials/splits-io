@@ -22,6 +22,7 @@ build:
 	$(docker-compose) build
 	$(docker-compose) run web rails db:migrate
 	@[ -e tmp/seed ] || make seed
+	$(docker-compose) run web skylight disable_dev_warning
 
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Run>
   <GameIcon />
-  <GameName>
-  </GameName>
-  <CategoryName><%= @run.to_s %></CategoryName>
+  <GameName><%= @run.game %></GameName>
+  <CategoryName><%= @run.category %></CategoryName>
   <Offset><%= Time.at(@run.offset || 0).utc.strftime("%H:%M:%S").strip %></Offset>
   <AttemptCount><%= @run.attempts || 0 %></AttemptCount>
   <RunHistory />

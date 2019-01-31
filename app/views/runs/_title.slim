@@ -18,39 +18,16 @@ h5
         a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
 
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
-  .btn-group.mr-2 role='group' aria={label: 'Run navigation'}
+  .btn-group.m-2 role='group' aria={label: 'Run navigation'}
     .btn-group role='group'
-      button#download-link.btn.btn-outline-light.dropdown-toggle href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'
-        => icon('fas', 'download')
-        span Export
-      .dropdown-menu.bg-dark aria-labelledby='download-link'
-        h6.dropdown-header Generic Formats
-        a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
-          => icon('fas', 'file-download')
-          = ExchangeFormat
-        h6.dropdown-header Local Timers
-        - timer = Run.program(run.timer)
-        - (Run.exportable_programs - [ExchangeFormat]).each do |timer|
-          a.dropdown-item.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
-            => icon('fas', 'download')
-            = timer
-        h6.dropdown-header Online Timers
-        a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
-          => icon('fas', 'cloud')
-          | LiveSplit One
-        h6.dropdown-header Raw Data
-        a.dropdown-item.text-secondary href=history_csv_path(run)
-          => icon('fas', 'file-csv')
-          | Run History
-        a.dropdown-item.text-secondary href=segment_history_csv_path(run)
-          => icon('fas', 'file-csv')
-          | Segment History
+      = render partial: 'export_button', locals: {run: run, timing: timing}
+    .btn-group role='group'
       - if run.category
         - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
           a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
             => icon('fas', 'chart-bar')
             span Compare
-    - if can?(:edit, run)
+      - if can?(:edit, run)
       - if request.path_info == edit_run_path(run)
         a.btn.btn-outline-light href=run_path(run)
           => icon('fas', 'hand-point-left')
@@ -59,7 +36,7 @@ h5
         a.btn.btn-outline-light href=edit_run_path(run)
           => icon('fas', 'edit')
           span Edit
-  .btn-group.mr-2 role='group' aria={label: 'Related links'}
+  .btn-group.m-2 role='group' aria={label: 'Related links'}
     - if run.user.nil?
       #claim-nav-link-container hidden=true
         - if current_user.present?
@@ -68,7 +45,7 @@ h5
             span Claim
         - else
           button.btn.btn-outline-secondary disabled=true Sign In to Claim
-  .btn-group.mr-2 role='group' aria={label: 'Calls to action'}
+  .btn-group.m-2 role='group' aria={label: 'Calls to action'}
     - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
       a.btn.btn-twitch.tip-top(
         href='#'
