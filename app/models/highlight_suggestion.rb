@@ -36,7 +36,8 @@ class HighlightSuggestion < ApplicationRecord
               }.to_query
             end
           )
-          delay(run_at: video_start + 60.days).destroy # 60 days is life of archives for Partners / Twitch Prime members
+          # 60 days is life of archives for Partners / Twitch Prime members
+          highlight_suggestion.delay(run_at: video_start + 60.days).destroy
           return highlight_suggestion
         end
       end
