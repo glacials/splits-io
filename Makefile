@@ -9,24 +9,23 @@ else
 endif
 
 docker-compose := docker-compose
+docker := docker
 ifeq ($(detectedOS),Linux)
   docker-compose := sudo -E docker-compose
+  docker := sudo -E docker
 endif
 
-ifeq ($(container),)
-  container := web
-endif
+container ?= web
 
 build:
 	$(docker-compose) run web bundle install
 	$(docker-compose) build
 	$(docker-compose) run web rails db:migrate
-	@[ -e tmp/seed ] || make seed && echo "# Do not delete this file. Its presence tells the splits-io Makefile to not re-seed data." > tmp/seed
+	@[ -e tmp/seed ] || make seed
 
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
 	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > tmp/seed
-	docker-compose run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
 
 lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
@@ -45,7 +44,7 @@ update_lsc:
 
 attach:
 	@echo Do not use ctrl + c to exit this session, use ctrl + p then ctrl + q
-	docker attach $(shell docker ps | grep splits-io_$(container)_ | awk '{print $$1}')
+	$(docker) attach $(shell $(docker) ps | grep splits-io_$(container)_ | awk '{print $$1}')
 
 clean:
 	$(docker-compose) down
