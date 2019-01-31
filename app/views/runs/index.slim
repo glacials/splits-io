@@ -35,6 +35,10 @@ article
           ' From LiveSplit, WSplit, Llanfair, or many others.
         p
           ' Splits I/O analyzes your splits to give you insight into how to improve your runs.
+        p
+          ' Want to see it in action? See an
+          a> href=(Run.find_by(id: 'gcb'.to_i(36)).present? ? run_path(Run.find36('gcb')) : random_run_path) example run
+          ' or hit "Randomizer" down below.
         #carousel.carousel.slide.mb-2 data={ride: 'carousel'}
           ol.carousel-indicators
             li.active data={target: '#carousel', slide_to: '0'}
@@ -90,7 +94,7 @@ article
           a.btn.btn-primary.mx-2 href=faq_path(anchor: 'programs')
             => icon('fas', 'stopwatch')
             ' All Supported Timers
-          a.btn.btn-primary.mx-2 href=random_path
+          a.btn.btn-primary.mx-2 href=random_run_path
             => icon('fas', 'dice')
             ' Randomizer
 - if current_user.present?

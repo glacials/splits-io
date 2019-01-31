@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   root 'runs#index'
 
   get '/faq',       to: 'pages#faq',            as: :faq
+  get '/brand',     to: 'pages#brand',          as: :brand
   get '/read-only', to: 'pages#read_only_mode', as: :read_only_mode
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
@@ -39,7 +40,7 @@ Rails.application.routes.draw do
 
   get  '/upload',     to: 'runs#new',        as: :new_run
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
-  get  '/random',     to: 'runs#random',     as: :random
+  get  '/random',     to: 'runs#random',     as: :random_run
   get  '/convert',    to: redirect('/upload')
 
   get '/search',    to: 'search#index'
