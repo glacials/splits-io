@@ -8,4 +8,8 @@ class RunnerSerializer < Panko::Serializer
   def display_name
     object.to_s
   end
+
+  def avatar
+    object.avatar
+  end
 end
