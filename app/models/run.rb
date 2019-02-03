@@ -156,6 +156,10 @@ class Run < ApplicationRecord
     delay.set_runner_from_srdc
   end
 
+  def runners
+    [user]
+  end
+
   def filename(timer: Run.program(self.timer))
     "#{to_param}.#{timer.file_extension}"
   end

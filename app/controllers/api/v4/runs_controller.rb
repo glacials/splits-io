@@ -21,9 +21,11 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     timer = Run.program_from_attribute(:content_type, @accept_header)
     if timer.nil?
       if params[:historic] == '1'
-        render json: @run,
-               serializer: Api::V4::RunSerializer,
-               include: ['game', 'category', 'runners', 'histories', 'segments', 'segments.histories']
+        render(
+          json: Panko::Response.create do |r|
+            {run: r.serializer(@run, ::RunSerializer)}
+          end
+        )
       else
         render json: @run, serializer: Api::V4::RunSerializer, include: %w[game category runners segments]
       end

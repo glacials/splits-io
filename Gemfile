@@ -54,6 +54,7 @@ gem 'groupdate'
 gem 'active_model_serializers'
 gem 'api-pagination', '= 4.7'
 gem 'jbuilder'
+gem 'panko_serializer'
 gem 'rack-cors', require: 'rack/cors'
 
 # authentication
