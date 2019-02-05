@@ -8,14 +8,17 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import "jquery"
-import "jquery-ujs"
+import Rails from "rails-ujs"
+import Turbolinks from "turbolinks"
 import "moment"
 import "moment-duration-format"
 import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
 import * as Cookies from "js-cookie"
-import "jquery.turbolinks"
+
+Rails.start()
+Turbolinks.start()
 
 // Using Google charts for now (a script tag in app/views/layouts/admin/application.slim) because Chartkick + Highcharts
 // doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
@@ -29,7 +32,6 @@ global.Clipboard = clipboard
 global.Cookies = Cookies
 
 import "../cable.js"
-global.App = this.App
 import "../cable/subscriptions/run.js"
 
 import "../ad_cleanup.js"
