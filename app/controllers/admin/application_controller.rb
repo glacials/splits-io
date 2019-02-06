@@ -10,7 +10,7 @@ module Admin
 
     def authenticate_admin
       return if request.host_with_port == 'localhost:3000'
-      return if current_user.present? && [1, 123].include?(current_user.id)
+      return if current_user.present? && [1, 123, 14].include?(current_user.id)
 
       redirect_to root_path
     end
