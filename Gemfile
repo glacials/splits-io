@@ -103,11 +103,9 @@ gem 'rails', '~> 5.2'
 # see https://github.com/faye/websocket-driver-ruby/issues/58#issuecomment-394611125
 gem 'websocket-driver', git: 'https://github.com/faye/websocket-driver-ruby', ref: 'ee39af83d03ae3059c775583e4c4b291641257b8'
 
-
 # speediness
 gem 'bootsnap'
 gem 'dalli'
-gem 'turbolinks'
 
 # views
 gem 'bootstrap4-kaminari-views'
@@ -118,7 +116,7 @@ gem 'purecss-rails', github: 'glacials/purecss-rails'
 gem 'sass-rails', '~> 5.0.7'
 gem 'slim'
 gem 'uglifier'
-gem 'webpacker'
+gem 'webpacker', '>= 4.0.x'
 
 # workers/jobs
 gem 'daemons'

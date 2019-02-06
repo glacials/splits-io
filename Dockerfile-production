@@ -4,7 +4,7 @@
 FROM ruby:2.6.0
 
 # Setup for current nodejs
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 
 # Setup for yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -\
