@@ -35,7 +35,6 @@ header.main-content__header role='banner'
       )
 
 section.main-content__body.main-content__body--flush
-  = line_chart(SegmentHistory.group_by_month(:created_at).count)
   = render( \
     'collection', \
     collection_presenter: page, \

@@ -35,7 +35,7 @@ header.main-content__header role='banner'
       )
 
 section.main-content__body.main-content__body--flush
-  = line_chart(SpeedrunDotComGame.group_by_month(:created_at).count, xtitle: 'Time', ytitle: 'New Speedrun.com games per month')
+  = line_chart(SpeedrunDotComGame.group_by_month(:created_at).count, xtitle: 'Time', ytitle: 'New Speedrun.com games per month', current: false)
   = render( \
     'collection', \
     collection_presenter: page, \
