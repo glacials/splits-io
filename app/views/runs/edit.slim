@@ -19,7 +19,7 @@
 
 article
   .card-deck.mb-4
-    .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+    .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
       h5.card-header Edit Game/Category
       .card-body
         .form-row
@@ -58,7 +58,7 @@ article
       .card-body = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
       .card-footer.clearfix: .float-right: .btn-group = f.submit 'Save', class: 'btn btn-success'
 
-    .card = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+    .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
       h5.card-header Edit Speedrun.com Link
       .card-body = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
       .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-success'
@@ -85,7 +85,7 @@ article
       .card-footer
         .float-right
           - if @run.archived?
-            = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+            = form_for @run, as: @run.id36, url: run_path(@run) do |f|
               = f.hidden_field(:archived, value: false)
               .btn-group
                 = f.submit 'Change to Listed', class: 'btn btn-info'
@@ -93,7 +93,7 @@ article
                   => icon('fas', 'minus-circle')
                   ' Unlisted
           - else
-            = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+            = form_for @run, as: @run.id36, url: run_path(@run) do |f|
               = f.hidden_field(:archived, value: true)
               .btn-group
                 button.btn.btn-info.disabled.text-white
@@ -111,7 +111,7 @@ article
         .card-footer
           .float-right
             - if @run.default_timing == 'game'
-              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+              = form_for @run, as: @run.id36, url: run_path(@run) do |f|
                 = f.hidden_field(:default_timing, value: 'real')
                 .btn-group
                   = f.submit 'Change to Realtime', class: 'btn btn-info'
@@ -119,7 +119,7 @@ article
                     => icon('fas', 'gamepad')
                     ' Gametime
             - else
-              = form_for @run, as: @run.id36, remote: true, url: run_path(@run) do |f|
+              = form_for @run, as: @run.id36, url: run_path(@run) do |f|
                 = f.hidden_field(:default_timing, value: 'game')
                 .btn-group
                   button.btn.btn-info.disabled.text-white

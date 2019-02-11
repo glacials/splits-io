@@ -70,13 +70,15 @@ class RunsController < ApplicationController
 
     if params[@run.id36][:srdc_url]
       srdc_id = SpeedrunDotCom::Run.id_from_url(params[@run.id36][:srdc_url])
-      redirect_params = if !srdc_id
-                          {alert: 'Your speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.'}
-                        elsif !@run.update(srdc_id: srdc_id)
-                          {alert: 'There was an error updating your SRDC link. Please try again.'}
-                        else
-                          {notice: 'Link with Speedrun.com updated.'}
-                        end
+      if !srdc_id
+        redirect_params = {
+          alert: 'Your Speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.'
+        }
+      elsif !@run.update(srdc_id: srdc_id)
+        redirect_params = {alert: 'There was an error updating your Speedrun.com link. Please try again.'}
+      else
+        redirect_params = {notice: 'Link with Speedrun.com updated.'}
+      end
       redirect_to edit_run_path(@run), redirect_params
       return
     end
