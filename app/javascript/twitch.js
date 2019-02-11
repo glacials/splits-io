@@ -15,7 +15,7 @@ document.addEventListener('turbolinks:load', function() {
 
   Array.from(document.getElementsByClassName('split')).forEach(function(el) {
     el.addEventListener('click', function() {
-      player.seek(parseInt(el.dataset.startMs / 1000 + 10))
+      player.seek(parseInt(el.dataset.start_ms / 1000 + 10))
       player.play()
     })
   })
