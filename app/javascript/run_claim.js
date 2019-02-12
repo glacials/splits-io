@@ -29,6 +29,10 @@ document.addEventListener('turbolinks:load', function() {
     return
   }
 
+  if (location.pathname === '/') {
+    return
+  }
+
   const claimTokenKey = `claim_tokens/${gon.run.id}`
   const dismissedClaimTokenKey = `dismissed_claim_tokens/${gon.run.id}`
 

@@ -1,10 +1,12 @@
 require 'uri'
 
+require 'example'
 require 'speedrundotcom'
 
 class RunsController < ApplicationController
-  before_action :set_run,        only: [:show, :destroy, :compare, :edit, :update]
-  before_action :set_comparison, only: [:compare]
+  before_action :set_run,         only: [:show, :destroy, :compare, :edit, :update]
+  before_action :set_example_run, only: [:index], if: -> { current_user.nil? }
+  before_action :set_comparison,  only: [:compare]
 
   before_action :first_parse, only: [:show, :edit, :update], if: -> { @run.parsed_at.nil? }
 
@@ -157,6 +159,11 @@ class RunsController < ApplicationController
     gon.scale_to = @run.duration_ms(timing)
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: 404
+  end
+
+  def set_example_run
+    @example_run = Example::Run.example_run
+    @example_segment = Example::Run.example_segment
   end
 
   def set_comparison

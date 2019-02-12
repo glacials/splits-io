@@ -2,8 +2,8 @@
 - content_for(:header) do
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
-article
-  - if current_user.present? && current_user.runs.any?
+- if current_user.present? && current_user.runs.any?
+  article
       .row
         .col-sm-3: .statcard.p-3
           h2.statcard-number
@@ -27,76 +27,8 @@ article
           cols: %i[time name uploaded owner_controls rival], \
           description: 'My Personal Bests' \
         }.merge(sorting_info)
-  - else
-    .card
-      .card-body
-        h2 Drag and drop run files here
-        p.lead
-          ' From LiveSplit, WSplit, Llanfair, or many others.
-        p
-          ' Splits I/O analyzes your splits to give you insight into how to improve your runs.
-        p
-          ' Want to see it in action? See an
-          a> href=(Run.find_by(id: 'gcb'.to_i(36)).present? ? run_path(Run.find36('gcb')) : random_run_path) example run
-          ' or hit "Randomizer" down below.
-        #carousel.carousel.slide.mb-2 data={ride: 'carousel'}
-          ol.carousel-indicators
-            li.active data={target: '#carousel', slide_to: '0'}
-            li data={target: '#carousel', slide_to: '1'}
-            li data={target: '#carousel', slide_to: '2'}
-            li data={target: '#carousel', slide_to: '3'}
-            li data={target: '#carousel', slide_to: '4'}
-          .carousel-inner
-            .carousel-item.active data={interval: 10000}
-              = image_tag(asset_path('carousel/run_duration.png'), class: 'd-block w-100', alt: 'Chart of run duration over time')
-              .carousel-caption.d-none.d-md-block
-                h5 See yourself improve
-                p Chart your run times over your life playtime to see the trendline.
-            .carousel-item data={interval: 10000}
-              = image_tag(asset_path('carousel/playtime_to_pb.png'), class: 'd-block w-100', alt: 'Chart of predictions of playtime hours required to PB')
-              .carousel-caption.d-none.d-md-block
-                h5 Predict your next improvements
-                p Become a patron to access regression analysis against your past performance to predict when you'll next PB.
-            .carousel-item data={interval: 10000}
-              = image_tag(asset_path('carousel/resets.png'), class: 'd-block w-100', alt: 'Pie chart of resets per split')
-              .carousel-caption.d-none.d-md-block
-                h5 Determine what to work on
-                p See your weak spots to figure out which splits to laser-focus your practice hours on.
-            .carousel-item data={interval: 10000}
-              = image_tag(asset_path('carousel/all-segments.png'), class: 'd-block w-100', alt: 'Bar chart of segment timesaves and reset rates')
-              .carousel-caption.d-none.d-md-block
-                h5 See where you can do better
-                p Look at where your splits' bests, averages, and PB times differ the most to see how consistent you are.
-            .carousel-item data={interval: 10000}
-              = image_tag(asset_path('carousel/one-segment.png'), class: 'd-block w-100', alt: 'Bar chart of segment timesaves and reset rates')
-              .carousel-caption.d-none.d-md-block
-                h5 Drill down split-by-split
-                p Get into the nitty-gritty standard deviations, 99th percentiles, and more of each split.
-          .carousel-control-prev href='#carousel' role='button' data={slide: 'prev'}
-            span.carousel-control-prev-icon aria={hidden: true}
-            .sr-only Previous
-          .carousel-control-next href='#carousel' role='button' data={slide: 'next'}
-            span.carousel-control-next-icon aria={hidden: true}
-            .sr-only Next
-        .row
-          .card.col-md-6
-            img.card-img-top src=asset_path('livesplit_share.png')
-            .card-body
-              b> Using LiveSplit?
-              ' Upload from within the program with a right-click &rarr; "Share...".
-          .card.col-md-6
-            img.card-img-top src=asset_path('multi_upload.png')
-            .card-body
-              b> Run several games?
-              ' Logged-in users can drag-and-drop any number of run files at once.
-      .card-footer
-        .float-right
-          a.btn.btn-primary.mx-2 href=faq_path(anchor: 'programs')
-            => icon('fas', 'stopwatch')
-            ' All Supported Timers
-          a.btn.btn-primary.mx-2 href=random_run_path
-            => icon('fas', 'dice')
-            ' Randomizer
+- else
+  = render partial: 'landing'
 - if current_user.present?
   article
     = render partial: 'shared/follows'
