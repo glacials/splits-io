@@ -1,5 +1,5 @@
 class Runs::ExportsController < Runs::ApplicationController
-  before_action :set_run, only: [:index, :timer, :history_csv, :segment_history_csv]
+  before_action :set_run, only: [:timer, :history_csv, :segment_history_csv]
   before_action :first_parse, only: [:download], if: -> { @run.parsed_at.nil? }
 
   def timer
