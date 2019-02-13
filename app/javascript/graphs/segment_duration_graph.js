@@ -3,14 +3,14 @@ import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
 const build_segment_graph = function(segment, chartOptions) {
-  const url = new URL(window.location.href)
-  const duration_string = `${url.searchParams.get('timing') || gon.run.default_timing}time_duration_ms`
+  const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
+  const duration = `${timing}time_duration_ms`
 
   let graph_data = []
-  const non_zero_values = segment.histories.filter((attempt) => attempt[duration_string] > 0)
+  const non_zero_values = segment.histories.filter((attempt) => attempt[duration] > 0)
   graph_data.push({
     name: segment.name,
-    data: non_zero_values.map(function(attempt) { return ['Attempt #' + attempt.attempt_number, attempt[duration_string]] }),
+    data: non_zero_values.map(function(attempt) { return ['Attempt #' + attempt.attempt_number, attempt[duration]] }),
     pointStart: 1
   })
 
