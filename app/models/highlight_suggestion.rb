@@ -1,7 +1,7 @@
 class HighlightSuggestion < ApplicationRecord
   belongs_to :run
 
-  validates_uniqueness_of :run
+  validates :run, uniqueness: true
 
   class << self
     # from_run looks on Twitch for past broadcasts whose timestamps show that it contains the given run's PB. If found,
@@ -37,7 +37,7 @@ class HighlightSuggestion < ApplicationRecord
             end
           )
           # 60 days is life of archives for Partners / Twitch Prime members
-          highlight_suggestion.delay(run_at: video_start + 60.days).destroy
+          highlight_suggestion.delay(run_at: video_start + 60.days).destroy if highlight_suggestion.persisted?
           return highlight_suggestion
         end
       end
