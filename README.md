@@ -35,8 +35,8 @@ first run, it will be much quicker.
 ```sh
 make
 ```
-Once the output looks settled, you're good to go! Access [localhost:3000][localhost] in your browser. The first page
-load after a new build may also take a minute.
+Once the output looks settled (you should see `* Listening on tcp://0.0.0.0:3000`), you're good to go! Access
+[localhost:3000][localhost] in your browser. The first page load after a new build may also take a minute.
 
 [localhost]: http://localhost:3000/
 
