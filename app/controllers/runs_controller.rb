@@ -164,6 +164,8 @@ class RunsController < ApplicationController
   def set_example_run
     @example_run = Example::Run.example_run
     @example_segment = Example::Run.example_segment
+
+    gon.run = {id: 'example', default_timing: Run::REAL}
   end
 
   def set_comparison

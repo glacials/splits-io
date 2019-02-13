@@ -7,10 +7,9 @@ import {example_run} from "example_run.js"
 import {example_segment} from "example_run.js"
 
 document.addEventListener('turbolinks:load', () => {
-  if (window.pathname !== '/' || gon.user !== null) {
+  if (window.location.pathname !== '/' || gon.user !== null) {
     return
   }
-  gon.run = {default_timing: 'real', id: 'example'}
 
   build_run_duration_graph(example_run,     {}, {title: {text: ''}})
   build_reset_graph(       example_run,     {}, {title: {text: ''}})
