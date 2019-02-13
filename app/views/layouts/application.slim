@@ -10,7 +10,7 @@ html
     = render partial: 'shared/rollbarjs'
     = javascript_pack_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
     = javascript_include_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
-    script src='https://player.twitch.tv/js/embed/v1.js'
+    script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
     = render partial: 'application/favicon'

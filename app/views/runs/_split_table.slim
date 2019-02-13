@@ -140,4 +140,6 @@
                           but their absolute worst fit under this umbrella."
                         ) = icon('fas', 'question-circle')
                     h4.card-subtitle = format_ms(history_times.percentile(99), precise: run.short?(timing))
+                .segment-graph-alert.alert.alert-danger.my-3 hidden=true
+                .segment-spinner.my-3
                 .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
