@@ -4,13 +4,13 @@ html
     title
       = yield(:title) || 'Hi!'
       = " - #{site_title}"
-    /link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'
+    link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
     = javascript_pack_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
     = javascript_include_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
-    /script src='https://player.twitch.tv/js/embed/v1.js'
+    script src='https://player.twitch.tv/js/embed/v1.js'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
     = render partial: 'application/favicon'
