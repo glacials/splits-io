@@ -32,15 +32,6 @@ document.addEventListener('turbolinks:load', function() {
     spinners.push(spinner)
   }
 
-  for (const toggler of document.getElementsByClassName('segment-graph-toggler')) {
-    toggler.addEventListener('click', event => {
-      event.preventDefault()
-      const row = document.querySelector(`.segment-graph-holder[data-segment="${toggler.dataset.segment}"]`)
-                  .closest('tr')
-      row.hidden = !row.hidden
-    })
-  }
-
   fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
     headers: {accept: 'application/json'}
   }).then(function(response) {
@@ -75,4 +66,13 @@ document.addEventListener('turbolinks:load', function() {
 
     throw error
   })
+})
+
+document.addEventListener('click', event => {
+  if (event.target.matches('.segment-graph-toggler')) {
+    event.preventDefault()
+    const row = document.querySelector(`.segment-graph-holder[data-segment="${toggler.dataset.segment}"]`)
+                .closest('tr')
+    row.hidden = !row.hidden
+  }
 })
