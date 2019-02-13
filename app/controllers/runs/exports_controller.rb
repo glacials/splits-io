@@ -1,22 +1,6 @@
 class Runs::ExportsController < Runs::ApplicationController
-  before_action :set_run, only: [:index, :timer, :history_csv, :segment_history_csv]
+  before_action :set_run, only: [:timer, :history_csv, :segment_history_csv]
   before_action :first_parse, only: [:download], if: -> { @run.parsed_at.nil? }
-
-  def index
-    @run.parse_into_db unless @run.parsed?
-
-    # Catch bad runs
-    if @run.timer.nil?
-      render 'runs/cant_parse', status: 500
-      return
-    end
-
-    gon.run = {
-      id: @run.id36,
-      attempts: @run.attempts,
-      program: @run.program
-    }
-  end
 
   def timer
     # Enable CORS for this endpoint so clients can download files; this should be an API endpoint but I'm not sure how I
@@ -32,24 +16,25 @@ class Runs::ExportsController < Runs::ApplicationController
       return
     end
 
-    begin
-      s3_file = $s3_bucket_internal.object("splits/#{@run.s3_filename}")
-
-      if timer == Run.program(@run.timer) && s3_file.exists?
-        redirect_to s3_file.presigned_url(
-          :get,
-          response_content_disposition: "attachment; filename=\"#{@run.filename}\""
-        )
-        return
+    if timer == Run.program(@run.timer)
+      begin
+        s3_file = $s3_bucket_internal.object("splits/#{@run.s3_filename}")
+        if s3_file.exists?
+          redirect_to s3_file.presigned_url(
+            :get,
+            response_content_disposition: "attachment; filename=\"#{@run.filename}\""
+          )
+          return
+        end
+      rescue Aws::S3::Errors::Forbidden
       end
-    rescue Aws::S3::Errors::Forbidden
     end
 
     send_data(
-      if timer == Run.program(@run.timer)
+      if timer == Run.program(@run.timer) && params[:blank] != '1'
         @run.file
       else
-        render_to_string(params[:timer], layout: false)
+        render_to_string(timer.to_sym, layout: false)
       end,
       filename: @run.filename(timer: timer).to_s,
       layout: false

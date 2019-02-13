@@ -2,7 +2,7 @@
   "_schemaVersion": "v1.0.0",
   "links": <%= {
     splitsioID: @run.id36
-  }.to_json.html_safe %>,
+  }.compact.to_json.html_safe %>,
   "timer": <%= {
     shortname: Run.program(@run.timer).to_sym.to_s,
     longname: Run.program(@run.timer).to_s,
@@ -10,7 +10,7 @@
     version: ''
   }.to_json.html_safe %>,
   "attempts": <%= {
-    total: @run.attempts,
+    total: @run.attempts || 0,
     histories: @run.histories.map do |history|
       {
         attemptNumber: history.attempt_number,
@@ -61,20 +61,20 @@
     {
       name: segment.name,
       endedAt: {
-        realtimeMS: segment.end_ms(Run::REAL),
-        gametimeMS: segment.end_ms(Run::GAME)
+        realtimeMS: segment.end_ms(Run::REAL) || 0,
+        gametimeMS: segment.end_ms(Run::GAME) || 0
       },
       bestDuration: {
-        realtimeMS: segment.shortest_duration_ms(Run::REAL),
-        gametimeMS: segment.shortest_duration_ms(Run::GAME)
+        realtimeMS: segment.shortest_duration_ms(Run::REAL) || 0,
+        gametimeMS: segment.shortest_duration_ms(Run::GAME) || 0
       },
       isSkipped: segment.skipped?(Run::REAL),
       histories: segment.histories.with_ends.map do |history|
         {
           attemptNumber: history.attempt_number,
           endedAt: {
-            realtimeMS: history.realtime_end_ms,
-            gametimeMS: history.gametime_end_ms
+            realtimeMS: history.realtime_end_ms || 0,
+            gametimeMS: history.gametime_end_ms || 0
           },
           isSkipped: history.duration_ms(Run::REAL).try(:zero?) && history.duration_ms(Run::GAME).try(:zero?),
           isReset: history.duration_ms(Run::REAL).nil? && history.duration_ms(Run::GAME).nil?
