@@ -4,9 +4,10 @@
       nav, .breadcrumb, #alerts, #footer, #carbonads-holder
        visibility: hidden
 = render template: 'layouts/application'
-footer.fixed-bottom.text-secondary.ml-auto.mr-0 style='text-align: right'
-  => icon('fas', 'envelope')
-  a> href='mailto:hi@splits.io' hi@splits.io
-  ' /
-  => icon('fab', 'twitter')
-  a> href='https://twitter.com/splitsio' @splitsio
+- if current_user.nil?
+  footer.fixed-bottom.text-secondary.ml-auto.mr-0 style='text-align: right'
+    => icon('fas', 'envelope')
+    a> href='mailto:hi@splits.io' hi@splits.io
+    ' /
+    => icon('fab', 'twitter')
+    a> href='https://twitter.com/splitsio' @splitsio
