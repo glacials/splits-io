@@ -11,21 +11,21 @@ document.addEventListener('turbolinks:load', () => {
     return
   }
 
-  build_run_duration_graph(example_run,     {}, {title: {text: ''}})
-  build_reset_graph(       example_run,     {}, {title: {text: ''}})
-  build_playtime_graph(    example_run,     {}, {title: {text: ''}})
-  buildSegmentGraphs(      example_run,     {}, {title: {text: ''}})
-  build_segment_graph(     example_segment, {}, {title: {text: ''}})
+  build_run_duration_graph(   example_run,     {})
+  build_reset_graph(          example_run,     {})
+  build_playtime_graph(       example_run,     {})
+  buildSegmentGraphs(         example_run,     {})
+  build_segment_graph('real', example_segment, {})
 
   const aboveTheFold = document.getElementById('above-the-fold')
   const belowTheFold = document.getElementById('below-the-fold')
 
   aboveTheFold.style['min-height'] = `${window.innerHeight}px`
   belowTheFold.style.visibility = 'visible'
+})
 
-  document.addEventListener('click', event => {
-    if (event.target.matches('#scroll') || event.target.parentElement.matches('#scroll')) {
-      belowTheFold.scrollIntoView({block: 'start', behavior: 'smooth'})
-    }
-  })
+document.addEventListener('click', event => {
+  if (event.target.matches('#scroll') || event.target.parentElement.matches('#scroll')) {
+    document.getElementById('below-the-fold').scrollIntoView({block: 'start', behavior: 'smooth'})
+  }
 })

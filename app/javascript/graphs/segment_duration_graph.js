@@ -2,8 +2,7 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const build_segment_graph = function(segment, chartOptions) {
-  const timing = new URLSearchParams(window.location.search).get('timing') || segment.default_timing
+const build_segment_graph = function(timing, segment, chartOptions) {
   const duration = `${timing}time_duration_ms`
 
   let graph_data = []

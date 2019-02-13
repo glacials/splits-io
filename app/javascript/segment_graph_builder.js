@@ -66,7 +66,8 @@ document.addEventListener('turbolinks:load', function() {
           event.target.dataset.generated = '1'
           runJSON.then(function(json) {
             const segment = json.run.segments.filter(segment => (segment.id === toggler.dataset.segment))[0]
-            build_segment_graph(segment, chartOptions)
+            const timing = new URLSearchParams(window.location.search).get('timing') || json.run.default_timing
+            build_segment_graph(timing, segment, chartOptions)
           })
         }
       })

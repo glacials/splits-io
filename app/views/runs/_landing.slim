@@ -53,8 +53,6 @@ a.m-2
           h3.card-title.text-warning Deep Dive
           p.card-text Look at individual segments' statistics to hyper-focus your practice.
       .card.border-primary
-        - timing = Run::REAL
-        - history_times = @example_segment.histories.map(&:realtime_duration_ms).compact
         .card.border-0.m-0.p-0.bg-primary
           .card-group
             .card.bg-danger: .card-body
@@ -64,16 +62,16 @@ a.m-2
                   title="A high standard deviation like this indicates inconsistency. You should practice
                   this segment!"
                 ) = icon('fas', 'exclamation-triangle')
-              h4.card-subtitle = format_ms_casual(history_times.standard_deviation.to_i, 1)
+              h4.card-subtitle 14s
             .card: .card-body
               h6.card-title Mean
-              h4.card-subtitle = format_ms(history_times.mean, precise: @example_run.short?(timing))
+              h4.card-subtitle 00:01:08
             .card: .card-body
               .float-right.tip-left.text-light(
                 title="Stats based on your last 100 runs."
               ) = icon('fas', 'info-circle')
               h6.card-title Best
-              h4.card-subtitle = format_ms(@example_segment.shortest_duration_ms(timing), precise: @example_run.short?(timing))
+              h4.card-subtitle 00:01:05
           .card-group
             .card: .card-body
               h6.card-title
@@ -82,7 +80,7 @@ a.m-2
                   title="Only 10% of your attempts are faster than this time. Treat this number like a relaxed
                   best&mdash;aim to beat it."
                 ) = icon('fas', 'question-circle')
-              h4.card-subtitle = format_ms(history_times.percentile(10), precise: @example_run.short?(timing))
+              h4.card-subtitle 00:01:06
             .card: .card-body
               h6.card-title
                 ' Median
@@ -90,7 +88,7 @@ a.m-2
                   title="50% of your attempts are faster than this time. This is the time you'd expect to get
                   in a marathon or no-reset run."
                 ) = icon('fas', 'question-circle')
-              h4.card-subtitle = format_ms(history_times.median, precise: @example_run.short?(timing))
+              h4.card-subtitle 00:01:09
             .card: .card-body
               h6.card-title
                 ' 90th percentile
@@ -98,7 +96,7 @@ a.m-2
                   title="90% of your attempts are faster than this time. You can see this as your worst time
                   excluding fantastic blunders."
                 ) = icon('fas', 'question-circle')
-              h4.card-subtitle = format_ms(history_times.percentile(90), precise: @example_run.short?(timing))
+              h4.card-subtitle 00:01:14
             .card: .card-body
               h6.card-title
                 ' 99th percentile
@@ -106,10 +104,10 @@ a.m-2
                   title="99% of your attempts are faster than this time. All attempts but your absolute worst
                   fit under this umbrella."
                 ) = icon('fas', 'question-circle')
-              h4.card-subtitle = format_ms(history_times.percentile(99), precise: @example_run.short?(timing))
-          .segment-graph-holder id="segment-graph-holder-example" data-segment=@example_segment.id
+              h4.card-subtitle 00:01:34
+          .segment-graph-holder id="segment-graph-holder-example" data={segment: 'example'}
         .card-body
-          h3.card-title.text-primary Automate Suggestions
+          h3.card-title.text-primary Learn
           p.card-text Know when a segment's not as hot as you think it is.
       .card.border-success
         .card-img-top.bg-twitch.text-center style='font-size: 10em' = icon('fab', 'twitch')
