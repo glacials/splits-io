@@ -27,7 +27,7 @@ h5
           a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
             => icon('fas', 'chart-bar')
             span Compare
-      - if can?(:edit, run)
+    - if can?(:edit, run)
       - if request.path_info == edit_run_path(run)
         a.btn.btn-outline-light href=run_path(run)
           => icon('fas', 'hand-point-left')
