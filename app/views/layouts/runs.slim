@@ -1,8 +1,10 @@
 - if current_user.nil?
   - content_for(:head) do
     sass:
-      nav, .breadcrumb, #alerts, #footer, #carbonads-holder
+      nav, .breadcrumb, #alerts, #footer
        visibility: hidden
+      #carbonads-holder
+        display: none
 = render template: 'layouts/application'
 - if current_user.nil?
   footer.fixed-bottom.text-secondary.ml-auto.mr-0 style='text-align: right'
