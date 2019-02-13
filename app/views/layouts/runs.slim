@@ -1,4 +1,4 @@
-- if current_user.nil?
+- if current_user.nil? && action_name == 'index'
   - content_for(:head) do
     sass:
       nav, .breadcrumb, #alerts, #footer
@@ -6,7 +6,7 @@
       #carbonads-holder
         display: none
 = render template: 'layouts/application'
-- if current_user.nil?
+- if current_user.nil? && action_name == 'index'
   footer.fixed-bottom.text-secondary.ml-auto.mr-0 style='text-align: right'
     => icon('fas', 'envelope')
     a> href='mailto:hi@splits.io' hi@splits.io
