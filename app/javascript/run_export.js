@@ -17,17 +17,16 @@ document.addEventListener('turbolinks:load', () => {
 
   setRoutesOnly(checkbox.checked)
 
-  // We can't attach an event listener directly to the element inside a turbolinks:load event.
-  // See https://github.com/turbolinks/turbolinks#observing-navigation-events
-  document.addEventListener('click', event => {
-    if (event.target.matches('#route-check')) {
-      setRoutesOnly(event.target.checked)
-    }
-  })
-
   // Stop clicks on the checkbox's label text from closing the dropdown menu
   document.getElementById('route-check-label').addEventListener('click', (event) => {
     event.stopPropagation()
   })
 })
 
+// We can't attach an event listener directly to the element inside a turbolinks:load event.
+// See https://github.com/turbolinks/turbolinks#observing-navigation-events
+document.addEventListener('click', event => {
+  if (event.target.matches('#route-check')) {
+    setRoutesOnly(event.target.checked)
+  }
+})
