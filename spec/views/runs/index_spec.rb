@@ -5,6 +5,8 @@ RSpec.describe 'runs/index' do
     before { allow(view).to receive(:current_user).and_return(nil) }
 
     it 'renders the index template' do
+      assign(:example_run, FactoryBot.create(:livesplit16_run, :parsed))
+      assign(:example_segment, FactoryBot.create(:segment))
       render
 
       expect(view).to render_template('runs/index')
@@ -15,6 +17,8 @@ RSpec.describe 'runs/index' do
     before { allow(view).to receive(:current_user).and_return(FactoryBot.build(:user)) }
 
     it 'renders the index template' do
+      assign(:example_run, FactoryBot.create(:livesplit16_run, :parsed))
+      assign(:example_segment, FactoryBot.create(:segment))
       render
 
       expect(view).to render_template('runs/index')

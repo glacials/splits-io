@@ -26,36 +26,37 @@
       run: @run, \
       timing: timing \
     }
-  .col-md-6
-    #graph-spinner
-      = render partial: 'shared/spinner'
-      h5.text-success.text-center Loading graphs
-    #graph-alert.alert.alert-danger.my-3 hidden=true
-    #graph-holder hidden=true
-      #run-duration-graph.card.my-3
-      #segment-graphs.card.my-3
-      #reset-graph.card.my-3
-      - if @run.histories.any?
-        - if @run.user.try(:silver_patron?) || @run.user.try(:admin?)
-          .my-3
-            span => icon('fas', 'lock-open')
-            - if @run.belongs_to?(current_user)
-              span Thanks for being a Splits I/O patron! The below graph is unlocked.
-            - else
-              span #{@run.user} is a Splits I/O patron, so the below graph can be viewed.
-          #playtime-graph.card.my-3
-        - elsif @run.belongs_to?(current_user)
-          .my-3.d-flex.justify-content-between
-            span.mr-2
-              a.text-muted> href=patreon_url Become a patron
-              ' to unlock the below graph, which uses regression analysis to predict how many attempts until you PB.
-              a.text-muted href=faq_path(anchor: 'programs') LiveSplit only
-              ' .
-            span.text-secondary style='white-space: nowrap'
-              span => icon('fas', 'lock')
-              span Only you can see this.
-          .card.my-3
-            #paywall-container
-              /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
-              #paywall.bg-dark
-              #playtime-graph
+  - if @run.completed?(timing) && @run.histories.any?
+    .col-md-6
+      #graph-spinner
+        = render partial: 'shared/spinner'
+        h5.text-success.text-center Loading graphs
+      #graph-alert.alert.alert-danger.my-3 hidden=true
+      #graph-holder hidden=true
+        #run-duration-graph.card.my-3
+        #segment-graphs.card.my-3
+        #reset-graph.card.my-3
+        - if @run.histories.any?
+          - if @run.user.try(:silver_patron?) || @run.user.try(:admin?)
+            .my-3
+              span => icon('fas', 'lock-open')
+              - if @run.belongs_to?(current_user)
+                span Thanks for being a Splits I/O patron! The below graph is unlocked.
+              - else
+                span #{@run.user} is a Splits I/O patron, so the below graph can be viewed.
+            #playtime-graph.card.my-3
+          - elsif @run.belongs_to?(current_user)
+            .my-3.d-flex.justify-content-between
+              span.mr-2
+                a.text-muted> href=patreon_url Become a patron
+                ' to unlock the below graph, which uses regression analysis to predict how many attempts until you PB.
+                a.text-muted href=faq_path(anchor: 'programs') LiveSplit only
+                ' .
+              span.text-secondary style='white-space: nowrap'
+                span => icon('fas', 'lock')
+                span Only you can see this.
+            .card.my-3
+              #paywall-container
+                /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
+                #paywall.bg-dark
+                #playtime-graph

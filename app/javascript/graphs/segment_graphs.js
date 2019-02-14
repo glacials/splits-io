@@ -8,19 +8,19 @@ const buildSegmentGraphs = function(run, chartOptions) {
     return
   }
 
-  const url = new URL(window.location.href)
-  const durationString = `${url.searchParams.get('timing') || 'real'}time_duration_ms`
-  const shortestString = `${url.searchParams.get('timing') || 'real'}time_shortest_duration_ms`
+  const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
+  const duration = `${timing}time_duration_ms`
+  const shortest = `${timing}time_shortest_duration_ms`
 
   const pbData = []
   const meanData = []
-  const finished = run[durationString] > 0
+  const finished = run[duration] > 0
   let resetCounter = run.attempts
   const resetData = []
 
   run.segments.forEach((segment, i) => {
     // Start PB info collection
-    let time = (segment[durationString] - segment[shortestString]) / 1000
+    let time = (segment[duration] - segment[shortest]) / 1000
     if (time < 0) {
       time = 0
     }
@@ -31,7 +31,7 @@ const buildSegmentGraphs = function(run, chartOptions) {
     let counter = 0
     if (segment.histories.length !== 0) {
       segment.histories.forEach((attempt) => {
-        if (attempt[durationString] === 0) {
+        if (attempt[duration] === 0) {
           // Reject attempts that have no duration (skipped splits)
           return
         } else if (run.segments[i - 1] !== undefined) {
@@ -39,17 +39,17 @@ const buildSegmentGraphs = function(run, chartOptions) {
             // Find the previous splits attempt for this same attempt id to make sure it wasn't skipped
             return prevAttempt.attempt_number === attempt.attempt_number
           })
-          if (prevSegAttempt !== undefined && prevSegAttempt[durationString] === 0) {
+          if (prevSegAttempt !== undefined && prevSegAttempt[duration] === 0) {
             // Reject the first split after a series of skipped splits to prevent data pollution
             return
           }
         }
 
-        time += attempt[durationString]
+        time += attempt[duration]
         counter++
       })
 
-      time = ((time / counter) - segment[shortestString]) / 1000
+      time = ((time / counter) - segment[shortest]) / 1000
     }
     meanData.push([segment.name, time])
 

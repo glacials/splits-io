@@ -7,12 +7,12 @@ const build_run_duration_graph = function(run, chartOptions) {
     return
   }
 
-  const url = new URL(window.location.href)
-  const duration_string = `${url.searchParams.get('timing') || 'real'}time_duration_ms`
+  const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
+  const duration = `${timing}time_duration_ms`
 
   const graph_data = []
   run.histories.forEach(function(attempt) {
-    let ms = attempt[duration_string]
+    let ms = attempt[duration]
     if (ms === 0) {
       ms = null
     }

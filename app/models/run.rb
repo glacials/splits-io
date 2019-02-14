@@ -157,7 +157,7 @@ class Run < ApplicationRecord
   end
 
   def filename(timer: Run.program(self.timer))
-    "#{to_param}.#{timer.file_extension}"
+    "#{to_param || ("#{game} #{category}")}.#{timer.file_extension}"
   end
 
   def publish_aging
