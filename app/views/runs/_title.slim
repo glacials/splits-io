@@ -79,7 +79,7 @@ h5
               ) = icon('fas', 'question-circle')
             .row.text-light.m-2
               p Paste the link you get here:
-              = f.text_field(:video_url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here')
+              = f.text_field(:video_url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here', spellcheck: false)
           .modal-footer.bg-dark
             .float-right
               .btn-group

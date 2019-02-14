@@ -147,6 +147,7 @@ class Run < ApplicationRecord
     return if game.blank?
     game.delay.sync_with_srdc
     game.delay.sync_with_srl
+    category.delay.sync_with_srdc
   end
 
   # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from

@@ -4,6 +4,8 @@ class Category < ApplicationRecord
   has_many :users, through: :runs
   has_many :rivalries, dependent: :destroy
 
+  has_one :srdc, class_name: 'SpeedrunDotComCategory', dependent: :destroy
+
   before_create :autodetect_shortname
 
   def self.global_aliases
@@ -46,6 +48,15 @@ class Category < ApplicationRecord
 
   def to_param
     id.to_s
+  end
+
+  def sync_with_srdc
+    if srdc.nil?
+      SpeedrunDotComCategory.from_category!(self)
+      return
+    end
+
+    srdc.sync!
   end
 
   def autodetect_shortname
