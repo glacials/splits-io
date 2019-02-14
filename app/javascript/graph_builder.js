@@ -75,15 +75,22 @@ document.addEventListener('turbolinks:load', function() {
 
 document.addEventListener('click', event => {
   const toggler = event.target.closest('.segment-graph-toggler')
-  if (toggler) {
-    const segId = toggler.dataset.segment
-    const row = document.querySelector(`.segment-graph-holder[data-segment="${segId}"]`).closest('tr')
-    row.hidden = !row.hidden
-    if (!row.hidden) {
-      const segCharts = Highcharts.charts.filter(chart => {
-        return chart.renderTo.id === `segment-graph-holder-${segId}`
-      })
-      segCharts.forEach(chart => { chart.reflow() })
-    }
+  if (!toggler) {
+    return
   }
+
+  const segId = toggler.dataset.segment
+  const row = document.querySelector(`.segment-graph-holder[data-segment="${segId}"]`).closest('tr')
+  row.hidden = !row.hidden
+
+  if (row.hidden) {
+    return
+  }
+
+  const segChart = Highcharts.charts.find(chart => chart.renderTo.id === `segment-graph-holder-${segId}`)
+  if (!segChart) {
+    return
+  }
+
+  segChart.reflow()
 })
