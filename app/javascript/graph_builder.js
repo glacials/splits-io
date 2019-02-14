@@ -52,8 +52,9 @@ document.addEventListener('turbolinks:load', function() {
     document.getElementById('graph-spinner').hidden = true
     document.getElementById('graph-holder').hidden = false
     if (run.run.histories.length !== 0) {
+      const timing = new URLSearchParams(window.location.search).get('timing') || run.run.default_timing
       run.run.segments.forEach(segment => {
-        build_segment_graph(segment, chartOptions)
+        build_segment_graph(timing, segment, chartOptions)
       })
       build_run_duration_graph(run.run, chartOptions)
       buildSegmentGraphs(run.run, chartOptions)
