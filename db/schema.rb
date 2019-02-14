@@ -306,6 +306,19 @@ ActiveRecord::Schema.define(version: 2019_02_20_233803) do
     t.index ["shortname"], name: "index_speedrun_dot_com_games_on_shortname"
   end
 
+  create_table "speedrun_dot_com_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "srdc_id", null: false
+    t.string "name", null: false
+    t.string "url", null: false
+    t.string "api_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key"], name: "index_speedrun_dot_com_users_on_api_key", unique: true
+    t.index ["srdc_id"], name: "index_speedrun_dot_com_users_on_srdc_id", unique: true
+    t.index ["user_id"], name: "index_speedrun_dot_com_users_on_user_id", unique: true
+  end
+
   create_table "splits", id: :serial, force: :cascade do |t|
     t.integer "run_id"
     t.integer "position"
@@ -371,6 +384,7 @@ ActiveRecord::Schema.define(version: 2019_02_20_233803) do
   add_foreign_key "speed_runs_live_games", "games"
   add_foreign_key "speedrun_dot_com_categories", "categories"
   add_foreign_key "speedrun_dot_com_games", "games"
+  add_foreign_key "speedrun_dot_com_users", "users"
   add_foreign_key "splits", "runs"
   add_foreign_key "twitch_users", "users"
 end

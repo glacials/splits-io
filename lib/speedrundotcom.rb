@@ -63,6 +63,12 @@ module SpeedrunDotCom
   end
 
   class User
+    def self.from_api_key(api_key)
+      JSON.parse(SpeedrunDotCom.route['/profile'].get('X-API-Key' => api_key).body)['data']
+    rescue RestClient::Forbidden
+      nil
+    end
+
     def self.twitch_login(id)
       begin
         res = get(id)

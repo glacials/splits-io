@@ -19,9 +19,10 @@ class User < ApplicationRecord
   has_many :twitch_follows,   through: :twitch_user_follows,   source: :to_user
   has_many :twitch_followers, through: :twitch_user_followers, source: :from_user
 
-  has_one  :patreon, class_name: 'PatreonUser', dependent: :destroy
-  has_one  :twitch,  class_name: 'TwitchUser',  dependent: :destroy
-  has_one  :google,  class_name: 'GoogleUser',  dependent: :destroy
+  has_one :patreon, dependent: :destroy, class_name: 'PatreonUser'
+  has_one :twitch,  dependent: :destroy, class_name: 'TwitchUser'
+  has_one :google,  dependent: :destroy, class_name: 'GoogleUser'
+  has_one :srdc,    dependent: :destroy, class_name: 'SpeedrunDotComUser'
 
   has_many :applications,  class_name: 'Doorkeeper::Application', foreign_key: :owner_id
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id

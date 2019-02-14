@@ -45,20 +45,12 @@ class Game < ApplicationRecord
   end
 
   def sync_with_srdc
-    if srdc.nil?
-      SpeedrunDotComGame.from_game!(self)
-      return
-    end
-
+    return SpeedrunDotComGame.from_game!(self) if srdc.nil?
     srdc.sync!
   end
 
   def sync_with_srl
-    if srl.nil?
-      SpeedRunsLiveGame.from_game!(self)
-      return
-    end
-
+    return SpeedRunsLiveGame.from_game!(self) if srl.nil?
     srl.sync!
   end
 

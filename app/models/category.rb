@@ -51,11 +51,7 @@ class Category < ApplicationRecord
   end
 
   def sync_with_srdc
-    if srdc.nil?
-      SpeedrunDotComCategory.from_category!(self)
-      return
-    end
-
+    return SpeedrunDotComCategory.from_category!(self) if srdc.nil?
     srdc.sync!
   end
 
