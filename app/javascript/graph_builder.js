@@ -5,14 +5,16 @@ import {build_playtime_graph} from "graphs/playtime_graph.js"
 import {build_reset_graph} from "graphs/reset_graph.js"
 import {chartOptions} from "consts.js"
 import {Spinner} from 'spin.js'
+import Highcharts from 'highcharts'
 
 document.addEventListener('turbolinks:load', function() {
   if (document.getElementById('graph-holder') === null) {
     return
   }
 
+  const segSpinners = document.getElementsByClassName('segment-spinner')
   const spinners = []
-  for (const segSpinner of document.getElementsByClassName('segment-spinner')) {
+  for (const segSpinner of segSpinners) {
     const spinner = new Spinner({
       lines: 3,
       length: 15,
@@ -38,6 +40,9 @@ document.addEventListener('turbolinks:load', function() {
     spinners.forEach(spinner => {
       spinner.stop()
     })
+    for (const segSpinner of segSpinners) {
+      segSpinner.hidden = true
+    }
 
     if (response.ok) {
       return response.json()
@@ -69,10 +74,16 @@ document.addEventListener('turbolinks:load', function() {
 })
 
 document.addEventListener('click', event => {
-  if (event.target.matches('.segment-graph-toggler')) {
-    event.preventDefault()
-    const row = document.querySelector(`.segment-graph-holder[data-segment="${toggler.dataset.segment}"]`)
-                .closest('tr')
+  const toggler = event.target.closest('.segment-graph-toggler')
+  if (toggler) {
+    const segId = toggler.dataset.segment
+    const row = document.querySelector(`.segment-graph-holder[data-segment="${segId}"]`).closest('tr')
     row.hidden = !row.hidden
+    if (!row.hidden) {
+      const segCharts = Highcharts.charts.filter(chart => {
+        return chart.renderTo.id === `segment-graph-holder-${segId}`
+      })
+      segCharts.forEach(chart => { chart.reflow() })
+    }
   }
 })
