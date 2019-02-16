@@ -10,12 +10,12 @@ h5
   - if run.srdc_id.present?
     a.badge.badge-dark.tip title='See on Speedrun.com' href=run.srdc_url
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-    - if run.video_url.present?
-      - uri = URI.parse(run.video_url)
-      - if uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
-        a.badge.badge-dark.tip href=run.video_url title='Watch on YouTube' => icon('fab', 'youtube')
-      - elsif !uri.host.match?(/^(www\.)?(twitch\.tv)$/)
-        a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
+  - if run.video_url.present?
+    - uri = URI.parse(run.video_url)
+    - if uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
+      a.badge.badge-dark.tip href=run.video_url title='Watch on YouTube' => icon('fab', 'youtube')
+    - elsif !uri.host.match?(/^(www\.)?(twitch\.tv)$/)
+      a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
 
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
   .btn-group.m-2 role='group' aria={label: 'Run navigation'}
