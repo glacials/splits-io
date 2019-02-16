@@ -54,7 +54,7 @@ module ApplicationHelper
 
     if user.admin?
       badge = 'badge-danger'
-      title = "#{user} is the creator of Splits I/O!"
+      title = "#{user} is a Splits I/O staff member!"
     end
 
     link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title)

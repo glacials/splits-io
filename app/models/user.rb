@@ -101,6 +101,10 @@ class User < ApplicationRecord
   end
 
   def admin?
-    twitch.try(:twitch_id) == '29798286' # Glacials
+    [
+      '29798286', # Glacials
+      '18946907', # Batedurgonnadie
+      '32102533'  # Squishy
+    ].include?(twitch.try(:twitch_id))
   end
 end
