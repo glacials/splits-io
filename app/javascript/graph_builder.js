@@ -53,8 +53,12 @@ document.addEventListener('turbolinks:load', function() {
     document.getElementById('graph-holder').hidden = false
     if (run.run.histories.length !== 0) {
       const timing = new URLSearchParams(window.location.search).get('timing') || run.run.default_timing
+      const skipped = `${timing}time_skipped`
+
       run.run.segments.forEach(segment => {
-        build_segment_graph(timing, segment, chartOptions)
+        if (!segment[skipped]) {
+          build_segment_graph(timing, segment, chartOptions)
+        }
       })
       build_run_duration_graph(run.run, chartOptions)
       buildSegmentGraphs(run.run, chartOptions)
