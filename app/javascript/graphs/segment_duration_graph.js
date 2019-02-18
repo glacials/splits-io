@@ -3,6 +3,10 @@ import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
 const build_segment_graph = function(timing, segment, chartOptions) {
+  if (document.getElementById(`segment-graph-holder-${segment.id}`) === null) {
+    return
+  }
+
   const duration = `${timing}time_duration_ms`
 
   let graph_data = []
