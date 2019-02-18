@@ -6,43 +6,31 @@
     .row
       .col-lg-6.offset-lg-3
         .card
-          .card-header
-            b #{@pre_auth.client.name} is requesting partial access to your Splits I/O account
           .card-body
             p
-              span Hey
+              ' Hi
               b< #{current_user}
-              span ! The application
-            p
-              h4.text-info = @pre_auth.client.name
-            p
-              span is requesting these abilities:
-            p
-              ol
-                li
-                  h5.text-info See who you are on Splits I/O
+              ' ! The application
+            p: h4.text-primary = @pre_auth.client.name
+            p: span is requesting these abilities:
+            p: ol
+                li See who you are on Splits I/O
                 - @pre_auth.scope.split(' ').each do |scope|
-                  li
-                    h5.text-info = scope_to_sentence(scope)
-            p
-              span You can always revoke
-              span.text-info<> #{@pre_auth.client.name}'s
-              span permissions later.
-          .card-footer
-            .row
-              .col-lg-6
-                = form_for oauth_authorization_path, method: :post do |f|
-                  = hidden_field_tag :client_id, @pre_auth.client.uid
-                  = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
-                  = hidden_field_tag :state, @pre_auth.state
-                  = hidden_field_tag :response_type, @pre_auth.response_type
-                  = hidden_field_tag :scope, @pre_auth.scope
-                  = submit_tag t('doorkeeper.authorizations.buttons.authorize'), class: 'btn btn-info btn-lg btn-block'
-              .col-lg-6
-                = form_for oauth_authorization_path, method: :delete do |f|
-                  = hidden_field_tag :client_id, @pre_auth.client.uid
-                  = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
-                  = hidden_field_tag :state, @pre_auth.state
-                  = hidden_field_tag :response_type, @pre_auth.response_type
-                  = hidden_field_tag :scope, @pre_auth.scope
-                  = submit_tag t('doorkeeper.authorizations.buttons.deny'), class: 'btn btn-primary btn-lg btn-block'
+                  li = scope_to_sentence(scope)
+            p You can always revoke these permissions later.
+          .card-footer.clearfix
+            = form_for oauth_authorization_path, method: :delete, html: {class: 'd-inline'} do |f|
+              = hidden_field_tag :client_id, @pre_auth.client.uid
+              = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
+              = hidden_field_tag :state, @pre_auth.state
+              = hidden_field_tag :response_type, @pre_auth.response_type
+              = hidden_field_tag :scope, @pre_auth.scope
+              = submit_tag t('doorkeeper.authorizations.buttons.deny'), class: 'btn btn-outline-danger'
+            .float-right
+              = form_for oauth_authorization_path, method: :post do |f|
+                = hidden_field_tag :client_id, @pre_auth.client.uid
+                = hidden_field_tag :redirect_uri, @pre_auth.redirect_uri
+                = hidden_field_tag :state, @pre_auth.state
+                = hidden_field_tag :response_type, @pre_auth.response_type
+                = hidden_field_tag :scope, @pre_auth.scope
+                = submit_tag t('doorkeeper.authorizations.buttons.authorize'), class: 'btn btn-outline-success'

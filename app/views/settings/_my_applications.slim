@@ -60,16 +60,6 @@
                           )
                             span#copy = icon('fas', 'copy')
                             span#copied style='display: none;' = icon('fas', 'check')
-                  coffee:
-                    clipboard = new Clipboard('.clipboard-btn')
-                    clipboard.on('success', (e) ->
-                      e.trigger.children[0].style.display = 'none'
-                      e.trigger.children[1].style.display = 'inline-block'
-                      setTimeout(->
-                        e.trigger.children[0].style.display = 'inline-block'
-                        e.trigger.children[1].style.display = 'none'
-                      , 4000)
-                    )
                   td
                     .btn-group
                       a.btn.btn-outline-light.tip(
