@@ -7,7 +7,7 @@ class SpeedrunDotComCategory < ApplicationRecord
     return category.srdc if category.srdc.present?
 
     if category.game.srdc.nil?
-      srdc_game = SpeedrunDotComGame.from_game!(category.game.srdc.srdc_id).persisted?
+      srdc_game = SpeedrunDotComGame.from_game!(category.game)
       return if srdc_game.nil? || !srdc_game.persisted?
     end
 
