@@ -18,7 +18,7 @@
               ' Sign In with Twitch
             b.text-secondary.d-block.tip-bottom title='Many features get better with a Twitch link, like highlighting runs on Twitch and comparing with runners you follow.' = '(recommended)'
           div.mt-3
-            a.btn.btn-google.btn-lg.m-2 href='/auth/google'
+            a.btn.btn-google.m-2 href='/auth/google'
               => icon('fab', 'google')
               ' Sign In with Google
         .card-footer.align-right.py-0.px-1 style='background: none'
@@ -26,10 +26,9 @@
             => icon('fas', 'upload')
             ' Or drag and drop to upload a speedrun
   .row.my-5.py-5: .col-md-12.text-center
-    button#scroll.btn.btn-outline-secondary.btn-lg = icon('fas', 'angle-double-down')
+    button#scroll-down.btn.btn-outline-secondary.btn-lg = icon('fas', 'angle-double-down')
     big.d-block: b.text-secondary First-timer?
-a.m-2
-#below-the-fold style='visibility: hidden'
+#below-the-fold.mt-2 style='visibility: hidden'
   .row
     .col-md-8.card-columns.mx-auto.my-4 style='column-count: 2'
       .card.border-warning
@@ -115,7 +114,5 @@ a.m-2
           h3.card-title.text-success Link with Twitch
           p.card-text Automatically highlight PBs and compete with friends by linking your Twitch account.
   .row.my-5.py-5: .col-md-12.text-center
-    a.btn.btn-twitch.btn-lg.m-0 href='/auth/twitch'
-      => icon('fab', 'twitch')
-      ' Sign In with Twitch
-    div: b: big.text-secondary Ready to try?
+    button#scroll-up.btn.btn-outline-secondary.btn-lg = icon('fas', 'angle-double-up')
+    big.d-block: b.text-secondary Ready to try?
