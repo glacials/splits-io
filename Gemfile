@@ -32,6 +32,13 @@ group :development, :hot do
   gem 'rails-erd', require: false
   gem 'rubocop', require: false
 
+  # profiling
+  gem 'derailed_benchmarks'
+  gem 'flamegraph'
+  gem 'memory_profiler'
+  gem 'rack-mini-profiler'
+  gem 'stackprof'
+
   # tests
   gem 'guard', require: false
   gem 'guard-rspec', require: false

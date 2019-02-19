@@ -90,7 +90,11 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.use_ssl = ENV['USE_SSL'].present? ? (ENV['USE_SSL'] == '1') : true
+  if Rails.root.join('tmp/profiling-dev.txt').exist?
+    config.use_ssl = false
+  else
+    config.use_ssl = ENV.fetch('USE_SSL', '1') == '1'
+  end
   config.read_only = false
   config.action_cable.allowed_request_origins = ['https://splits.io', 'https://*.splits.io']
 end
