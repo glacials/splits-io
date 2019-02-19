@@ -5,8 +5,11 @@ h1 = @category.game
     - @category.game.aliases.where.not(name: @category.game.name).each do |game_alias|
       li = game_alias
 h6
-  - if @category.game.srdc.try(:url).present?
+  - if @on_game_page && @category.game.srdc.try(:url).present?
     a.btn.btn-dark.mr-2.tip href=@category.game.srdc.url title='See on Speedrun.com'
+      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+  - elsif !@on_game_page && @category.srdc.try(:url).present?
+    a.btn.btn-dark.mr-2.tip href=@category.srdc.url title='See on Speedrun.com'
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
   - if @category.game.srl.present?
     a.btn.btn-dark.mr-2.tip href=@category.game.srl.url title='See on SpeedRunsLive'

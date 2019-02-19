@@ -50,17 +50,15 @@ module SpeedrunDotCom
     def self.from_id(id)
       JSON.parse(SpeedrunDotCom.route["/games/#{CGI.escape(id)}"].get.body)['data']
     end
+  end
 
-    class << self
-      private
+  class Category
+    def self.from_game(srdc_game_id)
+      JSON.parse(SpeedrunDotCom.route["/games/#{CGI.escape(srdc_game_id)}/categories"].get.body)['data']
+    end
 
-      def get(id)
-        route(id).get
-      end
-
-      def route
-        SpeedrunDotCom.route["/games"]
-      end
+    def self.from_id(id)
+      JSON.parse(SpeedrunDotCom.route["/categories/#{CGI.escape(id)}"].get.body)['data']
     end
   end
 

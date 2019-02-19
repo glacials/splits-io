@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_174102) do
+ActiveRecord::Schema.define(version: 2019_02_14_221756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -265,6 +265,20 @@ ActiveRecord::Schema.define(version: 2019_01_23_174102) do
     t.index ["srl_id"], name: "index_speed_runs_live_games_on_srl_id", unique: true
   end
 
+  create_table "speedrun_dot_com_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "srdc_id", null: false
+    t.string "name", null: false
+    t.string "url", null: false
+    t.boolean "misc", null: false
+    t.string "rules"
+    t.integer "min_players", null: false
+    t.integer "max_players", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_speedrun_dot_com_categories_on_category_id", unique: true
+  end
+
   create_table "speedrun_dot_com_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id"
     t.string "srdc_id", null: false
@@ -343,6 +357,7 @@ ActiveRecord::Schema.define(version: 2019_01_23_174102) do
   add_foreign_key "segment_histories", "segments", on_delete: :cascade
   add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "speed_runs_live_games", "games"
+  add_foreign_key "speedrun_dot_com_categories", "categories"
   add_foreign_key "speedrun_dot_com_games", "games"
   add_foreign_key "splits", "runs"
   add_foreign_key "twitch_users", "users"
