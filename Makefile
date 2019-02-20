@@ -40,6 +40,14 @@ run: # Run docker-compose up, but work around Ctrl-C sometimes not stopping cont
 console:
 	$(docker-compose) run web rails console
 
+profile:
+	$(docker-compose) run -e RAILS_ENV=profiling web rake assets:precompile
+	$(docker-compose) run -e RAILS_ENV=profiling --service-ports web rails s
+	$(docker-compose) run -e RAILS_ENV=profiling web rake assets:clobber
+
+derailed:
+	$(docker-compose) run -e RAILS_ENV=profiling $(env) web bundle exec derailed $(command)
+
 update_lsc:
 	$(docker-compose) run web bundle exec rake update_lsc
 

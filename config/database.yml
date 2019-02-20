@@ -11,13 +11,12 @@ development: &development
   <<: *default
   database: app_development
 
+profiling:
+  <<: *development
+
 test:
   <<: *default
   database: app_test
 
 production:
-  <% if Rails.root.join('tmp/profiling-dev.txt').exist? %>
-    <<: *development
-  <% else %>
-    url: <%= ENV['DATABASE_URL'] %>
-  <% end %>
+  url: <%= ENV['DATABASE_URL'] %>

@@ -34,10 +34,6 @@ group :development, :hot do
 
   # profiling
   gem 'derailed_benchmarks'
-  gem 'flamegraph'
-  gem 'memory_profiler'
-  gem 'rack-mini-profiler'
-  gem 'stackprof'
 
   # tests
   gem 'guard', require: false
@@ -103,6 +99,12 @@ gem 'nilify_blanks'
 # parsing
 gem 'descriptive_statistics'
 gem 'moving_average'
+
+# profiling
+gem 'flamegraph'
+gem 'memory_profiler'
+gem 'rack-mini-profiler'
+gem 'stackprof'
 
 # server/environment
 gem 'puma'

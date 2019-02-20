@@ -74,6 +74,11 @@ development:
     watch_options:
       ignored: '**/node_modules/**'
 
+profiling:
+  <<: *default
+  compile: true
+
+  public_output_path: packs-profiling
 
 test:
   <<: *default

@@ -14,6 +14,7 @@ services:
       - s3
       - webpacker
       - worker
+      - redis
     links:
       - s3:s3.localhost
       - webpacker:webpacker.localhost
