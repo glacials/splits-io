@@ -7,9 +7,12 @@ default: &default
   host: db
   port: 5432
 
-development:
+development: &development
   <<: *default
   database: app_development
+
+profiling:
+  <<: *development
 
 test:
   <<: *default

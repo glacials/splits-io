@@ -32,6 +32,9 @@ group :development, :hot do
   gem 'rails-erd', require: false
   gem 'rubocop', require: false
 
+  # profiling
+  gem 'derailed_benchmarks'
+
   # tests
   gem 'guard', require: false
   gem 'guard-rspec', require: false
@@ -96,6 +99,12 @@ gem 'nilify_blanks'
 # parsing
 gem 'descriptive_statistics'
 gem 'moving_average'
+
+# profiling
+gem 'flamegraph'
+gem 'memory_profiler'
+gem 'rack-mini-profiler'
+gem 'stackprof'
 
 # server/environment
 gem 'puma'

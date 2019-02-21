@@ -71,12 +71,12 @@ make console
 ```
 
 #### Attaching to a debugger
-If you use `binding.pry` anywhere in the code, once you hit the breakpoint specified use the command 
+If you use `binding.pry` anywhere in the code, once you hit the breakpoint specified use the command
 ```sh
 make attach
 ```
-in another terminal window to attach to it.  To detach, make sure to exit the debug session then use the docker 
-attach escape sequence `ctrl + p` then `ctrl + q`.  
+in another terminal window to attach to it.  To detach, make sure to exit the debug session then use the docker
+attach escape sequence `ctrl + p` then `ctrl + q`.
 
 If you need to attach to a container other than `web`, specify a container with the syntax
 ```sh
@@ -98,6 +98,29 @@ We use [Rubocop][rubocop] for code cleanliness and styling. To run it against ch
 ```sh
 make lint
 ```
+
+### Profiling
+Splits I/O utilizes a few libraries for profiling our code.
+
+
+[Rack Mini Profiler](https://github.com/MiniProfiler/rack-mini-profiler) is used to find major slowdowns in the code
+through the use of the badge in the top left corner of the browser window. There is also a slew of different URL
+paremeters that you can use to get more detailed information about various aspects of the request. Details of these are
+explained in the readme for RMP.
+To get more detailed information about how code will perform in a production like environment, run
+```sh
+make profile
+```
+to boot the app in the profiling environment, which has most of the production flags toggled on.
+
+
+[DerailedBenchmarks](https://github.com/schneems/derailed_benchmarks) is used to test memory over lots of requests.
+The commands that can be run are detailed in the readme for DB. When you have a command you want to run, use the make
+task like so with the options that you need
+```sh
+make derailed env="-e TEST_COUNT=5000 -e USE_AUTH=true" command="exec perf:mem_over_time"
+```
+The env flag is optional, so feel free to leave that blank if you have no environment variables to set.
 
 [rubocop]: https://github.com/rubocop-hq/rubocop
 

@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :set_gon
   before_action :sanitize_pagination_params
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
+  before_action :authorize_rmp
 
   rescue_from Authie::Session::ValidityError, with: :auth_session_error
   rescue_from Authie::Session::InactiveSession, with: :auth_session_error
@@ -70,5 +71,9 @@ class ApplicationController < ActionController::Base
 
   def auth_session_error
     flash.now[:alert] = 'Your session is no longer valid, please sign in again.'
+  end
+
+  def authorize_rmp
+    Rack::MiniProfiler.authorize_request if current_user.try(:admin?)
   end
 end
