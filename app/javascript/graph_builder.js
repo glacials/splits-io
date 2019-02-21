@@ -6,7 +6,7 @@ import {build_reset_graph} from "graphs/reset_graph.js"
 import {chartOptions} from "consts.js"
 import {Spinner} from 'spin.js'
 import Highcharts from 'highcharts'
-import _ from 'lodash'
+import _ from 'underscore'
 
 document.addEventListener('turbolinks:load', function() {
   if (document.getElementById('graph-holder') === null) {
@@ -101,6 +101,7 @@ document.addEventListener('click', event => {
   segChart.reflow()
 })
 
+// Use debounce to collect all resize events to fire it once instead of every single time
 window.addEventListener('resize', _.debounce(() => {
   Highcharts.charts.forEach((chart) => {
     const row = chart.renderTo.closest('tr')
@@ -108,6 +109,8 @@ window.addEventListener('resize', _.debounce(() => {
       return
     }
 
+    // Use defer to allow other JS to run on the stack in between chart sizing changes
+    // Without this the page will completely lock up for a bit while all charts are resized
     _.defer((size) => {
       chart.setSize(size)
     }, chart.container.closest('table').closest('.card').clientWidth)

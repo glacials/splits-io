@@ -1,3 +1,5 @@
+import _ from 'underscore'
+
 const upload = function(file, options) {
   if(file === undefined) {
     document.getElementById('droplabel').textContent = 'That looks like an empty file! :('
@@ -84,8 +86,8 @@ document.addEventListener('turbolinks:load', function() {
     event.preventDefault()
     event.stopPropagation()
 
-    files = event.dataTransfer.files
-    if(files.length > 1 && gon.user === null) {
+    const files = event.dataTransfer.files
+    if (files.length > 1 && gon.user === null) {
       document.getElementById('droplabel').textContent = 'To upload more than one file at a time, please sign in.'
       return
     }
@@ -94,7 +96,7 @@ document.addEventListener('turbolinks:load', function() {
     window.isUploading = true
     window.showSpinner('#fff')
 
-    if(files.length > 1) {
+    if (files.length > 1) {
       uploadAll(_.toArray(files))
     } else {
       upload(files[0])
