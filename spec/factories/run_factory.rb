@@ -34,7 +34,6 @@ FactoryBot.define do
   factory :run do
     category
 
-    video_url   { 'http://www.twitch.tv/glacials/c/3463112' }
     s3_filename { test_files[:livesplit14][:s3_filename] }
 
     trait :owned do
@@ -43,6 +42,10 @@ FactoryBot.define do
 
     trait :unowned do
       user { nil }
+    end
+
+    trait :archived do
+      archived { true }
     end
 
     trait :nicked do

@@ -12,6 +12,7 @@ class RunDashboard < Administrate::BaseDashboard
     category: Field::BelongsTo,
     game: Field::HasOne,
     segments: Field::HasMany,
+    video: Field::BelongsTo,
     id: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -21,7 +22,6 @@ class RunDashboard < Administrate::BaseDashboard
     program: Field::String,
     claim_token: Field::Password,
     archived: Field::Boolean,
-    video_url: Field::String,
     srdc_id: Field::String,
     attempts: Field::Number,
     s3_filename: Field::String,
@@ -50,6 +50,7 @@ class RunDashboard < Administrate::BaseDashboard
     user
     game
     category
+    video
     created_at
     updated_at
     parsed_at
@@ -63,7 +64,6 @@ class RunDashboard < Administrate::BaseDashboard
     program
     claim_token
     archived
-    video_url
     attempts
     srdc_id
     s3_filename
@@ -76,10 +76,10 @@ class RunDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     user
     category
+    video
     nick
     image_url
     archived
-    video_url
     srdc_id
     attempts
     s3_filename

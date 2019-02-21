@@ -8,6 +8,7 @@ class Run < ApplicationRecord
   include S3Run
   include SRDCRun
   include UnparsedRun
+  include Videoable
 
   include ActionView::Helpers::DateHelper
 

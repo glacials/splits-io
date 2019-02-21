@@ -10,12 +10,10 @@ h5
   - if run.srdc_id.present?
     a.badge.badge-dark.tip title='See on Speedrun.com' href=run.srdc_url
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-  - if run.video_url.present?
-    - uri = URI.parse(run.video_url)
-    - if uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
-      a.badge.badge-dark.tip href=run.video_url title='Watch on YouTube' => icon('fab', 'youtube')
-    - elsif !uri.host.match?(/^(www\.)?(twitch\.tv)$/)
-      a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
+  - if run.video.try(:youtube?)
+    a.badge.badge-dark.tip href=run.video.url title='Watch on YouTube' => icon('fab', 'youtube')
+  - elsif  run.video.present? && !run.video.try(:twitch?)
+    a.badge.badge-dark.tip href=run.video.url title='Watch video' => icon('fas', 'video')
 
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
   .btn-group.m-2 role='group' aria={label: 'Run navigation'}
@@ -46,7 +44,7 @@ h5
         - else
           button.btn.btn-outline-secondary disabled=true Sign In to Claim
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-    - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+    - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion.present?
       a.btn.btn-twitch.tip-top(
         href='#'
         data={toggle: :modal, target: '#highlight'}
@@ -54,7 +52,7 @@ h5
       )
         => icon('fab', 'twitch')
         span Auto-Highlight Possible
-- if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+- if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion.present?
   #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
     .modal-dialog role='document'
       .modal-content

@@ -86,11 +86,19 @@ class RunsController < ApplicationController
     end
 
     if params[@run.id36][:video_url]
-      if @run.update(video_url: params[@run.id36][:video_url])
+      if params[@run.id36][:video_url].blank?
+        @run.video.try(:destroy)
+        redirect_back(fallback_location: edit_run_path(@run), notice: 'Video deleted.')
+        return
+      end
+
+      video = Video.find_or_initialize_by(videoable: @run)
+      if video.update(url: params[@run.id36][:video_url])
         redirect_back(fallback_location: edit_run_path(@run), notice: 'Video saved! 📹')
       else
         redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
       end
+      return
     end
 
     if params[@run.id36][:archived]
@@ -117,6 +125,7 @@ class RunsController < ApplicationController
       end
     end
   end
+
   def random
     redirect_to Run.random
   end
