@@ -12,7 +12,6 @@ import Rails from "rails-ujs"
 import Turbolinks from "turbolinks"
 import "moment"
 import "moment-duration-format"
-import "underscore"
 import {Spinner} from "spin.js"
 import "clipboard"
 import * as Cookies from "js-cookie"
@@ -26,7 +25,6 @@ import Chartkick from "chartkick"
 window.Chartkick = Chartkick
 
 global.moment = moment
-global._ = underscore
 global.Spinner = Spinner
 global.Clipboard = clipboard
 global.Cookies = Cookies
