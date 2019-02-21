@@ -4,8 +4,8 @@ class Ability
   def initialize(user)
     user ||= User.new
     grant_anon_perms
-    grant_user_perms(user)
-    grant_admin_perms if user.id == 1
+    grant_user_perms(user) if user.persisted?
+    grant_admin_perms if user.admin?
   end
 
   private

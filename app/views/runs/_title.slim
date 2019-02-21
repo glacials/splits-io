@@ -48,11 +48,15 @@ h5
     - if can?(:create, RunLike)
       button#like-button.btn.tip(
         data={liked: current_user.likes?(run) ? '1' : '0'}
-        class=(current_user.likes?(run) ? 'btn-danger' : 'btn-outline-danger')
+        class=(current_user.likes?(run) ? 'btn-light' : 'btn-outline-light')
         title=tooltip(run)
       )
-        => icon('fas', 'heart')
+        ' 🎉
         span#likes-count data={value: @run.likes.count} = @run.likes.count
+    - else
+      .btn.btn-outline-light.tip.disabled title=tooltip(run)
+        ' 🎉
+        = @run.likes.count
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
     - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
       a.btn.btn-twitch.tip-top(

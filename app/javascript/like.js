@@ -5,8 +5,8 @@ document.addEventListener('click', event => {
     return
   }
 
-  likeButton.classList.toggle('btn-danger')
-  likeButton.classList.toggle('btn-outline-danger')
+  likeButton.classList.toggle('btn-light')
+  likeButton.classList.toggle('btn-outline-light')
 
   if (likeButton.dataset.liked === '1') {
     likeButton.dataset.liked = '0'
