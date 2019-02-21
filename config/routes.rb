@@ -110,6 +110,9 @@ Rails.application.routes.draw do
   patch  '/:run',       to: 'runs#update'
   delete '/:run',       to: 'runs#destroy'
 
+  put    '/:run/like', to: 'runs/likes#create',  as: :create_run_like
+  delete '/:run/like', to: 'runs/likes#destroy', as: :destroy_run_like
+
   get '/:run/export/history.csv',         to: 'runs/exports#history_csv',         as: :history_csv
   get '/:run/export/segment_history.csv', to: 'runs/exports#segment_history_csv', as: :segment_history_csv
   get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download

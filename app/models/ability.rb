@@ -21,8 +21,9 @@ class Ability
     can(%i[create read update destroy], Run,                     user_id:      user.id)
     can(%i[create read update destroy], Rivalry,                 from_user_id: user.id)
     can(%i[create read update destroy], Doorkeeper::Application, owner_id:     user.id)
+    can(%i[create read update destroy], RunLike,                 user_id:      user.id)
 
-    cannot(%i[create update destroy], Run, user_id: nil)
+    cannot(%i[update destroy], Run, user_id: nil)
   end
 
   def grant_admin_perms

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_14_221756) do
+ActiveRecord::Schema.define(version: 2019_02_20_233803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -192,6 +192,16 @@ ActiveRecord::Schema.define(version: 2019_02_14_221756) do
     t.index ["run_id"], name: "index_run_histories_on_run_id"
   end
 
+  create_table "run_likes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "run_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["run_id", "user_id"], name: "index_run_likes_on_run_id_and_user_id", unique: true
+    t.index ["run_id"], name: "index_run_likes_on_run_id"
+    t.index ["user_id"], name: "index_run_likes_on_user_id"
+  end
+
   create_table "runs", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.datetime "created_at"
@@ -354,6 +364,8 @@ ActiveRecord::Schema.define(version: 2019_02_14_221756) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"
   add_foreign_key "run_histories", "runs", on_delete: :cascade
+  add_foreign_key "run_likes", "runs"
+  add_foreign_key "run_likes", "users"
   add_foreign_key "segment_histories", "segments", on_delete: :cascade
   add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "speed_runs_live_games", "games"
