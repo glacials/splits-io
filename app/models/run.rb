@@ -25,6 +25,7 @@ class Run < ApplicationRecord
   # If RunHistory is changed to have child records, change this back to just :destroy
   has_many :histories, class_name: 'RunHistory', dependent: :delete_all
   has_one :highlight_suggestion, dependent: :destroy
+  has_many :likes, class_name: 'RunLike'
 
   has_secure_token :claim_token
 

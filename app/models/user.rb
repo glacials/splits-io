@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :categories, -> { distinct }, through: :runs
   has_many :games,      -> { distinct }, through: :runs
 
+  has_many :run_likes
+
   has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy
   has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, class_name: 'Rivalry'
 
@@ -106,5 +108,9 @@ class User < ApplicationRecord
       '18946907', # Batedurgonnadie
       '32102533'  # Squishy
     ].include?(twitch.try(:twitch_id))
+  end
+
+  def likes?(run)
+    RunLike.find_by(user: self, run: run)
   end
 end

@@ -26,16 +26,16 @@ h5
         - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
           a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
             => icon('fas', 'chart-bar')
-            span Compare
+            ' Compare
     - if can?(:edit, run)
       - if request.path_info == edit_run_path(run)
         a.btn.btn-outline-light href=run_path(run)
           => icon('fas', 'hand-point-left')
-          span Back
+          ' Back
       - else
         a.btn.btn-outline-light href=edit_run_path(run)
           => icon('fas', 'edit')
-          span Edit
+          ' Edit
   .btn-group.m-2 role='group' aria={label: 'Related links'}
     - if run.user.nil?
       #claim-nav-link-container hidden=true
@@ -45,6 +45,18 @@ h5
             span Claim
         - else
           button.btn.btn-outline-secondary disabled=true Sign In to Claim
+    - if can?(:create, RunLike)
+      button#like-button.btn.tip(
+        data={liked: current_user.likes?(run) ? '1' : '0'}
+        class=(current_user.likes?(run) ? 'btn-light' : 'btn-outline-light')
+        title=tooltip(run)
+      )
+        ' 🎉
+        span#likes-count data={value: @run.likes.count} = @run.likes.count
+    - else
+      .btn.btn-outline-light.tip.disabled title=tooltip(run)
+        ' 🎉
+        = @run.likes.count
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
     - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
       a.btn.btn-twitch.tip-top(
