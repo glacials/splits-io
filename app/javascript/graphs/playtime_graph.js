@@ -84,7 +84,7 @@ const build_playtime_graph = function(run, chartOptions = {}) {
             const xdiff = moment.duration(this.x - playtime)
 
             if (this.y >= lastPB[duration]) {
-              return `Regression analysis says <b>${x} hours</b> of attempts should yield a <b>${y}</b>`
+              return `Splits I/O predicts <b>${x} hours</b> of attempts will yield a <b>${y}</b>`
             }
             if (xdiff < 0) {
               return `<b>Too soon to say</b> 🤷`
