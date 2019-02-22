@@ -52,11 +52,11 @@ h5
         title=tooltip(run)
       )
         ' 🎉
-        span#likes-count data={value: @run.likes.count} = @run.likes.count
+        span#likes-count data={value: run.likes.count} = run.likes.count
     - else
       .btn.btn-outline-light.tip.disabled title=tooltip(run)
         ' 🎉
-        = @run.likes.count
+        = run.likes.count
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
     - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
       a.btn.btn-twitch.tip-top(

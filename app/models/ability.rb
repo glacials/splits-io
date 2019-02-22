@@ -2,10 +2,9 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new
     grant_anon_perms
-    grant_user_perms(user) if user.persisted?
-    grant_admin_perms if user.admin?
+    grant_user_perms(user) if user
+    grant_admin_perms if user.try(:admin?)
   end
 
   private
