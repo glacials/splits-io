@@ -9,7 +9,11 @@ class Runs::ApplicationController < ApplicationController
 
     if params[:blank] == '1' # Build a fake, non-persisted run
       fake_run = Run.new(category: @run.category, program: ExchangeFormat.to_sym)
-      @run.segments.find_each do |segment|
+
+      # We can't use find_each here since it doesn't respect order. We need the order to be applied correctly on append,
+      # because we're not persisting this run to the database so we can't sort it on "select". We have to keep all
+      # segments in memory on the fake run anyway, so 2x that should be fine.
+      @run.segments.order(segment_number: :asc).each do |segment|
         fake_run.segments << Segment.new(segment_number: segment.segment_number, name: segment.name)
       end
 
