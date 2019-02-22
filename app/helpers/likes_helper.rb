@@ -3,6 +3,8 @@ module LikesHelper
 
   def tooltip(run)
     count = run.likes.count
+    return nil if count.zero?
+
     likes = run.likes.joins(:user).limit(MAX_NAMES).pluck(:name)
 
     if count <= MAX_NAMES
