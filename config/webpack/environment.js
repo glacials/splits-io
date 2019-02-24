@@ -1,6 +1,10 @@
 const { environment } = require('@rails/webpacker')
 const webpack = require('webpack')
 
+environment.config.set('resolve.alias', {
+  handlebars: 'handlebars/dist/handlebars.js'
+})
+
 environment.plugins.prepend(
   'Provide',
   new webpack.ProvidePlugin({
