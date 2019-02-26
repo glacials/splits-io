@@ -4,7 +4,7 @@ class Runs::LikesController < Runs::ApplicationController
 
   def create
     if cannot?(:create, RunLike)
-      redirect_to run_path(@run_like.run), alert: 'You do not have permission to like this run.'
+      redirect_to run_path(@run), alert: 'You do not have permission to like this run.'
       return
     end
 
@@ -28,7 +28,7 @@ class Runs::LikesController < Runs::ApplicationController
     @run = Run.find_by(id: params[:run].to_i(36))
     head :not_found if @run.nil?
   end
-  
+
   def set_run_like
     @run_like = RunLike.find_by(user: current_user, run: Run.find_by(id: params[:run].to_i(36)))
     head :not_found if @run_like.nil?
