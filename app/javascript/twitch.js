@@ -2,7 +2,7 @@ const async = require('async')
 
 document.addEventListener('turbolinks:load', function() {
   const el = document.getElementById('twitch-player')
-  if (el === null) {
+  if (el === null || el.dataset.loaded === '1') {
     return
   }
 
@@ -12,6 +12,8 @@ document.addEventListener('turbolinks:load', function() {
     height: '100%',
     width: '100%'
   })
+
+  el.dataset.loaded = '1'
 
   Array.from(document.getElementsByClassName('split')).forEach(function(el) {
     el.addEventListener('click', function() {
