@@ -2,67 +2,58 @@
   .card-header My Patreon Benefits
   - pledge_cents = current_user.patreon.try(:pledge_cents) || 0
   .list-group
-    - if current_user.bronze_patron?
-      .list-group-item
-        .d-flex.w-100.justify-content-between
+    .list-group-item
+      .d-flex.w-100.justify-content-between
+        - if current_user.bronze_patron?
           h5.mb1
             span.text-success> ✓
             ' No Ads
           i.btn.btn-outline-light.disabled Complete!
-        p.mb-1
-          ' Make the ad at the top of the page go away, but without feeling guilty about it. Comes with a
-          ' #{user_badge(current_user, override: :standard)} → #{user_badge(current_user, override: :silver)} username
-          ' upgrade.
-    - else
-      .list-group-item
-        .d-flex.w-100.justify-content-between
+        - else
           h5.mb1
             span.text-danger> ✗
             ' No Ads
-          a.btn.btn-primary href=patreon_url(checkout: :bronze) + $#{2 - pledge_cents / 100} / month
-        p.mb-1
-          ' Make the ad at the top of the page go away, but without feeling guilty about it. Comes with a
-          ' #{user_badge(current_user, override: :standard)} → #{user_badge(current_user, override: :silver)} username
-          ' upgrade.
-    - if current_user.silver_patron?
-      .list-group-item
-        .d-flex.w-100.justify-content-between
+          a.btn.btn-outline-patreon href=patreon_url(checkout: :bronze)
+            => icon('fab', 'patreon')
+            ' Subscribe
+      p.mb-1
+        ' Make the ad at the top of the page go away, but without feeling guilty about it. Comes with a
+        ' #{user_badge(current_user, override: :standard)} → #{user_badge(current_user, override: :silver)} username
+        ' upgrade.
+    .list-group-item
+      .d-flex.w-100.justify-content-between
+        - if current_user.silver_patron?
           h5.mb1
             span.text-success> ✓
-            ' Practice-till-PB Regression Analysis
+            ' PB Predictions
           i.btn.btn-outline-light.disabled Complete!
-        p.mb-1
-          ' Regression analysis for how many hours of attempts you need to hit specific PBs. Comes with a
-          ' #{user_badge(current_user, override: :silver)} → #{user_badge(current_user, override: :gold)}
-          ' username upgrade.
-    - else
-      .list-group-item
-        .d-flex.w-100.justify-content-between
+        - else
           h5.mb1
             span.text-danger> ✗
-            ' Practice-till-PB Graph
-          a.btn.btn-primary href=patreon_url(checkout: :silver) + $#{4 - pledge_cents / 100} / month
-        p.mb-1
-          ' Regression analysis for how many hours of attempts you need to hit specific PBs. Comes with a
-          ' #{user_badge(current_user, override: :silver)} → #{user_badge(current_user, override: :gold)}
-          ' username upgrade.
-    - if current_user.gold_patron?
-      .list-group-item
-        .d-flex.w-100.justify-content-between
+            ' PB Predictions
+          a.btn.btn-outline-patreon href=patreon_url(checkout: :silver)
+            => icon('fab', 'patreon')
+            ' Subscribe
+      p.mb-1
+        ' No ads, and predict how many hours of attempts you need to hit specific PBs (as a graph). Comes with a
+        ' #{user_badge(current_user, override: :silver)} → #{user_badge(current_user, override: :gold)}
+        ' username upgrade.
+    .list-group-item
+      .d-flex.w-100.justify-content-between
+        - if current_user.gold_patron?
           h5.mb1
             span.text-success> ✓
             ' Permalink Redirectors
-          i: a.btn.btn-outline-light href=tools_path Triple complete!
-        p.mb-1
-          ' Get special static links that always redirect to your current PB, even when it improves.
-    - else
-      .list-group-item
-        .d-flex.w-100.justify-content-between
+          i: a.btn.btn-outline-light.disabled href=tools_path Complete!
+        - else
           h5.mb1
             span.text-danger> ✗
             ' Permalink Redirectors
-          a.btn.btn-primary href=patreon_url(checkout: :gold) + $#{6 - pledge_cents / 100} / month
-        p.mb-1
-          ' Get special static links that always redirect to your current PB, even when it improves.
+          a.btn.btn-outline-patreon href=patreon_url(checkout: :gold)
+            => icon('fab', 'patreon')
+            ' Subscribe
+      p.mb-1
+        ' No ads, get PB predictions, and get special static links that always redirect to your current PB, even when it
+        ' improves.
   .card-footer
     p All tiers also put you in the footer of the site! 😍 See Patreon for how much the site costs to run.
