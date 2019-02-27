@@ -21,6 +21,7 @@ class Ability
     can(%i[create read update destroy], Rivalry,                 from_user_id: user.id)
     can(%i[create read update destroy], Doorkeeper::Application, owner_id:     user.id)
     can(%i[create read update destroy], RunLike,                 user_id:      user.id)
+    can(%i[create read update destroy], SpeedrunDotComUser,      user_id:      user.id)
 
     cannot(%i[update destroy], Run, user_id: nil)
   end

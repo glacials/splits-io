@@ -26,6 +26,7 @@ module SpeedrunDotCom
 
     def self.url_from_id(id)
       return nil if id.blank?
+
       "https://www.speedrun.com/run/#{CGI.escape(id)}"
     end
 
@@ -63,6 +64,12 @@ module SpeedrunDotCom
   end
 
   class User
+    def self.from_api_key(api_key)
+      JSON.parse(SpeedrunDotCom.route['/profile'].get('X-API-Key' => api_key).body)['data']
+    rescue RestClient::Forbidden
+      nil
+    end
+
     def self.twitch_login(id)
       begin
         res = get(id)

@@ -1,8 +1,10 @@
 class Category < ApplicationRecord
   belongs_to :game
-  has_many :runs
-  has_many :users, through: :runs
+
+  has_many :runs,      dependent: :nullify
   has_many :rivalries, dependent: :destroy
+
+  has_many :users, through: :runs
 
   has_one :srdc, class_name: 'SpeedrunDotComCategory', dependent: :destroy
 
@@ -10,21 +12,23 @@ class Category < ApplicationRecord
 
   def self.global_aliases
     {
-      'Any% (NG+)' => 'Any% NG+',
-      'Any% (New Game+)' => 'Any% NG+',
-      'Any %' => 'Any%',
+      'Any% (NG+)'        => 'Any% NG+',
+      'Any% (New Game+)'  => 'Any% NG+',
+      'Any %'             => 'Any%',
       'All Skills No OOB' => 'All Skills no OOB no TA' # for ori_de
     }
   end
 
   def self.from_name(name)
     return nil if name.blank?
+
     name = name.strip
-    where('lower(name) = lower(?)', name).first
+    find_by('lower(name) = lower(?)', name)
   end
 
   def self.from_name!(name)
     return nil if name.blank?
+
     name = name.strip
     where('lower(name) = lower(?)', name).first_or_create(name: name)
   end
@@ -51,10 +55,7 @@ class Category < ApplicationRecord
   end
 
   def sync_with_srdc
-    if srdc.nil?
-      SpeedrunDotComCategory.from_category!(self)
-      return
-    end
+    return SpeedrunDotComCategory.from_category!(self) if srdc.nil?
 
     srdc.sync!
   end
@@ -78,6 +79,7 @@ class Category < ApplicationRecord
   # category. Does nothing if the given category is nil.
   def merge_into!(category)
     return if category.nil?
+
     ApplicationRecord.transaction do
       runs.update_all(category_id: category.id)
       rivalries.update_all(category_id: category.id)

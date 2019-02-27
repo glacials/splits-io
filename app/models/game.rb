@@ -9,9 +9,9 @@ class Game < ApplicationRecord
 
   has_many :categories, dependent: :destroy
   has_many :runs, through: :categories
-  has_many :users, -> { distinct }, through: :runs
+  has_many :users,   -> { distinct }, through: :runs
   has_many :runners, -> { distinct }, through: :runs, class_name: 'User'
-  has_many :aliases, class_name: 'GameAlias'
+  has_many :aliases, class_name: 'GameAlias', dependent: :destroy
 
   has_one :srdc, class_name: 'SpeedrunDotComGame', dependent: :destroy
   has_one :srl,  class_name: 'SpeedRunsLiveGame',  dependent: :destroy
@@ -31,12 +31,14 @@ class Game < ApplicationRecord
   def self.from_name(name)
     name = name.strip
     return nil if name.blank?
-    joins(:aliases).where(game_aliases: {name: name}).first
+
+    joins(:aliases).find_by(game_aliases: {name: name})
   end
 
   def self.from_name!(name)
     name = name.strip
     return nil if name.blank?
+
     joins(:aliases).where(game_aliases: {name: name}).first_or_create(name: name)
   end
 
@@ -45,19 +47,13 @@ class Game < ApplicationRecord
   end
 
   def sync_with_srdc
-    if srdc.nil?
-      SpeedrunDotComGame.from_game!(self)
-      return
-    end
+    return SpeedrunDotComGame.from_game!(self) if srdc.nil?
 
     srdc.sync!
   end
 
   def sync_with_srl
-    if srl.nil?
-      SpeedRunsLiveGame.from_game!(self)
-      return
-    end
+    return SpeedRunsLiveGame.from_game!(self) if srl.nil?
 
     srl.sync!
   end

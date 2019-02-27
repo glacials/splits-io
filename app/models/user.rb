@@ -4,32 +4,32 @@ class User < ApplicationRecord
   include RivalUser
   include RunnerUser
 
-  has_many :runs
+  has_many :runs, dependent: :nullify
   has_many :categories, -> { distinct }, through: :runs
   has_many :games,      -> { distinct }, through: :runs
 
-  has_many :run_likes
+  has_many :run_likes, dependent: :destroy
 
-  has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy
-  has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, class_name: 'Rivalry'
+  has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
+  has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
+                                class_name: 'Rivalry'
 
-  has_many :twitch_user_follows,   foreign_key: :from_user_id, dependent: :destroy
-  has_many :twitch_user_followers, foreign_key: :to_user_id,   dependent: :destroy, class_name: 'TwitchUserFollow'
+  has_many :twitch_user_follows,   foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
+  has_many :twitch_user_followers, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
+                                   class_name: 'TwitchUserFollow'
 
   has_many :twitch_follows,   through: :twitch_user_follows,   source: :to_user
   has_many :twitch_followers, through: :twitch_user_followers, source: :from_user
 
-  has_one  :patreon, class_name: 'PatreonUser', dependent: :destroy
-  has_one  :twitch,  class_name: 'TwitchUser',  dependent: :destroy
-  has_one  :google,  class_name: 'GoogleUser',  dependent: :destroy
+  has_one :patreon, dependent: :destroy, class_name: 'PatreonUser'
+  has_one :twitch,  dependent: :destroy, class_name: 'TwitchUser'
+  has_one :google,  dependent: :destroy, class_name: 'GoogleUser'
+  has_one :srdc,    dependent: :destroy, class_name: 'SpeedrunDotComUser'
 
-  has_many :applications,  class_name: 'Doorkeeper::Application', foreign_key: :owner_id
-  has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', foreign_key: :resource_owner_id
-  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id
-
-  after_destroy do |user|
-    user.runs.update_all(user_id: nil)
-  end
+  has_many :applications,  class_name: 'Doorkeeper::Application', dependent: :destroy, foreign_key: :owner_id,
+                           inverse_of: 'owner'
+  has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id
+  has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy, foreign_key: :resource_owner_id
 
   NAME_REGEX = /\A[A-Za-z0-9_]+\z/.freeze
 
@@ -42,6 +42,7 @@ class User < ApplicationRecord
   def self.search(term)
     term = term.strip
     return nil if term.blank?
+
     search_for_name(term)
   end
 

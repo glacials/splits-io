@@ -1,9 +1,9 @@
-.card-deck.mb-3
+.card-columns.mb-3 style='column-count: 2'
   - if current_user.twitch.nil?
     .card.border-twitch
       .card-body.text-light
         span> ✗ Not linked with Twitch
-      .card-footer
+      .card-footer.clearfix
         .float-right
           a.btn.btn-twitch href='/auth/twitch' Link with Twitch
   - else
@@ -11,7 +11,7 @@
       .card-body.text-light
         span ✓ Linked with Twitch as
         b< = current_user.twitch.display_name
-      .card-footer
+      .card-footer.clearfix
         .float-right
           - if current_user.google.present?
             a.btn.btn-outline-light href='/auth/twitch/unlink' Unlink
@@ -24,7 +24,7 @@
     .card.border-google
       .card-body
         span> ✗ Not linked with Google
-      .card-footer
+      .card-footer.clearfix
         .float-right
           a.btn.btn-google href='/auth/google'
             => icon('fab', 'google')
@@ -34,7 +34,7 @@
       .card-body.text-light
         span ✓ Linked with Google as
         b< = current_user.google.name
-      .card-footer
+      .card-footer.clearfix
         .float-right
           - if current_user.twitch.present?
             a.btn.btn-outline-light href='/auth/google/unlink' Unlink
@@ -47,7 +47,7 @@
     .card.border-patreon
       .card-body
         span> ✗ Not linked with Patreon
-      .card-footer
+      .card-footer.clearfix
         .float-right
           a.btn.btn-patreon.mr-2 href='/auth/patreon'
             => icon('fab', 'patreon')
@@ -58,7 +58,26 @@
       .card-body.text-light
         span ✓ Linked with Patreon as
         b< = current_user.patreon.full_name
-      .card-footer
+      .card-footer.clearfix
         .float-right
           a.btn.btn-outline-light.mr-2 href='/auth/patreon/unlink' Unlink
           a.btn.btn-light href=patreon_url Visit
+  - if current_user.srdc.nil?
+    .card.border-srdc
+      .card-body
+        span> ✗ Not linked with Speedrun.com
+      .card-footer.clearfix
+        .float-right
+          a.btn.btn-srdc.mr-2 href='#' data={toggle: :modal, target: '#srdc-link'}
+            => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+            ' Link with Speedrun.com
+    = render partial: 'shared/srdc_link_modal'
+  - else
+    .card.bg-srdc
+      .card-body.text-light
+        span ✓ Linked with Speedrun.com as
+        b< = current_user.srdc.name
+      .card-footer.clearfix
+        .float-right
+          = button_to speedrun_dot_com_user_path, method: :delete, class: 'btn btn-outline-light mr-2'
+            ' Unlink

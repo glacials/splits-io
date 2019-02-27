@@ -48,15 +48,18 @@ Rails.application.routes.draw do
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
 
-  get '/auth/patreon',          to: 'patreon_users#out'
-  get '/auth/patreon/callback', to: 'patreon_users#in'
-  get '/auth/patreon/unlink',   to: 'patreon_users#unlink'
+  get '/auth/twitch/callback', to: 'twitch_users#in'
+  get '/auth/twitch/unlink',   to: 'twitch_users#unlink'
 
   get '/auth/google/callback', to: 'google_users#in'
   get '/auth/google/unlink',   to: 'google_users#unlink'
 
-  get '/auth/twitch/callback', to: 'twitch_users#in'
-  get '/auth/twitch/unlink',   to: 'twitch_users#unlink'
+  get '/auth/patreon',          to: 'patreon_users#out'
+  get '/auth/patreon/callback', to: 'patreon_users#in'
+  get '/auth/patreon/unlink',   to: 'patreon_users#unlink'
+
+  post   '/auth/srdc', to: 'speedrun_dot_com_users#create',  as: :speedrun_dot_com_users
+  delete '/auth/srdc', to: 'speedrun_dot_com_users#destroy', as: :speedrun_dot_com_user
 
   get '/auth/failure', to: 'sessions#failure'
 
