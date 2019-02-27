@@ -26,6 +26,7 @@ module SpeedrunDotCom
 
     def self.url_from_id(id)
       return nil if id.blank?
+
       "https://www.speedrun.com/run/#{CGI.escape(id)}"
     end
 

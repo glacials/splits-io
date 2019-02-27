@@ -19,6 +19,10 @@ Documentation:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Layout/AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle:      table
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 
