@@ -1,4 +1,5 @@
-- if flash[:alert]
-  .alert.alert-danger = flash[:alert]
-- if flash[:notice]
-  .alert.alert-success = flash[:notice]
+- unless on_landing_page?
+  - if flash[:alert]
+    .alert.alert-danger = flash[:alert]
+  - if flash[:notice]
+    .alert.alert-success = flash[:notice]
