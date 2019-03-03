@@ -41,14 +41,14 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     response.set_header('X-Filename', filename)
 
     new_file = if params[:format] == 'json'
-                 render_to_string(json: @run, serializer: Api::V4::Convert::RunSerializer)
+                 render_to_string(json: RunBlueprint.render_as_hash(@run, view: :api_v4_convert, root: :run, toplevel: :run, historic: true))
                else
                  render_to_string("runs/exports/#{params[:format]}", layout: false)
                end
     send_data(
       new_file,
       filename: filename,
-      layout: false
+      layout:   false
     )
   end
 

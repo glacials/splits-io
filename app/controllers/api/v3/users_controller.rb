@@ -2,7 +2,7 @@ class Api::V3::UsersController < Api::V3::ApplicationController
   before_action :set_user, only: [:show]
 
   def show
-    render json: @user, serializer: Api::V3::UserSerializer, root: :user
+    render json: UserBlueprint.render(@user, view: :api_v3, root: :user)
   end
 
   private

@@ -3,7 +3,8 @@ class Api::V3::Games::RunsController < Api::V3::ApplicationController
   before_action :set_runs, only: [:index]
 
   def index
-    paginate json: @runs, each_serializer: Api::V3::RunSerializer, root: :runs
+    runs = paginate @runs
+    render json: RunBlueprint.render(runs, view: :api_v3, root: :runs)
   end
 
   private

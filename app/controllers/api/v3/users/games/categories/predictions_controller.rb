@@ -15,9 +15,9 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
       image_url: nil,
       created_at: Time.now,
       updated_at: Time.now,
-      user: Api::V3::UserSerializer.new(@user, root: false),
-      game: Api::V3::GameSerializer.new(@game, root: false),
-      category: Api::V3::CategorySerializer.new(@category, root: false),
+      user: UserBlueprint.render_as_hash(@user, view: :api_v3),
+      game: GameBlueprint.render_as_hash(@game, view: :api_v3),
+      category: CategoryBlueprint.render_as_hash(@category, view: :api_v3),
       time: 0
     )
     @prediction[:splits] = most_recent_run.splits.map do |segment|

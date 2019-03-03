@@ -8,7 +8,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   end
 
   def show
-    render json: @run, serializer: Api::V3::Detail::RunSerializer, root: :run
+    render json: RunBlueprint.render(@run, view: :api_v3, root: :run, toplevel: :run)
   end
 
   def create

@@ -7,18 +7,18 @@ class Api::V3::GamesController < Api::V3::ApplicationController
       return
     end
     @games = Game.search(params[:search]).includes(:categories)
-    render json: @games, each_serializer: Api::V3::GameSerializer, root: :games
+    render json: GameBlueprint.render(@games, view: :api_v3, root: :games)
   end
 
   def show
-    render json: @game, serializer: Api::V3::GameSerializer, root: :game
+    render json: GameBlueprint.render(@game, view: :api_v3, root: :game, toplevel: :game)
   end
 
   private
 
   def set_game
-    @game = Game.joins(:srdc).includes(:categories).find_by(speedrun_dot_com_games: {shortname: params[:id]}) || Game.includes(:categories).find(params[:id])
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:id]}) || Game.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render status: :not_found, json: {status: 404, message: "No game with shortname or id '#{params[:id]}' found."}
+    render status: :not_found, json: {status: 404, message: "Game with shortname or id '#{params[:game_id]}' not found."}
   end
 end

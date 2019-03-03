@@ -83,7 +83,7 @@ describe Api::V3::GamesController do
 
     context 'when given a shortname' do
       context 'when the game exists' do
-        subject(:response) { get(:show, params: {id: game.id}) }
+        subject(:response) { get(:show, params: {id: game.srdc.shortname}) }
         subject(:body) { JSON.parse(response.body)['game'] }
 
         it 'returns the correct response code' do

@@ -7,10 +7,10 @@ class Api::V4::RunnersController < Api::V4::ApplicationController
       return
     end
     @runners = User.search(params[:search])
-    render json: @runners, each_serializer: Api::V4::RunnerSerializer, root: 'runners'
+    render json: UserBlueprint.render(@runners, view: :api_v4, root: :runners)
   end
 
   def show
-    render json: @runner, serializer: Api::V4::RunnerSerializer, root: 'runner'
+    render json: UserBlueprint.render(@runner, view: :api_v4, root: :runner)
   end
 end
