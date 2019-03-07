@@ -29,7 +29,7 @@ class HighlightSuggestion < ApplicationRecord
 
         if video_start - 30.seconds < pb.started_at && video_end + 30.seconds > pb.ended_at
           video_time_at_pb_start = pb.started_at - video_start
-          video_time_at_pb_end   = video_time_at_pb_start + pb.duration_ms(Run::REAL) / 1000)
+          video_time_at_pb_end   = video_time_at_pb_start + (pb.duration_ms(Run::REAL) / 1000)
 
           highlight_suggestion = create(
             run: run,
