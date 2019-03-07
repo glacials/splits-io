@@ -25,7 +25,7 @@ class HighlightSuggestion < ApplicationRecord
 
         video_start    = DateTime.parse(video['created_at'])
         video_end      = video_start + hours + minutes + seconds
-        video_duration = video_end - video_start
+        video_duration = (video_end - video_start) * 1.day # subtracting DateTimes gives fractional days; we want seconds
 
         if video_start - 30.seconds < pb.started_at && video_end + 30.seconds > pb.ended_at
           video_time_at_pb_start = pb.started_at - video_start
