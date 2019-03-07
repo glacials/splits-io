@@ -18,20 +18,25 @@ class HighlightSuggestion < ApplicationRecord
 
       Twitch::Videos.recent(run.user.twitch.twitch_id, type: :archive).each do |video|
         match = /^((\d+)h)?((\d+)m)?((\d+)s)?$/.match(video['duration'])
+
         hours   = match[2].to_i.hours
         minutes = match[4].to_i.minutes
         seconds = match[6].to_i.seconds
 
-        video_start = DateTime.parse(video['created_at'])
-        video_end   = video_start + hours + minutes + seconds
+        video_start    = DateTime.parse(video['created_at'])
+        video_end      = video_start + hours + minutes + seconds
+        video_duration = video_end - video_start
 
         if video_start - 30.seconds < pb.started_at && video_end + 30.seconds > pb.ended_at
+          video_time_at_pb_start = pb.started_at - video_start
+          video_time_at_pb_end   = video_time_at_pb_start + (pb.duration_ms(Run::REAL) / 1000)
+
           highlight_suggestion = create(
             run: run,
             url: URI.parse("https://www.twitch.tv/#{run.user.twitch.name}/manager/highlighter/#{video['id']}").tap do |uri|
               uri.query = {
-                start: (pb.started_at - video_start - 10.seconds).to_i,
-                end: ((pb.started_at - video_start) + (pb.duration_ms(Run::REAL) / 1000) + 10.seconds).to_i,
+                start: [0, (video_time_at_pb_start - 10.seconds).to_i].max,
+                end:   [video_duration.to_i, (video_time_at_pb_end + 10.seconds).to_i].min,
                 title: "PB: #{run.game} #{run.category} in #{Duration.new(run.duration_ms(run.default_timing)).format}"
               }.to_query
             end
