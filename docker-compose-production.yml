@@ -29,6 +29,7 @@ services:
       - RAILS_SKIP_ASSET_COMPILATION
       - RAILS_SKIP_MIGRATIONS
       - READ_ONLY_MODE
+      - REDIS_URL
       - ROLLBAR_ACCESS_TOKEN
       - S3_BUCKET
       - SECRET_KEY_BASE
@@ -62,6 +63,7 @@ services:
       - RAILS_SKIP_ASSET_COMPILATION
       - RAILS_SKIP_MIGRATIONS
       - READ_ONLY_MODE
+      - REDIS_URL
       - ROLLBAR_ACCESS_TOKEN
       - S3_BUCKET
       - SECRET_KEY_BASE
@@ -69,5 +71,3 @@ services:
       - SITE_TITLE
       - TWITCH_CLIENT_ID
       - TWITCH_CLIENT_SECRET
-  redis:
-    image: redis
