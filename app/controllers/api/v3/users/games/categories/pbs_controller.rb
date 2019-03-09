@@ -5,7 +5,7 @@ class Api::V3::Users::Games::Categories::PbsController < Api::V3::ApplicationCon
   before_action :set_pb, only: [:show]
 
   def show
-    render json: RunBlueprint.render(@pb, view: :api_v3, root: :run)
+    render json: Api::V3::RunBlueprint.render(@pb, root: :run)
   end
 
   private
@@ -17,9 +17,13 @@ class Api::V3::Users::Games::Categories::PbsController < Api::V3::ApplicationCon
   end
 
   def set_game
-    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game_id]}) || Game.find(params[:game_id])
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game_id]})
+    @game ||= Game.find(params[:game_id])
   rescue ActiveRecord::RecordNotFound
-    render status: :not_found, json: {status: 404, message: "Game with shortname or id '#{params[:game_id]}' not found."}
+    render status: :not_found, json: {
+      status:  404,
+      message: "Game with shortname or id '#{params[:game_id]}' not found."
+    }
   end
 
   def set_category

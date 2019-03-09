@@ -4,7 +4,7 @@ class Api::V4::Runners::GamesController < Api::V4::ApplicationController
 
   def index
     games = paginate @games
-    render json: GameBlueprint.render(games, view: :api_v4, root: :games, toplevel: :game)
+    render json: Api::V4::GameBlueprint.render(games, root: :games, toplevel: :game)
   end
 
   private

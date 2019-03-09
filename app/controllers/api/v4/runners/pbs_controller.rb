@@ -4,7 +4,7 @@ class Api::V4::Runners::PbsController < Api::V4::ApplicationController
 
   def index
     pbs = paginate @pbs
-    render json: RunBlueprint.render(pbs, view: :api_v4, root: :pbs, toplevel: :run)
+    render json: Api::V4::RunBlueprint.render(pbs, root: :pbs, toplevel: :run)
   end
 
   private

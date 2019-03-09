@@ -21,9 +21,9 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     timer = Run.program_from_attribute(:content_type, @accept_header)
     if timer.nil?
       if params[:historic] == '1'
-        render json: RunBlueprint.render(@run, view: :api_v4, root: :run, historic: true)
+        render json: Api::V4::RunBlueprint.render(@run, root: :run, historic: true)
       else
-        render json: RunBlueprint.render(@run, view: :api_v4, root: :run)
+        render json: Api::V4::RunBlueprint.render(@run, root: :run)
       end
     else
       rendered_run = render_run_to_string(timer)

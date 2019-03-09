@@ -4,7 +4,7 @@ class Api::V3::Users::RunsController < Api::V3::ApplicationController
 
   def index
     runs = paginate @runs
-    render json: RunBlueprint.render(runs, view: :api_v3, root: :runs)
+    render json: Api::V3::RunBlueprint.render(runs, root: :runs)
   end
 
   private

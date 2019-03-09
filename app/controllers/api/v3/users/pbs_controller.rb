@@ -3,7 +3,7 @@ class Api::V3::Users::PbsController < Api::V3::ApplicationController
   before_action :set_pbs, only: [:index]
 
   def index
-    render json: RunBlueprint.render(@pbs, view: :api_v3, root: :pbs)
+    render json: Api::V3::RunBlueprint.render(@pbs, root: :pbs)
   end
 
   private

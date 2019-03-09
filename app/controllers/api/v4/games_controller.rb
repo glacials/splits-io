@@ -7,11 +7,11 @@ class Api::V4::GamesController < Api::V4::ApplicationController
       return
     end
     @games = Game.search(params[:search]).includes(:categories)
-    render json: GameBlueprint.render(@games, view: :api_v4, root: :games, toplevel: :game)
+    render json: Api::V4::GameBlueprint.render(@games, root: :games, toplevel: :game)
   end
 
   def show
-    render json: GameBlueprint.render(@game, view: :api_v4, root: :game, toplevel: :game)
+    render json: Api::V4::GameBlueprint.render(@game, root: :game, toplevel: :game)
   end
 
   private

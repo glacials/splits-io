@@ -4,7 +4,7 @@ class Api::V4::Runners::CategoriesController < Api::V4::ApplicationController
 
   def index
     categories = paginate @categories
-    render json: CategoryBlueprint.render(categories, view: :api_v4, root: :categories)
+    render json: Api::V4::CategoryBlueprint.render(categories, root: :categories)
   end
 
   private

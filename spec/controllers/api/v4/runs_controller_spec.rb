@@ -113,7 +113,7 @@ describe Api::V4::RunsController do
     end
 
     context 'for an existing run with historic=1' do
-      let(:run) { create(:run, :owned) }
+      let(:run) { create(:run, :owned, :parsed) }
       subject { get :show, params: {run: run.id36, historic: '1'} }
 
       it 'returns a 200' do
