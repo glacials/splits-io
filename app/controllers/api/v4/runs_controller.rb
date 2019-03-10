@@ -21,11 +21,9 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     timer = Run.program_from_attribute(:content_type, @accept_header)
     if timer.nil?
       if params[:historic] == '1'
-        render json: @run,
-               serializer: Api::V4::RunSerializer,
-               include: ['game', 'category', 'runners', 'histories', 'segments', 'segments.histories']
+        render json: Api::V4::RunBlueprint.render(@run, root: :run, historic: true)
       else
-        render json: @run, serializer: Api::V4::RunSerializer, include: %w[game category runners segments]
+        render json: Api::V4::RunBlueprint.render(@run, root: :run)
       end
     else
       rendered_run = render_run_to_string(timer)
@@ -116,14 +114,13 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     @accept_header = 'application/json' if @accept_header.include?('text/html')
 
     valid_accepts = Run.exportable_programs.map(&:content_type) << 'application/json'
-    unless valid_accepts.include?(@accept_header)
-      render status: :not_acceptable, json: {
-        status: 406,
-        error: "Accept mime type #{@accept_header} not supported",
-        valid_accepts: valid_accepts
-      }
-      return
-    end
+    return if valid_accepts.include?(@accept_header)
+
+    render status: :not_acceptable, json: {
+      status:        406,
+      error:         "Accept mime type #{@accept_header} not supported",
+      valid_accepts: valid_accepts
+    }
   end
 
   def render_run_to_string(timer)

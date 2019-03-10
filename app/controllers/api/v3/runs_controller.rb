@@ -8,20 +8,20 @@ class Api::V3::RunsController < Api::V3::ApplicationController
   end
 
   def show
-    render json: @run, serializer: Api::V3::Detail::RunSerializer, root: :run
+    render json: Api::V3::RunBlueprint.render(@run, root: :run, toplevel: :run)
   end
 
   def create
     filename = SecureRandom.uuid
 
     @run = Run.create(
-      user: current_user,
-      image_url: params[:image_url],
+      user:        current_user,
+      image_url:   params[:image_url],
       s3_filename: filename
     )
 
     $s3_bucket_internal.put_object(
-      key: "splits/#{filename}",
+      key:  "splits/#{filename}",
       body: params.require(:file)
     )
 
@@ -38,7 +38,7 @@ class Api::V3::RunsController < Api::V3::ApplicationController
     }
   rescue ActiveRecord::StatementInvalid, ActiveRecord::RecordInvalid, PG::CharacterNotInRepertoire, ArgumentError
     render status: :bad_request, json: {
-      status: 400,
+      status:  400,
       message: "Invalid run file received. Make sure you're including a 'file' parameter in your request."
     }
   end
@@ -63,17 +63,17 @@ class Api::V3::RunsController < Api::V3::ApplicationController
     @run = Run.includes(:game, :category, :user, :histories, segments: [:histories]).find(params[:id].to_i(36))
   rescue ActiveRecord::RecordNotFound
     render status: :not_found, json: {
-      status: 404,
+      status:  404,
       message: "Run with id '#{params[:id]}' not found."
     }
   end
 
   def verify_ownership!
-    if cannot?(:edit, @run)
-      render status: :unauthorized, json: {
-        status: 401,
-        message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."
-      }
-    end
+    return if can?(:edit, @run)
+
+    render status: :unauthorized, json: {
+      status:  401,
+      message: "Run with id '#{params[:id]}' is not owned by you. You must supply a cookie proving your are the owner of this run in order to disown or delete it."
+    }
   end
 end

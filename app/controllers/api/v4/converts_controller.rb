@@ -8,25 +8,26 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     filename = SecureRandom.uuid
 
     @run = Run.create(
-      user: nil,
+      user:        nil,
       s3_filename: filename
     )
 
     $s3_bucket_internal.put_object(
-      key: "splits/#{filename}",
+      key:  "splits/#{filename}",
       body: params.require(:file)
     )
 
     @run.parse_into_db
     if @run.program.nil?
       render status: :bad_request, json: {
-        status: 400,
+        status:  400,
         message: 'Unable to parse that run.'
       }
       return
     end
 
-    @run.reload
+    # Use a new find by to eager load the segment histories to prevent n+1 queries
+    @run = Run.includes(segments: [:histories]).find(@run.id)
 
     old_extension = Run.program(@run.program).file_extension
 
@@ -41,14 +42,14 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     response.set_header('X-Filename', filename)
 
     new_file = if params[:format] == 'json'
-                 render_to_string(json: @run, serializer: Api::V4::Convert::RunSerializer)
+                 render_to_string(json: Api::V4::RunBlueprint.render_as_hash(@run, view: :convert, root: :run, toplevel: :run, historic: true))
                else
                  render_to_string("runs/exports/#{params[:format]}", layout: false)
                end
     send_data(
       new_file,
       filename: filename,
-      layout: false
+      layout:   false
     )
   end
 
@@ -60,13 +61,13 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
     supported = Run.exportable_programs.map(&:to_sym).map(&:to_s) + ['json']
     unless supported.map(&:to_s).include?(params[:format])
       render status: :bad_request, json: {
-        status: 400,
+        status:  400,
         message: "Convert supports the following output formats: #{supported.to_sentence}."
       }
     end
   rescue ActionController::ParameterMissing
     render status: :bad_request, json: {
-      status: 400,
+      status:  400,
       message: "Missing 'file' or 'format' parameter. Make sure to include both in your request."
     }
   end

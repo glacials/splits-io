@@ -18,15 +18,8 @@ describe Api::V4::ConvertsController do
           expect(body['run']['id']).to be_nil
         end
 
-        it 'has a history field' do
-          expect(body['run']['history']).to_not be_nil
-        end
-
-        it 'has the correct splits' do
-          expect(body['run']['splits'].map { |s| [s['name'], s['duration']] }).to eq [
-            ['Spiral Mountain', 211.23],
-            ["Mumbo's Mountain", 808.2]
-          ]
+        it 'renders a run schema' do
+          expect(subject.body).to match_json_schema(:run)
         end
       end
 

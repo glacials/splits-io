@@ -22,7 +22,10 @@
   "additionalProperties": false,
   "properties": {
     "id": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "srdc_id": {
       "type": [

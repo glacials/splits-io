@@ -7,11 +7,11 @@ class Api::V4::GamesController < Api::V4::ApplicationController
       return
     end
     @games = Game.search(params[:search]).includes(:categories)
-    render json: @games, each_serializer: Api::V4::GameSerializer
+    render json: Api::V4::GameBlueprint.render(@games, root: :games, toplevel: :game)
   end
 
   def show
-    render json: @game, serializer: Api::V4::GameSerializer
+    render json: Api::V4::GameBlueprint.render(@game, root: :game, toplevel: :game)
   end
 
   private

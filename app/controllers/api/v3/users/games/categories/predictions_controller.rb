@@ -8,17 +8,17 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
     most_recent_run = @user.runs.where(category: @category).order(created_at: :desc).last
 
     @prediction.merge!(
-      id: nil,
-      path: nil,
-      name: most_recent_run.to_s,
-      program: most_recent_run.program,
-      image_url: nil,
-      created_at: Time.now,
-      updated_at: Time.now,
-      user: Api::V3::UserSerializer.new(@user, root: false),
-      game: Api::V3::GameSerializer.new(@game, root: false),
-      category: Api::V3::CategorySerializer.new(@category, root: false),
-      time: 0
+      id:         nil,
+      path:       nil,
+      name:       most_recent_run.to_s,
+      program:    most_recent_run.program,
+      image_url:  nil,
+      created_at: Time.now.utc,
+      updated_at: Time.now.utc,
+      user:       Api::V3::UserBlueprint.render_as_hash(@user),
+      game:       Api::V3::GameBlueprint.render_as_hash(@game),
+      category:   Api::V3::CategoryBlueprint.render_as_hash(@category),
+      time:       0
     )
     @prediction[:splits] = most_recent_run.splits.map do |segment|
       {
@@ -43,16 +43,20 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
   end
 
   def set_game
-    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game_id]}) || Game.find(params[:game_id])
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game_id]})
+    @game ||= Game.find(params[:game_id])
   rescue ActiveRecord::RecordNotFound
-    render status: :not_found, json: {status: 404, message: "Game with shortname or id '#{params[:game_id]}' not found."}
+    render status: :not_found, json: {
+      status:  404,
+      message: "Game with shortname or id '#{params[:game_id]}' not found."
+    }
   end
 
   def set_category
     @category = @game.categories.find(params[:category_id])
   rescue ActiveRecord::RecordNotFound
     render status: :not_found, json: {
-      status: 404,
+      status:  404,
       message: "Category with id '#{params[:category_id]}' not found for game '#{params[:game_id]}'."
     }
   end
@@ -60,7 +64,7 @@ class Api::V3::Users::Games::Categories::PredictionsController < Api::V3::Applic
   def set_prediction
     unless @user.runs?(@category)
       render status: :not_found, json: {
-        status: 404,
+        status:  404,
         message: "User with name or id '#{params[:user_id]}' doesn't run category '#{params[:category_id]}' for game '#{params[:game_id]}'."
       }
     end

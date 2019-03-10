@@ -3,7 +3,8 @@ class Api::V4::Runners::CategoriesController < Api::V4::ApplicationController
   before_action :set_categories, only: [:index]
 
   def index
-    paginate json: @categories, each_serializer: Api::V4::CategorySerializer
+    categories = paginate @categories
+    render json: Api::V4::CategoryBlueprint.render(categories, root: :categories)
   end
 
   private

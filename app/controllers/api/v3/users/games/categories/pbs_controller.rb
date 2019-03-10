@@ -5,7 +5,7 @@ class Api::V3::Users::Games::Categories::PbsController < Api::V3::ApplicationCon
   before_action :set_pb, only: [:show]
 
   def show
-    render json: @pb, serializer: Api::V3::Detail::RunSerializer, root: :run
+    render json: Api::V3::RunBlueprint.render(@pb, root: :run)
   end
 
   private
@@ -17,27 +17,31 @@ class Api::V3::Users::Games::Categories::PbsController < Api::V3::ApplicationCon
   end
 
   def set_game
-    @game = Game.find_by(shortname: params[:game_id]) || Game.find(params[:game_id])
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game_id]})
+    @game ||= Game.find(params[:game_id])
   rescue ActiveRecord::RecordNotFound
-    render status: :not_found, json: {status: 404, message: "Game with shortname or id '#{params[:game_id]}' not found."}
+    render status: :not_found, json: {
+      status:  404,
+      message: "Game with shortname or id '#{params[:game_id]}' not found."
+    }
   end
 
   def set_category
     @category = @game.categories.find(params[:category_id])
   rescue ActiveRecord::RecordNotFound
     render status: :not_found, json: {
-      status: 404,
+      status:  404,
       message: "Category with id '#{params[:category_id]}' not found for game '#{params[:game_id]}'."
     }
   end
 
   def set_pb
     @pb = @user.pb_for(@category)
-    if @pb.blank?
-      render status: :not_found, json: {
-        status: 404,
-        message: "User '#{params[:user_id]}' does not run category '#{params[:category_id]}' for game '#{params[:game_id]}'."
-      }
-    end
+    return if @pb.present?
+
+    render status: :not_found, json: {
+      status:  404,
+      message: "User '#{params[:user_id]}' does not run category '#{params[:category_id]}' for game '#{params[:game_id]}'."
+    }
   end
 end
