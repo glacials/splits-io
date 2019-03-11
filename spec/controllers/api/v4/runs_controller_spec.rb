@@ -102,6 +102,7 @@ describe Api::V4::RunsController do
     context 'for an existing run' do
       let(:run) { create(:run, :owned) }
       subject { get :show, params: {run: run.id36} }
+      let(:body) { JSON.parse(subject.body)['run'] }
 
       it 'returns a 200' do
         expect(subject).to have_http_status 200
@@ -109,12 +110,23 @@ describe Api::V4::RunsController do
 
       it 'renders a run schema' do
         expect(subject.body).to match_json_schema(:run)
+      end
+
+      it 'has no history present' do
+        expect(body['histories']).to be_nil
+      end
+
+      it 'has no segment histories present' do
+        body['segments'].each do |segment|
+          expect(segment['histories']).to be_nil
+        end
       end
     end
 
     context 'for an existing run with historic=1' do
       let(:run) { create(:run, :owned, :parsed) }
       subject { get :show, params: {run: run.id36, historic: '1'} }
+      let(:body) { JSON.parse(subject.body)['run'] }
 
       it 'returns a 200' do
         expect(subject).to have_http_status 200
@@ -122,6 +134,16 @@ describe Api::V4::RunsController do
 
       it 'renders a run schema' do
         expect(subject.body).to match_json_schema(:run)
+      end
+
+      it 'has a history present' do
+        expect(body['histories']).not_to be_nil
+      end
+
+      it 'has segment histories present' do
+        body['segments'].each do |segment|
+          expect(segment['histories']).not_to be_nil
+        end
       end
     end
 
