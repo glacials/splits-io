@@ -14,7 +14,6 @@ phases:
       - docker-compose run -e RAILS_ENV=test web rspec
       - docker save splits-io_web | gzip -c > web.tar.gz
       - docker save splits-io_worker | gzip -c > worker.tar.gz
-      - zip dist.zip web.tar worker.tar
   post_build:
     commands:
       - echo Build completed! wixSanic
