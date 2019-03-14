@@ -12,8 +12,9 @@ phases:
       - docker-compose build
       - docker-compose run -e RAILS_ENV=test web rails db:migrate
       - docker-compose run -e RAILS_ENV=test web rspec
-      - docker-compose save splits-io_web | gzip -c > web.tar.gz
-      - docker-compose save splits-io_worker | gzip -c > worker.tar.gz
+      - docker-compose save splits-io_web | web.tar
+      - docker-compose save splits-io_worker | worker.tar
+      - zip dist.zip web.tar worker.tar
   post_build:
     commands:
       - echo Build completed! wixSanic
