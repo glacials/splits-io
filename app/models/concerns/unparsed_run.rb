@@ -14,10 +14,12 @@ module UnparsedRun
         histories.delete_all
 
         parse_result = nil
+        size = 0
         file do |f|
           return false if f.nil?
 
           parse_result = Parser.parse(f.fileno)
+          size = File.size(f)
         end
 
         return false if parse_result.nil?
@@ -40,10 +42,10 @@ module UnparsedRun
         write_segment_histories(splits)
 
         update(
-          parsed_at: Time.now.utc,
-          program: timer_used.to_s,
-          attempts: parse_result[:attempts],
-          srdc_id: srdc_id || parse_result[:metadata][:srdc_id],
+          parsed_at:               Time.now.utc,
+          program:                 timer_used.to_s,
+          attempts:                parse_result[:attempts],
+          srdc_id:                 srdc_id || parse_result[:metadata][:srdc_id],
 
           realtime_duration_ms:    parse_result[:realtime_duration_ms] || 0,
           realtime_sum_of_best_ms: parse_result[:realtime_sum_of_best_ms],
@@ -51,8 +53,9 @@ module UnparsedRun
           gametime_duration_ms:    parse_result[:gametime_duration_ms] || 0,
           gametime_sum_of_best_ms: parse_result[:gametime_sum_of_best_ms],
 
-          total_playtime_ms: parse_result[:total_playtime_ms],
-          default_timing:    default_timing
+          total_playtime_ms:       parse_result[:total_playtime_ms],
+          default_timing:          default_timing,
+          filesize_bytes:          size
         )
 
         HighlightSuggestion.from_run(self)
@@ -144,8 +147,8 @@ module UnparsedRun
           next unless history[:attempt_number].to_i.positive?
 
           histories << SegmentHistory.new(
-            segment_id: ids[i],
-            attempt_number: history[:attempt_number].to_i,
+            segment_id:           ids[i],
+            attempt_number:       history[:attempt_number].to_i,
             realtime_duration_ms: history[:realtime_duration_ms],
             gametime_duration_ms: history[:gametime_duration_ms]
           )

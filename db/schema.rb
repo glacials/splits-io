@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_20_233803) do
+ActiveRecord::Schema.define(version: 2019_03_15_000310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -212,7 +212,6 @@ ActiveRecord::Schema.define(version: 2019_02_20_233803) do
     t.string "program"
     t.string "claim_token"
     t.boolean "archived", default: false, null: false
-    t.string "video_url"
     t.string "srdc_id"
     t.integer "attempts"
     t.string "s3_filename", null: false
@@ -223,6 +222,8 @@ ActiveRecord::Schema.define(version: 2019_02_20_233803) do
     t.bigint "gametime_sum_of_best_ms"
     t.string "default_timing", default: "real", null: false
     t.bigint "total_playtime_ms"
+    t.string "video_url"
+    t.bigint "filesize_bytes", default: 0, null: false
     t.index ["category_id"], name: "index_runs_on_category_id"
     t.index ["s3_filename"], name: "index_runs_on_s3_filename"
     t.index ["user_id"], name: "index_runs_on_user_id"
