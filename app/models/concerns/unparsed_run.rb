@@ -55,7 +55,7 @@ module UnparsedRun
 
           total_playtime_ms:       parse_result[:total_playtime_ms],
           default_timing:          default_timing,
-          filesize:                size
+          filesize_bytes:          size
         )
 
         HighlightSuggestion.from_run(self)

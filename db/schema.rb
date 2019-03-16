@@ -223,7 +223,7 @@ ActiveRecord::Schema.define(version: 2019_03_15_000310) do
     t.string "default_timing", default: "real", null: false
     t.bigint "total_playtime_ms"
     t.string "video_url"
-    t.bigint "filesize", default: 0, null: false
+    t.bigint "filesize_bytes", default: 0, null: false
     t.index ["category_id"], name: "index_runs_on_category_id"
     t.index ["s3_filename"], name: "index_runs_on_s3_filename"
     t.index ["user_id"], name: "index_runs_on_user_id"
