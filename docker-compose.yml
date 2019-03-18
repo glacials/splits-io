@@ -1,6 +1,7 @@
 version: '2'
 services:
   web:
+    image: web
     build:
       context: .
       dockerfile: Dockerfile
@@ -49,6 +50,7 @@ services:
     expose:
       - "4569"
   webpacker:
+    image: webpacker
     build: .
     command: bash -c "yarn install && ruby bin/webpack-dev-server"
     volumes:
@@ -58,6 +60,7 @@ services:
     expose:
       - "3035"
   worker:
+    image: worker
     environment:
       - AWS_REGION=local
       - AWS_ACCESS_KEY_ID=beep
