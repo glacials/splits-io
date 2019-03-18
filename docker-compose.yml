@@ -19,6 +19,17 @@ services:
       - s3:s3.localhost
       - webpacker:webpacker.localhost
     environment:
+      - AWS_REGION=local
+      - AWS_ACCESS_KEY_ID=beep
+      - AWS_SECRET_KEY=boop
+      - ENABLE_ADS=0
+      - NODE_ENV=development
+      - READ_ONLY_MODE=0
+      - REDIS_URL="redis/0"
+      - RAILS_ENV=development
+      - RAILS_ROOT="/app"
+      - S3_BUCKET="splits-io"
+      - SITE_TITLE="Splits I/O (Local)"
       - GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET
       - PATREON_CLIENT_ID
@@ -48,6 +59,17 @@ services:
       - "3035"
   worker:
     environment:
+      - AWS_REGION=local
+      - AWS_ACCESS_KEY_ID=beep
+      - AWS_SECRET_KEY=boop
+      - ENABLE_ADS=0
+      - NODE_ENV=development
+      - READ_ONLY_MODE=0
+      - REDIS_URL="redis/0"
+      - RAILS_ENV=development
+      - RAILS_ROOT="/app"
+      - S3_BUCKET="splits-io"
+      - SITE_TITLE="Splits I/O (Local)"
       - GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET
       - PATREON_CLIENT_ID
