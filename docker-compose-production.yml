@@ -1,6 +1,7 @@
 version: '3'
 services:
   web:
+    image: web
     build:
       context: .
       dockerfile: Dockerfile
@@ -38,6 +39,7 @@ services:
       - TWITCH_CLIENT_ID
       - TWITCH_CLIENT_SECRET
   worker:
+    image: worker
     build:
       context: .
       dockerfile: Dockerfile
