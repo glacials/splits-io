@@ -4,11 +4,15 @@ files:
   - source: /
     destination: /app
 hooks:
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 600
+      runas: root
   ApplicationStart:
-    - location: scripts/start_container.sh
+    - location: scripts/application_start.sh
       timeout: 600
       runas: root
   ApplicationStop:
-    - location: scripts/stop_container.sh
+    - location: scripts/application_stop.sh
       timeout: 60
       runas: root
