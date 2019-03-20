@@ -10,5 +10,5 @@ hooks:
       runas: root
   ApplicationStop:
     - location: scripts/stop_container.sh
-      timeout: 600
+      timeout: 60
       runas: root
