@@ -54,18 +54,12 @@ const buildSegmentGraphs = function(run, chartOptions) {
     meanData.push([segment.name, time])
 
     // Start reset info collection
-    let attemptTotal = segment.histories.length
-    if (attemptTotal <= 0 && finished) {
-      // Add one to the history length if it is 0 and the run is finished because we know there should be at least one
-      // This means we don't have to check for NaN later because we set resetCounter to this value (divide by 0)
-      attemptTotal = 1
+    if (resetCounter - segment.histories.length > 0) {
+      resetData.push([segment.name, (1 - (segment.histories.length / resetCounter)) * 100])
+      resetCounter = segment.histories.length
+    } else {
+      resetData.push([segment.name, 0])
     }
-    let resetPercentage = (1 - (attemptTotal / resetCounter)) * 100
-    if (resetPercentage < 0) {
-      resetPercentage = 0
-    }
-    resetData.push([segment.name, resetPercentage])
-    resetCounter = attemptTotal
   })
 
   Highcharts.chart('segment-graphs', {
