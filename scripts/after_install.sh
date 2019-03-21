@@ -2,3 +2,4 @@
 
 cd /app
 docker load < dist.tar
+rm dist.tar
