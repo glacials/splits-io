@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  force_ssl if: :ssl_configured?
 
   before_action :remove_www
   before_action :set_gon
@@ -28,7 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(_resource_or_scope)
-    request.referrer
+    request.referer
   end
 
   def not_found
@@ -53,10 +52,6 @@ class ApplicationController < ActionController::Base
                else
                  {id: current_user.id, name: current_user.name}
                end
-  end
-
-  def ssl_configured?
-    Rails.application.config.use_ssl && (controller_name != 'health')
   end
 
   def sanitize_pagination_params

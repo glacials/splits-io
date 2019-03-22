@@ -1,4 +1,4 @@
-if SplitsIO::Application.config.read_only
+if Rails.configuration.read_only
   module ActiveRecord::Base
     def readonly?
       true

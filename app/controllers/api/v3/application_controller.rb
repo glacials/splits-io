@@ -3,7 +3,6 @@ class Api::V3::ApplicationController < ActionController::Base
 
   skip_before_action :set_browser_id
   skip_before_action :touch_auth_session
-  before_action :force_ssl, if: :ssl_configured?
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
 
   def options
@@ -16,15 +15,5 @@ class Api::V3::ApplicationController < ActionController::Base
     if write_actions.include?(action_name) || write_methods.include?(request.method)
       render template: 'pages/read_only_mode'
     end
-  end
-
-  private
-
-  def force_ssl
-    render status: :moved_permanently, json: {status: 301, message: 'API v3 hits must be over HTTPS.'} unless request.ssl?
-  end
-
-  def ssl_configured?
-    Rails.application.config.use_ssl
   end
 end

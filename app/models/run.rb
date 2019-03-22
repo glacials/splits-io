@@ -17,15 +17,15 @@ class Run < ApplicationRecord
 
   ALLOWED_PROGRAM_METHODS = %i[to_s to_sym file_extension website content_type].freeze
 
-  belongs_to :user
-  belongs_to :category
+  belongs_to :user, optional: true
+  belongs_to :category, optional: true
   has_one :game, through: :category
   has_many :segments, -> { order(segment_number: :asc) }, dependent: :destroy
   # dependent: :delete_all requires there be no child records that need to be deleted
   # If RunHistory is changed to have child records, change this back to just :destroy
   has_many :histories, class_name: 'RunHistory', dependent: :delete_all
   has_one :highlight_suggestion, dependent: :destroy
-  has_many :likes, class_name: 'RunLike'
+  has_many :likes, class_name: 'RunLike', dependent: :destroy
 
   has_secure_token :claim_token
 
@@ -69,6 +69,7 @@ class Run < ApplicationRecord
 
     def program_from_attribute(func_name, value)
       raise 'not a valid attribute' unless ALLOWED_PROGRAM_METHODS.include?(func_name)
+
       Run.programs.find { |program| program.send(func_name) == value }
     end
 
@@ -124,6 +125,7 @@ class Run < ApplicationRecord
 
   def to_s
     return '(no title)' if game.blank?
+
     game.name + (category.present? ? " #{category.name}" : '')
   end
 
@@ -146,6 +148,7 @@ class Run < ApplicationRecord
 
   def refresh_game
     return if game.blank?
+
     game.sync_with_srdc
     game.sync_with_srl
     category.sync_with_srdc
@@ -155,6 +158,7 @@ class Run < ApplicationRecord
   # speedrun.com. For this to work that user must have their Twitch account tied to both Splits I/O and speedrun.com.
   def discover_runner
     return if user.present?
+
     delay.set_runner_from_srdc
   end
 

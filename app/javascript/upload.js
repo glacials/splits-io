@@ -63,6 +63,10 @@ const uploadAll = function(files) {
 
 document.addEventListener('turbolinks:load', function() {
   // Show dropzone-overlay when a file is dragged onto the page
+  if (document.getElementById('dropzone') === null) {
+    return
+  }
+
   document.getElementById('dropzone').addEventListener('dragenter', function(event) {
     event.preventDefault()
     event.stopPropagation()

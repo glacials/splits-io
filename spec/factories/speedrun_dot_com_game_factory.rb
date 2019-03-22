@@ -1,5 +1,7 @@
 FactoryBot.define do
   factory :speedrun_dot_com_game do
+    game
+
     srdc_id        { SecureRandom.uuid }
     url            { 'https://speedrun.com/sms' }
     default_timing { 'real' }
