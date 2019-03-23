@@ -5,6 +5,7 @@
     "@rails/actioncable": "6.0.0-beta3",
     "@rails/ujs": "6.0.0-beta3",
     "@rails/webpacker": "^4.0.0-rc.7",
+    "async": "^2.6.2",
     "caniuse-lite": "^1.0.30000792",
     "chartkick": "^3.0.2",
     "clipboard": "^1.7.1",
