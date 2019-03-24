@@ -1,10 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.6.0'
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 group :test, :development do
   gem 'pry-rails'
@@ -16,14 +13,14 @@ group :test do
   gem 'json-schema'
   gem 'json-schema-rspec'
   gem 'rails-controller-testing'
-  gem 'rspec-rails', require: false
+  gem 'rspec-rails', require: false, github: 'rspec/rspec-rails', branch: '4-0-dev'
+  %w[rspec rspec-core rspec-expectations rspec-mocks rspec-support].each do |lib|
+    gem lib, github: "rspec/#{lib}", branch: 'master'
+  end
   gem 'simplecov', require: false
 end
 
 group :development, :hot do
-  # debugging
-  gem 'meta_request'
-
   # errors+logging
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -41,6 +38,8 @@ group :development, :hot do
 
   # views
   gem 'rails_real_favicon'
+
+  gem 'listen'
 end
 
 group :production do
@@ -75,7 +74,6 @@ gem 'doorkeeper'
 # db
 gem 'active_record_union'
 gem 'activerecord-import'
-gem 'arel'
 gem 'aws-sdk-rails'
 gem 'aws-sdk-s3'
 gem 'order_as_specified'
@@ -85,7 +83,7 @@ gem 'strong_migrations'
 
 # errors+logging
 gem 'newrelic_rpm'
-gem 'skylight'
+gem 'skylight', '~> 4.0.0.beta2'
 
 # external communication
 gem 'httparty'
@@ -109,9 +107,9 @@ gem 'stackprof'
 
 # server/environment
 gem 'puma'
-gem 'rails', '~> 5.2'
+gem 'rails', '~> 6.0.0.beta3'
 # see https://github.com/faye/websocket-driver-ruby/issues/58#issuecomment-394611125
-gem 'websocket-driver', git: 'https://github.com/faye/websocket-driver-ruby', ref: 'ee39af83d03ae3059c775583e4c4b291641257b8'
+gem 'websocket-driver', github: 'faye/websocket-driver-ruby', ref: 'ee39af83d03ae3059c775583e4c4b291641257b8'
 
 # speediness
 gem 'bootsnap'
@@ -130,6 +128,9 @@ gem 'webpacker', '>= 4.0.x'
 
 # workers/jobs
 gem 'daemons'
-gem 'delayed_job_active_record'
+gem 'delayed_job_active_record', github: 'collectiveidea/delayed_job_active_record', branch: 'rails-6-compatibility'
 gem 'foreman'
 gem 'redis'
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

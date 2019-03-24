@@ -1,4 +1,4 @@
-SplitsIO::Application.configure do
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -28,7 +28,7 @@ SplitsIO::Application.configure do
   config.action_mailer.default_url_options = {host: 'localhost:3000'}
   config.action_mailer.raise_delivery_errors = false
 
-  config.use_ssl = false
+  config.force_ssl = false
   config.read_only = false
 
   Slim::Engine.set_options(pretty: true)

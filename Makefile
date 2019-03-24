@@ -19,6 +19,7 @@ container ?= web
 
 build:
 	$(docker-compose) run web bundle install
+	$(docker-compose) run web yarn install
 	$(docker-compose) build
 	$(docker-compose) run web rails db:migrate
 	@[ -e tmp/seed ] || make seed
@@ -32,7 +33,7 @@ lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
 
 test:
-	$(docker-compose) run -e RAILS_ENV=test web rspec $(path)
+	$(docker-compose) run -e RAILS_ENV=test web bundle exec rspec $(path)
 
 run: # Run docker-compose up, but work around Ctrl-C sometimes not stopping containers. See https://github.com/docker/compose/issues/3317#issuecomment-416552656
 	bash -c "trap '$(docker-compose) stop' EXIT; $(docker-compose) up"

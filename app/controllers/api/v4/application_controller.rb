@@ -5,7 +5,6 @@ class Api::V4::ApplicationController < ActionController::Base
 
   skip_before_action :set_browser_id
   skip_before_action :touch_auth_session
-  before_action :force_ssl, if: -> { Rails.application.config.use_ssl }
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
 
   def options
@@ -26,17 +25,6 @@ class Api::V4::ApplicationController < ActionController::Base
     links.map do |link|
       "<#{link[:url]}>; rel=\"#{link[:rel]}\""
     end.join(', ')
-  end
-
-  def force_ssl
-    return if request.ssl?
-    secure_uri = URI.parse(request.original_url)
-    secure_uri.scheme = 'https'
-    response.set_header('Location', secure_uri.to_s)
-
-    render status: :moved_permanently, json: {
-      error: 'The Splits I/O API is only accessible over HTTPS.'
-    }
   end
 
   def not_found(collection_name)
