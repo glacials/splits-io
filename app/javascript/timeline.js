@@ -1,4 +1,4 @@
-const hoverToggle = function(event) {
+const hoverToggle = (event) => {
   const segment = event.target.closest('.split')
   if (segment === null) {
     return

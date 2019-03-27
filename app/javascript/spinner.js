@@ -17,12 +17,12 @@ const opts = {
 
 let globalSpinner = null
 
-const createSpinner = function(spinnerOptions = {}) {
+const createSpinner = (spinnerOptions = {}) => {
   const newOptions = Object.assign(opts, spinnerOptions)
   return new Spinner(newOptions)
 }
 
-const showSpinner = function(spinnerOptions = {}) {
+const showSpinner = (spinnerOptions = {}) => {
   if (globalSpinner !== null) {
     globalSpinner.stop()
   }
@@ -36,7 +36,7 @@ const showSpinner = function(spinnerOptions = {}) {
   globalSpinner.spin(document.body)
 }
 
-const hideSpinner = function() {
+const hideSpinner = () => {
   if (globalSpinner === null) {
     return
   }
