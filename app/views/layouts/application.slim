@@ -121,12 +121,12 @@ html
           = yield(:footer)
           .row
             .col-md-6
-              - patreons = User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200')
-              - unless patreons.blank?
+              - patrons = User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200')
+              - unless patrons.blank?
                 a> href=patreon_url
                   span Thanks to our patrons!
                 p
-                  - patreons.each do |user|
+                  - patrons.each do |user|
                     span.mr-1 = user_badge(user)
             .col-md-6
               .float-right style='text-align: right;'

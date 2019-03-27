@@ -11,7 +11,7 @@ document.addEventListener('turbolinks:load', function() {
     $("#dropzone-overlay").fadeTo(125, 0.9)
     $("#droplabel").text("Converting file...")
     window.isUploading = true
-    showSpinner
+    showSpinner()
 
     $.ajax({
       method: "POST",

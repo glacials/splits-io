@@ -31,9 +31,9 @@ const showSpinner = function(spinnerOptions = {}) {
     className: 'spinner',
     zIndex: 2e9
   }, spinnerOptions)
-  const spinner = createSpinner(newOptions)
 
-  spinner.spin(document.body)
+  globalSpinner = createSpinner(newOptions)
+  globalSpinner.spin(document.body)
 }
 
 const hideSpinner = function() {
@@ -42,6 +42,7 @@ const hideSpinner = function() {
   }
 
   globalSpinner.stop()
+  globalSpinner = null
 }
 
 export {createSpinner, showSpinner, hideSpinner}
