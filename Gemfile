@@ -53,7 +53,7 @@ gem 'chartkick'
 gem 'groupdate'
 
 # api
-gem 'api-pagination', '= 4.7'
+gem 'api-pagination'
 gem 'blueprinter'
 gem 'jbuilder'
 gem 'oj'
@@ -123,7 +123,6 @@ gem 'kaminari'
 gem 'purecss-rails', github: 'glacials/purecss-rails'
 gem 'sass-rails', '~> 5.0.7'
 gem 'slim'
-gem 'uglifier'
 gem 'webpacker', '>= 4.0.x'
 
 # workers/jobs

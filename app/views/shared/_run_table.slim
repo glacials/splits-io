@@ -53,7 +53,9 @@
                   .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
                     = icon('fas', 'ellipsis-v')
                   .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
-                    = link_to '<i class="fas fa-eraser"></i> Disown'.html_safe, '#', onclick: "window.disown_run('#{run.id36}');", class: 'dropdown-item text-danger'
-                    = link_to '<i class="fas fa-trash"></i> Delete'.html_safe, '#', onclick: "window.delete_run('#{run.id36}');", class: 'dropdown-item text-danger'
+                    button.dropdown-item.text-danger.run-disown-button data={run: {id: run.id36}}
+                      = icon('fas', 'eraser', 'Disown')
+                    button.dropdown-item.text-danger.run-delete-button data={run: {id: run.id36}}
+                      = icon('fas', 'trash', 'Delete')
   .mx-auto
     = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')

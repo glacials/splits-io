@@ -1,10 +1,12 @@
+import {showSpinner, hideSpinner} from 'spinner.js'
+
 import _ from 'underscore'
 
 const upload = function(file, options) {
   if(file === undefined) {
     document.getElementById('droplabel').textContent = 'That looks like an empty file! :('
     window.isUploading = false
-    window.spinner.stop()
+    hideSpinner()
     return
   }
   options = Object.assign({bulk: false}, options)
@@ -36,7 +38,7 @@ const upload = function(file, options) {
       }
       window.isUploading = false
       document.getElementById('droplabel').innerHTML = `Error: ${error.message}.<br />Try again, or email help@splits.io!<br />`
-      window.spinner.stop()
+      hideSpinner()
     })
   })
 }
@@ -98,7 +100,7 @@ document.addEventListener('turbolinks:load', function() {
 
     document.getElementById('droplabel').textContent = 'Uploading...'
     window.isUploading = true
-    window.showSpinner('#fff')
+    showSpinner()
 
     if (files.length > 1) {
       uploadAll(_.toArray(files))
@@ -126,9 +128,10 @@ document.addEventListener('turbolinks:load', function() {
   const form = document.getElementById('upload')
   if(form === null) {
     return
-}
+  }
+
   form.addEventListener('change', function() {
-    window.showSpinner("#000")
+    showSpinner({color: '#000'})
     window.isUploading = true
     upload(document.getElementById('file').files[0])
   })
