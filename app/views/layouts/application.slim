@@ -9,7 +9,6 @@ html
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
     = javascript_pack_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
-    = javascript_include_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
@@ -122,11 +121,12 @@ html
           = yield(:footer)
           .row
             .col-md-6
-              - if User.joins(:patreon).where('patreon_users.pledge_cents > 0').any?
+              - patrons = User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200')
+              - unless patrons.blank?
                 a> href=patreon_url
                   span Thanks to our patrons!
                 p
-                  - User.joins(:patreon).where('patreon_users.pledge_cents >= 200').each do |user|
+                  - patrons.each do |user|
                     span.mr-1 = user_badge(user)
             .col-md-6
               .float-right style='text-align: right;'

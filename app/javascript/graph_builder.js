@@ -4,7 +4,7 @@ import {buildSegmentGraphs} from "graphs/segment_graphs.js"
 import {build_playtime_graph} from "graphs/playtime_graph.js"
 import {build_reset_graph} from "graphs/reset_graph.js"
 import {chartOptions} from "consts.js"
-import {Spinner} from 'spin.js'
+import {createSpinner} from 'spinner.js'
 import Highcharts from 'highcharts'
 import _ from 'underscore'
 
@@ -16,19 +16,7 @@ document.addEventListener('turbolinks:load', function() {
   const segSpinners = document.getElementsByClassName('segment-spinner')
   const spinners = []
   for (const segSpinner of segSpinners) {
-    const spinner = new Spinner({
-      lines: 3,
-      length: 15,
-      width: 1,
-      radius: 0,
-      corners: 1,
-      rotate: 90,
-      direction: 1,
-      color: '#FFFFFF',
-      speed: 0.5,
-      trail: 30,
-      shadow: false,
-      hwaccel: true,
+    const spinner = createSpinner({
       position: 'relative'
     })
     spinner.spin(segSpinner)

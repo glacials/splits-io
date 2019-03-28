@@ -153,7 +153,7 @@ GEM
       momentjs-rails (~> 2.8)
       sass-rails (~> 5.0)
       selectize-rails (~> 0.6)
-    api-pagination (4.7.0)
+    api-pagination (4.8.2)
     ast (2.4.0)
     authie (3.2.0)
     autoprefixer-rails (9.5.0)
@@ -501,8 +501,6 @@ GEM
     tilt (2.0.9)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.20)
-      execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
@@ -521,7 +519,7 @@ DEPENDENCIES
   active_record_union
   activerecord-import
   administrate
-  api-pagination (= 4.7)
+  api-pagination
   authie
   aws-sdk-rails
   aws-sdk-s3
@@ -592,7 +590,6 @@ DEPENDENCIES
   stackprof
   strong_migrations
   tzinfo-data
-  uglifier
   webpacker (>= 4.0.x)
   websocket-driver!
 

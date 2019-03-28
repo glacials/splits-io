@@ -1,10 +1,13 @@
-document.addEventListener('turbolinks:load', function() {
-  Array.from(document.getElementsByClassName('split')).forEach(function(el) {
-    el.addEventListener('mouseover', function() {
-      document.getElementById(`${el.id.split('-')[0]}-inspect-${el.id.split('-')[2]}`).style.visibility = 'visible'
-    })
-    el.addEventListener('mouseout', function() {
-      document.getElementById(`${el.id.split('-')[0]}-inspect-${el.id.split('-')[2]}`).style.visibility = 'hidden'
-    })
-  })
-})
+const hoverToggle = (event) => {
+  const segment = event.target.closest('.split')
+  if (segment === null) {
+    return
+  }
+
+  const visibility = event.type === 'mouseover' ? 'visible' : 'hidden'
+  const id = segment.id.split('-')
+  document.getElementById(`${id[0]}-inspect-${id[2]}`).style.visibility = visibility
+}
+
+document.addEventListener('mouseover', hoverToggle)
+document.addEventListener('mouseout', hoverToggle)

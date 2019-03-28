@@ -13,7 +13,6 @@ require("turbolinks").start()
 require("channels")
 import "moment"
 import "moment-duration-format"
-import {Spinner} from "spin.js"
 import "clipboard"
 import * as Cookies from "js-cookie"
 
@@ -23,18 +22,19 @@ import Chartkick from "chartkick"
 window.Chartkick = Chartkick
 
 global.moment = moment
-global.Spinner = Spinner
 global.Clipboard = clipboard
 global.Cookies = Cookies
 
 import "../ad_cleanup.js"
+import "../analytics.js"
 import "../convert.js"
 import "../highchart_theme.js"
-import "../gon.js"
 import "../graph_builder.js"
 import "../landing.js"
 import "../like.js"
 import "../run_claim.js"
+import '../run_delete.js'
+import '../run_disown.js'
 import "../run_edit.js"
 import "../run_export.js"
 import "../search.js"
