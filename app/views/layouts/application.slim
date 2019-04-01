@@ -30,8 +30,8 @@ html
       - unless on_landing_page?
         nav.navbar.navbar-expand-md.navbar-dark
           a.navbar-brand href=root_path
-            img.logo src=asset_path('logo.svg') width='20' height='20'
-            .d-none.d-xl-inline = site_title
+            img.logo src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
+            .d-none.d-xl-inline: img.logo src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
           button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
             span.navbar-toggler-icon
           .collapse.navbar-collapse#global-nav

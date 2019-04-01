@@ -29,8 +29,8 @@ services:
       - REDIS_URL="redis/0"
       - RAILS_ENV
       - RAILS_ROOT="/app"
-      - S3_BUCKET="splits-io"
-      - SITE_TITLE="Splits I/O (Local)"
+      - S3_BUCKET=splits-io
+      - SITE_TITLE=Splits I/O (Local)
       - GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET
       - PATREON_CLIENT_ID
@@ -68,11 +68,11 @@ services:
       - ENABLE_ADS=0
       - NODE_ENV=development
       - READ_ONLY_MODE=0
-      - REDIS_URL="redis/0"
+      - REDIS_URL=redis/0
       - RAILS_ENV
-      - RAILS_ROOT="/app"
-      - S3_BUCKET="splits-io"
-      - SITE_TITLE="Splits I/O (Local)"
+      - RAILS_ROOT=/app
+      - S3_BUCKET=splits-io
+      - SITE_TITLE=Splits I/O (Local)
       - GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET
       - PATREON_CLIENT_ID
