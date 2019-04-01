@@ -304,7 +304,8 @@ ActiveRecord::Schema.define(version: 2019_03_16_060411) do
     t.datetime "updated_at", null: false
     t.string "twitch_name"
     t.index ["game_id"], name: "index_speedrun_dot_com_games_on_game_id", unique: true
-    t.index ["shortname"], name: "index_speedrun_dot_com_games_on_shortname"
+    t.index ["shortname"], name: "index_speedrun_dot_com_games_on_shortname", unique: true
+    t.index ["srdc_id"], name: "index_speedrun_dot_com_games_on_srdc_id", unique: true
   end
 
   create_table "speedrun_dot_com_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

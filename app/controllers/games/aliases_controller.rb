@@ -12,22 +12,6 @@ class Games::AliasesController < ApplicationController
       return
     end
 
-    if @game_to_merge.shortname.present? && @game.srdc.try(:shortname).present?
-      redirect_to(
-        edit_game_path(@game),
-        alert: "Error: You're trying to merge two games with SRL links, which probably isn't right."
-      )
-      return
-    end
-
-    if @game_to_merge.shortname.present?
-      redirect_to(
-        edit_game_path(@game),
-        alert: "Error: You can't merge a game with an SRL link into another game. Try merging the other way instead."
-      )
-      return
-    end
-
     @game_to_merge.merge_into!(@game)
     redirect_to edit_game_path(@game), notice: "Done! #{@game_to_merge} is now part of #{@game}."
   end
@@ -45,7 +29,7 @@ class Games::AliasesController < ApplicationController
   end
 
   def set_game
-    @game = Game.find_by(shortname: params[:game])
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) || Game.find_by(id: params[:game])
 
     redirect_to games_path(q: params[:game]) if @game.nil?
   end

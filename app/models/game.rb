@@ -85,6 +85,9 @@ class Game < ApplicationRecord
         equiv ? category.merge_into!(equiv) : category.update(game: game)
       end
 
+      srdc.update(game: game) if srdc.present? && game.srdc.nil?
+      srl.update(game: game) if srl.present? && game.srl.nil?
+
       destroy
     end
   end

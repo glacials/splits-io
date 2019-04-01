@@ -16,7 +16,7 @@ h6
       = image_tag(asset_path('srl.png'))
   - if can?(:edit, @category.game)
     a.btn.btn-outline-light href=edit_game_path(@category.game)
-      = icon('fas', 'edit')
+      => icon('fas', 'edit')
       span Edit
 article data-turbolinks-temporary=true
   .row
