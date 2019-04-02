@@ -17,7 +17,7 @@ class CleanupJobs < ActiveRecord::Migration[6.0]
         RefreshGameJob.perform_later(run.game, run.category)
       when 'Delayed::PerformableMethod'
         # These jobs are highlight suggestions that are deleted
-        job.destory
+        job.destroy
       end
     end
 
