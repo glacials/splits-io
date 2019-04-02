@@ -44,7 +44,9 @@ class HighlightSuggestion < ApplicationRecord
             end
           )
           # 60 days is life of archives for Partners / Twitch Prime members
-          HighlightCleanupJob.set(wait: 60.days).perform_later(highlight_suggestion) if highlight_suggestion.persisted?
+          if highlight_suggestion.persisted?
+            HighlightCleanupJob.set(wait_until: video_start + 60.days).perform_later(highlight_suggestion)
+          end
           return highlight_suggestion
         end
       end

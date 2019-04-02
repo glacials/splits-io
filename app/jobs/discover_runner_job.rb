@@ -8,6 +8,6 @@ class DiscoverRunnerJob < ApplicationJob
     twitch_login = SpeedrunDotCom::User.twitch_login(srdc_runner_id)
     return if twitch_login.blank?
 
-    run.update(user: User.find_by(name: twitch_login))
+    run.update(user: User.joins(:twitch).find_by(twitch_users: {name: twitch_login}))
   end
 end
