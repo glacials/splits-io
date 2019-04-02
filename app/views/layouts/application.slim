@@ -12,6 +12,7 @@ html
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
+    = render partial: 'application/adsense'
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
     = content_for(:head)
