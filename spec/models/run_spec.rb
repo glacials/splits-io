@@ -72,7 +72,7 @@ describe Run, type: :model do
       end
 
       it 'tries to fetch its runner from speedrun.com' do
-        run.set_runner_from_srdc
+        DiscoverRunnerJob.perform_now(run)
       end
     end
   end

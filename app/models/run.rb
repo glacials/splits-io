@@ -143,15 +143,7 @@ class Run < ApplicationRecord
       name: category_string
     )
 
-    delay.refresh_game
-  end
-
-  def refresh_game
-    return if game.blank?
-
-    game.sync_with_srdc
-    game.sync_with_srl
-    category.sync_with_srdc
+    RefreshGameJob.perform_later(game, category) if game.blank?
   end
 
   # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
@@ -159,7 +151,7 @@ class Run < ApplicationRecord
   def discover_runner
     return if user.present?
 
-    delay.set_runner_from_srdc
+    DiscoverRunnerJob.perform_later(self)
   end
 
   def filename(timer: Run.program(self.timer))
@@ -176,7 +168,7 @@ class Run < ApplicationRecord
 
   def publish_age_every(period, cycles)
     cycles.times do |i|
-      RunChannel.delay(run_at: Time.now.utc + (period * (i + 1))).broadcast_time_since_upload(id36)
+      BroadcastUploadJob.set(wait: (period * (i + 1))).perform_later(self)
     end
   end
 end
