@@ -2,7 +2,7 @@ class CleanupJobs < ActiveRecord::Migration[6.0]
   def change
     # Remove all broken destroy jobs
     Delayed::Job.all.each do |job|
-      case j.name
+      case job.name
       when 'HighlightSuggestion.destroy'
         # This job is broken
         job.destroy
