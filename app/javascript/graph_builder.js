@@ -3,6 +3,7 @@ import {build_run_duration_graph} from "graphs/run_duration_graph.js"
 import {buildSegmentGraphs} from "graphs/segment_graphs.js"
 import {build_playtime_graph} from "graphs/playtime_graph.js"
 import {build_reset_graph} from "graphs/reset_graph.js"
+import {buildBoxPlot} from "graphs/box_plot.js"
 import {chartOptions} from "consts.js"
 import {createSpinner} from 'spinner.js'
 import Highcharts from 'highcharts'
@@ -50,6 +51,7 @@ document.addEventListener('turbolinks:load', function() {
         }
       })
       build_run_duration_graph(run.run, chartOptions)
+      buildBoxPlot(run.run, chartOptions)
       buildSegmentGraphs(run.run, chartOptions)
       build_reset_graph(run.run, chartOptions)
       build_playtime_graph(run.run, chartOptions)
