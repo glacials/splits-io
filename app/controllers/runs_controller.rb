@@ -26,7 +26,7 @@ class RunsController < ApplicationController
     @run.reload
 
     # Catch bad runs
-    render :cant_parse, status: 500 if @run.timer.nil?
+    render :cant_parse, status: :internal_server_error if @run.timer.nil?
   end
 
   def index
@@ -37,7 +37,7 @@ class RunsController < ApplicationController
 
   def edit
     if cannot?(:edit, @run)
-      render :forbidden, status: 403
+      render :forbidden, status: :forbidden
       return
     end
 
@@ -50,7 +50,7 @@ class RunsController < ApplicationController
 
   def update
     if cannot?(:edit, @run)
-      render :forbidden, status: 403
+      render :forbidden, status: :forbidden
       return
     end
 
@@ -117,13 +117,14 @@ class RunsController < ApplicationController
       end
     end
   end
+
   def random
     redirect_to Run.random
   end
 
   def destroy
     if cannot?(:destroy, @run)
-      render :forbidden, status: 403
+      render :forbidden, status: :forbidden
       return
     end
 
@@ -142,12 +143,12 @@ class RunsController < ApplicationController
     timing = params[:timing] || @run.default_timing
 
     gon.run = {
-      id: @run.id36,
+      id:             @run.id36,
 
       splits:         @run.collapsed_segments(timing),
       timer:          @run.timer,
       video_url:      @run.video_url,
-      default_timing: @run.default_timing,
+      default_timing: @run.default_timing
     }
 
     gon.run['user'] = if @run.user.nil?
@@ -158,7 +159,7 @@ class RunsController < ApplicationController
 
     gon.scale_to = @run.duration_ms(timing)
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
-    render :not_found, status: 404
+    render :not_found, status: :not_found
   end
 
   def set_example_run
@@ -170,9 +171,10 @@ class RunsController < ApplicationController
 
   def set_comparison
     return if params[:comparison_run].blank?
+
     @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
   rescue ActiveRecord::RecordNotFound
-    render :not_found, status: 404
+    render :not_found, status: :not_found
   end
 
   def first_parse
@@ -223,7 +225,7 @@ class RunsController < ApplicationController
     return if current_user.nil? || current_user.twitch.nil?
     return if current_user.twitch.follows_synced_at > Time.now.utc - 1.day
 
-    current_user.twitch.delay.sync_follows!
+    SyncUserFollowsJob.perform_later(current_user, current_user.twitch)
     current_user.twitch.update(follows_synced_at: Time.now.utc)
   end
 end

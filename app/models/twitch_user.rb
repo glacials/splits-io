@@ -33,27 +33,6 @@ class TwitchUser < ApplicationRecord
     twitch_user
   end
 
-  def sync_follows!
-    ActiveRecord::Base.transaction do
-      current_followed_users = User.joins(:twitch).where(
-        twitch_users: {twitch_id: Twitch::Follows.followed_ids(twitch_id)}
-      )
-
-      # If TwitchUserFollow is changed to have child records or destroy callbacks, change this to destroy_all
-      TwitchUserFollow.where(
-        from_user: user,
-        to_user: (user.twitch_follows - current_followed_users)
-      ).delete_all
-
-      TwitchUserFollow.import!((current_followed_users - user.twitch_follows).map do |u|
-        TwitchUserFollow.new(from_user: user, to_user: u)
-      end)
-    end
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
-    update(follows_synced_at: Time.new(1970))
-    raise e
-  end
-
   def self.default_avatar
     'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
   end

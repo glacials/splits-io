@@ -10,6 +10,8 @@ class HighlightSuggestion < ApplicationRecord
     def from_run(run)
       return if run.user.nil? || run.user.twitch.nil?
 
+      return run.highlight_suggestion if run.highlight_suggestion.present?
+
       pb = run.histories.where.not(started_at: nil, ended_at: nil).find_by(
         realtime_duration_ms: run.duration_ms(Run::REAL),
         gametime_duration_ms: run.duration_ms(Run::GAME)
@@ -42,7 +44,9 @@ class HighlightSuggestion < ApplicationRecord
             end
           )
           # 60 days is life of archives for Partners / Twitch Prime members
-          highlight_suggestion.delay(run_at: video_start + 60.days).destroy if highlight_suggestion.persisted?
+          if highlight_suggestion.persisted?
+            HighlightCleanupJob.set(wait_until: video_start + 60.days).perform_later(highlight_suggestion)
+          end
           return highlight_suggestion
         end
       end
