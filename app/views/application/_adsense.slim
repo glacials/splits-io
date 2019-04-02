@@ -1,6 +1,7 @@
-script async=true src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
-javascript:
-  (adsbygoogle = window.adsbygoogle || []).push({
-    google_ad_client: "ca-pub-8661670367253675",
-    enable_page_level_ads: true
-  })
+- if (current_user.nil? || current_user.should_see_ads?) && (ENV['ENABLE_ADS'] == '1') && !on_landing_page?
+  script async=true src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+  javascript:
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-8661670367253675",
+      enable_page_level_ads: true
+    })
