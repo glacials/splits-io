@@ -1,20 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Run>
+<Run version="1.7.0">
   <GameIcon />
   <GameName><%= @run.game %></GameName>
   <CategoryName><%= @run.category %></CategoryName>
+  <Metadata>
+    <Run id="" />
+    <Platform usesEmulator="False">
+    </Platform>
+    <Region>
+    </Region>
+    <Variables />
+  </Metadata>
   <Offset><%= Time.at(@run.offset || 0).utc.strftime("%H:%M:%S").strip %></Offset>
   <AttemptCount><%= @run.attempts || 0 %></AttemptCount>
-  <RunHistory />
+  <AttemptHistory />
   <Segments>
   <% @run.segments.each do |segment| %>
     <Segment>
-      <Icon />
       <Name><%= segment.name %></Name>
-      <PersonalBestSplitTime><%= Time.at((segment.end_ms(Run::REAL) || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></PersonalBestSplitTime>
-      <BestSegmentTime><%= Time.at((segment.shortest_duration_ms(Run::REAL) || 0) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></BestSegmentTime>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <% if segment.end_ms(Run::REAL).present? %>
+            <RealTime><%= Time.at(segment.end_ms(Run::REAL) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></RealTime>
+          <% end %>
+          <% if segment.end_ms(Run::GAME).present? %>
+            <GameTime><%= Time.at(segment.end_ms(Run::GAME) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></GameTime>
+          <% end %>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <% if segment.shortest_duration_ms(Run::REAL).present? %>
+          <RealTime><%= Time.at(segment.shortest_duration_ms(Run::REAL) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></RealTime>
+        <% end %>
+        <% if segment.shortest_duration_ms(Run::GAME).present? %>
+          <GameTime><%= Time.at(segment.shortest_duration_ms(Run::GAME) / 1000).utc.strftime("%H:%M:%S.%7N").strip %></GameTime>
+        <% end %>
+      </BestSegmentTime>
       <SegmentHistory />
     </Segment>
   <% end %>
   </Segments>
+  <AutoSplitterSettings />
 </Run>
