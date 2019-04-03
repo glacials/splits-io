@@ -1,4 +1,5 @@
 import {logoBlue} from '../colors.js'
+import {quantile} from '../stats.js'
 import Highcharts from 'highcharts'
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
@@ -10,21 +11,6 @@ const buildBoxPlot = (run, chartOptions = {}) => {
 
   const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
   const duration = `${timing}time_duration_ms`
-
-  const asc = arr => arr.sort((a, b) => a - b)
-  const sum = arr => arr.reduce((a, b) => a + b, 0)
-  const mean = arr => sum(arr) / arr.length
-  const quantile = (arr, q) => {
-    const sorted = asc(arr)
-    const pos = ((sorted.length) - 1) * q
-    const base = Math.floor(pos)
-    const rest = pos - base
-    if ((sorted[base + 1] !== undefined)) {
-      return sorted[base] + rest * (sorted[base + 1] - sorted[base])
-    } else {
-      return sorted[base]
-    }
-  }
 
   Highcharts.chart('box-plot', {
     exporting: {
@@ -51,6 +37,7 @@ const buildBoxPlot = (run, chartOptions = {}) => {
       zoomType: 'y'
     },
     colors: [logoBlue],
+    subtitle: {text: 'Excludes Outliers'},
     legend: {enabled: false},
     plotOptions: {
       boxplot: {
@@ -60,17 +47,22 @@ const buildBoxPlot = (run, chartOptions = {}) => {
       }
     },
     series: [{
-      name: 'Segments',
       data: run.segments.map(segment => {
         const histories = segment.histories.map(attempt => attempt[duration]).filter(duration => duration > 0)
+        const q1 = quantile(histories, .25)
+        const q3 = quantile(histories, .75)
+        const iqr = q3 - q1 // interquartile range, used for finding outliers (below)
+        const historiesSansOutliers = histories.filter(duration => duration >= (q1 - 1.5*iqr) && duration <= (q3 + 1.5*iqr))
+
         return {
-          low:    Math.min(...histories),
-          q1:     quantile(histories, .25),
-          median: quantile(histories, .5),
-          q3:     quantile(histories, .75),
-          high:   Math.max(...histories)
+          low:    Math.min(...historiesSansOutliers),
+          q1:     q1,
+          median: quantile(historiesSansOutliers, .5),
+          q3:     q3,
+          high:   Math.max(...historiesSansOutliers)
         }
       }),
+      name: 'Segments',
       tooltip: {
         pointFormatter: function() {
           return `Worst: ${moment.duration(this.high).format('H:mm:ss')}<br/>
