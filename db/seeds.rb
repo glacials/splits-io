@@ -6,4 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+# See https://github.com/rails/rails/issues/35812
+ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapter
+
 Run.create(s3_filename: SecureRandom.uuid)
