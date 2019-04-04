@@ -2,8 +2,8 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const build_reset_graph = function(run, chartOptions = {}) {
-  if (document.getElementById('reset-graph') === null) {
+const buildResetChart = function(run, chartOptions = {}) {
+  if (document.getElementById('reset-chart') === null) {
     return
   }
 
@@ -17,7 +17,7 @@ const build_reset_graph = function(run, chartOptions = {}) {
     }
   })
 
-  Highcharts.chart('reset-graph', {
+  Highcharts.chart('reset-chart', {
     exporting: {
       chartOptions: Object.assign(chartOptions, {
         plotOptions: {
@@ -64,4 +64,4 @@ const build_reset_graph = function(run, chartOptions = {}) {
   })
 }
 
-export {build_reset_graph}
+export {buildResetChart}

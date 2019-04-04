@@ -4,8 +4,8 @@ Exporting(Highcharts)
 
 import 'vendor/highcharts-regression'
 
-const build_playtime_graph = function(run, chartOptions = {}) {
-  if (document.getElementById('playtime-graph') === null) {
+const buildPlaytimeChart = function(run, chartOptions = {}) {
+  if (document.getElementById('playtime-chart') === null) {
     return
   }
 
@@ -39,7 +39,7 @@ const build_playtime_graph = function(run, chartOptions = {}) {
     }
   })
 
-  Highcharts.chart('playtime-graph', {
+  Highcharts.chart('playtime-chart', {
     exporting: {
       chartOptions: Object.assign(chartOptions, {
         plotOptions: {
@@ -97,14 +97,6 @@ const build_playtime_graph = function(run, chartOptions = {}) {
         }
       }
     },
-    xAxis: {
-      title: {text: 'Life Playtime'},
-      labels: {formatter: function() { return `${Math.trunc(moment.duration(this.value).asHours())} h` }}
-    },
-    yAxis: {
-      title: {text: 'PBs'},
-      labels: {formatter: function() { return moment.duration(this.value).format('H:mm:ss') }}
-    },
     series: [{
       name: 'Life playtime at time of PB',
       data: playtimeBetweenPBs,
@@ -116,8 +108,18 @@ const build_playtime_graph = function(run, chartOptions = {}) {
         dashStyle: 'dot',
         extrapolate: playtimeBetweenPBs.length
       }
-    }]
+    }],
+    xAxis: {
+      title: {text: 'Life Playtime'},
+      labels: {formatter: function() { return `${Math.trunc(moment.duration(this.value).asHours())} h` }}
+    },
+    yAxis: {
+      gridLineColor: 'rgba(255, 255, 255, 0.2)',
+      labels: {formatter: function() { return moment.duration(this.value).format('H:mm:ss') }},
+      tickColor: 'rgba(255, 255, 255, 0.2)',
+      title: {text: 'PBs'}
+    }
   })
 }
 
-export {build_playtime_graph}
+export {buildPlaytimeChart}

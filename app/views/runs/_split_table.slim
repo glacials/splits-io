@@ -32,10 +32,10 @@
             - if history_times.present?
               - danger = history_times.standard_deviation > history_times.mean / 2
               - if danger
-                .segment-graph-toggler.text-danger.cursor-pointer data-segment=segment.id
+                .segment-duration-chart-toggler.text-danger.cursor-pointer data-segment=segment.id
                   = icon('fas', 'chart-pie')
               - else
-                .segment-graph-toggler.text-primary.cursor-pointer data-segment=segment.id
+                .segment-duration-chart-toggler.text-primary.cursor-pointer data-segment=segment.id
                   = icon('fas', 'chart-pie')
         - if history_times.present?
           tr hidden=true
@@ -141,6 +141,6 @@
                           but their absolute worst fit under this umbrella."
                         ) = icon('fas', 'question-circle')
                     h4.card-subtitle = format_ms(history_times.percentile(99), precise: run.short?(timing))
-                .segment-graph-alert.alert.alert-danger.my-3 hidden=true
+                .segment-duration-chart-alert.alert.alert-danger.my-3 hidden=true
                 .segment-spinner.my-3
-                .segment-graph-holder id="segment-graph-holder-#{segment.id}" data-segment=segment.id
+                .segment-duration-chart id="segment-duration-chart-#{segment.id}" data-segment=segment.id

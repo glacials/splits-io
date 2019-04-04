@@ -32,22 +32,22 @@
   .row
     .col-md-8.card-columns.mx-auto.my-4 style='column-count: 2'
       .card.border-warning
-        #run-duration-graph.card-img-top
+        #run-duration-chart.card-img-top
         .card-body
           h3.card-title.text-warning Track
           p.card-text See your improvements over time, all the way back to your first run.
       .card.border-primary
-        #reset-graph.card-img-top
+        #reset-chart.card-img-top
         .card-body
           h3.card-title.text-primary Diagnose
           p.card-text Find out where you're failing to hone your practice sessions.
       .card.border-success
-        #playtime-graph.card-img-top
+        #playtime-chart.card-img-top
         .card-body
           h3.card-title.text-success Predict
           p.card-text Determine when you'll best your time based on past performance.
       .card.border-warning
-        #segment-graphs.card-img-top
+        #segment-chart.card-img-top
         .card-body
           h3.card-title.text-warning Deep Dive
           p.card-text Look at individual segments' statistics to hyper-focus your practice.
@@ -104,7 +104,7 @@
                   fit under this umbrella."
                 ) = icon('fas', 'question-circle')
               h4.card-subtitle 00:01:34
-          .segment-graph-holder id="segment-graph-holder-example" data={segment: 'example'}
+          .segment-duration-chart id="segment-duration-chart-example" data={segment: 'example'}
         .card-body
           h3.card-title.text-primary Learn
           p.card-text Know when a segment's not as hot as you think it is.

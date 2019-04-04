@@ -31,9 +31,7 @@ const buildBoxPlot = (run, chartOptions = {}) => {
     },
     chart: {
       type: 'boxplot',
-      scrollablePlotArea: {
-        minWidth: 75 * run.segments.length
-      },
+      scrollablePlotArea: {minWidth: 75 * run.segments.length},
       zoomType: 'y'
     },
     colors: [logoBlue],
@@ -79,11 +77,10 @@ const buildBoxPlot = (run, chartOptions = {}) => {
       categories: run.segments.map(segment => segment.name)
     },
     yAxis: {
-      labels: {
-        formatter: function() { return moment.duration(this.value).format('H:mm:ss') }
-      },
-      title: {text: 'Segment Durations'},
-      min: 0
+      gridLineColor: 'rgba(255, 255, 255, 0.2)',
+      labels: {formatter: function() { return moment.duration(this.value).format('H:mm:ss') }},
+      tickColor: 'rgba(255, 255, 255, 0.2)',
+      title: {text: 'Segment Durations'}
     }
   })
 }

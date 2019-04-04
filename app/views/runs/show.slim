@@ -22,35 +22,32 @@
     - if @run.video_url.present? && URI.parse(@run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
         .card.my-3 style='padding-bottom: 56.25%'
           #twitch-player style='position: absolute; top: 0; right: 0; bottom: 0; left: 0'
-    = render partial: 'runs/split_table', locals: {\
-      run: @run, \
-      timing: timing \
-    }
+    = render partial: 'runs/split_table', locals: {run: @run, timing: timing}
   - if @run.completed?(timing) && @run.histories.any?
     .col-md-6
-      #graph-spinner
+      #chart-spinner
         = render partial: 'shared/spinner'
-        h5.text-success.text-center Loading graphs
-      #graph-alert.alert.alert-danger.my-3 hidden=true
-      #graph-holder hidden=true
-        #run-duration-graph.card.my-3
+        h5.text-success.text-center Loading charts
+      #chart-alert.alert.alert-danger.my-3 hidden=true
+      #chart-holder hidden=true
+        #run-duration-chart.card.my-3
         #box-plot.card.my-3
-        #segment-graphs.card.my-3
-        #reset-graph.card.my-3
+        #segment-chart.card.my-3
+        #reset-chart.card.my-3
         - if @run.histories.any?
           - if @run.user.try(:silver_patron?) || @run.user.try(:admin?)
             .my-3
               span => icon('fas', 'lock-open')
               - if @run.belongs_to?(current_user)
-                span Thanks for being a Splits I/O patron! The below graph is unlocked.
+                span Thanks for being a Splits I/O patron! The below chart is unlocked.
               - else
-                span #{@run.user} is a Splits I/O patron, so the below graph can be viewed.
-            #playtime-graph.card.my-3
+                span #{@run.user} is a Splits I/O patron, so the below chart can be viewed.
+            #playtime-chart.card.my-3
           - elsif @run.belongs_to?(current_user)
             .my-3.d-flex.justify-content-between
               span.mr-2
                 a.text-muted> href=patreon_url Become a patron
-                ' to unlock the below graph, which predicts how much more practice you need to achieve specific PBs.
+                ' to unlock the below chart, which predicts how much more practice you need to achieve specific PBs.
                 a.text-muted href=faq_path(anchor: 'programs') LiveSplit only
                 ' .
               span.text-secondary style='white-space: nowrap'
@@ -60,4 +57,4 @@
               #paywall-container
                 /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
                 #paywall.bg-dark
-                #playtime-graph
+                #playtime-chart

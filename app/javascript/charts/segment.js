@@ -3,8 +3,8 @@ import Exporting from 'highcharts/modules/exporting'
 import {logoYellow, logoBlue, logoGreen} from '../colors.js'
 Exporting(Highcharts)
 
-const buildSegmentGraphs = function(run, chartOptions) {
-  if (document.getElementById('segment-graphs') === null) {
+const buildSegmentChart = function(run, chartOptions) {
+  if (document.getElementById('segment-chart') === null) {
     return
   }
 
@@ -62,7 +62,7 @@ const buildSegmentGraphs = function(run, chartOptions) {
     }
   })
 
-  Highcharts.chart('segment-graphs', {
+  Highcharts.chart('segment-chart', {
     exporting: {
       chartOptions: Object.assign(chartOptions, {
         plotOptions: {
@@ -75,6 +75,7 @@ const buildSegmentGraphs = function(run, chartOptions) {
     },
     chart: {
       type: 'column',
+      scrollablePlotArea: {minWidth: 75 * run.segments.length},
       zoomType: 'x'
     },
     title: {text: 'Individual Segment Stats'},
@@ -83,20 +84,6 @@ const buildSegmentGraphs = function(run, chartOptions) {
       shared: true
     },
     legend: {enabled: false},
-    xAxis: {
-      categories: pbData.map(function(seg) { return seg[0] }),
-      crosshair: true
-    },
-    yAxis: [{
-      title: {text: 'Possible Time Save (s)'}
-    }, {
-      title: {text: 'Reset Attempts Per Split (%)'},
-      min: 0,
-      max: 100,
-      opposite: true,
-      tickColor: logoGreen,
-      gridLineColor: logoGreen
-    }],
     series: [{
       name: 'Difference of PB and Gold',
       data: pbData,
@@ -119,8 +106,22 @@ const buildSegmentGraphs = function(run, chartOptions) {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.1f}%</b><br/>'
       },
       yAxis: 1
+    }],
+    xAxis: {
+      categories: pbData.map(function(seg) { return seg[0] }),
+      crosshair: true
+    },
+    yAxis: [{
+      title: {text: 'Possible Time Save (s)'},
+      gridLineColor: 'rgba(255, 255, 255, 0.2)',
+      tickColor: 'rgba(255, 255, 255, 0.2)'
+    }, {
+      title: {text: 'Reset Attempts Per Split (%)'},
+      opposite: true,
+      gridLineColor: 'rgba(255, 255, 255, 0.2)',
+      tickColor: 'rgba(255, 255, 255, 0.2)'
     }]
   })
 }
 
-export {buildSegmentGraphs}
+export {buildSegmentChart}
