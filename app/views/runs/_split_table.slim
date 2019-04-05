@@ -1,4 +1,3 @@
-- all_history_stats = run.segment_history_stats
 .card.shadow.my-3
   .card-header.text-white Segments
   .table-responsive: table.card-body.table.mb-0
@@ -24,10 +23,10 @@
             td.align-right.time.align-middle -
           - else
             td.align-right.align-middle = format_ms(segment.end_ms(timing), precise: run.short?(timing))
-          - history_stats = all_history_stats.find { |h| h.segment_id == segment.id }
+          - history_stats = segment.history_stats(timing)
           td.align-right
             - if history_stats.present?
-              - danger = history_stats.standard_deviation.to_f > history_stats.mean.to_f / 2
+              - danger = history_stats[:standard_deviation].to_f > history_stats[:mean].to_f / 2
               - if danger
                 .segment-duration-chart-toggler.text-danger.cursor-pointer data-segment=segment.id
                   = icon('fas', 'chart-pie')
@@ -51,7 +50,7 @@
                         - else
                           small.tip-right( title="A high standard deviation like this indicates inconsistency!")
                             = icon('fas', 'exclamation-triangle')
-                      h4.card-subtitle = format_ms_casual(history_stats.standard_deviation.to_i, 1)
+                      h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
                   - else
                     .card: .card-body
                       h6.card-title
@@ -66,10 +65,10 @@
                             title="By definition, 68% of #{run.user || 'the runner'}'s attempts are within one
                             standard deviation of the mean, 95% within two, and 99% within three."
                           ) = icon('fas', 'question-circle')
-                      h4.card-subtitle = format_ms_casual(history_stats.standard_deviation.to_i, 1)
+                      h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
                   .card: .card-body
                     h6.card-title Mean
-                    h4.card-subtitle = format_ms(history_stats.mean.to_f, precise: run.short?(timing))
+                    h4.card-subtitle = format_ms(history_stats[:mean].to_f, precise: run.short?(timing))
                   .card: .card-body
                     - if run.belongs_to?(current_user)
                       .float-right.tip-left.text-light(
@@ -95,7 +94,7 @@
                           title="10% of #{run.user || 'the runner'}'s attempts are faster than this time. This number
                           is basically a relaxed best."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_stats.percentile10.to_f, precise: run.short?(timing))
+                    h4.card-subtitle = format_ms(history_stats[:percentiles][10].to_f, precise: run.short?(timing))
                   .card: .card-body
                     h6.card-title
                       ' Median
@@ -109,7 +108,7 @@
                           title="50% of #{run.user || 'the runner'}'s attempts are faster than this time. This is the
                           time they'd expect to get in a marathon or no-reset run."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_stats.median.to_f, precise: run.short?(timing))
+                    h4.card-subtitle = format_ms(history_stats[:median].to_f, precise: run.short?(timing))
                   .card: .card-body
                     h6.card-title
                       ' 90th percentile
@@ -123,7 +122,7 @@
                           title="90% of #{run.user || 'the runner'}'s attempts are faster than this time. You can see
                           this as their worst time excluding fantastic blunders."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_stats.percentile90.to_f, precise: run.short?(timing))
+                    h4.card-subtitle = format_ms(history_stats[:percentiles][90].to_f, precise: run.short?(timing))
                   .card: .card-body
                     h6.card-title
                       ' 99th percentile
@@ -137,7 +136,7 @@
                           title="99% of #{run.user || 'the runner'}'s attempts are faster than this time. All attempts
                           but their absolute worst fit under this umbrella."
                         ) = icon('fas', 'question-circle')
-                    h4.card-subtitle = format_ms(history_stats.percentile99, precise: run.short?(timing))
+                    h4.card-subtitle = format_ms(history_stats[:percentiles][99], precise: run.short?(timing))
                 .segment-duration-chart-alert.alert.alert-danger.my-3 hidden=true
                 .segment-spinner.my-3
                 .segment-duration-chart id="segment-duration-chart-#{segment.id}" data-segment=segment.id

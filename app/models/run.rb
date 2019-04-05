@@ -181,22 +181,28 @@ class Run < ApplicationRecord
 
   # Calculate the various statistical information about each segments history once in the database for the whole run
   # instead of individually for each segment (N queries)
-  # Returns an array of SegmentHistories with the following attributes:
-  # segment_id, standard deviation, mean, median, and the 10th, 90th, 99th percentiles
-  def segment_history_stats
-    SegmentHistory.joins(segment: :run)
-                  .where(segment: {runs: {id: id}})
-                  .where.not(realtime_duration_ms: [0, nil])
-                  .group(:segment_id)
-                  .select('
-                    segment_id,
-                    STDDEV_POP(segment_histories.realtime_duration_ms) AS standard_deviation,
-                    AVG(segment_histories.realtime_duration_ms) AS mean,
-                    PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS median,
-                    PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile10,
-                    PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile90,
-                    PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile99
-                  ')
+  def segment_history_stats(timing)
+    stats = SegmentHistory.joins(segment: :run)
+                          .where(segment: {runs: {id: id}})
+                          .where.not(Run.duration_type(timing) => [0, nil])
+                          .group(:segment_id)
+                          .select(stats_select_query(timing))
+
+    h = {}
+    stats.each do |stat|
+      h[stat.segment_id] = {
+        standard_deviation: stat.standard_deviation,
+        mean:               stat.mean,
+        median:             stat.median,
+        percentiles:        {
+          10 => stat.percentile10,
+          90 => stat.percentile90,
+          99 => stat.percentile99
+        }
+      }
+    end
+
+    h
   end
 
   private
@@ -204,6 +210,31 @@ class Run < ApplicationRecord
   def publish_age_every(period, cycles)
     cycles.times do |i|
       BroadcastUploadJob.set(wait: (period * (i + 1))).perform_later(self)
+    end
+  end
+
+  def stats_select_query(timing)
+    case timing
+    when Run::REAL
+      'segment_id,
+      STDDEV_POP(segment_histories.realtime_duration_ms) AS standard_deviation,
+      AVG(segment_histories.realtime_duration_ms) AS mean,
+      PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS median,
+      PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile10,
+      PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile90,
+      PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile99
+      '.squish
+    when Run::GAME
+      'segment_id,
+      STDDEV_POP(segment_histories.gametime_duration_ms) AS standard_deviation,
+      AVG(segment_histories.gametime_duration_ms) AS mean,
+      PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS median,
+      PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile10,
+      PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile90,
+      PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile99
+      '.squish
+    else
+      raise 'Unsupported timing'
     end
   end
 end
