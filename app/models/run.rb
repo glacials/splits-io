@@ -158,6 +158,21 @@ class Run < ApplicationRecord
     "#{to_param || ("#{game} #{category}")}.#{timer.file_extension}"
   end
 
+  def previous_pb(timing)
+    return if user.nil?
+
+    case timing
+    when Run::REAL
+      user.runs.where(
+        category: category
+      ).where('realtime_duration_ms > ?', duration_ms(timing)).order(realtime_duration_ms: :asc).first
+    when Run::GAME
+      user.runs.where(
+        category: category
+      ).where('gametime_duration_ms > ?', duration_ms(timing)).order(gametime_duration_ms: :asc).first
+    end
+  end
+
   def publish_aging
     publish_age_every(1.minute, 60)
     publish_age_every(1.hour, 24)

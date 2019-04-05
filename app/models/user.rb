@@ -58,10 +58,6 @@ class User < ApplicationRecord
     runs.where(category: category).order(realtime_duration_ms: :asc).first
   end
 
-  def previous_upload_for(category)
-    runs.where(category: category).order(created_at: :desc).second
-  end
-
   def pbs
     runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
         .union_all(runs.by_category(nil))
