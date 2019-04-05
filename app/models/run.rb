@@ -179,6 +179,26 @@ class Run < ApplicationRecord
     publish_age_every(1.day, 30)
   end
 
+  # Calculate the various statistical information about each segments history once in the database for the whole run
+  # instead of individually for each segment (N queries)
+  # Returns an array of SegmentHistories with the following attributes:
+  # segment_id, standard deviation, mean, median, and the 10th, 90th, 99th percentiles
+  def segment_history_stats
+    SegmentHistory.joins(segment: :run)
+                  .where(segment: {runs: {id: id}})
+                  .where.not(realtime_duration_ms: [0, nil])
+                  .group(:segment_id)
+                  .select('
+                    segment_id,
+                    STDDEV_POP(segment_histories.realtime_duration_ms) AS standard_deviation,
+                    AVG(segment_histories.realtime_duration_ms) AS mean,
+                    PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS median,
+                    PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile10,
+                    PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile90,
+                    PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile99
+                  ')
+  end
+
   private
 
   def publish_age_every(period, cycles)
