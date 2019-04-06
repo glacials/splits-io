@@ -147,4 +147,8 @@ class Segment < ApplicationRecord
   def to_s
     name
   end
+
+  def history_stats(timing)
+    run.segment_history_stats(timing)[id]
+  end
 end
