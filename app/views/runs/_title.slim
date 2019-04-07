@@ -20,7 +20,7 @@ h5
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
   .btn-group.m-2 role='group' aria={label: 'Run navigation'}
     .btn-group role='group'
-      = render partial: 'export_button', locals: {run: run, timing: timing}
+      = render partial: 'export_button', locals: {run: run}
     .btn-group role='group'
       - if run.category
         - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)

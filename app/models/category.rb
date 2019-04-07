@@ -86,4 +86,17 @@ class Category < ApplicationRecord
       destroy
     end
   end
+
+  # route returns a run whose route is the most popular in this category, as determined by runs sharing segment names
+  # and order.
+  def route
+    Run.find(
+      Run.select('MIN(runs.id) as id').
+      joins(:segments).
+      where(category: self).
+      group(:segment_number, :name).
+      order('COUNT(*) DESC').
+      first.id
+    )
+  end
 end
