@@ -94,7 +94,7 @@ class Category < ApplicationRecord
       joins(:segments).
       where(category: self).
       group(:segment_number, :name).
-      order('COUNT(*) DESC').
+      order(Arel.sql('COUNT(*) DESC')).
       first
 
     return nil if result.nil?
