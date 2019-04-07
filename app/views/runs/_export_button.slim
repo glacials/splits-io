@@ -1,15 +1,16 @@
 button#export-link.btn.btn-outline-light.dropdown-toggle href='#' role='button' aria={haspopup: true, expanded: false} data={toggle: 'dropdown'}
   => icon('fas', 'download')
-  span Export
+  = local_assigns.fetch(:button_text, 'Export')
 #export-menu.dropdown-menu.bg-dark aria-labelledby='export-link'
-  form.px-4.pt-2: .form-group: .form-check
-    input#route-check.form-check-input type='checkbox' checked=true
-    label#route-check-label.form-check-label for='route-check'
-      ' Route only
-      small.tip(
-        title="When checked, Splits I/O won't include attempt history and gold times in the export.
-        Only applies to Generic Formats and Local Timers. If you're not sure, leave this checked."
-      ) = icon('fas', 'question-circle')
+  form.px-4.pt-2 style=('display: none' if local_assigns.fetch(:force_route_only, false))
+    .form-group: .form-check
+      input#route-check.form-check-input type='checkbox' checked=true
+      label#route-check-label.form-check-label for='route-check'
+        ' Route only
+        small.tip(
+          title="When checked, Splits I/O won't include attempt history and gold times in the export.
+          Only applies to Generic Formats and Local Timers. If you're not sure, leave this checked."
+        ) = icon('fas', 'question-circle')
   h6.dropdown-header.text-success Generic Formats
   a.dropdown-item.can-strip-history.text-light data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
     => icon('fas', 'file-download')

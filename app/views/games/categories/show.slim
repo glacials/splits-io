@@ -10,6 +10,13 @@
   = render partial: 'games/categories/title', locals: {category: @category}
 
 article data-turbolinks-temporary=true
+  - route = @category.route
+  - if @category.route.present?
+    .card.mb-4 style='width: 18rem'
+      .card-body
+        h5.card-title #{@category.name} Route
+        p.card-text Automatically determined based on popularity
+        = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download', force_route_only: true}
   .card
     .card-header
       = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
