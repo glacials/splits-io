@@ -87,16 +87,18 @@ class Category < ApplicationRecord
     end
   end
 
-  # route returns a run whose route is the most popular in this category, as determined by runs sharing segment names
-  # and order.
+  # route returns a run whose route is the most popular in this category, as determined by the number of runs sharing
+  # its segment names and order. Returns nil if no runs exist in this category.
   def route
-    Run.find(
-      Run.select('MIN(runs.id) as id').
+    result = Run.select('MIN(runs.id) as id').
       joins(:segments).
       where(category: self).
       group(:segment_number, :name).
       order('COUNT(*) DESC').
-      first.id
-    )
+      first
+
+    return nil if result.nil?
+
+    Run.find(result.id)
   end
 end
