@@ -111,6 +111,11 @@ html
                             ' We are
                             a> href='https://github.com/glacials/splits-io/issues/396' working
                             ' on adding linkless accounts.
+      article.pt-0#survey-container style='display: none'
+        div.text-right
+          small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
+        a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
+          ' Help us out by taking the 2019 Splits I/O survey!
       header#header = yield(:header)
       article
         .row: .col-lg-12: #alerts data-turbolinks-temporary=true
