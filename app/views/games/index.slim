@@ -2,8 +2,8 @@
 article
   input#search.form-control.mb-4 type='text' placeholder='Search games...'
   .card-columns
-    - all_games = SpeedrunDotComGame.order(name: :asc).select(:game_id, :name, :shortname)
-    - all_games.slice_when { |a, b| a.name[0].downcase != b.name[0].downcase }.each do |games|
+    - all_games = SpeedrunDotComGame.order('ASCII(name) ASC').select(:game_id, :name, :shortname)
+    - all_games.slice_when { |a, b| ('a'..'z').include?(a.name[0]) && a.name[0].downcase != b.name[0].downcase }.each do |games|
       .card.game-section
         .card-header.bg-dark
           = [*('a'..'z'), *('0'..'9')].include?(games[0].name[0].downcase) ? games[0].name[0] : 'Other'
