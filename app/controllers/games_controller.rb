@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game, only: [:show, :edit, :update]
+  before_action :set_games, only: [:index]
   before_action :authorize, only: [:edit, :update]
 
   def index
@@ -35,5 +36,13 @@ class GamesController < ApplicationController
       return
     end
     redirect_to game_path(@game) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
+  end
+
+  def set_games
+    @game_sections = SpeedrunDotComGame.order(name: :asc).slice_when do |a, b|
+      a.name[0].downcase != b.name[0].downcase
+    end.map do |srdc_games|
+      [srdc_games.first.name[0].downcase, srdc_games]
+    end.to_h
   end
 end
