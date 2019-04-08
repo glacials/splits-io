@@ -2,6 +2,9 @@ class GamesController < ApplicationController
   before_action :set_game, only: [:show, :edit, :update]
   before_action :authorize, only: [:edit, :update]
 
+  def index
+  end
+
   def show
     @on_game_page = true
     @category = @game.categories.joins(:runs).group('categories.id').order('count(runs.id) desc').first
