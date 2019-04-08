@@ -3,9 +3,9 @@ article
   .card-columns
     - sections = {}
     - ('a'..'z').each do |character|
-      - sections[character] = Game.joins(:srdc).where('games.name ILIKE :prefix', prefix: "#{character}%")
-    - sections['0-9'] = Game.joins(:srdc).where('games.name ILIKE ANY(ARRAY[?])', ('0'..'9').map { |n| "#{n}%" })
-    - sections['Other'] = Game.joins(:srdc).where('games.name NOT ILIKE ALL(ARRAY[?])', [*('a'..'z'), *('0'..'9')].map { |c| "#{c}%" })
+      - sections[character] = Game.joins(:srdc).where('games.name ILIKE :prefix', prefix: "#{character}%").order(name: :asc)
+    - sections['0-9'] = Game.joins(:srdc).where('games.name ILIKE ANY(ARRAY[?])', ('0'..'9').map { |n| "#{n}%" }).order(name: :asc)
+    - sections['Other'] = Game.joins(:srdc).where('games.name NOT ILIKE ALL(ARRAY[?])', [*('a'..'z'), *('0'..'9')].map { |c| "#{c}%" }).order(name: :asc)
     - sections.each do |label, games|
       .card
         .card-header.bg-dark = label
