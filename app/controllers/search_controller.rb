@@ -3,7 +3,7 @@ class SearchController < ApplicationController
 
   def index
     @results = {}
-    return if @query.blank?
+    redirect_to(games_path) && return if @query.blank?
 
     @results[:games] = Game.search(@query).order(:name).includes(:categories)
     @results[:users] = User.search(@query).includes(:games)

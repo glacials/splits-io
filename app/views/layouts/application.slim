@@ -37,20 +37,26 @@ html
             ul.navbar-nav.mr-auto
               li.nav-item class=('active' if request.path == new_run_path)
                 a.nav-link.px-3 href=new_run_path
-                  span> = icon('fas', 'cloud-upload-alt')
+                  => icon('fas', 'cloud-upload-alt')
                   | Upload
-              li.nav-item class=('active' if request.path == rivalries_path)
-                a.nav-link.px-3 href=rivalries_path
-                  span> = icon('fas', 'weight')
-                  | My Rivals
+              li.nav-item class=('active' if request.path == games_path)
+                a.nav-link.px-3 href=games_path
+                  => icon('fas', 'gamepad')
+                  | Games
+              - if current_user.present?
+                li.nav-item class=('active' if request.path == rivalries_path)
+                  a.nav-link.px-3 href=rivalries_path
+                    => icon('fas', 'weight')
+                    | My Rivals
               - if ENV['READ_ONLY_MODE'] == '1'
                 li.nav-item
                   a.nav-link.px-3 href=read_only_mode_path
                     span.text-warning Read-Only Mode Active
-              li.nav-item class=('active' if request.path == faq_path)
-                a.nav-link.px-3 href=faq_path
-                  span> = icon('fas', 'info-circle')
-                  | FAQ
+              - if current_user.nil?
+                li.nav-item class=('active' if request.path == faq_path)
+                  a.nav-link.px-3 href=faq_path
+                    => icon('fas', 'info-circle')
+                    | FAQ
               = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
                 .input-group
                   = f.text_field(:q, name: :q, class: 'form-control search', value: @query, placeholder: 'Search...')
@@ -70,7 +76,7 @@ html
                     - if current_user.avatar.present?
                       img.mr-2 src=current_user.avatar width=20 height=20
                     - else
-                      span> = icon('fas', 'user')
+                      => icon('fas', 'user')
                     span = current_user
                     span.caret
                   ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
@@ -139,6 +145,10 @@ html
                 span<> &bull;
                 a href=brand_path Brand
                 br
+                a href=faq_path FAQ
+                span<> &bull;
+                a href='https://discord.gg/yGaxX39' Discord
+                span<> &bull;
                 a href='https://twitter.com/splitsio' Twitter
                 span<> &bull;
                 a href='mailto:help@splits.io' Email
