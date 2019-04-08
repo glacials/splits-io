@@ -1,15 +1,15 @@
 - content_for(:title, 'Games')
 article
+  input#search.form-control.mb-4 type='text' placeholder='Search games...'
   .card-columns
-    - sections = {}
-    - ('a'..'z').each do |character|
-      - sections[character] = Game.joins(:srdc).where('games.name ILIKE :prefix', prefix: "#{character}%").order(name: :asc)
-    - sections['0-9'] = Game.joins(:srdc).where('games.name ILIKE ANY(ARRAY[?])', ('0'..'9').map { |n| "#{n}%" }).order(name: :asc)
-    - sections['Other'] = Game.joins(:srdc).where('games.name NOT ILIKE ALL(ARRAY[?])', [*('a'..'z'), *('0'..'9')].map { |c| "#{c}%" }).order(name: :asc)
-    - sections.each do |label, games|
-      .card
-        .card-header.bg-dark = label
+    - all_games = SpeedrunDotComGame.order(name: :asc).select(:game_id, :name, :shortname)
+    - all_games.slice_when { |a, b| a.name[0].downcase != b.name[0].downcase }.each do |games|
+      .card.game-section
+        .card-header.bg-dark
+          = [*('a'..'z'), *('0'..'9')].include?(games[0].name[0].downcase) ? games[0].name[0] : 'Other'
         .list-group.list-group-flush
-          - games.each do |game|
-            a.list-group-item.list-group-item-action.py-1 href=game_path(game)
-              = game
+          - games.each do |srdc_game|
+            a.list-group-item.list-group-item-action.py-1.game(
+              href=game_path(srdc_game.shortname)
+              data={name: srdc_game.name}
+            ) = srdc_game.name

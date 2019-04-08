@@ -86,3 +86,23 @@ document.addEventListener('turbolinks:load', function() {
     }
   })
 })
+
+document.addEventListener('turbolinks:load', () => {
+  document.getElementById('search').addEventListener('input', event => {
+    Array.from(document.getElementsByClassName('game')).forEach(el => {
+      if (el.dataset.name.toLowerCase().search(event.target.value.toLowerCase()) === -1) {
+        el.style.display = 'none'
+      } else {
+        el.style.display = 'block'
+      }
+    })
+    Array.from(document.getElementsByClassName('game-section')).forEach(el => {
+      el.style.display = 'none'
+      el.querySelectorAll('.list-group-item').forEach(child => {
+        if (child.style.display === 'block') {
+          el.style.display = 'inline-block'
+        }
+      })
+    })
+  })
+})
