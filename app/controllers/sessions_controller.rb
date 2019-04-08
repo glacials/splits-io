@@ -1,4 +1,7 @@
 class SessionsController < ApplicationController
+  def in
+  end
+
   def destroy
     auth_session.invalidate!
     redirect_back fallback_location: root_path, notice: 'Signed out. (>-.-)>'

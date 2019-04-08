@@ -48,6 +48,8 @@ Rails.application.routes.draw do
 
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
 
+  get '/auth/splitsio/callback', to: 'sessions#in'
+
   get '/auth/twitch/callback', to: 'twitch_users#in'
   get '/auth/twitch/unlink',   to: 'twitch_users#unlink'
 
