@@ -2,7 +2,7 @@
 article
   input#search.form-control.mb-4 type='text' placeholder='Search games...'
   .card-columns
-    - @game_sections.each do |label, srdc_games|
+    - @games.each do |label, srdc_games|
       .card.game-section
         .card-header.bg-dark = label
         .list-group.list-group-flush

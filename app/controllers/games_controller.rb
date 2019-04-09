@@ -1,7 +1,8 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update]
-  before_action :set_games, only: [:index]
-  before_action :authorize, only: [:edit, :update]
+  before_action :set_game,              only: %i[show edit update]
+  before_action :set_games,             only: %i[index]
+  before_action :redirect_if_not_found, only: %i[show edit update]
+  before_action :authorize,             only: %i[edit update]
 
   def index
   end
@@ -10,7 +11,7 @@ class GamesController < ApplicationController
     @on_game_page = true
     @category = @game.categories.joins(:runs).group('categories.id').order('count(runs.id) desc').first
     if @category.nil?
-      render :not_found, status: 404
+      render :not_found, status: :not_found
       return
     end
     render template: 'games/categories/show'
@@ -29,8 +30,11 @@ class GamesController < ApplicationController
   end
 
   def set_game
-    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) || Game.find_by(id: params[:game])
+    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) ||
+            Game.find_by(id: params[:game])
+  end
 
+  def redirect_if_not_found
     if @game.nil?
       redirect_to games_path(q: params[:game])
       return
@@ -39,10 +43,9 @@ class GamesController < ApplicationController
   end
 
   def set_games
-    @game_sections = SpeedrunDotComGame.order(name: :asc).slice_when do |a, b|
-      a.name[0].downcase != b.name[0].downcase
-    end.map do |srdc_games|
-      [srdc_games.first.name[0].downcase, srdc_games]
-    end.to_h
+    @games = Hash.new([])
+    SpeedrunDotComGame.order('ASCII(name) ASC').each do |game|
+      @games[game.name[0].downcase] += [game]
+    end
   end
 end

@@ -88,6 +88,10 @@ document.addEventListener('turbolinks:load', function() {
 })
 
 document.addEventListener('turbolinks:load', () => {
+  if (document.getElementById('search') === null) {
+    return
+  }
+
   document.getElementById('search').addEventListener('input', event => {
     Array.from(document.getElementsByClassName('game')).forEach(el => {
       if (el.dataset.name.toLowerCase().search(event.target.value.toLowerCase()) === -1) {
