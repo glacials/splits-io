@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def in
+    head :ok
   end
 
   def destroy
