@@ -1,7 +1,6 @@
 class GamesController < ApplicationController
   before_action :set_game,              only: %i[show edit update]
   before_action :set_games,             only: %i[index]
-  before_action :redirect_if_not_found, only: %i[show edit update]
   before_action :authorize,             only: %i[edit update]
 
   def index
@@ -31,21 +30,21 @@ class GamesController < ApplicationController
 
   def set_game
     @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) ||
-            Game.find_by(id: params[:game])
-  end
+            Game.includes(:srdc).find(id: params[:game])
 
-  def redirect_if_not_found
+    redirect_to game_path(@game) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
+  rescue ActiveRecord::RecordNotFound
     if @game.nil?
       redirect_to games_path(q: params[:game])
       return
     end
-    redirect_to game_path(@game) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
   end
 
   def set_games
-    @games = Hash.new([])
+    @games = {}
     SpeedrunDotComGame.order('ASCII(name) ASC').each do |game|
-      @games[game.name[0].downcase] += [game]
+      @games[game.name[0].downcase] = [] if @games[game.name[0].downcase].nil?
+      @games[game.name[0].downcase] << game
     end
   end
 end

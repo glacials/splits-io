@@ -87,26 +87,24 @@ document.addEventListener('turbolinks:load', function() {
   })
 })
 
-document.addEventListener('turbolinks:load', () => {
-  if (document.getElementById('search') === null) {
+document.addEventListener('input', event => {
+  if (event.target.id !== 'search') {
     return
   }
 
-  document.getElementById('search').addEventListener('input', event => {
-    Array.from(document.getElementsByClassName('game')).forEach(el => {
-      if (el.dataset.name.toLowerCase().search(event.target.value.toLowerCase()) === -1) {
-        el.style.display = 'none'
-      } else {
-        el.style.display = 'block'
-      }
-    })
-    Array.from(document.getElementsByClassName('game-section')).forEach(el => {
+  Array.from(document.getElementsByClassName('game')).forEach(el => {
+    if (el.dataset.name.toLowerCase().search(event.target.value.toLowerCase()) === -1) {
       el.style.display = 'none'
-      el.querySelectorAll('.list-group-item').forEach(child => {
-        if (child.style.display === 'block') {
-          el.style.display = 'inline-block'
-        }
-      })
+    } else {
+      el.style.display = 'block'
+    }
+  })
+  Array.from(document.getElementsByClassName('game-section')).forEach(el => {
+    el.style.display = 'none'
+    el.querySelectorAll('.list-group-item').forEach(child => {
+      if (child.style.display === 'block') {
+        el.style.display = 'inline-block'
+      }
     })
   })
 })
