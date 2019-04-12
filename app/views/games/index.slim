@@ -1,0 +1,13 @@
+- content_for(:title, 'Games')
+article
+  input#search.form-control.mb-4 type='text' placeholder='Search games...'
+  .card-columns
+    - @games.each do |label, srdc_games|
+      .card.game-section
+        .card-header.bg-dark = label
+        .list-group.list-group-flush
+          - srdc_games.each do |srdc_game|
+            a.list-group-item.list-group-item-action.py-1.game(
+              href=game_path(srdc_game.shortname)
+              data={name: srdc_game.name}
+            ) = srdc_game.name

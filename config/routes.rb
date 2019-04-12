@@ -80,7 +80,7 @@ Rails.application.routes.draw do
 
   get '/users/:user/pbs/:game/:category(/*trailing_path)', to: 'users/pbs#show', as: :user_pb
 
-  get   '/games',            to: redirect('/search')
+  get   '/games',            to: 'games#index'
   get   '/games(?q=:q)',     to: redirect('/search?q=%{q}')
   get   '/games/:game',      to: 'games#show',  as: :game
   get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
