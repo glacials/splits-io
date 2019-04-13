@@ -1,7 +1,7 @@
 - description ||= nil
 - cols ||= [:runner, :time, :name, :rival, :uploaded]
 / This allows us to blindly check the keys for items instead of wraping in `try`s
-- col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options), {})
+- col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options, {}))
 - runs = order_runs(runs).page(params[:page]).includes(:user, :game)
 - all_runs = user.old_runs_for_page(runs) if col_options[:time].include?(:archived)
 - unless runs.any?
