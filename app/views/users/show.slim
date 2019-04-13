@@ -22,5 +22,6 @@ article
         = render partial: 'shared/run_table', locals: { \
           runs: @user.pbs, \
           cols: %i[archived time name uploaded], \
-          description: 'Personal Bests' \
+          description: 'Personal Bests', \
+          user: @user \
         }.merge(sorting_info)
