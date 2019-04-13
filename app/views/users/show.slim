@@ -12,7 +12,7 @@
       a.btn.btn-twitch.mr-2.tip title='Watch on Twitch' href=@user.twitch.url
         => icon('fab', 'twitch')
     - if @user.srdc.present?
-      a.btn.btn-srdc.mr-2.tip title='Visit on Speedrun.com' href=@user.srdc.url
+      a.btn.btn-srdc.tip title='Visit on Speedrun.com' href=@user.srdc.url
         => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
 
 article
