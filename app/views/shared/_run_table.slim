@@ -1,6 +1,7 @@
 - description ||= nil
 - cols ||= [:runner, :time, :name, :rival, :uploaded]
 - runs = order_runs(runs).page(params[:page]).includes(:user, :game)
+- all_runs = current_user.runs.order(:realtime_duration_ms) if cols.include?(:archived)
 - unless runs.any?
   center
     i No runs matched!
@@ -29,7 +30,17 @@
             - if cols.include?(:runner)
               td.align-right = user_badge(run.user)
             - if cols.include?(:time)
-              td.align-right = run.duration.format
+              td.align-right
+                - if cols.include?(:archived) && run.category_id.present?
+                  - old_runs = all_runs.filter { |r| r.id != run.id && r.category_id == run.category_id }
+                  - if old_runs.length.positive?
+                    span.dropdown-toggle.mr-2 id="#{run.id36}-history-dropdown" data-toggle='dropdown'
+                      = icon('fas', 'history')
+                    span.dropdown-menu.bg-dark aria-labelledby="#{run.id36}-history-dropdown"
+                      h6.dropdown-header Past Times
+                      - old_runs.each do |old_run|
+                        a.dropdown-item.text-light href="#{run_path(old_run)}" = old_run.duration.format
+                = run.duration.format
             - if cols.include?(:name)
               td = link_to run, run_path(run), class: 'run-link'
             - if cols.include?(:rival)

@@ -14,25 +14,13 @@
     - if @user.srdc.present?
       a.btn.btn-srdc.mr-2.tip title='Visit on Speedrun.com' href=@user.srdc.url
         => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-    .btn-group
-      a.btn.tip{
-        class=(params[:archived] ? 'btn-secondary' : 'btn-primary')
-        title="View PB's By #{@user}"
-        href=user_path(@user, request.query_parameters.except(:archived))
-      }
-        => icon('fas', 'tachometer-alt')
-      a.btn.tip{
-        class=(params[:archived] ? 'btn-primary' : 'btn-secondary')
-        title="View All Runs By #{@user}"
-        href=user_path(@user, request.query_parameters.merge(archived: true))
-      }
-        => icon('fas', 'globe-americas')
+
 article
   .row
     .col-lg-12
       .card.shadow
         = render partial: 'shared/run_table', locals: { \
-          runs: params[:archived] ? @user.runs : @user.pbs, \
-          cols: %i[time name uploaded], \
-          description: params[:archived] ? 'All Runs' : 'Personal Bests' \
+          runs: @user.pbs, \
+          cols: %i[archived time name uploaded], \
+          description: 'Personal Bests' \
         }.merge(sorting_info)

@@ -26,7 +26,7 @@
         .card.shadow
           = render partial: 'shared/run_table', locals: { \
             runs: current_user.pbs, \
-            cols: %i[time name uploaded owner_controls rival], \
+            cols: %i[archived time name uploaded owner_controls rival], \
             description: 'My Personal Bests' \
           }.merge(sorting_info)
   - else
