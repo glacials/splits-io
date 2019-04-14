@@ -63,15 +63,11 @@ class User < ApplicationRecord
         .union_all(runs.by_category(nil))
   end
 
-  def non_pbs
-    ids = []
-    categories = []
-    pbs.map do |run|
-      ids << run.id
-      categories << run.category_id
-    end
-
-    runs.where(category_id: categories).where.not(id: ids)
+  # Takes array of category_ids, will limit returned runs to only those from those categories
+  def non_pbs(categories = [])
+    query = runs.where.not(id: pbs).where.not(category_id: nil)
+    query = query.where(category_id: categories) if categories.present?
+    query
   end
 
   def runs?(category)
