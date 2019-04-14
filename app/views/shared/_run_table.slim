@@ -3,7 +3,7 @@
 / This allows us to blindly check the keys for items instead of wraping in `try`s
 - col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options, {}))
 - runs = order_runs(runs).page(params[:page]).includes(:user, :game)
-- all_runs = user.old_runs_for_page(runs) if col_options[:time].include?(:archived)
+- non_pbs_runs = user.non_pbs.group_by(&:category_id) if col_options[:time].include?(:archived)
 - unless runs.any?
   center
     i No runs matched!
@@ -36,9 +36,8 @@
                 / Make sure to not group runs with no category
                 - if col_options[:time].include?(:archived) && run.category_id.present?
                   / Gather only runs with the same category and sort by default timing ascending
-                  - old_runs = all_runs.filter { |r| r.category_id == run.category_id }
-                  - old_runs = old_runs.sort_by(&Run.duration_type(run.default_timing))
-                  - if old_runs.any?
+                  - old_runs = non_pbs_runs[run.category_id].try(:sort_by, &Run.duration_type(run.default_timing))
+                  - if old_runs.present?
                     span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
                       = icon('fas', 'history')
                     span.dropdown-menu.bg-dark aria-labelledby="#{run.id36}-history-dropdown"

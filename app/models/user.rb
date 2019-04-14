@@ -63,6 +63,17 @@ class User < ApplicationRecord
         .union_all(runs.by_category(nil))
   end
 
+  def non_pbs
+    ids = []
+    categories = []
+    pbs.map do |run|
+      ids << run.id
+      categories << run.category_id
+    end
+
+    runs.where(category_id: categories).where.not(id: ids)
+  end
+
   def runs?(category)
     runs.where(category: category).any?
   end
@@ -109,17 +120,5 @@ class User < ApplicationRecord
 
   def likes?(run)
     RunLike.find_by(user: self, run: run)
-  end
-
-  # Retrieve all runs scoped for a paginated page excluding already loaded runs
-  def old_runs_for_page(paged_runs)
-    ids = []
-    categories = []
-    paged_runs.map do |run|
-      ids << run.id
-      categories << run.category_id
-    end
-
-    runs.where(category_id: categories).where.not(id: ids)
   end
 end
