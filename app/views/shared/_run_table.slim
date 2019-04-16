@@ -1,6 +1,9 @@
 - description ||= nil
 - cols ||= [:runner, :time, :name, :rival, :uploaded]
+/ This allows us to blindly check the keys for items instead of wraping in `try`s
+- col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options, {}))
 - runs = order_runs(runs).page(params[:page]).includes(:user, :game)
+- non_pbs_runs = user.non_pbs(runs.map(&:category_id)).group_by(&:category_id) if col_options[:time].include?(:archived)
 - unless runs.any?
   center
     i No runs matched!
@@ -29,7 +32,19 @@
             - if cols.include?(:runner)
               td.align-right = user_badge(run.user)
             - if cols.include?(:time)
-              td.align-right = run.duration.format
+              td.align-right
+                / Make sure to not group runs with no category
+                - if col_options[:time].include?(:archived) && run.category_id.present?
+                  / Gather only runs with the same category and sort by default timing ascending
+                  - old_runs = non_pbs_runs[run.category_id].try(:sort_by, &Run.duration_type(run.default_timing))
+                  - if old_runs.present?
+                    span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
+                      = icon('fas', 'history')
+                    span.dropdown-menu.bg-dark aria-labelledby="#{run.id36}-history-dropdown"
+                      h6.dropdown-header Past Times
+                      - old_runs.each do |old_run|
+                        a.dropdown-item.text-secondary href=run_path(old_run) = old_run.duration.format
+                = run.duration.format
             - if cols.include?(:name)
               td = link_to run, run_path(run), class: 'run-link'
             - if cols.include?(:rival)

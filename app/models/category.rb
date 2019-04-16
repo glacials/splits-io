@@ -90,12 +90,12 @@ class Category < ApplicationRecord
   # route returns a run whose route is the most popular in this category, as determined by the number of runs sharing
   # its segment names and order. Returns nil if no runs exist in this category.
   def route
-    result = Run.select('MIN(runs.id) as id').
-      joins(:segments).
-      where(category: self).
-      group(:segment_number, :name).
-      order(Arel.sql('COUNT(*) DESC')).
-      first
+    result = Run.select('MIN(runs.id) as id')
+                .joins(:segments)
+                .where(category: self)
+                .group(:segment_number, :name)
+                .order(Arel.sql('COUNT(*) DESC'))
+                .first
 
     return nil if result.nil?
 

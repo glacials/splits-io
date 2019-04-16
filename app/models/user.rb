@@ -63,6 +63,14 @@ class User < ApplicationRecord
         .union_all(runs.by_category(nil))
   end
 
+  # Will filter returned runs to only those from the supplied categories if provided
+  # Accepts either an ActiveRecord::Relation of categories or a PORO Array of category ids
+  def non_pbs(categories = [])
+    query = runs.where.not(id: pbs).where.not(category_id: nil)
+    query = query.where(category_id: categories) if categories.present?
+    query
+  end
+
   def runs?(category)
     runs.where(category: category).any?
   end

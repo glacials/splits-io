@@ -27,7 +27,9 @@
           = render partial: 'shared/run_table', locals: { \
             runs: current_user.pbs, \
             cols: %i[time name uploaded owner_controls rival], \
-            description: 'My Personal Bests' \
+            col_options: {time: [:archived]}, \
+            description: 'My Personal Bests', \
+            user: current_user \
           }.merge(sorting_info)
   - else
     article

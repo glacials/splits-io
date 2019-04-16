@@ -14,6 +14,7 @@
     - if @user.srdc.present?
       a.btn.btn-srdc.tip title='Visit on Speedrun.com' href=@user.srdc.url
         => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+
 article
   .row
     .col-lg-12
@@ -21,5 +22,7 @@ article
         = render partial: 'shared/run_table', locals: { \
           runs: @user.pbs, \
           cols: %i[time name uploaded], \
-          description: 'Personal Bests' \
+          col_options: {time: [:archived]}, \
+          description: 'Personal Bests', \
+          user: @user \
         }.merge(sorting_info)
