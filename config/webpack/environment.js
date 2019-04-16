@@ -11,10 +11,7 @@ environment.plugins.prepend(
     $: 'jquery',
     jQuery: 'jquery',
     jquery: 'jquery',
-    Popper: ['popper.js', 'default'],
-    moment: 'moment',
-    underscore: 'underscore',
-    clipboard: 'clipboard'
+    Popper: ['popper.js', 'default']
   })
 )
 

@@ -11,19 +11,15 @@ import "jquery"
 require("@rails/ujs").start()
 require("turbolinks").start()
 require("channels")
-import "moment"
-import "moment-duration-format"
-import "clipboard"
-import * as Cookies from "js-cookie"
+const moment = require('moment')
+const momentDurationFormatSetup = require('moment-duration-format')
+
+momentDurationFormatSetup(moment)
 
 // Using Google charts for now (a script tag in app/views/layouts/admin/application.slim) because Chartkick + Highcharts
 // doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
 import Chartkick from "chartkick"
 window.Chartkick = Chartkick
-
-global.moment = moment
-global.Clipboard = clipboard
-global.Cookies = Cookies
 
 import "../ad_cleanup.js"
 import "../analytics.js"

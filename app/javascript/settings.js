@@ -1,3 +1,5 @@
+const Clipboard = require('clipboard')
+
 document.addEventListener('turbolinks:load', () => {
   clipboard = new Clipboard('.clipboard-btn')
 

@@ -9,7 +9,7 @@ const urlHashToObject = function(hash) {
 
 document.addEventListener('turbolinks:load', () => {
   // Protect dev modes that haven't set up a client yet
-  if (process.env.SPLITSIO_CLIENT_ID === undefined) {
+  if (process.env.SPLITSIO_CLIENT_ID === undefined || gon.user === null) {
     return
   }
 
