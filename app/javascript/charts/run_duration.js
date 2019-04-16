@@ -1,6 +1,6 @@
-import Highcharts from 'highcharts'
-import Exporting from 'highcharts/modules/exporting'
-Exporting(Highcharts)
+const Highcharts = require('highcharts')
+require('highcharts/modules/exporting')(Highcharts)
+const moment = require('moment')
 
 const buildRunDurationChart = function(run, chartOptions) {
   if (document.getElementById('run-duration-chart') === null ) {

@@ -1,5 +1,3 @@
-import Highcharts from 'highcharts'
-
 document.addEventListener('mouseover', event => {
   const segment = event.target.closest('.split')
   if (segment === null) {

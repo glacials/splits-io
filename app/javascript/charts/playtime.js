@@ -1,8 +1,8 @@
-import Highcharts from 'highcharts'
-import Exporting from 'highcharts/modules/exporting'
-Exporting(Highcharts)
+const Highcharts = require('highcharts')
+require('highcharts/modules/exporting')(Highcharts)
+const moment = require('moment')
 
-import 'vendor/highcharts-regression'
+require('highcharts-regression')(Highcharts)
 
 const buildPlaytimeChart = function(run, chartOptions = {}) {
   if (document.getElementById('playtime-chart') === null) {

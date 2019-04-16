@@ -1,8 +1,10 @@
-import {logoBlue} from '../colors.js'
-import {quantile} from '../stats.js'
-import Highcharts from 'highcharts'
+const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
+const moment = require('moment')
+
+import {logoBlue} from '../colors.js'
+import {quantile} from '../stats.js'
 
 const buildBoxPlot = (run, chartOptions = {}) => {
   if (document.getElementById('box-plot') === null) {
