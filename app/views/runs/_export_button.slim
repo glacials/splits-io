@@ -12,23 +12,23 @@ button#export-link.btn.btn-outline-light.dropdown-toggle href='#' role='button' 
           Only applies to Generic Formats and Local Timers. If you're not sure, leave this checked."
         ) = icon('fas', 'question-circle')
   h6.dropdown-header.text-success Generic Formats
-  a.dropdown-item.can-strip-history.text-light data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
+  a.dropdown-item.can-strip-history.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
     => icon('fas', 'file-download')
     = ExchangeFormat
   h6.dropdown-header.text-success Local Timers
   - timer = Run.program(run.timer)
   - (Run.exportable_programs - [ExchangeFormat]).each do |timer|
-    a.dropdown-item.can-strip-history.text-light data={turbolinks: false} href=download_path(run, timer.to_sym)
+    a.dropdown-item.can-strip-history.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
       => icon('fas', 'download')
       = timer
   h6.dropdown-header.text-success Online Timers
-  a.dropdown-item.text-light href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
+  a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
     => icon('fas', 'cloud')
     | LiveSplit One
   h6.dropdown-header.text-success Raw Data
-  a.dropdown-item.text-light href=history_csv_path(run)
+  a.dropdown-item.text-secondary href=history_csv_path(run)
     => icon('fas', 'file-csv')
     | Run History
-  a.dropdown-item.text-light href=segment_history_csv_path(run)
+  a.dropdown-item.text-secondary href=segment_history_csv_path(run)
     => icon('fas', 'file-csv')
     | Segment History
