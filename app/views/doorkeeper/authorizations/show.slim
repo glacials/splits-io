@@ -13,16 +13,6 @@ article
                 .btn.btn-primary.clipboard-btn data-clipboard-target="#code"
                   span#copy = icon("fas", "copy")
                   span#copied style='display: none;' = icon("fas", "check")
-          coffee:
-            clipboard = new Clipboard('.clipboard-btn')
-            clipboard.on('success', (e) ->
-              e.trigger.children[0].style.display = 'none'
-              e.trigger.children[1].style.display = 'inline-block'
-              setTimeout(->
-                e.trigger.children[0].style.display = 'inline-block'
-                e.trigger.children[1].style.display = 'none'
-              , 4000)
-            )
           p
             span> In a production environment, your users won't see this page and will instead be sent to your
             code redirect_uri
