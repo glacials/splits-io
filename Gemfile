@@ -89,9 +89,6 @@ gem 'skylight', '~> 4.0.0.beta2'
 gem 'httparty'
 gem 'rest-client'
 
-# javascript
-gem 'coffee-rails'
-
 # models
 gem 'nilify_blanks'
 
