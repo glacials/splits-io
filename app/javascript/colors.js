@@ -9,4 +9,6 @@ const logoYellow = 'rgba(245, 185, 70, 1)'
 const logoBlue = 'rgba(70, 156, 230, 1)'
 const logoGreen = 'rgba(109, 229, 136, 1)'
 
-export {blue, purple, green, yellow, red, orange, logoYellow, logoBlue, logoGreen}
+const logoColors = [logoYellow, logoBlue, logoGreen]
+
+export {blue, purple, green, yellow, red, orange, logoColors, logoYellow, logoBlue, logoGreen}

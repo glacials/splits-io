@@ -86,7 +86,8 @@ module ApplicationHelper
     {
       'created_at' => :created_at,
       'time'       => :realtime_duration_ms,
-      'user_id'    => :user_id
+      'user_id'    => :user_id,
+      'video_url'  => :video_url
     }[param] || :created_at
   end
 end

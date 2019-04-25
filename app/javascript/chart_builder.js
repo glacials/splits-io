@@ -23,10 +23,19 @@ document.addEventListener('turbolinks:load', function() {
     spinner.spin(segSpinner)
     spinners.push(spinner)
   }
+  const runs = []
 
-  fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
+  runs.push(fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
     headers: {accept: 'application/json'}
-  }).then(function(response) {
+  }))
+
+  if (gon.compared_run !== undefined) {
+    runs.push(fetch(`/api/v4/runs/${gon.compared_run.id}?historic=1`, {
+      headers: {accept: 'application/json'}
+    }))
+  }
+
+  Promise.all(runs).then(function(responses) {
     spinners.forEach(spinner => {
       spinner.stop()
     })
@@ -34,28 +43,27 @@ document.addEventListener('turbolinks:load', function() {
       segSpinner.hidden = true
     }
 
-    if (response.ok) {
-      return response.json()
+    if (responses.every(response => response.ok)) {
+      return Promise.all(responses.map(response => response.json()))
     }
     throw new Error('Request for run from API failed')
-  }).then(function(body) {
-    const timing = new URLSearchParams(window.location.search).get('timing') || body.run.default_timing
-    const duration = `${timing}time_duration_ms`
+  }).then(function(bodies) {
+    const runs = bodies.map(body => body.run)
+    const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
 
     document.getElementById('chart-spinner').hidden = true
     document.getElementById('chart-holder').hidden = false
-    if (body.run.histories.length !== 0) {
-      const timing = new URLSearchParams(window.location.search).get('timing') || body.run.default_timing
+    if (runs[0].histories.length !== 0) {
       const skipped = `${timing}time_skipped`
 
-      buildRunDurationChart(body.run, chartOptions)
-      buildBoxPlot(body.run, chartOptions)
-      buildSegmentChart(body.run, chartOptions)
-      buildResetChart(body.run, chartOptions)
-      buildPlaytimeChart(body.run, chartOptions)
+      buildRunDurationChart(runs, chartOptions)
+      buildBoxPlot(runs, chartOptions)
+      buildSegmentChart(runs, chartOptions)
+      buildResetChart(runs, chartOptions)
+      buildPlaytimeChart(runs, chartOptions)
 
-      body.run.segments.filter(segment => !segment.skipped).forEach(segment => {
-        buildSegmentDurationChart(timing, segment, chartOptions)
+      runs[0].segments.filter(segment => !segment.skipped).forEach((segment, i) => {
+        buildSegmentDurationChart(timing, runs, runs.map(run => run.segments[i]).filter(segment => segment !== undefined), chartOptions)
       })
     }
   }).catch(function(error) {

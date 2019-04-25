@@ -1,7 +1,7 @@
 module RunsHelper
   include ActionView::Helpers::DateHelper
 
-  TIMELINE_COLORS = %i[blue purple green yellow red orange].freeze
+  TIMELINE_CLASSES = %w[blue purple green yellow red orange].freeze
 
   def difference(run_a, run_b)
     return 0 if run_a.nil? || run_b.nil?
@@ -43,16 +43,16 @@ module RunsHelper
     link_to(name, "?#{p}")
   end
 
-  def next_timeline_color(timeline_id)
+  def next_timeline_color(timeline_id, alt: false)
     @next_index = {} if @next_index.blank?
 
-    @next_index[timeline_id] = if @next_index[timeline_id].blank?
-                                 0
-                               else
-                                 (@next_index[timeline_id] + 1) % TIMELINE_COLORS.length
-                               end
+    if @next_index[timeline_id].blank?
+      @next_index[timeline_id] = 0
+    else
+      @next_index[timeline_id] = (@next_index[timeline_id] + 1) % TIMELINE_CLASSES.length
+    end
 
-    TIMELINE_COLORS[@next_index[timeline_id]]
+    TIMELINE_CLASSES[@next_index[timeline_id]]
   end
 
   def pretty_timestamp(timestamp)

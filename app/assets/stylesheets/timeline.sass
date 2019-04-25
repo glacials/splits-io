@@ -77,5 +77,20 @@
 .timeline-background
   background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1), 6px, rgba(0, 0, 0, .1) 6px, rgba(0, 0, 0, .1) 12px)
 
-#timeline-video-caret
+.video-progress-line
+  height: 6em
   margin-left: -0.5em
+  position: absolute
+  z-index: 1000
+
+.video-progress-line::after
+  border: 1px solid #fff
+  content: ''
+  transform: translate(-50%, -50%)
+
+  position: absolute
+  left: 50%
+  top: 50%
+
+  height: 100%
+  width: 100%

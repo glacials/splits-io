@@ -1,0 +1,61 @@
+.btn-group
+  - if run.user.present?
+    button#compare.btn.btn-outline-light.dropdown-toggle(
+      aria={haspopup: true, expanded: false}
+      data={toggle: 'dropdown'}
+      type='button'
+    )
+      - if compared_run.present?
+        ' vs.
+        b = compared_run.user
+        ' 's
+        = compared_run.duration(timing).format
+      - else
+        ' Compare
+    .dropdown-menu.bg-dark aria={labelledby: 'compare'} style='height: auto; max-height: 400px; overflow-x: hidden'
+        .dropdown-header.text-light = run.user
+        - if run.user.comparable_runs(timing, run).where.not(id: run.id).any?
+          - run.user.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
+            a.dropdown-item.text-secondary href=run_path(run, compare: comparable_run)
+              = comparable_run.duration(timing).format
+              - if comparable_run.video_url.present?
+                span.tip title='Video attached' =< icon('fas', 'video')
+        - else
+          .dropdown-item.disabled.text-secondary: i No past runs found
+        - if current_user.try(:silver_patron?)
+          .dropdown-header.btn.btn-outline-patreon.rounded-0.text-light.tip(
+            style='cursor: default'
+            title='As thanks for being a patron, you can compare to other runners!'
+          )
+            => icon('fab', 'patreon')
+            ' Thanks for being a patron!
+        - else
+          a.dropdown-header.btn.btn-patreon.rounded-0.text-light.tip(
+            href=patreon_url
+            title='Only tier-2+ patrons can compare to other runners. Comparing to your past self is free.'
+          )
+            => icon('fab', 'patreon')
+            ' Below comparisons for patrons only!
+        - recommended_comparison = run.recommended_comparison(timing)
+        .dropdown-header.text-light Recommended
+        - if recommended_comparison.nil?
+          .dropdown-item.disabled.text-secondary No good comparisons right now 🤷
+        - else
+          a.dropdown-item.text-secondary href=run_path(run, compare: recommended_comparison)
+            b> #{recommended_comparison.user.name}'s
+            ' #{recommended_comparison.duration(timing).format}
+            - if recommended_comparison.video_url.present?
+              span.tip title='Video attached' =< icon('fas', 'video')
+        - run.category.runners.where.not(id: run.user.id).limit(100).each do |comparable_runner|
+          .dropdown-header.text-light = comparable_runner
+          - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
+            a.dropdown-item.text-secondary href=run_path(run, compare: comparable_run)
+              = comparable_run.duration(timing).format
+              - if comparable_run.video_url.present?
+                span.tip title='Video attached' =< icon('fas', 'video')
+    - if compared_run.present?
+      .btn-group
+        a.btn.text-light.tip.pr-1 title='Switcharoo!' href=run_path(compared_run, compare: run) = icon('fas', 'exchange-alt')
+        a.btn.text-light.tip.pl-1 title='Remove comparison' href=run_path(run) = icon('fas', 'times')
+  - else
+    button.btn.btn-outline-secondary.tip.disabled title='Cannot compare anonymous runs' style='cursor: default' Compare

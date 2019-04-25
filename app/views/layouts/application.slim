@@ -43,11 +43,6 @@ html
                 a.nav-link.px-3 href=games_path
                   => icon('fas', 'gamepad')
                   | Games
-              - if current_user.present?
-                li.nav-item class=('active' if request.path == rivalries_path)
-                  a.nav-link.px-3 href=rivalries_path
-                    => icon('fas', 'weight')
-                    | My Rivals
               - if ENV['READ_ONLY_MODE'] == '1'
                 li.nav-item
                   a.nav-link.px-3 href=read_only_mode_path

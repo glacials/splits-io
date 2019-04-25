@@ -1,18 +1,19 @@
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
 const moment = require('moment')
+import {logoYellow, logoBlue, logoColors} from '../colors.js'
 
 require('highcharts-regression')(Highcharts)
 
-const buildPlaytimeChart = function(run, chartOptions = {}) {
+const buildPlaytimeChart = function(runs, chartOptions = {}) {
   if (document.getElementById('playtime-chart') === null) {
     return
   }
 
-  const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
+  const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
   const duration = `${timing}time_duration_ms`
 
-  let attemptSort = function(a, b) {
+  const attemptSort = function(a, b) {
     if (a.attempt_number < b.attempt_number) {
       return -1
     }
@@ -22,24 +23,32 @@ const buildPlaytimeChart = function(run, chartOptions = {}) {
     return 0
   }
 
-  let lastPB = null
-  let playtime = 0
-  let playtimeBetweenPBs = []
-  let sortedAttempts = run.histories
-  sortedAttempts.sort(attemptSort)
+  const playtimeBetweenPBs = runs.map(run => {
+    let lastPB = null
+    let playtime = 0
 
-  sortedAttempts.filter(runAttempt => runAttempt[duration] > 0).forEach(function(runAttempt) {
-    if (lastPB === null || runAttempt[duration] < lastPB[duration]) {
-      playtime = run.segments.map(segment => segment.histories).flat().
-        filter(segmentAttempt => segmentAttempt.attempt_number <= runAttempt.attempt_number).
-        map(segmentAttempt => segmentAttempt[duration]).
-        reduce((playtime, segmentAttempt) => playtime + segmentAttempt, 0),
-      playtimeBetweenPBs.push([playtime, runAttempt[duration]])
-      lastPB = runAttempt
-    }
+    return run.histories.sort(attemptSort).filter(runAttempt => runAttempt[duration] > 0).map(runAttempt => {
+      if (lastPB === null || runAttempt[duration] < lastPB[duration]) {
+        lastPB = runAttempt
+        return [
+          run.segments.map(segment => segment.histories).flat().
+          filter(segmentAttempt => segmentAttempt.attempt_number <= runAttempt.attempt_number).
+          map(segmentAttempt => segmentAttempt[duration]).
+          reduce((playtime, segmentAttempt) => playtime + segmentAttempt, 0),
+          runAttempt[duration]
+        ]
+      } else {
+        return null
+      }
+    }).filter(datum => datum != null)
   })
 
   Highcharts.chart('playtime-chart', {
+    colors: logoColors,
+    chart: {
+      type: 'scatter',
+      zoomType: 'x'
+    },
     exporting: {
       chartOptions: Object.assign(chartOptions, {
         plotOptions: {
@@ -56,11 +65,6 @@ const buildPlaytimeChart = function(run, chartOptions = {}) {
       }),
       fallbackToExportServer: false
     },
-    chart: {
-      type: 'scatter',
-      zoomType: 'x'
-    },
-    title: {text: 'Practice Required to PB'},
     plotOptions: {
       series: {connectNulls: true},
       scatter: {
@@ -97,18 +101,19 @@ const buildPlaytimeChart = function(run, chartOptions = {}) {
         }
       }
     },
-    series: [{
-      name: 'Life playtime at time of PB',
+    series: playtimeBetweenPBs.map((playtimeBetweenPBs, i) => ({
+      name: `${runs[i].runners[0].name}'s PBs`,
       data: playtimeBetweenPBs,
       regression: playtimeBetweenPBs.length >= 2,
       regressionSettings: {
-        name: 'Prediction',
+        name: `${runs[i].runners[0].name}'s Projected PBs`,
         type: 'logarithmic',
-        color: 'rgba(250, 200, 50, 1)',
+        color: logoColors[i],
         dashStyle: 'dot',
         extrapolate: playtimeBetweenPBs.length
       }
-    }],
+    })),
+    title: {text: 'Practice Required to PB'},
     xAxis: {
       title: {text: 'Life Playtime'},
       labels: {formatter: function() { return `${Math.trunc(moment.duration(this.value).asHours())} h` }}

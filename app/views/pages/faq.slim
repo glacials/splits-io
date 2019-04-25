@@ -51,13 +51,14 @@ article
         manual support for the following timers:
       .col-md-6
         ul.list-group.mb-4
-          - (Run.programs - [SplitsIO]).each do |program|
+          - (Run.programs - [ExchangeFormat]).each do |program|
             li.list-group-item = program
       p In LiveSplit, you can upload from within the program with a right click -> Share.
       .alert.alert-info
         b> Just so you know:
-        ' Some of Splits I/O's detailed statistics, charts, and other features that rely on historical data only work on
-        ' runs recorded with LiveSplit, as LiveSplit is currently the only timer that collects this data.
+        ' Some of Splits I/O's statistics, charts, and other features that rely on historical data only work on runs
+        ' recorded with LiveSplit or timers that fully support the Splits I/O Exchange Format, as these are the only
+        ' formats that store this data.
     .card-footer
       a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/tree/master/public/schema'
         => icon('fas', 'exchange-alt')

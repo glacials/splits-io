@@ -4,9 +4,8 @@ require 'example'
 require 'speedrundotcom'
 
 class RunsController < ApplicationController
-  before_action :set_run,         only: [:show, :destroy, :compare, :edit, :update]
+  before_action :set_run,         only: [:show, :destroy, :edit, :update]
   before_action :set_example_run, only: [:index], if: -> { current_user.nil? }
-  before_action :set_comparison,  only: [:compare]
 
   before_action :first_parse, only: [:show, :edit, :update], if: -> { @run.parsed_at.nil? }
 
@@ -142,6 +141,16 @@ class RunsController < ApplicationController
     @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
 
+    if params[:compare].present?
+      @compared_run = Run.find36(params[:compare]) if params[:compare].present?
+
+      if (current_user.nil? || !current_user.silver_patron?) && (@run.user.nil? || @run.user != @compared_run.user)
+        redirect_to(run_path(@run), alert: 'Only tier-2+ patrons can compare two different runners.')
+        return
+      end
+    end
+
+
     gon.run = {
       id:             @run.id36,
 
@@ -150,6 +159,11 @@ class RunsController < ApplicationController
       video_url:      @run.video_url,
       default_timing: @run.default_timing
     }
+    if @compared_run.present?
+      gon.compared_run = {
+        id: @compared_run.id36
+      }
+    end
 
     gon.run['user'] = if @run.user.nil?
                         nil
@@ -167,14 +181,6 @@ class RunsController < ApplicationController
     @example_segment = Example::Run.example_segment
 
     gon.run = {id: 'example', default_timing: Run::REAL}
-  end
-
-  def set_comparison
-    return if params[:comparison_run].blank?
-
-    @comparison_run = Run.find_by(id: params[:comparison_run].to_i(36)) || Run.find_by!(nick: params[:comparison_run])
-  rescue ActiveRecord::RecordNotFound
-    render :not_found, status: :not_found
   end
 
   def first_parse

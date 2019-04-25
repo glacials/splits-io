@@ -1,9 +1,13 @@
 - scale_to ||= run.duration_ms(timing)
 - overlap ||= false
 - first, last = run.collapsed_segments(timing).first, run.collapsed_segments(timing).last
-.timeline style="margin-top: .75em;" class=(overlap ? 'absolute' : '')
+.timeline class=(overlap ? 'absolute' : '')
   - run.collapsed_segments(timing).each_with_index do |segment, index|
-    .pure-u.inspect id="#{run.id36}-inspect-#{index}" style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; visibility: hidden;"
+    .pure-u.inspect(
+      class='segment-inspect'
+      data={run_id: run.id36, segment_number: index+1}
+      style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; visibility: hidden;"
+    )
       .bar
         p
       div class="#{"mx-2" if segment == first || segment == last} #{"second-half" if segment.second_half?(timing)}"

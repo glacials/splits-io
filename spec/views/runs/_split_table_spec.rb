@@ -13,13 +13,30 @@ RSpec.describe 'runs/_split_table' do
       render(
         partial: 'runs/split_table',
         locals: {
-          short: run.short?(Run::REAL),
           run: run,
+          compared_run: nil,
+          short: run.short?(Run::REAL),
           timing: Run::REAL
         }
       )
 
       expect(view).to render_template('runs/_split_table')
+    end
+
+    context 'with a comparison run' do
+      it 'renders the split table' do
+        render(
+          partial: 'runs/split_table',
+          locals: {
+            run: run,
+            compared_run: run,
+            short: run.short?(Run::REAL),
+            timing: Run::REAL
+          }
+        )
+
+        expect(view).to render_template('runs/_split_table')
+      end
     end
   end
 
@@ -29,11 +46,28 @@ RSpec.describe 'runs/_split_table' do
         partial: 'runs/split_table',
         locals: {
           run: run,
+          compared_run: nil,
           timing: Run::GAME
         }
       )
 
       expect(view).to render_template('runs/_split_table')
+    end
+
+    context 'with a comparison run' do
+      it 'renders the split table' do
+        render(
+          partial: 'runs/split_table',
+          locals: {
+            run: run,
+            compared_run: run,
+            short: run.short?(Run::GAME),
+            timing: Run::GAME
+          }
+        )
+
+        expect(view).to render_template('runs/_split_table')
+      end
     end
   end
 end

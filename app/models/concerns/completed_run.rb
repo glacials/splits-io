@@ -52,7 +52,9 @@ module CompletedRun
     end
 
     def shortest_segment(timing)
-      realtime_collapsed_segments.min_by do |segment|
+      collapsed_segments(timing).reject do |segment|
+        segment.reduced?(timing)
+      end.min_by do |segment|
         segment.duration_ms(timing)
       end
     end
@@ -99,8 +101,8 @@ module CompletedRun
       duration_ms(timing) == best_run.duration_ms(timing)
     end
 
-    def pb?
-      user && category && self == user.pb_for(category)
+    def pb?(timing)
+      user && category && self == user.pb_for(timing, category)
     end
 
     def time

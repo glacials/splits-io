@@ -241,19 +241,4 @@ describe RunsController do
       end
     end
   end
-
-  describe '#compare' do
-    let(:run) { FactoryBot.create(:run, :parsed) }
-    let(:comparison_run) { FactoryBot.create(:run, :parsed) }
-
-    let(:response) { get(:compare, params: {run: run.id36, comparison_run: comparison_run.id36}) }
-
-    context 'by a logged-in user' do
-      before { allow(controller).to receive(:current_user).and_return(FactoryBot.build(:user)) }
-
-      it 'returns a 200' do
-        expect(response).to have_http_status(200)
-      end
-    end
-  end
 end

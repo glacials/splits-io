@@ -1,23 +1,25 @@
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
 const moment = require('moment')
+import {logoColors} from '../colors.js'
 
-const buildRunDurationChart = function(run, chartOptions) {
+const buildRunDurationChart = function(runs, chartOptions) {
   if (document.getElementById('run-duration-chart') === null ) {
     return
   }
 
-  const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
+  const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
   const duration = `${timing}time_duration_ms`
 
   return Highcharts.chart('run-duration-chart', {
-    exporting: {
-      chartOptions: chartOptions,
-      fallbackToExportServer: false
-    },
     chart: {
       type: 'spline',
       zoomType: 'x'
+    },
+    colors: logoColors,
+    exporting: {
+      chartOptions: chartOptions,
+      fallbackToExportServer: false
     },
     plotOptions: {
       series: {
@@ -28,15 +30,14 @@ const buildRunDurationChart = function(run, chartOptions) {
         marker: {enabled: false}
       }
     },
-    series: [{
-      name: 'Run Time',
+    series: runs.map(run => ({
+      name: (run.runners[0] || {name: '???'}).name,
       data: run.histories.map(attempt => {
         return [attempt.attempt_number, attempt[duration] === 0 ? null : attempt[duration]]
       }).sort((a, b) => a[0] - b[0])
-    }],
+    })),
     title: {text: 'Run Duration over Time'},
     tooltip: {
-      shared: true,
       crosshairs: true,
       pointFormatter: function() {
         const time = moment.duration(this.y).format('H:mm:ss')

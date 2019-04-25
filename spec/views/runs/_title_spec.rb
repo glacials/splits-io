@@ -14,11 +14,27 @@ RSpec.describe 'runs/_title' do
         partial: 'runs/title',
         locals: {
           run: run,
+          compared_run: nil,
           timing: Run::REAL
         }
       )
 
       expect(view).to render_template('runs/_title')
+    end
+
+    context 'with a comparison run' do
+      it 'renders the title template' do
+        render(
+          partial: 'runs/title',
+          locals: {
+            run: run,
+            compared_run: run,
+            timing: Run::REAL
+          }
+        )
+
+        expect(view).to render_template('runs/_title')
+      end
     end
   end
 
@@ -28,11 +44,27 @@ RSpec.describe 'runs/_title' do
         partial: 'runs/title',
         locals: {
           run: run,
+          compared_run: nil,
           timing: Run::GAME
         }
       )
 
       expect(view).to render_template('runs/_title')
+    end
+
+    context 'with a comparison run' do
+      it 'renders the title template' do
+        render(
+          partial: 'runs/title',
+          locals: {
+            run: run,
+            compared_run: run,
+            timing: Run::GAME
+          }
+        )
+
+        expect(view).to render_template('runs/_title')
+      end
     end
   end
 end

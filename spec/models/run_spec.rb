@@ -57,7 +57,7 @@ describe Run, type: :model do
       let(:other_run) { FactoryBot.create(:run, category: category) }
 
       it 'can be compared against' do
-        run.improvements_towards(other_run)
+        run.improvements_towards(Run::REAL, other_run)
       end
     end
   end
