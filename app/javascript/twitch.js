@@ -28,7 +28,7 @@ document.addEventListener('turbolinks:load', function() {
 
     const ticker = document.getElementById(`video-progress-line-${el.dataset.run_id}`)
     async.forever(next => {
-      ticker.style.margin = `0 0 0 ${player.getCurrentTime() / (gon.scale_to / 1000) * 100}%`
+      ticker.style.margin = `0 0 0 ${Math.max(player.getCurrentTime() - 10, 0) / (gon.scale_to / 1000) * 100}%`
       setTimeout(() => next(), 100)
     })
   })

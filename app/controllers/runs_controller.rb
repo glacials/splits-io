@@ -144,7 +144,7 @@ class RunsController < ApplicationController
     if params[:compare].present?
       @compared_run = Run.find36(params[:compare]) if params[:compare].present?
 
-      if (current_user.nil? || !current_user.silver_patron?) && (@run.user.nil? || @run.user != @compared_run.user)
+      if !current_user.try(:silver_patron?) && (@run.user.nil? || @run.user != @compared_run.user)
         redirect_to(run_path(@run), alert: 'Only tier-2+ patrons can compare two different runners.')
         return
       end
@@ -152,7 +152,7 @@ class RunsController < ApplicationController
 
 
     gon.run = {
-      id:             @run.id36,
+      id: @run.id36,
 
       splits:         @run.collapsed_segments(timing),
       timer:          @run.timer,
