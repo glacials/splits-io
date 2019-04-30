@@ -141,16 +141,6 @@ class RunsController < ApplicationController
     @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
 
-    if params[:compare].present?
-      @compared_run = Run.find36(params[:compare]) if params[:compare].present?
-
-      if !current_user.try(:silver_patron?) && (@run.user.nil? || @run.user != @compared_run.user)
-        redirect_to(run_path(@run), alert: 'Only tier-2+ patrons can compare two different runners.')
-        return
-      end
-    end
-
-
     gon.run = {
       id: @run.id36,
 
@@ -159,11 +149,9 @@ class RunsController < ApplicationController
       video_url:      @run.video_url,
       default_timing: @run.default_timing
     }
-    if @compared_run.present?
-      gon.compared_run = {
-        id: @compared_run.id36
-      }
-    end
+
+    @compare_runs = Run.where(id: params[:compare])
+    gon.compare_runs = @compare_runs.map { |run| {id: run.id36} } if @compare_runs.any?
 
     gon.run['user'] = if @run.user.nil?
                         nil

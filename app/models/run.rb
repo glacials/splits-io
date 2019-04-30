@@ -208,14 +208,17 @@ class Run < ApplicationRecord
 
   def recommended_comparison(timing)
     query = Run.where(category: category).where.not(user: nil, category: nil)
-    query = query.where.not(video_url: nil) if video_url.present?
 
     case timing
     when Run::REAL
-      query.where('realtime_duration_ms < ?', duration(timing).to_ms).order(realtime_duration_ms: :desc).first
+      query = query.where('realtime_duration_ms < ?', duration(timing).to_ms)
+      duration_col = :realtime_duration_ms
     when Run::GAME
-      query.where('gametime_duration_ms < ?', duration(timing).to_ms).order(gametime_duration_ms: :desc).first
+      query = query.where('gametime_duration_ms < ?', duration(timing).to_ms)
+      duration_col = :gametime_duration_ms
     end
+
+    query.order(video_url: :asc, duration_col => :desc).first
   end
 
   private

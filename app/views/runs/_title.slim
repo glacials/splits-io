@@ -30,7 +30,7 @@ h5
           a.btn.btn-outline-light href=edit_run_path(run)
             => icon('fas', 'edit')
             ' Edit
-      = render partial: 'compare_button', locals: {timing: timing, run: run, compared_run: compared_run}
+      = render partial: 'compare_button', locals: {timing: timing, run: run, compare_runs: compare_runs}
     - if run.user.nil?
       #claim-nav-link-container.btn-group hidden=true
         - if current_user.present?

@@ -1,5 +1,5 @@
-- scale_to ||= run.duration_ms(timing)
-- if run.collapsed_segments(timing).map { |s| s.duration_ms(timing) }.any?(&:nil?)
+- scale_to ||= run.duration(timing).to_ms
+- if run.collapsed_segments(timing).map { |s| s.duration(timing).to_ms }.any?(&:nil?)
   article
     .alert.alert-warning This run doesn't have game time splits.
 - else
@@ -12,8 +12,8 @@
           id="#{run.id36}-split-#{index}"
           data={start_ms: segment.start(timing).to_ms, run_id: run.id36, segment_number: index+1}
           class=next_timeline_color(run.id36)
-          style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
+          style="width: #{segment.duration(timing) / scale_to * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
         )
           .p-2
             .text-light = segment.name.presence || '-'
-            .text-light-50 = format_ms(segment.duration_ms(timing), precise: run.short?(timing))
+            .text-light-50 = segment.duration(timing).format(precise: run.short?(timing))

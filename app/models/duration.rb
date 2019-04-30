@@ -4,11 +4,11 @@ class Duration
   end
 
   # format accepts a number of milliseconds and returns a time like "HH:MM:SS". If precise is true, it returns a time
-  # like "HH:MM:SS.mmm" instead.
+  # like "HH:MM:SS.cc" instead.
   def format(precise: false)
     return '-' if @ms.nil?
 
-    return Kernel.format('%02d:%02d:%02d.%03d', hours, minutes, seconds, milliseconds) if precise
+    return Kernel.format('%02d:%02d:%02d.%02d', hours, minutes, seconds, milliseconds) if precise
     Kernel.format('%02d:%02d:%02d', hours, minutes, seconds)
   end
 
@@ -34,6 +34,7 @@ class Duration
   end
 
   def ==(duration)
+    return false unless duration.respond_to?(:to_ms)
     to_ms == duration.to_ms
   end
 
@@ -51,6 +52,26 @@ class Duration
 
   def -(duration)
     Duration.new(to_ms - duration.to_ms)
+  end
+
+  def /(duration)
+    # duration can be a number or a Duration
+    ms = (duration == duration.to_i) ? duration : duration.to_ms
+    Duration.new(to_ms.to_f / ms)
+  end
+
+  def *(duration)
+    # duration can be a number or a Duration
+    ms = (duration == duration.to_i) ? duration : duration.to_ms
+    Duration.new(to_ms * ms)
+  end
+
+  def to_i
+    to_ms
+  end
+
+  def to_s
+    to_ms.to_s
   end
 
   def present?
@@ -73,7 +94,8 @@ class Duration
 
   def hours
     # This method and the below ones behave differently when @ms is negative because in integer division and modulo,
-    # operations like 100/60 or 100%60 are widly different from (-100)/60 or (-100)%60.
+    # operations like 100/60 or 100%60 are widly different from (-100)/60 or (-100)%60; i.e. the answers aren't
+    # negatives of each other.
     return -(@ms.abs / 1000 / 60 / 60) if @ms < 0
 
     @ms / 1000 / 60 / 60
