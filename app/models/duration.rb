@@ -50,6 +50,12 @@ class Duration
     to_ms > duration.to_ms
   end
 
+  def <=>(duration)
+    return nil unless duration.respond_to?(:to_ms)
+
+    to_ms <=> duration.to_ms
+  end
+
   def -(duration)
     Duration.new(to_ms - duration.to_ms)
   end

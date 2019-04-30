@@ -2,4 +2,4 @@
 .gold.timeline style="width: #{run.duration(timing) / scale_to * 100.0}%"
   - run.collapsed_segments(timing).each_with_index do |segment, index|
     div style="width: #{segment.duration(timing) / run.duration(timing) * 100.0}%"
-      .gold-split style="width: #{segment.shortest_duration(timing) / segment.duration(timing) * 100.0}%;" class=(segment.gold?(timing) ? :gold : :gray)
+      .gold-split style="width: #{segment.shortest_duration(timing) / segment.duration(timing) * 100.0}%;"

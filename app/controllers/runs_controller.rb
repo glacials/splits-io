@@ -150,7 +150,7 @@ class RunsController < ApplicationController
       default_timing: @run.default_timing
     }
 
-    @compare_runs = Run.where(id: params[:compare])
+    @compare_runs = Run.where(id: (params[:compare] || '').split(',').map { |r| r.to_i(36) })
     gon.compare_runs = @compare_runs.map { |run| {id: run.id36} }
 
     gon.run['user'] = if @run.user.nil?
