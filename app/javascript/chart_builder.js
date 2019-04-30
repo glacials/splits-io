@@ -30,7 +30,7 @@ document.addEventListener('turbolinks:load', function() {
   }))
 
   if (gon.compare_runs !== undefined) {
-    gon.compare_runs.each(run => runs.push(fetch(`/api/v4/runs/${run.id}?historic=1`, {
+    gon.compare_runs.forEach(run => runs.push(fetch(`/api/v4/runs/${run.id}?historic=1`, {
       headers: {accept: 'application/json'}
     })))
   }
