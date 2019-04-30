@@ -21,4 +21,4 @@
             .text-gold Tied best!
           - else
             .text-success
-              | #{(segment.duration(timing) - segment.shortest_duration(timing)).format_casual(1)} potential save
+              | #{(segment.duration(timing) - segment.shortest_duration(timing)).format_casual(num_units: 1)} potential save

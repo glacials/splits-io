@@ -14,7 +14,7 @@ RSpec.describe 'runs/_title' do
         partial: 'runs/title',
         locals: {
           run: run,
-          compared_run: nil,
+          compare_runs: [],
           timing: Run::REAL
         }
       )
@@ -28,7 +28,7 @@ RSpec.describe 'runs/_title' do
           partial: 'runs/title',
           locals: {
             run: run,
-            compared_run: run,
+            compare_runs: [run],
             timing: Run::REAL
           }
         )
@@ -44,7 +44,7 @@ RSpec.describe 'runs/_title' do
         partial: 'runs/title',
         locals: {
           run: run,
-          compared_run: nil,
+          compare_runs: [],
           timing: Run::GAME
         }
       )
@@ -58,7 +58,7 @@ RSpec.describe 'runs/_title' do
           partial: 'runs/title',
           locals: {
             run: run,
-            compared_run: run,
+            compare_runs: [run],
             timing: Run::GAME
           }
         )

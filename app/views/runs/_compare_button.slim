@@ -31,7 +31,7 @@
           ' #{recommended_comparison.duration(timing).format}
           - if recommended_comparison.video_url.present? && URI.parse(recommended_comparison.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
             span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
-      - run.category.runners.where.not(id: run.user.id).limit(100).each do |comparable_runner|
+      - run.category.runners.where.not(id: run.user.try(:id)).limit(100).each do |comparable_runner|
         .dropdown-header.text-light = comparable_runner
         - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
           a.dropdown-item.text-secondary href=run_path(run, compare: comparable_run)

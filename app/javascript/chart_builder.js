@@ -29,10 +29,10 @@ document.addEventListener('turbolinks:load', function() {
     headers: {accept: 'application/json'}
   }))
 
-  if (gon.compared_run !== undefined) {
-    runs.push(fetch(`/api/v4/runs/${gon.compared_run.id}?historic=1`, {
+  if (gon.compare_runs !== undefined) {
+    gon.compare_runs.each(run => runs.push(fetch(`/api/v4/runs/${run.id}?historic=1`, {
       headers: {accept: 'application/json'}
-    }))
+    })))
   }
 
   Promise.all(runs).then(function(responses) {

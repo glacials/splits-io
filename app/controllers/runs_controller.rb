@@ -151,7 +151,7 @@ class RunsController < ApplicationController
     }
 
     @compare_runs = Run.where(id: params[:compare])
-    gon.compare_runs = @compare_runs.map { |run| {id: run.id36} } if @compare_runs.any?
+    gon.compare_runs = @compare_runs.map { |run| {id: run.id36} }
 
     gon.run['user'] = if @run.user.nil?
                         nil

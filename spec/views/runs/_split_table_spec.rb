@@ -14,7 +14,7 @@ RSpec.describe 'runs/_split_table' do
         partial: 'runs/split_table',
         locals: {
           run: run,
-          compared_run: nil,
+          compare_runs: [],
           short: run.short?(Run::REAL),
           timing: Run::REAL
         }
@@ -29,7 +29,7 @@ RSpec.describe 'runs/_split_table' do
           partial: 'runs/split_table',
           locals: {
             run: run,
-            compared_run: run,
+            compare_runs: [run],
             short: run.short?(Run::REAL),
             timing: Run::REAL
           }
@@ -46,7 +46,7 @@ RSpec.describe 'runs/_split_table' do
         partial: 'runs/split_table',
         locals: {
           run: run,
-          compared_run: nil,
+          compare_runs: [],
           timing: Run::GAME
         }
       )
@@ -60,7 +60,7 @@ RSpec.describe 'runs/_split_table' do
           partial: 'runs/split_table',
           locals: {
             run: run,
-            compared_run: run,
+            compare_runs: [run],
             short: run.short?(Run::GAME),
             timing: Run::GAME
           }
