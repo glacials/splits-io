@@ -1,12 +1,12 @@
-# Splits I/O
+# Splits.io
 [![View performance data on Skylight](https://badges.skylight.io/typical/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
 [![View performance data on Skylight](https://badges.skylight.io/problem/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
 [![View performance data on Skylight](https://badges.skylight.io/rpm/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
 
-Splits I/O is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
+Splits.io is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
 code. It's written in Ruby on Rails.
 
-Splits I/O supports uploading splits from any timer that supports the [Splits I/O Exchange Format][exchange] plus many
+Splits.io supports uploading splits from any timer that supports the [Splits.io Exchange Format][exchange] plus many
 proprietary timer formats like LiveSplit, WSplit, Llanfair, and more. A full list of supported timers can be viewed in
 the [FAQ][faq].
 
@@ -19,7 +19,7 @@ For full API documentation, see the [API readme][api-docs].
 [api-docs]: /docs/api.md
 
 ## Local Development
-Splits I/O runs on Docker, which makes it easy and consistent to set up and run on any machine despite any unusual
+Splits.io runs on Docker, which makes it easy and consistent to set up and run on any machine despite any unusual
 dependencies. The one downside is that you must first install Docker!
 
 ### Requirements
@@ -30,7 +30,7 @@ dependencies. The one downside is that you must first install Docker!
 [docker-compose-download]: https://docs.docker.com/compose/install/
 
 ### First Run
-The first time you run Splits I/O with Docker is the best, because you'll have time to get a coffee! Yum! After the
+The first time you run Splits.io with Docker is the best, because you'll have time to get a coffee! Yum! After the
 first run, it will be much quicker.
 ```sh
 make
@@ -41,7 +41,7 @@ Once the output looks settled (you should see `* Listening on tcp://0.0.0.0:3000
 [localhost]: http://localhost:3000/
 
 #### Accounts (Optional)
-Splits I/O accounts are built on top of Twitch accounts, so if you want sign up / sign in to work, you will need to
+Splits.io accounts are built on top of Twitch accounts, so if you want sign up / sign in to work, you will need to
 register a Twitch application at [dev.twitch.tv/dashboard](https://dev.twitch.tv/dashboard).
 Use this redirect URI when asked:
 ```http
@@ -59,7 +59,7 @@ like [`autoenv`](https://github.com/kennethreitz/autoenv).)
 
 ### Debugging
 #### Getting Up and Running
-If you're having trouble getting Splits I/O running at all using the above instructions, please make a GitHub issue so
+If you're having trouble getting Splits.io running at all using the above instructions, please make a GitHub issue so
 we can work it out! Even if you think it's a silly issue, the fact that it's happening to you means we haven't ironed
 out everything (even if the only thing preventing you from setting up is better documentation!).
 
@@ -100,7 +100,7 @@ make lint
 ```
 
 ### Profiling
-Splits I/O utilizes a few libraries for profiling our code.
+Splits.io utilizes a few libraries for profiling our code.
 
 
 [Rack Mini Profiler](https://github.com/MiniProfiler/rack-mini-profiler) is used to find major slowdowns in the code
@@ -140,7 +140,7 @@ which will run `docker-compose down`, resetting your local database and any Dock
 
 ## Things You Probably Don't Need to Know
 ### Infrastructure
-Splits I/O is built in Ruby on Rails, but has some help from other pieces of infrastructure.
+Splits.io is built in Ruby on Rails, but has some help from other pieces of infrastructure.
 ```
 Production
 
@@ -191,7 +191,7 @@ Config for this generation is at [`config/favicon.json`][favicon-config].
 [favicon-config]: config/favicon.json
 
 ### Theme
-Splits I/O runs [Bootstrap 4][bootstrap] on a paid theme called [Dashboard][dashboard]. Its license does not allow its
+Splits.io runs [Bootstrap 4][bootstrap] on a paid theme called [Dashboard][dashboard]. Its license does not allow its
 source to be included in this repository; however there are three modifications we make to the source before producing
 the included final build. This is within the terms of the license.
 
@@ -200,18 +200,18 @@ the included final build. This is within the terms of the license.
 	- Change `$theme-colors[success]` to `#6EE588`
 	- Change `$theme-colors[warning]` to `#F5BA46`
 
-These new colors match those in the Splits I/O logo.
+These new colors match those in the Splits.io logo.
 
 [bootstrap]: https://getbootstrap.com/
 [dashboard]: https://themes.getbootstrap.com/product/dashboard/
 
 ## Responsible Disclosure
-If you find a security vulnerability in Splits I/O, please email it to security@splits.io, as posting the vulnerability
+If you find a security vulnerability in Splits.io, please email it to security@splits.io, as posting the vulnerability
 in public may allow malicious people to use it before it's able to be fixed.
 
 ## Library Information
 ### LiveSplit Core
-Splits I/O uses [livesplit-core][livesplit-core] for parsing runs. The parser is located in `lib/parser/*`. To upgrade
+Splits.io uses [livesplit-core][livesplit-core] for parsing runs. The parser is located in `lib/parser/*`. To upgrade
 it, run
 ```sh
 make update_lsc
@@ -221,7 +221,7 @@ and commit the changes.
 [livesplit-core]: https://github.com/LiveSplit/livesplit-core/
 
 ### Highcharts
-To generate run history charts Splits I/O uses [Highcharts][highcharts-home], which requires a
+To generate run history charts Splits.io uses [Highcharts][highcharts-home], which requires a
 [written license][highcharts-licenses]. Licensing is based on the honor system, so you do not need to enter a key
 anywhere. Highcharts is free to use for testing purposes.
 
