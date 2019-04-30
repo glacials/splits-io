@@ -50,7 +50,6 @@ const buildResetChart = function(runs, chartOptions = {}) {
       let attemptsSoFar = 0
 
       return {
-        center: [`${25+(50*i)}%`, '50%'],
         data: run.segments.map((segment, i) => {
           const attemptsReachedSegment = attemptsSoFar
           attemptsSoFar = segment.histories.length

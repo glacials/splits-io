@@ -8,7 +8,7 @@
       th.align-right Finished At
       th.align-right Stats
     tbody
-      - [run, *compare_runs].map { |r| r.segments.order(segment_number: :asc) }.transpose.each do |segment, *compare_segments|
+      - run.segments.order(segment_number: :asc).zip(*compare_runs.map { |r| r.segments.order(segment_number: :asc) }).each do |segment, *compare_segments|
         tr
           td.align-right.align-middle = segment.segment_number + 1
           td.align-left.align-middle = segment.name.presence || '-'

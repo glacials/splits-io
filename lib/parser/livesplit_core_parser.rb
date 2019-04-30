@@ -121,7 +121,7 @@ class Parser
       split[:realtime_skipped] = split[:realtime_duration_ms].zero?
 
       if split[:realtime_duration_ms].positive?
-        split[:realtime_gold] = true if split[:realtime_duration_ms].round(5) <= split[:realtime_best_ms].try(:round, 5)
+        split[:realtime_gold] = true if split[:realtime_duration_ms] <= split[:realtime_best_ms]
       end
 
       split[:gametime_end_ms] = (segment.personal_best_split_time.game_time.try(:total_seconds) || 0) * 1000
@@ -132,7 +132,7 @@ class Parser
       split[:gametime_skipped] = split[:gametime_duration_ms].zero?
 
       if split[:gametime_duration_ms].positive?
-        split[:gametime_gold] = true if split[:gametime_duration_ms].round(5) <= split[:gametime_best_ms].try(:round, 5)
+        split[:gametime_gold] = true if split[:gametime_duration_ms] <= split[:gametime_best_ms]
       end
 
       history_iterator = segment.segment_history.iter
