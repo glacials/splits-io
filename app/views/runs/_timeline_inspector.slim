@@ -1,7 +1,10 @@
 - scale_to ||= run.duration(timing)
 - overlap ||= false
 - first, last = run.collapsed_segments(timing).first, run.collapsed_segments(timing).last
-.timeline.mt-2 class=(overlap ? 'absolute' : '')
+/ This .my-2 spacer must be its own div to put the overlapped timeline inspectors exactly on top of the standard one.
+/ It can't be moved onto the .timeline div or their positions will differ vertically by that margin amount.
+.my-2
+.timeline class=(overlap ? 'absolute' : '')
   - run.collapsed_segments(timing).each.with_index do |segment, index|
     .pure-u.inspect(
       class='segment-inspect'
