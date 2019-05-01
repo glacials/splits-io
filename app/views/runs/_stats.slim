@@ -1,5 +1,8 @@
 - compare_run = compare_runs.first
-- subject = compare_run.try(:user).try(:name) || '???'
+- if compare_run.try(:belongs_to?, current_user)
+  - subject = "my #{compare_run.duration(timing).format}"
+- else
+  - subject = compare_run.try(:user).try(:name) || '???'
 .row
   .col-sm-3: .statcard.p-3
     h2.statcard-number
