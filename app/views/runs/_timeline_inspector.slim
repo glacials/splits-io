@@ -19,6 +19,9 @@
             .text-gold New best!
           - elsif segment.duration(timing) == segment.shortest_duration(timing)
             .text-gold Tied best!
-          - else
+          - elsif segment.shortest_duration(timing).present?
             .text-success
-              | #{(segment.duration(timing) - segment.shortest_duration(timing)).format_casual(num_units: 1)} possible timesave
+              => (segment.duration(timing) - segment.shortest_duration(timing)).format_casual(num_units: 1)
+              | possible timesave
+          - else
+            .text-danger No best time on record

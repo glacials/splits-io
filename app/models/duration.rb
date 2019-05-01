@@ -96,12 +96,16 @@ class Duration
   end
 
   def /(duration)
+    return Duration.new(nil) if nil? || duration.nil?
+
     # duration can be a number or a Duration
     ms = (duration == duration.to_i) ? duration : duration.to_ms
     Duration.new(to_ms.to_f / ms)
   end
 
   def *(duration)
+    return Duration.new(nil) if nil? || duration.nil?
+
     # duration can be a number or a Duration
     ms = (duration == duration.to_i) ? duration : duration.to_ms
     Duration.new(to_ms * ms)
@@ -124,7 +128,7 @@ class Duration
   end
 
   def nil?
-    @ms.nil?
+    @ms.nil? || @ms.zero?
   end
 
   def to_ms
