@@ -8,8 +8,9 @@
       th.align-right Finished At
       th.align-right Stats
     tbody
-      - run.segments.order(segment_number: :asc).zip(*compare_runs.map { |r| r.segments.order(segment_number: :asc) }).each do |segment, *compare_segments|
-        - compare_segment = compare_segments.min_by { |s| s.duration(timing) }
+      - compare_segments = compare_runs.map { |r| r.segments.order(segment_number: :asc) }
+      - run.segments.zip(*compare_segments).each do |segment, *compare_segments|
+        - compare_segment = compare_segments.compact.min_by { |s| s.duration(timing) }
         tr
           td.align-right.align-middle = segment.segment_number + 1
           td.align-left.align-middle = segment.name.presence || '-'

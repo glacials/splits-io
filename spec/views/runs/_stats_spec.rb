@@ -14,6 +14,7 @@ RSpec.describe 'runs/_stats' do
         partial: 'runs/stats',
         locals: {
           run: run,
+          compare_runs: [],
           timing: Run::REAL
         }
       )
@@ -28,6 +29,22 @@ RSpec.describe 'runs/_stats' do
         partial: 'runs/stats',
         locals: {
           run: run,
+          compare_runs: [],
+          timing: Run::GAME
+        }
+      )
+
+      expect(view).to render_template('runs/_stats')
+    end
+  end
+
+  context 'with compared runs' do
+    it 'renders stats' do
+      render(
+        partial: 'runs/stats',
+        locals: {
+          run: run,
+          compare_runs: [run],
           timing: Run::GAME
         }
       )
