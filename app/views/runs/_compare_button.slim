@@ -40,5 +40,5 @@
               span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
   - if compare_runs.any?
     .btn-group
-      a.btn.text-light.tip.pr-1 title='Switcharoo' href=run_path(compare_runs.first, compare: run) = icon('fas', 'exchange-alt')
+      a.btn.text-light.tip.pr-1 title='Swap comparison' href=run_path(compare_runs.first, compare: run) = icon('fas', 'exchange-alt')
       a.btn.text-light.tip.pl-1 title='Remove comparison' href=run_path(run) = icon('fas', 'times')

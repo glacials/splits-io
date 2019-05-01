@@ -12,7 +12,7 @@
 
 .row.mx-2
   .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-  .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run}
+  .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
 = render partial: 'runs/claim', locals: {run: @run}
 = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}

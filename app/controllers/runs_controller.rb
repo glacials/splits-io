@@ -1,11 +1,9 @@
 require 'uri'
 
-require 'example'
 require 'speedrundotcom'
 
 class RunsController < ApplicationController
   before_action :set_run,         only: [:show, :destroy, :edit, :update]
-  before_action :set_example_run, only: [:index], if: -> { current_user.nil? }
 
   before_action :first_parse, only: [:show, :edit, :update], if: -> { @run.parsed_at.nil? }
 
@@ -151,6 +149,7 @@ class RunsController < ApplicationController
     }
 
     @compare_runs = Run.where(id: (params[:compare] || '').split(',').map { |r| r.to_i(36) })
+    @compare_runs = [@run.previous_pb(timing)].compact if @compare_runs.empty?
     gon.compare_runs = @compare_runs.map { |run| {id: run.id36} }
 
     gon.run['user'] = if @run.user.nil?
@@ -162,13 +161,6 @@ class RunsController < ApplicationController
     gon.scale_to = @run.duration_ms(timing)
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: :not_found
-  end
-
-  def set_example_run
-    @example_run = Example::Run.example_run
-    @example_segment = Example::Run.example_segment
-
-    gon.run = {id: 'example', default_timing: Run::REAL}
   end
 
   def first_parse

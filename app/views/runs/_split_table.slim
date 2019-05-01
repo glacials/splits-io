@@ -9,6 +9,7 @@
       th.align-right Stats
     tbody
       - run.segments.order(segment_number: :asc).zip(*compare_runs.map { |r| r.segments.order(segment_number: :asc) }).each do |segment, *compare_segments|
+        - compare_segment = compare_segments.min_by { |s| s.duration(timing) }
         tr
           td.align-right.align-middle = segment.segment_number + 1
           td.align-left.align-middle = segment.name.presence || '-'
@@ -16,17 +17,8 @@
             - if segment.skipped?(timing) || segment.reduced?(timing)
               span.time -
             - else
-              - if compare_segments.any?
-                span.mx-2
-                  - compare_segment = compare_segments.min_by { |s| s.duration(timing) }
-                  - if segment.duration(timing) < compare_segment.duration(timing)
-                    small.text-success
-                      = (segment.duration(timing) - compare_segment.duration(timing)).format_casual(signed: true)
-                  - if segment.duration(timing) > compare_segment.duration(timing)
-                    small.text-danger
-                      = (segment.duration(timing) - compare_segment.duration(timing)).format_casual(signed: true)
-                  - if segment.duration(timing) == compare_segment.duration(timing)
-                    small.text-secondary tied
+              - if compare_segment.present?
+                = delta(segment.duration(timing), compare_segment.duration(timing), subject: compare_segment.run.user || '???')
               - if segment.gold?(timing)
                 .gold-split title='Gold'
               = segment.duration(timing).format(precise: run.short?(timing))
@@ -34,15 +26,8 @@
             td.align-right.time.align-middle -
           - else
             td.align-right.align-middle
-              - if compare_segments.any?
-                span.mx-2
-                  - compare_segment = compare_segments.min_by { |s| s.end(timing) }
-                  - if segment.end(timing) < compare_segment.end(timing)
-                    small.text-success = (segment.end(timing) - compare_segment.end(timing)).format_casual(signed: true)
-                  - if segment.end(timing) > compare_segment.end(timing)
-                    small.text-danger = (segment.end(timing) - compare_segment.end(timing)).format_casual(signed: true)
-                  - if segment.end(timing) == compare_segment.end(timing)
-                    small.text-secondary tied
+              - if compare_segment.present?
+                = delta(segment.end(timing), compare_segment.end(timing), subject: compare_segment.run.user || '???')
               = segment.end(timing).format(precise: run.short?(timing))
           - history_stats = segment.history_stats(timing)
           td.align-right

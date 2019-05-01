@@ -221,6 +221,10 @@ class Run < ApplicationRecord
     query.order(video_url: :asc, duration_col => :desc).first
   end
 
+  def possible_timesave(timing)
+    duration(timing) - sum_of_best(timing)
+  end
+
   private
 
   def publish_age_every(period, cycles)
