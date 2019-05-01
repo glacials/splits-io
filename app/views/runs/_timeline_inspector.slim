@@ -14,11 +14,11 @@
         div = segment.name
         .text-light-50 #{segment.duration(timing).format(precise: run.short?(timing))} duration
         .text-light-50 #{segment.end(timing).format(precise: run.short?(timing))} finished
-        - if run.has_golds?(timing) && !run.has_skipped_splits?(timing)
+        - if run.has_golds?(timing)
           - if segment.gold?(timing)
             .text-gold New best!
           - elsif segment.duration(timing) == segment.shortest_duration(timing)
             .text-gold Tied best!
           - else
             .text-success
-              | #{(segment.duration(timing) - segment.shortest_duration(timing)).format_casual(num_units: 1)} potential save
+              | #{(segment.duration(timing) - segment.shortest_duration(timing)).format_casual(num_units: 1)} possible timesave

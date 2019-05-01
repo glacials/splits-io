@@ -12,10 +12,10 @@
               .d-flex.w-100.justify-content-between
                 h5.mb-1 = run.user
                 = pretty_timestamp(run.created_at)
-              p.mb-1
+              h6.mb-1
                 = "#{run.game} #{run.category}"
-                div
-                  = run.duration(run.default_timing).format
-                  - my_pb = my_runs.detect { |r| r.category_id == run.category_id }
-                  - if my_pb.present?
-                    = delta(run.duration(run.default_timing), my_pb.duration(run.default_timing), subject: 'mine')
+              div
+                = run.duration(run.default_timing).format
+                - my_pb = my_runs.detect { |r| r.category_id == run.category_id }
+                - if my_pb.present?
+                  = delta(run.duration(run.default_timing), my_pb.duration(run.default_timing), subject: 'my PB')

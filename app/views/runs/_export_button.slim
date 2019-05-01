@@ -10,7 +10,7 @@
   #export-menu.dropdown-menu.bg-dark aria-labelledby='export-link'
     form.px-4.pt-2 style=('display: none' if local_assigns.fetch(:force_route_only, false))
       .form-group: .form-check
-        input#route-check.form-check-input type='checkbox' checked=true
+        input#route-check.form-check-input type='checkbox' checked=(!run.belongs_to?(current_user))
         label#route-check-label.form-check-label for='route-check'
           ' Route only
           small.tip(
