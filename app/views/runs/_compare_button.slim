@@ -17,7 +17,7 @@
       - if comparable_runs.none?
         .dropdown-item.disabled.text-secondary: i No comparable runs by me
       - comparable_runs.each do |comparable_run|
-        a.dropdown-item.text-secondary href=run_path(run, compare: comparable_run)
+        a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
           = comparable_run.duration(timing).format
           - if comparable_run.video_url.present? && URI.parse(comparable_run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
             span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
@@ -26,7 +26,7 @@
       - if recommended_comparison.nil?
         .dropdown-item.disabled.text-secondary: i No good comparisons right now 🤷
       - else
-        a.dropdown-item.text-secondary href=run_path(run, compare: recommended_comparison)
+        a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: recommended_comparison))
           b> #{recommended_comparison.user.name}'s
           ' #{recommended_comparison.duration(timing).format}
           - if recommended_comparison.video_url.present? && URI.parse(recommended_comparison.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
@@ -34,11 +34,13 @@
       - run.category.runners.where.not(id: run.user.try(:id)).limit(100).each do |comparable_runner|
         .dropdown-header.text-light = comparable_runner
         - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
-          a.dropdown-item.text-secondary href=run_path(run, compare: comparable_run)
+          a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
             = comparable_run.duration(timing).format
             - if comparable_run.video_url.present? && URI.parse(comparable_run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
               span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
   - if compare_runs.any?
     .btn-group
-      a.btn.text-light.tip.pr-1 title='Swap comparison' href=run_path(compare_runs.first, compare: run) = icon('fas', 'exchange-alt')
-      a.btn.text-light.tip.pl-1 title='Remove comparison' href=run_path(run) = icon('fas', 'times')
+      a.btn.text-light.tip.pr-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
+        = icon('fas', 'exchange-alt')
+      a.btn.text-light.tip.pl-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
+        = icon('fas', 'times')
