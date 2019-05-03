@@ -63,7 +63,12 @@ document.addEventListener('turbolinks:load', function() {
       buildPlaytimeChart(runs, chartOptions)
 
       runs[0].segments.filter(segment => !segment.skipped).forEach((segment, i) => {
-        buildSegmentDurationChart(timing, runs, runs.map(run => run.segments[i]).filter(segment => segment !== undefined), chartOptions)
+        buildSegmentDurationChart(
+          timing,
+          runs,
+          runs.map(run => run.segments[i]).filter(segment => segment !== undefined),
+          chartOptions
+        )
       })
     }
   }).catch(function(error) {
@@ -99,20 +104,20 @@ document.addEventListener('click', event => {
   }
 
   segChart.reflow()
+  segChart.setSize(segChart.container.closest('table').closest('.card').clientWidth)
 })
 
 // Use debounce to collect all resize events to fire it once instead of every single time
 window.addEventListener('resize', _.debounce(() => {
-  Highcharts.charts.forEach((chart) => {
+  Highcharts.charts.forEach((chart, i) => {
     const row = chart.renderTo.closest('tr')
     if (row === null) {
       return
     }
 
-    // Use defer to allow other JS to run on the stack in between chart sizing changes
-    // Without this the page will completely lock up for a bit while all charts are resized
-    _.defer((size) => {
-      chart.setSize(size)
-    }, chart.container.closest('table').closest('.card').clientWidth)
+    // We use setTimeout below for two reasons:
+    // 1. To allow other JS to run on the stack in between chart sizing changes, to avoid blocking UI on charts
+    // 2. To stagger the chart resizes from each other, to make them appear less choppy during the resize animation
+    window.setTimeout(() => chart.setSize(chart.container.closest('table').closest('.card').clientWidth), 250*i)
   })
-}), 250)
+}), 1000)
