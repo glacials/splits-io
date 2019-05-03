@@ -14,8 +14,9 @@
         label#route-check-label.form-check-label for='route-check'
           ' Route only
           small.tip(
-            title="When checked, Splits I/O won't include attempt history and gold times in the export.
-            Only applies to Generic Formats and Local Timers. If you're not sure, leave this checked."
+            title="When checked, Splits.io won't include attempt history and gold times in the export. Only applies to
+            Generic Formats and Local Timers. If you're not sure, leave this
+            #{run.belongs_to?(current_user) ? 'unchecked' : 'checked'}."
           ) = icon('fas', 'question-circle')
     h6.dropdown-header.text-success Generic Formats
     a.dropdown-item.can-strip-history.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
