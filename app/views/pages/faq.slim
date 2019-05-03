@@ -10,7 +10,7 @@ article
   a name='who'
   .card.mb-4
     h5.card-header
-      | Who made Splits I/O?
+      | Who made Splits.io?
       .float-right: a.text-muted data={turbolinks: false} href='#who' name='who' ¶
     .card-body
       p Glacials. You can look him up in these places:
@@ -20,7 +20,7 @@ article
             h4.text-nowrap
               img> src=asset_path('logo-imageonly.svg') width='25' height='25'
               | Glacials
-            a.btn.btn-outline-light.float-right href='https://splits.io/u/glacials' On Splits I/O
+            a.btn.btn-outline-light.float-right href='https://splits.io/u/glacials' On Splits.io
         .card style='background: #6441a4'
           .card-body
             h4.text-nowrap
@@ -47,37 +47,48 @@ article
       | Which programs can I upload splits from?
       .float-right: a.text-muted data={turbolinks: false} href='#programs' name='programs' ¶
     .card-body
-      p Splits I/O can read splits from any timer that supports the Splits I/O Exchange Format, and additionally has
-        manual support for the following timers:
-      .col-md-6
-        ul.list-group.mb-4
-          - (Run.programs - [SplitsIO]).each do |program|
-            li.list-group-item = program
+      p Splits.io can read splits from any timer that supports the generic Splits.io Exchange Format. Splits.io
+        additionally has manual support for several timers that don't support the format.
+      .row
+        .col-md-6
+          h5 Timers Supporting the Generic Format
+          .list-group.mb-4
+            - (Run.programs.select(&:exchangeable?) - [ExchangeFormat]).each do |program|
+              a.list-group-item.list-group-item-action href=program.website = program
+        .col-md-6
+          h5 Legacy Formats Supported
+          .list-group.mb-4
+            - Run.programs.reject(&:exchangeable?).each do |program|
+              a.list-group-item.list-group-item-action href=program.website = program
       p In LiveSplit, you can upload from within the program with a right click -> Share.
-      .alert.alert-info
+      .alert.alert-warning
         b> Just so you know:
-        ' Some of Splits I/O's detailed statistics, charts, and other features that rely on historical data only work on
-        ' runs recorded with LiveSplit, as LiveSplit is currently the only timer that collects this data.
+        ' Some of Splits.io's statistics, charts, and other features that rely on historical data only work when the
+        ' timer actually records such data. LiveSplit is currently the only known timer to do this.
+      .alert.alert-info
+        b> Fun fact!
+        ' The parsing engine that powers Splits.io is actually shared code extracted from LiveSplit by its authors!
+        ' Hooray open source! 🙌
     .card-footer
       a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/tree/master/public/schema'
         => icon('fas', 'exchange-alt')
-        | Splits I/O Exchange Format
+        | Splits.io Exchange Format
 
   .card-deck
     .card.mb-4
       h5.card-header
-        | Is Splits I/O open source?
+        | Is Splits.io open source?
         .float-right: a.text-muted data={turbolinks: false} href='#source' name='source' ¶
       .card-body
         p Yes, since the very beginning! Have a look or lend a hand on GitHub!
       .card-footer
         a.btn.btn-dark.text-light.float-right href='https://github.com/glacials/splits-io'
           => icon('fab', 'github')
-          | Splits I/O on GitHub
+          | Splits.io on GitHub
 
     .card.mb-4
       h5.card-header
-        | Does Splits I/O have an API?
+        | Does Splits.io have an API?
         .float-right: a.text-muted data={turbolinks: false} href='#api' name='api' ¶
       .card-body
         p Yes as well!
@@ -123,7 +134,7 @@ article
     .card-footer
       a.btn.btn-primary.float-right href='https://twitter.com/splitsio'
         => icon('fab', 'twitter')
-        | Splits I/O on Twitter
+        | Splits.io on Twitter
 
   .card.mb-4
     h5.card-header
@@ -135,13 +146,13 @@ article
       code style='display: block; margin: 1em; white-space: nowrap;'
         | (# attempts) * (# splits in the run)
       p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like stats!).
-      p It's my own fault that Splits I/O's handling of this is not as optimized as it should be, and I'm actively working
+      p It's my own fault that Splits.io's handling of this is not as optimized as it should be, and I'm actively working
         to solve it, but it's not a one-stop bug fix. To see how it's going and what specifically is being planned, you
-        can check Splits I/O's "speed" label on GitHub.
+        can check Splits.io's "speed" label on GitHub.
       p As a temporary solution, you can manually strip history before uploading by making a copy of your splits, opening
         the copy in LiveSplit, and resetting all of your best segments (drag-select the whole column and press Delete).
         This will remove all split history; you should notice a sizeable decrease in file size, and consequently the file
-        should upload to Splits I/O without a hitch.
+        should upload to Splits.io without a hitch.
     .card-footer
       a.btn.btn-dark.text-light.float-right href='https://github.com/glacials/splits-io/labels/speed'
         => icon('fab', 'github')
@@ -149,7 +160,7 @@ article
 
   .card
     h5.card-header
-      | Help! Splits I/O kidnapped my sister!!
+      | Help! Splits.io kidnapped my sister!!
       .float-right: a.text-muted data={turbolinks: false} href='#ohno' name='ohno' ¶
     .card-body
       p You can always email help@splits.io with issues! Or if you'd prefer, you can post them at the GitHub issues
@@ -157,7 +168,7 @@ article
     .card-footer
       a.btn.btn-primary.text-light.float-right href='mailto:help@splits.io'
         => icon('fa', 'envelope')
-        | Email Splits I/O
+        | Email Splits.io
 
 article.mt-4
   h3
@@ -171,7 +182,7 @@ article.mt-4
       .card-body
         p The most powerful and popular timer, LiveSplit is developed by two really cool people who decided to open
           source the whole thing around 1.4.
-        p In a magical display of the power of open source, the parsing component of Splits I/O is even powered by
+        p In a magical display of the power of open source, the parsing component of Splits.io is even powered by
           LiveSplit code.
       .card-footer
         .btn-group.float-right
@@ -194,8 +205,8 @@ article.mt-4
     .card
       h4.card-header PB Tracker
       .card-body
-        p PB Tracker is Splits I/O's spiritual sister, preferring a you-curated, diary-style progress tracking system to
-          Splits I/O's more automated "give me all your splits" attitude.
+        p PB Tracker is Splits.io's spiritual sister, preferring a you-curated, diary-style progress tracking system to
+          Splits.io's more automated "give me all your splits" attitude.
       .card-footer
         .btn-group.float-right
           a.btn.btn-dark href='https://github.com/rggibson/pb-tracker'

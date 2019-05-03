@@ -227,13 +227,19 @@ curl -X POST https://s3.amazonaws.com/splits.io \
   --form x-amz-algorithm="more gibberish" \
   --form x-amz-date="even more gibberish" \
   --form x-amz-signature="most gibberish" \
+  --form file='Your run here, e.g. a JSON object if using the Splits.io Exchange Format'
+```
+Or if your run is a file on disk, the last line would be:
+```
   --form file=@/path/to/file
 ```
+**Note**: Order of the parameters matters! Follow the order above if you're getting errors.
+
 This is called a presigned request. Each field above -- except `file`, that's yours -- is directly copied from the
 response of the first request. You don't need to inspect or care about the contents of the fields, as long as you
 include them. They serve as authorization for you to upload a file to S3 with Splits I/O's permission.
 
-Each presigned request can only be successfully made once, and expires if not made within an hour.
+Each presigned request can only be made once, and expires if not made within an hour.
 
 [s3]: https://aws.amazon.com/s3
 
