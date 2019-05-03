@@ -47,7 +47,7 @@ module ApplicationHelper
       title = "#{user} is a Splits I/O patron!"
     end
 
-    if user.silver_patron?
+    if user.patron?(tier: 2)
       badge = 'badge-warning'
       title = "#{user} is a Splits I/O patron!"
     end

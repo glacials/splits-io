@@ -85,35 +85,23 @@ class User < ApplicationRecord
   end
 
   def should_see_ads?
-    !bronze_patron?
+    !patron?(tier: 1)
   end
 
-  def patron?
+  def patron?(tier: 0)
     return true if admin?
     return false if patreon.nil?
 
-    patreon.pledge_cents.positive?
-  end
-
-  def bronze_patron?
-    return true if admin?
-    return false if patreon.nil?
-
-    patreon.pledge_cents >= 200
-  end
-
-  def silver_patron?
-    return true if admin?
-    return false if patreon.nil?
-
-    patreon.pledge_cents >= 400
-  end
-
-  def gold_patron?
-    return true if admin?
-    return false if patreon.nil?
-
-    patreon.pledge_cents >= 600
+    case tier
+    when 0
+      patreon.pledge_cents > 0
+    when 1
+      patreon.pledge_cents >= 200
+    when 2
+      patreon.pledge_cents >= 400
+    when 3
+      patreon.pledge_cents >= 600
+    end
   end
 
   def admin?

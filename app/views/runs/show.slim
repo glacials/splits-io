@@ -17,7 +17,7 @@
 = render partial: 'runs/claim', locals: {run: @run}
 = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
-- if @compare_runs.none? || (@compare_runs.any? && current_user.try(:silver_patron?))
+- if @compare_runs.none? || (@compare_runs.any? && current_user.try(:patron?, tier: 3))
   - if [@run, *@compare_runs].map(&:video_url).compact.any?
     .card-deck.mx-1
       - [@run, *@compare_runs].each do |run|
@@ -47,7 +47,7 @@
           #segment-chart.card.my-3
           #reset-chart.card.my-3
           - if @run.histories.any?
-            - if @run.user.try(:silver_patron?) || @run.user.try(:admin?)
+            - if @run.user.try(:patron?, tier: 2) || @run.user.try(:admin?)
               .my-3
                 span => icon('fas', 'lock-open')
                 - if @run.belongs_to?(current_user)
@@ -72,8 +72,8 @@
                   #playtime-chart
 - else
   article: .col-md-6.offset-md-3: .card
-    .card-body: i Become a tier-2 patron to compare videos, charts, and splits.
+    .card-body: i Become a tier-3 patron to compare videos, charts, and splits.
     .card-footer
       a.btn.btn-patreon.float-right href=patreon_url
         => icon('fab', 'patreon')
-        | Become a tier-2 patron
+        | Become a tier-3 patron

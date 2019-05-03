@@ -4,7 +4,7 @@ class Users::PbsController < ApplicationController
   before_action :set_category, only: [:show]
 
   def show
-    if @user.gold_patron?
+    if @user.patron?(tier: 3)
       if params[:trailing_path].nil?
         redirect_to run_path(@user.pb_for(@category))
       else
