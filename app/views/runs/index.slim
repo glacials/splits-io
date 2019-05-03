@@ -6,31 +6,31 @@
 - if current_user.present?
   - if current_user.runs.any?
     article
-        .row
-          .col-sm-3: .statcard.p-3
-            h2.statcard-number
-              span> = s3_bytes_used(current_user)
-              small.delta-indicator.delta-positive.tip-top title='Since last year'
-                = s3_bytes_used(current_user, since: 1.year.ago)
-            span.statcard-desc Space used
-          .col-sm-3: .statcard.p-3
-            h2.statcard-number
-              span> = current_user.runs.count
-              small.delta-indicator.delta-positive.tip-top title='Since last year'
-                = current_user.runs.where(created_at: 1.year.ago..Time.now.utc).count
-            span.statcard-desc Runs stored
-          .col-sm-3: .statcard.p-3
-            h2.statcard-number
-              span> title=current_user.created_at = time_ago_in_words(current_user.created_at)
-            span.statcard-desc Account age
-        .card.shadow
-          = render partial: 'shared/run_table', locals: { \
-            runs: current_user.pbs, \
-            cols: %i[time name uploaded owner_controls rival], \
-            col_options: {time: [:archived]}, \
-            description: 'My Personal Bests', \
-            user: current_user \
-          }.merge(sorting_info)
+      .row
+        .col-sm-3: .statcard.p-3
+          h2.statcard-number
+            span> = s3_bytes_used(current_user)
+            small.delta-indicator.delta-positive.tip-top title='Since last year'
+              = s3_bytes_used(current_user, since: 1.year.ago)
+          span.statcard-desc Space used
+        .col-sm-3: .statcard.p-3
+          h2.statcard-number
+            span> = current_user.runs.count
+            small.delta-indicator.delta-positive.tip-top title='Since last year'
+              = current_user.runs.where(created_at: 1.year.ago..Time.now.utc).count
+          span.statcard-desc Runs stored
+        .col-sm-3: .statcard.p-3
+          h2.statcard-number
+            span> title=current_user.created_at = time_ago_in_words(current_user.created_at)
+          span.statcard-desc Account age
+      .card.shadow
+        = render partial: 'shared/run_table', locals: { \
+          runs: current_user.pbs, \
+          cols: %i[time name video uploaded owner_controls rival], \
+          col_options: {time: [:archived]},
+          description: 'My Personal Bests', \
+          user: current_user \
+        }.merge(sorting_info)
   - else
     article
       .card.col-md-12

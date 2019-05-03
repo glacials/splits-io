@@ -1,48 +1,45 @@
-- previous_pb = run.previous_pb(timing)
-
+- compare_run = compare_runs.first
+- if compare_run.try(:belongs_to?, current_user)
+  - subject = "my #{compare_run.duration(timing).format}"
+- else
+  - subject = compare_run.try(:user).try(:name) || '???'
 .row
   .col-sm-3: .statcard.p-3
     h2.statcard-number
-      span> = format_ms(run.duration_ms(timing), precise: run.short?(timing))
-      - if faster?(run.duration_ms(timing), previous_pb.try(:duration_ms, timing))
-        small.delta-indicator.delta-negative.text-success.tip-top title='Since last PB'
-          = format_ms_casual(previous_pb.duration_ms(timing) - run.duration_ms(timing))
+      = run.duration(timing).format(precise: run.short?(timing))
+      - if compare_run.present?
+        = delta(run.duration(timing), compare_runs.first.try(:duration, timing), subject: subject)
     span.statcard-desc Time
   .col-sm-3: .statcard.p-3
     h3.statcard-number
-      span> = format_ms(run.sum_of_best_ms(timing), precise: run.short?(timing))
-      - if faster?(run.sum_of_best_ms(timing), previous_pb.try(:sum_of_best, timing))
-        small.delta-indicator.delta-negative.text-success.tip-top title='Since last PB'
-          = format_ms_casual(previous_pb.sum_of_best_ms(timing) - run.sum_of_best_ms(timing))
+      = run.sum_of_best(timing).format(precise: run.short?(timing))
+      - if compare_run.present?
+        = delta(run.sum_of_best(timing), compare_runs.first.try(:sum_of_best, timing), subject: subject)
     span.statcard-desc Sum of best
-  - if faster?(run.sum_of_best_ms(timing), previous_pb.try(:sum_of_best, timing))
-    .col-sm-3: .statcard.p-3
-      h3.statcard-number = format_ms(run.duration_ms(timing) - run.sum_of_best_ms(timing), precise: run.short?(timing))
-      span.statcard-desc Potential timesave
+  .col-sm-3: .statcard.p-3
+    h3.statcard-number
+      = (run.duration(timing) - run.sum_of_best(timing)).format_casual
+      - if compare_run.present?
+        = delta(run.possible_timesave(timing), compare_runs.first.try(:possible_timesave, timing), subject: subject, better: :different)
+    span.statcard-desc Possible timesave
   .col-sm-3: .statcard.p-3
     h3.statcard-number = Run.program(run.timer)
     span.statcard-desc = link_to('Timer', Run.program(run.timer).website, target: '_blank', class: 'text-muted')
   - if run.attempts.present?
     .col-sm-3: .statcard.p-3
       h3.statcard-number
-        span> = run.attempts
-        - if previous_pb.try(:attempts).present? && run.attempts > previous_pb.attempts
-          small.delta-indicator.delta-positive.tip-top title='Since last PB'
-            = run.attempts - previous_pb.attempts
+        = run.attempts
+        - if compare_run.present?
+          = delta(run.attempts, compare_runs.first.try(:attempts), subject: subject, better: :different)
       span.statcard-desc = 'Attempt'.pluralize(run.attempts)
-  - if run.total_playtime_ms > 0
+  - if run.total_playtime > 0
     .col-sm-3: .statcard.p-3
       h3.statcard-number
-        span = format_ms(run.total_playtime_ms)
-        - if previous_pb.present? && run.total_playtime_ms > previous_pb.total_playtime_ms
-          small.delta-indicator.delta-positive.text-success.tip-top title='Since last PB'
-            = format_ms_casual(run.total_playtime_ms - previous_pb.total_playtime_ms)
+        = run.total_playtime.format
+        - if compare_run.present?
+          = delta(run.total_playtime, compare_runs.first.total_playtime, subject: subject, better: :different)
       span.statcard-desc Life playtime
   .col-sm-3: .statcard.p-3
     h3.statcard-number#time-since-upload title=run.created_at
       = render partial: 'runs/time_since_upload', locals: {run: run}
     span.statcard-desc Time since upload
-  .col-sm-3: .statcard.p-3
-    h3.statcard-number
-      span = format_ms_casual(run.duration_ms(timing) - run.sum_of_best_ms(timing))
-    span.statcard-desc Potential timesave

@@ -12,10 +12,10 @@
     li.breadcrumb-item.active = link_to('Edit', edit_run_path(@run))
 
 .row.mx-2
-  .col-md-4 = render partial: 'runs/title', locals: {run: @run, timing: timing}
-  .col-md-8 = render partial: 'runs/stats', locals: {run: @run, timing: timing}
+  .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+  .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
-= render partial: 'runs/full_timeline', locals: {run: @run, timing: timing}
+= render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
 article
   .card-deck.mb-4

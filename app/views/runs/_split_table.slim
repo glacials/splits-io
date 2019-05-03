@@ -8,21 +8,28 @@
       th.align-right Finished At
       th.align-right Stats
     tbody
-      - run.segments.order(segment_number: :asc).each do |segment|
+      - compare_segments = compare_runs.map { |r| r.segments.order(segment_number: :asc) }
+      - run.segments.zip(*compare_segments).each do |segment, *compare_segments|
+        - compare_segment = compare_segments.compact.min_by { |s| s.duration(timing) }
         tr
           td.align-right.align-middle = segment.segment_number + 1
           td.align-left.align-middle = segment.name.presence || '-'
           td.align-right.align-middle
-            - if segment.gold?(timing)
-              .gold-split title='Gold'
             - if segment.skipped?(timing) || segment.reduced?(timing)
               span.time -
             - else
-              span = format_ms(segment.duration_ms(timing), precise: run.short?(timing))
+              - if compare_segment.present?
+                = delta(segment.duration(timing), compare_segment.duration(timing), subject: compare_segment.run.user || '???')
+              - if segment.gold?(timing)
+                .gold-split title='Gold'
+              = segment.duration(timing).format(precise: run.short?(timing))
           - if segment.skipped?(timing)
             td.align-right.time.align-middle -
           - else
-            td.align-right.align-middle = format_ms(segment.end_ms(timing), precise: run.short?(timing))
+            td.align-right.align-middle
+              - if compare_segment.present?
+                = delta(segment.end(timing), compare_segment.end(timing), subject: compare_segment.run.user || '???')
+              = segment.end(timing).format(precise: run.short?(timing))
           - history_stats = segment.history_stats(timing)
           td.align-right
             - if history_stats.present?
@@ -36,7 +43,7 @@
         - if history_stats.present?
           tr hidden=true
             td colspan='999' style='margin: 0; padding: 0;'
-              .card.border-0.m-0.p-0.bg-primary
+              .card.border-0.m-0.p-0
                 .card-group
                   - if danger
                     .card.bg-danger: .card-body
@@ -79,7 +86,7 @@
                         title="Stats based on #{run.user || 'the runner'}'s last 100 runs."
                       ) = icon('fas', 'info-circle')
                     h6.card-title Best
-                    h4.card-subtitle = format_ms(segment.shortest_duration_ms(timing), precise: run.short?(timing))
+                    h4.card-subtitle = segment.shortest_duration(timing).format(precise: run.short?(timing))
                 .card-group
                   .card: .card-body
                     h6.card-title

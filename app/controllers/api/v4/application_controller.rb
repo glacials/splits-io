@@ -1,5 +1,3 @@
-require 'example'
-
 class Api::V4::ApplicationController < ActionController::Base
   include Rails::Pagination
 
@@ -55,11 +53,6 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_run
-    if params[:run] == 'example'
-      @run = Example::Run.example_run
-      return
-    end
-
     @run = if params[:historic] == '1'
              Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
            else

@@ -1,15 +1,25 @@
-- scale_to ||= run.duration_ms(timing)
-- if run.collapsed_segments(timing).map { |s| s.duration_ms(timing) }.any?(&:nil?)
-  article
-    .alert.alert-warning This run doesn't have any game time segments.
+- scale_to ||= run.duration(timing).to_ms
+- if !run.completed?(timing)
+  .card: .card-body: i This run doesn't have #{timing}time splits.
 - else
-  .timeline-background.mt-3
-    .timeline.shadow
+  - if run.video_url.present? && URI.parse(run.video_url).host.match?(/^(www\.)?twitch\.tv$/)
+    div style="height: 1em": span.video-progress-line id="video-progress-line-#{run.id36}"
+  .timeline-background
+    .timeline.shadow style="width: #{run.duration(timing) / scale_to * 100.0}%"
       - run.collapsed_segments(timing).each.with_index do |segment, index|
-        .pure-u.split id="#{run.id36}-split-#{index}" data={start_ms: segment.start(timing).to_ms} class=next_timeline_color(run.id36) style="width: #{segment.duration_ms(timing).to_f / scale_to * 100}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
+        .pure-u.split(
+          id="#{run.id36}-split-#{index}"
+          data={start_ms: segment.start(timing).to_ms, run_id: run.id36, segment_number: index+1}
+          class=next_timeline_color(run.id36)
+          style="width: #{segment.duration(timing) / run.duration(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
+        )
           .p-2
             .text-light = segment.name.presence || '-'
-            .text-light-50 = format_ms(segment.duration_ms(timing), precise: run.short?(timing))
-  - if run.video_url.present? && URI.parse(run.video_url).host.match?(/^(www\.)?twitch\.tv$/)
-    div
-      span#timeline-video-progress: span#timeline-video-caret = icon('fas', 'caret-up')
+            .text-light-50 = segment.duration(timing).format(precise: run.short?(timing))
+  .gold.timeline style="width: #{run.duration(timing) / scale_to * 100.0}%"
+    - run.collapsed_segments(timing).each_with_index do |segment, index|
+      div style="width: #{segment.duration(timing) / run.duration(timing) * 100.0}%"
+        - if segment.shortest_duration(timing).present?
+          .gold-split style="width: #{segment.shortest_duration(timing) / segment.duration(timing) * 100.0}%"
+        - else
+          .gold-split.bg-dark style='width: 100%'

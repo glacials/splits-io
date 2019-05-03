@@ -1,9 +1,9 @@
-- if current_user.twitch_follows.present?
+- if current_user.twitch_follows.any?
   h4 Recent PBs By People You Follow
   .card.col-md-6.p-0
     .list-group
-      - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_follows).where.not(games: {name: [nil, ""]}).order('runs.created_at DESC').limit(10)
-      - user_runs = current_user.pbs.where(category_id: followed_runs.map(&:category_id))
+      - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_follows).where.not(games: {name: [nil, '']}).order('runs.created_at DESC').limit(10)
+      - my_runs = current_user.pbs.where(category_id: followed_runs.map(&:category_id))
       - followed_runs.each do |run|
         = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start')
           .media
@@ -12,12 +12,10 @@
               .d-flex.w-100.justify-content-between
                 h5.mb-1 = run.user
                 = pretty_timestamp(run.created_at)
-              p.mb-1
+              h6.mb-1
                 = "#{run.game} #{run.category}"
-                div
-                  = format_ms(run.duration_ms(Run::REAL))
-                  - user_pb = user_runs.detect { |r| r.category_id == run.category_id }
-                  - if user_pb.present?
-                    = " ("
-                    = pretty_difference(user_pb.duration_ms(Run::REAL), run.duration_ms(Run::REAL))
-                    = ")"
+              div
+                = run.duration(run.default_timing).format
+                - my_pb = my_runs.detect { |r| r.category_id == run.category_id }
+                - if my_pb.present?
+                  = delta(run.duration(run.default_timing), my_pb.duration(run.default_timing), subject: 'my PB')

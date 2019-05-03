@@ -2,20 +2,10 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const buildResetChart = function(run, chartOptions = {}) {
+const buildResetChart = function(runs, chartOptions = {}) {
   if (document.getElementById('reset-chart') === null) {
     return
   }
-
-  let reset_counter = run.attempts
-  let reset_data = []
-
-  run.segments.forEach(function(segment, i) {
-    if (reset_counter - segment.histories.length > 0) {
-      reset_data.push([segment.name, reset_counter - segment.histories.length])
-      reset_counter = segment.histories.length
-    }
-  })
 
   Highcharts.chart('reset-chart', {
     exporting: {
@@ -56,11 +46,22 @@ const buildResetChart = function(run, chartOptions = {}) {
     yAxis: {
       title: {text: 'Resets'}
     },
-    series: [{
-      name: 'Resets',
-      data: reset_data,
-      innerSize: '50%'
-    }]
+    series: runs.map((run, i) => {
+      let attemptsSoFar = 0
+
+      return {
+        center: [`${(100/(runs.length+1))*(i+1)}%`, '50%'],
+        data: run.segments.map((segment, i) => {
+          const attemptsReachedSegment = attemptsSoFar
+          attemptsSoFar = segment.histories.length
+
+          return [segment.name, attemptsReachedSegment - segment.histories.length]
+        }).filter(datum => datum[1] > 0),
+        innerSize: '50%',
+        linkedTo: ':previous',
+        name: (run.runners[0] || {name: '???'}).name
+      }
+    })
   })
 }
 

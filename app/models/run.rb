@@ -21,11 +21,12 @@ class Run < ApplicationRecord
   belongs_to :category, optional: true
   has_one :game, through: :category
   has_many :segments, -> { order(segment_number: :asc) }, dependent: :destroy
+
   # dependent: :delete_all requires there be no child records that need to be deleted
   # If RunHistory is changed to have child records, change this back to just :destroy
-  has_many :histories, class_name: 'RunHistory', dependent: :delete_all
-  has_one :highlight_suggestion, dependent: :destroy
-  has_many :likes, class_name: 'RunLike', dependent: :destroy
+  has_many :histories,            dependent: :delete_all, class_name: 'RunHistory'
+  has_one  :highlight_suggestion, dependent: :destroy
+  has_many :likes,                dependent: :destroy,    class_name: 'RunLike'
 
   has_secure_token :claim_token
 
@@ -203,6 +204,25 @@ class Run < ApplicationRecord
     end
 
     h
+  end
+
+  def recommended_comparison(timing)
+    query = Run.where(category: category).where.not(user: nil, category: nil)
+
+    case timing
+    when Run::REAL
+      query = query.where('realtime_duration_ms < ?', duration(timing).to_ms)
+      duration_col = :realtime_duration_ms
+    when Run::GAME
+      query = query.where('gametime_duration_ms < ?', duration(timing).to_ms)
+      duration_col = :gametime_duration_ms
+    end
+
+    query.order(video_url: :asc, duration_col => :desc).first
+  end
+
+  def possible_timesave(timing)
+    duration(timing) - sum_of_best(timing)
   end
 
   private

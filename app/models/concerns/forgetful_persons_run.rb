@@ -4,21 +4,31 @@ module ForgetfulPersonsRun
   extend ActiveSupport::Concern
 
   included do
-    # Returns segments, but with skipped segments rolled into the soonest future segment that wasn't realtime skipped.
-    def realtime_collapsed_segments
+    # Returns segments, but with skipped segments rolled into the soonest future segment that wasn't skipped.
+    def collapsed_segments(timing)
       segments.reduce([]) do |segs, seg|
-        if segs.last.try(:realtime_duration_ms) == 0
+        if segs.last.try(:duration_ms, timing) == 0
           skipped_seg = segs.last
           segs + [Segment.new(
             segs.pop.attributes.merge(
               name: "#{skipped_seg.name} + #{seg.name}",
-              realtime_start_ms: skipped_seg.realtime_start_ms,
-              realtime_end_ms: seg.realtime_end_ms,
-              realtime_duration_ms: seg.realtime_duration_ms,
-              gametime_start_ms: skipped_seg.gametime_start_ms,
-              gametime_end_ms: skipped_seg.gametime_end_ms,
-              gametime_duration_ms: seg.gametime_duration_ms,
-              realtime_reduced: true
+
+              realtime_start_ms:             skipped_seg.start(Run::REAL).to_ms,
+              realtime_end_ms:               seg.end(Run::REAL).to_ms,
+              realtime_duration_ms:          seg.duration(Run::REAL).to_ms,
+              realtime_shortest_duration_ms: [skipped_seg, seg].map { |s| s.shortest_duration(Run::REAL).to_ms }.sum,
+
+              gametime_start_ms:             skipped_seg.start(Run::GAME).to_ms,
+              gametime_end_ms:               skipped_seg.end(Run::GAME).to_ms,
+              gametime_duration_ms:          seg.duration(Run::GAME).to_ms,
+              gametime_shortest_duration_ms: [skipped_seg, seg].map { |s| s.shortest_duration(Run::GAME).to_ms }.sum,
+            ).merge(
+              case timing
+              when Run::REAL
+                {realtime_reduced: true}
+              when Run::GAME
+                {gametime_reduced: true}
+              end
             )
           )]
         else
@@ -27,69 +37,21 @@ module ForgetfulPersonsRun
       end
     end
 
-    # Returns segments, but with skipped segments rolled into the soonest future segment that wasn't gametime skipped.
-    def gametime_collapsed_segments
-      segments.reduce([]) do |segs, seg|
-        if segs.last.try(:gametime_duration_ms) == 0
-          skipped_seg = segs.last
-          segs + [Segment.new(
-            segs.pop.attributes.merge(
-              name: "#{skipped_seg.name} + #{seg.name}",
-              realtime_start_ms: skipped_seg.realtime_start_ms,
-              realtime_end_ms: seg.realtime_end_ms,
-              realtime_duration_ms: seg.realtime_duration_ms,
-              gametime_start_ms: skipped_seg.gametime_start_ms,
-              gametime_end_ms: skipped_seg.gametime_end_ms,
-              gametime_duration_ms: seg.gametime_duration_ms,
-              gametime_reduced: true
-            )
-          )]
-        else
-          segs + [seg]
-        end
+    def skipped_splits(timing)
+      case timing
+      when Run::REAL
+        segments.select(&:realtime_skipped?)
+      when Run::GAME
+        segments.select(&:gametime_skipped?)
       end
     end
 
-    def collapsed_segments(time_type)
-      case time_type
+    def has_skipped_splits?(timing)
+      case timing
       when Run::REAL
-        realtime_collapsed_segments
+        segments.any?(&:realtime_skipped?)
       when Run::GAME
-        gametime_collapsed_segments
-      end
-    end
-
-    def realtime_skipped_splits
-      segments.select(&:realtime_skipped?)
-    end
-
-    def gametime_skipped_splits
-      segments.select(&:realtime_skipped?)
-    end
-
-    def skipped_splits(time_type)
-      case time_type
-      when Run::REAL
-        realtime_skipped_splits
-      when Run::GAME
-        gametime_skipped_splits
-      end
-    end
-
-    def realtime_has_skipped_splits?
-      segments.any?(&:realtime_skipped?)
-    end
-
-    def gametime_has_skipped_splits?
-      segments.any?(&:gametime_skipped?)
-    end
-
-    def has_skipped_splits?(time_type)
-      case time_type
-      when Run::REAL
-        realtime_has_skipped_splits?
-      when Run::GAME
-        gametime_has_skipped_splits?
+        segments.any?(&:gametime_skipped?)
       end
     end
   end

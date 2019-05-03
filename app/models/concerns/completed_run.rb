@@ -52,7 +52,9 @@ module CompletedRun
     end
 
     def shortest_segment(timing)
-      realtime_collapsed_segments.min_by do |segment|
+      collapsed_segments(timing).reject do |segment|
+        segment.reduced?(timing)
+      end.min_by do |segment|
         segment.duration_ms(timing)
       end
     end
@@ -99,8 +101,8 @@ module CompletedRun
       duration_ms(timing) == best_run.duration_ms(timing)
     end
 
-    def pb?
-      user && category && self == user.pb_for(category)
+    def pb?(timing)
+      user && category && self == user.pb_for(timing, category)
     end
 
     def time
@@ -116,7 +118,7 @@ module CompletedRun
     end
 
     def completed?(timing)
-      duration_ms(timing).present? && duration_ms(timing).positive?
+      duration(timing).present? && duration(timing).positive?
     end
 
     # total_playtime returns the total amount of time logged in this game by this runner, according to the timer. This

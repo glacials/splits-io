@@ -1,7 +1,9 @@
-- if run.completed?(timing)
-  #timeline
-    = render partial: 'runs/timeline', locals: {run: run, timing: timing}
-    - if run.segments.all? { |segment| !segment.skipped?(timing) } && run.has_golds?(timing)
-      = render partial: 'runs/gold_timeline', locals: {run: run, timing: timing}
-  #timeline-inspector
-    = render partial: 'runs/timeline_inspector', locals: {run: run, timing: timing}
+- scale_to = [run, *compare_runs].max_by { |r| r.duration(timing).to_ms }.duration(timing)
+= render partial: 'runs/timeline', locals: {run: run, timing: timing, scale_to: scale_to}
+.m-0 style='filter: sepia(60%)'
+  - compare_runs.each do |run|
+    = render partial: 'runs/timeline', locals: {timing: timing, run: run, scale_to: scale_to}
+.timeline-inspectors.m-0
+  - compare_runs.each do |run|
+    = render partial: 'runs/timeline_inspector', locals: {timing: timing, run: run, scale_to: scale_to, overlap: true}
+  = render partial: 'runs/timeline_inspector', locals: {timing: timing, run: run, scale_to: scale_to}

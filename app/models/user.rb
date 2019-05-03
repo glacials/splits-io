@@ -54,8 +54,13 @@ class User < ApplicationRecord
     name.downcase
   end
 
-  def pb_for(category)
-    runs.where(category: category).order(realtime_duration_ms: :asc).first
+  def pb_for(timing, category)
+    case timing
+    when Run::REAL
+      runs.where(category: category).order(realtime_duration_ms: :asc).first
+    when Run::GAME
+      runs.where(category: category).order(gametime_duration_ms: :asc).first
+    end
   end
 
   def pbs
@@ -80,31 +85,23 @@ class User < ApplicationRecord
   end
 
   def should_see_ads?
-    !bronze_patron?
+    !patron?(tier: 1)
   end
 
-  def patron?
+  def patron?(tier: 0)
+    return true if admin?
     return false if patreon.nil?
 
-    patreon.pledge_cents.positive?
-  end
-
-  def bronze_patron?
-    return false if patreon.nil?
-
-    patreon.pledge_cents >= 200
-  end
-
-  def silver_patron?
-    return false if patreon.nil?
-
-    patreon.pledge_cents >= 400
-  end
-
-  def gold_patron?
-    return false if patreon.nil?
-
-    patreon.pledge_cents >= 600
+    case tier
+    when 0
+      patreon.pledge_cents > 0
+    when 1
+      patreon.pledge_cents >= 200
+    when 2
+      patreon.pledge_cents >= 400
+    when 3
+      patreon.pledge_cents >= 600
+    end
   end
 
   def admin?
@@ -117,5 +114,25 @@ class User < ApplicationRecord
 
   def likes?(run)
     RunLike.find_by(user: self, run: run)
+  end
+
+  # comprable_runs returns some runs by this user that could be usefully compared to the given run.
+  def comparable_runs(timing, run)
+    case timing
+    when Run::REAL
+      Run.where(
+        id: runs.select('realtime_duration_ms, MAX(id) AS id')
+          .group(:realtime_duration_ms)
+          .where(category: run.category)
+          .map(&:id)
+      ).order(realtime_duration_ms: :asc)
+    when Run::GAME
+      Run.where(
+        id: runs.select('gametime_duration_ms, MAX(id) AS id')
+          .group(:gametime_duration_ms)
+          .where(category: run.category)
+          .map(&:id)
+      ).order(gametime_duration_ms: :asc)
+    end
   end
 end

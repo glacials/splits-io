@@ -23,10 +23,19 @@ document.addEventListener('turbolinks:load', function() {
     spinner.spin(segSpinner)
     spinners.push(spinner)
   }
+  const runs = []
 
-  fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
+  runs.push(fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
     headers: {accept: 'application/json'}
-  }).then(function(response) {
+  }))
+
+  if (gon.compare_runs !== undefined) {
+    gon.compare_runs.forEach(run => runs.push(fetch(`/api/v4/runs/${run.id}?historic=1`, {
+      headers: {accept: 'application/json'}
+    })))
+  }
+
+  Promise.all(runs).then(function(responses) {
     spinners.forEach(spinner => {
       spinner.stop()
     })
@@ -34,28 +43,32 @@ document.addEventListener('turbolinks:load', function() {
       segSpinner.hidden = true
     }
 
-    if (response.ok) {
-      return response.json()
+    if (responses.every(response => response.ok)) {
+      return Promise.all(responses.map(response => response.json()))
     }
     throw new Error('Request for run from API failed')
-  }).then(function(body) {
-    const timing = new URLSearchParams(window.location.search).get('timing') || body.run.default_timing
-    const duration = `${timing}time_duration_ms`
+  }).then(function(bodies) {
+    const runs = bodies.map(body => body.run)
+    const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
 
     document.getElementById('chart-spinner').hidden = true
     document.getElementById('chart-holder').hidden = false
-    if (body.run.histories.length !== 0) {
-      const timing = new URLSearchParams(window.location.search).get('timing') || body.run.default_timing
+    if (runs[0].histories.length !== 0) {
       const skipped = `${timing}time_skipped`
 
-      buildRunDurationChart(body.run, chartOptions)
-      buildBoxPlot(body.run, chartOptions)
-      buildSegmentChart(body.run, chartOptions)
-      buildResetChart(body.run, chartOptions)
-      buildPlaytimeChart(body.run, chartOptions)
+      buildRunDurationChart(runs, chartOptions)
+      buildBoxPlot(runs, chartOptions)
+      buildSegmentChart(runs, chartOptions)
+      buildResetChart(runs, chartOptions)
+      buildPlaytimeChart(runs, chartOptions)
 
-      body.run.segments.filter(segment => !segment.skipped).forEach(segment => {
-        buildSegmentDurationChart(timing, segment, chartOptions)
+      runs[0].segments.filter(segment => !segment.skipped).forEach((segment, i) => {
+        buildSegmentDurationChart(
+          timing,
+          runs,
+          runs.map(run => run.segments[i]).filter(segment => segment !== undefined),
+          chartOptions
+        )
       })
     }
   }).catch(function(error) {
@@ -91,20 +104,24 @@ document.addEventListener('click', event => {
   }
 
   segChart.reflow()
+  segChart.setSize(segChart.container.closest('table').closest('.card').clientWidth)
 })
 
 // Use debounce to collect all resize events to fire it once instead of every single time
 window.addEventListener('resize', _.debounce(() => {
-  Highcharts.charts.forEach((chart) => {
+  Highcharts.charts.forEach((chart, i) => {
+    if (chart === undefined) {
+      return
+    }
+
     const row = chart.renderTo.closest('tr')
     if (row === null) {
       return
     }
 
-    // Use defer to allow other JS to run on the stack in between chart sizing changes
-    // Without this the page will completely lock up for a bit while all charts are resized
-    _.defer((size) => {
-      chart.setSize(size)
-    }, chart.container.closest('table').closest('.card').clientWidth)
+    // We use setTimeout below for two reasons:
+    // 1. To defer the reflow so other JS can run on the stack in between chart sizing changes, to avoid blocking the UI
+    // 2. To stagger the chart resizes from one another, so they don't all fire at once and stutter each other
+    window.setTimeout(() => chart.setSize(chart.container.closest('table').closest('.card').clientWidth), 100*i)
   })
-}), 250)
+}), 1000)

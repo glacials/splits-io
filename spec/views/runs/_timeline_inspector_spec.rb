@@ -14,6 +14,7 @@ RSpec.describe 'runs/_timeline_inspector' do
         partial: 'runs/timeline_inspector',
         locals: {
           run: run,
+          compare_runs: [],
           timing: Run::REAL
         }
       )
@@ -28,6 +29,7 @@ RSpec.describe 'runs/_timeline_inspector' do
         partial: 'runs/timeline_inspector',
         locals: {
           run: run,
+          compare_runs: [],
           timing: Run::GAME
         }
       )

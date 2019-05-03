@@ -1,15 +1,16 @@
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
 const moment = require('moment')
+import {logoColors, logoYellow, logoGreen, logoBlue} from '../colors.js'
 
-const buildSegmentDurationChart = function(timing, segment, chartOptions) {
-  if (document.getElementById(`segment-duration-chart-${segment.id}`) === null) {
+const buildSegmentDurationChart = function(timing, runs, segments, chartOptions) {
+  if (document.getElementById(`segment-duration-chart-${segments[0].id}`) === null) {
     return
   }
 
   const duration = `${timing}time_duration_ms`
 
-  Highcharts.chart(`segment-duration-chart-${segment.id}`, {
+  Highcharts.chart(`segment-duration-chart-${segments[0].id}`, {
     exporting: {enabled: false},
     chart: {
       borderRadius: 0,
@@ -18,21 +19,20 @@ const buildSegmentDurationChart = function(timing, segment, chartOptions) {
       type: 'spline',
       zoomType: 'xy'
     },
-    colors: ['#fff'],
-    legend: {enabled: false},
+    colors: logoColors,
     plotOptions: {
       series: {connectNulls: true},
       spline: {
         marker: {enabled: false}
       }
     },
-    series: [{
-      name: segment.name,
+    series: segments.map((segment, i) => ({
+      name: `${(runs[i].runners[0] || {name: '???'}).name}'s ${segment.name}`,
       data: segment.histories.filter(attempt => attempt[duration] > 0).map(attempt => {
         return [`Attempt #${attempt.attempt_number}`, attempt[duration]]
       }),
       pointStart: 1
-    }],
+    })),
     title: {text: undefined},
     tooltip: {
       shared: true,

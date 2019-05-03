@@ -65,3 +65,7 @@ ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapte
     show_ms:        true
   )
 end
+
+User.create(
+  name: 'Alice'
+)

@@ -3,11 +3,12 @@ import Exporting from 'highcharts/modules/exporting'
 import {logoYellow, logoBlue, logoGreen} from '../colors.js'
 Exporting(Highcharts)
 
-const buildSegmentChart = function(run, chartOptions) {
+const buildSegmentChart = function(runs, chartOptions) {
   if (document.getElementById('segment-chart') === null) {
     return
   }
 
+  const run = runs[0]
   const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
   const duration = `${timing}time_duration_ms`
   const shortest = `${timing}time_shortest_duration_ms`

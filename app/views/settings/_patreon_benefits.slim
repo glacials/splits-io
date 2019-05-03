@@ -4,7 +4,7 @@
   .list-group
     .list-group-item
       .d-flex.w-100.justify-content-between
-        - if current_user.bronze_patron?
+        - if current_user.patron?(tier: 1)
           h5.mb1
             span.text-success> ✓
             ' No Ads
@@ -22,7 +22,7 @@
         ' upgrade.
     .list-group-item
       .d-flex.w-100.justify-content-between
-        - if current_user.silver_patron?
+        - if current_user.patron?(tier: 2)
           h5.mb1
             span.text-success> ✓
             ' PB Predictions
@@ -40,7 +40,7 @@
         ' username upgrade.
     .list-group-item
       .d-flex.w-100.justify-content-between
-        - if current_user.gold_patron?
+        - if current_user.patron?(tier: 3)
           h5.mb1
             span.text-success> ✓
             ' Permalink Redirectors

@@ -1,5 +1,5 @@
 - description ||= nil
-- cols ||= [:runner, :time, :name, :rival, :uploaded]
+- cols ||= [:runner, :time, :name, :video, :rival, :uploaded]
 / This allows us to blindly check the keys for items instead of wraping in `try`s
 - col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options, {}))
 - runs = order_runs(runs).page(params[:page]).includes(:user, :game)
@@ -15,24 +15,27 @@
       thead
         tr
           - if cols.include?(:runner)
-            th.header.align-right = th_sorter('Runner', 'user_id')
+            th.header.align-right.nowrap = th_sorter('Runner', 'user_id')
           - if cols.include?(:time)
-            th.header.align-right = th_sorter('Time', 'time')
+            th.header.align-right.nowrap = th_sorter('Time', 'time')
+          - if cols.include?(:video)
+            th.nowrap = th_sorter('Video', 'video_url')
           - if cols.include?(:name)
-            th Game + Category
+            th width='100%' Game + Category
           - if cols.include?(:rival)
-            th.align-right Rival
+            th.align-right.nowrap Rival
           - if cols.include?(:uploaded)
-            th.align-right = th_sorter('Uploaded', 'created_at')
+            th.align-right.nowrap = th_sorter('Uploaded', 'created_at')
           - if cols.include?(:owner_controls)
-            th.header.align-right
+            th.header.align-right.nowrap
       tbody
         - runs.each do |run|
+          - timing = params[:timing] || run.default_timing
           tr id="run_#{run.id36}"
             - if cols.include?(:runner)
-              td.align-right = user_badge(run.user)
+              td.align-right.nowrap = user_badge(run.user)
             - if cols.include?(:time)
-              td.align-right
+              td.align-right.nowrap
                 / Make sure to not group runs with no category
                 - if col_options[:time].include?(:archived) && run.category_id.present?
                   / Gather only runs with the same category and sort by default timing ascending
@@ -45,32 +48,32 @@
                       - old_runs.each do |old_run|
                         a.dropdown-item.text-secondary href=run_path(old_run) = old_run.duration.format
                 = run.duration.format
+            - if cols.include?(:video)
+              td.text-center.nowrap
+                - if run.video_url.present?
+                  = icon('fas', 'video')
             - if cols.include?(:name)
-              td = link_to run, run_path(run), class: 'run-link'
+              td width='100%' = link_to run, run_path(run), class: 'run-link'
             - if cols.include?(:rival)
-              td.align-right
+              td.align-right.nowrap
                 small
                   - rivalry = run.user.rivalries.includes(:to_user).detect { |r| r.category_id == run.category_id }
-                  - if rivalry.present? && rivalry.to_user.pb_for(run.category).present?
-                    - rival_run = rivalry.to_user.pb_for(run.category)
-                    = link_to compare_path(run, rival_run), class: 'run-link stealth-link' do
+                  - if rivalry.present? && rivalry.to_user.pb_for(timing, run.category).present?
+                    - rival_run = rivalry.to_user.pb_for(timing, run.category)
+                    = link_to run_path(run, compare: rival_run), class: 'run-link stealth-link' do
                       = pretty_difference(run.duration(run.default_timing).to_ms, rival_run.duration(run.default_timing).to_ms)
                       '  against
                       = user_badge(rivalry.to_user)
-                  - elsif run.category.present?
-                    = link_to new_rivalry_path(category: run.category)
-                      .text-success = icon('fas', 'plus')
             - if cols.include?(:uploaded)
               td.align-right.nowrap title=run.created_at #{time_ago_in_words(run.created_at)} ago
             - if cols.include?(:owner_controls)
-              td
-                .dropleft.text-center
-                  .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
-                    = icon('fas', 'ellipsis-v')
-                  .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
-                    button.dropdown-item.text-danger.run-disown-button data={run: {id: run.id36}}
-                      = icon('fas', 'eraser', 'Disown')
-                    button.dropdown-item.text-danger.run-delete-button data={run: {id: run.id36}}
-                      = icon('fas', 'trash', 'Delete')
+              td.nowrap: .dropleft.text-center
+                .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
+                  = icon('fas', 'ellipsis-v')
+                .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
+                  button.dropdown-item.text-danger.run-disown-button data={run: {id: run.id36}}
+                    = icon('fas', 'eraser', 'Disown')
+                  button.dropdown-item.text-danger.run-delete-button data={run: {id: run.id36}}
+                    = icon('fas', 'trash', 'Delete')
   .mx-auto
     = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')
