@@ -116,8 +116,8 @@ window.addEventListener('resize', _.debounce(() => {
     }
 
     // We use setTimeout below for two reasons:
-    // 1. To allow other JS to run on the stack in between chart sizing changes, to avoid blocking UI on charts
-    // 2. To stagger the chart resizes from each other, to make them appear less choppy during the resize animation
-    window.setTimeout(() => chart.setSize(chart.container.closest('table').closest('.card').clientWidth), 250*i)
+    // 1. To defer the reflow so other JS can run on the stack in between chart sizing changes, to avoid blocking the UI
+    // 2. To stagger the chart resizes from one another, so they don't all fire at once and stutter each other
+    window.setTimeout(() => chart.setSize(chart.container.closest('table').closest('.card').clientWidth), 100*i)
   })
 }), 1000)
