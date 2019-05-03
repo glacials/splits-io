@@ -1,12 +1,9 @@
 - scale_to = [run, *compare_runs].max_by { |r| r.duration(timing).to_ms }.duration(timing)
-- if run.completed?(timing)
-  = render partial: 'runs/timeline', locals: {run: run, timing: timing, scale_to: scale_to}
-  = render partial: 'runs/gold_timeline', locals: {timing: timing, run: run, scale_to: scale_to}
-  .m-0 style='filter: sepia(60%)'
-    - compare_runs.each do |run|
-      = render partial: 'runs/timeline', locals: {timing: timing, run: run, scale_to: scale_to}
-      = render partial: 'runs/gold_timeline', locals: {timing: timing, run: run, scale_to: scale_to}
-  .timeline-inspectors.m-0
-    - compare_runs.each do |run|
-      = render partial: 'runs/timeline_inspector', locals: {timing: timing, run: run, scale_to: scale_to, overlap: true}
-    = render partial: 'runs/timeline_inspector', locals: {timing: timing, run: run, scale_to: scale_to}
+= render partial: 'runs/timeline', locals: {run: run, timing: timing, scale_to: scale_to}
+.m-0 style='filter: sepia(60%)'
+  - compare_runs.each do |run|
+    = render partial: 'runs/timeline', locals: {timing: timing, run: run, scale_to: scale_to}
+.timeline-inspectors.m-0
+  - compare_runs.each do |run|
+    = render partial: 'runs/timeline_inspector', locals: {timing: timing, run: run, scale_to: scale_to, overlap: true}
+  = render partial: 'runs/timeline_inspector', locals: {timing: timing, run: run, scale_to: scale_to}

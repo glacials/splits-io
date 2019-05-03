@@ -110,6 +110,10 @@ document.addEventListener('click', event => {
 // Use debounce to collect all resize events to fire it once instead of every single time
 window.addEventListener('resize', _.debounce(() => {
   Highcharts.charts.forEach((chart, i) => {
+    if (chart === undefined) {
+      return
+    }
+
     const row = chart.renderTo.closest('tr')
     if (row === null) {
       return
