@@ -110,7 +110,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       @accept_header = Run.program(@run.timer).content_type.to_s
       return
     end
-    @accept_header = 'application/json' if @accept_header.blank?
+    @accept_header = 'application/json' if ['', nil, '*/*'].include?(@accept_header)
     @accept_header = 'application/json' if @accept_header.include?('text/html')
 
     valid_accepts = Run.exportable_programs.map(&:content_type) << 'application/json'
