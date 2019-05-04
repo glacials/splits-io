@@ -1,46 +1,47 @@
-.btn-group
-  button#compare.btn.btn-outline-light.dropdown-toggle(
-    aria={haspopup: true, expanded: false}
-    data={toggle: 'dropdown'}
-    type='button'
-  )
-    - if compare_runs.any?
-      ' vs.
-      b = compare_runs.first.user
-      ' 's
-      = compare_runs.first.duration(timing).format
-    - else
-      ' Compare
-  .dropdown-menu.bg-dark aria={labelledby: 'compare'} style='height: auto; max-height: 400px; overflow-x: hidden'
-      .dropdown-header.text-light Mine
-      - comparable_runs = current_user.present? ? current_user.comparable_runs(timing, run).where.not(id: run.id) : []
-      - if comparable_runs.none?
-        .dropdown-item.disabled.text-secondary: i No comparable runs by me
-      - comparable_runs.each do |comparable_run|
-        a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
-          = comparable_run.duration(timing).format
-          - if comparable_run.video_url.present? && URI.parse(comparable_run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
-            span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
-      - recommended_comparison = run.recommended_comparison(timing)
-      .dropdown-header.text-light Recommended
-      - if recommended_comparison.nil?
-        .dropdown-item.disabled.text-secondary: i No good comparisons right now 🤷
+- if run.category.present?
+  .btn-group
+    button#compare.btn.btn-outline-light.dropdown-toggle(
+      aria={haspopup: true, expanded: false}
+      data={toggle: 'dropdown'}
+      type='button'
+    )
+      - if compare_runs.any?
+        ' vs.
+        b = compare_runs.first.user
+        ' 's
+        = compare_runs.first.duration(timing).format
       - else
-        a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: recommended_comparison))
-          b> #{recommended_comparison.user.name}'s
-          ' #{recommended_comparison.duration(timing).format}
-          - if recommended_comparison.video_url.present? && URI.parse(recommended_comparison.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
-            span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
-      - run.category.runners.where.not(id: run.user.try(:id)).limit(100).each do |comparable_runner|
-        .dropdown-header.text-light = comparable_runner
-        - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
+        ' Compare
+    .dropdown-menu.bg-dark aria={labelledby: 'compare'} style='height: auto; max-height: 400px; overflow-x: hidden'
+        .dropdown-header.text-light Mine
+        - comparable_runs = current_user.present? ? current_user.comparable_runs(timing, run).where.not(id: run.id) : []
+        - if comparable_runs.none?
+          .dropdown-item.disabled.text-secondary: i No comparable runs by me
+        - comparable_runs.each do |comparable_run|
           a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
             = comparable_run.duration(timing).format
             - if comparable_run.video_url.present? && URI.parse(comparable_run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
               span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
-  - if compare_runs.any?
-    .btn-group
-      a.btn.text-light.tip.pr-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
-        = icon('fas', 'exchange-alt')
-      a.btn.text-light.tip.pl-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
-        = icon('fas', 'times')
+        - recommended_comparison = run.recommended_comparison(timing)
+        .dropdown-header.text-light Recommended
+        - if recommended_comparison.nil?
+          .dropdown-item.disabled.text-secondary: i No good comparisons right now 🤷
+        - else
+          a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: recommended_comparison))
+            b> #{recommended_comparison.user.name}'s
+            ' #{recommended_comparison.duration(timing).format}
+            - if recommended_comparison.video_url.present? && URI.parse(recommended_comparison.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+              span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
+        - run.category.runners.where.not(id: run.user.try(:id)).limit(100).each do |comparable_runner|
+          .dropdown-header.text-light = comparable_runner
+          - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
+            a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
+              = comparable_run.duration(timing).format
+              - if comparable_run.video_url.present? && URI.parse(comparable_run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+                span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
+    - if compare_runs.any?
+      .btn-group
+        a.btn.text-light.tip.pr-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
+          = icon('fas', 'exchange-alt')
+        a.btn.text-light.tip.pl-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
+          = icon('fas', 'times')
