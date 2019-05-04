@@ -16,12 +16,12 @@ module ForgetfulPersonsRun
               realtime_start_ms:             skipped_seg.start(Run::REAL).to_ms,
               realtime_end_ms:               seg.end(Run::REAL).to_ms,
               realtime_duration_ms:          seg.duration(Run::REAL).to_ms,
-              realtime_shortest_duration_ms: [skipped_seg, seg].compact.map { |s| s.shortest_duration(Run::REAL).to_ms }.sum,
+              realtime_shortest_duration_ms: [skipped_seg, seg].map { |s| s.shortest_duration(Run::REAL).to_ms }.compact.sum,
 
               gametime_start_ms:             skipped_seg.start(Run::GAME).to_ms,
               gametime_end_ms:               skipped_seg.end(Run::GAME).to_ms,
               gametime_duration_ms:          seg.duration(Run::GAME).to_ms,
-              gametime_shortest_duration_ms: [skipped_seg, seg].compact.map { |s| s.shortest_duration(Run::GAME).to_ms }.sum,
+              gametime_shortest_duration_ms: [skipped_seg, seg].map { |s| s.shortest_duration(Run::GAME).to_ms }.compact.sum,
             ).merge(
               case timing
               when Run::REAL

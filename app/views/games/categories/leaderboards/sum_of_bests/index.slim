@@ -1,3 +1,4 @@
+- timing = params[:timing] || Run::REAL
 - content_for(:title, 'Sum of Bests Leaderboard')
 - content_for(:header) do
   ol.breadcrumb.shadow
@@ -32,7 +33,7 @@ article data-turbolinks-temporary=true
           tbody
             - i = 0
             - runners.each do |runner|
-              - pb = runner.pb_for(@category)
+              - pb = runner.pb_for(timing, @category)
               tr id=[:run, pb.id]
                 td.align-right = i += 1
                 td.align-left = user_badge(runner)
