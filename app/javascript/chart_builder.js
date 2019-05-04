@@ -98,30 +98,33 @@ document.addEventListener('click', event => {
     return
   }
 
-  const segChart = Highcharts.charts.find(chart => chart.renderTo.id === `segment-duration-chart-${segId}`)
-  if (!segChart) {
-    return
-  }
-
-  segChart.reflow()
-  segChart.setSize(segChart.container.closest('table').closest('.card').clientWidth)
+  // With Turbolinks, Highcharts can leave behind old charts that are from previous pageloads. If the user loaded the
+  // same page twice, it's possible there are multiple charts rendered to elements with the same IDs, even if some are
+  // not in the DOM.
+  const segCharts = Highcharts.charts.filter(chart => chart.renderTo.id === `segment-duration-chart-${segId}`)
+  segCharts.forEach(chart => chart.reflow())
 })
 
-// Use debounce to collect all resize events to fire it once instead of every single time
-window.addEventListener('resize', _.debounce(() => {
-  Highcharts.charts.forEach((chart, i) => {
-    if (chart === undefined) {
-      return
-    }
+window.addEventListener('resize', () => {
+  _.debounce(() => {
+    Highcharts.charts.forEach((chart, i) => {
+      if (chart === undefined) {
+        return
+      }
 
-    const row = chart.renderTo.closest('tr')
-    if (row === null) {
-      return
-    }
+      const row = chart.renderTo.closest('tr')
+      if (row === null) {
+        return
+      }
 
-    // We use setTimeout below for two reasons:
-    // 1. To defer the reflow so other JS can run on the stack in between chart sizing changes, to avoid blocking the UI
-    // 2. To stagger the chart resizes from one another, so they don't all fire at once and stutter each other
-    window.setTimeout(() => chart.setSize(chart.container.closest('table').closest('.card').clientWidth), 100*i)
-  })
-}), 1000)
+      // We use setTimeout below for two reasons:
+      // 1. To defer the reflow so other JS can run on the stack in between chart sizing changes, to avoid blocking the UI
+      // 2. To stagger the chart resizes from one another, so they don't all fire at once and stutter each other
+      window.setTimeout(() => {
+        chart.setSize(chart.container.closest('table').closest('.card').clientWidth)
+        chart.reflow()
+      }, 0)
+    })
+  }, 1000)()
+})
+
