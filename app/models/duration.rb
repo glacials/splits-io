@@ -36,7 +36,7 @@ class Duration
   # returned value never has a sign in front of it. When sign is :negatives, only negative values have a sign
   # (default).
   def format_casual(num_units: 2, sign: :negatives)
-    return '-' if @ms.nil?
+    return '-' if nil?
 
     d = {
       h:  hours,
@@ -92,6 +92,8 @@ class Duration
   end
 
   def -(duration)
+    return Duration.new(nil) if duration.nil?
+
     Duration.new(to_ms - duration.to_ms)
   end
 
@@ -136,7 +138,7 @@ class Duration
   end
 
   def abs
-    Duration.new(to_ms.abs)
+    Duration.new(to_ms.try(:abs))
   end
 
   def positive?

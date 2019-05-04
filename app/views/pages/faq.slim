@@ -51,7 +51,7 @@ article
         additionally has manual support for several timers that don't support the format.
       .row
         .col-md-6
-          h5 Timers Supporting the Generic Format
+          h5 Timers Known to Support the Generic Format
           .list-group.mb-4
             - (Run.programs.select(&:exchangeable?) - [ExchangeFormat]).each do |program|
               a.list-group-item.list-group-item-action href=program.website = program
