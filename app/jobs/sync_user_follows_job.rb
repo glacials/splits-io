@@ -4,7 +4,7 @@ class SyncUserFollowsJob < ApplicationJob
   def perform(user, twitch_user)
     ActiveRecord::Base.transaction do
       current_followed_users = User.joins(:twitch).where(
-        twitch_users: {twitch_id: Twitch::Follows.followed_ids(twitch_user.twitch_id)}
+        twitch_users: {twitch_id: twitch_user.followed_ids}
       )
 
       TwitchUserFollow.where(

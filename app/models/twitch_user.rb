@@ -36,4 +36,12 @@ class TwitchUser < ApplicationRecord
   def self.default_avatar
     'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
   end
+
+  def videos
+    Twitch::Videos.recent(twitch_id, type: :archive, token: access_token)
+  end
+
+  def followed_ids
+    Twitch::Follows.followed_ids(twitch_id, token: access_token)
+  end
 end
