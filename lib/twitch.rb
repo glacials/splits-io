@@ -96,7 +96,7 @@ class Twitch
     end
 
     # headers returns the HTTP headers we should send with the Twitch API request. It accepts a bearer token; if this
-    # request is on behalf of a user, you should pass one to improve rate limits (from 30/day to 800/user/day).
+    # request is on behalf of a user, you should pass one to improve rate limits (from 30/min to 800/user/min).
     #
     # See: https://dev.twitch.tv/docs/api/guide/#rate-limits
     def headers(token: nil)
