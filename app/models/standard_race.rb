@@ -1,6 +1,7 @@
 class StandardRace < ApplicationRecord
   include Raceable
 
+  belongs_to :user
   belongs_to :category
   has_one :game, through: :category
 

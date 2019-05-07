@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["user_id"], name: "index_authie_sessions_on_user_id"
   end
 
-  create_table "bingo_races", force: :cascade do |t|
+  create_table "bingo_races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "user_id", null: false
     t.string "status_text", null: false
@@ -109,11 +109,11 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "entrants", force: :cascade do |t|
+  create_table "entrants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "raceable_type"
-    t.bigint "raceable_id"
+    t.uuid "raceable_id"
     t.bigint "user_id"
-    t.boolean "ready", default: false, null: false
+    t.datetime "readied_at", precision: 3
     t.datetime "finished_at", precision: 3
     t.datetime "forfeited_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
@@ -218,7 +218,7 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["user_id"], name: "index_patreon_users_on_user_id"
   end
 
-  create_table "randomizer_races", force: :cascade do |t|
+  create_table "randomizer_races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "user_id", null: false
     t.string "status_text", null: false
@@ -398,7 +398,7 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["run_id"], name: "index_splits_on_run_id"
   end
 
-  create_table "standard_races", force: :cascade do |t|
+  create_table "standard_races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "category_id", null: false
     t.bigint "user_id", null: false
     t.string "status_text", null: false

@@ -123,7 +123,7 @@ Rails.application.routes.draw do
   get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download
   get '/:run/download/:timer',            to: 'runs/exports#timer' # deprecated
 
-  get 'races/:race_type/:race_id', to: 'races#show', as: :race
+  get '/races/:race_type/:race_id', to: 'races#show', as: :race
 
   namespace :api do
     namespace :webhooks do
