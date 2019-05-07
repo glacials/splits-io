@@ -1,0 +1,53 @@
+.row
+  .col-md-12: h1 = race.to_s
+
+.row
+  .col-md-12
+    - if race.try(:card)
+      - if race.started?
+        h5 Card: = race.card
+      - else
+        h5 Card Will Be Revealed When Race Starts!
+    - if race.try(:seed)
+      - if race.started?
+        h5 Seed: = race.seed
+      - else
+        h5 Seed Will Be Revealed When Race Starts!
+
+    - if race.notes.present?
+      h5 = "Notes: #{race.notes}"
+    h5
+      span> created by
+      span = user_badge(race.owner)
+
+    h5#race-status = race.status_text
+
+  .col-md-8
+    .btn-toolbar role='toolbar' aria={label: 'Race Controls'}
+      button.btn.btn-outline-success.mr-2#btn-race-join(
+        hidden=(race.started? || current_user.nil? || race.users.include?(current_user))
+      ) Join
+      button.btn.btn-outline-warning.mr-2#btn-race-leave(
+        hidden=(race.started? || !race.users.include?(current_user))
+      ) Leave
+
+      button.btn.btn-outline-success.mr-2#btn-race-ready(
+        hidden=(race.started? || !race.users.include?(current_user) || race.entrant_for_user(current_user).ready?)
+      ) Ready
+      button.btn.btn-outline-danger.mr-2#btn-race-unready(
+        hidden=(race.started? || !race.users.include?(current_user) || !race.entrant_for_user(current_user).ready?)
+      ) Unready
+
+      button.btn.btn-outline-success.mr-2#btn-race-done(
+        hidden=(!race.in_progress? || !race.users.include?(current_user) || race.entrant_for_user(current_user).done?)
+      ) Done
+      button.btn.btn-outline-danger.mr-2#btn-race-forfeit(
+        hidden=(!race.in_progress? || !race.users.include?(current_user) || race.entrant_for_user(current_user).done?)
+      ) Forfeit
+
+      button.btn.btn-outline-warning.mr-2#btn-race-rejoin(
+        hidden=(!race.in_progress? || !race.users.include?(current_user) || !race.entrant_for_user(current_user).done?)
+      ) Rejoin
+
+  .col-md-4
+    h1 0:00

@@ -1,0 +1,15 @@
+.card.shadow.my-3
+  h6.card-header Entrants
+  .table-responsive: table.card-body.table.mb-0
+    thead: tr
+      th Name
+      th Ready
+      th Place
+      th Time
+    tbody
+      - race.entrants.each do |entrant|
+        tr
+          td = entrant.user.name
+          td = entrant.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
+          td = entrant.place
+          td = entrant.duration || '-'

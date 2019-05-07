@@ -10,13 +10,99 @@
   = render partial: 'games/categories/title', locals: {category: @category}
 
 article data-turbolinks-temporary=true
-  - route = @category.route
-  - if @category.route.present?
-    .card.mb-4 style='width: 18rem'
-      .card-body
-        h5.card-title #{@category.name} Route
-        p.card-text Automatically determined based on popularity
-        = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download', force_route_only: true}
+  .row
+    - route = @category.route
+    - if @category.route.present?
+      .col-md-4: .card.mb-4
+        h5.card-header #{@category.name} Route
+        .card-body
+          p.card-text Automatically determined based on popularity
+          = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download', force_route_only: true}
+
+    - if current_user.present?
+      .col-md-4: .card.mb-4
+        h5.card-header Start a Race
+        .card-body
+          p.card-text Create a new race for #{@category.game}
+          button.btn.btn-outline-success(
+            data={toggle: :modal, target: '#race-modal'}
+          ) Choose a Category
+      #race-modal.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'race-modal-label', hidden: true}
+        .modal-dialog role='document'
+          .modal-content
+            .modal-header.bg-primary
+              h5.text-light Races
+            .modal-body.bg-dark
+              .row.text-light.m-2
+                p Create a new race on Splits.io
+              .row
+                ul.nav.nav-tabs.nav-justified.mb-3#races-tab role='tablist' style='width: 100%;'
+                  li.nav-item
+                    a.nav-link.active#standard-tab(
+                      href='#standard-content'
+                      data={toggle: :tab}
+                      role='tab'
+                      aria={controls: :home, selected: true}
+                    ) Standard Race
+                  li.nav-item
+                    a.nav-link#bingo-tab(
+                      href='#bingo-content'
+                      data={toggle: :tab}
+                      role='tab'
+                      aria={controls: :home, selected: false}
+                    ) Bingo
+                  li.nav-item
+                    a.nav-link#randomizer-tab(
+                      href='#randomizer-content'
+                      data={toggle: :tab}
+                      role='tab'
+                      aria={controls: :home, selected: false}
+                    ) Randomizer
+                .tab-content#races-tab-content style='width: 100%;'
+                  .tab-pane.text-light.fade.show.active#standard-content role='tabpanel' aria={labelledby: 'standard-content-tab'}
+                    form#standard-races-form
+                      .form-group
+                        select.form-control#standard-visibility-select
+                          option value='public' Public
+                          option value='invite_only' Invite Only
+                          option value='secret' Secret
+                      .form-group
+                        select.form-control#standard-category-select
+                          - @game.categories.each do |category|
+                            option value=category.id = category.name
+                      .form-group
+                        textarea.form-control#standard-notes-textarea placeholder='Notes (optional)'
+                      .form-group
+                        button.btn.btn-outline-success#standard-submit type='button' Create Race
+                  .tab-pane.text-light.fade#bingo-content role='tabpanel' aria={labelledby: 'bingo-content-tab'}
+                    form#bingo-races-form
+                      .form-group
+                        select.form-control#bingo-visibility-select
+                          option value='public' Public
+                          option value='invite_only' Invite Only
+                          option value='secret' Secret
+                      .form-group
+                        input.form-control#bingo-card-input type='text' placeholder='Card URL' required=true
+                      .form-group
+                        textarea.form-control#bingo-notes-textarea placeholder='Notes (optional)'
+                      .form-group
+                        input#bingo-game-id type='hidden' value=@game.id
+                        button.btn.btn-outline-success#bingo-submit type='button' Create Race
+                  .tab-pane.text-light.fade#randomizer-content role='tabpanel' aria={labelledby: 'randomizer-content-tab'}
+                    form#randomizer-races-form
+                      .form-group
+                        select.form-control#randomizer-visibility-select
+                          option value='public' Public
+                          option value='invite_only' Invite Only
+                          option value='secret' Secret
+                      .form-group
+                        input.form-control#randomizer-seed-input type='text' placeholder='Seed' required=true
+                      .form-group
+                        textarea.form-control#randomizer-notes-textarea placeholder='Notes (optional)'
+                      .form-group
+                        input#randomizer-game-id type='hidden' value=@game.id
+                        button.btn.btn-outline-success#randomizer-submit type='button' Create Race
+
   .card
     .card-header
       = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}

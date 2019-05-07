@@ -1,3 +1,5 @@
+import consumer from 'channels/consumer'
+
 const accessTokenKey = 'splitsio_access_token'
 const accessTokenExpiryKey = 'splitsio_access_token_expiry'
 
@@ -9,7 +11,7 @@ const urlHashToObject = function(hash) {
 
 document.addEventListener('turbolinks:load', () => {
   // Protect dev modes that haven't set up a client yet
-  if (process.env.SPLITSIO_CLIENT_ID === undefined || gon.user === null) {
+  if (process.env.SPLITSIO_CLIENT_ID === undefined || !gon.user) {
     return
   }
 
@@ -33,7 +35,7 @@ document.addEventListener('turbolinks:load', () => {
   const iframe = document.createElement('iframe')
   const params = {
     response_type: 'token',
-    scope: 'upload_run',
+    scope: 'upload_run+websocket_sign_in',
     redirect_uri: `${window.location.origin}/auth/splitsio/callback`,
     client_id: process.env.SPLITSIO_CLIENT_ID
   }
@@ -48,5 +50,9 @@ document.addEventListener('turbolinks:load', () => {
     localStorage.setItem(accessTokenKey, hash.access_token)
     localStorage.setItem(accessTokenExpiryKey, expiry)
     document.body.removeChild(iframe)
+    consumer.connection.close()
+    consumer.connection.open()
   }
 })
+
+export {accessTokenKey, accessTokenExpiryKey}

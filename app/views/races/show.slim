@@ -1,0 +1,24 @@
+- content_for(:title, @race)
+
+- content_for(:header) do
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Games', games_path)
+    li.breadcrumb-item = link_to(@race.game, game_path(@race.game))
+    - if @race.try(:category)
+      li.breadcrumb-item = link_to(@race.category, game_category_path(@race.game, @race.category))
+    li.breadcrumb-item.active = link_to(@race.id, race_path(*@race.url_params))
+
+.row.mx-2
+  .col-md-6 = render partial: 'races/title', locals: {race: @race}
+  .col-md-6 = render partial: 'races/stats', locals: {race: @race}
+
+.row.mx-1.mt-3
+  #entrants-table.col-md-6 = render partial: 'races/entrants_table', locals: {race: @race}
+
+  .col-md-6
+    .card.shadow.my-3#chat-card
+      h6.card-header Chat
+      .card-body: #chat-box
+        | BIG OL FAT CHATBOX
+

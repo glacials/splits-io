@@ -93,7 +93,7 @@ gem 'rest-client'
 gem 'nilify_blanks'
 
 # parsing
-gem 'descriptive_statistics'
+gem 'descriptive_statistics', require: 'descriptive_statistics/safe'
 gem 'moving_average'
 
 # profiling
@@ -104,7 +104,7 @@ gem 'stackprof'
 
 # server/environment
 gem 'puma'
-gem 'rails', '~> 6.0.0.beta3'
+gem 'rails', '~> 6.0.0.rc1'
 # see https://github.com/faye/websocket-driver-ruby/issues/58#issuecomment-394611125
 gem 'websocket-driver', github: 'faye/websocket-driver-ruby', ref: 'ee39af83d03ae3059c775583e4c4b291641257b8'
 
