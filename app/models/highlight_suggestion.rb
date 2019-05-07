@@ -18,7 +18,7 @@ class HighlightSuggestion < ApplicationRecord
       )
       return if pb.nil?
 
-      Twitch::Videos.recent(run.user.twitch.twitch_id, type: :archive).each do |video|
+      run.user.twitch.videos.each do |video|
         match = /^((\d+)h)?((\d+)m)?((\d+)s)?$/.match(video['duration'])
 
         hours   = match[2].to_i.hours

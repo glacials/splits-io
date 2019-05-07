@@ -10,8 +10,8 @@ class Twitch
     end
 
     class << self
-      def get(id)
-        route(id).get(Twitch.headers)['data']
+      def get(id, token: nil)
+        route(id).get(Twitch.headers(token))['data']
       end
 
       def route(id)
@@ -21,11 +21,11 @@ class Twitch
   end
 
   module Follows
-    def self.followed_ids(id)
+    def self.followed_ids(id, token: nil)
       cursor = nil
       ids = []
       loop do
-        response = get(id, cursor)
+        response = get(id, token: token, cursor: cursor)
         break if response.code != 200
         body = JSON.parse(response.body)
         break if body['data'].empty?
@@ -39,11 +39,11 @@ class Twitch
     end
 
     class << self
-      def get(id, cursor)
-        route(id, cursor).get(Twitch.headers)
+      def get(id, token: nil, cursor: nil)
+        route(id, token: token, cursor: cursor).get(Twitch.headers(token: token))
       end
 
-      def route(id, cursor)
+      def route(id, cursor: nil)
         Twitch.route["/users/follows?#{{
           from_id: id,
           first: 100,
@@ -54,13 +54,16 @@ class Twitch
   end
 
   module Videos
-    # recent returns recent videos on the channel of the given Twitch user ID. type can be :all, :upload, :archive, or
-    # :highlight.
-    def self.recent(id, type: :all)
+    # recent returns videos for the given Twitch user ID from most to least recent. type can be :all, :upload, :archive,
+    # or :highlight.
+    def self.recent(id, type: :all, token: nil)
+      # To the caller this feels as if we're returning an array of all Twitch videos, but it's just an enumerator that
+      # lazily fetches more videos only if the caller tries to look at them.
       cursor = nil
+
       Enumerator.new do |yielder|
         loop do
-          response = get(id, type, cursor: cursor)
+          response = Videos.get(id, type, token: token, cursor: cursor)
           raise StopIteration if response.code != 200
           body = JSON.parse(response.body)
           raise StopIteration if body['data'].empty?
@@ -73,19 +76,17 @@ class Twitch
       end.lazy
     end
 
-    class << self
-      def get(id, type, cursor: nil)
-        route(id, type, cursor).get(Twitch.headers)
-      end
+    def self.get(id, type, token: nil, cursor: nil)
+      Videos.route(id, type, cursor: cursor).get(Twitch.headers(token))
+    end
 
-      def route(id, type, cursor)
-        return Twitch.route["/videos?#{{
-          user_id: id,
-          type: type,
-          first: 100,
-          after: cursor
-        }.to_query}"]
-      end
+    def self.route(id, type, cursor: nil)
+      return Twitch.route["/videos?#{{
+        user_id: id,
+        type: type,
+        first: 100,
+        after: cursor
+      }.to_query}"]
     end
   end
 
@@ -94,8 +95,16 @@ class Twitch
       RestClient::Resource.new('https://api.twitch.tv/helix')
     end
 
-    def headers
-      {'Client-ID' => ENV['TWITCH_CLIENT_ID']}
+    # headers returns the HTTP headers we should send with the Twitch API request. It accepts a bearer token; if this
+    # request is on behalf of a user, you should pass one to improve rate limits (from 30/min to 800/user/min).
+    #
+    # See: https://dev.twitch.tv/docs/api/guide/#rate-limits
+    def headers(token: nil)
+      if token.present?
+        {'Authorization' => "Bearer #{token}"}
+      else
+        {'Client-ID' => ENV['TWITCH_CLIENT_ID']}
+      end
     end
   end
 end
