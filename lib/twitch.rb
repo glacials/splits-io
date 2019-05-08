@@ -11,7 +11,7 @@ class Twitch
 
     class << self
       def get(id, token: nil)
-        route(id).get(Twitch.headers(token))['data']
+        User.route(id).get(token: Twitch.headers(token))['data']
       end
 
       def route(id)
@@ -40,7 +40,7 @@ class Twitch
 
     class << self
       def get(id, token: nil, cursor: nil)
-        route(id, token: token, cursor: cursor).get(Twitch.headers(token: token))
+        Follows.route(id, token: token, cursor: cursor).get(token: Twitch.headers(token: token))
       end
 
       def route(id, cursor: nil)
@@ -77,7 +77,7 @@ class Twitch
     end
 
     def self.get(id, type, token: nil, cursor: nil)
-      Videos.route(id, type, cursor: cursor).get(Twitch.headers(token))
+      Videos.route(id, type, cursor: cursor).get(token: Twitch.headers(token))
     end
 
     def self.route(id, type, cursor: nil)
