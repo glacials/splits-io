@@ -82,22 +82,6 @@ const buildPlaytimeChart = function(runs, chartOptions = {}) {
         tooltip: {
           headerFormat: '',
           shared: true,
-          pointFormatter: function() {
-            const x = Math.trunc(moment.duration(this.x).asHours())
-            const y = moment.duration(this.y).format('H:mm:ss')
-            const xdiff = moment.duration(this.x - playtime)
-
-            if (this.y >= lastPB[duration]) {
-              return `Splits I/O would have predicted <b>${x} hours</b> of practice to get a <b>${y}</b>`
-            }
-            if (xdiff < 0) {
-              return `<b>Too soon to say</b> 🤷`
-            }
-
-            return `<b>Prediction:</b> PB should hit <b>${y}</b> after about <b>${Math.trunc(xdiff.asHours())} more
-              hours</b> of attempts<br />(about <b>${Math.trunc(xdiff.asMilliseconds() / lastPB[duration])}
-              </b>full attempts' worth)`
-          }
         }
       }
     },
@@ -106,11 +90,31 @@ const buildPlaytimeChart = function(runs, chartOptions = {}) {
       data: playtimeBetweenPBs,
       regression: playtimeBetweenPBs.length >= 2,
       regressionSettings: {
-        name: `${runs[i].runners[0].name}'s Projected PBs`,
-        type: 'logarithmic',
         color: logoColors[i],
         dashStyle: 'dot',
-        extrapolate: playtimeBetweenPBs.length
+        extrapolate: playtimeBetweenPBs.length,
+        index: i,
+        name: `${runs[i].runners[0].name}'s Projected PBs`,
+        type: 'logarithmic'
+      },
+      tooltip: {
+        pointFormatter: function() {
+          const lastPB = playtimeBetweenPBs.find(point => point[0] === this.x)
+          const x = Math.trunc(moment.duration(this.x).asHours())
+          const y = moment.duration(this.y).format('H:mm:ss')
+          const xdiff = moment.duration(this.x - lastPB[1])
+
+          if (this.y >= playtimeBetweenPBs.find(point => point[0] === this.x)[1]) {
+            return `Splits I/O would have predicted <b>${x} hours</b> of practice to get a <b>${y}</b>`
+          }
+          if (xdiff < 0) {
+            return `<b>Too soon to say</b> 🤷`
+          }
+
+          return `<b>Prediction:</b> PB should hit <b>${y}</b> after about <b>${Math.trunc(xdiff.asHours())} more
+            hours</b> of attempts<br />(about <b>${Math.trunc(xdiff.asMilliseconds() / lastPB[1])}
+            </b> attempts)`
+        }
       }
     })),
     title: {text: 'Practice Required to PB'},
