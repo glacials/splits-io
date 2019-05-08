@@ -93,31 +93,20 @@ const buildPlaytimeChart = function(runs, chartOptions = {}) {
         color: logoColors[i],
         dashStyle: 'dot',
         extrapolate: playtimeBetweenPBs.length,
-        index: i,
-        name: `${runs[i].runners[0].name}'s Projected PBs`,
+        name: `${runs[i].runners[0].name}'s Predicted PBs`,
         type: 'logarithmic'
-      },
-      tooltip: {
-        pointFormatter: function() {
-          const lastPB = playtimeBetweenPBs.find(point => point[0] === this.x)
-          const x = Math.trunc(moment.duration(this.x).asHours())
-          const y = moment.duration(this.y).format('H:mm:ss')
-          const xdiff = moment.duration(this.x - lastPB[1])
-
-          if (this.y >= playtimeBetweenPBs.find(point => point[0] === this.x)[1]) {
-            return `Splits I/O would have predicted <b>${x} hours</b> of practice to get a <b>${y}</b>`
-          }
-          if (xdiff < 0) {
-            return `<b>Too soon to say</b> 🤷`
-          }
-
-          return `<b>Prediction:</b> PB should hit <b>${y}</b> after about <b>${Math.trunc(xdiff.asHours())} more
-            hours</b> of attempts<br />(about <b>${Math.trunc(xdiff.asMilliseconds() / lastPB[1])}
-            </b> attempts)`
-        }
       }
     })),
     title: {text: 'Practice Required to PB'},
+    tooltip: {
+      pointFormatter: function() {
+        const x = moment.duration(this.x)
+        const y = moment.duration(this.y)
+
+        return `<b>Based on past data,</b> hitting a <b>${y.format('H:mm:ss')}</b> should take about <b>${Math.trunc(x.asHours())} total
+          hours</b> of attempts`
+      }
+    },
     xAxis: {
       title: {text: 'Life Playtime'},
       labels: {formatter: function() { return `${Math.trunc(moment.duration(this.value).asHours())} h` }}
