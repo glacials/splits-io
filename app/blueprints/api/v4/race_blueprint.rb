@@ -1,5 +1,5 @@
 class Api::V4::RaceBlueprint < Blueprinter::Base
-  fields :id, :status_text, :listed, :invite, :notes, :started_at, :created_at, :updated_at
+  fields :id, :status_text, :visibility, :notes, :started_at, :created_at, :updated_at
 
   association :entrants, blueprint: Api::V4::EntrantBlueprint
 

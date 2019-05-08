@@ -3,7 +3,7 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
     @race = Raceable.race_from_type(params[:race_type]).find_by(id: params[:race_id])
     reject if @race.nil?
 
-    if (@race.invite_only? || @race.secret?) && @race.auth_token != params[:auth_token]
+    if (@race.invite_only_visibility? || @race.secret_visibility?) && @race.auth_token != params[:auth_token]
       reject
     else
       stream_for(@race)
@@ -53,7 +53,7 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
       transmit_user('race_leave_success', 'Race successfully left')
       broadcast_race_update('race_entrants_updated', 'An entrant has left the race')
     else
-      transmit_user('race_part_error', entrant.error.full_messages.to_sentence)
+      transmit_user('race_leave_error', entrant.error.full_messages.to_sentence)
     end
   end
 
@@ -69,7 +69,7 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
 
-    if entrant.update(ready: true)
+    if entrant.update(readied_at: Time.now.utc)
       transmit_user('race_ready_success', 'Entrant ready successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has readied up')
       maybe_start_race
@@ -90,7 +90,7 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
 
-    if entrant.update(ready: false)
+    if entrant.update(readied_at: nil)
       transmit_user('race_unready_success', 'Entrant unready successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has unreadied')
     else
@@ -124,7 +124,7 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
       broadcast_race_update('race_entrants_updated', 'An entrant has forfeited')
       maybe_end_race
     else
-      transmit_user('race_abandon_error', entrant.errors.full_messages.to_sentence)
+      transmit_user('race_forfeit_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -192,26 +192,20 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
   end
 
   def transmit_user(type, msg)
-    transmit({
-      type: type,
-      data: {
-        message: msg
-      }
-    })
+    ws_msg = Api::V1::WebsocketMessage.new(type, message: msg)
+    transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
   end
 
   def broadcast_race_update(type, msg)
     update_race_instance
     msg = {
-      type: type,
-      data: {
-        message: msg,
-        race:    Api::V4::RaceBlueprint.render_as_hash(@race)
-      }
+      message: msg,
+      race:    Api::V4::RaceBlueprint.render_as_hash(@race)
     }
     msg[:entrants_html] = ApplicationController.render(partial: 'races/entrants_table', locals: {race: @race}) if onsite
 
-    broadcast_to(@race, msg)
+    ws_msg = Api::V1::WebsocketMessage.new(type, msg)
+    broadcast_to(@race, Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
   end
 
   # Starts the race if every entrant is readied up, otherwise does nothing

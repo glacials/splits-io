@@ -5,6 +5,10 @@ class StandardRace < ApplicationRecord
   belongs_to :category
   has_one :game, through: :category
 
+  def self.string_type
+    'standard'
+  end
+
   def to_s
     "#{game} - #{category}"
   end

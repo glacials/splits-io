@@ -14,7 +14,7 @@ document.addEventListener('turbolinks:load', () => {
 
     received(data) {
       switch(data.type) {
-        case 'race_creation_successful':
+        case 'race_creation_success':
           Turbolinks.visit(data.data.path)
           break
         case 'race_creation_error':

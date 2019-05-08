@@ -52,9 +52,8 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.bigint "game_id", null: false
     t.bigint "user_id", null: false
     t.string "status_text", null: false
-    t.boolean "listed", default: true, null: false
-    t.boolean "invite", default: false, null: false
-    t.string "auth_token"
+    t.integer "visibility", default: 0, null: false
+    t.string "auth_token", null: false
     t.string "notes"
     t.string "card", null: false
     t.datetime "started_at", precision: 3
@@ -222,9 +221,8 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.bigint "game_id", null: false
     t.bigint "user_id", null: false
     t.string "status_text", null: false
-    t.boolean "listed", default: true, null: false
-    t.boolean "invite", default: false, null: false
-    t.string "auth_token"
+    t.integer "visibility", default: 0, null: false
+    t.string "auth_token", null: false
     t.string "notes"
     t.string "seed", null: false
     t.datetime "started_at", precision: 3
@@ -402,9 +400,8 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.bigint "category_id", null: false
     t.bigint "user_id", null: false
     t.string "status_text", null: false
-    t.boolean "listed", default: true, null: false
-    t.boolean "invite", default: false, null: false
-    t.string "auth_token"
+    t.integer "visibility", default: 0, null: false
+    t.string "auth_token", null: false
     t.string "notes"
     t.datetime "started_at", precision: 3
     t.datetime "created_at", precision: 3, null: false

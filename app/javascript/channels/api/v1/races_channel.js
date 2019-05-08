@@ -23,7 +23,7 @@ document.addEventListener('turbolinks:load', () => {
       received(data) {
         switch(data.type) {
           case 'race_entrants_updated':
-            document.getElementById('entrants-table').innerHTML = data.entrants_html
+            document.getElementById('entrants-table').innerHTML = data.data.entrants_html
             break;
 
           case 'race_join_success':

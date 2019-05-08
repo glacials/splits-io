@@ -2,6 +2,10 @@ class Entrant < ApplicationRecord
   belongs_to :raceable, polymorphic: true, touch: true
   belongs_to :user
 
+  def ready?
+    readied_at.present?
+  end
+
   def finished?
     finished_at.present?
   end

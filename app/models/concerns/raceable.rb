@@ -2,7 +2,10 @@ module Raceable
   extend ActiveSupport::Concern
 
   included do
-    OPEN = 'Open Entry'.freeze
+    # These can only be accessed from classes that it is included in, not from the Raceable class
+    enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
+
+    OPEN_ENTRY = 'Open Entry'.freeze
     IN_PROGRESS = 'In Progress'.freeze
     ENDED = 'Ended'.freeze
 
@@ -14,17 +17,7 @@ module Raceable
 
     has_secure_token :auth_token
 
-    def public?
-      listed? && !invite?
-    end
-
-    def invite_only?
-      listed? && invite?
-    end
-
-    def secret?
-      !listed?
-    end
+    validates :status_text, presence: true
 
     def started?
       started_at.present?
@@ -41,31 +34,13 @@ module Raceable
     def entrant_for_user(user)
       entrants.find_by(user_id: user.id)
     end
-
-    def visibility!(type)
-      # When given an invalid type, the column defaults will make the race public
-      case type
-      when 'public'
-        self.listed = true
-        self.invite = false
-      when 'invite_only'
-        self.listed = true
-        self.invite = true
-      when 'secret'
-        self.listed = false
-        self.invite = true
-      end
-    end
   end
 
+  RACE_TYPES = [StandardRace, BingoRace, RandomizerRace].freeze
+
   def self.race_from_type(type)
-    case type
-    when 'standard'
-      StandardRace
-    when 'bingo'
-      BingoRace
-    when 'randomizer'
-      RandomizerRace
-    end
+    RACE_TYPES.each { |klass| return klass if klass.string_type == type }
+
+    nil
   end
 end
