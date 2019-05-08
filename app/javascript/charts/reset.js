@@ -47,7 +47,7 @@ const buildResetChart = function(runs, chartOptions = {}) {
       title: {text: 'Resets'}
     },
     series: runs.map((run, i) => {
-      let attemptsSoFar = 0
+      let attemptsSoFar = run.attempts
 
       return {
         center: [`${(100/(runs.length+1))*(i+1)}%`, '50%'],
