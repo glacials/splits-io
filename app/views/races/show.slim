@@ -18,7 +18,106 @@
 
   .col-md-6
     .card.shadow.my-3#chat-card
-      h6.card-header Chat
-      .card-body: #chat-box
-        | BIG OL FAT CHATBOX
-
+      #chat-box
+        .list-group.list-group-flush
+          .list-group-item.p-0
+            .input-group
+              input.form-control type='text' placeholder='Chat...' autofocus=true
+              .input-group-append
+                button.btn.btn-dark type='button' Chat
+          .progress
+            .progress-bar.progress-bar-striped.progress-bar-animated.bg-dark role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'
+          - user = User.first
+          .list-group-item
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=1.minute.ago #{time_ago_in_words(1.minute.ago)} ago
+                p.mb-1 Ready now
+          .list-group-item.bg-dark
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=2.minutes.ago #{time_ago_in_words(30.seconds.ago)} ago
+                p.mb-1
+                  span.badge.badge-success.mr-1 style='text-transform: uppercase' Ready
+          .list-group-item
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=1.minute.ago #{time_ago_in_words(1.minute.ago)} ago
+                p.mb-1 Ok
+          .list-group-item
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=1.minute.ago #{time_ago_in_words(1.minute.ago)} ago
+                p.mb-1 Wait I have to get a drink
+          .list-group-item.bg-dark
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=2.minutes.ago #{time_ago_in_words(2.minutes.ago)} ago
+                p.mb-1
+                  span.badge.badge-danger.mr-1 style='text-transform: uppercase' Unready
+          .list-group-item
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=1.minute.ago #{time_ago_in_words(2.minute.ago)} ago
+                p.mb-1
+                  ' Let's do this!
+          .list-group-item.bg-dark
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=2.minutes.ago #{time_ago_in_words(2.minutes.ago)} ago
+                p.mb-1
+                  span.badge.badge-success.mr-1 style='text-transform: uppercase' Ready
+          .list-group-item
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=3.minutes.ago #{time_ago_in_words(3.minutes.ago)} ago
+                p.mb-1 This is a blind run for me :P
+          .list-group-item
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=3.minutes.ago #{time_ago_in_words(3.minutes.ago)} ago
+                p.mb-1 Oh hello there!
+          .list-group-item.bg-dark
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=4.minutes.ago #{time_ago_in_words(4.minutes.ago)} ago
+                p.mb-1
+                  span.badge.badge-warning.mr-1 style='text-transform: uppercase' Joined
+          .list-group-item style='filter: grayscale(1)'
+            .media
+              img.mr-3 src=user.avatar width=50 height=50
+              .media-body
+                .d-flex.w-100.justify-content-between
+                  h5.mb-1 = user_badge(user)
+                  small title=5.minutes.ago #{time_ago_in_words(5.minutes.ago)} ago
+                p.mb-1 First message! I'm grayscale because I haven't joined.
