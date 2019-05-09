@@ -40,7 +40,7 @@ class Twitch
 
     class << self
       def get(id, token: nil, cursor: nil)
-        Follows.route(id, token: token, cursor: cursor).get(Twitch.headers(token: token))
+        Follows.route(id, cursor: cursor).get(Twitch.headers(token: token))
       end
 
       def route(id, cursor: nil)
