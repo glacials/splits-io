@@ -353,6 +353,8 @@ for an OAuth token using a secure API request.
     ```http
     grant_type=refresh_token
     refresh_token=YOUR_REFRESH_TOKEN
+    client_id=YOUR_CLIENT_ID
+    client_secret=YOUR_CLIENT_SECRET
     ```
     This will return a new access token (and a new refresh token -- update yours!) in a body format identical to
     original grant (above).
@@ -451,6 +453,8 @@ using a secure API request.
     ```http
     grant_type=refresh_token
     refresh_token=YOUR_REFRESH_TOKEN
+    client_id=YOUR_CLIENT_ID
+    client_secret=YOUR_CLIENT_SECRET
     ```
     This will return a new access token (and a new refresh token -- update yours!) in a body format identical to
     original grant (above).
