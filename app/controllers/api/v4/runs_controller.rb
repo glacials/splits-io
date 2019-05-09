@@ -9,12 +9,19 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   before_action only: [:create] do
     if current_user.nil? # If a cookie is supplied, use it because we're probably on the website.
       # If an OAuth token is supplied, use it (and fail if it's invalid). Otherwise, upload anonymously.
-      doorkeeper_authorize! :upload_run if request.headers['Authorization'].present?
+      if request.headers['Authorization'].present?
+        doorkeeper_authorize! :upload_run
+        self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+      end
     end
   end
 
   before_action only: [:destroy] do
     doorkeeper_authorize! :delete_run
+
+    if doorkeeper_token.nil? || @run.user.nil? || doorkeeper_token.resource_owner_id != @run.user.id
+      head :unauthorized
+    end
   end
 
   def show
@@ -38,14 +45,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def create
-    filename = SecureRandom.uuid
-
-    rp = run_params
-    rp = {} if rp.nil?
-
-    rp = rp.merge(s3_filename: filename, user: current_user)
-
-    @run = Run.create(rp)
+    @run = Run.create(run_params.merge(s3_filename: SecureRandom.uuid, user: current_user))
     unless @run.persisted?
       render status: :bad_request, json: {
         status: 400,
@@ -55,7 +55,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     end
 
     presigned_request = $s3_bucket_external.presigned_post(
-      key: "splits/#{filename}",
+      key: "splits/#{@run.s3_filename}",
       content_length_range: 1..(25 * 1024 * 1024)
     )
 
@@ -86,6 +86,11 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def destroy
+    if request.headers['Authorization'].present?
+      doorkeeper_authorize! :upload_run
+      current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+    end
+
     if @run.destroy
       head 205
     else
