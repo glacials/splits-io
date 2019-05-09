@@ -54,13 +54,21 @@ class Duration
   end
 
   def ==(duration)
+    return false if nil? || duration.nil?
     return false unless duration.respond_to?(:to_ms)
 
     to_ms == duration.to_ms
   end
 
+  def !=(duration)
+    return false if nil? || duration.nil?
+    return false unless duration.respond_to?(:to_ms)
+
+    to_ms != duration.to_ms
+  end
+
   def <(duration)
-    return false if duration.nil?
+    return false if nil? || duration.nil?
 
     # duration can be a Duration or a number of milliseconds
     ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
@@ -73,7 +81,7 @@ class Duration
   end
 
   def >(duration)
-    return false if duration.nil?
+    return false if nil? || duration.nil?
 
     # duration can be a Duration or a number of milliseconds
     ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
@@ -92,7 +100,7 @@ class Duration
   end
 
   def -(duration)
-    return Duration.new(nil) if duration.nil?
+    return Duration.new(nil) if nil? || duration.nil?
 
     Duration.new(to_ms - duration.to_ms)
   end

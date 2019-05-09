@@ -8,19 +8,19 @@
     h2.statcard-number
       = run.duration(timing).format(precise: run.short?(timing))
       - if compare_run.present?
-        = delta(run.duration(timing), compare_runs.first.try(:duration, timing), subject: subject)
+        = delta(run.duration(timing), compare_run.try(:duration, timing), subject: subject)
     span.statcard-desc Time
   .col-sm-3: .statcard.p-3
     h3.statcard-number
       = run.sum_of_best(timing).format(precise: run.short?(timing))
       - if compare_run.present?
-        = delta(run.sum_of_best(timing), compare_runs.first.try(:sum_of_best, timing), subject: subject)
+        = delta(run.sum_of_best(timing), compare_run.try(:sum_of_best, timing), subject: subject)
     span.statcard-desc Sum of best
   .col-sm-3: .statcard.p-3
     h3.statcard-number
       = (run.duration(timing) - run.sum_of_best(timing)).format_casual
       - if compare_run.present?
-        = delta(run.possible_timesave(timing), compare_runs.first.try(:possible_timesave, timing), subject: subject, better: :different)
+        = delta(run.possible_timesave(timing), compare_run.try(:possible_timesave, timing), subject: subject, better: :different)
     span.statcard-desc Possible timesave
   .col-sm-3: .statcard.p-3
     h3.statcard-number = Run.program(run.timer)
@@ -30,14 +30,14 @@
       h3.statcard-number
         = run.attempts
         - if compare_run.present?
-          = delta(run.attempts, compare_runs.first.try(:attempts), subject: subject, better: :different)
+          = delta(run.attempts, compare_run.try(:attempts), subject: subject, better: :different)
       span.statcard-desc = 'Attempt'.pluralize(run.attempts)
   - if run.total_playtime > 0
     .col-sm-3: .statcard.p-3
       h3.statcard-number
         = run.total_playtime.format
         - if compare_run.present?
-          = delta(run.total_playtime, compare_runs.first.total_playtime, subject: subject, better: :different)
+          = delta(run.total_playtime, compare_run.total_playtime, subject: subject, better: :different)
       span.statcard-desc Life playtime
   .col-sm-3: .statcard.p-3
     h3.statcard-number#time-since-upload title=run.created_at

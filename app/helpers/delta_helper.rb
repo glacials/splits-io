@@ -9,8 +9,10 @@ module DeltaHelper
   # If better is :higher, it will be colored green if base is higher than compare.
   # If better is :different, it will be colored green if different from compare.
   #
-  # Pass a subject string to fill in the tooltip like so: "Compared to #{subject}".
+  # Pass a subject string to fill in the tooltip with "Compared to #{subject}".
   def delta(base, compare, subject:, better: :lower)
+    return tag.small('', class: 'text-muted') if [base, compare].any?(:nil?)
+
     classes = %w[delta-indicator tip-top mx-2 cursor-default]
 
     if base == compare
@@ -20,17 +22,15 @@ module DeltaHelper
       text = (base - compare).abs
       # Format if they're Durations, leave alone if they're flat numbers (e.g. # attempts)
       text = text.format_casual if [base, compare].all? { |d| d.respond_to?(:format_casual) }
+
+      classes << 'delta-negative' if base < compare
+      classes << 'delta-positive' if base > compare
     end
 
-    if base < compare
-      classes << 'delta-negative'
-    elsif base > compare
-      classes << 'delta-positive'
-    end
-
+    # We use if/elsif instead of if/else because nil durations hard-return false for all comparisons.
     if (better == :higher && base > compare) || (better == :lower && base < compare) || (better == :different && base != compare)
       classes << 'text-success'
-    else
+    elsif (better == :higher && base < compare) || (better == :lower && base > compare)
       classes << 'text-danger'
     end
 
