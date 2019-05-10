@@ -2,7 +2,7 @@ module Raceable
   extend ActiveSupport::Concern
 
   included do
-    # These can only be accessed from classes that it is included in, not from the Raceable class
+    # These can only be accessed from classes that include this module, not from the module itself
     enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
 
     OPEN_ENTRY = 'Open Entry'.freeze
@@ -33,6 +33,22 @@ module Raceable
 
     def entrant_for_user(user)
       entrants.find_by(user_id: user.id)
+    end
+
+    def type
+      self.class.string_type
+    end
+
+    def bingo?
+      type == 'bingo'
+    end
+
+    def randomizer?
+      type == 'randomizer'
+    end
+
+    def race?
+      type == 'race'
     end
   end
 

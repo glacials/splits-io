@@ -6,7 +6,7 @@ class StandardRace < ApplicationRecord
   has_one :game, through: :category
 
   def self.string_type
-    'standard'
+    'race'
   end
 
   def to_s

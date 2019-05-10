@@ -40,22 +40,18 @@ Once the output looks settled (you should see `* Listening on tcp://0.0.0.0:3000
 
 [localhost]: http://localhost:3000/
 
-#### Accounts (Optional)
-Splits.io accounts are built on top of Twitch accounts, so if you want sign up / sign in to work, you will need to
-register a Twitch application at [dev.twitch.tv/dashboard](https://dev.twitch.tv/dashboard).
-Use this redirect URI when asked:
-```http
-http://localhost:3000/auth/twitch/callback
-```
-Twitch will give you a client ID and a client secret. Put them in `.env` in the same format as `.example.env`. Then run
-```sh
-source .env
-make build
-```
-before starting the server again and you're set!
+#### Optional Features
+Some features are built on top of links with other platforms, like Twitch sign-in. If you want these features to work,
+you need to register developer applications with the appropriate services. See `.envrc.example` for details on which
+features require which platforms.
 
-(If you want to do the source step automatically in the future, use something
-like [`autoenv`](https://github.com/kennethreitz/autoenv).)
+After changing or creating `.envrc`, run
+```sh
+source .envrc && make build run
+```
+to rebuild the server with your new environment variables, or use [direnv][direnv] to automate this step!
+
+[direnv]: https://github.com/direnv/direnv
 
 ### Debugging
 #### Getting Up and Running

@@ -19,105 +19,104 @@
   .col-md-6
     .card.shadow.my-3#chat-card
       #chat-box
-        .list-group.list-group-flush
+        .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
           .list-group-item.p-0
             .input-group
               input.form-control type='text' placeholder='Chat...' autofocus=true
               .input-group-append
                 button.btn.btn-dark type='button' Chat
-          .progress
-            .progress-bar.progress-bar-striped.progress-bar-animated.bg-dark role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'
           - user = User.first
-          .list-group-item
+          - [ \
+              { \
+                text: 'First message! I\'m greyscale because I haven\'t joined.', \
+                status: :spectator \
+              }, \
+              { \
+                text: 'Oh hello there!', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'This is a blind run for me :P', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Let\'s do this!', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Wait I have to get a drink', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+              { \
+                text: 'Filler to trigger the scrollbar', \
+                status: :entrant \
+              }, \
+            ].reverse.each.with_index do |message, i|
+            .list-group-item.p-0 style=('filter: grayscale(1)' if message[:status] == :spectator)
+              .media
+                img.mr-3 src=user.avatar width=25 height=25
+                .media-body
+                  span.mr-2 = user_badge(user)
+                  span title="Sent #{i.minutes.ago}" = message[:text]
+          .list-group-item.p-0
             .media
-              img.mr-3 src=user.avatar width=50 height=50
+              img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
               .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=1.minute.ago #{time_ago_in_words(1.minute.ago)} ago
-                p.mb-1 Ready now
-          .list-group-item.bg-dark
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=2.minutes.ago #{time_ago_in_words(30.seconds.ago)} ago
-                p.mb-1
-                  span.badge.badge-success.mr-1 style='text-transform: uppercase' Ready
-          .list-group-item
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=1.minute.ago #{time_ago_in_words(1.minute.ago)} ago
-                p.mb-1 Ok
-          .list-group-item
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=1.minute.ago #{time_ago_in_words(1.minute.ago)} ago
-                p.mb-1 Wait I have to get a drink
-          .list-group-item.bg-dark
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=2.minutes.ago #{time_ago_in_words(2.minutes.ago)} ago
-                p.mb-1
-                  span.badge.badge-danger.mr-1 style='text-transform: uppercase' Unready
-          .list-group-item
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=1.minute.ago #{time_ago_in_words(2.minute.ago)} ago
-                p.mb-1
-                  ' Let's do this!
-          .list-group-item.bg-dark
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=2.minutes.ago #{time_ago_in_words(2.minutes.ago)} ago
-                p.mb-1
-                  span.badge.badge-success.mr-1 style='text-transform: uppercase' Ready
-          .list-group-item
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=3.minutes.ago #{time_ago_in_words(3.minutes.ago)} ago
-                p.mb-1 This is a blind run for me :P
-          .list-group-item
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=3.minutes.ago #{time_ago_in_words(3.minutes.ago)} ago
-                p.mb-1 Oh hello there!
-          .list-group-item.bg-dark
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=4.minutes.ago #{time_ago_in_words(4.minutes.ago)} ago
-                p.mb-1
-                  span.badge.badge-warning.mr-1 style='text-transform: uppercase' Joined
-          .list-group-item style='filter: grayscale(1)'
-            .media
-              img.mr-3 src=user.avatar width=50 height=50
-              .media-body
-                .d-flex.w-100.justify-content-between
-                  h5.mb-1 = user_badge(user)
-                  small title=5.minutes.ago #{time_ago_in_words(5.minutes.ago)} ago
-                p.mb-1 First message! I'm grayscale because I haven't joined.
+                span.mr-2: .badge.badge-success Splits.io
+                span title="Sent #{60.minutes.ago}": i Race created
