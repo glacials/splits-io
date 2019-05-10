@@ -12,7 +12,7 @@ const urlHashToObject = function(hash) {
 document.addEventListener('turbolinks:load', () => {
   // Protect dev modes that haven't set up a client yet
   if (process.env.SPLITSIO_CLIENT_ID === undefined) {
-    console.error("SPLITSIO_CLIENT_ID & SPLITSIO_CLIENT_SECRET not set in .envrc. Some features like races won't work.")
+    console.warn("SPLITSIO_CLIENT_ID & SPLITSIO_CLIENT_SECRET not set in .envrc. Some features like races won't work.")
   }
   if (!gon.user) {
     return
