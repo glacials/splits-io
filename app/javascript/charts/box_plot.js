@@ -1,17 +1,17 @@
+const moment = require('moment')
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
-const moment = require('moment')
 
-import {logoBlue} from '../colors.js'
+import {logoColors} from '../colors.js'
 import {quantile} from '../stats.js'
 
-const buildBoxPlot = (run, chartOptions = {}) => {
+const buildBoxPlot = (runs, chartOptions = {}) => {
   if (document.getElementById('box-plot') === null) {
     return
   }
 
-  const timing = new URLSearchParams(window.location.search).get('timing') || run.default_timing
+  const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
   const duration = `${timing}time_duration_ms`
 
   Highcharts.chart('box-plot', {
@@ -33,20 +33,17 @@ const buildBoxPlot = (run, chartOptions = {}) => {
     },
     chart: {
       type: 'boxplot',
-      scrollablePlotArea: {minWidth: 75 * run.segments.length},
-      zoomType: 'y'
+      scrollablePlotArea: {minWidth: 75 * runs[0].segments.length},
+      zoomType: 'xy'
     },
-    colors: [logoBlue],
+    colors: logoColors,
     subtitle: {text: 'Excludes Outliers'},
-    legend: {enabled: false},
     plotOptions: {
       boxplot: {
         lineWidth: 2,
-        fillColor: '#fff',
-        whiskerColor: '#fff'
       }
     },
-    series: [{
+    series: runs.map(run => ({
       data: run.segments.map(segment => {
         const histories = segment.histories.map(attempt => attempt[duration]).filter(duration => duration > 0)
         const q1 = quantile(histories, .25)
@@ -62,7 +59,7 @@ const buildBoxPlot = (run, chartOptions = {}) => {
           high:   Math.max(...historiesSansOutliers)
         }
       }),
-      name: 'Segments',
+      name: (run.runners[0] || {name: '???'}).name,
       tooltip: {
         pointFormatter: function() {
           return `Worst: ${moment.duration(this.high).format('H:mm:ss')}<br/>
@@ -72,11 +69,11 @@ const buildBoxPlot = (run, chartOptions = {}) => {
             Best: ${moment.duration(this.low).format('H:mm:ss')}<br/>`
         }
       }
-    }],
+    })),
     title: {text: 'Segment Box Plot'},
     xAxis: {
       title: {text: 'Segment'},
-      categories: run.segments.map(segment => segment.name)
+      categories: runs[0].segments.map(segment => segment.name)
     },
     yAxis: {
       gridLineColor: 'rgba(255, 255, 255, 0.2)',

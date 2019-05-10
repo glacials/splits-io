@@ -1,34 +1,41 @@
-button#export-link.btn.btn-outline-light.dropdown-toggle href='#' role='button' aria={haspopup: true, expanded: false} data={toggle: 'dropdown'}
-  => icon('fas', 'download')
-  = local_assigns.fetch(:button_text, 'Export')
-#export-menu.dropdown-menu.bg-dark aria-labelledby='export-link'
-  form.px-4.pt-2 style=('display: none' if local_assigns.fetch(:force_route_only, false))
-    .form-group: .form-check
-      input#route-check.form-check-input type='checkbox' checked=true
-      label#route-check-label.form-check-label for='route-check'
-        ' Route only
-        small.tip(
-          title="When checked, Splits I/O won't include attempt history and gold times in the export.
-          Only applies to Generic Formats and Local Timers. If you're not sure, leave this checked."
-        ) = icon('fas', 'question-circle')
-  h6.dropdown-header.text-success Generic Formats
-  a.dropdown-item.can-strip-history.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
-    => icon('fas', 'file-download')
-    = ExchangeFormat
-  h6.dropdown-header.text-success Local Timers
-  - timer = Run.program(run.timer)
-  - (Run.exportable_programs - [ExchangeFormat]).each do |timer|
-    a.dropdown-item.can-strip-history.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
-      => icon('fas', 'download')
-      = timer
-  h6.dropdown-header.text-success Online Timers
-  a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
-    => icon('fas', 'cloud')
-    | LiveSplit One
-  h6.dropdown-header.text-success Raw Data
-  a.dropdown-item.text-secondary href=history_csv_path(run)
-    => icon('fas', 'file-csv')
-    | Run History
-  a.dropdown-item.text-secondary href=segment_history_csv_path(run)
-    => icon('fas', 'file-csv')
-    | Segment History
+.btn-group
+  button#export-link.btn.btn-outline-light.dropdown-toggle(
+    href='#'
+    role='button'
+    aria={haspopup: true, expanded: false}
+    data={toggle: 'dropdown'}
+  )
+    => icon('fas', 'download')
+    = local_assigns.fetch(:button_text, 'Export')
+  #export-menu.dropdown-menu.bg-dark aria-labelledby='export-link'
+    form.px-4.pt-2 style=('display: none' if local_assigns.fetch(:force_route_only, false))
+      .form-group: .form-check
+        input#route-check.form-check-input type='checkbox' checked=(!run.belongs_to?(current_user))
+        label#route-check-label.form-check-label for='route-check'
+          ' Route only
+          small.tip(
+            title="When checked, Splits.io won't include attempt history and gold times in the export. Only applies to
+            Generic Formats and Local Timers. If you're not sure, leave this
+            #{run.belongs_to?(current_user) ? 'unchecked' : 'checked'}."
+          ) = icon('fas', 'question-circle')
+    h6.dropdown-header.text-success Generic Formats
+    a.dropdown-item.can-strip-history.text-secondary data={turbolinks: false} href=download_path(run, ExchangeFormat.to_sym)
+      => icon('fas', 'file-download')
+      = ExchangeFormat
+    h6.dropdown-header.text-success Local Timers
+    - timer = Run.program(run.timer)
+    - (Run.exportable_programs - [ExchangeFormat]).each do |timer|
+      a.dropdown-item.can-strip-history.text-secondary data={turbolinks: false} href=download_path(run, timer.to_sym)
+        => icon('fas', 'download')
+        = timer
+    h6.dropdown-header.text-success Online Timers
+    a.dropdown-item.text-secondary href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
+      => icon('fas', 'cloud')
+      | LiveSplit One
+    h6.dropdown-header.text-success Raw Data
+    a.dropdown-item.text-secondary href=history_csv_path(run)
+      => icon('fas', 'file-csv')
+      | Run History
+    a.dropdown-item.text-secondary href=segment_history_csv_path(run)
+      => icon('fas', 'file-csv')
+      | Segment History

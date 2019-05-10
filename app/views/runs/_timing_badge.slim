@@ -1,10 +1,16 @@
 - if run.completed?(Run::REAL) && run.completed?(Run::GAME)
   - if timing == Run::REAL
-    a.badge.badge-dark.tip title='Recorded in realtime & gametime — click to switch' href='?timing=game'
+    a.badge.badge-dark.tip(
+      title='Recorded in realtime & gametime — click to switch'
+      href=run_path(run, params.permit(:compare).merge(timing: 'game'))
+    )
       span.text-success => icon('fas', 'globe-americas')
       = icon('fas', 'gamepad')
   - if timing == Run::GAME
-    a.badge.badge-dark.tip title='Recorded in realtime & gametime — click to switch' href='?timing=real'
+    a.badge.badge-dark.tip(
+      title='Recorded in realtime & gametime — click to switch'
+      href=run_path(run, params.permit(:compare).merge(timing: 'real'))
+    )
       => icon('fas', 'globe-americas')
       span.text-success = icon('fas', 'gamepad')
 - else

@@ -47,7 +47,7 @@ module ApplicationHelper
       title = "#{user} is a Splits I/O patron!"
     end
 
-    if user.silver_patron?
+    if user.patron?(tier: 2)
       badge = 'badge-warning'
       title = "#{user} is a Splits I/O patron!"
     end
@@ -86,7 +86,8 @@ module ApplicationHelper
     {
       'created_at' => :created_at,
       'time'       => :realtime_duration_ms,
-      'user_id'    => :user_id
+      'user_id'    => :user_id,
+      'video_url'  => :video_url
     }[param] || :created_at
   end
 end

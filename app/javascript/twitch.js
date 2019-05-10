@@ -1,29 +1,35 @@
 const async = require('async')
 
 document.addEventListener('turbolinks:load', function() {
-  const el = document.getElementById('twitch-player')
-  if (el === null || el.dataset.loaded === '1') {
-    return
-  }
+  Array.from(document.getElementsByClassName('twitch-player')).forEach(el => {
+    if (el.dataset.loaded === '1') {
+      return
+    }
+    el.dataset.loaded = '1'
 
-  const player = new Twitch.Player('twitch-player', {
-    video: gon.run.video_url.split('/').slice(-1)[0],
-    muted: true,
-    height: '100%',
-    width: '100%'
-  })
-
-  el.dataset.loaded = '1'
-
-  Array.from(document.getElementsByClassName('split')).forEach(function(el) {
-    el.addEventListener('click', function() {
-      player.seek(parseInt(el.dataset.start_ms / 1000 + 10))
-      player.play()
+    const player = new Twitch.Player(el.id, {
+      autoplay: false,
+      video: el.dataset.video_url.split('/').slice(-1)[0],
+      muted: true,
+      height: '100%',
+      width: '100%'
     })
-  })
 
-  async.forever((next) => {
-    document.getElementById('timeline-video-progress').style.margin = `0 0 0 ${player.getCurrentTime() / player.getDuration() * 100}%`
-    setTimeout(() => next(), 100)
+
+    document.addEventListener('click', event => {
+      const segment = event.target.closest('.split')
+      if (segment === null) {
+        return
+      }
+
+      player.seek(parseInt(segment.dataset.start_ms / 1000 + 10))
+      setTimeout(() => player.play(), 10) // Running this instantly after seek causes the player to hang
+    })
+
+    const ticker = document.getElementById(`video-progress-line-${el.dataset.run_id}`)
+    async.forever(next => {
+      ticker.style.margin = `0 0 0 ${Math.max(player.getCurrentTime() - 10, 0) / (gon.scale_to / 1000) * 100}%`
+      setTimeout(() => next(), 100)
+    })
   })
 })

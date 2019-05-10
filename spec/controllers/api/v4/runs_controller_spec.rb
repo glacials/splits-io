@@ -47,12 +47,14 @@ describe Api::V4::RunsController do
       subject(:response) { post :create, params: {file: run.file} }
 
       it 'returns a 403' do
-        application = Doorkeeper::Application.create(
-          name: 'Test Application',
-          redirect_uri: 'http://localhost:3000/',
-          owner: create(:user)
+        authorization = Doorkeeper::AccessToken.create(
+          application: Doorkeeper::Application.create(
+            name: 'Test Application Please Ignore',
+            redirect_uri: 'debug',
+            owner: FactoryBot.create(:user)
+          ),
+          resource_owner_id: FactoryBot.create(:user).id,
         )
-        authorization = Doorkeeper::AccessToken.create(application_id: application.id, resource_owner_id: create(:user))
         auth_header = "Bearer #{authorization.token}"
         request.headers['Authorization'] = auth_header
 
@@ -64,20 +66,33 @@ describe Api::V4::RunsController do
       subject(:response) { post :create, params: {file: run.file} }
 
       it 'returns a 201' do
-        application = Doorkeeper::Application.create(
-          name: 'Test Application',
-          redirect_uri: 'http://localhost:3000/',
-          owner: create(:user)
-        )
         authorization = Doorkeeper::AccessToken.create(
-          application_id: application.id,
-          resource_owner_id: create(:user),
+          application: Doorkeeper::Application.create(
+            name: 'Test Application Please Ignore',
+            redirect_uri: 'debug',
+            owner: FactoryBot.create(:user)
+          ),
+          resource_owner_id: FactoryBot.create(:user).id,
           scopes: 'upload_run'
         )
-        auth_header = "Bearer #{authorization.token}"
-        request.headers['Authorization'] = auth_header
+        request.headers['Authorization'] = "Bearer #{authorization.token}"
 
         expect(response).to have_http_status 201
+      end
+
+      it 'sets the token owner as the run owner' do
+        authorization = Doorkeeper::AccessToken.create(
+          application: Doorkeeper::Application.create(
+            name: 'Test Application Please Ignore',
+            redirect_uri: 'debug',
+            owner: FactoryBot.create(:user)
+          ),
+          resource_owner_id: FactoryBot.create(:user).id,
+          scopes: 'upload_run'
+        )
+        request.headers['Authorization'] = "Bearer #{authorization.token}"
+
+        expect(Run.find36(JSON.parse(response.body)['id']).user).to eq(User.find(authorization.resource_owner_id))
       end
     end
   end
@@ -249,6 +264,8 @@ describe Api::V4::RunsController do
         subject { delete :destroy, params: {run: run.id36} }
 
         it 'returns a 401' do
+          request.headers['Authorization'] = 'Bearer bad_token'
+
           expect(subject).to have_http_status 401
         end
       end
@@ -262,43 +279,69 @@ describe Api::V4::RunsController do
       end
     end
 
-    context 'when given a valid OAuth token with no scopes' do
-      let(:run) { create(:run) }
+    context 'when given a valid OAuth token with no scopes for the right user' do
+      let(:run) { FactoryBot.create(:run, :owned) }
       subject { delete :destroy, params: {run: run.id36} }
+      let(:authorization) do
+        Doorkeeper::AccessToken.create(
+          application: Doorkeeper::Application.create(
+            name: 'Test Application Please Ignore',
+            redirect_uri: 'debug',
+            owner: FactoryBot.create(:user)
+          ),
+          resource_owner_id: run.user.id
+        )
+      end
 
       it 'returns a 403' do
-        application = Doorkeeper::Application.create(
-          name: 'Test Application',
-          redirect_uri: 'http://localhost:3000/',
-          owner: create(:user)
-        )
-        authorization = Doorkeeper::AccessToken.create(application_id: application.id, resource_owner_id: create(:user))
-        auth_header = "Bearer #{authorization.token}"
-        request.headers['Authorization'] = auth_header
+        request.headers['Authorization'] = "Bearer #{authorization.token}"
 
-        expect(subject).to have_http_status 403
+        expect(subject).to have_http_status :forbidden
       end
     end
 
-    context 'when given a valid OAuth token with an delete_run scope' do
-      let(:run) { create(:run) }
+    context 'when given a valid OAuth token with a delete_run scope for the right user' do
+      let(:run) { FactoryBot.create(:run, :owned) }
       subject { delete :destroy, params: {run: run.id36} }
-
-      it 'returns a 205' do
-        application = Doorkeeper::Application.create(
-          name: 'Test Application',
-          redirect_uri: 'http://localhost:3000/',
-          owner: create(:user)
-        )
-        authorization = Doorkeeper::AccessToken.create(
-          application_id: application.id,
-          resource_owner_id: create(:user),
+      let(:authorization) do
+        Doorkeeper::AccessToken.create(
+          application: Doorkeeper::Application.create(
+            name: 'Test Application Please Ignore',
+            redirect_uri: 'debug',
+            owner: FactoryBot.create(:user)
+          ),
+          resource_owner_id: run.user.id,
           scopes: 'delete_run'
         )
-        auth_header = "Bearer #{authorization.token}"
-        request.headers['Authorization'] = auth_header
+      end
+
+
+      it 'returns a 205' do
+        request.headers['Authorization'] = "Bearer #{authorization.token}"
 
         expect(subject).to have_http_status 205
+      end
+    end
+    context 'when given a valid OAuth token with a delete_run scope for the wrong user' do
+      let(:run) { FactoryBot.create(:run, :owned) }
+      subject { delete :destroy, params: {run: run.id36} }
+      let(:authorization) do
+        Doorkeeper::AccessToken.create(
+          application: Doorkeeper::Application.create(
+            name: 'Test Application Please Ignore',
+            redirect_uri: 'debug',
+            owner: FactoryBot.create(:user)
+          ),
+          resource_owner_id: FactoryBot.create(:user).id,
+          scopes: 'delete_run'
+        )
+      end
+
+
+      it 'returns a 401' do
+        request.headers['Authorization'] = "Bearer #{authorization.token}"
+
+        expect(subject).to have_http_status :unauthorized
       end
     end
   end

@@ -2,7 +2,7 @@ h1 = run.to_s
 h5
   span> by
   span = user_badge(run.user)
-  - if run.pb?
+  - if run.pb?(timing)
     .badge
       => icon('fas', 'check')
       span Personal Best
@@ -21,42 +21,36 @@ h5
   .btn-group.m-2 role='group' aria={label: 'Run navigation'}
     .btn-group role='group'
       = render partial: 'export_button', locals: {run: run}
-    .btn-group role='group'
-      - if run.category
-        - if !run.belongs_to?(current_user) && current_user.try(:runs?, run.category)
-          a.btn.btn-outline-light href=compare_path(current_user.pb_for(run.category), run)
-            => icon('fas', 'chart-bar')
-            ' Compare
-    - if can?(:edit, run)
-      - if request.path_info == edit_run_path(run)
-        a.btn.btn-outline-light href=run_path(run)
-          => icon('fas', 'hand-point-left')
-          ' Back
-      - else
-        a.btn.btn-outline-light href=edit_run_path(run)
-          => icon('fas', 'edit')
-          ' Edit
-  .btn-group.m-2 role='group' aria={label: 'Related links'}
+      - if can?(:edit, run)
+        - if request.path_info == edit_run_path(run)
+          a.btn.btn-outline-light href=run_path(run)
+            => icon('fas', 'hand-point-left')
+            ' Back
+        - else
+          a.btn.btn-outline-light href=edit_run_path(run)
+            => icon('fas', 'edit')
+            ' Edit
+      = render partial: 'compare_button', locals: {timing: timing, run: run, compare_runs: compare_runs}
     - if run.user.nil?
-      #claim-nav-link-container hidden=true
+      #claim-nav-link-container.btn-group hidden=true
         - if current_user.present?
           a#claim-nav-link.btn.btn-outline-success href='#' data-confirm="Claim this run as #{current_user}?"
             => icon('fas', 'user-check')
             span Claim
         - else
-          button.btn.btn-outline-secondary disabled=true Sign In to Claim
-    - if can?(:create, RunLike)
-      button#like-button.btn.tip(
-        data={liked: current_user.likes?(run) ? '1' : '0'}
-        class=(current_user.likes?(run) ? 'btn-light' : 'btn-outline-light')
-        title=tooltip(run)
-      )
-        ' 🎉
-        span#likes-count data={value: run.likes.count} = run.likes.count
-    - else
-      .btn.btn-outline-light.tip.disabled title=tooltip(run)
-        ' 🎉
-        = run.likes.count
+          button.btn.btn-outline-secondary.tip.disabled title='Sign in to claim' style='cursor: default' Claim
+  - if can?(:create, RunLike)
+    .btn-group.m-2: button#like-button.btn.tip(
+      data={liked: current_user.likes?(run) ? '1' : '0'}
+      class=(current_user.likes?(run) ? 'btn-light' : 'btn-outline-light')
+      title=tooltip(run)
+    )
+      ' 🎉
+      span#likes-count data={value: run.likes.count} = run.likes.count
+  - else
+    .btn-group.m-2: .btn.btn-outline-secondary.tip.disabled title=tooltip(run)
+      ' 🎉
+      = run.likes.count
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
     - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
       a.btn.btn-twitch.tip-top(

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   use_doorkeeper do
     skip_controllers :applications, :authorized_applications
+    controllers(tokens: 'tokens', token_info: 'token_info')
   end
 
   root 'runs#index'
@@ -69,12 +70,6 @@ Rails.application.routes.draw do
 
   get '/users/:user', to: 'users#show',               as: :user
   get '/u/:user',     to: redirect('/users/%{user}'), as: :short_user
-
-  get    '/rivals',             to: redirect('/rivalries')
-  get    '/rivalries',          to: 'rivalries#index',   as: :rivalries
-  get    '/rivalries/new',      to: 'rivalries#new',     as: :new_rivalry
-  post   '/rivalries',          to: 'rivalries#create'
-  delete '/rivalries/:rivalry', to: 'rivalries#destroy', as: :rivalry
 
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 

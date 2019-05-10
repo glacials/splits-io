@@ -1,10 +1,10 @@
-module ExchangeFormat
+module FramePerfect
   def self.to_s
-    'Splits.io Exchange Format'
+    'FramePerfect'
   end
 
   def self.to_sym
-    :exchange
+    :frameperfect
   end
 
   def self.file_extension
@@ -12,7 +12,7 @@ module ExchangeFormat
   end
 
   def self.website
-    'https://github.com/glacials/splits-io/tree/master/public/schema'
+    'https://futuretrostudios.com/frameperfect/'
   end
 
   def self.content_type
@@ -20,10 +20,10 @@ module ExchangeFormat
   end
 
   def self.exportable?
-    true
+    false
   end
 
-  # exchangeable? is true if the timer supports the Splits.io Exchange Format for importing and exporting, false
+  # exchangeable? is true if the timer supports the Splits I/O Exchange Format for importing and exporting, false
   # otherwise. See: https://github.com/glacials/splits-io/tree/master/public/schema
   def self.exchangeable?
     true

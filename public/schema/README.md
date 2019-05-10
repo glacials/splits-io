@@ -1,6 +1,6 @@
-# Splits I/O Exchange Format
-The Splits I/O Exchange Format is a JSON schema denoting a standard way of arranging run information for passing between
-timers and other programs (like Splits I/O).
+# Splits.io Exchange Format
+The Splits.io Exchange Format is a JSON schema denoting a standard way of arranging run information for passing between
+timers and other programs (like Splits.io).
 
 [**Documentation**][1]
 

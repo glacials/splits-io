@@ -1,12 +1,28 @@
 - content_for(:title, 'Nope')
 - content_for(:header) do
-  h2 can't parse that
 article
-  p For some reason we couldn't parse that file. We currently support splits from #{Run.programs.to_sentence}.
-  p
-    | If that file
-    em<> did
-    | come from a program we support, please email
-    a<> href="mailto:bugs@splits.io" bugs@splits.io
-    | with the file attached so that the issue can be fixed!
-  p If it wasn't, and you'd like support for that program, let me know!
+  .col-md-8.offset-md-2
+    .alert.alert-warning
+      p
+        b> We couldn't parse that file!
+        ' For a list of timers and formats supported, see the
+        a href=faq_path(anchor: 'programs') FAQ
+        ' .
+      p
+        ' If that file
+        em<> did
+        | come from a program we support, please email
+        a<> href="mailto:bugs@splits.io" bugs@splits.io
+        | with the file attached so that the issue can be fixed!
+      p
+        ' If it didn't and you'd like support for that program,
+        a href='mailto:hi@splits.io' let us know
+        ' !
+    .alert.alert-info
+      b
+        ' If you're uploading a
+        code> .lsl
+        ' file:
+      ' that's a layout file! Splits from LiveSplit have the extension
+      code .lss
+      ' .
