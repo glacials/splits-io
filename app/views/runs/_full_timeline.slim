@@ -1,4 +1,4 @@
-- scale_to = [run, *compare_runs].max_by { |r| r.duration(timing).to_ms }.duration(timing)
+- scale_to = [run, *compare_runs].max_by { |r| r.duration(timing) }.duration(timing).to_ms
 = render partial: 'runs/timeline', locals: {run: run, timing: timing, scale_to: scale_to}
 .m-0 style='filter: sepia(60%)'
   - compare_runs.each do |run|
