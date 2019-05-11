@@ -2,8 +2,7 @@ class TwitchUsersController < ApplicationController
   include Authenticatable
 
   def in
-    auth = request.env['omniauth.auth']
-    twitch_user = TwitchUser.from_auth(auth, current_user)
+    twitch_user = TwitchUser.from_auth(request.env['omniauth.auth'], current_user)
     if twitch_user.errors.any?
       redirect_to redirect_path, alert: "Couldn't sign in: #{twitch_user.errors.full_messages.to_sentence} :("
       return
