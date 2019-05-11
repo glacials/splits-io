@@ -38,7 +38,7 @@ document.addEventListener('turbolinks:load', () => {
   const iframe = document.createElement('iframe')
   const params = {
     response_type: 'token',
-    scope: 'upload_run+websocket_sign_in',
+    scope: 'upload_run+manage_race',
     redirect_uri: `${window.location.origin}/auth/splitsio/callback`,
     client_id: process.env.SPLITSIO_CLIENT_ID
   }

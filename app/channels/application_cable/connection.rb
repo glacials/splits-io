@@ -5,7 +5,7 @@ module ApplicationCable
     def connect
       # Identify if the user is 'onsite' so that pre-rendered html can be sent
       self.current_user, self.onsite = find_verified_user
-      log_tag = current_user.try(:name) || SecureRandom.hex
+      log_tag = current_user.try(:name) || SecureRandom.uuid
       logger.add_tags('ActionCable', log_tag)
     end
 
@@ -25,7 +25,7 @@ module ApplicationCable
       # If a token is explicitly passed in then error out instead of going into anonymous mode if it isn't valid
       access_token = Doorkeeper::AccessToken.by_token(passed_token)
       reject_unauthorized_connection unless access_token
-      reject_unauthorized_connection unless access_token.includes_scope?(:websocket_sign_in)
+      reject_unauthorized_connection if access_token.expired? || !access_token.includes_scope?(:manage_race)
 
       user = User.find_by(id: access_token.try(:resource_owner_id))
       reject_unauthorized_connection if user.nil?

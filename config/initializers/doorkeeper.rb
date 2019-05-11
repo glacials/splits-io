@@ -25,7 +25,7 @@ Doorkeeper.configure do
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   # default_scopes  :public
-  optional_scopes :upload_run, :delete_run, :websocket_sign_in
+  optional_scopes :upload_run, :delete_run, :manage_race
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then

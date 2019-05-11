@@ -12,4 +12,4 @@
           td = entrant.user.name
           td = entrant.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
           td = entrant.place
-          td = entrant.duration || '-'
+          td = entrant.duration.format

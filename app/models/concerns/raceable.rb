@@ -5,10 +5,6 @@ module Raceable
     # These can only be accessed from classes that include this module, not from the module itself
     enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
 
-    OPEN_ENTRY = 'Open Entry'.freeze
-    IN_PROGRESS = 'In Progress'.freeze
-    ENDED = 'Ended'.freeze
-
     belongs_to :owner, foreign_key: :user_id, class_name: 'User'
     has_many :entrants, as: :raceable, dependent: :destroy
     has_many :users, through: :entrants
@@ -54,6 +50,9 @@ module Raceable
     end
   end
 
+  OPEN_ENTRY = 'Open Entry'.freeze
+  IN_PROGRESS = 'In Progress'.freeze
+  ENDED = 'Ended'.freeze
   RACE_TYPES = [StandardRace, BingoRace, RandomizerRace].freeze
 
   def self.race_from_type(type)

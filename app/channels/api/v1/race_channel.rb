@@ -156,7 +156,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   # Starts the race if every entrant is readied up, otherwise does nothing
   def maybe_start_race
     update_race_instance
-    return if @race.started? || !@race.entrants.all(&:ready) || @race.entrants.count < 2
+    return if @race.started? || !@race.entrants.all?(&:ready?) || @race.entrants.count < 2
 
     @race.update(started_at: Time.now.utc + 20.seconds, status_text: Raceable::IN_PROGRESS)
     broadcast_race_update('race_start_scheduled', 'Race starting soon')

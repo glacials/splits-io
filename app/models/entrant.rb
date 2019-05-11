@@ -29,7 +29,7 @@ class Entrant < ApplicationRecord
   end
 
   def duration
-    return nil unless finished?
+    return Duration.new(nil) unless finished?
 
     Duration.new((finished_at - raceable.started_at) * 1000).format
   end

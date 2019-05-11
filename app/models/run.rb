@@ -207,7 +207,7 @@ class Run < ApplicationRecord
   end
 
   def recommended_comparison(timing)
-    query = Run.where(category: category).where.not(user: nil, category: nil)
+    query = Run.where(category: category).where.not(user: nil).where.not(category: nil)
 
     case timing
     when Run::REAL

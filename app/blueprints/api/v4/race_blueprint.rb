@@ -8,17 +8,13 @@ class Api::V4::RaceBlueprint < Blueprinter::Base
   end
 
   view :bingo do
-    field :card do |race, _|
-      race.started? ? race.card : nil
-    end
+    field :card
 
     association :game, blueprint: Api::V4::GameBlueprint
   end
 
   view :randomizer do
-    field :seed do |race, _|
-      race.started? ? race.seed : nil
-    end
+    field :seed
 
     association :game, blueprint: Api::V4::GameBlueprint
   end

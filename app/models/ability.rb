@@ -23,10 +23,6 @@ class Ability
     can(%i[create read update destroy], RunLike,                 user_id:      user.id)
     can(%i[create read update destroy], SpeedrunDotComUser,      user_id:      user.id)
 
-    can [:join], StandardRace unless user.in_race?
-    can [:join], BingoRace unless user.in_race?
-    can [:join], RandomizerRace unless user.in_race?
-
     cannot(%i[update destroy], Run, user_id: nil)
   end
 
