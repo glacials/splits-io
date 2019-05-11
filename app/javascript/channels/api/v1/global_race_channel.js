@@ -25,7 +25,7 @@ document.addEventListener('turbolinks:load', () => {
 
     createStandard(categoryId, visibility, notes) {
       this.perform('create_race', {
-        race_type: 'standard',
+        race_type: 'race',
         category_id: categoryId,
         visibility: visibility,
         notes: notes

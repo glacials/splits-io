@@ -15,7 +15,7 @@ module Raceable
     has_one :chat_room, dependent: :destroy, as: :raceable
     has_many :chat_messages, through: :chat_room
 
-    has_secure_token :auth_token
+    has_secure_token :join_token
 
     validates :status_text, presence: true
 

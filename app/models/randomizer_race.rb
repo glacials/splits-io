@@ -14,6 +14,6 @@ class RandomizerRace < ApplicationRecord
   end
 
   def url_params
-    [:randomizer, id]
+    [type, id]
   end
 end

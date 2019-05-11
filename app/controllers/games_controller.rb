@@ -8,7 +8,7 @@ class GamesController < ApplicationController
 
   def show
     @on_game_page = true
-    @category = @game.categories.joins(:runs).group('categories.id').order('count(runs.id) desc').first
+    @category = @game.categories.joins(:runs).group('categories.id').order(Arel.sql('count(runs.id) desc')).first
     if @category.nil?
       render :not_found, status: :not_found
       return
@@ -34,10 +34,7 @@ class GamesController < ApplicationController
 
     redirect_to game_path(@game) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
   rescue ActiveRecord::RecordNotFound
-    if @game.nil?
-      redirect_to games_path(q: params[:game])
-      return
-    end
+    redirect_to games_path(q: params[:game]) if @game.nil?
   end
 
   def set_games

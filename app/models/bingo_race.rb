@@ -14,6 +14,6 @@ class BingoRace < ApplicationRecord
   end
 
   def url_params
-    [:bingo, id]
+    [type, id]
   end
 end

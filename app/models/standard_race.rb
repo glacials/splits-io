@@ -14,6 +14,6 @@ class StandardRace < ApplicationRecord
   end
 
   def url_params
-    [:standard, id]
+    [type, id]
   end
 end
