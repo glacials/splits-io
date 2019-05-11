@@ -1,9 +1,14 @@
-class Api::V1::RacesChannel < ApplicationCable::Channel
+class Api::V1::RaceChannel < ApplicationCable::Channel
   def subscribed
     @race = Raceable.race_from_type(params[:race_type]).find_by(id: params[:race_id])
-    reject if @race.nil?
+    if @race.nil?
+      transmit_user('race_not_found', "No race found with id: #{params[:race_id]}")
+      reject
+      return
+    end
 
-    if (@race.invite_only_visibility? || @race.secret_visibility?) && @race.auth_token != params[:auth_token]
+    if (@race.invite_only_visibility? || @race.secret_visibility?) && @race.join_token != params[:join_token]
+      transmit_user('race_invalid_join_token', 'The join token provided is not valid for this race')
       reject
     else
       stream_for(@race)
@@ -15,36 +20,19 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
   end
 
   def join
-    return if current_user.nil?
-
     update_race_instance
-    if @race.started?
-      transmit_user('race_started_error', 'The race has already started')
-      return
-    end
 
-    if ability.cannot?(:join, @race)
-      transmit_user('race_join_error', 'Please make sure you are not in another race')
-      return
-    end
-
-    entrant = Entrant.new(raceable: @race, user: current_user)
-    if entrant.save
+    entrant = Entrant.create(raceable: @race, user: current_user)
+    if entrant.persisted?
       transmit_user('race_join_success', 'Race successfully joined')
       broadcast_race_update('race_entrants_updated', 'A new entrant has join the race')
     else
-      transmit_user('race_join_error', entrant.errors.full_messages.to_sentence)
+      transmit_user(get_entrant_error(entrant, 'race_join_error'), entrant.errors.full_messages.to_sentence)
     end
   end
 
   def leave
-    return if current_user.nil?
-
     update_race_instance
-    if @race.started?
-      transmit_user('race_started_error', 'The race has already started')
-      return
-    end
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
@@ -53,18 +41,12 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
       transmit_user('race_leave_success', 'Race successfully left')
       broadcast_race_update('race_entrants_updated', 'An entrant has left the race')
     else
-      transmit_user('race_leave_error', entrant.error.full_messages.to_sentence)
+      transmit_user(get_entrant_error(entrant, 'race_leave_error'), entrant.errors.full_messages.to_sentence)
     end
   end
 
   def ready
-    return if current_user.nil?
-
     update_race_instance
-    if @race.started?
-      transmit_user('race_started_error', 'Cannot ready for race in progress')
-      return
-    end
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
@@ -74,18 +56,12 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
       broadcast_race_update('race_entrants_updated', 'An entrant has readied up')
       maybe_start_race
     else
-      transmit_user('race_ready_error', entrant.errors.full_messages.to_sentence)
+      transmit_user(get_entrant_error(entrant, 'race_ready_error'), entrant.errors.full_messages.to_sentence)
     end
   end
 
   def unready
-    return if current_user.nil?
-
     update_race_instance
-    if @race.started?
-      transmit_user('race_started_error', 'Cannot unready for race in progress')
-      return
-    end
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
@@ -94,7 +70,7 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
       transmit_user('race_unready_success', 'Entrant unready successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has unreadied')
     else
-      transmit_user('race_unready_error', entrant.errors.full_messages.to_sentence)
+      transmit_user(get_entrant_error(entrant, 'race_unready_error'), entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -103,28 +79,16 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
     # This is to try and make sure ff's have the most accurate time
     forfeit_time = Time.now.utc
     forfeit_time = Time.at(data['server_time']).utc if data['server_time'].present?
-    return if current_user.blank?
-
-    update_race_instance
-    unless @race.started?
-      transmit_user('race_started_error', 'Cannot abandon race that is not in progress')
-      return
-    end
-
-    if @race.finished?
-      transmit_user('race_finished_error', 'Cannot finish in a race that is already finished')
-      return
-    end
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
 
-    if entrant.update(forfeited_at: forfeit_time)
+    if entrant.update(finished_at: nil, forfeited_at: forfeit_time)
       transmit_user('race_forfeit_success', 'Entrant forfeit successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has forfeited')
       maybe_end_race
     else
-      transmit_user('race_forfeit_error', entrant.errors.full_messages.to_sentence)
+      transmit_user(get_entrant_error(entrant, 'race_forfeit_error'), entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -133,44 +97,21 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
     # This is to try and make sure done's have the most accurate time
     done_time = Time.now.utc
     done_time = Time.at(data['server_time']).utc if data['server_time'].present?
-    return if current_user.nil?
-
-    update_race_instance
-    unless @race.started?
-      transmit_user('race_started_error', 'Cannot finish in a race that is not started')
-      return
-    end
-
-    if @race.finished?
-      transmit_user('race_finished_error', 'Cannot finish in a race that is already finished')
-      return
-    end
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
 
-    if entrant.update(finished_at: done_time)
+    if entrant.update(finished_at: done_time, forfeited_at: nil)
       transmit_user('race_done_success', 'Entrant done successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has finished')
       maybe_end_race
     else
-      transmit_user('race_done_error', entrant.errors.full_messages.to_sentence)
+      transmit_user(get_entrant_error(entrant, 'race_done_error'), entrant.errors.full_messages.to_sentence)
     end
   end
 
   def rejoin
-    return if current_user.nil?
-
     update_race_instance
-    unless @race.started?
-      transmit_user('race_started_error', 'Cannot rejoin race that is not in progress')
-      return
-    end
-
-    if @race.finished?
-      transmit_user('race_finished_error', 'Cannot rejoin race that has already finished')
-      return
-    end
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
@@ -179,7 +120,7 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
       transmit_user('race_rejoin_success', 'Entrant rejoin successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has rejoined the race')
     else
-      transmit_user('race_rejoin_error', entrant.errors.full_messages.to_sentence)
+      transmit_user(get_entrant_error(entrant, 'race_rejoin_error'), entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -189,6 +130,10 @@ class Api::V1::RacesChannel < ApplicationCable::Channel
     # Instance variables do not update automatically, so we call this function before anything that needs
     # to check the state of the race variable to make sure it isn't stale
     @race.reload
+  end
+
+  def get_entrant_error(entrant, default)
+    entrant.errors.delete(:status_message).try(:first) || default
   end
 
   def transmit_user(type, msg)

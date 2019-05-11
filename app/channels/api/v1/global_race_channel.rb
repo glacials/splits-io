@@ -1,6 +1,9 @@
 class Api::V1::GlobalRaceChannel < ApplicationCable::Channel
   def subscribed
     stream_from('global_channel')
+    return unless params[:state] == '1'
+
+    # send all current active races
   end
 
   def unsubscribed

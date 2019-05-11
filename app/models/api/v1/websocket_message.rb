@@ -2,6 +2,11 @@ class Api::V1::WebsocketMessage
   attr_reader :type, :data
 
   TYPES = %w[
+    race_not_found
+    race_invalid_join_token
+
+    in_race_error
+
     race_creation_success
     race_creation_error
 

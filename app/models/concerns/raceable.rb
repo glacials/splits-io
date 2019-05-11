@@ -12,12 +12,14 @@ module Raceable
     belongs_to :owner, foreign_key: :user_id, class_name: 'User'
     has_many :entrants, as: :raceable, dependent: :destroy
     has_many :users, through: :entrants
-    has_one :chat_room, dependent: :destroy
+    has_one :chat_room, dependent: :destroy, as: :raceable
     has_many :chat_messages, through: :chat_room
 
     has_secure_token :auth_token
 
     validates :status_text, presence: true
+
+    after_create { |record| ChatRoom.create!(raceable: record) }
 
     def started?
       started_at.present?

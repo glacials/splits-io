@@ -8,9 +8,10 @@ document.addEventListener('turbolinks:load', () => {
   }
 
   raceSubscription = consumer.subscriptions.create({
-      channel:   "Api::V1::RacesChannel",
-      race_id:   window.gon.race.id,
-      race_type: window.gon.race.type
+      channel:    'Api::V1::RaceChannel',
+      race_id:    window.gon.race.id,
+      race_type:  window.gon.race.type,
+      join_token: window.gon.race.join_token
     }, {
       connected() {
         // Called when the subscription is ready for use on the server

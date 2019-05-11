@@ -6,7 +6,7 @@ class AddRacing < ActiveRecord::Migration[6.0]
 
       t.string   :status_text, null: false
       t.integer  :visibility,  null: false, default: 0
-      t.string   :auth_token,  null: false, index: {unique: true}
+      t.string   :join_token,  null: false, index: {unique: true}
       t.string   :notes,       null: true
 
       # The limit param changes the precision of the datetime; 3 is millisecond accuracy
@@ -21,7 +21,7 @@ class AddRacing < ActiveRecord::Migration[6.0]
 
       t.string   :status_text, null: false
       t.integer  :visibility,  null: false, default: 0
-      t.string   :auth_token,  null: false, index: {unique: true}
+      t.string   :join_token,  null: false, index: {unique: true}
       t.string   :notes,       null: true
       t.string   :card,        null: false
 
@@ -36,7 +36,7 @@ class AddRacing < ActiveRecord::Migration[6.0]
 
       t.string   :status_text, null: false
       t.integer  :visibility,  null: false, default: 0
-      t.string   :auth_token,  null: false, index: {unique: true}
+      t.string   :join_token,  null: false, index: {unique: true}
       t.string   :notes,       null: true
       t.string   :seed,        null: false
 

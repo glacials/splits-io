@@ -22,8 +22,9 @@ class RacesController < ApplicationController
 
   def set_race_gon
     gon.race = {
-      id:   @race.id,
-      type: params[:race_type]
+      id:         @race.id,
+      type:       params[:race_type],
+      join_token: params[:join_token]
     }
   end
 end
