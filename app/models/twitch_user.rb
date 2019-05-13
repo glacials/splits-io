@@ -39,15 +39,21 @@ class TwitchUser < ApplicationRecord
   end
 
   def videos
+    retries ||= 0
     Twitch::Videos.recent(twitch_id, type: :archive, token: access_token)
   rescue RestClient::Unauthorized
     refresh_tokens!
+    retries += 1
+    retry if retries < 2
   end
 
   def followed_ids
+    retries ||= 0
     Twitch::Follows.followed_ids(twitch_id, token: access_token)
   rescue RestClient::Unauthorized
     refresh_tokens!
+    retries += 1
+    retry if retries < 2
   end
 
   # refresh_tokens! updates the access token and refresh token for this user with a new one from the Twitch API.
@@ -56,7 +62,7 @@ class TwitchUser < ApplicationRecord
   rescue RestClient::Unauthorized, RestClient::BadRequest
     # If the refresh got 401 Unauthorized, we were probably de-authorized from using the user's Twitch account. If it
     # got 400 Bad Request, we probably have a nil refresh token, perhaps because the authorization was created before we
-    # started saving them to the database.
+    # started saving refresh tokens to the database.
     #
     # Ideally we'd destroy the TwitchUser here, but that may leave the user with no way to sign in. Instead, force a
     # sign out so we can get some fresh tokens. Until that happens we technically have no way to verify this Twitch user
