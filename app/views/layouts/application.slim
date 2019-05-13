@@ -114,7 +114,12 @@ html
         div.text-right
           small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
-          ' Help us out by taking the 2019 Splits I/O survey!
+      - entrant = current_user.present? ? current_user.entrants.active.first : nil
+      - if current_user.present? && entrant.present? && request.path != polymorphic_path(entrant.raceable)
+        article
+          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entrant.raceable)
+            => icon('fas', 'flag-checkered')
+            | Return to Active Race
       header#header = yield(:header)
       article
         .row: .col-lg-12: #alerts data-turbolinks-temporary=true

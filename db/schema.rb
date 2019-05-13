@@ -48,20 +48,19 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["user_id"], name: "index_authie_sessions_on_user_id"
   end
 
-  create_table "bingo_races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "bingos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "user_id", null: false
-    t.string "status_text", null: false
+    t.integer "status", default: 0, null: false
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
-    t.string "card", null: false
+    t.string "card_url"
     t.datetime "started_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
-    t.index ["game_id"], name: "index_bingo_races_on_game_id"
-    t.index ["join_token"], name: "index_bingo_races_on_join_token", unique: true
-    t.index ["user_id"], name: "index_bingo_races_on_user_id"
+    t.index ["game_id"], name: "index_bingos_on_game_id"
+    t.index ["user_id"], name: "index_bingos_on_user_id"
   end
 
   create_table "categories", id: :serial, force: :cascade do |t|
@@ -217,20 +216,33 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["user_id"], name: "index_patreon_users_on_user_id"
   end
 
-  create_table "randomizer_races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "game_id", null: false
+  create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "category_id", null: false
     t.bigint "user_id", null: false
-    t.string "status_text", null: false
+    t.integer "status", default: 0, null: false
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
-    t.string "seed", null: false
     t.datetime "started_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
-    t.index ["game_id"], name: "index_randomizer_races_on_game_id"
-    t.index ["join_token"], name: "index_randomizer_races_on_join_token", unique: true
-    t.index ["user_id"], name: "index_randomizer_races_on_user_id"
+    t.index ["category_id"], name: "index_races_on_category_id"
+    t.index ["user_id"], name: "index_races_on_user_id"
+  end
+
+  create_table "randomizers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "visibility", default: 0, null: false
+    t.string "join_token", null: false
+    t.string "notes"
+    t.string "seed"
+    t.datetime "started_at", precision: 3
+    t.datetime "created_at", precision: 3, null: false
+    t.datetime "updated_at", precision: 3, null: false
+    t.index ["game_id"], name: "index_randomizers_on_game_id"
+    t.index ["user_id"], name: "index_randomizers_on_user_id"
   end
 
   create_table "rivalries", id: :serial, force: :cascade do |t|
@@ -396,21 +408,6 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["run_id"], name: "index_splits_on_run_id"
   end
 
-  create_table "standard_races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "category_id", null: false
-    t.bigint "user_id", null: false
-    t.string "status_text", null: false
-    t.integer "visibility", default: 0, null: false
-    t.string "join_token", null: false
-    t.string "notes"
-    t.datetime "started_at", precision: 3
-    t.datetime "created_at", precision: 3, null: false
-    t.datetime "updated_at", precision: 3, null: false
-    t.index ["category_id"], name: "index_standard_races_on_category_id"
-    t.index ["join_token"], name: "index_standard_races_on_join_token", unique: true
-    t.index ["user_id"], name: "index_standard_races_on_user_id"
-  end
-
   create_table "subscriptions", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "stripe_subscription_id"
@@ -451,8 +448,8 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.index ["name"], name: "index_users_on_name", unique: true
   end
 
-  add_foreign_key "bingo_races", "games"
-  add_foreign_key "bingo_races", "users"
+  add_foreign_key "bingos", "games"
+  add_foreign_key "bingos", "users"
   add_foreign_key "chat_messages", "chat_rooms"
   add_foreign_key "chat_messages", "users"
   add_foreign_key "entrants", "users"
@@ -462,8 +459,10 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"
-  add_foreign_key "randomizer_races", "games"
-  add_foreign_key "randomizer_races", "users"
+  add_foreign_key "races", "categories"
+  add_foreign_key "races", "users"
+  add_foreign_key "randomizers", "games"
+  add_foreign_key "randomizers", "users"
   add_foreign_key "run_histories", "runs", on_delete: :cascade
   add_foreign_key "run_likes", "runs"
   add_foreign_key "run_likes", "users"
@@ -474,7 +473,5 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
   add_foreign_key "speedrun_dot_com_games", "games"
   add_foreign_key "speedrun_dot_com_users", "users"
   add_foreign_key "splits", "runs"
-  add_foreign_key "standard_races", "categories"
-  add_foreign_key "standard_races", "users"
   add_foreign_key "twitch_users", "users"
 end

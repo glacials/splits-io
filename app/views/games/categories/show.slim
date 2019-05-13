@@ -26,14 +26,16 @@ article data-turbolinks-temporary=true
           p.card-text Create a new race for #{@category.game}
           button.btn.btn-outline-success(
             data={toggle: :modal, target: '#race-modal'}
-          ) Choose a Category
+          )
+            => icon('fas', 'flag-checkered')
+            ' Create a race
       = render partial: 'races/new', locals: {game: @game}
   .card
     .card-header
       = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
     = render partial: 'shared/run_table', locals: { \
       runs: @category.runs.nonempty.unarchived, \
-      races: [*@game.standard_races, *@game.randomizers, *@game.bingos].sort_by { |r| r.created_at },
+      races: (@game.races + @game.randomizers + @game.bingos).sort_by { |r| r.created_at },
       cols: %i[runner time name video uploaded], \
     }.merge(sorting_info)
   center

@@ -22,7 +22,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   def join
     update_race_instance
 
-    entrant = Entrant.create(raceable: @race, user: current_user)
+    entrant = @race.entrants.create(user: current_user)
     if entrant.persisted?
       transmit_user('race_join_success', 'Race successfully joined')
       broadcast_race_update('race_entrants_updated', 'A new entrant has join the race')
@@ -94,7 +94,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
 
   def done(data)
     # Immediately take a timestamp in case there is no server time passed in
-    # This is to try and make sure done's have the most accurate time
+    # This is to try and make sure dones have the most accurate time
     done_time = Time.now.utc
     done_time = Time.at(data['server_time']).utc if data['server_time'].present?
 

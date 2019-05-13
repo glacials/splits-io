@@ -1,75 +1,62 @@
-#race-modal.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'race-modal-label', hidden: true}
+#race-modal.modal tabindex='-1' role='dialog' aria={labelledby: 'race-modal-label', hidden: true}
   .modal-dialog role='document'
     .modal-content
       .modal-header.bg-primary
-        h5.text-light Races
+        h5.text-light Create a #{game} race
       .modal-body.bg-dark
-        .row.text-light.m-2
-          p Create a new race on Splits.io
-        .row
-          ul.nav.nav-tabs.nav-justified.mb-3#races-tab role='tablist' style='width: 100%;'
-            li.nav-item
-              a.nav-link.active#standard-tab(
-                href='#standard-content'
-                data={toggle: :tab}
-                role='tab'
-                aria={controls: :home, selected: true}
-              ) Standard Race
-            li.nav-item
-              a.nav-link#bingo-tab(
-                href='#bingo-content'
-                data={toggle: :tab}
-                role='tab'
-                aria={controls: :home, selected: false}
-              ) Bingo
-            li.nav-item
-              a.nav-link#randomizer-tab(
-                href='#randomizer-content'
-                data={toggle: :tab}
-                role='tab'
-                aria={controls: :home, selected: false}
-              ) Randomizer
-          .tab-content#races-tab-content style='width: 100%;'
-            .tab-pane.text-light.fade.show.active#standard-content role='tabpanel' aria={labelledby: 'standard-content-tab'}
-              form#standard-races-form
-                .form-group
-                  select.form-control#standard-visibility-select
-                    option value='public' Public
-                    option value='invite_only' Invite Only
-                    option value='secret' Secret
-                .form-group
-                  select.form-control#standard-category-select
-                    - game.categories.each do |category|
-                      option value=category.id = category.name
-                .form-group
-                  textarea.form-control#standard-notes-textarea placeholder='Notes (optional)'
-                .form-group
-                  button.btn.btn-outline-success#standard-submit type='button' Create Race
-            .tab-pane.text-light.fade#bingo-content role='tabpanel' aria={labelledby: 'bingo-content-tab'}
-              form#bingo-races-form
-                .form-group
-                  select.form-control#bingo-visibility-select
-                    option value='public' Public
-                    option value='invite_only' Invite Only
-                    option value='secret' Secret
-                .form-group
-                  input.form-control#bingo-card-input type='text' placeholder='Card URL' required=true
-                .form-group
-                  textarea.form-control#bingo-notes-textarea placeholder='Notes (optional)'
-                .form-group
-                  input#bingo-game-id type='hidden' value=game.id
-                  button.btn.btn-outline-success#bingo-submit type='button' Create Race
-            .tab-pane.text-light.fade#randomizer-content role='tabpanel' aria={labelledby: 'randomizer-content-tab'}
-              form#randomizer-races-form
-                .form-group
-                  select.form-control#randomizer-visibility-select
-                    option value='public' Public
-                    option value='invite_only' Invite Only
-                    option value='secret' Secret
-                .form-group
-                  input.form-control#randomizer-seed-input type='text' placeholder='Seed' required=true
-                .form-group
-                  textarea.form-control#randomizer-notes-textarea placeholder='Notes (optional)'
-                .form-group
-                  input#randomizer-game-id type='hidden' value=game.id
-                  button.btn.btn-outline-success#randomizer-submit type='button' Create Race
+        input#game-id type='hidden' value=game.id
+        .form-group
+          select.form-control#visibility-select
+            option value='public' Public - Anyone can see or join
+            option value='invite_only' Invite Only - Anyone can see, need a special link to join
+            option value='secret' Secret - Need a special link to see or join
+        .form-group
+          textarea.form-control#notes-textarea placeholder='Notes (optional)'
+        ul.nav.nav-pills.my-3#races-tab role='tablist'
+          li.nav-item
+            .nav-link.disabled Race type
+          li.nav-item
+            a.nav-link.active#category-tab(
+              href='#category-content'
+              data={toggle: :tab}
+              role='tab'
+              aria={controls: :home, selected: true}
+            ) Category Race
+          li.nav-item
+            a.nav-link#bingo-tab(
+              href='#bingo-content'
+              data={toggle: :tab}
+              role='tab'
+              aria={controls: :home, selected: false}
+            ) Bingo
+          li.nav-item
+            a.nav-link#randomizer-tab(
+              href='#randomizer-content'
+              data={toggle: :tab}
+              role='tab'
+              aria={controls: :home, selected: false}
+            ) Randomizer
+        .tab-content#races-tab-content style='width: 100%;'
+          .tab-pane.text-light.show.active#category-content role='tabpanel' aria={labelledby: 'category-content-tab'}
+            form#category-races-form
+              .form-group
+                label for='category-select' Category
+                select.form-control#category-select
+                  - game.categories.each do |category|
+                    option value=category.id = category.name
+              .form-group
+                button.btn.btn-outline-success#category-submit type='button' Create Race
+          .tab-pane.text-light#bingo-content role='tabpanel' aria={labelledby: 'bingo-content-tab'}
+            form#bingo-races-form
+              .form-group
+                label for='bingo-card-input' Bingo Card (optional)
+                input.form-control#bingo-card-input type='text' placeholder='Bingo card URL (include http:// or https://)' required=true
+              .form-group
+                button.btn.btn-outline-success#bingo-submit type='button' Create Race
+          .tab-pane.text-light#randomizer-content role='tabpanel' aria={labelledby: 'randomizer-content-tab'}
+            form#randomizer-races-form
+              .form-group
+                label for='randomizer-seed-input' Seed (optional)
+                input.form-control#randomizer-seed-input type='text' placeholder='Seed' required=true
+              .form-group
+                button.btn.btn-outline-success#randomizer-submit type='button' Create Race

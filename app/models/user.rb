@@ -11,9 +11,9 @@ class User < ApplicationRecord
   has_many :run_likes, dependent: :destroy
 
   has_many :entrants
-  has_many :standard_races, through: :entrants, source: :raceable, source_type: 'StandardRace'
-  has_many :bingo_races, through: :entrants, source: :raceable, source_type: 'BingoRace'
-  has_many :randomizer_races, through: :entrants, source: :raceable, source_type: 'RandomizerRace'
+  has_many :races,      through: :entrants, source: :raceable, source_type: 'Race'
+  has_many :bingo,      through: :entrants, source: :raceable, source_type: 'Bingo'
+  has_many :randomizer, through: :entrants, source: :raceable, source_type: 'Randomizer'
 
   has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
   has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
@@ -121,9 +121,9 @@ class User < ApplicationRecord
     RunLike.find_by(user: self, run: run)
   end
 
-  # races will returns a standard ruby array, NOT an AR relation
-  def races
-    standard_races + bingo_races + randomizer_races
+  # raceables returns a standard Ruby array (not an ActiveRecord::Relation) of all race types the user has entered in.
+  def raceables
+    races + bingos + randomizers
   end
 
   def in_race?

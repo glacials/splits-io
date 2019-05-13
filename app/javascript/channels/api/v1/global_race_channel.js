@@ -19,11 +19,12 @@ document.addEventListener('turbolinks:load', () => {
           break
         case 'race_creation_error':
           // TODO some kind of error handling
+          console.error(`Race creation error: ${data.data.message}`)
           break
       }
     },
 
-    createStandard(categoryId, visibility, notes) {
+    createRace(categoryId, visibility, notes) {
       this.perform('create_race', {
         race_type: 'race',
         category_id: categoryId,
@@ -55,11 +56,11 @@ document.addEventListener('turbolinks:load', () => {
 }, {once: true})
 
 document.addEventListener('click', (event) => {
-  if (event.target.matches('#standard-submit')) {
-    const categorySelect = document.getElementById('standard-category-select')
-    const visibilitySelect = document.getElementById('standard-visibility-select')
-    const notesTextArea = document.getElementById('standard-notes-textarea')
-    globalSubscription.createStandard(
+  if (event.target.matches('#category-submit')) {
+    const categorySelect = document.getElementById('category-select')
+    const visibilitySelect = document.getElementById('visibility-select')
+    const notesTextArea = document.getElementById('notes-textarea')
+    globalSubscription.createRace(
       categorySelect.selectedOptions[0].value,
       visibilitySelect.selectedOptions[0].value,
       notesTextArea.value
@@ -67,9 +68,9 @@ document.addEventListener('click', (event) => {
   }
 
   if (event.target.matches('#bingo-submit')) {
-    const gameIdInput = document.getElementById('bingo-game-id')
-    const visibilitySelect = document.getElementById('bingo-visibility-select')
-    const notesTextArea = document.getElementById('bingo-notes-textarea')
+    const gameIdInput = document.getElementById('game-id')
+    const visibilitySelect = document.getElementById('visibility-select')
+    const notesTextArea = document.getElementById('notes-textarea')
     const bingoInput = document.getElementById('bingo-card-input')
     globalSubscription.createBingo(
       gameIdInput.value,
@@ -80,9 +81,9 @@ document.addEventListener('click', (event) => {
   }
 
   if (event.target.matches('#randomizer-submit')) {
-    const gameIdInput = document.getElementById('bingo-game-id')
-    const visibilitySelect = document.getElementById('standard-visibility-select')
-    const notesTextArea = document.getElementById('standard-notes-textarea')
+    const gameIdInput = document.getElementById('game-id')
+    const visibilitySelect = document.getElementById('visibility-select')
+    const notesTextArea = document.getElementById('notes-textarea')
     const seedInput = document.getElementById('randomizer-seed-input')
     globalSubscription.createRandomizer(
       gameIdInput.value,

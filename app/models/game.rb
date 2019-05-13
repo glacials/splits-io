@@ -13,9 +13,9 @@ class Game < ApplicationRecord
   has_many :runners, -> { distinct }, through: :runs, class_name: 'User'
   has_many :aliases, class_name: 'GameAlias', dependent: :destroy
 
-  has_many :standard_races, through: :categories, source: :races
-  has_many :randomizers, class_name: 'RandomizerRace'
-  has_many :bingos, class_name: 'BingoRace'
+  has_many :races, through: :categories, source: :races
+  has_many :randomizers,    class_name: 'Randomizer'
+  has_many :bingos,         class_name: 'Bingo'
 
   has_one :srdc, class_name: 'SpeedrunDotComGame', dependent: :destroy
   has_one :srl,  class_name: 'SpeedRunsLiveGame',  dependent: :destroy

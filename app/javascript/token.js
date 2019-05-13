@@ -24,7 +24,7 @@ document.addEventListener('turbolinks:load', () => {
   const accessTokenExpiry = localStorage.getItem(accessTokenExpiryKey)
   const expiry = Date.parse(accessTokenExpiry)
 
-  if (accessToken === null || accessTokenExpiry === null || isNaN(expiry)) {
+  if (accessToken === null || accessTokenExpiry === null || isNaN(expiry) || accessToken === 'undefined') {
     localStorage.removeItem(accessTokenKey)
     localStorage.removeItem(accessTokenExpiryKey)
   }
@@ -49,6 +49,10 @@ document.addEventListener('turbolinks:load', () => {
     const hash = urlHashToObject(iframe.contentWindow.location.hash)
     const expiry = new Date()
     expiry.setSeconds(expiry.getSeconds() + Number(hash.expires_in))
+
+    if (accessToken === 'undefined') {
+      console.warn("Can't get a Splits.io access token. Your SPLITSIO_CLIENT_ID/SPLITSIO_CLIENT_SECRET may be wrong.")
+    }
 
     localStorage.setItem(accessTokenKey, hash.access_token)
     localStorage.setItem(accessTokenExpiryKey, expiry)

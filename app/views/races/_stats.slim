@@ -1,20 +1,25 @@
 .row
+  .col-sm-3: .statcard.p-3.bg-success.rounded
+    h2.statcard-number.text-dark
+      #race-status
+        = race.status.capitalize
+    span.statcard-desc.text-dark
+      - if race.entrants.count <= 1
+        ' Need #{2 - race.entrants.count} more to start
+      - else
+        ' #{entrants.ready} / #{entrants.nonready} ready
+  .col-sm-3: .statcard.p-3
+    h2.statcard-number
+      = race.visibility.sub('_', ' ').capitalize
+    span.statcard-desc Visibility
   .col-sm-3: .statcard.p-3
     h2.statcard-number
       = race.entrants.count
     span.statcard-desc Entrants
   .col-sm-3: .statcard.p-3
     h2.statcard-number
-      = race.status_text
-    span.statcard-desc Status
-  .col-sm-3: .statcard.p-3
-    h2.statcard-number
-      = race.class.string_type.capitalize
+      = race.type.capitalize
     span.statcard-desc Type
-  .col-sm-3: .statcard.p-3
-    h2.statcard-number
-      = race.visibility
-    span.statcard-desc Visibility
   .col-sm-3: .statcard.p-3
     h2.statcard-number
       ' 400

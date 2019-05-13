@@ -20,8 +20,6 @@
       span> created by
       span = user_badge(race.owner)
 
-    h5#race-status = race.status_text
-
   .col-md-8
     .btn-toolbar role='toolbar' aria={label: 'Race Controls'}
       button.btn.btn-outline-success.mr-2#btn-race-join(
@@ -48,6 +46,3 @@
       button.btn.btn-outline-warning.mr-2#btn-race-rejoin(
         hidden=(!race.in_progress? || !race.users.include?(current_user) || !race.entrant_for_user(current_user).done?)
       ) Rejoin
-
-  .col-md-4
-    h1 0:00

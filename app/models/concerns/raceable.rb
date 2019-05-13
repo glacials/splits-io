@@ -4,6 +4,7 @@ module Raceable
   included do
     # These can only be accessed from classes that include this module, not from the module itself
     enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
+    enum status: {open: 0, in_progress: 1, ended: 2}, _suffix: true
 
     belongs_to :owner, foreign_key: :user_id, class_name: 'User'
     has_many :entrants, as: :raceable, dependent: :destroy
@@ -12,8 +13,6 @@ module Raceable
     has_many :chat_messages, through: :chat_room
 
     has_secure_token :join_token
-
-    validates :status_text, presence: true
 
     after_create { |record| ChatRoom.create!(raceable: record) }
 
@@ -34,30 +33,25 @@ module Raceable
     end
 
     def type
-      self.class.string_type
+      self.class.type
     end
 
     def bingo?
-      type == 'bingo'
+      type == :bingo
     end
 
     def randomizer?
-      type == 'randomizer'
+      type == :randomizer
     end
 
     def race?
-      type == 'race'
+      type == :race
     end
   end
 
-  OPEN_ENTRY = 'Open Entry'.freeze
-  IN_PROGRESS = 'In Progress'.freeze
-  ENDED = 'Ended'.freeze
-  RACE_TYPES = [StandardRace, BingoRace, RandomizerRace].freeze
+  RACE_TYPES = [Race, Bingo, Randomizer].freeze
 
   def self.race_from_type(type)
-    RACE_TYPES.each { |klass| return klass if klass.string_type == type }
-
-    nil
+    RACE_TYPES.find { |klass| klass.type.to_s == type.to_s }
   end
 end

@@ -118,7 +118,9 @@ Rails.application.routes.draw do
   get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download
   get '/:run/download/:timer',            to: 'runs/exports#timer' # deprecated
 
-  get '/races/:race_type/:race_id', to: 'races#show', as: :race
+  get '/races/:race',       to: 'races/races#show',       as: :race
+  get '/bingos/:race',      to: 'races/bingos#show',      as: :bingo
+  get '/randomizers/:race', to: 'races/randomizers#show', as: :randomizer
 
   namespace :api do
     namespace :webhooks do
