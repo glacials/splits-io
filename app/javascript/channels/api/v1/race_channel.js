@@ -78,6 +78,13 @@ document.addEventListener('turbolinks:load', () => {
           hideButton('btn-race-done')
           hideButton('btn-race-rejoin')
           break;
+
+        case 'new_message':
+          document.getElementById('input-list-item').insertAdjacentHTML('afterend', data.data.chat_html)
+          break;
+        case 'message_creation_error':
+          console.error(`Message creation error: ${data.data.message}`)
+          break;
       }
     },
 
@@ -107,9 +114,12 @@ document.addEventListener('turbolinks:load', () => {
 
     rejoin() {
       this.perform('rejoin')
+    },
+
+    sendMessage(message) {
+      this.perform('send_message', { body: message })
     }
-  }
-  )
+  })
 
   document.addEventListener('turbolinks:visit', () => {
     consumer.subscriptions.remove(raceSubscription)
@@ -138,6 +148,23 @@ document.addEventListener('click', (event) => {
   if (event.target.matches('#btn-race-rejoin')) {
     raceSubscription.rejoin()
   }
+
+  if (event.target.matches('#btn-chat-submit')) {
+    submitChatInput()
+  }
+})
+
+document.addEventListener('keypress', (event) => {
+  if (event.keyCode !== 13) {
+    return
+  }
+
+  const chatInput = document.getElementById('input-chat-text')
+  if (document.activeElement !== chatInput) {
+    return
+  }
+
+  submitChatInput()
 })
 
 const showButton = (elementId) => {
@@ -148,4 +175,14 @@ const showButton = (elementId) => {
 const hideButton = (elementId) => {
   const elem = document.getElementById(elementId)
   elem.hidden = true
+}
+
+const submitChatInput = () => {
+  const chatInput = document.getElementById('input-chat-text')
+  if (chatInput.value === '') {
+    return
+  }
+
+  raceSubscription.sendMessage(chatInput.value)
+  chatInput.value = ''
 }

@@ -37,7 +37,7 @@
             - if cols.include?(:time)
               td.align-right.nowrap
                 - if race.in_progress?
-                  - now = Time.utc.now
+                  - now = Time.now.utc
                   .text-warning data={ms: (now - race.created_at) * 1000}
                     = Duration.new((now - race.created_at) * 1000).format
                 - else

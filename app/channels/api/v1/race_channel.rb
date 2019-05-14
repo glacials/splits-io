@@ -124,6 +124,28 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     end
   end
 
+  def send_message(data)
+    update_race_instance
+    chat_message = @race.chat_messages.create(
+      user: current_user, body: data['body'],
+      entrant: @race.entrant_for_user(current_user).present?
+    )
+    if chat_message.persisted?
+      transmit_user('message_creation_success', 'Messages successfully created')
+      message = {
+        message: 'A new message has been posted',
+        chat_message: Api::V4::ChatMessageBlueprint.render_as_hash(chat_message)
+      }
+      message[:chat_html] = ApplicationController.render(partial: 'chat_messages/show', locals: {chat_message: chat_message}) if onsite
+      broadcast_to(@race, Api::V1::WebsocketMessageBlueprint.render_as_hash(Api::V1::WebsocketMessage.new(
+        'new_message',
+        message
+      )))
+    else
+      transmit_user('message_creation_error', message.errors.full_messages.to_sentence)
+    end
+  end
+
   private
 
   def update_race_instance

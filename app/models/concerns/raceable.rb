@@ -9,12 +9,9 @@ module Raceable
     belongs_to :owner, foreign_key: :user_id, class_name: 'User'
     has_many :entrants, as: :raceable, dependent: :destroy
     has_many :users, through: :entrants
-    has_one :chat_room, dependent: :destroy, as: :raceable
-    has_many :chat_messages, through: :chat_room
+    has_many :chat_messages, as: :raceable, dependent: :destroy
 
     has_secure_token :join_token
-
-    after_create { |record| ChatRoom.create!(raceable: record) }
 
     def started?
       started_at.present?
@@ -25,7 +22,11 @@ module Raceable
     end
 
     def finished?
-      entrants.all? { |entrant| entrant.finished? || entrant.forfeited? }
+      started? && entrants.where(finished_at: nil, forfeited_at: nil).none?
+    end
+
+    def locked?
+      finished? && Time.now.utc < entrants.order(updated_at: :desc).first.pluck(:updated_at) + 30.minutes
     end
 
     def entrant_for_user(user)

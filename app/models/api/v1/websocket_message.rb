@@ -37,6 +37,10 @@ class Api::V1::WebsocketMessage
     race_ended
 
     race_entrants_updated
+
+    message_creation_success
+    new_message
+    message_creation_error
   ].freeze
 
   def initialize(type, **data)

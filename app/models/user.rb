@@ -99,7 +99,7 @@ class User < ApplicationRecord
 
     case tier
     when 0
-      patreon.pledge_cents > 0
+      patreon.pledge_cents.positive?
     when 1
       patreon.pledge_cents >= 200
     when 2
@@ -127,7 +127,7 @@ class User < ApplicationRecord
   end
 
   def in_race?
-    !races.all?(&:finished?)
+    entrants.where(finished_at: nil, forfeited_at: nil).any?
   end
 
   # comprable_runs returns some runs by this user that could be usefully compared to the given run.

@@ -1,4 +1,6 @@
 class Entrant < ApplicationRecord
+  # On validation error, entrants will have the error key :status_message to indicate what went wrong with the request
+  # to clients, this should be removed if you plan to display all error messages to users
   belongs_to :raceable, polymorphic: true, touch: true
   belongs_to :user
 

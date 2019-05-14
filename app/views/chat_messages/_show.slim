@@ -1,0 +1,6 @@
+.list-group-item.p-0 style=('filter: grayscale(1)' unless chat_message.entrant?)
+  .media
+    img.mr-3 src=chat_message.user.avatar width=25 height=25
+    .media-body
+      span.mr-2 = user_badge(chat_message.user)
+      span title="Sent #{chat_message.created_at}" = chat_message.body

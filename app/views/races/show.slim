@@ -23,100 +23,13 @@
     .card.shadow.my-3#chat-card
       #chat-box
         .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
-          .list-group-item.p-0
+          .list-group-item#input-list-item.p-0
             .input-group
-              input.form-control type='text' placeholder='Chat...' autofocus=true
+              input.form-control#input-chat-text type='text' placeholder='Chat...' autofocus=true
               .input-group-append
-                button.btn.btn-dark type='button' Chat
-          - user = User.first
-          - [ \
-              { \
-                text: 'First message! I\'m greyscale because I haven\'t joined.', \
-                status: :spectator \
-              }, \
-              { \
-                text: 'Oh hello there!', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'This is a blind run for me :P', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Let\'s do this!', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Wait I have to get a drink', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-              { \
-                text: 'Filler to trigger the scrollbar', \
-                status: :entrant \
-              }, \
-            ].reverse.each.with_index do |message, i|
-            .list-group-item.p-0 style=('filter: grayscale(1)' if message[:status] == :spectator)
-              .media
-                img.mr-3 src=user.avatar width=25 height=25
-                .media-body
-                  span.mr-2 = user_badge(user)
-                  span title="Sent #{i.minutes.ago}" = message[:text]
+                button.btn.btn-dark#btn-chat-submit type='button' Chat
+          - @race.chat_messages.order(created_at: :desc).each do |message|
+            = render partial: 'chat_messages/show', locals: {chat_message: message}
           .list-group-item.p-0
             .media
               img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25

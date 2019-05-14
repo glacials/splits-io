@@ -57,19 +57,12 @@ class AddRacing < ActiveRecord::Migration[6.0]
       t.datetime :updated_at,   limit: 3, null: false
     end
 
-    create_table :chat_rooms, id: :uuid do |t|
-      t.belongs_to :raceable, polymorphic: true, index: true, type: :uuid
-
-      t.boolean :locked, default: false, null: false
-
-      t.timestamps
-    end
-
     create_table :chat_messages, id: :uuid do |t|
-      t.belongs_to :chat_room, foreign_key: true, null: false, type: :uuid
+      t.belongs_to :raceable,  polymorphic: true, index: true, type: :uuid
       t.belongs_to :user,      foreign_key: true, null: false
 
-      t.text :body, null: false
+      t.boolean :entrant, null: false
+      t.text    :body,    null: false
 
       t.timestamps
     end

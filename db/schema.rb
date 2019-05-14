@@ -74,22 +74,15 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
   end
 
   create_table "chat_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "chat_room_id", null: false
+    t.string "raceable_type"
+    t.uuid "raceable_id"
     t.bigint "user_id", null: false
+    t.boolean "entrant", null: false
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["chat_room_id"], name: "index_chat_messages_on_chat_room_id"
+    t.index ["raceable_type", "raceable_id"], name: "index_chat_messages_on_raceable_type_and_raceable_id"
     t.index ["user_id"], name: "index_chat_messages_on_user_id"
-  end
-
-  create_table "chat_rooms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "raceable_type"
-    t.uuid "raceable_id"
-    t.boolean "locked", default: false, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["raceable_type", "raceable_id"], name: "index_chat_rooms_on_raceable_type_and_raceable_id"
   end
 
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
@@ -450,7 +443,6 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
 
   add_foreign_key "bingos", "games"
   add_foreign_key "bingos", "users"
-  add_foreign_key "chat_messages", "chat_rooms"
   add_foreign_key "chat_messages", "users"
   add_foreign_key "entrants", "users"
   add_foreign_key "game_aliases", "games", on_delete: :cascade

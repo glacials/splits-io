@@ -9,12 +9,6 @@ module ApplicationCable
       logger.add_tags('ActionCable', log_tag)
     end
 
-    def ability
-      # Abilities will become stale if reused when objects are changed, therefore we generate a new one
-      # everytime an action needs to be checked
-      Ability.new(current_user)
-    end
-
     protected
 
     def find_verified_user
