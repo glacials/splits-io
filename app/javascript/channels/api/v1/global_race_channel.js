@@ -72,6 +72,12 @@ document.addEventListener('click', (event) => {
     const visibilitySelect = document.getElementById('visibility-select')
     const notesTextArea = document.getElementById('notes-textarea')
     const bingoInput = document.getElementById('bingo-card-input')
+
+    if (bingoInput.value === '') {
+      bingoInput.classList.add('is-invalid')
+      return
+    }
+
     globalSubscription.createBingo(
       gameIdInput.value,
       visibilitySelect.selectedOptions[0].value,
@@ -85,6 +91,12 @@ document.addEventListener('click', (event) => {
     const visibilitySelect = document.getElementById('visibility-select')
     const notesTextArea = document.getElementById('notes-textarea')
     const seedInput = document.getElementById('randomizer-seed-input')
+
+    if (seedInput.value === '') {
+      seedInput.classList.add('is-invalid')
+      return
+    }
+
     globalSubscription.createRandomizer(
       gameIdInput.value,
       visibilitySelect.selectedOptions[0].value,

@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
-    t.string "card_url"
+    t.string "card_url", null: false
     t.datetime "started_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
@@ -237,7 +237,7 @@ ActiveRecord::Schema.define(version: 2019_04_25_121602) do
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
-    t.string "seed"
+    t.string "seed", null: false
     t.datetime "started_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false

@@ -49,14 +49,18 @@
           .tab-pane.text-light#bingo-content role='tabpanel' aria={labelledby: 'bingo-content-tab'}
             form#bingo-races-form
               .form-group
-                label for='bingo-card-input' Bingo Card (optional)
+                label for='bingo-card-input' Bingo Card
                 input.form-control#bingo-card-input type='text' placeholder='Bingo card URL (include http:// or https://)' required=true
+                .valid-feedback Looks good!
+                .invalid-feedback Required.
               .form-group
                 button.btn.btn-outline-success#bingo-submit type='button' Create Race
           .tab-pane.text-light#randomizer-content role='tabpanel' aria={labelledby: 'randomizer-content-tab'}
             form#randomizer-races-form
               .form-group
-                label for='randomizer-seed-input' Seed (optional)
+                label for='randomizer-seed-input' Seed
                 input.form-control#randomizer-seed-input type='text' placeholder='Seed' required=true
+                .valid-feedback Looks good!
+                .invalid-feedback Required.
               .form-group
                 button.btn.btn-outline-success#randomizer-submit type='button' Create Race
