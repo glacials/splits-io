@@ -4,6 +4,7 @@ class Api::V1::WebsocketMessage
   TYPES = %w[
     race_not_found
     race_invalid_join_token
+    race_state
 
     in_race_error
 
@@ -23,7 +24,9 @@ class Api::V1::WebsocketMessage
     race_unready_error
     race_unready_success
 
+    race_not_started_error
     race_finished_error
+    race_done_error
     race_forfeit_error
     race_forfeit_success
 

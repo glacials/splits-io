@@ -5,6 +5,7 @@ class Entrant < ApplicationRecord
   belongs_to :user
 
   validates_with EntrantValidator
+  # Validators are not called before destroy's, so manually hook and prevent if race is started
   before_destroy :validate_destroy
 
   scope :ready,    -> { where.not(readied_at: nil) }
@@ -42,12 +43,16 @@ class Entrant < ApplicationRecord
     Duration.new((finished_at - raceable.started_at) * 1000)
   end
 
+  def error_status!
+    errors.delete(:status_message).try(:first)
+  end
+
   private
 
   def validate_destroy
     return unless raceable.started?
 
-    errors[:base] << 'Cannot leave race in progress'
+    errors[:base] << 'Cannot leave race once it has started'
     errors[:status_message] << 'race_started_error'
     throw(:abort)
   end

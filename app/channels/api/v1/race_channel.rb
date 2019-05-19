@@ -12,6 +12,15 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       reject
     else
       stream_for(@race)
+      return unless params[:state] == '1'
+
+      ws_msg = Api::V1::WebsocketMessage.new(
+        'race_state',
+        message: 'Race state',
+        race:    Api::V4::RaceBlueprint.render_as_hash(@race, chat: true)
+      )
+
+      transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
     end
   end
 
@@ -27,7 +36,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user('race_join_success', 'Race successfully joined')
       broadcast_race_update('race_entrants_updated', 'A new entrant has join the race')
     else
-      transmit_user(get_entrant_error(entrant, 'race_join_error'), entrant.errors.full_messages.to_sentence)
+      transmit_user(entrant.error_status! || 'race_join_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -41,7 +50,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user('race_leave_success', 'Race successfully left')
       broadcast_race_update('race_entrants_updated', 'An entrant has left the race')
     else
-      transmit_user(get_entrant_error(entrant, 'race_leave_error'), entrant.errors.full_messages.to_sentence)
+      transmit_user(entrant.error_status! || 'race_leave_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -56,7 +65,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       broadcast_race_update('race_entrants_updated', 'An entrant has readied up')
       maybe_start_race
     else
-      transmit_user(get_entrant_error(entrant, 'race_ready_error'), entrant.errors.full_messages.to_sentence)
+      transmit_user(entrant.error_status! || 'race_ready_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -70,7 +79,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user('race_unready_success', 'Entrant unready successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has unreadied')
     else
-      transmit_user(get_entrant_error(entrant, 'race_unready_error'), entrant.errors.full_messages.to_sentence)
+      transmit_user(entrant.error_status! || 'race_unready_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -88,7 +97,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       broadcast_race_update('race_entrants_updated', 'An entrant has forfeited')
       maybe_end_race
     else
-      transmit_user(get_entrant_error(entrant, 'race_forfeit_error'), entrant.errors.full_messages.to_sentence)
+      transmit_user(entrant.error_status! || 'race_forfeit_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -96,7 +105,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     # Immediately take a timestamp in case there is no server time passed in
     # This is to try and make sure dones have the most accurate time
     done_time = Time.now.utc
-    done_time = Time.at(data['server_time']).utc if data['server_time'].present?
+    done_time = Time.at(data['server_time'] / 1000).utc if data['server_time'].present?
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
@@ -106,7 +115,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       broadcast_race_update('race_entrants_updated', 'An entrant has finished')
       maybe_end_race
     else
-      transmit_user(get_entrant_error(entrant, 'race_done_error'), entrant.errors.full_messages.to_sentence)
+      transmit_user(entrant.error_status! || 'race_done_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -120,7 +129,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user('race_rejoin_success', 'Entrant rejoin successful')
       broadcast_race_update('race_entrants_updated', 'An entrant has rejoined the race')
     else
-      transmit_user(get_entrant_error(entrant, 'race_rejoin_error'), entrant.errors.full_messages.to_sentence)
+      transmit_user(entrant.error_status! || 'race_rejoin_error', entrant.errors.full_messages.to_sentence)
     end
   end
 
@@ -154,10 +163,6 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     @race.reload
   end
 
-  def get_entrant_error(entrant, default)
-    entrant.errors.delete(:status_message).try(:first) || default
-  end
-
   def transmit_user(type, msg)
     ws_msg = Api::V1::WebsocketMessage.new(type, message: msg)
     transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
@@ -180,7 +185,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     update_race_instance
     return if @race.started? || !@race.entrants.all?(&:ready?) || @race.entrants.count < 2
 
-    @race.update(started_at: Time.now.utc + 20.seconds, status_text: Raceable::IN_PROGRESS)
+    @race.update(started_at: Time.now.utc + 20.seconds, status: :in_progress)
     broadcast_race_update('race_start_scheduled', 'Race starting soon')
   end
 
@@ -189,7 +194,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     update_race_instance
     return if !@race.started? || !@race.entrants.all?(&:done?)
 
-    @race.update(status_text: Raceable::ENDED)
+    @race.update(status: :ended)
     broadcast_race_update('race_ended', 'All entrants have finished')
   end
 end

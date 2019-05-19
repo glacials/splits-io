@@ -13,6 +13,18 @@ module Raceable
 
     has_secure_token :join_token
 
+    # Return all current races, as defined by any raceable less than an hour old or has 2 or more entrants
+    def self.current
+      where('updated_at > ?', 1.hour.ago)
+        .or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)))
+    end
+
+    # Return all active races, as defined by any raceable less than an hour old that is not finished
+    def self.active
+      # TODO: optimize, need help
+      current.reject(&:finished?)
+    end
+
     def started?
       started_at.present?
     end
@@ -26,7 +38,7 @@ module Raceable
     end
 
     def locked?
-      finished? && Time.now.utc < entrants.order(updated_at: :desc).first.pluck(:updated_at) + 30.minutes
+      finished? && Time.now.utc > entrants.order(updated_at: :desc).pluck(:updated_at).first + 30.minutes
     end
 
     def entrant_for_user(user)
@@ -38,15 +50,15 @@ module Raceable
     end
 
     def bingo?
-      type == :bingo
+      type == Bingo.type
     end
 
     def randomizer?
-      type == :randomizer
+      type == Randomizer.type
     end
 
     def race?
-      type == :race
+      type == Race.type
     end
   end
 

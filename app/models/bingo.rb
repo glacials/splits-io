@@ -10,8 +10,4 @@ class Bingo < ApplicationRecord
   def to_s
     "#{game} Bingo"
   end
-
-  def url_params
-    [type, id]
-  end
 end

@@ -3,7 +3,12 @@ class Api::V1::GlobalRaceChannel < ApplicationCable::Channel
     stream_from('global_channel')
     return unless params[:state] == '1'
 
-    # send all current active races
+    ws_msg = Api::V1::WebsocketMessage.new(
+      'global_state',
+      message: 'Global race state',
+      races:   Api::V4::RaceBlueprint.render_as_hash(Race.active + Bingo.active + Randomizer.active)
+    )
+    transmit(ws_msg)
   end
 
   def unsubscribed
@@ -18,16 +23,16 @@ class Api::V1::GlobalRaceChannel < ApplicationCable::Channel
       )))
       return
     end
-    if data['race_type'].blank?
-      transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(Api::V1::WebsocketMessage.new(
-        'race_creation_error',
-        message: "Invalid race_type, must be one of: #{Raceable.RACE_TYPES.map(&:to_s).join(', ')}"
-      )))
-      return
-    end
 
     race_type = Raceable.race_from_type(data['race_type'])
-    return if race_type.nil?
+    if race_type.nil?
+      ws_msg = Api::V1::WebsocketMessage.new(
+        'race_creation_error',
+        message: "Invalid race_type, must be one of: #{Raceable.RACE_TYPES.map(&:to_s).join(', ')}"
+      )
+      transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
+      return
+    end
 
     race = race_type.new
     case race
@@ -58,13 +63,12 @@ class Api::V1::GlobalRaceChannel < ApplicationCable::Channel
         race:    Api::V4::RaceBlueprint.render_as_hash(race),
         path:    Rails.application.routes.url_helpers.polymorphic_path(race)
       )
-      transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
     else
       ws_msg = Api::V1::WebsocketMessage.new(
         'race_creation_error',
         message: race.errors.full_messages.to_sentence
       )
-      transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
     end
+    transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
   end
 end

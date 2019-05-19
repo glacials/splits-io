@@ -1,16 +1,17 @@
 .row
-  .col-sm-3: .statcard.p-3.bg-success.rounded
-    h2.statcard-number.text-dark
-      #race-status
-        = race.status.capitalize
-    span.statcard-desc.text-dark
-      - if race.entrants.count <= 1
-        ' Need #{2 - race.entrants.count} more to start
-      - else
-        ' #{entrants.ready} / #{entrants.nonready} ready
+  .col-sm-3
+    .statcard.p-3.rounded class=statcard_class(race)
+      h2.statcard-number.text-dark
+        #race-status
+          = race.status.titleize
+      span.statcard-desc.text-dark
+        - if race.entrants.count <= 1
+          ' Need #{2 - race.entrants.count} more to start
+        - else
+          ' #{race.entrants.ready.count} / #{race.entrants.count} ready
   .col-sm-3: .statcard.p-3
     h2.statcard-number
-      = race.visibility.sub('_', ' ').capitalize
+      = race.visibility.titleize
     span.statcard-desc Visibility
   .col-sm-3: .statcard.p-3
     h2.statcard-number

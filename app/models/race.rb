@@ -12,8 +12,4 @@ class Race < ApplicationRecord
   def to_s
     "#{game} #{category}"
   end
-
-  def url_params
-    [type, id]
-  end
 end

@@ -1,4 +1,7 @@
+const moment = require('moment')
+
 import consumer from '../../consumer'
+import { ts } from '../../../time'
 
 let raceSubscription
 
@@ -48,13 +51,16 @@ document.addEventListener('turbolinks:load', () => {
           break;
 
         case 'race_start_scheduled':
-          document.getElementById('race-status').innerText = data.data.race.status_text
+          document.getElementById('race-status').innerText = data.data.race.status
           hideButton('btn-race-join')
           hideButton('btn-race-leave')
           hideButton('btn-race-ready')
           hideButton('btn-race-unready')
           showButton('btn-race-done')
           showButton('btn-race-forfeit')
+          const duration = moment.duration(moment(data.data.race.started_at).valueOf() - ts.now())
+          const startAlert = createAlert('warning', `Race starting in ${duration.format()}!`)
+          document.getElementById('alerts').appendChild(startAlert)
           break;
         case 'race_done_success':
           hideButton('btn-race-done')
@@ -82,8 +88,22 @@ document.addEventListener('turbolinks:load', () => {
         case 'new_message':
           document.getElementById('input-list-item').insertAdjacentHTML('afterend', data.data.chat_html)
           break;
+
+        case 'race_started_error':
+        case 'race_join_error':
+        case 'in_race_error':
+        case 'race_leave_error':
+        case 'race_ready_error':
+        case 'race_unready_error':
+        case 'race_not_started_error':
+        case 'race_finished_error':
+        case 'race_done_error':
+        case 'race_forfeit_error':
+        case 'race_rejoin_error':
         case 'message_creation_error':
-          console.error(`Message creation error: ${data.data.message}`)
+          const errorAlert = createAlert('danger', `Error: ${data.data.message}`)
+          document.getElementById('alerts').appendChild(errorAlert)
+          setTimeout(() => { errorAlert.parentNode.removeChild(errorAlert) }, 5000)
           break;
       }
     },
@@ -105,11 +125,11 @@ document.addEventListener('turbolinks:load', () => {
     },
 
     forfeit() {
-      this.perform('forfeit', { server_time: '' })
+      this.perform('forfeit', { server_time: ts.now() })
     },
 
     done() {
-      this.perform('done', { server_time: '' })
+      this.perform('done', { server_time: ts.now() })
     },
 
     rejoin() {
@@ -185,4 +205,13 @@ const submitChatInput = () => {
 
   raceSubscription.sendMessage(chatInput.value)
   chatInput.value = ''
+}
+
+const createAlert = (style, message) => {
+  const div = document.createElement('div')
+  div.classList = `alert alert-${style} center`
+  div.setAttribute('role', 'alert')
+  const text = document.createTextNode(message)
+  div.appendChild(text)
+  return div
 }

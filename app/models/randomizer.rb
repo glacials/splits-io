@@ -10,8 +10,4 @@ class Randomizer < ApplicationRecord
   def to_s
     "#{game} Randomizer"
   end
-
-  def url_params
-    [type, id]
-  end
 end

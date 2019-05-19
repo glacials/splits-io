@@ -42,7 +42,7 @@
                     = Duration.new((now - race.created_at) * 1000).format
                 - else
                   - if race.public_visibility?
-                    .text-success Open Entry
+                    .text-success Public
                   - elsif race.invite_only_visibility?
                     .text-warning Invite-Only
             - if cols.include?(:video)
@@ -57,6 +57,8 @@
               td width='100%'
                 .badge.badge-dark.mr-2 style='text-transform: uppercase' Race
                 = link_to race, polymorphic_path(race), class: 'text-warning'
+                - if race.notes.present?
+                  span.mx-1.tip title=race.notes = icon('fas', 'comment-alt')
             - if cols.include?(:rival)
               td.align-right.nowrap
             - if cols.include?(:uploaded)

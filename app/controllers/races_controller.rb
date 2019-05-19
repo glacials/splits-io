@@ -21,6 +21,8 @@ class RacesController < ApplicationController
   end
 
   def set_race_gon
+    return if @race.locked?
+
     gon.race = {
       id:         @race.id,
       type:       params[:race_type],

@@ -10,7 +10,7 @@
       li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_category_path(@race.game, @race.category))
     - else
       li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_path(@race.game))
-    li.breadcrumb-item.active = link_to(@race.id, race_path(*@race.url_params))
+    li.breadcrumb-item.active = link_to(@race.id, polymorphic_path(@race))
 
 .row.mx-2
   .col-md-6 = render partial: 'races/title', locals: {race: @race}
@@ -23,12 +23,13 @@
     .card.shadow.my-3#chat-card
       #chat-box
         .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
-          .list-group-item#input-list-item.p-0
-            .input-group
-              input.form-control#input-chat-text type='text' placeholder='Chat...' autofocus=true
-              .input-group-append
-                button.btn.btn-dark#btn-chat-submit type='button' Chat
-          - @race.chat_messages.order(created_at: :desc).each do |message|
+          - unless @race.locked?
+            .list-group-item#input-list-item.p-0
+              .input-group
+                input.form-control#input-chat-text type='text' placeholder='Chat...' autofocus=true
+                .input-group-append
+                  button.btn.btn-dark#btn-chat-submit type='button' Chat
+          - @race.chat_messages.order(created_at: :desc).includes(user: [:twitch, :patreon, :google]).each do |message|
             = render partial: 'chat_messages/show', locals: {chat_message: message}
           .list-group-item.p-0
             .media

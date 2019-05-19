@@ -158,6 +158,8 @@ Rails.application.routes.draw do
       delete '/runs/:run/user', to: 'runs/users#destroy'
 
       post '/convert', to: 'converts#create'
+
+      post '/timesync', to: 'time#create'
     end
 
     namespace :v3 do
