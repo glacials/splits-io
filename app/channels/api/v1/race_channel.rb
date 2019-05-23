@@ -39,6 +39,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_join_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#join')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -56,6 +57,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_leave_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#leave')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -74,6 +76,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_ready_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#ready')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -91,6 +94,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_unready_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#unready')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -112,6 +116,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_forfeit_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#forfeit')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -133,6 +138,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_done_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#done')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -150,6 +156,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_rejoin_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#rejoin')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -183,6 +190,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user('message_creation_error', message.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
+    Rails.logger.error(e)
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#send_message')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end

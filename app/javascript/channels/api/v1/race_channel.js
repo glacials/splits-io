@@ -4,6 +4,7 @@ import consumer from '../../consumer'
 import { ts } from '../../../time'
 
 let raceSubscription
+let isConnceted = false
 
 document.addEventListener('turbolinks:load', () => {
   if (!window.gon || !window.gon.race) {
@@ -17,11 +18,30 @@ document.addEventListener('turbolinks:load', () => {
     join_token: window.gon.race.join_token
   }, {
     connected() {
-      // Called when the subscription is ready for use on the server
+      isConnceted = true
+      const alert = document.getElementById('disconnected-alert')
+      if (alert) {
+        alert.parentNode.removeChild(alert)
+      }
+
+      const forfeitTime = localStorage.getItem(`race-${window.gon.race.id}-forfeit-time`)
+      if (forfeitTime) {
+        this.forfeit(parseFloat(forfeitTime))
+        localStorage.removeItem(`race-${window.gon.race.id}-forfeit-time`)
+      }
+
+      const doneTime = localStorage.getItem(`race-${window.gon.race.id}-done-time`)
+      if (doneTime) {
+        this.done(parseFloat(doneTime))
+        localStorage.removeItem(`race-${window.gon.race.id}-done-time`)
+      }
     },
 
     disconnected() {
-      // Called when the subscription has been terminated by the server
+      isConnceted = false
+      const alert = createAlert('danger', 'Disconnected')
+      alert.setAttribute('id', 'disconnected-alert')
+      document.getElementById('alerts').appendChild(alert)
     },
 
     received(data) {
@@ -128,12 +148,26 @@ document.addEventListener('turbolinks:load', () => {
       this.perform('unready')
     },
 
-    forfeit() {
-      this.perform('forfeit', { server_time: ts.now() })
+    forfeit(time) {
+      if (isConnceted) {
+        if (!time) {
+          time = ts.now()
+        }
+        this.perform('forfeit', { server_time: time })
+      } else {
+        localStorage.setItem(`race-${window.gon.race.id}-forfeit-time`, ts.now())
+      }
     },
 
-    done() {
-      this.perform('done', { server_time: ts.now() })
+    done(time) {
+      if (isConnceted) {
+        if (!time) {
+          time = ts.now()
+        }
+        this.perform('done', { server_time: time })
+      } else {
+        localStorage.setItem(`race-${window.gon.race.id}-done-time`, ts.now())
+      }
     },
 
     rejoin() {
