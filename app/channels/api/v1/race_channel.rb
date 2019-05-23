@@ -142,7 +142,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     if chat_message.persisted?
       transmit_user('message_creation_success', 'Messages successfully created')
       message = {
-        message: 'A new message has been posted',
+        message:      'A new message has been posted',
         chat_message: Api::V4::ChatMessageBlueprint.render_as_hash(chat_message)
       }
       message[:chat_html] = ApplicationController.render(partial: 'chat_messages/show', locals: {chat_message: chat_message}) if onsite
@@ -174,7 +174,10 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       message: msg,
       race:    Api::V4::RaceBlueprint.render_as_hash(@race)
     }
-    msg[:entrants_html] = ApplicationController.render(partial: 'races/entrants_table', locals: {race: @race}) if onsite
+    if onsite
+      msg[:entrants_html] = ApplicationController.render(partial: 'races/entrants_table', locals: {race: @race})
+      msg[:stats_html] = ApplicationController.render(partial: 'races/stats', locals: {race: @race})
+    end
 
     ws_msg = Api::V1::WebsocketMessage.new(type, msg)
     broadcast_to(@race, Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))

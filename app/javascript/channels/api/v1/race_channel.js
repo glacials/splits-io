@@ -28,6 +28,7 @@ document.addEventListener('turbolinks:load', () => {
       switch(data.type) {
         case 'race_entrants_updated':
           document.getElementById('entrants-table').innerHTML = data.data.entrants_html
+          document.getElementById('stats-box').innerHTML = data.data.stats_html
           break;
 
         case 'race_join_success':
@@ -51,7 +52,7 @@ document.addEventListener('turbolinks:load', () => {
           break;
 
         case 'race_start_scheduled':
-          document.getElementById('race-status').innerText = data.data.race.status
+          document.getElementById('stats-box').innerHTML = data.data.stats_html
           hideButton('btn-race-join')
           hideButton('btn-race-leave')
           hideButton('btn-race-ready')
@@ -59,8 +60,10 @@ document.addEventListener('turbolinks:load', () => {
           showButton('btn-race-done')
           showButton('btn-race-forfeit')
           const duration = moment.duration(moment(data.data.race.started_at).valueOf() - ts.now())
-          const startAlert = createAlert('warning', `Race starting in ${duration.format()}!`)
+          const startAlert = createAlert('warning', `Race starting in ${duration.format('s [seconds]')}!`)
+          startAlert.setAttribute('data-start', data.data.race.started_at)
           document.getElementById('alerts').appendChild(startAlert)
+          countdown(startAlert)
           break;
         case 'race_done_success':
           hideButton('btn-race-done')
@@ -211,7 +214,22 @@ const createAlert = (style, message) => {
   const div = document.createElement('div')
   div.classList = `alert alert-${style} center`
   div.setAttribute('role', 'alert')
-  const text = document.createTextNode(message)
-  div.appendChild(text)
+  div.innerText = message
   return div
+}
+
+const countdown = (alert) => {
+  const interval = setInterval(() => {
+    const duration = moment.duration(moment(alert.dataset.start).valueOf() - ts.now())
+    if (duration.asSeconds() <= 0) {
+      clearInterval(interval)
+      alert.innerText = 'Race Started!'
+      alert.classList.remove('alert-warning')
+      alert.classList.add('alert-success')
+      setTimeout(() => { alert.parentNode.removeChild(alert) }, 10000)
+      return
+    }
+
+    alert.innerText = `Race starting in ${duration.format('s [seconds]')}!`
+  }, 100)
 }

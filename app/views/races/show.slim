@@ -14,7 +14,7 @@
 
 .row.mx-2
   .col-md-6 = render partial: 'races/title', locals: {race: @race}
-  .col-md-6 = render partial: 'races/stats', locals: {race: @race}
+  #stats-box.col-md-6 = render partial: 'races/stats', locals: {race: @race}
 
 .row.mx-1.mt-3
   #entrants-table.col-md-6 = render partial: 'races/entrants_table', locals: {race: @race}
