@@ -7,9 +7,13 @@
       th Place
       th Time
     tbody
-      - race.entrants.each do |entrant|
+      - race.entrants.order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS FIRST').each do |entrant|
         tr
           td = entrant.user.name
           td = entrant.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
-          td = entrant.place
+          td
+            - if entrant.forfeited?
+              = icon('fas', 'times', class: 'text-danger')
+            - else
+              = entrant.place
           td = entrant.duration.format
