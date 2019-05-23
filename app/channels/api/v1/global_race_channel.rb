@@ -70,5 +70,8 @@ class Api::V1::GlobalRaceChannel < ApplicationCable::Channel
       )
     end
     transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::GlobalRaceChannel#create_race')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 end

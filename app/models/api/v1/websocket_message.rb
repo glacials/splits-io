@@ -44,6 +44,8 @@ class Api::V1::WebsocketMessage
     message_creation_success
     new_message
     message_creation_error
+
+    fatal_error
   ].freeze
 
   def initialize(type, **data)

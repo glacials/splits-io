@@ -18,8 +18,14 @@ document.addEventListener('turbolinks:load', () => {
           Turbolinks.visit(data.data.path)
           break
         case 'race_creation_error':
-          // TODO some kind of error handling
-          console.error(`Race creation error: ${data.data.message}`)
+        case 'fatal_error':
+          // TODO consolodate this with `createAlert` in races_channel.js
+          const div = document.createElement('div')
+          div.classList = `alert alert-danger center`
+          div.setAttribute('role', 'alert')
+          div.innerText = `Error: ${data.data.message}`
+          document.getElementById('alerts').appendChild(div)
+          setTimeout(() => { div.parentNode.removeChild(div) }, 5000)
           break
       }
     },

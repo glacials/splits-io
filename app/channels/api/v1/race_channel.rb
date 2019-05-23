@@ -38,6 +38,9 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     else
       transmit_user(entrant.error_status! || 'race_join_error', entrant.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#join')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def leave
@@ -52,6 +55,9 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     else
       transmit_user(entrant.error_status! || 'race_leave_error', entrant.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#leave')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def ready
@@ -67,6 +73,9 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     else
       transmit_user(entrant.error_status! || 'race_ready_error', entrant.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#ready')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def unready
@@ -81,6 +90,9 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     else
       transmit_user(entrant.error_status! || 'race_unready_error', entrant.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#unready')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def forfeit(data)
@@ -99,6 +111,9 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     else
       transmit_user(entrant.error_status! || 'race_forfeit_error', entrant.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#forfeit')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def done(data)
@@ -117,6 +132,9 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     else
       transmit_user(entrant.error_status! || 'race_done_error', entrant.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#done')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def rejoin
@@ -131,6 +149,9 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     else
       transmit_user(entrant.error_status! || 'race_rejoin_error', entrant.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#rejoin')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def send_message(data)
@@ -145,14 +166,25 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
         message:      'A new message has been posted',
         chat_message: Api::V4::ChatMessageBlueprint.render_as_hash(chat_message)
       }
-      message[:chat_html] = ApplicationController.render(partial: 'chat_messages/show', locals: {chat_message: chat_message}) if onsite
-      broadcast_to(@race, Api::V1::WebsocketMessageBlueprint.render_as_hash(Api::V1::WebsocketMessage.new(
-        'new_message',
-        message
-      )))
+      if onsite
+        message[:chat_html] = ApplicationController.render(
+          partial: 'chat_messages/show',
+          locals:  {chat_message: chat_message}
+        )
+      end
+
+      broadcast_to(
+        @race,
+        Api::V1::WebsocketMessageBlueprint.render_as_hash(
+          Api::V1::WebsocketMessage.new('new_message', message)
+        )
+      )
     else
       transmit_user('message_creation_error', message.errors.full_messages.to_sentence)
     end
+  rescue StandardError => e
+    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#send_message')
+    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   private

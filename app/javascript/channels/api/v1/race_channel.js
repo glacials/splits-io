@@ -104,6 +104,7 @@ document.addEventListener('turbolinks:load', () => {
         case 'race_forfeit_error':
         case 'race_rejoin_error':
         case 'message_creation_error':
+        case 'fatal_error':
           const errorAlert = createAlert('danger', `Error: ${data.data.message}`)
           document.getElementById('alerts').appendChild(errorAlert)
           setTimeout(() => { errorAlert.parentNode.removeChild(errorAlert) }, 5000)
