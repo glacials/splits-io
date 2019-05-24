@@ -24,6 +24,7 @@ window.Chartkick = Chartkick
 import "../ad_cleanup.js"
 import "../analytics.js"
 import "../convert.js"
+import "../count.js"
 import "../highchart_theme.js"
 import "../chart_builder.js"
 import "../landing.js"

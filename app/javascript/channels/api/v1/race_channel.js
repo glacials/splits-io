@@ -6,6 +6,11 @@ import { ts } from '../../../time'
 let raceSubscription
 let isConnceted = false
 
+// from https://stackoverflow.com/a/3291856/392225
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 document.addEventListener('turbolinks:load', () => {
   if (!window.gon || !window.gon.race) {
     return
@@ -102,7 +107,7 @@ document.addEventListener('turbolinks:load', () => {
           break;
 
         case 'race_ended':
-          document.getElementById('race-status').innerText = data.data.race.status_text
+          document.getElementById('race-status').innerText = data.data.race.status.capitalize
           hideButton('btn-race-forfeit')
           hideButton('btn-race-done')
           hideButton('btn-race-rejoin')

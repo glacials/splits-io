@@ -15,8 +15,14 @@ module Raceable
 
     # Return all current races, as defined by any raceable less than an hour old or has 2 or more entrants
     def self.current
-      where('updated_at > ?', 1.hour.ago)
-        .or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)))
+      case name # self.name refers to the class including this concern
+      when 'Race'
+        where('races.updated_at > ?', 1.hour.ago)
+      when 'Randomizer'
+        where('randomizers.updated_at > ?', 1.hour.ago)
+      when 'Bingo'
+        where('bingos.updated_at > ?', 1.hour.ago)
+      end.or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)))
     end
 
     # Return all active races, as defined by any raceable less than an hour old that is not finished

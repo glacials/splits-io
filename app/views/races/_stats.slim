@@ -1,25 +1,30 @@
 .row
   .col-sm-3
     .statcard.p-3.rounded class=statcard_class(race)
-      h2.statcard-number.text-dark
-        #race-status
-          = race.status.titleize
-      span.statcard-desc.text-dark
-        - if race.entrants.count <= 1
-          ' Need #{2 - race.entrants.count} more to start
+      - if race.in_progress?
+        h2.statcard-number.text-dark data={ms: ((Time.now.utc - race.started_at) * 1000).floor}
+          = Duration.new(((Time.now.utc - race.started_at) * 1000).floor).format
+        span.statcard-desc.text-dark
+          #race-status = race.status.titleize
+      - else
+        h2.statcard-number.text-dark
+          #race-status = race.status.titleize
+        - if !race.started? && race.entrants.count <= 1
+          span.statcard-desc.text-dark
+            ' Need #{2 - race.entrants.count} more to start
+        - elsif !race.finished?
+          span.statcard-desc.text-dark
+            ' #{race.entrants.ready.count} / #{race.entrants.count} ready
         - else
-          ' #{race.entrants.ready.count} / #{race.entrants.count} ready
+          span.statcard-desc.text-dark title=race.started_at #{time_ago_in_words(race.started_at)} ago
   .col-sm-3: .statcard.p-3
-    h2.statcard-number
-      = race.visibility.titleize
+    h2.statcard-number = race.visibility.titleize
     span.statcard-desc Visibility
   .col-sm-3: .statcard.p-3
-    h2.statcard-number
-      = race.entrants.count
+    h2.statcard-number = race.entrants.count
     span.statcard-desc Entrants
   .col-sm-3: .statcard.p-3
-    h2.statcard-number
-      = race.type.capitalize
+    h2.statcard-number = race.type.capitalize
     span.statcard-desc Type
   .col-sm-3: .statcard.p-3
     h2.statcard-number

@@ -2,18 +2,23 @@
   h6.card-header Entrants
   .table-responsive: table.card-body.table.mb-0
     thead: tr
-      th Name
-      th Ready
-      th Place
-      th Time
+      th.nowrap Name
+      th.nowrap Ready
+      th.nowrap.text-center Place
+      th.w-100 Time
     tbody
       - race.entrants.order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS FIRST').each do |entrant|
         tr
           td = entrant.user.name
           td = entrant.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
-          td
-            - if entrant.forfeited?
-              = icon('fas', 'times', class: 'text-danger')
-            - else
+          - if entrant.forfeited?
+            td.text-danger.text-center.rounded.text-monospace
+              b = icon('fas', 'times')
+          - elsif entrant.finished?
+            td.text-success.text-center.rounded.text-monospace
+              b = entrant.place
+          - else
+            td.text-center
               = entrant.place
-          td = entrant.duration.format
+          td
+            = (entrant.duration || race.duration).format

@@ -38,11 +38,13 @@
               td.align-right.nowrap
                 - if race.in_progress?
                   - now = Time.now.utc
-                  .text-warning data={ms: (now - race.created_at) * 1000}
-                    = Duration.new((now - race.created_at) * 1000).format
+                  .text-warning data={ms: (now - race.started_at) * 1000}
+                    = Duration.new((now - race.started_at) * 1000).format
+                - elsif race.finished?
+                  .text-success Finished
                 - else
                   - if race.public_visibility?
-                    .text-success Public
+                    .text-success Open
                   - elsif race.invite_only_visibility?
                     .text-warning Invite-Only
             - if cols.include?(:video)
@@ -58,7 +60,7 @@
                 .badge.badge-dark.mr-2 style='text-transform: uppercase' Race
                 = link_to race, polymorphic_path(race), class: 'text-warning'
                 - if race.notes.present?
-                  span.mx-1.tip title=race.notes = icon('fas', 'comment-alt')
+                  span.ml-2.tip title=race.notes = icon('far', 'sticky-note')
             - if cols.include?(:rival)
               td.align-right.nowrap
             - if cols.include?(:uploaded)
