@@ -1,13 +1,19 @@
 class Api::V1::RaceChannel < ApplicationCable::Channel
   def subscribed
     @race = Raceable.race_from_type(params[:race_type]).find_by(id: params[:race_id])
+    @permitted = true
     if @race.nil?
       transmit_user('race_not_found', "No race found with id: #{params[:race_id]}")
       reject
       return
     end
 
-    if (@race.invite_only_visibility? || @race.secret_visibility?) && @race.join_token != params[:join_token]
+    if @race.invite_only_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
+      @permitted = false
+      transmit_user('race_read_only', 'Invalid or no join token')
+    end
+
+    if @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
       transmit_user('race_invalid_join_token', 'The join token provided is not valid for this race')
       reject
     else
@@ -29,6 +35,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   end
 
   def join
+    return unless @permitted
+
     update_race_instance
 
     entrant = @race.entrants.create(user: current_user)
@@ -45,6 +53,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   end
 
   def leave
+    return unless @permitted
+
     update_race_instance
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
@@ -63,6 +73,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   end
 
   def ready
+    return unless @permitted
+
     update_race_instance
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
@@ -82,6 +94,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   end
 
   def unready
+    return unless @permitted
+
     update_race_instance
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
@@ -105,6 +119,10 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     forfeit_time = Time.now.utc
     forfeit_time = Time.at(data['server_time']).utc if data['server_time'].present?
 
+    return unless @permitted
+
+    update_race_instance
+
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
 
@@ -127,6 +145,10 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     done_time = Time.now.utc
     done_time = Time.at(data['server_time'] / 1000).utc if data['server_time'].present?
 
+    return unless @permitted
+
+    update_race_instance
+
     entrant = Entrant.find_by(raceable: @race, user: current_user)
     return if entrant.nil?
 
@@ -144,6 +166,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   end
 
   def rejoin
+    return unless @permitted
+
     update_race_instance
 
     entrant = Entrant.find_by(raceable: @race, user: current_user)
@@ -162,6 +186,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
   end
 
   def send_message(data)
+    return unless @permitted
+
     update_race_instance
     chat_message = @race.chat_messages.create(
       user: current_user, body: data['body'],

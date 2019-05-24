@@ -5,6 +5,8 @@ class Api::V1::WebsocketMessage
     race_not_found
     race_invalid_join_token
     race_state
+    global_state
+    race_read_only
 
     in_race_error
 

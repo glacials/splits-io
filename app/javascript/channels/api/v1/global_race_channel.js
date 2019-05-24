@@ -1,5 +1,7 @@
 import consumer from '../../consumer'
 
+import { createAlert } from '../../../dom_helpers'
+
 let globalSubscription
 
 document.addEventListener('turbolinks:load', () => {
@@ -19,11 +21,7 @@ document.addEventListener('turbolinks:load', () => {
           break
         case 'race_creation_error':
         case 'fatal_error':
-          // TODO consolodate this with `createAlert` in races_channel.js
-          const div = document.createElement('div')
-          div.classList = `alert alert-danger center`
-          div.setAttribute('role', 'alert')
-          div.innerText = `Error: ${data.data.message}`
+          const div = createAlert('danger', `Error: ${data.data.message}`)
           document.getElementById('alerts').appendChild(div)
           setTimeout(() => { div.parentNode.removeChild(div) }, 5000)
           break

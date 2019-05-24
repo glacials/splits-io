@@ -3,40 +3,48 @@
 
 .row
   .col-md-12
-    - if race.try(:card)
-      h5 Card: = race.card
-    - if race.try(:seed)
-      h5 Seed: = race.seed
+    - if race.try(:card_url).present?
+      h5 = "Card: #{race.card}"
+    - if race.try(:seed).present?
+      h5 = "Seed: #{race.seed}"
 
     - if race.notes.present?
       h5 = "Notes: #{race.notes}"
     h5
       span> created by
       span = user_badge(race.owner)
+      - if race.owner == current_user && !race.public_visibility? && !race.started?
+        btn.btn.btn-outline-info.clipboard-btn.tip.ml-2(
+          data-clipboard-text=polymorphic_url(race, join_token: race.join_token)
+          title='This link will allow others to join your race'
+        )
+          span#copy = icon('fas', 'link')
+          span#copied style='display: none;' = icon('fas', 'check')
 
   .col-md-8
-    .btn-toolbar role='toolbar' aria={label: 'Race Controls'}
-      button.btn.btn-outline-success.mr-2#btn-race-join(
-        hidden=(race.started? || current_user.nil? || race.users.include?(current_user))
-      ) Join
-      button.btn.btn-outline-warning.mr-2#btn-race-leave(
-        hidden=(race.started? || !race.users.include?(current_user))
-      ) Leave
+    - if race.joinable?(token: params[:join_token], user: current_user)
+      .btn-toolbar role='toolbar' aria={label: 'Race Controls'}
+        button.btn.btn-outline-success.mr-2#btn-race-join(
+          hidden=(race.started? || current_user.nil? || race.users.include?(current_user))
+        ) Join
+        button.btn.btn-outline-warning.mr-2#btn-race-leave(
+          hidden=(race.started? || !race.users.include?(current_user))
+        ) Leave
 
-      button.btn.btn-outline-success.mr-2#btn-race-ready(
-        hidden=(race.started? || !race.users.include?(current_user) || race.entrant_for_user(current_user).ready?)
-      ) Ready
-      button.btn.btn-outline-danger.mr-2#btn-race-unready(
-        hidden=(race.started? || !race.users.include?(current_user) || !race.entrant_for_user(current_user).ready?)
-      ) Unready
+        button.btn.btn-outline-success.mr-2#btn-race-ready(
+          hidden=(race.started? || !race.users.include?(current_user) || race.entrant_for_user(current_user).ready?)
+        ) Ready
+        button.btn.btn-outline-danger.mr-2#btn-race-unready(
+          hidden=(race.started? || !race.users.include?(current_user) || !race.entrant_for_user(current_user).ready?)
+        ) Unready
 
-      button.btn.btn-outline-success.mr-2#btn-race-done(
-        hidden=(!race.in_progress? || !race.users.include?(current_user) || race.entrant_for_user(current_user).done?)
-      ) Done
-      button.btn.btn-outline-danger.mr-2#btn-race-forfeit(
-        hidden=(!race.in_progress? || !race.users.include?(current_user) || race.entrant_for_user(current_user).done?)
-      ) Forfeit
+        button.btn.btn-outline-success.mr-2#btn-race-done(
+          hidden=(!race.in_progress? || !race.users.include?(current_user) || race.entrant_for_user(current_user).done?)
+        ) Done
+        button.btn.btn-outline-danger.mr-2#btn-race-forfeit(
+          hidden=(!race.in_progress? || !race.users.include?(current_user) || race.entrant_for_user(current_user).done?)
+        ) Forfeit
 
-      button.btn.btn-outline-warning.mr-2#btn-race-rejoin(
-        hidden=(!race.in_progress? || !race.users.include?(current_user) || !race.entrant_for_user(current_user).done?)
-      ) Rejoin
+        button.btn.btn-outline-warning.mr-2#btn-race-rejoin(
+          hidden=(!race.in_progress? || !race.users.include?(current_user) || !race.entrant_for_user(current_user).done?)
+        ) Rejoin

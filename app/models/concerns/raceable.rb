@@ -48,7 +48,17 @@ module Raceable
     end
 
     def entrant_for_user(user)
+      return nil if user.nil?
+
       entrants.find_by(user_id: user.id)
+    end
+
+    def joinable?(user: nil, token: nil)
+      result = false
+      result = true if entrant_for_user(user).present? || owner == user
+      result = true if (invite_only_visibility? || secret_visibility?) && token == join_token
+
+      result
     end
 
     def type

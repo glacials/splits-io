@@ -1,15 +1,11 @@
 const moment = require('moment')
 
 import consumer from '../../consumer'
+import { createAlert, showButton, hideButton } from '../../../dom_helpers'
 import { ts } from '../../../time'
 
 let raceSubscription
-let isConnceted = false
-
-// from https://stackoverflow.com/a/3291856/392225
-String.prototype.capitalize = function() {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-}
+let isConnected = false
 
 document.addEventListener('turbolinks:load', () => {
   if (!window.gon || !window.gon.race) {
@@ -23,7 +19,7 @@ document.addEventListener('turbolinks:load', () => {
     join_token: window.gon.race.join_token
   }, {
     connected() {
-      isConnceted = true
+      isConnected = true
       const alert = document.getElementById('disconnected-alert')
       if (alert) {
         alert.parentNode.removeChild(alert)
@@ -43,7 +39,7 @@ document.addEventListener('turbolinks:load', () => {
     },
 
     disconnected() {
-      isConnceted = false
+      isConnected = false
       const alert = createAlert('danger', 'Disconnected')
       alert.setAttribute('id', 'disconnected-alert')
       document.getElementById('alerts').appendChild(alert)
@@ -76,6 +72,11 @@ document.addEventListener('turbolinks:load', () => {
           hideButton('btn-race-unready')
           break;
 
+        case 'race_read_only':
+          const readAlert = createAlert('warning', 'You will not be able to join this race')
+          document.getElementById('alerts').appendChild(readAlert)
+          setTimeout(() => { readAlert.parentNode.removeChild(readAlert) }, 5000)
+          break;
         case 'race_start_scheduled':
           document.getElementById('stats-box').innerHTML = data.data.stats_html
           hideButton('btn-race-join')
@@ -107,7 +108,8 @@ document.addEventListener('turbolinks:load', () => {
           break;
 
         case 'race_ended':
-          document.getElementById('race-status').innerText = data.data.race.status.capitalize
+          document.getElementById('entrants-table').innerHTML = data.data.entrants_html
+          document.getElementById('stats-box').innerHTML = data.data.stats_html
           hideButton('btn-race-forfeit')
           hideButton('btn-race-done')
           hideButton('btn-race-rejoin')
@@ -154,7 +156,7 @@ document.addEventListener('turbolinks:load', () => {
     },
 
     forfeit(time) {
-      if (isConnceted) {
+      if (isConnected) {
         if (!time) {
           time = ts.now()
         }
@@ -165,7 +167,7 @@ document.addEventListener('turbolinks:load', () => {
     },
 
     done(time) {
-      if (isConnceted) {
+      if (isConnected) {
         if (!time) {
           time = ts.now()
         }
@@ -230,16 +232,6 @@ document.addEventListener('keypress', (event) => {
   submitChatInput()
 })
 
-const showButton = (elementId) => {
-  const elem = document.getElementById(elementId)
-  elem.hidden = false
-}
-
-const hideButton = (elementId) => {
-  const elem = document.getElementById(elementId)
-  elem.hidden = true
-}
-
 const submitChatInput = () => {
   const chatInput = document.getElementById('input-chat-text')
   if (chatInput.value === '') {
@@ -248,14 +240,6 @@ const submitChatInput = () => {
 
   raceSubscription.sendMessage(chatInput.value)
   chatInput.value = ''
-}
-
-const createAlert = (style, message) => {
-  const div = document.createElement('div')
-  div.classList = `alert alert-${style} center`
-  div.setAttribute('role', 'alert')
-  div.innerText = message
-  return div
 }
 
 const countdown = (alert) => {
