@@ -1,97 +1,96 @@
-version: '2'
+version: '3.7'
+x-environment:
+  &server-environment
+  - AWS_REGION=local
+  - AWS_ACCESS_KEY_ID=beep
+  - AWS_SECRET_KEY=boop
+  - ENABLE_ADS=0
+  - GOOGLE_CLIENT_ID
+  - GOOGLE_CLIENT_SECRET
+  - NODE_ENV=development
+  - PATREON_CLIENT_ID
+  - PATREON_CLIENT_SECRET
+  - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
+  - RAILS_ENV=development
+  - RAILS_ROOT="/app"
+  - READ_ONLY_MODE=0
+  - REDIS_URL="redis/0"
+  - S3_BUCKET=splits-io
+  - SITE_TITLE=Splits.io (Local)
+  - SPLITSIO_CLIENT_ID
+  - SPLITSIO_CLIENT_SECRET
+  - TWITCH_CLIENT_ID
+  - TWITCH_CLIENT_SECRET
+x-logging:
+  &default-logging
+  driver: json-file
+  options:
+    max-size: 1m
+    max-file: "1"
+
 services:
+  db:
+    image: postgres
+    logging: *default-logging
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
+  s3:
+    expose:
+      - "4569"
+    image: lphoward/fake-s3
+    logging: *default-logging
+    ports:
+      - 4569:4569
+  webpacker:
+    build: .
+    command: bash -c "yarn install && ruby bin/webpack-dev-server"
+    environment:
+      - SPLITSIO_CLIENT_ID
+    expose:
+      - "3035"
+    image: webpacker
+    logging: *default-logging
+    ports:
+      - 3035:3035
+    volumes:
+      - .:/app
   web:
-    image: web
     build:
       context: .
       dockerfile: Dockerfile
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle install && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    volumes:
-      - ./:/app
-    ports:
-      - 3000:3000
     depends_on:
       - db
       - s3
       - webpacker
       - worker
       - redis
+    environment: *server-environment
+    image: web
     links:
       - s3:s3.localhost
       - webpacker:webpacker.localhost
-    environment:
-      - AWS_REGION=local
-      - AWS_ACCESS_KEY_ID=beep
-      - AWS_SECRET_KEY=boop
-      - ENABLE_ADS=0
-      - NODE_ENV=development
-      - READ_ONLY_MODE=0
-      - REDIS_URL="redis/0"
-      - RAILS_ENV
-      - RAILS_ROOT="/app"
-      - S3_BUCKET=splits-io
-      - SITE_TITLE=Splits I/O (Local)
-      - GOOGLE_CLIENT_ID
-      - GOOGLE_CLIENT_SECRET
-      - PATREON_CLIENT_ID
-      - PATREON_CLIENT_SECRET
-      - SPLITSIO_CLIENT_ID
-      - TWITCH_CLIENT_ID
-      - TWITCH_CLIENT_SECRET
+    logging: *default-logging
+    ports:
+      - 3000:3000
     stdin_open: true
     tty: true
-  db:
-    image: postgres
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
-  s3:
-    image: lphoward/fake-s3
-    ports:
-      - 4569:4569
-    expose:
-      - "4569"
-  webpacker:
-    image: webpacker
-    environment:
-      - SPLITSIO_CLIENT_ID
-    build: .
-    command: bash -c "yarn install && ruby bin/webpack-dev-server"
-    volumes:
-      - .:/app
-    ports:
-      - 3035:3035
-    expose:
-      - "3035"
+      - ./:/app
   worker:
-    image: worker
-    environment:
-      - AWS_REGION=local
-      - AWS_ACCESS_KEY_ID=beep
-      - AWS_SECRET_KEY=boop
-      - ENABLE_ADS=0
-      - NODE_ENV=development
-      - READ_ONLY_MODE=0
-      - REDIS_URL=redis/0
-      - RAILS_ENV
-      - RAILS_ROOT=/app
-      - S3_BUCKET=splits-io
-      - SITE_TITLE=Splits I/O (Local)
-      - GOOGLE_CLIENT_ID
-      - GOOGLE_CLIENT_SECRET
-      - PATREON_CLIENT_ID
-      - PATREON_CLIENT_SECRET
-      - SPLITSIO_CLIENT_ID
-      - TWITCH_CLIENT_ID
-      - TWITCH_CLIENT_SECRET
     build: .
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work"
-    ports: []
     depends_on:
       - db
       - s3
+    environment: *server-environment
+    image: worker
     links:
       - s3:s3.localhost
+    logging: *default-logging
+    ports: []
     stdin_open: true
     tty: true
   redis:
     image: redis
+    logging: *default-logging
