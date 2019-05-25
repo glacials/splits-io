@@ -11,7 +11,7 @@ x-environment:
   - PATREON_CLIENT_ID
   - PATREON_CLIENT_SECRET
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
-  - RAILS_ENV=development
+  - RAILS_ENV
   - RAILS_ROOT="/app"
   - READ_ONLY_MODE=0
   - REDIS_URL="redis/0"
