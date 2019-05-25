@@ -1,7 +1,7 @@
 version: '3.7'
 x-environment:
   &server-environment
-  - ASSET_HOST=splits.io
+  - ASSET_HOST
   - AWS_ACCESS_KEY_ID
   - AWS_REGION
   - AWS_SECRET_KEY
@@ -25,7 +25,7 @@ x-environment:
   - ROLLBAR_ACCESS_TOKEN
   - S3_BUCKET
   - SECRET_KEY_BASE
-  - SITE_TITLE=Splits.io
+  - SITE_TITLE
   - SKYLIGHT_AUTHENTICATION
   - SPLITSIO_CLIENT_ID
   - SPLITSIO_CLIENT_SECRET
