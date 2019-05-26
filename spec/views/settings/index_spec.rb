@@ -19,5 +19,16 @@ RSpec.describe 'settings/index' do
 
       expect(view).to render_template('settings/index')
     end
+
+    context 'when your most recent run is categoryless' do
+      before { FactoryBot.create(:run, user: user, category: nil) }
+
+      it 'renders the index template' do
+        allow(view).to receive(:current_user).and_return(user)
+        render
+
+        expect(view).to render_template('settings/index')
+      end
+    end
   end
 end
