@@ -24,7 +24,9 @@ class RunValidator < ActiveModel::Validator
 
     # Embeds break for URLs like https://www.twitch.tv/videos/29447340?filter=highlights&sort=time, which is what Twitch
     # gives you when you copy the link given by the highlights page for a channel.
-    record.video_url = URI(record.video_url).tap { |u| u.query = nil }.to_s
+    if URI.parse(record.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+      record.video_url = URI(record.video_url).tap { |u| u.query = nil }.to_s
+    end
   rescue URI::InvalidURIError
     record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
   end
