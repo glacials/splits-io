@@ -2,6 +2,13 @@ class Api::V1::WebsocketMessage
   attr_reader :type, :data
 
   TYPES = %w[
+    user_absent_error
+    oauth_expired_error
+    oauth_blank_error
+    oauth_scope_error
+    user_mismatch_error
+    oauth_updated
+
     global_state
     race_creation_success
     race_creation_error

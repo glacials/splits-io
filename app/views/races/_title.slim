@@ -4,7 +4,7 @@
 .row
   .col-md-12
     - if race.try(:card_url).present?
-      h5 = "Card: #{race.card}"
+      h5 = "Card: #{race.card_url}"
     - if race.try(:seed).present?
       h5 = "Seed: #{race.seed}"
 

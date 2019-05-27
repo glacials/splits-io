@@ -1,4 +1,4 @@
-class Api::V1::RaceChannel < ApplicationCable::Channel
+class Api::V1::RaceChannel < Api::V1::ApplicationChannel
   def subscribed
     @race = Raceable.race_from_type(params[:race_type]).find_by(id: params[:race_id])
     @permitted = true
@@ -36,6 +36,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
 
   def join
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
 
@@ -48,13 +50,15 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_join_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#join')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def leave
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
 
@@ -69,13 +73,15 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_leave_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#leave')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def ready
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
 
@@ -90,13 +96,15 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_ready_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#ready')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def unready
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
 
@@ -110,7 +118,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_unready_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#unready')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -122,6 +130,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     forfeit_time = Time.at(data['server_time'] / 1000).utc if data['server_time'].present?
 
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
 
@@ -136,7 +146,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_forfeit_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#forfeit')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -148,6 +158,8 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     done_time = Time.at(data['server_time'] / 1000).utc if data['server_time'].present?
 
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
 
@@ -162,13 +174,15 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_done_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#done')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def rejoin
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
 
@@ -182,13 +196,15 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user(entrant.error_status! || 'race_rejoin_error', entrant.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#rejoin')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
   def send_message(data)
     return unless @permitted
+    return if check_user
+    return if check_oauth
 
     update_race_instance
     chat_message = @race.chat_messages.create(
@@ -218,7 +234,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       transmit_user('message_creation_error', message.errors.full_messages.to_sentence)
     end
   rescue StandardError => e
-    Rails.logger.error(e)
+    Rails.logger.error([e.message, *e.backtrace].join($RS))
     Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#send_message')
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
@@ -229,11 +245,6 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     # Instance variables do not update automatically, so we call this function before anything that needs
     # to check the state of the race variable to make sure it isn't stale
     @race.reload
-  end
-
-  def transmit_user(type, msg)
-    ws_msg = Api::V1::WebsocketMessage.new(type, message: msg)
-    transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
   end
 
   def broadcast_race_update(type, msg)

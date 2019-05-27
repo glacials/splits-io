@@ -9,6 +9,14 @@ module ApplicationCable
       logger.add_tags('ActionCable', log_tag)
     end
 
+    def oauth_token
+      @oauth_token
+    end
+
+    def oauth_token=(token)
+      @oauth_token = token
+    end
+
     protected
 
     def find_verified_user
@@ -24,6 +32,7 @@ module ApplicationCable
       user = User.find_by(id: access_token.try(:resource_owner_id))
       reject_unauthorized_connection if user.nil?
 
+      self.oauth_token = access_token
       [user, onsite]
     end
   end
