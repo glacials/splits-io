@@ -31,16 +31,16 @@ class Entrant < ApplicationRecord
   end
 
   def place
-    return '-' unless finished?
-    return 'big fat x' if forfeited?
+    return nil unless finished?
 
     raceable.entrants.order(finished_at: :asc).pluck(:id).index(id) + 1
   end
 
   def duration
-    return Duration.new(nil) unless finished?
+    return Duration.new((finished_at  - raceable.started_at) * 1000) if finished?
+    return Duration.new((forfeited_at - raceable.started_at) * 1000) if forfeited?
 
-    Duration.new((finished_at - raceable.started_at) * 1000)
+    Duration.new(nil)
   end
 
   def error_status!

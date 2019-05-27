@@ -23,7 +23,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
       ws_msg = Api::V1::WebsocketMessage.new(
         'race_state',
         message: 'Race state',
-        race:    Api::V4::RaceBlueprint.render_as_hash(@race, chat: true)
+        race:    Api::V4::RaceBlueprint.render_as_hash(@race, view: @race.type, chat: true)
       )
 
       transmit(Api::V1::WebsocketMessageBlueprint.render_as_hash(ws_msg))
@@ -43,6 +43,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     if entrant.persisted?
       transmit_user('race_join_success', 'Race successfully joined')
       broadcast_race_update('race_entrants_updated', 'A new entrant has join the race')
+      GlobalRaceUpdateJob.perform_later('race_entrants_updated', 'A new entrnat has joined', @race)
     else
       transmit_user(entrant.error_status! || 'race_join_error', entrant.errors.full_messages.to_sentence)
     end
@@ -63,6 +64,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     if entrant.destroy
       transmit_user('race_leave_success', 'Race successfully left')
       broadcast_race_update('race_entrants_updated', 'An entrant has left the race')
+      GlobalRaceUpdateJob.perform_later('race_entrants_updated', 'An entrant has left', @race)
     else
       transmit_user(entrant.error_status! || 'race_leave_error', entrant.errors.full_messages.to_sentence)
     end
@@ -117,7 +119,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     # Immediately take a timestamp in case there is no server time passed in
     # This is to try and make sure ff's have the most accurate time
     forfeit_time = Time.now.utc
-    forfeit_time = Time.at(data['server_time']).utc if data['server_time'].present?
+    forfeit_time = Time.at(data['server_time'] / 1000).utc if data['server_time'].present?
 
     return unless @permitted
 
@@ -238,7 +240,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
     update_race_instance
     msg = {
       message: msg,
-      race:    Api::V4::RaceBlueprint.render_as_hash(@race)
+      race:    Api::V4::RaceBlueprint.render_as_hash(@race, view: @race.type)
     }
     if onsite
       msg[:entrants_html] = ApplicationController.render(partial: 'races/entrants_table', locals: {race: @race})
@@ -256,6 +258,7 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
 
     @race.update(started_at: Time.now.utc + 20.seconds, status: :in_progress)
     broadcast_race_update('race_start_scheduled', 'Race starting soon')
+    GlobalRaceUpdateJob.perform_later('race_started', 'A race has started', @race)
   end
 
   # Ends the race if all entrants have either finished or forfeited, otherwise does nothing
@@ -265,5 +268,6 @@ class Api::V1::RaceChannel < ApplicationCable::Channel
 
     @race.update(status: :ended)
     broadcast_race_update('race_ended', 'All entrants have finished')
+    GlobalRaceUpdateJob.perform_later('race_finished', 'A race has finished', @race)
   end
 end

@@ -1,12 +1,15 @@
 class Api::V1::GlobalRaceChannel < ApplicationCable::Channel
   def subscribed
-    stream_from('global_channel')
+    stream_from('v1:global_channel')
+    stream_from('v1:global_updates_channel') if params[:updates] == '1'
     return unless params[:state] == '1'
 
     ws_msg = Api::V1::WebsocketMessage.new(
       'global_state',
-      message: 'Global race state',
-      races:   Api::V4::RaceBlueprint.render_as_hash(Race.active + Bingo.active + Randomizer.active)
+      message:     'Global race state',
+      races:       Api::V4::RaceBlueprint.render_as_hash(Race.active, view: :race),
+      bingos:      Api::V4::RaceBlueprint.render_as_hash(Bingo.active, view: :bingo),
+      randomizers: Api::V4::RaceBlueprint.render_as_hash(Randomizer.active, view: :randomizer)
     )
     transmit(ws_msg)
   end
@@ -60,9 +63,10 @@ class Api::V1::GlobalRaceChannel < ApplicationCable::Channel
       ws_msg = Api::V1::WebsocketMessage.new(
         'race_creation_success',
         message: 'Race has been created',
-        race:    Api::V4::RaceBlueprint.render_as_hash(race),
+        race:    Api::V4::RaceBlueprint.render_as_hash(race, view: race.type),
         path:    Rails.application.routes.url_helpers.polymorphic_path(race)
       )
+      GlobalRaceUpdateJob.perform_later('race_created', 'A new race has been created', race)
     else
       ws_msg = Api::V1::WebsocketMessage.new(
         'race_creation_error',

@@ -12,7 +12,7 @@ Doorkeeper.configure do
   end
 
   authorization_code_expires_in 10.minutes
-  access_token_expires_in 2.hours
+  access_token_expires_in 48.hours
 
   use_refresh_token
 

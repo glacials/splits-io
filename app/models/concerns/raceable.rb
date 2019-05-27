@@ -57,6 +57,7 @@ module Raceable
       result = false
       result = true if entrant_for_user(user).present? || owner == user
       result = true if (invite_only_visibility? || secret_visibility?) && token == join_token
+      result = true if public_visibility? && !user.try(:in_race?)
 
       result
     end
