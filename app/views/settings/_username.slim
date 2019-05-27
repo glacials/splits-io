@@ -12,7 +12,7 @@
               | .)
             p Capitalization matters for display, but URLs will always be lowercase.
       .col-md-6: .alert.alert-warning
-        - sample_run = current_user.runs.last || Run.random
+        - sample_run = current_user.runs.where.not(category: nil).last || Run.random
         b Changing your username breaks these links:
         ul
           li: code: a href=user_path(current_user) = request.host_with_port + user_path(current_user)
