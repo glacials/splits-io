@@ -31,6 +31,8 @@ class User < ApplicationRecord
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy, foreign_key: :resource_owner_id
 
+  has_many :sessions, class_name: 'Authie::Session', as: :user, dependent: :destroy
+
   NAME_REGEX = /\A[A-Za-z0-9_]+\z/.freeze
 
   validates :name, presence: true, uniqueness: true, format: {with: NAME_REGEX}
