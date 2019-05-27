@@ -19,7 +19,8 @@ describe TwitchUsersController do
               urls: double(Twitch: 'https://www.twitch.tv/glacials')
             ),
             credentials: double(
-              token: '',
+              token: SecureRandom.uuid,
+              refresh_token: SecureRandom.uuid,
               expires_at: Time.now + 1.day
             )
           )
