@@ -13,7 +13,7 @@ class Api::V4::RaceBlueprint < Blueprinter::Base
   end
 
   view :bingo do
-    field :card
+    field :card_url
 
     association :game, blueprint: Api::V4::GameBlueprint
   end

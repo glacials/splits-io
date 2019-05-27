@@ -58,9 +58,8 @@
           .tab-pane.text-light#randomizer-content role='tabpanel' aria={labelledby: 'randomizer-content-tab'}
             form#randomizer-races-form
               .form-group
-                label for='randomizer-seed-input' Seed
-                input.form-control#randomizer-seed-input type='text' placeholder='Seed' required=true
-                .valid-feedback Looks good!
-                .invalid-feedback Required.
+                label for='randomizer-seed-input' Seed name (optional)
+                input.form-control#randomizer-seed-input type='text' placeholder='Seed name'
+                small.form-text.text-muted You'll be able to attach a seed file once the race is created.
               .form-group
                 button.btn.btn-outline-success#randomizer-submit type='button' Create Race

@@ -38,7 +38,7 @@ class AddRacing < ActiveRecord::Migration[6.0]
       t.integer  :visibility,  null: false, default: 0
       t.string   :join_token,  null: false
       t.string   :notes,       null: true
-      t.string   :seed,        null: false
+      t.string   :seed,        null: true
 
       t.datetime :started_at, limit: 3, null: true
       t.datetime :created_at, limit: 3, null: false

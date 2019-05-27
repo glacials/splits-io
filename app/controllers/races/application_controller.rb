@@ -1,5 +1,5 @@
 class Races::ApplicationController < ApplicationController
-  before_action :set_race,         only: [:show]
+  before_action :set_race,         only: [:show, :update]
   before_action :check_permission, only: [:show]
   before_action :set_race_gon,     only: [:show]
 
@@ -24,5 +24,9 @@ class Races::ApplicationController < ApplicationController
       type:       @race.type,
       join_token: token || params[:join_token]
     }
+  end
+
+  def message_params
+    params.permit(:race, randomizer: {files: []})
   end
 end

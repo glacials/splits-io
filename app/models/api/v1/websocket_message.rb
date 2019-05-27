@@ -58,6 +58,8 @@ class Api::V1::WebsocketMessage
     new_message
     message_creation_error
 
+    new_attachment
+
     fatal_error
   ].freeze
 

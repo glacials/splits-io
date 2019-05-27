@@ -33,3 +33,6 @@ yarn-debug.log*
 .envrc
 
 .DS_Store
+
+# local activestorage
+storage

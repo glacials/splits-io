@@ -74,7 +74,7 @@ class Api::V1::GlobalRaceChannel < Api::V1::ApplicationChannel
       game = Game.find_by(id: data['game_id'])
 
       race.game = game
-      race.seed = data['seed']
+      race.seed = data['seed'].presence
     end
 
     race.owner = current_user

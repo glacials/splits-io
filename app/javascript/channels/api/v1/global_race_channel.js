@@ -96,11 +96,6 @@ document.addEventListener('click', (event) => {
     const notesTextArea = document.getElementById('notes-textarea')
     const seedInput = document.getElementById('randomizer-seed-input')
 
-    if (seedInput.value === '') {
-      seedInput.classList.add('is-invalid')
-      return
-    }
-
     globalSubscription.createRandomizer(
       gameIdInput.value,
       visibilitySelect.selectedOptions[0].value,

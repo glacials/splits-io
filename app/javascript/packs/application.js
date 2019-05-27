@@ -8,6 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import "jquery"
+require("@rails/activestorage").start()
 require("@rails/ujs").start()
 require("turbolinks").start()
 require("channels")

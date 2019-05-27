@@ -119,6 +119,10 @@ document.addEventListener('turbolinks:load', () => {
           document.getElementById('input-list-item').insertAdjacentHTML('afterend', data.data.chat_html)
           break;
 
+        case 'new_attachment':
+          document.getElementById('attachments').innerHTML = data.data.attachments_html
+          break;
+
         case 'race_started_error':
         case 'race_join_error':
         case 'in_race_error':

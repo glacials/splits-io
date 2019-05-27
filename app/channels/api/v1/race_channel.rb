@@ -239,6 +239,16 @@ class Api::V1::RaceChannel < Api::V1::ApplicationChannel
     transmit_user('fatal_error', 'A fatal error occurred while processing your message')
   end
 
+  def attach_file
+    return unless @permitted
+    return if check_user
+    return if check_oauth
+
+    update_race_instance
+
+    broadcast_race_update('new_attachment', 'The race owner has attached a new file')
+  end
+
   private
 
   def update_race_instance
@@ -256,6 +266,10 @@ class Api::V1::RaceChannel < Api::V1::ApplicationChannel
     if onsite
       msg[:entrants_html] = ApplicationController.render(partial: 'races/entrants_table', locals: {race: @race})
       msg[:stats_html] = ApplicationController.render(partial: 'races/stats', locals: {race: @race})
+
+      if @race.randomizer?
+        msg[:attachments_html] = ApplicationController.render(partial: 'races/files', locals: {race: @race})
+      end
     end
 
     ws_msg = Api::V1::WebsocketMessage.new(type, msg)

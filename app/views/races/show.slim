@@ -17,6 +17,16 @@
   #stats-box.col-md-6 = render partial: 'races/stats', locals: {race: @race}
 
 .row.mx-1.mt-3
+  .col-md-6
+    - if @race.randomizer?
+      .card.shadow.my-3
+        .card-header Attachments
+        #attachments = render partial: 'races/attachments', locals: {race: @race}
+        - if @race.owner == current_user
+          .card-footer
+            = form_for(@race, html: {class: 'w-100 d-flex justify-content-between'}) do |f|
+              = f.file_field(:files, multiple: true, direct_upload: true, class: 'form-control-file')
+              = f.submit('Attach', class: 'btn btn-outline-light')
   #entrants-table.col-md-6 = render partial: 'races/entrants_table', locals: {race: @race}
 
   .col-md-6
