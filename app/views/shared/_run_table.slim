@@ -39,7 +39,7 @@
                 / Make sure to not group runs with no category
                 - if col_options[:time].include?(:archived) && run.category_id.present?
                   / Gather only runs with the same category and sort by default timing ascending
-                  - old_runs = non_pb_runs[run.category_id].try(:sort_by, &:created_at)
+                  - old_runs = non_pb_runs[run.category_id].try(:sort_by, &:created_at).try(:reverse)
                   - if old_runs.present?
                     span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
                       = icon('fas', 'history')
