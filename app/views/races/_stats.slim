@@ -28,11 +28,9 @@
     span.statcard-desc Type
   .col-sm-3: .statcard.p-3
     h2.statcard-number
-      ' 400
-      = delta(200, 300, subject: 'a person')
-    span.statcard-desc Random stat
+      = race.entrants.last.user
+    span.statcard-desc Predicted winner
   .col-sm-3: .statcard.p-3
     h2.statcard-number
-      ' 400
-      = delta(200, 300, subject: 'a person')
-    span.statcard-desc Random stat
+      = (Entrant.where(user: race.users).where.not(forfeited_at: nil).count / Entrant.where(user: race.users).count * race.entrants.count).floor
+    span.statcard-desc Predicted forfeits

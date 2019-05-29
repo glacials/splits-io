@@ -13,8 +13,8 @@ module Raceable
 
     has_secure_token :join_token
 
-    # current returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour.
-    def self.current
+    # active returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour.
+    def self.active
       case name # self.name refers to the class including this concern
       when 'Race'
         where('races.updated_at > ?', 1.hour.ago)

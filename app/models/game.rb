@@ -100,7 +100,7 @@ class Game < ApplicationRecord
   # called on each raceable before returning them.
   def raceables(scope = nil)
     [races, randomizers, bingos].map do |r|
-      r.limit(100).send(scope) if scope.present?
+      scope.present? ? r.limit(100).send(scope) : r
     end.flatten.sort_by { |r| r.created_at }.reverse
   end
 
