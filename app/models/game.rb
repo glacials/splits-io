@@ -96,6 +96,14 @@ class Game < ApplicationRecord
     end
   end
 
+  # raceables returns an array of this game's raceables (races, randomizers, and bingos). If a scope is given, it is
+  # called on each raceable before returning them.
+  def raceables(scope = nil)
+    [races, randomizers, bingos].map do |r|
+      r.limit(100).send(scope) if scope.present?
+    end.flatten.sort_by { |r| r.created_at }.reverse
+  end
+
   private
 
   def create_initial_alias

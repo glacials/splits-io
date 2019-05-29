@@ -35,7 +35,7 @@ article data-turbolinks-temporary=true
       = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
     = render partial: 'shared/run_table', locals: { \
       runs: @category.runs.nonempty.unarchived, \
-      races: (@game.races.current + @game.randomizers.current + @game.bingos.current).sort_by { |r| r.created_at }.reverse,
+      races: @game.raceables(:current),
       cols: %i[runner time name video uploaded], \
     }.merge(sorting_info)
   center

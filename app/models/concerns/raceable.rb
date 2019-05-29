@@ -13,7 +13,7 @@ module Raceable
 
     has_secure_token :join_token
 
-    # Return all current races, as defined by any raceable less than an hour old or has 2 or more entrants
+    # current returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour.
     def self.current
       case name # self.name refers to the class including this concern
       when 'Race'
@@ -25,10 +25,29 @@ module Raceable
       end.or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)))
     end
 
-    # Return all active races, as defined by any raceable less than an hour old that is not finished
-    def self.active
-      # TODO: optimize, need help
-      current.reject(&:finished?)
+    # started returns races that have started. Both finished and unfinished races are included.
+    def self.started
+      where.not(started_at: nil)
+    end
+
+    # unstarted returns races that have not started.
+    #
+    # Returned races are not necessarily current; a race may have been created a year ago but never started.
+    def self.unstarted
+      where(started_at: nil)
+    end
+
+    # unfinished returns races that have not finished. Both started and unstarted races are included.
+    #
+    # Returned races are not necessarily current; a race may have been created a year ago but never started, or started
+    # a year ago but never finished.
+    def self.unfinished
+      joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct
+    end
+
+    # ongoing returns all races that have started but not finished.
+    def self.ongoing
+      started.unfinished
     end
 
     def started?
