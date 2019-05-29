@@ -5,6 +5,7 @@ class Races::RandomizersController < Races::ApplicationController
 
   def update
     render :unauthorized unless @race.owner == current_user
+    render :forbidden if @race.started?
 
     @race.files.attach(params[:randomizer][:files])
     Api::V1::RaceChannel.broadcast_to(@race, Api::V1::WebsocketMessageBlueprint.render_as_hash(

@@ -17,12 +17,12 @@
   #stats-box.col-md-6 = render partial: 'races/stats', locals: {race: @race}
 
 .row.mx-1.mt-3
-  .col-md-6
-    - if @race.randomizer?
+  - if @race.randomizer?
+    .col-md-6
       .card.shadow.my-3
         .card-header Attachments
         #attachments = render partial: 'races/attachments', locals: {race: @race}
-        - if @race.owner == current_user
+        - if @race.belongs_to?(current_user) && !@race.started?
           .card-footer
             = form_for(@race, html: {class: 'w-100 d-flex justify-content-between'}) do |f|
               = f.file_field(:files, multiple: true, direct_upload: true, class: 'form-control-file')
@@ -46,4 +46,4 @@
               img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
               .media-body
                 span.mr-2: .badge.badge-success Splits.io
-                span title="Sent #{60.minutes.ago}": i Race created
+                span title="Sent #{@race.created_at}": i Race created

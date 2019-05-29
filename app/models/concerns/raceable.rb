@@ -13,6 +13,11 @@ module Raceable
 
     has_secure_token :join_token
 
+    scope :started,    -> { where.not(started_at: nil) }
+    scope :unstarted,  -> { where(started_at: nil) }
+    scope :unfinished, -> { joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct }
+    scope :ongoing,    -> { started.unfinished }
+
     # active returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour.
     def self.active
       case name # self.name refers to the class including this concern
@@ -23,31 +28,6 @@ module Raceable
       when 'Bingo'
         where('bingos.updated_at > ?', 1.hour.ago)
       end.or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)))
-    end
-
-    # started returns races that have started. Both finished and unfinished races are included.
-    def self.started
-      where.not(started_at: nil)
-    end
-
-    # unstarted returns races that have not started.
-    #
-    # Returned races are not necessarily current; a race may have been created a year ago but never started.
-    def self.unstarted
-      where(started_at: nil)
-    end
-
-    # unfinished returns races that have not finished. Both started and unstarted races are included.
-    #
-    # Returned races are not necessarily current; a race may have been created a year ago but never started, or started
-    # a year ago but never finished.
-    def self.unfinished
-      joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct
-    end
-
-    # ongoing returns all races that have started but not finished.
-    def self.ongoing
-      started.unfinished
     end
 
     def started?
@@ -95,6 +75,15 @@ module Raceable
 
     def race?
       type == Race.type
+    end
+
+    # belongs_to? returns true if the given user owns this race, or false otherwise. Use this method instead of direct
+    # comparison to prevent nil users from editing races without owners (e.g. logged-out users & races whose owners
+    # deleted their accounts).
+    def belongs_to?(user)
+      return nil if user.nil?
+
+      owner == user
     end
   end
 
