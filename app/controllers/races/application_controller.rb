@@ -10,7 +10,7 @@ class Races::ApplicationController < ApplicationController
 
   def check_permission
     return unless @race.secret_visibility?
-    return if     @race.joinable?(token: params[:join_token], user: current_user)
+    return if     @race.joinable?(token: race_params[:join_token], user: current_user)
 
     render :unauthorized, status: :unauthorized
   end
@@ -22,11 +22,13 @@ class Races::ApplicationController < ApplicationController
     gon.race = {
       id:         @race.id,
       type:       @race.type,
-      join_token: token || params[:join_token]
+      join_token: token || race_params[:join_token]
     }
   end
 
-  def message_params
-    params.permit(:race, randomizer: {files: []})
+  private
+
+  def race_params
+    params.permit(:join_token)
   end
 end
