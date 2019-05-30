@@ -2452,6 +2452,13 @@ dot-prop@^4.1.1:
   dependencies:
     is-obj "^1.0.0"
 
+driftless@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/driftless/-/driftless-2.0.3.tgz#4378cade7aa8e39dee33faa94413bdc67850d90b"
+  integrity sha512-hSDKsQphnL4O0XLAiyWQ8EiM9suXH0Qd4gMtwF86b5wygGV8r95w0JcA38FOmx9N3LjFCIHLG2winLPNken4Tg==
+  dependencies:
+    present "^0.0.3"
+
 duplexify@^3.4.2, duplexify@^3.6.0:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/duplexify/-/duplexify-3.7.1.tgz#2a4df5317f6ccfd91f86d6fd25d8d8a103b88309"
@@ -5758,6 +5765,11 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.5,
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+present@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/present/-/present-0.0.3.tgz#5aefb8a5ddf6b34c65743bf1cde53523aac1c05a"
+  integrity sha1-Wu+4pd32s0xldDvxzeU1I6rBwFo=
 
 private@^0.1.6:
   version "0.1.8"
