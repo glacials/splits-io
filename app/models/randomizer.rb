@@ -2,7 +2,7 @@ class Randomizer < ApplicationRecord
   include Raceable
 
   belongs_to :game
-  has_many_attached :files
+  has_many_attached :attachments
 
   def self.type
     :randomizer

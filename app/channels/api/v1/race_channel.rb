@@ -268,7 +268,7 @@ class Api::V1::RaceChannel < Api::V1::ApplicationChannel
       msg[:stats_html] = ApplicationController.render(partial: 'races/stats', locals: {race: @race})
 
       if @race.randomizer?
-        msg[:attachments_html] = ApplicationController.render(partial: 'races/files', locals: {race: @race})
+        msg[:attachments_html] = ApplicationController.render(partial: 'races/attachments', locals: {race: @race})
       end
     end
 

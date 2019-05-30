@@ -20,6 +20,21 @@ class Api::V4::RaceBlueprint < Blueprinter::Base
 
   view :randomizer do
     field :seed
+    field :attachments do |race, _|
+      race.attachments.map do |attachment|
+        {
+          id: attachment.id,
+          created_at: attachment.created_at,
+          filename: attachment.filename,
+          url: Rails.application.routes.url_helpers.rails_blob_url(
+            attachment,
+            protocol: 'https',
+            host: 'splits.io',
+            disposition: 'attachment'
+          ),
+        }
+      end
+    end
 
     association :game, blueprint: Api::V4::GameBlueprint
   end
