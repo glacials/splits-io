@@ -86,6 +86,12 @@ module Raceable
 
       owner == user
     end
+
+    def to_param
+      (0..id.length).each do |length|
+        return id[0..length] if self.class.where('LEFT(id::text, ?) = ?', length + 1, id[0..length]).count == 1
+      end
+    end
   end
 
   RACE_TYPES = [Race, Bingo, Randomizer].freeze

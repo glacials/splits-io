@@ -10,7 +10,7 @@
       li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_category_path(@race.game, @race.category))
     - else
       li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_path(@race.game))
-    li.breadcrumb-item.active = link_to(@race.id, polymorphic_path(@race))
+    li.breadcrumb-item.active = link_to(@race, polymorphic_path(@race))
 
 .row.mx-2
   .col-md-6 = render partial: 'races/title', locals: {race: @race}
@@ -25,7 +25,7 @@
         - if @race.belongs_to?(current_user) && !@race.started?
           .card-footer
             = form_for(@race, html: {class: 'w-100 d-flex justify-content-between'}) do |f|
-              = f.file_field(:files, multiple: true, direct_upload: true, class: 'form-control-file')
+              = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
               = f.submit('Attach', class: 'btn btn-outline-light')
   #entrants-table.col-md-6 = render partial: 'races/entrants_table', locals: {race: @race}
 

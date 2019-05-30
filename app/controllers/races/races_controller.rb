@@ -6,6 +6,6 @@ class Races::RacesController < Races::ApplicationController
   private
 
   def set_race
-    @race = Race.find(params[:race])
+    @race = Race.where('LEFT(id::text, ?) = ?', race_params[:race].length, race_params[:race]).order(created_at: :asc).first
   end
 end

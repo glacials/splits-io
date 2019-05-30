@@ -6,6 +6,6 @@ class Races::BingosController < Races::ApplicationController
   private
 
   def set_race
-    @race = Bingo.find(params[:race])
+    @race = Bingo.where('LEFT(id::text, ?) = ?', race_params[:race].length, race_params[:race]).order(created_at: :asc).first
   end
 end

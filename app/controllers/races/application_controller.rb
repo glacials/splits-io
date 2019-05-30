@@ -29,6 +29,6 @@ class Races::ApplicationController < ApplicationController
   private
 
   def race_params
-    params.permit(:join_token)
+    params.permit(:race, :join_token, :attachment)
   end
 end
