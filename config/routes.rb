@@ -160,6 +160,14 @@ Rails.application.routes.draw do
 
       post '/convert', to: 'converts#create'
 
+      get '/races',       to: 'races/races#index'
+      get '/bingos',      to: 'races/bingos#index'
+      get '/randomizers', to: 'races/randomizers#index'
+
+      get '/races/:race',       to: 'races/races#show'
+      get '/bingos/:race',      to: 'races/bingos#show'
+      get '/randomizers/:race', to: 'races/randomizers#show'
+
       post '/timesync', to: 'time#create'
     end
 

@@ -26,11 +26,12 @@
   .col-sm-3: .statcard.p-3
     h2.statcard-number = race.type.capitalize
     span.statcard-desc Type
-  .col-sm-3: .statcard.p-3
-    h2.statcard-number
-      = race.entrants.last.user
-    span.statcard-desc Predicted winner
-  .col-sm-3: .statcard.p-3
-    h2.statcard-number
-      = (Entrant.where(user: race.users).where.not(forfeited_at: nil).count / Entrant.where(user: race.users).count * race.entrants.count).floor
-    span.statcard-desc Predicted forfeits
+  - if race.entrants.any?
+    .col-sm-3: .statcard.p-3
+      h2.statcard-number
+        = race.entrants.last.user
+      span.statcard-desc Predicted winner
+    .col-sm-3: .statcard.p-3
+      h2.statcard-number
+        = (Entrant.where(user: race.users).where.not(forfeited_at: nil).count / Entrant.where(user: race.users).count * race.entrants.count).floor
+      span.statcard-desc Predicted forfeits

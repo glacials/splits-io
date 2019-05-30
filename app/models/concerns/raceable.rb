@@ -42,6 +42,7 @@ module Raceable
       started? && entrants.where(finished_at: nil, forfeited_at: nil).none?
     end
 
+    # Races are "locked" 30 minutes after they end to stop new messages coming in
     def locked?
       finished? && Time.now.utc > entrants.order(updated_at: :desc).pluck(:updated_at).first + 30.minutes
     end

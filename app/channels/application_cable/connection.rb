@@ -20,7 +20,7 @@ module ApplicationCable
     protected
 
     def find_verified_user
-      onsite = ['splits.io', 'localhost'].include?(request.host)
+      onsite = ['splits.io', 'localhost'].include?(request.domain(1))
       passed_token = request.query_parameters[:access_token]
       return [nil, onsite] if passed_token.nil?
 
