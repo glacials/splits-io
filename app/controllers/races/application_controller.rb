@@ -31,4 +31,13 @@ class Races::ApplicationController < ApplicationController
   def race_params
     params.permit(:race, :join_token, :attachment)
   end
+
+  # set_race should be called from controllers that extend this one.
+  def set_race(klass)
+    @race = klass.where(
+      'LEFT(id::text, ?) = ?',
+      race_params[:race].length,
+      race_params[:race]
+    ).order(created_at: :asc).first
+  end
 end

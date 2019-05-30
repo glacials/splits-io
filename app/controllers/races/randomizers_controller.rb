@@ -21,6 +21,6 @@ class Races::RandomizersController < Races::ApplicationController
   private
 
   def set_race
-    @race = Randomizer.where('LEFT(id::text, ?) = ?', race_params[:race].length, race_params[:race]).order(created_at: :asc).first
+    super(Randomizer)
   end
 end
