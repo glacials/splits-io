@@ -188,8 +188,8 @@ Config for this generation is at [`config/favicon.json`][favicon-config].
 
 ### Theme
 Splits.io runs [Bootstrap 4][bootstrap] on a paid theme called [Dashboard][dashboard]. Its license does not allow its
-source to be included in this repository; however there are three modifications we make to the source before producing
-the included final build. This is within the terms of the license.
+unminified source to be included in this repository; for posterity there are three modifications we make to the source
+before producing the included final build. This is within the terms of the license.
 
 - In `/v4/scss/variables.scss`:
 	- Change `$theme-colors[primary]` to `#489BE7`

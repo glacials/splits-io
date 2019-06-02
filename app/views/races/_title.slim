@@ -22,30 +22,5 @@
           span#copied style='display: none;' = icon('fas', 'check')
 
   .col-md-8
-    - current_entrant = race.entrant_for_user(current_user)
-    - if race.joinable?(token: params[:join_token], user: current_user)
-      .btn-toolbar role='toolbar' aria={label: 'Race Controls'}
-        button.btn.btn-outline-success.mr-2#btn-race-join(
-          hidden=(race.started? || current_entrant.present?)
-        ) Join
-        button.btn.btn-outline-warning.mr-2#btn-race-leave(
-          hidden=(race.started? || current_entrant.nil?)
-        ) Leave
-
-        button.btn.btn-outline-success.mr-2#btn-race-ready(
-          hidden=(race.started? || current_entrant.nil? || current_entrant.ready?)
-        ) Ready
-        button.btn.btn-outline-danger.mr-2#btn-race-unready(
-          hidden=(race.started? || current_entrant.nil? || !current_entrant.ready?)
-        ) Unready
-
-        button.btn.btn-outline-success.mr-2#btn-race-done(
-          hidden=(!race.in_progress? || current_entrant.nil? || current_entrant.done?)
-        ) Done
-        button.btn.btn-outline-danger.mr-2#btn-race-forfeit(
-          hidden=(!race.in_progress? || current_entrant.nil? || current_entrant.done?)
-        ) Forfeit
-
-        button.btn.btn-outline-warning.mr-2#btn-race-rejoin(
-          hidden=(!race.in_progress? || current_entrant.nil? || !current_entrant.done?)
-        ) Rejoin
+    div v-if="false" = render partial: 'shared/spinner'
+    racebuttons
