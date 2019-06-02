@@ -5,6 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 group :test, :development do
   gem 'pry-rails'
+  gem 'rspec-rails', '~> 4.0.0.beta2'
 end
 
 group :test do
@@ -13,10 +14,6 @@ group :test do
   gem 'json-schema'
   gem 'json-schema-rspec'
   gem 'rails-controller-testing'
-  gem 'rspec-rails', require: false, github: 'rspec/rspec-rails', branch: '4-0-dev'
-  %w[rspec rspec-core rspec-expectations rspec-mocks rspec-support].each do |lib|
-    gem lib, github: "rspec/#{lib}", branch: 'master'
-  end
   gem 'simplecov', require: false
 end
 

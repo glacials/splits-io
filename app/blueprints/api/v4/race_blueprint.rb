@@ -1,10 +1,16 @@
 class Api::V4::RaceBlueprint < Blueprinter::Base
   fields :id, :status, :visibility, :notes, :started_at, :created_at, :updated_at
+  field :path do |race, _|
+    race.to_param
+  end
 
   field :type do |race, _|
     race.type
   end
 
+  field :join_token, if: ->(_, options) { options[:join_token] }
+
+  association :owner, blueprint: Api::V4::UserBlueprint
   association :entrants, blueprint: Api::V4::EntrantBlueprint
   association :chat_messages, blueprint: Api::V4::ChatMessageBlueprint, if: ->(_, options) { options[:chat] }
 

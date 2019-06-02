@@ -160,13 +160,16 @@ Rails.application.routes.draw do
 
       post '/convert', to: 'converts#create'
 
-      get '/races',       to: 'races/races#index'
-      get '/bingos',      to: 'races/bingos#index'
-      get '/randomizers', to: 'races/randomizers#index'
+      Raceable::RACE_TYPES.map { |raceable| raceable.type.to_s.pluralize }.each do |type|
+        get   "/#{type}",       to: "races/#{type}#index"
+        post  "/#{type}",       to: "races/#{type}#create"
+        get   "/#{type}/:race", to: "races/#{type}#show"
+        patch "/#{type}/:race", to: "races/#{type}#update"
 
-      get '/races/:race',       to: 'races/races#show'
-      get '/bingos/:race',      to: 'races/bingos#show'
-      get '/randomizers/:race', to: 'races/randomizers#show'
+        post   "/#{type}/:race/entrants",          to: "races/entrants/#{type}#create"
+        patch  "/#{type}/:race/entrants/:entrant", to: "races/entrants/#{type}#update"
+        delete "/#{type}/:race/entrants/:entrant", to: "races/entrants/#{type}#destroy"
+      end
 
       post '/timesync', to: 'time#create'
     end

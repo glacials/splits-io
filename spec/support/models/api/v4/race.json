@@ -1,0 +1,68 @@
+{
+  "type": "object",
+  "required": [
+    "id",
+    "status",
+    "visibility",
+    "notes",
+    "started_at",
+    "created_at",
+    "updated_at",
+    "category",
+    "owner",
+    "entrants"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string"
+    },
+    "join_token": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "started_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "category": {
+      "$ref": "../../../models/api/v4/category.json"
+    },
+    "owner": {
+      "$ref": "../../../models/api/v4/runner.json"
+    },
+    "entrants": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../models/api/v4/entrant.json"
+      }
+    },
+    "chat_messages": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../models/api/v4/chat_message.json"
+      }
+    }
+  }
+}

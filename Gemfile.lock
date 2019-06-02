@@ -22,63 +22,6 @@ GIT
     purecss-rails (0.6.0)
       railties (>= 3.2.6)
 
-GIT
-  remote: https://github.com/rspec/rspec-core.git
-  revision: 7727a078e01df1677fe8ce787e3a751111364e00
-  branch: master
-  specs:
-    rspec-core (3.9.0.pre)
-      rspec-support (= 3.9.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-expectations.git
-  revision: 7a5c9f7fdaeec189b9856e4cedbad70ce86cba69
-  branch: master
-  specs:
-    rspec-expectations (3.9.0.pre)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (= 3.9.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-mocks.git
-  revision: 55f0b116dc8c15a7acef9e7619bb0a3925bd18fa
-  branch: master
-  specs:
-    rspec-mocks (3.9.0.pre)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (= 3.9.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-rails.git
-  revision: a8078b8729a9062161118f440f7d49da9b2de134
-  branch: 4-0-dev
-  specs:
-    rspec-rails (4.0.0.pre)
-      actionpack (>= 4.2)
-      activesupport (>= 4.2)
-      railties (>= 4.2)
-      rspec-core (= 3.9.0.pre)
-      rspec-expectations (= 3.9.0.pre)
-      rspec-mocks (= 3.9.0.pre)
-      rspec-support (= 3.9.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec-support.git
-  revision: e972ee6594ccc7ea3f8717ababcf6295c58aec33
-  branch: master
-  specs:
-    rspec-support (3.9.0.pre)
-
-GIT
-  remote: https://github.com/rspec/rspec.git
-  revision: afd67e30946543fb71889cf60d332c28291878b8
-  branch: master
-  specs:
-    rspec (3.9.0.pre)
-      rspec-core (= 3.9.0.pre)
-      rspec-expectations (= 3.9.0.pre)
-      rspec-mocks (= 3.9.0.pre)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -439,6 +382,27 @@ GEM
       netrc (~> 0.8)
     rollbar (2.19.3)
       multi_json
+    rspec (3.8.0)
+      rspec-core (~> 3.8.0)
+      rspec-expectations (~> 3.8.0)
+      rspec-mocks (~> 3.8.0)
+    rspec-core (3.8.0)
+      rspec-support (~> 3.8.0)
+    rspec-expectations (3.8.3)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.8.0)
+    rspec-mocks (3.8.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.8.0)
+    rspec-rails (4.0.0.beta2)
+      actionpack (>= 4.2)
+      activesupport (>= 4.2)
+      railties (>= 4.2)
+      rspec-core (~> 3.8)
+      rspec-expectations (~> 3.8)
+      rspec-mocks (~> 3.8)
+      rspec-support (~> 3.8)
+    rspec-support (3.8.0)
     rubocop (0.67.2)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -569,12 +533,7 @@ DEPENDENCIES
   redis
   rest-client
   rollbar
-  rspec!
-  rspec-core!
-  rspec-expectations!
-  rspec-mocks!
-  rspec-rails!
-  rspec-support!
+  rspec-rails (~> 4.0.0.beta2)
   rubocop
   sass-rails (~> 5.0.7)
   simplecov

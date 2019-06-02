@@ -4,7 +4,7 @@ class Races::RandomizersController < Races::ApplicationController
   end
 
   def update
-    render :unauthorized unless @race.owner == current_user
+    render :unauthorized unless @race.belongs_to?(current_user)
     render :forbidden if @race.started?
     render :bad_request if params[:randomizer].blank?
 

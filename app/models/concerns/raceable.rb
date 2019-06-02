@@ -20,6 +20,7 @@ module Raceable
 
     # active returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour.
     def self.active
+      # TODO: remove secret races from this
       case name # self.name refers to the class including this concern
       when 'Race'
         where('races.updated_at > ?', 1.hour.ago)
@@ -55,7 +56,7 @@ module Raceable
 
     def joinable?(user: nil, token: nil)
       result = false
-      result = true if entrant_for_user(user).present? || owner == user
+      result = true if entrant_for_user(user).present? || belongs_to?(user)
       result = true if (invite_only_visibility? || secret_visibility?) && token == join_token
       result = true if public_visibility? && !user.try(:in_race?)
 

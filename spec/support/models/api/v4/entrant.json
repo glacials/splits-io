@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "required": [
+    "id",
+    "readied_at",
+    "finished_at",
+    "forfeited_at",
+    "created_at",
+    "updated_at",
+    "user"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "readied_at": {
+      "type": "string"
+    },
+    "finished_at": {
+      "type": "string"
+    },
+    "forfeited_at": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "user": {
+      "$ref": "../../../models/api/v4/runner.json"
+    }
+  }
+}

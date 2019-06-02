@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "required": [
+    "race"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "race": {
+      "$ref": "../../../../models/api/v4/race.json"
+    }
+  }
+}
