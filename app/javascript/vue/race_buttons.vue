@@ -110,7 +110,7 @@ export default {
       this.errors.finish = false
       this.loading.finish = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrant`, {
           method: 'PATCH',
           body: JSON.stringify({
             finished_at: ts.now(),
@@ -132,7 +132,7 @@ export default {
       this.errors.forfeit = false
       this.loading.forfeit = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrant`, {
           method: 'PATCH',
           body: JSON.stringify({
             forfeited_at: ts.now(),
@@ -154,8 +154,8 @@ export default {
       this.errors.join = false
       this.loading.join = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
-          method: 'PUT',
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrants`, {
+          method: 'POST',
         })
 
         if (!response.ok) {
@@ -173,7 +173,7 @@ export default {
       this.errors.leave = false
       this.loading.leave = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrant`, {
           method: 'DELETE',
         })
 
@@ -193,7 +193,7 @@ export default {
       this.errors.ready = false
       this.loading.ready = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrant`, {
           method: 'PATCH',
           body: JSON.stringify({
             readied_at: ts.now(),
@@ -215,7 +215,7 @@ export default {
       this.errors.unfinish = false
       this.loading.unfinish = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrant`, {
           method: 'PATCH',
           body: JSON.stringify({
             finished_at: null,
@@ -237,7 +237,7 @@ export default {
       this.errors.unforfeit = false
       this.loading.unforfeit = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrant`, {
           method: 'PATCH',
           body: JSON.stringify({
             forfeited_at: null,
@@ -259,7 +259,7 @@ export default {
       this.errors.unready = false
       this.loading.unready = true
       try {
-        const response = await fetch(`/api/v4/races/${this.raceId}/participant`, {
+        const response = await fetch(`/api/v4/${this.raceType}/${this.raceId}/entrant`, {
           method: 'PATCH',
           body: JSON.stringify({
             readied_at: null,
