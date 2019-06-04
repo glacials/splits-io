@@ -71,7 +71,8 @@ RSpec.configure do |config|
     runner_pbs:        'spec/support/views/api/v4/runners/pbs/index.json',
     run:               'spec/support/views/api/v4/runs/show.json',
     runner:            'spec/support/views/api/v4/runners/show.json',
-    race:              'spec/support/views/api/v4/races/show.json'
+    race:              'spec/support/views/api/v4/races/show.json',
+    entrant:           'spec/support/views/api/v4/races/entrants/show.json'
   }
 
 # The settings below are suggested to provide a good initial experience

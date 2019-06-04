@@ -166,9 +166,9 @@ Rails.application.routes.draw do
         get   "/#{type}/:race", to: "races/#{type}#show"
         patch "/#{type}/:race", to: "races/#{type}#update"
 
-        post   "/#{type}/:race/entrants",          to: "races/entrants/#{type}#create"
-        patch  "/#{type}/:race/entrants/:entrant", to: "races/entrants/#{type}#update"
-        delete "/#{type}/:race/entrants/:entrant", to: "races/entrants/#{type}#destroy"
+        post   "/#{type}/:race/entrants", to: "races/entrants/#{type}#create"
+        patch  "/#{type}/:race/entrants", to: "races/entrants/#{type}#update"
+        delete "/#{type}/:race/entrants", to: "races/entrants/#{type}#destroy"
       end
 
       post '/timesync', to: 'time#create'

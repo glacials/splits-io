@@ -13,7 +13,7 @@ class Api::V4::Race::Entrants::BingosController < Api::V4::Races::Entrants::Appl
 
   private
 
-  def set_race
+  def set_raceable
     super(Bingo)
   end
 end

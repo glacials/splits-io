@@ -1,7 +1,6 @@
 {
   "type": "object",
   "required": [
-    "id",
     "readied_at",
     "finished_at",
     "forfeited_at",
@@ -11,17 +10,23 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "id": {
-      "type": "string"
-    },
     "readied_at": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "finished_at": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "forfeited_at": {
-      "type": "string"
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "created_at": {
       "type": "string"

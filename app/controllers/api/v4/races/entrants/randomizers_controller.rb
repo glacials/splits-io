@@ -13,7 +13,7 @@ class Api::V4::Race::Entrants::RandomizersController < Api::V4::Races::Entrants:
 
   private
 
-  def set_race
+  def set_raceable
     super(Randomizer)
   end
 end

@@ -1,12 +1,12 @@
 {
   "type": "object",
   "required": [
-    "race"
+    "entrant"
   ],
   "additionalProperties": false,
   "properties": {
-    "race": {
-      "$ref": "../../../../models/api/v4/raceable.json"
+    "entrant": {
+      "$ref": "../../../../../models/api/v4/entrant.json"
     }
   }
 }

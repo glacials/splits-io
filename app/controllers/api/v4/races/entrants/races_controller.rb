@@ -13,7 +13,7 @@ class Api::V4::Races::Entrants::RacesController < Api::V4::Races::Entrants::Appl
 
   private
 
-  def set_race
+  def set_raceable
     super(Race)
   end
 end
