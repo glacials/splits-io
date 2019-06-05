@@ -18,8 +18,8 @@ class EntrantValidator < ActiveModel::Validator
       record.errors[:base] << "Cannot #{type} on a race that has already started"
     end
 
-    # Reject finished_at changes on races that haven't started or have finished
     if record.finished_at_changed?
+      # Reject finished_at changes on races that haven't started or have finished
       type = record.finished_at.nil? ? 'rejoin' : 'finish'
       unless record.raceable.started?
         record.errors[:base] << "Cannot #{type} a race that hasn't started"
@@ -29,14 +29,19 @@ class EntrantValidator < ActiveModel::Validator
         record.errors[:base] << "Cannot #{type} a race that is already completed"
       end
 
-      # Ensure time is after race start time
+      # Reject times before the race start time
       if record.finished_at.present? && record.raceable.started_at > record.finished_at
         record.errors[:base] << 'Finish time can not be before race start'
       end
+
+      # Reject if `forfeited_at` is already set
+      if record.finished_at.present? && record.forfeited_at.present?
+        record.errors[:finished_at] << 'Canont finish a race you have already forfeited'
+      end
     end
 
-    # Reject forfeited_at changes on races that haven't started or have finished
     if record.forfeited_at_changed?
+      # Reject forfeited_at changes on races that haven't started or have finished
       type = record.forfeited_at.nil? ? 'rejoin' : 'forfeit'
       unless record.raceable.started?
         record.errors[:base] << "Cannot #{type} a race that hasn't started"
@@ -46,9 +51,14 @@ class EntrantValidator < ActiveModel::Validator
         record.errors[:base] << "Cannot #{type} a race that is already completed"
       end
 
-      # Ensure time is after the race start time
+      # Reject times before the race start time
       if record.forfeited_at.present? && record.raceable.started_at > record.forfeited_at
         record.errors[:base] << 'Forfeit time can not be before race start'
+      end
+
+      # Reject if `finished_at` is already set
+      if record.forfeited_at.present? && record.finished_at.present?
+        record.errors[:forfeited_at] << 'Cannot forfeit a race you have already finished'
       end
     end
   end

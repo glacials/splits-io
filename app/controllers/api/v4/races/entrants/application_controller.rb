@@ -1,15 +1,11 @@
 class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationController
+  before_action :set_time, only: %i[update]
   before_action :set_user
   before_action :set_raceable
-  before_action :set_entrant, only: %i[update destroy]
+  before_action :set_entrant, only: %i[show update destroy]
 
   def show
-    entrant = @raceable.entrants.find_by(user: current_user)
-    if entrant
-      render status: :ok, json: Api::V4::EntrantBlueprint.render(entrant, root: :entrant)
-    else
-      render status: :no_content
-    end
+    render status: :ok, json: Api::V4::EntrantBlueprint.render(@entrant, root: :entrant)
   end
 
   def create
@@ -33,6 +29,11 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
         error:  @entrant.errors.full_messages.to_sentence
       }
     end
+  rescue ActionController::ParameterMissing
+    render status: :bad_request, json: {
+      status: :bad_request,
+      error:  'Missing parameter: "entrant"'
+    }
   end
 
   def destroy
@@ -48,10 +49,14 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
 
   private
 
+  def set_time
+    @time = Time.now.utc
+  end
+
   def set_user
     if request.headers['Authorization'].present?
       doorkeeper_authorize!(:manage_race)
-      current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+      self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
     end
 
     head :unauthorized if current_user.nil?
@@ -79,7 +84,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   def entrant_params
     params.each do |k, v|
       if k[-3, -1] == '_at' && v == 'now'
-        params[k] = Time.now.utc
+        params[k] = @time
       end
     end
     params.require(:entrant).permit(:readied_at, :finished_at, :forfeited_at)
