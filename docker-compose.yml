@@ -83,6 +83,7 @@ services:
     depends_on:
       - db
       - s3
+      - redis
     environment: *server-environment
     image: worker
     links:

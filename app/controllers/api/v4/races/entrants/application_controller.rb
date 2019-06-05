@@ -12,6 +12,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
     entrant = @raceable.entrants.new(user: current_user)
     if entrant.save
       render status: :created, json: Api::V4::EntrantBlueprint.render(entrant, root: :entrant)
+      Api::V4::RaceBroadcastJob.perform_later(@raceable, 'race_entrants_updated', 'A new entrant has joined')
     else
       render status: :bad_request, json: {
         status: :bad_request,
@@ -23,6 +24,8 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   def update
     if @entrant.update(entrant_params)
       render status: :ok, json: Api::V4::EntrantBlueprint.render(@entrant, root: :entrant)
+      updated = @entrant.saved_changes.keys.reject { |k| k == 'updated_at' }.map { |k| k[0...-3] }.join('and')
+      Api::V4::RaceBroadcastJob.perform_later(@raceable, 'race_entrants_updated', "An entrant has #{updated}")
     else
       render status: :bad_request, json: {
         status: :bad_request,
@@ -39,6 +42,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   def destroy
     if @entrant.destroy
       head :reset_content
+      Api::V4::RaceBroadcastJob.perform_later(@raceable, 'race_entrants_updated', 'An entrant has left the race')
     else
       render status: :conflict, json: {
         status: :conflict,

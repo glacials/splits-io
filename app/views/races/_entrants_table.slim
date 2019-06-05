@@ -7,7 +7,7 @@
       th.nowrap.text-center Place
       th.w-100 Time
     tbody
-      - race.entrants.includes(:user).order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS FIRST').each do |entrant|
+      - race.entrants.includes(:user).order('readied_at ASC NULLS LAST').order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS FIRST').each do |entrant|
         tr
           td = entrant.user.name
           td = entrant.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
