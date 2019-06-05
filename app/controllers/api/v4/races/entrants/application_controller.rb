@@ -1,14 +1,21 @@
 class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationController
-  before_action :set_time
   before_action :set_user
   before_action :set_raceable
   before_action :set_entrant, only: %i[update destroy]
-  before_action :set_column, only: %i[update]
+
+  def show
+    entrant = @raceable.entrants.find_by(user: current_user)
+    if entrant
+      render status: :ok, json: Api::V4::EntrantBlueprint.render(entrant, root: :entrant)
+    else
+      render status: :no_content
+    end
+  end
 
   def create
     entrant = @raceable.entrants.new(user: current_user)
     if entrant.save
-      render status: :created, json: Api::V4::EntrantBlueprint.render(entrant)
+      render status: :created, json: Api::V4::EntrantBlueprint.render(entrant, root: :entrant)
     else
       render status: :bad_request, json: {
         status: :bad_request,
@@ -18,7 +25,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   end
 
   def update
-    if @entrant.update(@column => @time)
+    if @entrant.update(entrant_params)
       render status: :ok, json: Api::V4::EntrantBlueprint.render(@entrant, root: :entrant)
     else
       render status: :bad_request, json: {
@@ -41,14 +48,12 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
 
   private
 
-  def set_time
-    @time = Time.now.utc
-    @time = Time.at(params[:server_time].to_f / 1000).utc if params[:server_time].present?
-  end
-
   def set_user
-    doorkeeper_authorize!(:manage_race) if headers['Authorization'].present?
-    self.current_user = User.find_by(id: doorkeeper_token.try(:resource_owner_id))
+    if request.headers['Authorization'].present?
+      doorkeeper_authorize!(:manage_race)
+      current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+    end
+
     head :unauthorized if current_user.nil?
   end
 
@@ -59,9 +64,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
       params[:race]
     ).order(created_at: :asc).first
     raise ActiveRecord::RecordNotFound if @raceable.nil?
-    return unless @raceable.secret_visibility? && !@raceable.joinable?(user: current_user, token: params[:join_token])
-
-    head :unauthorized
+    head :unauthorized if @raceable.secret_visibility? && !@raceable.joinable?(user: current_user, token: params[:join_token])
   rescue ActiveRecord::RecordNotFound
     render not_found(klass.type)
   end
@@ -73,25 +76,12 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
     render not_found(:entrant)
   end
 
-  def set_column
-    @column = nil
-    columns = %i[readied_at finished_at forfeited_at].freeze
-    columns.each do |param|
-      if @column.present? && params[param].present?
-        render status: :bad_request, json: {
-          status: :bad_request,
-          error:  'Only supply one parameter to update'
-        }
-        return nil # return nil to satisfy rubocop
+  def entrant_params
+    params.each do |k, v|
+      if k[-3, -1] == '_at' && v == 'now'
+        params[k] = Time.now.utc
       end
-
-      @column = param if params[param].present?
     end
-    return unless @column.nil?
-
-    render status: :bad_request, json: {
-      status: :bad_request,
-      error:  "Specify at least one parameter to update: #{columns}"
-    }
+    params.require(:entrant).permit(:readied_at, :finished_at, :forfeited_at)
   end
 end

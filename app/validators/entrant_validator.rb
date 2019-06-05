@@ -30,7 +30,7 @@ class EntrantValidator < ActiveModel::Validator
       end
 
       # Ensure time is after race start time
-      if record.finished_at.present && record.raceable.started_at > record.finished_at
+      if record.finished_at.present? && record.raceable.started_at > record.finished_at
         record.errors[:base] << 'Finish time can not be before race start'
       end
     end
@@ -47,7 +47,7 @@ class EntrantValidator < ActiveModel::Validator
       end
 
       # Ensure time is after the race start time
-      if record.forfeited_at.present && record.raceable.started_at > record.forfeited_at
+      if record.forfeited_at.present? && record.raceable.started_at > record.forfeited_at
         record.errors[:base] << 'Forfeit time can not be before race start'
       end
     end

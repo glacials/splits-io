@@ -1,4 +1,4 @@
-class Api::V4::Race::Entrants::RandomizersController < Api::V4::Races::Entrants::ApplicationController
+class Api::V4::Races::Entrants::RandomizersController < Api::V4::Races::Entrants::ApplicationController
   def create
     super
   end
