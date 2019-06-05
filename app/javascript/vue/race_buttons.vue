@@ -1,5 +1,5 @@
 <template>
-  <div id="race-buttons" v-if="!finalized">
+  <div id="race-buttons" v-if="race.entrants && race.entrants.every(entrant => entrant.finished_at === null && entrant.forfeited_at === null)">
     <div class="btn-group" v-if="!entrant && !race.started_at">
       <button class="btn btn-outline-light" v-tippy :title="errors.join" :disabled="loading.join" @click="join">
         <spinner v-if="loading.join" />
@@ -83,7 +83,7 @@ import { ts } from '../time'
 
 export default {
   components: {
-    spinner
+    spinner,
   },
   created: async function() {
     const response = await fetch(`/api/v4/${this.raceType}s/${this.raceId}`, {
@@ -113,7 +113,6 @@ export default {
       unready: false,
     },
 
-    finalized: false,
     race: {},
   }),
   methods: {
@@ -220,7 +219,7 @@ export default {
         throw (await response.json()).error || response.statusText
       }
 
-      if (response.status === 205) {
+      if (response.status === 204 || response.status === 205) {
         // No body to parse
         return
       }
@@ -232,10 +231,3 @@ export default {
   props: ['raceId', 'raceType'],
 }
 </script>
-
-<style scoped>
-p {
-  font-size: 2em;
-  text-align: center;
-}
-</style>

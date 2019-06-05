@@ -7,7 +7,12 @@ class Api::V4::Races::RandomizersController < Api::V4::Races::ApplicationControl
     rando = Randomizer.new(randomizer_params)
     rando.owner = current_user
     if rando.save
-      render status: :created, json: Api::V4::RaceBlueprint.render(rando, root: :randomizer, view: :randomizer, join_token: true)
+      render status: :created, json: Api::V4::RaceBlueprint.render(
+        rando,
+        root: :randomizer,
+        view: :randomizer,
+        join_token: true,
+      )
     else
       render status: :bad_request, json: {
         status: :bad_request,

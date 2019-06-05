@@ -39,5 +39,7 @@ class Races::ApplicationController < ApplicationController
       race_params[:race].length,
       race_params[:race]
     ).order(created_at: :asc).first
+
+    render 'application/not_found' if @race.nil?
   end
 end

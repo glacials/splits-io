@@ -5,18 +5,6 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
   before_action :set_race, only: %i[show update]
   before_action :check_permission, only: %i[update]
 
-  def index
-  end
-
-  def create
-  end
-
-  def show
-  end
-
-  def update
-  end
-
   private
 
   def set_races(klass)

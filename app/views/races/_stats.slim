@@ -1,22 +1,27 @@
 .row
   .col-sm-3
     .statcard.p-3.rounded class=statcard_class(race)
-      - if race.in_progress?
-        h2.statcard-number.text-dark data={ms: ((Time.now.utc - race.started_at) * 1000).floor}
-          = Duration.new(((Time.now.utc - race.started_at) * 1000).floor).format
-        span.statcard-desc.text-dark
-          #race-status = race.status.titleize
-      - else
+      - if !race.started?
         h2.statcard-number.text-dark
-          #race-status = race.status.titleize
+          - if race.visibility == 'public'
+            ' Open entry
+          - elsif race.visibility == 'invite_only'
+            ' Invite-only
+          - else
+            ' Secret race
         - if !race.started? && race.entrants.count <= 1
           span.statcard-desc.text-dark
             ' Need #{2 - race.entrants.count} more to start
-        - elsif !race.finished?
+        - else
           span.statcard-desc.text-dark
             ' #{race.entrants.ready.count} / #{race.entrants.count} ready
-        - else
-          span.statcard-desc.text-dark title=race.started_at #{time_ago_in_words(race.started_at)} ago
+      - if race.started? && !race.finished?
+        h2.statcard-number.text-dark data={ms: ((Time.now.utc - race.started_at) * 1000).floor}
+          = Duration.new(((Time.now.utc - race.started_at) * 1000).floor).format
+        span.statcard-desc.text-dark In progress
+      - if race.finished?
+        h2.statcard-number.text-dark Finished
+        span.statcard-desc.text-dark title=race.finished_at #{time_ago_in_words(race.finished_at)} ago
   .col-sm-3: .statcard.p-3
     h2.statcard-number = race.visibility.titleize
     span.statcard-desc Visibility

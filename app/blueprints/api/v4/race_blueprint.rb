@@ -31,7 +31,7 @@ class Api::V4::RaceBlueprint < Blueprinter::Base
         {
           id: attachment.id,
           created_at: attachment.created_at,
-          filename: attachment.filename,
+          filename: attachment.filename.to_s,
           url: Rails.application.routes.url_helpers.rails_blob_url(
             attachment,
             protocol: 'https',
