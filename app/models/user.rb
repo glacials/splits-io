@@ -121,6 +121,10 @@ class User < ApplicationRecord
     RunLike.find_by(user: self, run: run)
   end
 
+  def in_race?
+    entrants.where(finished_at: nil, forfeited_at: nil).any?
+  end
+
   def active_raceables
     entrants.where(finished_at: nil, forfeited_at: nil).map(&:raceable)
   end
