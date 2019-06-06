@@ -2,6 +2,7 @@ class Races::ApplicationController < ApplicationController
   before_action :set_race,         only: [:show, :update]
   before_action :check_permission, only: [:show]
   before_action :set_race_gon,     only: [:show]
+  before_action :shorten_url,      only: [:show]
 
   def show
   end
@@ -41,5 +42,11 @@ class Races::ApplicationController < ApplicationController
     ).order(created_at: :asc).first
 
     render 'application/not_found' if @race.nil?
+  end
+
+  def shorten_url
+    return if request.path == polymorphic_path(@race)
+
+    redirect_to polymorphic_path(@race)
   end
 end

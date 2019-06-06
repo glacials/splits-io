@@ -118,7 +118,7 @@ html
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
           ' Help us out by taking the 2019 Splits I/O survey!
       - entrant = current_user.present? ? current_user.entrants.active.first : nil
-      - if current_user.present? && entrant.present? && request.path != polymorphic_path(entrant.raceable)
+      - if entrant.present? && request.path != polymorphic_path(entrant.raceable)
         article
           a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entrant.raceable, join_token: entrant.present? ? entrant.raceable.join_token : nil)
             => icon('fas', 'flag-checkered')

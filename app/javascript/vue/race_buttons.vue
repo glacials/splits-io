@@ -8,11 +8,12 @@
         Join race
       </button>
     </div>
+
     <div class="btn-group mr-2" v-if="entrant && !race.started_at">
       <button class="btn btn-outline-light" disabled>
         <i class="fas fa-check" /> Joined
       </button>
-      <button class="btn btn-outline-light" v-tippy :title="errors.leave || 'Leave race'" :disabled="loading.leave" @click="leave">
+      <button class="btn btn-outline-light" v-tippy v-if="!entrant.readied_at" :title="errors.leave || 'Leave race'" :disabled="loading.leave" @click="leave">
         <spinner v-if="loading.leave" />
         <i v-else-if="errors.leave" class="fas fa-exclamation-triangle text-danger" />
         <i v-else class="fas fa-times" />

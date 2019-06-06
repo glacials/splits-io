@@ -1,5 +1,8 @@
 <template>
   <button class="btn btn-outline-light" v-tippy :title="error" :disabled="loading" @click="create">
+    <spinner v-if="loading" />
+    <i v-else-if="error" class="fas fa-exclamation-triangle text-danger" />
+    <i v-else class="fas fa-flag-checkered" />
     Create race
   </button>
 </template>
@@ -40,11 +43,11 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
-        window.location = `/${this.raceType}s/${(await response.json())[this.raceType]['id']}`
+        Turbolinks.visit(`/${this.raceType}s/${(await response.json())[this.raceType]['id']}`)
       } catch(error) {
-        this.error = `Error: ${error}`
-      } finally {
+        // Since a success makes the page navigate away, don't unset loading in the success case
         this.loading = false
+        this.error = `Error: ${error}`
       }
     },
   },

@@ -18,6 +18,8 @@ module Raceable
     scope :unfinished, -> { joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct }
     scope :ongoing,    -> { started.unfinished }
 
+    after_create  { entrants.create(user: owner) }
+
     # active returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour.
     def self.active
       # TODO: remove secret races from this
