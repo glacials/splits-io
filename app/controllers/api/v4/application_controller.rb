@@ -19,6 +19,16 @@ class Api::V4::ApplicationController < ActionController::Base
 
   private
 
+  # override authie's current_user methods for API, so we don't set or obey cookies
+  def current_user
+    @current_user
+  end
+
+  # override authie's current_user methods for API, so we don't set or obey cookies
+  def current_user=(user)
+    @current_user = user
+  end
+
   def build_link_headers(links)
     links.map do |link|
       "<#{link[:url]}>; rel=\"#{link[:rel]}\""

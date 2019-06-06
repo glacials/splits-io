@@ -15,6 +15,8 @@ document.addEventListener('turbolinks:load', () => {
     console.warn("SPLITSIO_CLIENT_ID & SPLITSIO_CLIENT_SECRET not set in .envrc. Some features like races won't work.")
   }
   if (!gon.user) {
+    localStorage.removeItem(accessTokenKey)
+    localStorage.removeItem(accessTokenExpiryKey)
     return
   }
 
