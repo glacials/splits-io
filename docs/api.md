@@ -345,6 +345,8 @@ for an OAuth token using a secure API request.
     ```http
     Authorization: Bearer YOUR_ACCESS_TOKEN
     ```
+    or by including an `access_token=YOUR_ACCESS_TOKEN` parameter.
+
     The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
     can retrieve a new one with no user intervention using the returned `refresh_token`:
     ```http

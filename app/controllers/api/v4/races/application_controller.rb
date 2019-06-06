@@ -37,6 +37,6 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
   def check_permission
     return if @race.belongs_to?(current_user)
 
-    render :unauthorized
+    head :unauthorized
   end
 end

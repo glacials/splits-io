@@ -30,6 +30,7 @@ import "../highchart_theme.js"
 import "../chart_builder.js"
 import "../landing.js"
 import "../like.js"
+import "../race_attach.js"
 import "../run_claim.js"
 import '../run_delete.js'
 import '../run_disown.js'

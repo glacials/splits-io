@@ -64,4 +64,14 @@ document.addEventListener('turbolinks:load', () => {
   }
 })
 
+document.addEventListener('turbolinks:load', () => {
+  Array.from(document.getElementsByClassName('auth-me')).forEach(form => {
+    const tokenField = document.createElement('input')
+    tokenField.type = 'hidden'
+    tokenField.name = 'access_token'
+    tokenField.value = localStorage.getItem(accessTokenKey)
+    form.appendChild(tokenField)
+  })
+})
+
 export {accessTokenKey, accessTokenExpiryKey}

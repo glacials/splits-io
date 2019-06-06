@@ -11,6 +11,10 @@ Vue.use(TurbolinksAdapter)
 Vue.use(VueTippy)
 
 document.addEventListener('turbolinks:load', () => {
+  if (document.getElementById('vue-race') === undefined) {
+    return
+  }
+
   const app = new Vue({
     el: '#vue-race',
     components: { racebuttons, racecreate },

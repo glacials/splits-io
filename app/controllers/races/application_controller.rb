@@ -47,6 +47,6 @@ class Races::ApplicationController < ApplicationController
   def shorten_url
     return if request.path == polymorphic_path(@race)
 
-    redirect_to polymorphic_path(@race)
+    redirect_to polymorphic_path(@race, race_params.to_hash.slice('join_token'))
   end
 end

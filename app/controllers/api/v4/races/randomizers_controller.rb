@@ -26,7 +26,18 @@ class Api::V4::Races::RandomizersController < Api::V4::Races::ApplicationControl
   end
 
   def update
-    # TODO: port from internal only controller
+    render 'application/unauthorized' unless @race.belongs_to?(current_user)
+    render 'application/forbidden' if @race.started?
+    render 'application/bad_request' if params[:randomizer].blank?
+
+    @race.attachments.attach(params[:randomizer][:attachments])
+    Api::V4::RaceChannel.broadcast_to(@race, Api::V4::WebsocketMessageBlueprint.render_as_hash(
+      Api::V4::WebsocketMessage.new('new_attachment', {
+        message: 'The race owner has attached a new file',
+        race: Api::V4::RaceBlueprint.render_as_hash(@race, view: @race.type),
+        attachments_html: ApplicationController.render(partial: 'races/attachments', locals: {race: @race})
+      })
+    ))
   end
 
   private

@@ -25,7 +25,7 @@
           #attachments = render partial: 'races/attachments', locals: {race: @race}
           - if @race.belongs_to?(current_user) && !@race.started?
             .card-footer
-              = form_for(@race, html: {class: 'w-100 d-flex justify-content-between'}) do |f|
+              = form_for(@race, url: api_v4_randomizer_path(@race), remote: true, method: 'PATCH', html: {class: 'w-100 d-flex justify-content-between auth-me'}) do |f|
                 = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
                 = f.submit('Attach', class: 'btn btn-outline-light')
     #entrants-table.col-md-6 = render partial: 'races/entrants_table', locals: {race: @race}

@@ -121,7 +121,6 @@ Rails.application.routes.draw do
   get '/races/:race',         to: 'races/races#show',       as: :race
   get '/bingos/:race',        to: 'races/bingos#show',      as: :bingo
   get '/randomizers/:race',   to: 'races/randomizers#show', as: :randomizer
-  patch '/randomizers/:race', to: 'races/randomizers#update'
 
   namespace :api do
     namespace :webhooks do
@@ -160,16 +159,16 @@ Rails.application.routes.draw do
 
       post '/convert', to: 'converts#create'
 
-      Raceable::RACE_TYPES.map { |raceable| raceable.type.to_s.pluralize }.each do |type|
-        get   "/#{type}",       to: "races/#{type}#index"
-        post  "/#{type}",       to: "races/#{type}#create"
-        get   "/#{type}/:race", to: "races/#{type}#show"
-        patch "/#{type}/:race", to: "races/#{type}#update"
+      Raceable::RACE_TYPES.map { |raceable| raceable.type.to_s }.each do |type|
+        get   "/#{type.pluralize}",       to: "races/#{type.pluralize}#index",  as: type.pluralize
+        post  "/#{type.pluralize}",       to: "races/#{type.pluralize}#create"
+        get   "/#{type.pluralize}/:race", to: "races/#{type.pluralize}#show",   as: type
+        patch "/#{type.pluralize}/:race", to: "races/#{type.pluralize}#update"
 
-        get    "/#{type}/:race/entrant", to: "races/entrants/#{type}#show"
-        put    "/#{type}/:race/entrant", to: "races/entrants/#{type}#create"
-        patch  "/#{type}/:race/entrant", to: "races/entrants/#{type}#update"
-        delete "/#{type}/:race/entrant", to: "races/entrants/#{type}#destroy"
+        get    "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#show"
+        put    "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#create"
+        patch  "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#update"
+        delete "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#destroy"
       end
 
       post '/timesync', to: 'time#create'
