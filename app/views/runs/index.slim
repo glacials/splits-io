@@ -26,7 +26,7 @@
       .card.shadow
         = render partial: 'shared/run_table', locals: { \
           runs: current_user.pbs, \
-          races: current_user.races, \
+          races: current_user.active_raceables, \
           cols: %i[time name video uploaded owner_controls rival], \
           col_options: {time: [:archived]},
           description: 'My Personal Bests', \
