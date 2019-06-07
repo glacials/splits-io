@@ -8,6 +8,7 @@ class Api::V4::Races::BingosController < Api::V4::Races::ApplicationController
     bingo.owner = current_user
     if bingo.save
       render status: :created, json: Api::V4::RaceBlueprint.render(bingo, root: :bingo, view: :bingo, join_token: true)
+      Api::V4::GlobalRaceUpdateJob.perform_later(bingo, 'race_created', 'A new bingo has been created')
     else
       render status: :bad_request, json: {
         status: :bad_request,

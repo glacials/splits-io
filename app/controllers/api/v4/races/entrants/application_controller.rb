@@ -3,6 +3,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   before_action :set_user
   before_action :set_raceable
   before_action :set_entrant, only: %i[show update destroy]
+  after_action  :update_race, only: %i[update]
 
   def show
     render status: :ok, json: Api::V4::EntrantBlueprint.render(@entrant, root: :entrant)
@@ -68,5 +69,12 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
       params[k] = @time if k[-3, -1] == '_at' && v == 'now'
     end
     params.require(:entrant).permit(:readied_at, :finished_at, :forfeited_at)
+  end
+
+  def update_race
+    return unless response.status == 200
+
+    @raceable.maybe_start!
+    @raceable.maybe_end!
   end
 end

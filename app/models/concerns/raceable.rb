@@ -57,6 +57,23 @@ module Raceable
       finished? && Time.now.utc > entrants.order(updated_at: :desc).pluck(:updated_at).first + 30.minutes
     end
 
+    def maybe_start!
+      return false if started? || !entrants.all?(&:ready?) || entrants.count < 2
+
+      update(started_at: Time.now.utc + 20.seconds, status: :in_progress)
+      Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', "The #{type} is starting soon")
+      Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_start_scheduled', 'A race is starting soon')
+    end
+
+    def maybe_end!
+      return false if !started? || !entrants.all?(&:done?)
+
+      update(status: :ended)
+      Api::V4::RaceBroadcastJob.perform_later(self, 'race_ended', "The #{type} has ended")
+      Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_ended', 'A race has ended')
+      true
+    end
+
     def entrant_for_user(user)
       return nil if user.nil?
 

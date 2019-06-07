@@ -1,7 +1,7 @@
 const moment = require('moment')
 
 import consumer from '../../consumer'
-import { createAlert, showButton, hideButton } from '../../../dom_helpers'
+import { createAlert } from '../../../dom_helpers'
 let raceSubscription
 
 document.addEventListener('turbolinks:load', () => {
@@ -35,14 +35,10 @@ document.addEventListener('turbolinks:load', () => {
           document.getElementById('stats-box').innerHTML = data.data.stats_html
           break;
 
-        case 'race_start_scheduled':
+        case 'race_start_scheduled:html':
           document.getElementById('stats-box').innerHTML = data.data.stats_html
-          hideButton('btn-race-join')
-          hideButton('btn-race-leave')
-          hideButton('btn-race-ready')
-          hideButton('btn-race-unready')
-          showButton('btn-race-done')
-          showButton('btn-race-forfeit')
+          break
+        case 'race_start_scheduled':
           const duration = moment.duration(moment(data.data.race.started_at).valueOf() - ts.now())
           const startAlert = createAlert('warning', `Race starting in ${duration.format('s [seconds]')}!`)
           startAlert.setAttribute('data-start', data.data.race.started_at)
@@ -50,19 +46,16 @@ document.addEventListener('turbolinks:load', () => {
           countdown(startAlert)
           break;
 
-        case 'race_ended':
+        case 'race_ended:html':
           document.getElementById('entrants-table').innerHTML = data.data.entrants_html
           document.getElementById('stats-box').innerHTML = data.data.stats_html
-          hideButton('btn-race-forfeit')
-          hideButton('btn-race-done')
-          hideButton('btn-race-rejoin')
           break;
 
         case 'new_message:html':
           document.getElementById('input-list-item').insertAdjacentHTML('afterend', data.data.chat_html)
           break;
 
-        case 'new_attachment':
+        case 'new_attachment:html':
           document.getElementById('attachments').innerHTML = data.data.attachments_html
           break;
       }

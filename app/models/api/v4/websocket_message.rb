@@ -16,18 +16,26 @@ class Api::V4::WebsocketMessage
     race_ended
 
     race_entrants_updated
-    race_entrants_updated:html
 
     new_message
 
     new_attachment
   ].freeze
 
+  HTML_TYPES = TYPES.map { |t| "#{t}:html" }
+
   def initialize(type, **data)
-    raise "Invalid type #{type}" unless TYPES.include?(type)
+    raise "Invalid type #{type}" unless TYPES.include?(type) || HTML_TYPES.include?(type)
     raise '"message" required as keyword argument' if data[:message].blank?
 
     @type = type
     @data = data
+  end
+
+  def to_h
+    {
+      type: @type,
+      data: @data
+    }
   end
 end

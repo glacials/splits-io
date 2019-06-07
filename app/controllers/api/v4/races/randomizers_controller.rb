@@ -13,6 +13,7 @@ class Api::V4::Races::RandomizersController < Api::V4::Races::ApplicationControl
         view:       :randomizer,
         join_token: true
       )
+      Api::V4::GlobalRaceUpdateJob.perform_later(rando, 'race_created', 'A new randomizer has been created')
     else
       render status: :bad_request, json: {
         status: :bad_request,
@@ -30,13 +31,7 @@ class Api::V4::Races::RandomizersController < Api::V4::Races::ApplicationControl
     head :bad_request if params[:randomizer].blank?
 
     @raceable.attachments.attach(params[:randomizer][:attachments])
-    Api::V4::RaceChannel.broadcast_to(@raceable, Api::V4::WebsocketMessageBlueprint.render_as_hash(
-      Api::V4::WebsocketMessage.new('new_attachment', {
-        message: 'The race owner has attached a new file',
-        race: Api::V4::RaceBlueprint.render_as_hash(@raceable, view: @raceable.type),
-        attachments_html: ApplicationController.render(partial: 'races/attachments', locals: {race: @race})
-      })
-    ))
+    Api::V4::RaceBroadcastJob.perform_later(@raceable, 'new_attachment', 'The race owner has attached a new file')
   end
 
   private

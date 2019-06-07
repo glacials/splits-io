@@ -10,7 +10,7 @@ class Api::V4::GlobalRaceChannel < Api::V4::ApplicationChannel
       bingos:      Api::V4::RaceBlueprint.render_as_hash(Bingo.active, view: :bingo),
       randomizers: Api::V4::RaceBlueprint.render_as_hash(Randomizer.active, view: :randomizer)
     )
-    transmit(ws_msg)
+    transmit(ws_msg.to_h)
   end
 
   def unsubscribed

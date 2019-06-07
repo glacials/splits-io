@@ -6,14 +6,4 @@ const createAlert = (style, message) => {
   return div
 }
 
-const showButton = (elementId) => {
-  const elem = document.getElementById(elementId)
-  elem.hidden = false
-}
-
-const hideButton = (elementId) => {
-  const elem = document.getElementById(elementId)
-  elem.hidden = true
-}
-
-export { createAlert, showButton, hideButton }
+export { createAlert }
