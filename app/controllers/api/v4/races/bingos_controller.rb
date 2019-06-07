@@ -26,11 +26,11 @@ class Api::V4::Races::BingosController < Api::V4::Races::ApplicationController
 
   private
 
-  def set_races
+  def set_raceables
     super(Bingo)
   end
 
-  def set_race
+  def set_raceable
     super(Bingo)
   end
 

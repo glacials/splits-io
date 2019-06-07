@@ -32,7 +32,7 @@ RSpec.describe Api::V4::Races::RacesController do
 
   describe '#show' do
     context 'with a bad id' do
-      subject(:response) { get :show, params: {race: '-'} }
+      subject(:response) { get :show, params: {raceable: '-'} }
 
       it 'returns a 404' do
         expect(response).to have_http_status(:not_found)
@@ -41,7 +41,7 @@ RSpec.describe Api::V4::Races::RacesController do
 
     context 'with a valid id' do
       let(:race) { FactoryBot.create(:race) }
-      subject(:response) { get :show, params: {race: race.id} }
+      subject(:response) { get :show, params: {raceable: race.id} }
 
       it 'returns a 200' do
         expect(response).to have_http_status(:ok)

@@ -5,7 +5,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
     let(:race) { FactoryBot.create(:race) }
 
     context 'with no authorization header' do
-      subject(:response) { put :create, params: {race: race.to_param} }
+      subject(:response) { put :create, params: {raceable: race.id} }
 
       it 'returns a 403' do
         expect(response).to have_http_status(:unauthorized)
@@ -15,7 +15,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
     context 'with a valid authorization header' do
       let(:user) { FactoryBot.create(:user) }
       let(:token) { FactoryBot.create(:access_token, resource_owner_id: user.id) }
-      subject(:response) { put :create, params: {race: race.to_param} }
+      subject(:response) { put :create, params: {raceable: race.id} }
 
       before do
         request.headers['Authorization'] = "Bearer #{token.token}"
@@ -37,7 +37,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
     let(:entrant) { FactoryBot.create(:entrant, raceable: race, user: user) }
 
     context 'with no authorization header' do
-      subject(:response) { patch :update, params: {race: race.to_param, readied_at: Time.now.utc} }
+      subject(:response) { patch :update, params: {raceable: race.id, readied_at: Time.now.utc} }
 
       it 'returns a 403' do
         expect(response).to have_http_status(:unauthorized)
@@ -46,14 +46,14 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
 
     context 'with a valid authorization header' do
       let(:token) { FactoryBot.create(:access_token, resource_owner_id: user.id) }
-      subject(:response) { patch :update, params: {race: race.to_param} }
+      subject(:response) { patch :update, params: {raceable: race.id} }
 
       before do
         request.headers['Authorization'] = "Bearer #{token.token}"
       end
 
       context 'with no entrant' do
-        subject(:response) { patch :update, params: {race: race.to_param} }
+        subject(:response) { patch :update, params: {raceable: race.id} }
         it 'returns a 404' do
           expect(response).to have_http_status(:not_found)
         end
@@ -63,7 +63,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         before { entrant }
 
         context 'with no parameters' do
-          subject(:response) { patch :update, params: {race: race.to_param} }
+          subject(:response) { patch :update, params: {raceable: race.id} }
 
           it 'returns a 400' do
             expect(response).to have_http_status(:bad_request)
@@ -72,7 +72,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
 
         context 'with 1 parameter to update' do
           let(:time) { Time.now.utc }
-          subject(:response) { patch :update, params: {race: race.to_param, entrant: {readied_at: time.iso8601(3)}, format: :json} }
+          subject(:response) { patch :update, params: {raceable: race.id, entrant: {readied_at: time.iso8601(3)}, format: :json} }
 
           it 'returns a 200' do
             expect(response).to have_http_status(:ok)
@@ -88,7 +88,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         end
 
         context "who unready's" do
-          subject(:response) { patch :update, params: {race: race.to_param, entrant: {readied_at: nil}, format: :json} }
+          subject(:response) { patch :update, params: {raceable: race.id, entrant: {readied_at: nil}, format: :json} }
           before { entrant.update(readied_at: Time.now.utc) }
 
           it 'returns a 200' do
@@ -106,7 +106,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
 
         context 'setting both forfeited and entrant' do
           let(:time) { Time.now.utc }
-          subject(:response) { patch :update, params: {race: race.to_param, entrant: {readied_at: time.iso8601(3)}, format: :json} }
+          subject(:response) { patch :update, params: {raceable: race.id, entrant: {readied_at: time.iso8601(3)}, format: :json} }
 
           before { race.update(started_at: Time.now.utc - 30.seconds) }
 
@@ -124,7 +124,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
     let(:entrant) { FactoryBot.create(:entrant, raceable: race, user: user) }
 
     context 'with no authorization header' do
-      subject(:response) { delete :destroy, params: {race: race.to_param} }
+      subject(:response) { delete :destroy, params: {raceable: race.id} }
 
       it 'returns a 403' do
         expect(response).to have_http_status(:unauthorized)
@@ -133,7 +133,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
 
     context 'with a valid authorization header' do
       let(:token) { FactoryBot.create(:access_token, resource_owner_id: user.id) }
-      subject(:response) { delete :destroy, params: {race: race.to_param} }
+      subject(:response) { delete :destroy, params: {raceable: race.id} }
 
       before do
         request.headers['Authorization'] = "Bearer #{token.token}"

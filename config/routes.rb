@@ -160,15 +160,18 @@ Rails.application.routes.draw do
       post '/convert', to: 'converts#create'
 
       Raceable::RACE_TYPES.map { |raceable| raceable.type.to_s }.each do |type|
-        get   "/#{type.pluralize}",       to: "races/#{type.pluralize}#index",  as: type.pluralize
-        post  "/#{type.pluralize}",       to: "races/#{type.pluralize}#create"
-        get   "/#{type.pluralize}/:race", to: "races/#{type.pluralize}#show",   as: type
-        patch "/#{type.pluralize}/:race", to: "races/#{type.pluralize}#update"
+        get   "/#{type.pluralize}",           to: "races/#{type.pluralize}#index",  as: type.pluralize
+        post  "/#{type.pluralize}",           to: "races/#{type.pluralize}#create"
+        get   "/#{type.pluralize}/:raceable", to: "races/#{type.pluralize}#show",   as: type
+        patch "/#{type.pluralize}/:raceable", to: "races/#{type.pluralize}#update"
 
-        get    "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#show"
-        put    "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#create"
-        patch  "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#update"
-        delete "/#{type.pluralize}/:race/entrant", to: "races/entrants/#{type.pluralize}#destroy"
+        get    "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#show"
+        put    "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#create"
+        patch  "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#update"
+        delete "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#destroy"
+
+        get  "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#index"
+        post "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#create"
       end
 
       post '/timesync', to: 'time#create'

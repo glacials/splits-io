@@ -1,6 +1,6 @@
 class Api::V4::Races::RacesController < Api::V4::Races::ApplicationController
   def index
-    render json: Api::V4::RaceBlueprint.render(@races, view: :race)
+    render json: Api::V4::RaceBlueprint.render(@raceables, view: :race)
   end
 
   def create
@@ -17,7 +17,7 @@ class Api::V4::Races::RacesController < Api::V4::Races::ApplicationController
   end
 
   def show
-    render json: Api::V4::RaceBlueprint.render(@race, root: :race, view: :race, chat: true)
+    render json: Api::V4::RaceBlueprint.render(@raceable, root: :race, view: :race, chat: true)
   end
 
   def update
@@ -26,11 +26,11 @@ class Api::V4::Races::RacesController < Api::V4::Races::ApplicationController
 
   private
 
-  def set_races
+  def set_raceables
     super(Race)
   end
 
-  def set_race
+  def set_raceable
     super(Race)
   end
 

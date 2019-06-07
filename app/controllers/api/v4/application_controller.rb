@@ -79,4 +79,22 @@ class Api::V4::ApplicationController < ActionController::Base
       head 403
     end
   end
+
+  def set_user
+    if request.headers['Authorization'].present?
+      doorkeeper_authorize!(:manage_race)
+      self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+    end
+
+    head :unauthorized if current_user.nil?
+  end
+
+  def set_raceable(klass)
+    @raceable = klass.find(params[:raceable])
+    return unless @raceable.secret_visibility? && !@raceable.joinable?(user: current_user, token: params[:join_token])
+
+    head :unauthorized
+  rescue ActiveRecord::RecordNotFound
+    render not_found(klass.type)
+  end
 end

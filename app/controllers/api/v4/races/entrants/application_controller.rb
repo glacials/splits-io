@@ -57,39 +57,15 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
     @time = Time.now.utc
   end
 
-  def set_user
-    if request.headers['Authorization'].present?
-      doorkeeper_authorize!(:manage_race)
-      self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-    end
-
-    head :unauthorized if current_user.nil?
-  end
-
-  def set_raceable(klass)
-    @raceable = klass.where(
-      'LEFT(id::text, ?) = ?',
-      params[:race].length,
-      params[:race]
-    ).order(created_at: :asc).first
-    raise ActiveRecord::RecordNotFound if @raceable.nil?
-    head :unauthorized if @raceable.secret_visibility? && !@raceable.joinable?(user: current_user, token: params[:join_token])
-  rescue ActiveRecord::RecordNotFound
-    render not_found(klass.type)
-  end
-
   def set_entrant
-    @entrant = Entrant.find_by(user: current_user, raceable: @raceable)
-    raise ActiveRecord::RecordNotFound if @entrant.nil?
+    @entrant = Entrant.find_by!(user: current_user, raceable: @raceable)
   rescue ActiveRecord::RecordNotFound
     render not_found(:entrant)
   end
 
   def entrant_params
     params.each do |k, v|
-      if k[-3, -1] == '_at' && v == 'now'
-        params[k] = @time
-      end
+      params[k] = @time if k[-3, -1] == '_at' && v == 'now'
     end
     params.require(:entrant).permit(:readied_at, :finished_at, :forfeited_at)
   end
