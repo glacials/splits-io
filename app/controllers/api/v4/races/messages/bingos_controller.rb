@@ -1,9 +1,7 @@
 class Api::V4::Races::Messages::BingosController < Api::V4::Races::Messages::ApplicationController
-  def index
-    super
-  end
+  private
 
-  def create
-    super
+  def set_raceable
+    super(Bingo)
   end
 end

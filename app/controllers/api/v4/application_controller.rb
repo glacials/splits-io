@@ -87,6 +87,8 @@ class Api::V4::ApplicationController < ActionController::Base
     end
 
     head :unauthorized if current_user.nil?
+  rescue ActiveRecord::RecordNotFound
+    head :unauthorized
   end
 
   def set_raceable(klass)

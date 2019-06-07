@@ -11,7 +11,7 @@
             ' Secret race
         - if !race.started? && race.entrants.count <= 1
           span.statcard-desc.text-dark
-            ' Need #{2 - race.entrants.count} more to start
+            ' Need #{2 - race.entrants.count} more
         - else
           span.statcard-desc.text-dark
             ' #{race.entrants.ready.count} / #{race.entrants.count} ready
