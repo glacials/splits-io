@@ -29,54 +29,6 @@ class Api::V4::RaceChannel < Api::V4::ApplicationChannel
     stop_all_streams
   end
 
-  def send_message(data)
-    return unless @permitted
-    return if check_user
-    return if check_oauth
-
-    update_race_instance
-    chat_message = @race.chat_messages.create(
-      user: current_user, body: data['body'],
-      entrant: @race.entrant_for_user(current_user).present?
-    )
-    if chat_message.persisted?
-      transmit_user('message_creation_success', 'Messages successfully created')
-      message = {
-        message:      'A new message has been posted',
-        chat_message: Api::V4::ChatMessageBlueprint.render_as_hash(chat_message)
-      }
-      if onsite
-        message[:chat_html] = ApplicationController.render(
-          partial: 'chat_messages/show',
-          locals:  {chat_message: chat_message}
-        )
-      end
-
-      broadcast_to(
-        @race,
-        Api::V1::WebsocketMessageBlueprint.render_as_hash(
-          Api::V1::WebsocketMessage.new('new_message', message)
-        )
-      )
-    else
-      transmit_user('message_creation_error', message.errors.full_messages.to_sentence)
-    end
-  rescue StandardError => e
-    Rails.logger.error([e.message, *e.backtrace].join($RS))
-    Rollbar.error(e, 'Uncaught error for Api::V1::RaceChannel#send_message')
-    transmit_user('fatal_error', 'A fatal error occurred while processing your message')
-  end
-
-  def attach_file
-    return unless @permitted
-    return if check_user
-    return if check_oauth
-
-    update_race_instance
-
-    broadcast_race_update('new_attachment', 'The race owner has attached a new file')
-  end
-
   private
 
   def update_race_instance
