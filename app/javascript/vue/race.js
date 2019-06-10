@@ -10,7 +10,7 @@ export default {
     this.loading = true
     this.error = false
 
-    const response = await fetch(`/api/v4/${this.raceableType}s/${this.raceableId}?chat=1`, {
+    const response = await fetch(`/api/v4/${this.raceableType}s/${this.raceableId}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
       },

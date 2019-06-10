@@ -39,6 +39,10 @@ module Raceable
       unabandoned.unfinished.not_secret_visibility
     end
 
+    def self.active
+      unabandoned.unfinished
+    end
+
     def started?
       started_at.present?
     end

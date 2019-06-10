@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_27_190820) do
+ActiveRecord::Schema.define(version: 2019_05_28_183829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -129,7 +129,9 @@ ActiveRecord::Schema.define(version: 2019_05_27_190820) do
     t.datetime "forfeited_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
+    t.bigint "run_id"
     t.index ["raceable_type", "raceable_id"], name: "index_entrants_on_raceable_type_and_raceable_id"
+    t.index ["run_id"], name: "index_entrants_on_run_id"
     t.index ["user_id"], name: "index_entrants_on_user_id"
   end
 
@@ -450,6 +452,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_190820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "url", null: false
+    t.string "refresh_token"
     t.index ["twitch_id"], name: "index_twitch_users_on_twitch_id", unique: true
     t.index ["user_id"], name: "index_twitch_users_on_user_id", unique: true
   end
@@ -465,6 +468,7 @@ ActiveRecord::Schema.define(version: 2019_05_27_190820) do
   add_foreign_key "bingos", "games"
   add_foreign_key "bingos", "users"
   add_foreign_key "chat_messages", "users"
+  add_foreign_key "entrants", "runs"
   add_foreign_key "entrants", "users"
   add_foreign_key "game_aliases", "games", on_delete: :cascade
   add_foreign_key "google_users", "users"
