@@ -18,19 +18,25 @@ module Raceable
     scope :unfinished, -> { joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct }
     scope :ongoing,    -> { started.unfinished }
 
-    after_create  { entrants.create(user: owner) }
+    after_create { entrants.create(user: owner) }
 
-    # active returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour.
-    def self.active
+    # unabandoned returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour
+    # or have more than 2 entrants. this includes races that have finished (excluding secret races)
+    def self.unabandoned
       # TODO: remove secret races from this
       case name # self.name refers to the class including this concern
       when 'Race'
-        where('races.updated_at > ?', 1.hour.ago)
+        where('races.updated_at > ?', 1.hour.ago).not_secret_visibility
       when 'Randomizer'
-        where('randomizers.updated_at > ?', 1.hour.ago)
+        where('randomizers.updated_at > ?', 1.hour.ago).not_secret_visibility
       when 'Bingo'
-        where('bingos.updated_at > ?', 1.hour.ago)
-      end.or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)))
+        where('bingos.updated_at > ?', 1.hour.ago).not_secret_visibility
+      end.or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)).not_secret_visibility)
+    end
+
+    # active returns all non-finished unabandonded races (excluding secret races)
+    def self.active
+      unabandoned.unfinished.not_secret_visibility
     end
 
     def started?

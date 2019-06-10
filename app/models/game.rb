@@ -101,7 +101,7 @@ class Game < ApplicationRecord
   def raceables(scope = nil)
     [races, randomizers, bingos].map do |r|
       scope.present? ? r.limit(100).send(scope) : r
-    end.flatten.sort_by { |r| r.created_at }.reverse
+    end.flatten.sort_by(&:created_at).reverse
   end
 
   private

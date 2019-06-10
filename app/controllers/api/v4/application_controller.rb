@@ -10,24 +10,17 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def read_only_mode
-    write_actions = %w[create edit destroy]
-    write_methods = %w[POST PUT DELETE PATCH]
-    if write_actions.include?(action_name) || write_methods.include?(request.method)
-      render template: 'pages/read_only_mode'
-    end
+    write_actions = %w[create edit destroy].freeze
+    write_methods = %w[POST PUT DELETE PATCH].freeze
+    return unless write_actions.include?(action_name) || write_methods.include?(request.method)
+
+    render template: 'pages/read_only_mode'
   end
 
   private
 
   # override authie's current_user methods for API, so we don't set or obey cookies
-  def current_user
-    @current_user
-  end
-
-  # override authie's current_user methods for API, so we don't set or obey cookies
-  def current_user=(user)
-    @current_user = user
-  end
+  attr_accessor :current_user
 
   def build_link_headers(links)
     links.map do |link|
@@ -38,7 +31,7 @@ class Api::V4::ApplicationController < ActionController::Base
   def not_found(collection_name)
     {
       status: 404,
-      json: {
+      json:   {
         error: "No #{collection_name} with ID #{params[collection_name]} found."
       }
     }
@@ -91,7 +84,7 @@ class Api::V4::ApplicationController < ActionController::Base
     head :unauthorized
   end
 
-  def set_raceable(klass)
+  def set_raceable(klass) # rubocop:disable Naming/AccessorMethodName
     @raceable = klass.find(params[:raceable])
     return unless @raceable.secret_visibility? && !@raceable.joinable?(user: current_user, token: params[:join_token])
 

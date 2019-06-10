@@ -2,6 +2,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   before_action :set_time, only: %i[update]
   before_action :set_user
   before_action :set_raceable
+  before_action :check_permission, only: %i[create]
   before_action :set_entrant, only: %i[show update destroy]
   after_action  :update_race, only: %i[update]
 
@@ -56,6 +57,15 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
 
   def set_time
     @time = Time.now.utc
+  end
+
+  def check_permission
+    return if @raceable.joinable?(token: params[:join_token], user: current_user)
+
+    render status: :forbidden, json: {
+      status: :forbidden,
+      error:  'Must be invited to this race'
+    }
   end
 
   def set_entrant
