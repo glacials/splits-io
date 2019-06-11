@@ -42,7 +42,8 @@
                       .input-group
                         input.form-control#input-chat-text type='text' placeholder='Chat...' autofocus=true v-model='body'
                         .input-group-append
-                          button.btn.btn-dark#btn-chat-submit type='button' @click='chat' Chat
+                          button.btn.btn-dark#btn-chat-submit type='button' @click='chat'
+                            ' Chat
                   .list-group-item.p-0 v-for='msg in raceable.chat_messages'
                     .media
                       img.mr-3 :src='msg.user.avatar' width=25 height=25

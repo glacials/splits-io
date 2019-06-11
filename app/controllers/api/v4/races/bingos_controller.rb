@@ -1,6 +1,6 @@
 class Api::V4::Races::BingosController < Api::V4::Races::ApplicationController
   def index
-    render json: Api::V4::RaceBlueprint.render(@races, view: :bingo)
+    render json: Api::V4::RaceBlueprint.render(@raceables, view: :bingo)
   end
 
   def create
@@ -27,11 +27,11 @@ class Api::V4::Races::BingosController < Api::V4::Races::ApplicationController
 
   private
 
-  def set_raceables
+  def set_raceable
     super(Bingo)
   end
 
-  def set_raceable
+  def set_raceables
     super(Bingo)
   end
 

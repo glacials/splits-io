@@ -55,8 +55,8 @@ module Raceable
 
     def finished_at
       [
-        entrants.order(finished_at: :desc).first.finished_at,
-        entrants.order(forfeited_at: :desc).first.forfeited_at
+        entrants.where.not(finished_at: nil).maximum(:finished_at),
+        entrants.where.not(forfeited_at: nil).maximum(:forfeited_at),
       ].compact.max
     end
 

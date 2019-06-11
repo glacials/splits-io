@@ -6,7 +6,7 @@ module RacesHelper
     when 'in_progress'
       'bg-warning'
     when 'ended'
-      'bg-info'
+      'bg-secondary'
     else
       raise 'invalid status'
     end

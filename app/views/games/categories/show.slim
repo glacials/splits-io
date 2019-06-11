@@ -17,18 +17,18 @@ article data-turbolinks-temporary=true
         h5.card-header #{@category.name} Route
         .card-body
           p.card-text Automatically determined based on popularity
-          = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download', force_route_only: true}
+          = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download splits', force_route_only: true}
 
     - if current_user.present?
       .col-md-4: .card.mb-4
-        h5.card-header Start a Race
+        h5.card-header Set up race
         .card-body
-          p.card-text Start a #{@category.game} race
+          p.card-text Race #{@category.game} against others
           button.btn.btn-outline-light(
             data={toggle: :modal, target: '#race-modal'}
           )
             => icon('fas', 'flag-checkered')
-            ' Create a race
+            ' Set up race
       = render partial: 'races/new', locals: {game: @game}
   .card
     .card-header

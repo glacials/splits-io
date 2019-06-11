@@ -1,5 +1,5 @@
 .row
-  .col-sm-3
+  .col-sm-6.col-lg-4
     .statcard.p-3.rounded class=statcard_class(race)
       - if !race.started?
         h2.statcard-number.text-dark
@@ -22,21 +22,21 @@
       - if race.finished?
         h2.statcard-number.text-dark Finished
         span.statcard-desc.text-dark title=race.finished_at #{time_ago_in_words(race.finished_at)} ago
-  .col-sm-3: .statcard.p-3
+  .col-sm-6.col-lg-4: .statcard.p-3
     h2.statcard-number = race.visibility.titleize
     span.statcard-desc Visibility
-  .col-sm-3: .statcard.p-3
+  .col-sm-6.col-lg-4: .statcard.p-3
     h2.statcard-number = race.entrants.count
     span.statcard-desc Entrants
-  .col-sm-3: .statcard.p-3
+  .col-sm-6.col-lg-4: .statcard.p-3
     h2.statcard-number = race.type.capitalize
     span.statcard-desc Type
   - if race.entrants.any?
-    .col-sm-3: .statcard.p-3
+    .col-sm-6.col-lg-4: .statcard.p-3
       h2.statcard-number
         = race.entrants.last.user
       span.statcard-desc Predicted winner
-    .col-sm-3: .statcard.p-3
+    .col-sm-6.col-lg-4: .statcard.p-3
       h2.statcard-number
         = (Entrant.where(user: race.users).where.not(forfeited_at: nil).count / Entrant.where(user: race.users).count * race.entrants.count).floor
       span.statcard-desc Predicted forfeits

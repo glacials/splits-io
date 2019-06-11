@@ -36,11 +36,11 @@ class Api::V4::Races::RandomizersController < Api::V4::Races::ApplicationControl
 
   private
 
-  def set_raceables
+  def set_raceable
     super(Randomizer)
   end
 
-  def set_raceable
+  def set_raceables
     super(Randomizer)
   end
 

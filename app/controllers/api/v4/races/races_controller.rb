@@ -27,11 +27,11 @@ class Api::V4::Races::RacesController < Api::V4::Races::ApplicationController
 
   private
 
-  def set_raceables
+  def set_raceable
     super(Race)
   end
 
-  def set_raceable
+  def set_raceables
     super(Race)
   end
 

@@ -6,8 +6,8 @@
       th.nowrap Ready
       th.nowrap.text-center Place
       th.w-100 Time
-      th.nowrap Stats
-      th.nowrap Twitch
+      th.nowrap.text-center Stats
+      th.nowrap.text-center Twitch
     tbody
       - race.entrants.includes(:user).order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS LAST').order('readied_at ASC NULLS FIRST').each do |entrant|
         tr
@@ -25,7 +25,7 @@
               = entrant.duration.format
             - entrants = entrant.user.entrants
             - places = entrants.map(&:place)
-          td.nowrap
+          td.nowrap.text-center
             span.badge.badge-dark.mr-2.tip title='1sts/2nds/3rds'
               span.text-gold = places.count(1)
               span.text-secondary = '/'
@@ -36,7 +36,7 @@
               b.text-success = entrants.count(:finished_at)
               span.text-secondary = '/'
               span.text-danger = entrants.count(:forfeited_at)
-          td.nowrap
+          td.nowrap.text-center
             - if entrant.user.twitch.present?
-              a.btn.btn-twitch.btn-sm.tip href=entrant.user.twitch.url title='Watch on Twitch'
+              a.text-light.tip href=entrant.user.twitch.url title='Watch on Twitch'
                 = icon('fab', 'twitch')

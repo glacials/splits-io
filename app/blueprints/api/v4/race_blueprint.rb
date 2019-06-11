@@ -1,7 +1,7 @@
 class Api::V4::RaceBlueprint < Blueprinter::Base
   fields :id, :status, :visibility, :notes, :started_at, :created_at, :updated_at
   field :path do |race, _|
-    race.to_param
+    Rails.application.routes.url_helpers.polymorphic_path(race)
   end
 
   field :type do |race, _|

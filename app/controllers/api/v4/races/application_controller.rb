@@ -1,8 +1,8 @@
 class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
+  before_action :set_raceable, only: %i[show update]
   before_action :set_raceables, only: %i[index]
   before_action :set_user, only: %i[create update]
   before_action :check_user, only: %i[create]
-  before_action :set_raceable, only: %i[show update]
   before_action :check_permission, only: %i[update]
 
   # Define all methods otherwise rubocop complains above
@@ -19,6 +19,10 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
   end
 
   private
+
+  def set_raceable(klass)
+    @raceable = klass.find(params[:raceable])
+  end
 
   def set_raceables(klass) # rubocop:disable Naming/AccessorMethodName
     @raceables = klass.active

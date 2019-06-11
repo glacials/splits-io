@@ -3,6 +3,7 @@ import { applyTips } from '../../../tooltips'
 
 import consumer from '../../consumer'
 import { createAlert } from '../../../dom_helpers'
+import { ts } from '../../../time'
 let raceSubscription
 
 document.addEventListener('turbolinks:load', () => {

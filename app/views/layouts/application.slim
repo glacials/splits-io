@@ -122,7 +122,7 @@ html
         article
           a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entrant.raceable, join_token: entrant.present? ? entrant.raceable.join_token : nil)
             => icon('fas', 'flag-checkered')
-            | Return to Active Race
+            | Return to race
       header#header = yield(:header)
       article
         .row: .col-lg-12: #alerts data-turbolinks-temporary=true
