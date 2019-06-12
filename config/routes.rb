@@ -170,8 +170,8 @@ Rails.application.routes.draw do
         patch  "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#update"
         delete "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#destroy"
 
-        get  "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#index"
-        post "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#create"
+        get  "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#index",  as: "#{type}_chat"
+        post "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#create", as: "#{type}_chats"
       end
 
       post '/timesync', to: 'time#create'

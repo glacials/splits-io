@@ -64,13 +64,17 @@ document.addEventListener('turbolinks:load', () => {
   }
 })
 
+// Add a hidden 'access_token' field to form.auth-me elements. The value is the browser's locally stored Splits.io
+// access token.
 document.addEventListener('turbolinks:load', () => {
-  Array.from(document.getElementsByClassName('auth-me')).forEach(form => {
+  Array.from(document.querySelectorAll('form.auth-me')).forEach(el => {
+    el.classList.remove('auth-me')
+
     const tokenField = document.createElement('input')
     tokenField.type = 'hidden'
     tokenField.name = 'access_token'
     tokenField.value = localStorage.getItem(accessTokenKey)
-    form.appendChild(tokenField)
+    el.appendChild(tokenField)
   })
 })
 

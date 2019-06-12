@@ -29,7 +29,9 @@
                 #attachments = render partial: 'races/attachments', locals: {race: @race}
                 - if @race.belongs_to?(current_user) && !@race.started?
                   .card-footer
-                    = form_for(@race, url: api_v4_randomizer_path(@race), remote: true, method: 'PATCH', html: {class: 'w-100 d-flex justify-content-between auth-me'}) do |f|
+                    = form_for(@race, url: api_v4_randomizer_path(@race), remote: true, method: 'PATCH', html: { \
+                      class: 'w-100 d-flex justify-content-between auth-me' \
+                    }) do |f|
                       = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
                       = f.submit('Attach', class: 'btn btn-outline-light')
             #entrants-table = render partial: 'races/entrants_table', locals: {race: @race}
@@ -39,11 +41,27 @@
                 .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
                   - unless @race.locked?
                     .list-group-item#input-list-item.p-0
-                      .input-group
-                        input.form-control#input-chat-text type='text' placeholder='Chat...' autofocus=true v-model='body'
-                        .input-group-append
-                          button.btn.btn-dark#btn-chat-submit type='button' @click='chat'
-                            ' Chat
+                      = form_for(:chat, remote: true, html: {onsubmit: 'event.preventDefault()'}) do |f|
+                        .input-group
+                          input.form-control#input-chat-text(
+                            autofocus=true
+                            :disabled='loading'
+                            name='body'
+                            placeholder='Chat...'
+                            type='text'
+                            v-model='body'
+                          )
+                          .input-group-append
+                            button.btn.btn-dark#chat-submit(
+                              :disabled='loading'
+                              :title='error'
+                              type='submit'
+                              @click='chat'
+                              v-tippy=true
+                            )
+                              template v-if='loading' = render partial: 'shared/spinner'
+                              span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
+                              template v-else=true => icon('fas', 'comment')
                   .list-group-item.p-0 v-for='msg in raceable.chat_messages'
                     .media
                       img.mr-3 :src='msg.user.avatar' width=25 height=25

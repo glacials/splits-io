@@ -74,7 +74,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_user
-    if request.headers['Authorization'].present?
+    if request.headers['Authorization'].present? || params[:access_token].present?
       doorkeeper_authorize!(:manage_race)
       self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
     end
