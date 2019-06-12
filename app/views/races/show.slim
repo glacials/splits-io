@@ -37,9 +37,9 @@
             #entrants-table = render partial: 'races/entrants_table', locals: {race: @race}
 
             .card.shadow.my-3#chat-card
-              race-chat inline-template=true v-if='raceable' :raceable='raceable'
-                .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
-                  - unless @race.locked?
+              .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
+                - unless @race.locked?
+                  race-chat inline-template=true v-if='raceable' :raceable='raceable'
                     .list-group-item#input-list-item.p-0
                       = form_for(:chat, remote: true, html: {onsubmit: 'event.preventDefault()'}) do |f|
                         .input-group
@@ -62,12 +62,13 @@
                               template v-if='loading' = render partial: 'shared/spinner'
                               span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
                               template v-else=true => icon('fas', 'comment')
-                  .list-group-item.p-0 v-for='msg in raceable.chat_messages'
-                    .media
-                      img.mr-3 :src='msg.user.avatar' width=25 height=25
-                      .media-body
-                        .badge.badge-dark.mr-2 = '{{ msg.user.display_name }}'
-                        span :title='`Sent ${msg.created_at}`' {{ msg.body }}
+                  - @race.chat_messages.each do |msg|
+                    .list-group-item.p-0
+                      .media
+                        img.mr-3 src=msg.user.avatar width=25 height=25
+                        .media-body
+                          span.mr-2 = user_badge(msg.user)
+                          span title="Sent #{msg.created_at}" = msg.body
                   .list-group-item.p-0
                     .media
                       img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25

@@ -31,7 +31,7 @@ export default {
         this.error = error
       } finally {
         this.loading = false
-        document.getElementById('chat-submit').focus()
+        document.getElementById('chat-submit').focus() // TODO: This doesn't work
       }
     },
   },
