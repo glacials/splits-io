@@ -22,6 +22,8 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
 
   def set_raceable(klass)
     @raceable = klass.find(params[:raceable])
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
   end
 
   def set_raceables(klass) # rubocop:disable Naming/AccessorMethodName
