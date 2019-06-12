@@ -1,4 +1,4 @@
-class Api::V4::Race::Entrants::BingosController < Api::V4::Races::Entrants::ApplicationController
+class Api::V4::Races::Entrants::BingosController < Api::V4::Races::Entrants::ApplicationController
   def create
     super
   end

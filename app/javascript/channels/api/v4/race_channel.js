@@ -1,4 +1,5 @@
 const moment = require('moment')
+import { applyTips } from '../../../tooltips'
 
 import consumer from '../../consumer'
 import { createAlert } from '../../../dom_helpers'
@@ -33,7 +34,7 @@ document.addEventListener('turbolinks:load', () => {
         case 'race_entrants_updated:html':
           document.getElementById('entrants-table').innerHTML = data.data.entrants_html
           document.getElementById('stats-box').innerHTML = data.data.stats_html
-          break;
+          break
 
         case 'race_start_scheduled:html':
           document.getElementById('stats-box').innerHTML = data.data.stats_html
@@ -44,20 +45,21 @@ document.addEventListener('turbolinks:load', () => {
           startAlert.setAttribute('data-start', data.data.race.started_at)
           document.getElementById('alerts').appendChild(startAlert)
           countdown(startAlert)
-          break;
+          break
 
         case 'race_ended:html':
           document.getElementById('entrants-table').innerHTML = data.data.entrants_html
           document.getElementById('stats-box').innerHTML = data.data.stats_html
-          break;
+          break
 
         case 'new_message:html':
           document.getElementById('input-list-item').insertAdjacentHTML('afterend', data.data.chat_html)
-          break;
+          applyTips()
+          break
 
         case 'new_attachment:html':
           document.getElementById('attachments').innerHTML = data.data.attachments_html
-          break;
+          break
       }
     }
   })
@@ -66,35 +68,6 @@ document.addEventListener('turbolinks:load', () => {
     consumer.subscriptions.remove(raceSubscription)
   }, {once: true})
 })
-
-document.addEventListener('click', (event) => {
-  if (event.target.matches('#btn-chat-submit')) {
-    submitChatInput()
-  }
-})
-
-document.addEventListener('keypress', (event) => {
-  if (event.keyCode !== 13 || event.shiftKey) {
-    return
-  }
-
-  const chatInput = document.getElementById('input-chat-text')
-  if (document.activeElement !== chatInput) {
-    return
-  }
-
-  submitChatInput()
-})
-
-const submitChatInput = () => {
-  const chatInput = document.getElementById('input-chat-text')
-  if (chatInput.value === '') {
-    return
-  }
-
-  raceSubscription.sendMessage(chatInput.value)
-  chatInput.value = ''
-}
 
 const countdown = (alert) => {
   const interval = setInterval(() => {

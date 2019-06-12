@@ -26,21 +26,19 @@ module Raceable
       # TODO: remove secret races from this
       case name # self.name refers to the class including this concern
       when 'Race'
-        where('races.updated_at > ?', 1.hour.ago).not_secret_visibility
+        where('races.updated_at > ?', 1.hour.ago)
       when 'Randomizer'
-        where('randomizers.updated_at > ?', 1.hour.ago).not_secret_visibility
+        where('randomizers.updated_at > ?', 1.hour.ago)
       when 'Bingo'
-        where('bingos.updated_at > ?', 1.hour.ago).not_secret_visibility
-      end.or(where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)).not_secret_visibility)
+        where('bingos.updated_at > ?', 1.hour.ago)
+      end.not_secret_visibility.or(
+        where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)).not_secret_visibility
+      )
     end
 
     # active returns all non-finished unabandonded races (excluding secret races)
     def self.active
       unabandoned.unfinished.not_secret_visibility
-    end
-
-    def self.active
-      unabandoned.unfinished
     end
 
     def started?

@@ -18,7 +18,7 @@ class Api::V4::Races::BingosController < Api::V4::Races::ApplicationController
   end
 
   def show
-    render json: Api::V4::RaceBlueprint.render(@race, root: :bingo, view: :bingo, chat: true)
+    render json: Api::V4::RaceBlueprint.render(@raceable, root: :bingo, view: :bingo, chat: true)
   end
 
   def update
