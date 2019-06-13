@@ -71,11 +71,10 @@ ActiveRecord::Schema.define(version: 2019_05_27_190820) do
   create_table "bingos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "user_id", null: false
-    t.integer "status", default: 0, null: false
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
-    t.string "card_url", null: false
+    t.string "card_url"
     t.datetime "started_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
@@ -232,7 +231,6 @@ ActiveRecord::Schema.define(version: 2019_05_27_190820) do
   create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "category_id", null: false
     t.bigint "user_id", null: false
-    t.integer "status", default: 0, null: false
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
@@ -246,7 +244,6 @@ ActiveRecord::Schema.define(version: 2019_05_27_190820) do
   create_table "randomizers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id", null: false
     t.bigint "user_id", null: false
-    t.integer "status", default: 0, null: false
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"

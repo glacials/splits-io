@@ -4,7 +4,6 @@ module Raceable
   included do
     # These can only be accessed from classes that include this module, not from the module itself
     enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
-    enum status: {open: 0, in_progress: 1, ended: 2}, _suffix: true
 
     belongs_to :owner, foreign_key: :user_id, class_name: 'User'
     has_many :entrants, as: :raceable, dependent: :destroy
@@ -62,24 +61,22 @@ module Raceable
 
     # Races are "locked" 30 minutes after they end to stop new messages coming in
     def locked?
-      finished? && Time.now.utc > entrants.order(updated_at: :desc).pluck(:updated_at).first + 30.minutes
+      finished? && Time.now.utc > finished_at + 30.minutes
     end
 
     def maybe_start!
-      return false if started? || !entrants.all?(&:ready?) || entrants.count < 2
+      return if started? || entrants.where(readied_at: nil).any? || entrants.count < 2
 
-      update(started_at: Time.now.utc + 20.seconds, status: :in_progress)
+      update(started_at: Time.now.utc + 20.seconds)
       Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', "The #{type} is starting soon")
       Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_start_scheduled', 'A race is starting soon')
     end
 
     def maybe_end!
-      return false if !started? || !entrants.all?(&:done?)
+      return if finished? || entrants.where(finished_at: nil, forfeited_at: nil).any?
 
-      update(status: :ended)
       Api::V4::RaceBroadcastJob.perform_later(self, 'race_ended', "The #{type} has ended")
       Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_ended', 'A race has ended')
-      true
     end
 
     def entrant_for_user(user)

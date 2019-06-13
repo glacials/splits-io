@@ -120,7 +120,7 @@ html
       - entrant = current_user.present? ? current_user.entrants.active.first : nil
       - if entrant.present? && request.path != polymorphic_path(entrant.raceable)
         article
-          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entrant.raceable, join_token: entrant.present? ? entrant.raceable.join_token : nil)
+          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entrant.raceable)
             => icon('fas', 'flag-checkered')
             | Return to race
       header#header = yield(:header)

@@ -1,5 +1,5 @@
 class Api::V4::RaceBlueprint < Blueprinter::Base
-  fields :id, :status, :visibility, :notes, :started_at, :created_at, :updated_at
+  fields :id, :visibility, :notes, :started_at, :created_at, :updated_at
   field :path do |race, _|
     Rails.application.routes.url_helpers.polymorphic_path(race)
   end

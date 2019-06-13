@@ -1,5 +1,5 @@
 race-nav inline-template=true v-if='raceable' :raceable='raceable' v-cloak=true
-  div v-if='raceable.entrants && raceable.entrants.some(entrant => entrant.finished_at === null && entrant.forfeited_at === null)'
+  div v-if='raceable.entrants && (raceable.entrants.length === 0 || raceable.entrants.some(entrant => entrant.finished_at === null && entrant.forfeited_at === null))'
     .btn-group.mr-2 v-if='entrant && (!raceable.started_at || entrant.finished_at || entrant.forfeited_at)'
       button.btn.btn-secondary(
         :disabled='loading.leave'

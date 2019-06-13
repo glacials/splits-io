@@ -4,7 +4,6 @@ class AddRacing < ActiveRecord::Migration[6.0]
       t.belongs_to :category, foreign_key: true, null: false
       t.belongs_to :user,     foreign_key: true, null: false
 
-      t.integer  :status,      null: false, default: 0
       t.integer  :visibility,  null: false, default: 0
       t.string   :join_token,  null: false
       t.string   :notes,       null: true
@@ -19,11 +18,10 @@ class AddRacing < ActiveRecord::Migration[6.0]
       t.belongs_to :game, foreign_key: true, null: false
       t.belongs_to :user, foreign_key: true, null: false
 
-      t.integer  :status,      null: false, default: 0
       t.integer  :visibility,  null: false, default: 0
       t.string   :join_token,  null: false
       t.string   :notes,       null: true
-      t.string   :card_url,    null: false
+      t.string   :card_url,    null: true
 
       t.datetime :started_at, limit: 3, null: true
       t.datetime :created_at, limit: 3, null: false
@@ -34,7 +32,6 @@ class AddRacing < ActiveRecord::Migration[6.0]
       t.belongs_to :game, foreign_key: true, null: false
       t.belongs_to :user, foreign_key: true, null: false
 
-      t.integer  :status,      null: false, default: 0
       t.integer  :visibility,  null: false, default: 0
       t.string   :join_token,  null: false
       t.string   :notes,       null: true

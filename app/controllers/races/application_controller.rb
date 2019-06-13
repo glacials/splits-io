@@ -42,9 +42,16 @@ class Races::ApplicationController < ApplicationController
     render 'application/not_found' if @race.nil?
   end
 
+  # shorten_url cuts the race ID down to its shortest unique form, and strips the join token param if it's not needed
+  # (public race or the user already joined).
   def shorten_url
-    return if request.path == polymorphic_path(@race)
+    if @race.visibility == :public || @race.entrant_for_user(current_user).present?
+      desired_fullpath = polymorphic_path(@race)
+      redirect_to desired_fullpath if desired_fullpath != request.fullpath
+      return
+    end
 
-    redirect_to polymorphic_path(@race, race_params.to_hash.slice('join_token'))
+    desired_fullpath = polymorphic_path(@race, race_params.to_hash.slice('join_token'))
+    redirect_to desired_fullpath if desired_fullpath != request.fullpath
   end
 end

@@ -11,7 +11,7 @@ Vue.use(TurbolinksAdapter)
 Vue.use(VueTippy)
 
 document.addEventListener('turbolinks:load', () => {
-  if (document.getElementById('vue-race') === undefined) {
+  if (document.getElementById('vue-race') === null) {
     return
   }
 
