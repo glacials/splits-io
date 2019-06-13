@@ -2,7 +2,6 @@
   "type": "object",
   "required": [
     "id",
-    "status",
     "visibility",
     "notes",
     "started_at",
@@ -14,9 +13,6 @@
   ],
   "properties": {
     "id": {
-      "type": "string"
-    },
-    "status": {
       "type": "string"
     },
     "visibility": {
