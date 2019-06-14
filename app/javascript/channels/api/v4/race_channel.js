@@ -1,4 +1,0 @@
-
-document.addEventListener('turbolinks:load', () => {
-})
-
