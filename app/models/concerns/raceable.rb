@@ -14,10 +14,20 @@ module Raceable
 
     scope :started,    -> { where.not(started_at: nil) }
     scope :unstarted,  -> { where(started_at: nil) }
-    scope :unfinished, -> { joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct }
     scope :ongoing,    -> { started.unfinished }
 
     after_create { entrants.create(user: owner) }
+
+    def self.unfinished
+      # Distinct call will not return raceables with no entrants, so union all raceables with 0 entrants
+      joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct.union(
+        left_outer_joins(:entrants).where(entrants: {id: nil})
+      )
+    end
+
+    def self.finished
+      joins(:entrants).where.not(entrants: {finished_at: nil}).or(joins(:entrants).where.not(entrants: {forfeited_at: nil})).group(:id)
+    end
 
     # unabandoned returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour
     # or have more than 2 entrants. this includes races that have finished (excluding secret races)
@@ -55,7 +65,7 @@ module Raceable
     def finished_at
       [
         entrants.where.not(finished_at: nil).maximum(:finished_at),
-        entrants.where.not(forfeited_at: nil).maximum(:forfeited_at),
+        entrants.where.not(forfeited_at: nil).maximum(:forfeited_at)
       ].compact.max
     end
 

@@ -40,3 +40,12 @@ article data-turbolinks-temporary=true
     }.merge(sorting_info)
   center
     small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'
+
+article
+  .card
+    = render partial: 'shared/run_table', locals: { \
+      runs: Run.none, \
+      races: @game.raceables(:finished, params[:page]), \
+      cols: %i[runner time name video uploaded], \
+      description: 'Completed Races', \
+    }.merge(sorting_info)

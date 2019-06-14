@@ -98,9 +98,14 @@ class Game < ApplicationRecord
 
   # raceables returns an array of this game's raceables (races, randomizers, and bingos). If a scope is given, it is
   # called on each raceable before returning them.
-  def raceables(scope = nil)
+  def raceables(scope = nil, paginate = nil)
     [races, randomizers, bingos].map do |r|
-      scope.present? ? r.limit(100).send(scope) : r
+      break r.to_a if scope.nil?
+
+      r = r.limit(100).send(scope)
+      break r.to_a if paginate.nil?
+
+      r.page(paginate).to_a
     end.flatten.sort_by(&:created_at).reverse
   end
 
