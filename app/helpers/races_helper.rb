@@ -2,11 +2,11 @@ module RacesHelper
   def statcard_class(race)
     case
     when !race.started?
-      'bg-success'
+      'text-success'
     when race.in_progress?
-      'bg-warning'
+      'text-warning'
     when race.finished?
-      'bg-secondary'
+      nil
     else
       raise 'invalid status'
     end

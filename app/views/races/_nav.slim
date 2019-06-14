@@ -43,11 +43,11 @@ race-nav inline-template=true v-if='raceable' :raceable='raceable' v-cloak=true
         template v-else=true => icon('fas', 'undo')
 
     .btn-group.mr-2 v-if='!entrant && !raceable.started_at'
-      button.btn.btn-outline-light v-tippy=true :title='errors.join' :disabled='loading.join' @click='join'
+      button.btn.btn-outline-light v-tippy=true :title='errors.join' :disabled='loading.join || !currentUser' @click='join'
         template v-if="loading.join" = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.join' => icon('fas', 'exclamation-triangle')
-        template v-else=true => icon('fas', 'sign-in-alt')
-        ' Join race
+        template v-if='currentUser' Join race
+        template v-else=true Sign in to join
 
     template v-if="entrant && !raceable.started_at"
       .btn-group.mr-2
@@ -57,7 +57,6 @@ race-nav inline-template=true v-if='raceable' :raceable='raceable' v-cloak=true
       button.btn.btn-outline-light.glow v-tippy=true :title='errors.ready' :disabled='loading.ready' @click='ready'
         template v-if='loading.ready' = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.ready' => icon('fas', 'exclamation-triangle')
-        template v-else=true => icon('fas', 'user-check')
         ' Set ready
 
     template v-if="entrant && !raceable.started_at && entrant.readied_at"

@@ -1,8 +1,8 @@
 .row
-  .col-sm-6.col-lg-4
-    .statcard.p-3.rounded class=statcard_class(race)
+  .col-sm-6.col-xl-4
+    .statcard.p-3.rounded
       - if !race.started?
-        h2.statcard-number.text-dark
+        h2.statcard-number class=statcard_class(race)
           - if race.visibility == 'public'
             ' Open entry
           - elsif race.visibility == 'invite_only'
@@ -10,33 +10,33 @@
           - else
             ' Secret race
         - if !race.started? && race.entrants.count <= 1
-          span.statcard-desc.text-dark
+          span.statcard-desc class=statcard_class(race)
             ' Need #{2 - race.entrants.count} more
         - else
-          span.statcard-desc.text-dark
+          span.statcard-desc class=statcard_class(race)
             ' #{race.entrants.ready.count} / #{race.entrants.count} ready
       - if race.started? && !race.finished?
-        h2.statcard-number.text-dark data={ms: ((Time.now.utc - race.started_at) * 1000).floor}
+        h2.statcard-number class=statcard_class(race) data={ms: ((Time.now.utc - race.started_at) * 1000).floor}
           = Duration.new(((Time.now.utc - race.started_at) * 1000).floor).format
-        span.statcard-desc.text-dark In progress
+        span.statcard-desc class=statcard_class(race) In progress
       - if race.finished?
-        h2.statcard-number.text-dark Finished
-        span.statcard-desc.text-dark title=race.finished_at #{time_ago_in_words(race.finished_at)} ago
-  .col-sm-6.col-lg-4: .statcard.p-3
+        h2.statcard-number class=statcard_class(race) Finished
+        span.statcard-desc class=statcard_class(race) title=race.finished_at #{time_ago_in_words(race.finished_at)} ago
+  .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.visibility.titleize
     span.statcard-desc Visibility
-  .col-sm-6.col-lg-4: .statcard.p-3
+  .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.entrants.count
     span.statcard-desc Entrants
-  .col-sm-6.col-lg-4: .statcard.p-3
+  .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.type.capitalize
     span.statcard-desc Type
   - if race.entrants.any?
-    .col-sm-6.col-lg-4: .statcard.p-3
+    .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
         = race.entrants.last.user
       span.statcard-desc Predicted winner
-    .col-sm-6.col-lg-4: .statcard.p-3
+    .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
         = (Entrant.where(user: race.users).where.not(forfeited_at: nil).count / Entrant.where(user: race.users).count * race.entrants.count).floor
       span.statcard-desc Predicted forfeits

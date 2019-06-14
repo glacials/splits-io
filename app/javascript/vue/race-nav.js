@@ -2,9 +2,15 @@ import { ts } from '../time'
 
 export default {
   created: function() {
-    this.entrant = this.raceable.entrants.find(entrant => entrant.user.name === gon.user.name)
+    this.currentUser = gon.user
+    if (this.currentUser === null) {
+      return
+    }
+
+    this.entrant = this.raceable.entrants.find(entrant => entrant.user.name === this.currentUser.name)
   },
   data: () => ({
+    currentUser: null,
     entrant: null,
     errors: {},
     loading: {
