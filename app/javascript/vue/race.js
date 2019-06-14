@@ -17,7 +17,6 @@ export default {
     raceNav
   },
   created: async function() {
-    this.loading = true
     this.error = false
 
     const countdown = alert => {
@@ -45,16 +44,11 @@ export default {
       throw (await response.json()).error || response.statusText
     }
 
-
-    if (!window.gon || !window.gon.race) {
-      return
-    }
-
     raceSubscription = consumer.subscriptions.create({
       channel:    'Api::V4::RaceChannel',
-      race_id:    window.gon.race.id,
-      race_type:  window.gon.race.type,
-      join_token: window.gon.race.join_token
+      race_id:    this.raceableId,
+      race_type:  this.raceableType,
+      join_token: (window.gon.race || {}).join_token
     }, {
       connected: () => {
         const alert = document.getElementById('disconnected-alert')
@@ -114,7 +108,7 @@ export default {
   },
   data: () => ({
     error: false,
-    loading: false,
+    loading: true,
     raceable: null,
   }),
   methods: {
