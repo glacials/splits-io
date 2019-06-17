@@ -5,16 +5,7 @@ class Api::V4::Races::BingosController < Api::V4::Races::ApplicationController
 
   def create
     bingo = Bingo.new(bingo_params)
-    bingo.owner = current_user
-    if bingo.save
-      render status: :created, json: Api::V4::RaceBlueprint.render(bingo, root: :bingo, view: :bingo, join_token: true)
-      Api::V4::GlobalRaceUpdateJob.perform_later(bingo, 'race_created', 'A new bingo has been created')
-    else
-      render status: :bad_request, json: {
-        status: :bad_request,
-        error:  bingo.errors.full_messages.to_sentence
-      }
-    end
+    super(bingo)
   end
 
   def show

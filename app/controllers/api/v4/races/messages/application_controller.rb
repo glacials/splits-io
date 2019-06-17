@@ -3,7 +3,8 @@ class Api::V4::Races::Messages::ApplicationController < Api::V4::ApplicationCont
   before_action :set_raceable, only: %i[create]
 
   def index
-    render status: :ok, json: Api::V4::ChatMessageBlueprint.render(@messages)
+    paginated_message = paginate(@messages)
+    render status: :ok, json: Api::V4::ChatMessageBlueprint.render(paginated_message)
   end
 
   def create
@@ -26,6 +27,6 @@ class Api::V4::Races::Messages::ApplicationController < Api::V4::ApplicationCont
   private
 
   def set_messages
-    @messages = @raceable.chat_messages
+    @messages = @raceable.chat_messages.order(created_at: :desc)
   end
 end
