@@ -4,7 +4,8 @@ class Segment < ApplicationRecord
   # If SegmentHistory is changed to have child records, change this back to just :destroy
   has_many :histories, -> { order(attempt_number: :asc) }, class_name: 'SegmentHistory', dependent: :delete_all
 
-  validates :segment_number, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 1}
+  validates :name, presence: true
+  validates :segment_number, presence: true, numericality: {only_integer: true}
 
   # start returns the Duration between the start of the run and the start of this segment. For example, the first
   # segment of the run would have a start of 0. The second segment would have a start equal to the duration of the first

@@ -1,15 +1,21 @@
 {
   "type": "object",
   "required": [
+    "id",
     "readied_at",
     "finished_at",
     "forfeited_at",
     "created_at",
     "updated_at",
-    "user"
+    "user",
+    "run"
   ],
   "additionalProperties": false,
   "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
     "readied_at": {
       "type": [
         "string",
@@ -35,7 +41,10 @@
       "type": "string"
     },
     "user": {
-      "$ref": "../../../models/api/v4/runner.json"
+      "$ref": "./runner.json"
+    },
+    "run": {
+      "oneOf": [{"type": "null"}, {"$ref": "./run.json"}]
     }
   }
 }

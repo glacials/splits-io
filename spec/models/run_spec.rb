@@ -540,7 +540,7 @@ describe Run, type: :model do
     end
   end
 
-  context 'from the Splits I/O Exchange Format' do
+  context 'from the Splits.io Exchange Format' do
     let(:run) do
       r = FactoryBot.create(:splitsio_exchange_run)
       r.parse_into_db
