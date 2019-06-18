@@ -1,6 +1,10 @@
 class Api::V4::UserBlueprint < Blueprinter::Base
   fields :name, :avatar, :created_at, :updated_at
 
+  field :id do |user, _|
+    user.id.to_s
+  end
+
   field :display_name do |user, _|
     user.to_s
   end

@@ -7,7 +7,7 @@ export default {
       return
     }
 
-    this.entrant = this.raceable.entrants.find(entrant => entrant.user.name === this.currentUser.name)
+    this.entrant = this.raceable.entrants.find(entrant => entrant.user.id === this.currentUser.id)
   },
   data: () => ({
     currentUser: null,
