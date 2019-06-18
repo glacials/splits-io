@@ -3,6 +3,7 @@ class Entrant < ApplicationRecord
   # to clients, this should be removed if you plan to display all error messages to users
   belongs_to :raceable, polymorphic: true, touch: true
   belongs_to :user
+  belongs_to :run, dependent: :destroy, optional: true
 
   validates_with EntrantValidator
   # Validators are not called before destroy's, so manually hook and prevent if race is started

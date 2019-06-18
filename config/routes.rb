@@ -155,6 +155,9 @@ Rails.application.routes.draw do
       put    '/runs/:run', to: 'runs#update'
       delete '/runs/:run', to: 'runs#destroy'
 
+      get '/runs/:run/source_file', to: 'runs/source_files#show', as: 'run_source_file'
+      put '/runs/:run/source_file', to: 'runs/source_files#update'
+
       delete '/runs/:run/user', to: 'runs/users#destroy'
 
       post '/convert', to: 'converts#create'

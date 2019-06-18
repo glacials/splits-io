@@ -58,7 +58,7 @@ FactoryBot.define do
       total_playtime_ms       { 10_000 }
 
       after(:create) do |run|
-        FactoryBot.create_list(:segment, 10, run: run)
+        FactoryBot.create_list(:segment, 10, run: run, segment_number: rand(1..10))
       end
     end
 

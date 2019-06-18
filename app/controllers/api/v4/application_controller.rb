@@ -30,8 +30,9 @@ class Api::V4::ApplicationController < ActionController::Base
 
   def not_found(collection_name)
     {
-      status: 404,
+      status: :not_found,
       json:   {
+        status: :not_found,
         error: "No #{collection_name} with ID #{params[collection_name]} found."
       }
     }

@@ -11,6 +11,7 @@
         th.w-100 Time
         th.nowrap.text-center Stats
         th.nowrap.text-center Twitch
+        th.nowrap.text-center Linked run
       tbody
         - race.entrants.includes(:user).order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS LAST').order('readied_at ASC NULLS FIRST').each do |entrant|
           tr
@@ -30,12 +31,14 @@
               - places = entrants.map(&:place)
             td.nowrap.text-center
               span.badge.badge-dark.mr-2.tip title='1sts/2nds/3rds'
+                => icon('fas', 'medal')
                 span.text-gold = places.count(1)
                 span.text-secondary = '/'
                 span.text-silver = places.count(2)
                 span.text-secondary = '/'
                 span.text-bronze = places.count(3)
               span.badge.badge-dark.tip title='Finishes/Forfeits'
+                => icon('fas', 'receipt')
                 b.text-success = entrants.count(:finished_at)
                 span.text-secondary = '/'
                 span.text-danger = entrants.count(:forfeited_at)
@@ -43,3 +46,7 @@
               - if entrant.user.twitch.present?
                 a.text-light.tip href=entrant.user.twitch.url title='Watch on Twitch'
                   = icon('fab', 'twitch')
+            td.nowrap.text-center
+              - if entrant.run.present?
+                a.text-light.tip href=run_path(entrant.run) title='See associated run'
+                  = icon('fas', 'scroll')
