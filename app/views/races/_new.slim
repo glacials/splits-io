@@ -10,8 +10,8 @@
             .form-group
               select.form-control#visibility-select v-model='visibility'
                 option value='public' Public&mdash;Anyone can see or join
-                option disabled=!current_user.patron?(tier: 2) value='invite_only' Invite only&mdash;anyone can see, need a link to join (patrons only)
-                option disabled=!current_user.patron?(tier: 2) value='secret' Secret&mdash;Need a link to see or join (patrons only)
+                option disabled=(!current_user.patron?(tier: 2)) value='invite_only' Invite only&mdash;anyone can see, need a link to join (patrons only)
+                option disabled=(!current_user.patron?(tier: 2)) value='secret' Secret&mdash;Need a link to see or join (patrons only)
             .form-group
               textarea.form-control#notes-textarea placeholder='Notes (optional)' v-bind='notes'
             ul.nav.nav-pills.my-3#races-tab role='tablist'

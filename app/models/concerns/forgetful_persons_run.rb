@@ -4,10 +4,13 @@ module ForgetfulPersonsRun
   extend ActiveSupport::Concern
 
   included do
-    # Returns segments, but with skipped segments rolled into the soonest future segment that wasn't skipped.
+    # Returns segments, but with skipped segments rolled into the soonest future segment that wasn't skipped. If the run
+    # is not complete (i.e. the last segment and any # segments directly before it have nil durations), we don't
+    # return that last stretch of segments at all.
     def collapsed_segments(timing)
-      segments.reduce([]) do |segs, seg|
-        if segs.last.try(:duration_ms, timing) == 0
+      in_progress_segments = segments.reverse.take_while { |segment| segment.duration(timing).nil? }
+      segments[0..segments.count - 1 - in_progress_segments.count].reduce([]) do |segs, seg|
+        if segs.any? && segs.last.try(:duration, timing).nil?
           skipped_seg = segs.last
           segs + [Segment.new(
             segs.pop.attributes.merge(
@@ -34,7 +37,7 @@ module ForgetfulPersonsRun
         else
           segs + [seg]
         end
-      end
+      end.push(*in_progress_segments)
     end
 
     def skipped_splits(timing)

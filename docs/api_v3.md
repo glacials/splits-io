@@ -1,5 +1,5 @@
 # splits i/o API
-These docs are for the v3 API.
+**These docs are for the v3 API. v3 is deprecated; please use [v4](./api.md) instead.**
 
 ## Jump to section
 

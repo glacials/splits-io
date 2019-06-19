@@ -32,7 +32,7 @@ export default {
           body: JSON.stringify({
             game_id: this.gameId,
             category_id: this.categoryId,
-            visibiltiy: this.visibility,
+            visibility: this.visibility,
             notes: this.notes,
             card_url: this.bingo_card_url,
             seed: this.seed_name,

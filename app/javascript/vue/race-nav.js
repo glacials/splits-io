@@ -121,7 +121,10 @@ export default {
           'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({entrant: params}),
+        body: JSON.stringify({
+          entrant: params,
+          join_token: (new URLSearchParams(window.location.search)).get('join_token')
+        }),
       })
 
       if (!response.ok) {

@@ -14,9 +14,9 @@ class Segment < ApplicationRecord
   def start(timing)
     case timing
     when Run::REAL
-      Duration.new(realtime_start_ms)
+      Duration.new(realtime_start_ms || run.segments.find_by(segment_number: segment_number - 1).end(timing).to_ms)
     when Run::GAME
-      Duration.new(gametime_start_ms)
+      Duration.new(gametime_start_ms || run.segments.find_by(segment_number: segment_number - 1).end(timing).to_ms)
     end
   end
 
@@ -100,8 +100,16 @@ class Segment < ApplicationRecord
     segment_number == run.segments.count - 1
   end
 
+  # proportion returns a number from 0 to 1 representing the segment's proportion of the run it should represent, mostly
+  # for display purposes.
+  def proportion(timing, scale_to = run.duration(timing))
+    return (1.0 / run.segments.count) if scale_to.nil?
+
+    duration(timing) / scale_to
+  end
+
   def second_half?(timing)
-    (end_ms(timing) - (duration_ms(timing) / 2)) > (run.duration_ms(timing) / 2)
+    (self.end(timing) - (duration(timing) / 2)) > (run.duration(timing) / 2)
   end
 
   # gold? returns something truthy if this segment's PB time is the fastest (or tied for the fastest) ever recorded by

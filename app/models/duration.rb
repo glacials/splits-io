@@ -99,6 +99,12 @@ class Duration
     to_ms <=> duration.to_ms
   end
 
+  def +(duration)
+    return Duration.new(nil) if nil? || duration.nil?
+
+    Duration.new(to_ms + duration.to_ms)
+  end
+
   def -(duration)
     return Duration.new(nil) if nil? || duration.nil?
 

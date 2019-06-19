@@ -437,14 +437,17 @@ livesplit-core, documented in the [FAQ][faq].
 [faq]: https://splits.io/faq#programs
 
 #### Replacing source files
-Occasionally you may want to update a run's source file to a newer version, such as when a runner splits and you are
-reporting splits in realtime (like in a race). You can do this using an identical two-request system to above but
+Occasionally you may want to update an existing run's source file to a newer version, such as when a runner splits and
+you are reporting splits in realtime (like in a race). You can do this using the same two-request system as above but
 changing your method and path to
 ```http
 PUT https://splits.io/api/v4/run/:run/source_file
 ```
 and following the same steps as above to upload to S3. Splits.io will automatically parse the new file and update the
 run.
+
+**Note**: When uploading in-progress source files in the Splits.io Exchange Format include all splits as normal, but do
+not include the `endedAt` field for unreached segments.
 </details>
 
 <details>

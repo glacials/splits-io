@@ -7,6 +7,8 @@ module CompletedRun
     # duration returns the total duration of the run, from the beginning of the first segment to the end of the last
     # segment.
     def duration(timing = default_timing)
+      return Duration.new(nil) if segments.any? && segments.last.duration(timing).nil?
+
       case timing
       when Run::REAL
         Duration.new(realtime_duration_ms)

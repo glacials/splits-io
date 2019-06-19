@@ -1,5 +1,5 @@
 - scale_to ||= run.duration(timing).to_ms
-- if !run.completed?(timing)
+- if run.duration(timing).present? && !run.completed?(timing)
   .card: .card-body: i This run doesn't have #{timing}time splits.
 - else
   - if run.video_url.present? && URI.parse(run.video_url).host.match?(/^(www\.)?twitch\.tv$/)
@@ -10,15 +10,19 @@
         .pure-u.split(
           id="#{run.id36}-split-#{index}"
           data={start_ms: segment.start(timing).to_ms, run_id: run.id36, segment_number: index+1}
-          class=next_timeline_color(run.id36)
-          style="width: #{segment.duration(timing) / run.duration(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
+          class="#{next_timeline_color(run.id36)} #{'progress-bar-striped progress-bar-animated' if segment.duration(timing).nil?}"
+          style="width: #{segment.proportion(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
         )
           .p-2
             .text-light = segment.name.presence || '-'
-            .text-light-50 = segment.duration(timing).format(precise: run.short?(timing))
+            .text-light-50
+              - if segment.duration(timing).present?
+                = segment.duration(timing).format(precise: run.short?(timing))
+              - else
+                b In progress
   .gold.timeline style="width: #{run.duration(timing) / scale_to * 100.0}%"
     - run.collapsed_segments(timing).each_with_index do |segment, index|
-      div style="width: #{segment.duration(timing) / run.duration(timing) * 100.0}%"
+      div style="width: #{segment.proportion(timing) * 100.0}%"
         - if segment.shortest_duration(timing).present?
           .gold-split style="width: #{segment.shortest_duration(timing) / segment.duration(timing) * 100.0}%"
         - else

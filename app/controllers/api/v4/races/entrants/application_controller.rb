@@ -93,7 +93,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
     params.select { |k, _| k[-3, -1] == '_at' && v == 'now' }.each do |k, v|
       params[k] = @now
     end
-    params.permit(entrant: [:readied_at, :finished_at, :forfeited_at, :run_id]).fetch(:entrant, {})
+    params.permit(:join_token, entrant: [:readied_at, :finished_at, :forfeited_at, :run_id]).fetch(:entrant, {})
   end
 
   def update_race

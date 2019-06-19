@@ -27,7 +27,7 @@ class Run < ApplicationRecord
   has_many :histories,            dependent: :delete_all, class_name: 'RunHistory'
   has_one  :highlight_suggestion, dependent: :destroy
   has_many :likes,                dependent: :destroy,    class_name: 'RunLike'
-  has_one  :entrant # If this run is associated with a race
+  has_one  :entrant,              dependent: :nullify
 
   has_secure_token :claim_token
 

@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.datetime "updated_at", precision: 3, null: false
     t.bigint "run_id"
     t.index ["raceable_type", "raceable_id"], name: "index_entrants_on_raceable_type_and_raceable_id"
+    t.index ["run_id"], name: "index_entrants_on_run_id"
     t.index ["user_id"], name: "index_entrants_on_user_id"
   end
 
@@ -329,14 +330,14 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   create_table "segments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.integer "run_id", null: false
     t.integer "segment_number", null: false
-    t.bigint "realtime_duration_ms", null: false
-    t.bigint "realtime_start_ms", null: false
-    t.bigint "realtime_end_ms", null: false
-    t.bigint "realtime_shortest_duration_ms", null: false
+    t.bigint "realtime_duration_ms"
+    t.bigint "realtime_start_ms"
+    t.bigint "realtime_end_ms"
+    t.bigint "realtime_shortest_duration_ms"
     t.string "name", null: false
-    t.boolean "realtime_gold", null: false
-    t.boolean "realtime_reduced", null: false
-    t.boolean "realtime_skipped", null: false
+    t.boolean "realtime_gold", default: true, null: false
+    t.boolean "realtime_reduced", default: true, null: false
+    t.boolean "realtime_skipped", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "gametime_start_ms"
@@ -463,7 +464,6 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   add_foreign_key "bingos", "games"
   add_foreign_key "bingos", "users"
   add_foreign_key "chat_messages", "users"
-  add_foreign_key "entrants", "runs"
   add_foreign_key "entrants", "users"
   add_foreign_key "game_aliases", "games", on_delete: :cascade
   add_foreign_key "google_users", "users"
