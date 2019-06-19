@@ -30,13 +30,13 @@ class EntrantValidator < ActiveModel::Validator
       end
 
       # Reject times before the race start time
-      if record.finished_at.present? && record.raceable.started_at > record.finished_at
+      if type == 'finish' && (record.raceable.started_at.nil? || record.raceable.started_at > record.finished_at)
         record.errors[:base] << 'Finish time can not be before race start'
       end
 
       # Reject if `forfeited_at` is already set
       if record.finished_at.present? && record.forfeited_at.present?
-        record.errors[:finished_at] << 'Canont finish a race you have already forfeited'
+        record.errors[:finished_at] << 'Cannot finish a race you have already forfeited'
       end
     end
 
@@ -52,13 +52,19 @@ class EntrantValidator < ActiveModel::Validator
       end
 
       # Reject times before the race start time
-      if record.forfeited_at.present? && record.raceable.started_at > record.forfeited_at
+      if type == 'forfeit' && (record.raceable.started_at.nil? || record.raceable.started_at > record.forfeited_at)
         record.errors[:base] << 'Forfeit time can not be before race start'
       end
 
       # Reject if `finished_at` is already set
       if record.forfeited_at.present? && record.finished_at.present?
         record.errors[:forfeited_at] << 'Cannot forfeit a race you have already finished'
+      end
+    end
+
+    if record.run_id_changed?
+      if !record.run_id.nil? && Run.find(record.run_id).user != record.user
+        record.errors[:run_id] << 'Run and Entrant must be owned by the same user'
       end
     end
   end

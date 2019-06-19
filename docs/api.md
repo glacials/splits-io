@@ -326,6 +326,7 @@ If a `historic=1` param is included in the request, one additional field will be
 |------------:|:-------------------------|:------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `histories` | array of History objects | never | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history. |
 
+#### History
 History objects have the following format.
 
 | Field                  | Type   | Null? | Description                                              |
@@ -435,6 +436,15 @@ livesplit-core, documented in the [FAQ][faq].
 [exchange-format]: /public/schema
 [faq]: https://splits.io/faq#programs
 
+#### Replacing source files
+Occasionally you may want to update a run's source file to a newer version, such as when a runner splits and you are
+reporting splits in realtime (like in a race). You can do this using an identical two-request system to above but
+changing your method and path to
+```http
+PUT https://splits.io/api/v4/run/:run/source_file
+```
+and following the same steps as above to upload to S3. Splits.io will automatically parse the new file and update the
+run.
 </details>
 
 <details>
@@ -732,6 +742,7 @@ exists.
 | `created_at`   | string           | never                              | The time and date at which this entrant was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at`   | string           | never                              | The time and date at which this entrant was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `user`         | [Runner][runner] | never                              | The user represented by this Entrant.                                                                                        |
+| `run`          | [Run][run]       | when not supplied by the timer     | The Run linked to the current Entrant. It has more detailed info about this runner's run, such as splits and history.        |
 </details>
 
 <details>
@@ -856,15 +867,15 @@ This endpoint sends a Chat Message to a raceable. The user and entrant fields wi
 parameter which should contain the message that you wish to post.
 </details>
 
-[iso8601]: https://en.wikipedia.org/wiki/ISO_8601
-[authentication]: #authentication--authorization
-[run]: #run
-[segment]: #segment
-[runner]: #runner
-[game]: #game
-[category]: #category
-[uploading]: #uploading
-[raceable]: #race-bingo-randomizer
-[entrant]: #entrant
 [attachment]: #attachment
+[authentication]: #authentication--authorization
+[category]: #category
 [chat-message]: #chat-message
+[entrant]: #entrant
+[game]: #game
+[iso8601]: https://en.wikipedia.org/wiki/ISO_8601
+[raceable]: #race-bingo-randomizer
+[run]: #run
+[runner]: #runner
+[segment]: #segment
+[uploading]: #uploading

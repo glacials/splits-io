@@ -26,7 +26,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
       end
 
       it 'renders an entrant schema' do
-        # expect(response.body).to match_json_schema(:entrant)
+        expect(response.body).to match_json_schema(:entrant)
       end
     end
   end
@@ -65,14 +65,16 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         context 'with no parameters' do
           subject(:response) { patch :update, params: {raceable: race.id} }
 
-          it 'returns a 400' do
-            expect(response).to have_http_status(:bad_request)
+          it 'returns a 200' do
+            expect(response).to have_http_status(:ok)
           end
         end
 
         context 'with 1 parameter to update' do
           let(:time) { Time.now.utc }
-          subject(:response) { patch :update, params: {raceable: race.id, entrant: {readied_at: time.iso8601(3)}, format: :json} }
+          subject(:response) do
+            patch :update, params: {raceable: race.id, entrant: {readied_at: time.iso8601(3)}, format: :json}
+          end
 
           it 'returns a 200' do
             expect(response).to have_http_status(:ok)
@@ -87,7 +89,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
           end
         end
 
-        context "who unready's" do
+        context 'who unreadies' do
           subject(:response) { patch :update, params: {raceable: race.id, entrant: {readied_at: nil}, format: :json} }
           before { entrant.update(readied_at: Time.now.utc) }
 
@@ -104,14 +106,41 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
           end
         end
 
-        context 'setting both forfeited and entrant' do
+        context 'setting both forfeited and finished' do
           let(:time) { Time.now.utc }
-          subject(:response) { patch :update, params: {raceable: race.id, entrant: {readied_at: time.iso8601(3)}, format: :json} }
-
-          before { race.update(started_at: Time.now.utc - 30.seconds) }
+          subject(:response) do
+            patch :update, params: {
+              raceable: race.id,
+              entrant: {forfeited_at: time.iso8601(3), finished_at: time.iso8601(3)},
+              format: :json,
+            }
+          end
 
           it 'returns a 400' do
             expect(response).to have_http_status(:bad_request)
+          end
+        end
+
+        context 'setting run_id' do
+          let(:run) { FactoryBot.create(:run, user: entrant.user) }
+          subject(:response) do
+            patch :update, params: {
+              raceable: race.id,
+              entrant: {run_id: run.id36},
+              format: :json
+            }
+          end
+
+          it 'returns a 200' do
+            expect(response).to have_http_status(:ok)
+          end
+
+          it 'renders an entrant schema' do
+            expect(response.body).to match_json_schema(:entrant)
+          end
+
+          it 'sets the correct run' do
+            expect(JSON.parse(response.body)['entrant']['run']['id']).to eq(run.id36)
           end
         end
       end

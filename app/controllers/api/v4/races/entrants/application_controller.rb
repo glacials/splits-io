@@ -3,6 +3,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   before_action :set_user
   before_action :set_raceable
   before_action :check_permission, only: %i[create]
+  before_action :massage_params
   before_action :set_entrant, only: %i[show update destroy]
   after_action  :update_race, only: %i[update]
 
@@ -11,7 +12,8 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   end
 
   def create
-    entrant = @raceable.entrants.new(user: current_user)
+    entrant = @raceable.entrants.new(entrant_params)
+    entrant.user = current_user
     if entrant.save
       render status: :created, json: Api::V4::EntrantBlueprint.render(entrant, root: :entrant)
       Api::V4::RaceBroadcastJob.perform_later(@raceable, 'race_entrants_updated', 'A new entrant has joined')
@@ -21,13 +23,22 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
         error:  entrant.errors.full_messages.to_sentence
       }
     end
+  rescue ActionController::ParameterMissing
+    render status: :bad_request, json: {
+      status: :bad_request,
+      error: 'Specifying at least one entrant param is required',
+    }
   end
 
   def update
     if @entrant.update(entrant_params)
       render status: :ok, json: Api::V4::EntrantBlueprint.render(@entrant, root: :entrant)
-      updated = @entrant.saved_changes.keys.reject { |k| k == 'updated_at' }.map { |k| k[0...-3] }.join('and')
-      Api::V4::RaceBroadcastJob.perform_later(@raceable, 'race_entrants_updated', "An entrant has #{updated}")
+      updated = @entrant.saved_changes.keys.reject { |k| k == 'updated_at' }.to_sentence
+      Api::V4::RaceBroadcastJob.perform_later(
+        @raceable,
+        'race_entrants_updated',
+        "An entrant has changed their #{updated}"
+      )
     else
       render status: :bad_request, json: {
         status: :bad_request,
@@ -56,7 +67,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   private
 
   def set_time
-    @time = Time.now.utc
+    @now = Time.now.utc
   end
 
   def check_permission
@@ -74,11 +85,15 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
     render not_found(:entrant)
   end
 
+  def massage_params
+    params[:entrant][:run_id] = Run.find36(params[:entrant][:run_id]).id if params[:entrant].try(:[], :run_id).present?
+  end
+
   def entrant_params
-    params.each do |k, v|
-      params[k] = @time if k[-3, -1] == '_at' && v == 'now'
+    params.select { |k, _| k[-3, -1] == '_at' && v == 'now' }.each do |k, v|
+      params[k] = @now
     end
-    params.require(:entrant).permit(:readied_at, :finished_at, :forfeited_at)
+    params.permit(entrant: [:readied_at, :finished_at, :forfeited_at, :run_id]).fetch(:entrant, {})
   end
 
   def update_race
