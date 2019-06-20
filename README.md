@@ -1,14 +1,34 @@
-# Splits.io
-[![View performance data on Skylight](https://badges.skylight.io/typical/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
-[![View performance data on Skylight](https://badges.skylight.io/problem/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
-[![View performance data on Skylight](https://badges.skylight.io/rpm/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
+<p align="center">
+  <a href="https://splits.io/" rel="noopener">
+    <img src="https://i.imgur.com/PoeNer0.jpg" />
+  </a>
+</p>
 
-Splits.io is a website similar to Pastebin or GitHub Gist, but for splits generated from speedruns rather than text or
-code. It's written in Ruby on Rails.
+<h3 align="center">Splits.io</h3>
 
-Splits.io supports uploading splits from any timer that supports the [Splits.io Exchange Format][exchange] plus many
-proprietary timer formats like LiveSplit, WSplit, Llanfair, and more. A full list of supported timers can be viewed in
-the [FAQ][faq].
+<p align="center">
+	
+  [![View performance data on Skylight](https://badges.skylight.io/typical/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
+  [![View performance data on Skylight](https://badges.skylight.io/problem/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
+  [![View performance data on Skylight](https://badges.skylight.io/rpm/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
+  [![License](https://img.shields.io/github/license/glacials/splits-io.svg)](/LICENSE)
+  
+</p>
+
+---
+
+<p align="center">
+  A speedrun data store and analysis engine.
+</p>
+
+## About
+Splits.io is how speedrunners improve through data. It gives split-by-split analysis of individual runs, viewed through a
+lens of all runs. On Splits.io, speedrunners share more than their time -- they share their entire history of attempts, successful
+or not, and get feedback on how to improve long-term through statistics and comparisons with themselves and other runners in their
+weight class.
+
+Splits.io works with LiveSplit and more than 15 other speedrunning timers. An auto-generated list
+can be viewed in the [FAQ][faq]; new timers can self-integrate using the [Splits.io Exchange Format][exchange].
 
 [exchange]: /public/schema
 [faq]: https://splits.io/faq#programs
