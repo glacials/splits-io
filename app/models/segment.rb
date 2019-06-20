@@ -14,9 +14,13 @@ class Segment < ApplicationRecord
   def start(timing)
     case timing
     when Run::REAL
-      Duration.new(realtime_start_ms || run.segments.find_by(segment_number: segment_number - 1).end(timing).to_ms)
+      Duration.new(
+        realtime_start_ms || run.segments.find_by(segment_number: segment_number - 1).try(:end, timing).try(:to_ms)
+      )
     when Run::GAME
-      Duration.new(gametime_start_ms || run.segments.find_by(segment_number: segment_number - 1).end(timing).to_ms)
+      Duration.new(
+        gametime_start_ms || run.segments.find_by(segment_number: segment_number - 1).try(:end, timing).try(:to_ms)
+      )
     end
   end
 

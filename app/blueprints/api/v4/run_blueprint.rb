@@ -14,6 +14,10 @@ class Api::V4::RunBlueprint < Blueprinter::Base
     ([] << run.user).compact
   end
 
+  # API v4 promises non-null for these fields
+  field(:realtime_duration_ms) { |run, _| run.realtime_duration_ms || 0 }
+  field(:gametime_duration_ms) { |run, _| run.gametime_duration_ms || 0 }
+
   view :convert do
     field :id do |_, _|
       nil
