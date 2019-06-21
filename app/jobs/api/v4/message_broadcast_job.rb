@@ -13,7 +13,7 @@ class Api::V4::MessageBroadcastJob < ApplicationJob
     ws_msg = Api::V4::WebsocketMessage.new('new_message', msg)
     ws_onsite_msg = Api::V4::WebsocketMessage.new('new_message:html', onsite_msg)
 
-    Api::V4::RaceChannel.broadcast_to(raceable, ws_msg.to_h)
-    ActionCable.server.broadcast("api:v4:race:#{raceable.to_gid_param}:onsite", ws_onsite_msg.to_h)
+    Api::V4::RaceableChannel.broadcast_to(raceable, ws_msg.to_h)
+    ActionCable.server.broadcast("api:v4:raceable:#{raceable.to_gid_param}:onsite", ws_onsite_msg.to_h)
   end
 end

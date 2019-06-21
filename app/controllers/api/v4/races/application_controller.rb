@@ -19,7 +19,7 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
         view:       raceable.type,
         join_token: true
       )
-      Api::V4::GlobalRaceUpdateJob.perform_later(raceable, 'race_created', "A new #{raceable.type} has been created")
+      Api::V4::GlobalRaceableUpdateJob.perform_later(raceable, 'raceable_created', "A new #{raceable.type} has been created")
     else
       render status: :bad_request, json: {
         status: :bad_request,

@@ -24,7 +24,7 @@ class Api::V4::Races::RandomizersController < Api::V4::Races::ApplicationControl
     end
 
     @raceable.attachments.attach(params[:randomizer][:attachments])
-    Api::V4::RaceBroadcastJob.perform_later(@raceable, 'new_attachment', 'The race owner has attached a new file')
+    Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'new_attachment', 'The race owner has attached a new file')
   end
 
   private

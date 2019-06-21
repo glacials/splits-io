@@ -681,12 +681,12 @@ creation and must take place as a separate action afterwards.
 
 **Note**: Races are associated with a Category, while Bingos and Randomizers are associated with a Game.
 
-| Status Codes | Success? | Body Present? | Description                                                                                                       |
-|:-------------|:---------|:--------------|:------------------------------------------------------------------------------------------------------------------|
-| 201          | Yes      | Yes           | Successfully created, a raceable schema will be returned.                                                         |
-| 400          | No       | Yes           | An error occured while creating the raceable. `error` will contain a human-readable error message.                |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                                        |
-| 403          | No       | Yes           | Cannot create raceable with the desired visibility.                                                               |
+| Status Codes | Success? | Body Present? | Description                                                                                        |
+|:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------|
+| 201          | Yes      | Yes           | Successfully created, a raceable schema will be returned.                                          |
+| 400          | No       | Yes           | An error occured while creating the raceable. `error` will contain a human-readable error message. |
+| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                         |
+| 403          | No       | Yes           | Cannot create raceable with the desired visibility.                                                |
 </details>
 
 <details>
@@ -869,6 +869,142 @@ curl -X POST https://splits.io/api/v4/randomizers/:randomizer/chat \
 This endpoint sends a Chat Message to a raceable. The user and entrant fields will be inferred; only pass in a body
 parameter which should contain the message that you wish to post.
 </details>
+
+### Websockets
+Splits.io uses ActionCable for the WebSocket integration. JavaScript users will have the options to use the official
+ActionCable package on NPM to setup their integrations. Each section will be divided into 2 sections, one for using
+ActionCable and one for performing the tasks manually.
+
+When dealing with frames manually, note that every new object level needs to be wrapped in a `JSON.stringify` call if
+sending or `JSON.parse` when receiving.
+
+#### Connecting With ActionCable
+```javascript
+// consumer.js
+import { createConsumer } from "@rails/actioncable"
+
+export default createConsumer("wss://splits.io/api/cable")
+```
+The connection will be automatically established for you when you create a subscription.
+
+#### Connecting Manually
+```javascript
+/* [->] */ websocket = new WebSocket("wss://splits.io/api/cable")
+/* [<-] */ {"type":"welcome"}
+```
+Connecting is as easy as opening the socket.
+
+#### Connection Information
+If you would like to be able to see race updates for secret races, then supply a `access_token` parameter as well to
+authenticate as a user. Alternatively, `join_token` may be passed into the Raceable Subscription instead.
+
+Once you have connected you will receive a ping frame every 3 seconds from the server. A ping frame looks like this:
+`{"type":"ping","message":1561095929}`
+The `message` key will be a timestamp from the server. You should assume that if you do not receive any pings for an
+extended period of time that the connection has been lost. If you are using ActionCable disconnects will be handled
+for you.
+
+#### Subscribing With ActionCable
+```javascript
+// Assuming consuer.js is in the same folder from above
+import consumer from './consumer'
+
+consumer.subscriptions.create('Api::V4::GlobalRaceableChannel', {
+  connection() {
+    // Called when the subscription is ready for use on the server
+  },
+
+  disconnected() {
+    // Called when the subscription has been terminated by the server
+  },
+
+  received(data) {
+    switch(data.type) {
+      // Handle any status messages you wish to here
+      case '...':
+        ''
+        break;
+    }
+  }
+})
+
+consumer.subscriptions.create({
+    channel:       'Api::V4::RaceableChannel',
+    raceable_id:   "c198a25f-9f8a-43cd-92ab-472a952f9336",
+    raceable_type: "race"
+  }, {
+    connected: () => {
+      // Called when the subscription is ready for use on the server
+    },
+
+    disconnected: () => {
+      // Called when the subscription has been terminated by the server
+    },
+
+    received: (data) => {
+      switch(data.type) {
+        // Handle any status messages you wish to here
+        case '...':
+          break
+      }
+    }
+  })
+```
+##### Subscribing Manually
+```javascript
+// Global Raceable Channel subscription
+/* [->] */ websocket.send(JSON.stringify({command: 'subscribe', identifier: JSON.stringify({channel: 'Api::V4::GlobalRaceableChannel'})}))
+/* [<-] */ {"identifier":"{\"channel\":\"Api::V4::GlobalRaceableChannel\"}","type":"confirm_subscription"}
+
+// Individual Raceable subscription (join_token is optional here)
+/* [->] */ websocket.send(JSON.stringify({command: 'subscribe', identifier: JSON.stringify({channel: 'Api::V4::RaceableChannel', raceable_id: "11902182-aead-44c6-a7b8-e526951564b1", raceable_type: "race", join_token: "hzT5Fp6tX96wt2omLmRn4RHT"})}))
+/* [<-] */ {"identifier":"{\"channel\":\"Api::V4::RaceableChannel\",\"raceable_id\":\"11902182-aead-44c6-a7b8-e526951564b1\",\"raceable_type\":\"race\",\"join_token\":\"hzT5Fp6tX96wt2omLmRn4RHT\"}","type":"confirm_subscription"}
+```
+
+
+#### Subscription Information
+The global raceable channel will provide top level information about all raceables that are currently active. This is
+useful if you want to have a listing with basic information about all the current items. If `state: 1` is passed with
+the indentifier, you will also receive the current state of all the raceables in a separate frame.
+
+The individual raceable channes provide information about every update on the race. If `state: 1` is also passed in
+with the indentifier, a raceable schema will also be sent in a separate frame.
+
+The basic layout of all data frames is as follows:
+```JSON
+{"identifier":"{\"channel\":\"Api::V4::RaceableChannel\",\"raceable_id\":\"63dc9840-6f5d-46c9-812c-45d4addd92f0\",\"raceable_type\":\"bingo\",\"join_token\":\"VKAqM7D3KLgFMazLMzW7ZXbz\"}","message":{"type":"new_message","data":{"message":"A new message has been created","chat_message":{"body":"you're going down scum!","created_at":"2019-06-21T11:48:36.890Z","entrant":true,"updated_at":"2019-06-21T11:48:36.890Z","user":{"avatar":"https://static-cdn.jtvnw.net/jtv_user_pictures/78b63ce9-f643-4009-aa34-af21928d5916-profile_image-300x300.png","created_at":"2019-04-04T21:01:34.224Z","display_name":"BatedUrGonnaDie","id":"1","name":"BatedUrGonnaDie","twitch_id":"18946907","updated_at":"2019-04-04T21:01:34.224Z"}}}}}
+```
+
+The identifier key is the same response as the one you received from the subscription.
+The message key will contain a JSON object that looks like the object below. This object is where all new information is stored.
+*Note: This object will not need extra deserialization*
+```JSON
+{
+    type: "string type identifier",
+    data: {
+        message: "human-readable message here",
+        ...
+    }
+}
+```
+It is possible to have more keys in the `data` attribute, and most frame types will have more. Below is a list of all
+possible `types`s and what extra keys they have and the data they contain.
+
+| Type                        | Subscription          | Description                                                        | Extra Fields?                                                                       |
+|:----------------------------|:----------------------|:-------------------------------------------------------------------|:------------------------------------------------------------------------------------|
+| fatal_error                 | both                  | An error occured when processing the message                       | no                                                                                  |
+| raceable_start_scheduled    | both                  | The raceable is starting in a few seconds                          | no                                                                                  |
+| raceable_ended              | both                  | The raceable has finished                                          | no                                                                                  |
+| raceable_entrants_updated   | both                  | There is a change with one of the entrants (new, updated, deleted) | no                                                                                  |
+| global_state                | GlobalRaceableChannel | `state: 1` is provided to Global Subscription                      | `races`, `bingos`, and `randomizers` which contains the respective raceable schemas |
+| raceable_created            | GlobalRaceableChannel | A new raceable has been created                                    | `raceable` which contains a new raceable schema                                     |
+| raceable_updated            | RaceableChannel       | The bingo card or seed has been updated                            | `raceable` which contains a new raceable schema                                     |
+| raceable_not_found          | RaceableChannel       | No raceable found for the given ID                                 | `raceable` which contains a new raceable schema                                     |
+| raceable_invalid_join_token | RaceableChannel       | The join token is not valid for the raceable                       | `raceable` which contains a new raceable schema                                     |
+| raceable_state              | RaceableChannel       | `state: 1` is provided to the Raceable Subscription                | `raceable` which contains a new raceable schema                                     |
+| new_message                 | RaceableChannel       | There is a new message for the race                                | `chat_message` which contains a new chat message schema                             |
+| new_attachment              | RaceableChannel       | There is a new randomizer attachment                               | `raceable` which contains a new raceable schema                                     |
+
 
 [attachment]: #attachment
 [authentication]: #authentication--authorization

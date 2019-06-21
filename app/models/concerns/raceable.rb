@@ -32,7 +32,6 @@ module Raceable
     # unabandoned returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour
     # or have more than 2 entrants. this includes races that have finished (excluding secret races)
     def self.unabandoned
-      # TODO: remove secret races from this
       case name # self.name refers to the class including this concern
       when 'Race'
         where('races.updated_at > ?', 1.hour.ago)
@@ -69,24 +68,26 @@ module Raceable
       ].compact.max
     end
 
-    # Races are "locked" 30 minutes after they end to stop new messages coming in
+    # Raceables are "locked" 30 minutes after they end to stop new messages coming in
     def locked?
       finished? && Time.now.utc > finished_at + 30.minutes
     end
 
+    # potentially starts the raceable if all entrants are now ready
     def maybe_start!
       return if started? || entrants.where(readied_at: nil).any? || entrants.count < 2
 
       update(started_at: Time.now.utc + 20.seconds)
-      Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', "The #{type} is starting soon")
-      Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_start_scheduled', 'A race is starting soon')
+      Api::V4::RaceableBroadcastJob.perform_later(self, 'raceable_start_scheduled', "The #{type} is starting soon")
+      Api::V4::GlobalRaceableUpdateJob.perform_later(self, 'raceable_start_scheduled', 'A race is starting soon')
     end
 
+    # potentially ends the raceable if all entrants are done
     def maybe_end!
       return if finished? || entrants.where(finished_at: nil, forfeited_at: nil).any?
 
-      Api::V4::RaceBroadcastJob.perform_later(self, 'race_ended', "The #{type} has ended")
-      Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_ended', 'A race has ended')
+      Api::V4::RaceableBroadcastJob.perform_later(self, 'raceable_ended', "The #{type} has ended")
+      Api::V4::GlobalRaceableUpdateJob.perform_later(self, 'raceable_ended', 'A race has ended')
     end
 
     def entrant_for_user(user)
@@ -95,6 +96,10 @@ module Raceable
       entrants.find_by(user_id: user.id)
     end
 
+    # checks if a given user should be able to act on a given raceable, returning true if any of the following pass
+    # the user is an entrant in the race or is the race creator
+    # the race status is not public and the provided token is correct
+    # the race is public and the user is not in another race
     def joinable?(user: nil, token: nil)
       result = false
       result = true if entrant_for_user(user).present? || belongs_to?(user)

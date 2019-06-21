@@ -45,10 +45,10 @@ export default {
     }
 
     raceSubscription = consumer.subscriptions.create({
-      channel:    'Api::V4::RaceChannel',
-      race_id:    this.raceableId,
-      race_type:  this.raceableType,
-      join_token: (window.gon.race || {}).join_token
+      channel:       'Api::V4::RaceableChannel',
+      raceable_id:   this.raceableId,
+      raceable_type: this.raceableType,
+      join_token:    (window.gon.race || {}).join_token
     }, {
       connected: () => {
         const alert = document.getElementById('disconnected-alert')
@@ -65,24 +65,24 @@ export default {
 
       received: (data) => {
         switch(data.type) {
-          case 'race_entrants_updated:html':
+          case 'raceable_entrants_updated:html':
             document.getElementById('entrants-table').innerHTML = data.data.entrants_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break
 
-          case 'race_start_scheduled:html':
+          case 'raceable_start_scheduled:html':
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break
-          case 'race_start_scheduled':
-            this.raceable = data.data.race
-            const duration = moment.duration(moment(data.data.race.started_at).valueOf() - ts.now())
+          case 'raceable_start_scheduled':
+            this.raceable = data.data.raceable
+            const duration = moment.duration(moment(data.data.raceable.started_at).valueOf() - ts.now())
             const startAlert = createAlert('warning', `Race starting in ${duration.format('s [seconds]')}!`)
-            startAlert.setAttribute('data-start', data.data.race.started_at)
+            startAlert.setAttribute('data-start', data.data.raceable.started_at)
             document.getElementById('alerts').appendChild(startAlert)
             countdown(startAlert)
             break
 
-          case 'race_ended:html':
+          case 'raceable_ended:html':
             document.getElementById('entrants-table').innerHTML = data.data.entrants_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break

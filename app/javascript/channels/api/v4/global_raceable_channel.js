@@ -1,7 +1,7 @@
 import consumer from '../../consumer'
 
 document.addEventListener('turbolinks:load', () => {
-  consumer.subscriptions.create('Api::V4::GlobalRaceChannel', {
+  consumer.subscriptions.create('Api::V4::GlobalRaceableChannel', {
     connection() {
       // Called when the subscription is ready for use on the server
     },

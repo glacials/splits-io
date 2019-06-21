@@ -44,17 +44,12 @@ class Entrant < ApplicationRecord
     Duration.new(nil)
   end
 
-  def error_status!
-    errors.delete(:status_message).try(:first)
-  end
-
   private
 
   def validate_destroy
     return unless raceable.started?
 
     errors[:base] << 'Cannot leave race once it has started'
-    errors[:status_message] << 'race_started_error'
     throw(:abort)
   end
 end

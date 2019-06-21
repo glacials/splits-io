@@ -7,7 +7,7 @@ import { accessTokenKey } from '../token'
 
 function getWebsocketURL() {
   const token = localStorage.getItem(accessTokenKey)
-  let url = '/cable'
+  let url = '/api/cable'
   if (token) {
     url += `?access_token=${token}`
   }

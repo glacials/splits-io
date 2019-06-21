@@ -16,7 +16,8 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
     entrant.user = current_user
     if entrant.save
       render status: :created, json: Api::V4::EntrantBlueprint.render(entrant, root: :entrant)
-      Api::V4::RaceBroadcastJob.perform_later(@raceable, 'race_entrants_updated', 'A new entrant has joined')
+      Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'raceable_entrants_updated', 'A new entrant has joined')
+      Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entrants_updated', 'A new entrant has joined')
     else
       render status: :bad_request, json: {
         status: :bad_request,
@@ -26,7 +27,7 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   rescue ActionController::ParameterMissing
     render status: :bad_request, json: {
       status: :bad_request,
-      error: 'Specifying at least one entrant param is required',
+      error:  'Specifying at least one entrant param is required'
     }
   end
 
@@ -34,9 +35,9 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
     if @entrant.update(entrant_params)
       render status: :ok, json: Api::V4::EntrantBlueprint.render(@entrant, root: :entrant)
       updated = @entrant.saved_changes.keys.reject { |k| k == 'updated_at' }.to_sentence
-      Api::V4::RaceBroadcastJob.perform_later(
+      Api::V4::RaceableBroadcastJob.perform_later(
         @raceable,
-        'race_entrants_updated',
+        'raceable_entrants_updated',
         "An entrant has changed their #{updated}"
       )
     else
@@ -55,7 +56,8 @@ class Api::V4::Races::Entrants::ApplicationController < Api::V4::ApplicationCont
   def destroy
     if @entrant.destroy
       head :reset_content
-      Api::V4::RaceBroadcastJob.perform_later(@raceable, 'race_entrants_updated', 'An entrant has left the race')
+      Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'raceable_entrants_updated', 'An entrant has left')
+      Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entrants_updated', 'An entrant has left')
     else
       render status: :conflict, json: {
         status: :conflict,
