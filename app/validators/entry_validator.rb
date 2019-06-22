@@ -1,12 +1,12 @@
-class EntrantValidator < ActiveModel::Validator
+class EntryValidator < ActiveModel::Validator
   def validate(record)
     if record.new_record?
-      # Reject new entrant if race has already started
+      # Reject new entry if race has already started
       if record.raceable.started?
         record.errors[:base] << 'Cannot join race that has already started'
       end
 
-      # Reject if entrant's user is in another active race
+      # Reject if entry's user is in another active race
       if record.user.in_race?
         record.errors[:base] << 'Cannot join more than one race at a time'
       end
@@ -64,7 +64,7 @@ class EntrantValidator < ActiveModel::Validator
 
     if record.run_id_changed?
       if !record.run_id.nil? && Run.find(record.run_id).user != record.user
-        record.errors[:run_id] << 'Run and Entrant must be owned by the same user'
+        record.errors[:run_id] << 'Run and Entry must be owned by the same user'
       end
     end
   end

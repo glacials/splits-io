@@ -1,9 +1,9 @@
-class AddRunToEntrants < ActiveRecord::Migration[6.0]
+class AddRunToEntries < ActiveRecord::Migration[6.0]
   disable_ddl_transaction!
 
   def change
-    add_reference :entrants, :run, index: false, null: true
-    add_index :entrants, :run_id, algorithm: :concurrently
+    add_reference :entries, :run, index: false, null: true
+    add_index :entries, :run_id, algorithm: :concurrently
 
     # Add null: true to allow segments that haven't been completed yet (in-progress runs). Segment gametime columns and
     # columns in the runs table are already nullable.

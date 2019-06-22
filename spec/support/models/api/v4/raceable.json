@@ -9,7 +9,7 @@
     "updated_at",
     "category",
     "owner",
-    "entrants"
+    "entries"
   ],
   "properties": {
     "id": {
@@ -48,10 +48,10 @@
     "owner": {
       "$ref": "../../../models/api/v4/runner.json"
     },
-    "entrants": {
+    "entries": {
       "type": "array",
       "items": {
-        "$ref": "../../../models/api/v4/entrant.json"
+        "$ref": "../../../models/api/v4/entry.json"
       }
     },
     "chat_messages": {

@@ -15,7 +15,7 @@ class Api::V4::WebsocketMessage
     raceable_start_scheduled
     raceable_ended
 
-    raceable_entrants_updated
+    raceable_entries_updated
 
     new_message
 

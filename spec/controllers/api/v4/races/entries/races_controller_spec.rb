@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V4::Races::Entrants::RacesController do
+RSpec.describe Api::V4::Races::Entries::RacesController do
   describe '#create' do
     let(:race) { FactoryBot.create(:race) }
 
@@ -25,8 +25,8 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         expect(response).to have_http_status(:created)
       end
 
-      it 'renders an entrant schema' do
-        expect(response.body).to match_json_schema(:entrant)
+      it 'renders an entry schema' do
+        expect(response.body).to match_json_schema(:entry)
       end
     end
   end
@@ -34,7 +34,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
   describe '#update' do
     let(:race) { FactoryBot.create(:race) }
     let(:user) { FactoryBot.create(:user) }
-    let(:entrant) { FactoryBot.create(:entrant, raceable: race, user: user) }
+    let(:entry) { FactoryBot.create(:entry, raceable: race, user: user) }
 
     context 'with no authorization header' do
       subject(:response) { patch :update, params: {raceable: race.id, readied_at: Time.now.utc} }
@@ -52,15 +52,15 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         request.headers['Authorization'] = "Bearer #{token.token}"
       end
 
-      context 'with no entrant' do
+      context 'with no entry' do
         subject(:response) { patch :update, params: {raceable: race.id} }
         it 'returns a 404' do
           expect(response).to have_http_status(:not_found)
         end
       end
 
-      context 'with an entrant present' do
-        before { entrant }
+      context 'with an entry present' do
+        before { entry }
 
         context 'with no parameters' do
           subject(:response) { patch :update, params: {raceable: race.id} }
@@ -73,36 +73,36 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         context 'with 1 parameter to update' do
           let(:time) { Time.now.utc }
           subject(:response) do
-            patch :update, params: {raceable: race.id, entrant: {readied_at: time.iso8601(3)}, format: :json}
+            patch :update, params: {raceable: race.id, entry: {readied_at: time.iso8601(3)}, format: :json}
           end
 
           it 'returns a 200' do
             expect(response).to have_http_status(:ok)
           end
 
-          it 'renders an entrant schema' do
-            expect(response.body).to match_json_schema(:entrant)
+          it 'renders an entry schema' do
+            expect(response.body).to match_json_schema(:entry)
           end
 
           it 'matches the given time' do
-            expect(JSON.parse(response.body)['entrant']['readied_at']).to eq(time.iso8601(3))
+            expect(JSON.parse(response.body)['entry']['readied_at']).to eq(time.iso8601(3))
           end
         end
 
         context 'who unreadies' do
-          subject(:response) { patch :update, params: {raceable: race.id, entrant: {readied_at: nil}, format: :json} }
-          before { entrant.update(readied_at: Time.now.utc) }
+          subject(:response) { patch :update, params: {raceable: race.id, entry: {readied_at: nil}, format: :json} }
+          before { entry.update(readied_at: Time.now.utc) }
 
           it 'returns a 200' do
             expect(response).to have_http_status(:ok)
           end
 
-          it 'renders an entrant schema' do
-            expect(response.body).to match_json_schema(:entrant)
+          it 'renders an entry schema' do
+            expect(response.body).to match_json_schema(:entry)
           end
 
           it 'has a null readied_at' do
-            expect(JSON.parse(response.body)['entrant']['readied_at']).to eq(nil)
+            expect(JSON.parse(response.body)['entry']['readied_at']).to eq(nil)
           end
         end
 
@@ -111,7 +111,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
           subject(:response) do
             patch :update, params: {
               raceable: race.id,
-              entrant: {forfeited_at: time.iso8601(3), finished_at: time.iso8601(3)},
+              entry: {forfeited_at: time.iso8601(3), finished_at: time.iso8601(3)},
               format: :json,
             }
           end
@@ -122,11 +122,11 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         end
 
         context 'setting run_id' do
-          let(:run) { FactoryBot.create(:run, user: entrant.user) }
+          let(:run) { FactoryBot.create(:run, user: entry.user) }
           subject(:response) do
             patch :update, params: {
               raceable: race.id,
-              entrant: {run_id: run.id36},
+              entry: {run_id: run.id36},
               format: :json
             }
           end
@@ -135,12 +135,12 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
             expect(response).to have_http_status(:ok)
           end
 
-          it 'renders an entrant schema' do
-            expect(response.body).to match_json_schema(:entrant)
+          it 'renders an entry schema' do
+            expect(response.body).to match_json_schema(:entry)
           end
 
           it 'sets the correct run' do
-            expect(JSON.parse(response.body)['entrant']['run']['id']).to eq(run.id36)
+            expect(JSON.parse(response.body)['entry']['run']['id']).to eq(run.id36)
           end
         end
       end
@@ -150,7 +150,7 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
   describe '#destroy' do
     let(:race) { FactoryBot.create(:race) }
     let(:user) { FactoryBot.create(:user) }
-    let(:entrant) { FactoryBot.create(:entrant, raceable: race, user: user) }
+    let(:entry) { FactoryBot.create(:entry, raceable: race, user: user) }
 
     context 'with no authorization header' do
       subject(:response) { delete :destroy, params: {raceable: race.id} }
@@ -168,14 +168,14 @@ RSpec.describe Api::V4::Races::Entrants::RacesController do
         request.headers['Authorization'] = "Bearer #{token.token}"
       end
 
-      context 'with no entrant' do
+      context 'with no entry' do
         it 'returns a 404' do
           expect(response).to have_http_status(:not_found)
         end
       end
 
-      context 'with an entrant present' do
-        before { entrant }
+      context 'with an entry present' do
+        before { entry }
         it 'returns a 205' do
           expect(response).to have_http_status(:reset_content)
         end

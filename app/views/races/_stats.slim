@@ -9,12 +9,12 @@
             ' Invite-only
           - else
             ' Secret race
-        - if !race.started? && race.entrants.count <= 1
+        - if !race.started? && race.entries.count <= 1
           span.statcard-desc class=statcard_class(race)
-            ' Need #{2 - race.entrants.count} more
+            ' Need #{2 - race.entries.count} more
         - else
           span.statcard-desc class=statcard_class(race)
-            ' #{race.entrants.ready.count} / #{race.entrants.count} ready
+            ' #{race.entries.ready.count} / #{race.entries.count} ready
       - if race.started? && !race.finished?
         h2.statcard-number class=statcard_class(race) data={ms: ((Time.now.utc - race.started_at) * 1000).floor}
           = Duration.new(((Time.now.utc - race.started_at) * 1000).floor).format
@@ -26,17 +26,17 @@
     h2.statcard-number = race.visibility.titleize
     span.statcard-desc Visibility
   .col-sm-6.col-xl-4: .statcard.p-3
-    h2.statcard-number = race.entrants.count
-    span.statcard-desc Entrants
+    h2.statcard-number = race.entries.count
+    span.statcard-desc Entries
   .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.type.capitalize
     span.statcard-desc Type
-  - if race.entrants.any?
+  - if race.entries.any?
     .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
-        = race.entrants.last.user
+        = race.entries.last.user
       span.statcard-desc Predicted winner
     .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
-        = (Entrant.where(user: race.users).where.not(forfeited_at: nil).count / Entrant.where(user: race.users).count * race.entrants.count).floor
+        = (Entry.where(user: race.users).where.not(forfeited_at: nil).count / Entry.where(user: race.users).count * race.entries.count).floor
       span.statcard-desc Predicted forfeits

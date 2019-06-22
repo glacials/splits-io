@@ -117,10 +117,10 @@ html
           small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
           ' Help us out by taking the 2019 Splits I/O survey!
-      - entrant = current_user.present? ? current_user.entrants.active.first : nil
-      - if entrant.present? && request.path != polymorphic_path(entrant.raceable)
+      - entry = current_user.present? ? current_user.entries.active.first : nil
+      - if entry.present? && request.path != polymorphic_path(entry.raceable)
         article
-          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entrant.raceable)
+          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entry.raceable)
             => icon('fas', 'flag-checkered')
             | Return to race
       header#header = yield(:header)

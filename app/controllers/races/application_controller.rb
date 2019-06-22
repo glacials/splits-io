@@ -19,7 +19,7 @@ class Races::ApplicationController < ApplicationController
   def set_race_gon
     return if @race.locked?
 
-    token = @race.entrant_for_user(current_user).present? ? @race.join_token : nil
+    token = @race.entry_for_user(current_user).present? ? @race.join_token : nil
     gon.race = {
       id:         @race.id,
       type:       @race.type,
@@ -45,7 +45,7 @@ class Races::ApplicationController < ApplicationController
   # shorten_url cuts the race ID down to its shortest unique form, and strips the join token param if it's not needed
   # (public race or the user already joined).
   def shorten_url
-    if @race.visibility == :public || @race.entrant_for_user(current_user).present?
+    if @race.visibility == :public || @race.entry_for_user(current_user).present?
       desired_fullpath = polymorphic_path(@race)
       redirect_to desired_fullpath if desired_fullpath != request.fullpath
       return

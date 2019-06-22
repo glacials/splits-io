@@ -6,8 +6,8 @@ module Raceable
     enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
 
     belongs_to :owner, foreign_key: :user_id, class_name: 'User'
-    has_many :entrants, as: :raceable, dependent: :destroy
-    has_many :users, through: :entrants
+    has_many :entries, as: :raceable, dependent: :destroy
+    has_many :users, through: :entries
     has_many :chat_messages, as: :raceable, dependent: :destroy
 
     has_secure_token :join_token
@@ -16,21 +16,21 @@ module Raceable
     scope :unstarted,  -> { where(started_at: nil) }
     scope :ongoing,    -> { started.unfinished }
 
-    after_create { entrants.create(user: owner) }
+    after_create { entries.create(user: owner) }
 
     def self.unfinished
-      # Distinct call will not return raceables with no entrants, so union all raceables with 0 entrants
-      joins(:entrants).where(entrants: {finished_at: nil, forfeited_at: nil}).distinct.union(
-        left_outer_joins(:entrants).where(entrants: {id: nil})
+      # Distinct call will not return raceables with no entries, so union all raceables with 0 entries
+      joins(:entries).where(entries: {finished_at: nil, forfeited_at: nil}).distinct.union(
+        left_outer_joins(:entries).where(entries: {id: nil})
       )
     end
 
     def self.finished
-      joins(:entrants).where.not(entrants: {finished_at: nil}).or(joins(:entrants).where.not(entrants: {forfeited_at: nil})).group(:id)
+      joins(:entries).where.not(entries: {finished_at: nil}).or(joins(:entries).where.not(entries: {forfeited_at: nil})).group(:id)
     end
 
-    # unabandoned returns races that have had activity (e.g. creation, new entrant, etc.) in the last hour
-    # or have more than 2 entrants. this includes races that have finished (excluding secret races)
+    # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
+    # or have more than 2 entries. this includes races that have finished (excluding secret races)
     def self.unabandoned
       case name # self.name refers to the class including this concern
       when 'Race'
@@ -40,7 +40,7 @@ module Raceable
       when 'Bingo'
         where('bingos.updated_at > ?', 1.hour.ago)
       end.not_secret_visibility.or(
-        where(id: Entrant.having('count(*) > 1').group(:raceable_id).select(:raceable_id)).not_secret_visibility
+        where(id: Entry.having('count(*) > 1').group(:raceable_id).select(:raceable_id)).not_secret_visibility
       )
     end
 
@@ -58,13 +58,13 @@ module Raceable
     end
 
     def finished?
-      started? && entrants.where(finished_at: nil, forfeited_at: nil).none?
+      started? && entries.where(finished_at: nil, forfeited_at: nil).none?
     end
 
     def finished_at
       [
-        entrants.where.not(finished_at: nil).maximum(:finished_at),
-        entrants.where.not(forfeited_at: nil).maximum(:forfeited_at)
+        entries.where.not(finished_at: nil).maximum(:finished_at),
+        entries.where.not(forfeited_at: nil).maximum(:forfeited_at)
       ].compact.max
     end
 
@@ -75,7 +75,7 @@ module Raceable
 
     # potentially starts the raceable if all entrants are now ready
     def maybe_start!
-      return if started? || entrants.where(readied_at: nil).any? || entrants.count < 2
+      return if started? || entries.where(readied_at: nil).any? || entries.count < 2
 
       update(started_at: Time.now.utc + 20.seconds)
       Api::V4::RaceableBroadcastJob.perform_later(self, 'raceable_start_scheduled', "The #{type} is starting soon")
@@ -84,16 +84,16 @@ module Raceable
 
     # potentially ends the raceable if all entrants are done
     def maybe_end!
-      return if finished? || entrants.where(finished_at: nil, forfeited_at: nil).any?
+      return if finished? || entries.where(finished_at: nil, forfeited_at: nil).any?
 
       Api::V4::RaceableBroadcastJob.perform_later(self, 'raceable_ended', "The #{type} has ended")
       Api::V4::GlobalRaceableUpdateJob.perform_later(self, 'raceable_ended', 'A race has ended')
     end
 
-    def entrant_for_user(user)
+    def entry_for_user(user)
       return nil if user.nil?
 
-      entrants.find_by(user_id: user.id)
+      entries.find_by(user_id: user.id)
     end
 
     # checks if a given user should be able to act on a given raceable, returning true if any of the following pass
@@ -102,7 +102,7 @@ module Raceable
     # the race is public and the user is not in another race
     def joinable?(user: nil, token: nil)
       result = false
-      result = true if entrant_for_user(user).present? || belongs_to?(user)
+      result = true if entry_for_user(user).present? || belongs_to?(user)
       result = true if (invite_only_visibility? || secret_visibility?) && token == join_token
       result = true if public_visibility? && !user.try(:in_race?)
 

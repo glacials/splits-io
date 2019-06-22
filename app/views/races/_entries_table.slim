@@ -1,6 +1,6 @@
 .card.shadow.my-3
-  h6.card-header Entrants
-  - if race.entrants.none?
+  h6.card-header Entries
+  - if race.entries.none?
     .card-body: i No one here
   - else
     .table-responsive: table.card-body.table.mb-0
@@ -14,25 +14,25 @@
         th.nowrap.text-center Twitch
         th.nowrap.text-center Linked run
       tbody
-        - race.entrants.includes(:user).order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS LAST').order('readied_at ASC NULLS FIRST').each do |entrant|
+        - race.entries.includes(:user).order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS LAST').order('readied_at ASC NULLS FIRST').each do |entry|
           tr
-            td.nowrap = user_badge(entrant.user)
-            td.nowrap = entrant.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
-            - if entrant.done?
+            td.nowrap = user_badge(entry.user)
+            td.nowrap = entry.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
+            - if entry.done?
               td.text-center.rounded.text-monospace
-                b class=entrant_color(entrant) = entrant_place(entrant)
+                b class=entry_color(entry) = entry_place(entry)
             - else
-              td.text-center: b = entrant_place(entrant)
+              td.text-center: b = entry_place(entry)
             td.nowrap
-              - if entrant.done?
-                b class=entrant_color(entrant) = entrant.duration.format
+              - if entry.done?
+                b class=entry_color(entry) = entry.duration.format
               - else
-                = entrant.duration.format
-              - entrants = entrant.user.entrants
-              - places = entrants.map(&:place)
+                = entry.duration.format
+              - entries = entry.user.entries
+              - places = entries.map(&:place)
             td.nowrap
-              - if entrant.run.present? && race.started?
-                - segment = entrant.run.segments.order(segment_number: :asc).where(realtime_duration_ms: nil).first
+              - if entry.run.present? && race.started?
+                - segment = entry.run.segments.order(segment_number: :asc).where(realtime_duration_ms: nil).first
                 - if segment
                   .badge.badge-dark.mr-2 #{segment}
                   span.count data={ms: ((Time.now.utc - race.started_at) * 1000).floor - segment.start(Run::REAL).to_ms}
@@ -47,14 +47,14 @@
                 span.text-bronze = places.count(3)
               span.badge.badge-dark.tip title='Finishes/Forfeits'
                 => icon('fas', 'receipt')
-                b.text-success = entrants.count(:finished_at)
+                b.text-success = entries.count(:finished_at)
                 span.text-secondary = '/'
-                span.text-danger = entrants.count(:forfeited_at)
+                span.text-danger = entries.count(:forfeited_at)
             td.nowrap.text-center
-              - if entrant.user.twitch.present?
-                a.text-light.tip href=entrant.user.twitch.url title='Watch on Twitch'
+              - if entry.user.twitch.present?
+                a.text-light.tip href=entry.user.twitch.url title='Watch on Twitch'
                   = icon('fab', 'twitch')
             td.nowrap.text-center
-              - if entrant.run.present?
-                a.text-light.tip href=run_path(entrant.run) title='See associated run'
+              - if entry.run.present?
+                a.text-light.tip href=run_path(entry.run) title='See associated run'
                   = icon('fas', 'scroll')

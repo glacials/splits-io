@@ -12,21 +12,21 @@ module RacesHelper
     end
   end
 
-  def entrant_color(entrant)
-    if entrant.forfeited?
+  def entry_color(entry)
+    if entry.forfeited?
       'text-danger'
-    elsif entrant.finished?
+    elsif entry.finished?
       'text-success'
     else
       ''
     end
   end
 
-  def entrant_place(entrant)
-    if entrant.forfeited?
+  def entry_place(entry)
+    if entry.forfeited?
       icon('fas', 'times')
-    elsif entrant.finished?
-      entrant.place.ordinalize
+    elsif entry.finished?
+      entry.place.ordinalize
     else
       '-'
     end

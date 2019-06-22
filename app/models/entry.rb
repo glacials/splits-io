@@ -1,11 +1,11 @@
-class Entrant < ApplicationRecord
-  # On validation error, entrants will have the error key :status_message to indicate what went wrong with the request
+class Entry < ApplicationRecord
+  # On validation error, entries will have the error key :status_message to indicate what went wrong with the request
   # to clients, this should be removed if you plan to display all error messages to users
   belongs_to :raceable, polymorphic: true, touch: true
   belongs_to :user
   belongs_to :run, dependent: :destroy, optional: true
 
-  validates_with EntrantValidator
+  validates_with EntryValidator
   # Validators are not called before destroy's, so manually hook and prevent if race is started
   before_destroy :validate_destroy
 
@@ -34,7 +34,7 @@ class Entrant < ApplicationRecord
   def place
     return nil unless finished?
 
-    raceable.entrants.order(finished_at: :asc).pluck(:id).index(id) + 1
+    raceable.entries.order(finished_at: :asc).pluck(:id).index(id) + 1
   end
 
   def duration

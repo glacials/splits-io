@@ -65,8 +65,8 @@ export default {
 
       received: (data) => {
         switch(data.type) {
-          case 'raceable_entrants_updated:html':
-            document.getElementById('entrants-table').innerHTML = data.data.entrants_html
+          case 'raceable_entries_updated:html':
+            document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break
 
@@ -83,7 +83,7 @@ export default {
             break
 
           case 'raceable_ended:html':
-            document.getElementById('entrants-table').innerHTML = data.data.entrants_html
+            document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break
 

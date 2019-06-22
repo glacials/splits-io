@@ -43,7 +43,7 @@ class AddRacing < ActiveRecord::Migration[6.0]
     end
 
 
-    create_table :entrants, id: :uuid do |t|
+    create_table :entries, id: :uuid do |t|
       t.references :raceable, polymorphic: true, index: true, type: :uuid
       t.belongs_to :user,     foreign_key: true, index: true
 
@@ -58,8 +58,8 @@ class AddRacing < ActiveRecord::Migration[6.0]
       t.belongs_to :raceable,  polymorphic: true, index: true, type: :uuid
       t.belongs_to :user,      foreign_key: true, null: false
 
-      t.boolean :entrant, null: false
-      t.text    :body,    null: false
+      t.boolean :from_entrant, null: false
+      t.text    :body,         null: false
 
       t.timestamps
     end

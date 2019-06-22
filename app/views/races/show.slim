@@ -34,7 +34,7 @@
                     }) do |f|
                       = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
                       = f.submit('Attach', class: 'btn btn-outline-light')
-            #entrants-table = render partial: 'races/entrants_table', locals: {race: @race}
+            #entries-table = render partial: 'races/entries_table', locals: {race: @race}
 
             .card.shadow.my-3#chat-card
               .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'

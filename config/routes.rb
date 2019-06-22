@@ -168,10 +168,10 @@ Rails.application.routes.draw do
         get   "/#{type.pluralize}/:raceable", to: "races/#{type.pluralize}#show",   as: type
         patch "/#{type.pluralize}/:raceable", to: "races/#{type.pluralize}#update"
 
-        get    "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#show"
-        put    "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#create"
-        patch  "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#update"
-        delete "/#{type.pluralize}/:raceable/entrant", to: "races/entrants/#{type.pluralize}#destroy"
+        get    "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#show"
+        put    "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#create"
+        patch  "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#update"
+        delete "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#destroy"
 
         get  "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#index",  as: "#{type}_chat"
         post "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#create", as: "#{type}_chats"

@@ -12,7 +12,7 @@ Resources are identifiable by the following attributes:
 | [Game][game]         | Shortname     | String | Shortname       | `"sms"` `"sm64"` `"portal"`                     |
 | [Category][category] | ID            | String | Base 10 number  | `"312"` `"1456"` `"11"`                         |
 | [Raceable][raceable] | ID            | String | UUID            | `"c198a25f-9f8a-43cd-92ab-472a952f9336"`        |
-| [Entrant][entrant]   | ID            | String | UUID            | `"61db2b30-e024-45c5-b188-e9986ff1c89c"`        |
+| [Entry][Entry]       | ID            | String | UUID            | `"61db2b30-e024-45c5-b188-e9986ff1c89c"`        |
 
 Your code shouldn't care too much about what these attributes actually are. They're all represented as opaque
 unique strings.
@@ -536,17 +536,17 @@ belongs to a Game. Any number of Categories can be associated with a Game.
 ```sh
 curl https://splits.io/api/v4/races
 curl https://splits.io/api/v4/races/:race
-curl https://splits.io/api/v4/races/:race/entrant
+curl https://splits.io/api/v4/races/:race/entry
 curl https://splits.io/api/v4/races/:race/chat
 
 curl https://splits.io/api/v4/bingos
 curl https://splits.io/api/v4/bingos/:bingo
-curl https://splits.io/api/v4/bingos/:bingo/entrant
+curl https://splits.io/api/v4/bingos/:bingo/entry
 curl https://splits.io/api/v4/bingos/:bingo/chat
 
 curl https://splits.io/api/v4/randomizers
 curl https://splits.io/api/v4/randomizers/:randomizer
-curl https://splits.io/api/v4/randomizers/:randomizer/entrant
+curl https://splits.io/api/v4/randomizers/:randomizer/entry
 curl https://splits.io/api/v4/randomizers/:randomizer/chat
 ```
 A Race, Bingo, or Randomizer is a live competition between multiple Runners who share a start time for their run. The
@@ -573,7 +573,7 @@ Nearly all raceable endpoints require user authorization based on the flow descr
 | `created_at`    | string                                 | never                            | The time and date at which this raceable was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at`    | string                                 | never                            | The time and date at which this raceable was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `owner`         | [Runner][runner]                       | never                            | The user who created the raceable.                                                                                            |
-| `entrants`      | array of [Entrants][entrant]           | never                            | All entrants currently in the raceable.                                                                                       |
+| `entries`       | array of [Entries][entry]              | never                            | All entries currently in the raceable.                                                                                       |
 | `chat_messages` | array of [Chat Messages][chat-message] | never                            | Chat messages for the raceable. Only present when fetching the raceable specifically.                                         |
 
 Races have the following extra field:
@@ -619,7 +619,7 @@ curl https://splits.io/api/v4/randomizers
 These endpoints return a list of active raceables of their type. A raceable is active if it
 1. is in progress, or
 2. has had some activity in the last 30 minutes, or
-3. has at least two entrants.
+3. has at least two entries.
 </details>
 
 <details>
@@ -630,8 +630,8 @@ curl https://splits.io/api/v4/races/:race
 curl https://splits.io/api/v4/bingos/:bingo
 curl https://splits.io/api/v4/randomizers/:randomizer
 ```
-These endpoints get information about a specific raceable. To view information about secret raceables, a `join_token`
-parameter must also be provided.
+Get information about a raceable. To view information about secret raceables, a `join_token` parameter must also be
+provided.
 
 | Status Codes | Success? | Body Present? | Description                                                                             |
 |:-------------|:---------|:--------------|:----------------------------------------------------------------------------------------|
@@ -663,19 +663,18 @@ curl -X POST https://splits.io/api/v4/randomizers \
   -H 'Content-Type: application/json' \
   -d '{"game_id": "40", "notes": "Notes go here", "seed": "asdfqweruiop"}'
 ```
-These endpoints open a new raceable. All types can have `notes`, and tier-2+ patrons can use a `visibility` of
-`invite_only` or `secret`.
+Create a new raceable. All types can have `notes`. Tier-2+ patrons can use a `visibility` of `invite_only` or `secret`.
 
 Invite-only raceables can be seen by anyone but only joined with a `join_token`; secret raceables can only be seen or
-joined with a `join_token`. The user creating the raceable is given the join token in response to the race creation
-call; it is that user's responsibility to share the token with others.
-
-A join token can be shared as a user-friendly link:
+joined with a `join_token`. The join token is returned after creation. You can build it into a user-friendly link:
 ```http
 https://splits.io/races/:race?join_token=:join_token
 https://splits.io/bingos/:bingo?join_token=:join_token
 https://splits.io/randomizers/:randomizer?join_token=:join_token
 ```
+This link is effectively the password for the raceable. The raceable owner can always view this link on the raceable's
+page on Splits.io.
+
 The only required parameter between all types is the Game or Category being raced. Attachments cannot be specified at
 creation and must take place as a separate action afterwards.
 
@@ -697,8 +696,9 @@ curl -X PATCH https://splits.io/api/v4/races/:race
 curl -X PATCH https://splits.io/api/v4/bingos/:bingo
 curl -X PATCH https://splits.io/api/v4/randomizers/:randomizer
 ```
-This endpoint can update fields for a raceable. For Bingos this can be used to update the `card_url` parameter. For
-Randomizers this is used to add `attachments` to it such as seed files used in the race.
+Change a raceable. For Bingos this can be used to update the `card_url` parameter. For Randomizers this is used to add
+`attachments` to it such as seed files used in the race. This endpoint requires that the authenticated user is the
+creator of the raceable.
 
 | Status Codes | Success? | Body Present? | Description                                                                                                     |
 |:-------------|:---------|:--------------|:----------------------------------------------------------------------------------------------------------------|
@@ -711,119 +711,143 @@ Randomizers this is used to add `attachments` to it such as seed files used in t
 Raceables cannot be deleted. Once one becomes inactive for 30 minutes it will naturally disappear from the listings.
 </details>
 
-#### Entrant
+#### Entry
 ```sh
-curl           https://splits.io/api/v4/races/:race/entrant
-curl -X PUT    https://splits.io/api/v4/races/:race/entrant
-curl -X PATCH  https://splits.io/api/v4/races/:race/entrant
-curl -X DELETE https://splits.io/api/v4/races/:race/entrant
+curl           https://splits.io/api/v4/races/:race/entry
+curl -X PUT    https://splits.io/api/v4/races/:race/entry
+curl -X PATCH  https://splits.io/api/v4/races/:race/entry
+curl -X DELETE https://splits.io/api/v4/races/:race/entry
 
-curl           https://splits.io/api/v4/bingos/:bingo/entrant
-curl -X PUT    https://splits.io/api/v4/bingos/:bingo/entrant
-curl -X PATCH  https://splits.io/api/v4/bingos/:bingo/entrant
-curl -X DELETE https://splits.io/api/v4/bingos/:bingo/entrant
+curl           https://splits.io/api/v4/bingos/:bingo/entry
+curl -X PUT    https://splits.io/api/v4/bingos/:bingo/entry
+curl -X PATCH  https://splits.io/api/v4/bingos/:bingo/entry
+curl -X DELETE https://splits.io/api/v4/bingos/:bingo/entry
 
-curl           https://splits.io/api/v4/randomizers/:randomizer/entrant
-curl -X PUT    https://splits.io/api/v4/randomizers/:randomizer/entrant
-curl -X PATCH  https://splits.io/api/v4/randomizers/:randomizer/entrant
-curl -X DELETE https://splits.io/api/v4/randomizers/:randomizer/entrant
+curl           https://splits.io/api/v4/randomizers/:randomizer/entry
+curl -X PUT    https://splits.io/api/v4/randomizers/:randomizer/entry
+curl -X PATCH  https://splits.io/api/v4/randomizers/:randomizer/entry
+curl -X DELETE https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-An entrant represents a Runner's participation in a race.
+An Entry represents a Runner's participation in a raceable.
 
-All endpoints in this section require an access token and operate exclusively on the authenticated user's Entrant, if it
-exists.
+All endpoints in this section require an access token and implicitly operate on the authenticated user's Entry, if it
+exists. Entries cannot be retrieved by ID.
 
 <details>
-<summary>Structure of an Entrant</summary>
+<summary>Structure of an Entry</summary>
 
-| Field          | Type             | Null?                              | Description                                                                                                                  |
-|:---------------|:-----------------|:-----------------------------------|:-----------------------------------------------------------------------------------------------------------------------------|
-| `id`           | string           | never                              | The unique ID of the entrant.                                                                                                |
-| `readied_at`   | string           | when the entrant isn't ready       | The time and date at which this entrant readied up in the raceable. This field conforms to [ISO 8601][iso8601].              |
-| `finished_at`  | string           | when the entrant has not finished  | The time and date at which this entrant finished this raceable. This field conforms to [ISO 8601][iso8601].                  |
-| `forfeited_at` | string           | when the entrant has not forfeited | The time and date at which this entrant forfeited from this raceable. This field conforms to [ISO 8601][iso8601].            |
-| `created_at`   | string           | never                              | The time and date at which this entrant was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
-| `updated_at`   | string           | never                              | The time and date at which this entrant was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
-| `user`         | [Runner][runner] | never                              | The user represented by this Entrant.                                                                                        |
-| `run`          | [Run][run]       | when not supplied by the timer     | The Run linked to the current Entrant. It has more detailed info about this runner's run, such as splits and history.        |
+| Field          | Type             | Null?                              | Description                                                                                                                |
+|:---------------|:-----------------|:-----------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
+| `id`           | string           | never                              | The unique ID of the Entry.                                                                                                |
+| `readied_at`   | string           | when the Entry isn't ready         | The time and date at which this Entry readied up in the raceable. This field conforms to [ISO 8601][iso8601].              |
+| `finished_at`  | string           | when the Entry has not finished    | The time and date at which this Entry finished this raceable. This field conforms to [ISO 8601][iso8601].                  |
+| `forfeited_at` | string           | when the Entry has not forfeited   | The time and date at which this Entry forfeited from this raceable. This field conforms to [ISO 8601][iso8601].            |
+| `created_at`   | string           | never                              | The time and date at which this Entry was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `updated_at`   | string           | never                              | The time and date at which this Entry was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
+| `user`         | [Runner][runner] | never                              | The user represented by this Entry.                                                                                        |
+| `run`          | [Run][run]       | when not supplied by the timer     | The Run linked to the current Entry. It has more detailed info about this runner's run, such as splits and history.        |
 </details>
 
 <details>
-<summary>Fetching an Entrant</summary>
+<summary>Fetching an Entry</summary>
 
 ```sh
-curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entrant
-curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/bingos/:bingo/entrant
-curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/randomizers/:randomizer/entrant
+curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
+curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/bingos/:bingo/entry
+curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-Use this endpoint to find out if the authenticated user is entered in a raceable.
+Get information about the authenticated user's involvement in a given raceable.
 
-| Possible Status Codes | Success? | Body Present? | Description                                                                |
-|:----------------------|:---------|:--------------|:---------------------------------------------------------------------------|
-| 200                   | Yes      | Yes           | An entrant schema will be returned.                                        |
-| 401                   | No       | No            | Access token is either blank, expired, invalid, or not attached to a user. |
-| 404                   | No       | Yes           | There is no Entrant for the user associated with the access token.         |
+| Possible Status Codes | Success? | Body Present? | Description                                                                         |
+|:----------------------|:---------|:--------------|:------------------------------------------------------------------------------------|
+| 200                   | Yes      | Yes           | The authenticated user is entered in the given raceable; returns an [Entry][entry]. |
+| 401                   | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.          |
+| 404                   | No       | Yes           | The authenticated user is not entered into the given raceable.                      |
 </details>
 
 <details>
-<summary>Creating an Entrant</summary>
+<summary>Creating an Entry</summary>
 
 ```sh
-curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/:type/:id/entrant
+curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
+curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/bingos/:bingo/entry
+curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-Use this endpoint to join a raceable. If the raceable is invite-only or secret, you must supply a `join_token`.
+Join a raceable. If the raceable is invite-only or secret, you must supply a `join_token`.
 
-| Status Codes | Success? | Body Present? | Description                                                                                              |
-|:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------------|
-| 201          | Yes      | Yes           | Successfully created. An Entrant schema will be returned.                                                |
-| 400          | No       | Yes           | An error occured while creating the Entrant. The `error` key will contain a user-friendly error message. |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                               |
-| 403          | No       | Yes           | This raceable is not joinable by the current user because they lack a valid join token.                  |
+| Status Codes | Success? | Body Present? | Description                                                                                            |
+|:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
+| 201          | Yes      | Yes           | Successfully created; returns an [Entry][entry].                                                       |
+| 400          | No       | Yes           | An error occured while creating the Entry. The `error` key will contain a user-friendly error message. |
+| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 403          | No       | Yes           | This raceable is not joinable by the current user because they lack a valid join token.                |
 </details>
 
 <details>
-<summary>Updating an Entrant</summary>
+<summary>Updating an Entry</summary>
 
 ```sh
-curl -X PATCH https://splits.io/api/v4/:type/:id/entrant \
+curl -X PATCH https://splits.io/api/v4/races/:race/entry \
   -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
   -H 'Content-Type: application/json'
-  -d '{"readied_at":"2019-06-17T03:40:48.123Z"'
-```
-Use this endpoint to update an Entrant. Valid parameters are `readied_at`, `finished_at`, and `forfeited_at`. Valid
-values are either an [ISO 8601][iso8601] timestamp (with up to 3 decimal places of precision), the string `"now"`, or
-`null` (to undo a ready, forfeit, or finish).
+  -d '{"readied_at": "2019-06-17T03:40:48.123Z"}'
 
-When passing `"now"`, a timestamp will be recorded as soon as possible in the request, but this will be subject to the
-travel time from your client to Splits.io. When passing `null`, make sure your JSON encoder is not filtering the key
-out.
+curl -X PATCH https://splits.io/api/v4/bingos/:bingo/entry \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  -H 'Content-Type: application/json'
+  -d '{"forfeited_at": null}'
+
+curl -X PATCH https://splits.io/api/v4/randomizers/:randomizer/entry \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  -H 'Content-Type: application/json'
+  -d '{"run_id": "gcb", "readied_at": "now"}'
+```
+Change an Entry. Valid parameters are `readied_at`, `finished_at`, and `forfeited_at`, and `run_id`.
+
+| Field          | Type                       | Null?                            | Description                                                                                                             |
+|:---------------|:---------------------------|:---------------------------------|:------------------------------------------------------------------------------------------------------------------------|
+| `run_id`       | string                     | when not set by you              | The [Run][run] ID corresponding to the splits for this raceable. See: [replacing source files][replacing-source-files]. |
+| `readied_at`   | [ISO 8601][iso8601] string | when the runner isn't ready      | The timestamp when this runner readied up, if at all.                                                                   |
+| `finished_at`  | [ISO 8601][iso8601] string | when the runner hasn't finished  | The timestamp when this runner finished the raceable, if at all.                                                        |
+| `forfeited_at` | [ISO 8601][iso8601] string | when the runner hasn't forfeited | The timestamp when this runner forfeited the raceable, if at all.                                                       |
+
+The timestamps support three decimal places of precision. They serve as pseudo-booleans; they are the source of truth
+for whether a runner is ready/finished/forfeited (`null` for no; non-`null` for yes).
+
+You may optionally set these by passing the string `"now"`; this is a special string which will make the backend use the
+current time. The travel time from you to Splits.io will affect the timestamp, so we don't recommend doing this for
+`finished_at` where accuracy is important.
+
+To unset one of these fields (e.g. to unready the runner), simply set it to `null`. Make sure your JSON encoder does not
+filter the key out, as this is different from not passing the key at all.
 
 **Note**: A join token is not required if the user is already entered into the race. If they leave, it must be provided
 again to rejoin.
 
-| Status Codes | Success? | Body Present? | Description                                                                                              |
-|:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------------|
-| 200          | Yes      | Yes           | Successfully updated. An entrant schema will be returned.                                                |
-| 400          | No       | Yes           | An error occured while updating the Entrant. The `error` key will contain a user-friendly error message. |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                               |
-| 404          | No       | Yes           | No Entrant found for the associated user.                                                                |
+| Status Codes | Success? | Body Present? | Description                                                                                            |
+|:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Yes           | Successfully updated. An Entry schema will be returned.                                                |
+| 400          | No       | Yes           | An error occured while updating the Entry. The `error` key will contain a user-friendly error message. |
+| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 404          | No       | Yes           | No Entry found for the associated user.                                                                |
 </details>
 
 <details>
-<summary>Deleting an Entrant</summary>
+<summary>Deleting an Entry</summary>
 
 ```sh
-curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/:type/:id/entrant
+curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
+curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/bingos/:bingo/entry
+curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-Use this endpoint to part from a raceable before it starts. A started raceable cannot be left, only finished or
-forfeited.
+Leave a raceable. A raceable that has already started cannot be left, only finished or forfeited.
 
-| Status Codes | Success? | Body Present? | Description                                                                                              |
-|:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------------|
-| 205          | Yes      | No            | Successfully deleted.                                                                                    |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                               |
-| 404          | No       | Yes           | No Entrant found for the associated user.                                                                |
-| 409          | No       | Yes           | An error occured while deleting the Entrant. The `error` key will contain a user-friendly error message. |
+| Status Codes | Success? | Body Present? | Description                                                                                            |
+|:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
+| 205          | Yes      | No            | Successfully deleted.                                                                                  |
+| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 404          | No       | Yes           | No Entry found for the associated user.                                                                |
+| 409          | No       | Yes           | An error occured while deleting the Entry. The `error` key will contain a user-friendly error message. |
 </details>
 
 #### Chat Message
@@ -841,7 +865,7 @@ raceable in order to send a Chat Message to it.
 | Field        | Type             | Null? | Description                                                                                                                  |
 |:-------------|:-----------------|:------|:-----------------------------------------------------------------------------------------------------------------------------|
 | `body`       | string           | never | The contents of the message.                                                                                                 |
-| `entrant`    | boolean          | never | Boolean indicating wether the sender was in the race when the message was sent.                                              |
+| `entry`      | boolean          | never | Boolean indicating wether the sender was in the race when the message was sent.                                              |
 | `created_at` | string           | never | The time and date at which this message was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at` | string           | never | The time and date at which this message was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `user`       | [Runner][runner] | never | The Runner that sent the message.                                                                                            |
@@ -866,8 +890,7 @@ curl -X POST https://splits.io/api/v4/randomizers/:randomizer/chat \
   -H "Content-Type: application/json" \
   -d '{"body":"a message body here"}'
 ```
-This endpoint sends a Chat Message to a raceable. The user and entrant fields will be inferred; only pass in a body
-parameter which should contain the message that you wish to post.
+Send a Chat Message to a raceable. All fields except `body` are inferred from your access token.
 </details>
 
 ### Websockets
@@ -1010,7 +1033,7 @@ possible `types`s and what extra keys they have and the data they contain.
 [authentication]: #authentication--authorization
 [category]: #category
 [chat-message]: #chat-message
-[entrant]: #entrant
+[entry]: #entry
 [game]: #game
 [iso8601]: https://en.wikipedia.org/wiki/ISO_8601
 [raceable]: #race-bingo-randomizer

@@ -1,12 +1,12 @@
 {
   "type": "object",
   "required": [
-    "entrant"
+    "entry"
   ],
   "additionalProperties": false,
   "properties": {
-    "entrant": {
-      "$ref": "../../../../../models/api/v4/entrant.json"
+    "entry": {
+      "$ref": "../../../../../models/api/v4/entry.json"
     }
   }
 }

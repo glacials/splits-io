@@ -8,7 +8,7 @@ class Api::V4::RaceableBroadcastJob < ApplicationJob
     }
     onsite_msg = {
       message:       'Updated html',
-      entrants_html: ApplicationController.render(partial: 'races/entrants_table', locals: {race: raceable}),
+      entries_html: ApplicationController.render(partial: 'races/entries_table', locals: {race: raceable}),
       stats_html:    ApplicationController.render(partial: 'races/stats', locals: {race: raceable})
     }
     if raceable.randomizer?

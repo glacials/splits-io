@@ -33,7 +33,7 @@
           tr.bg-dark
             - if cols.include?(:runner)
               td.align-right.nowrap
-                ' #{race.entrants.count} entrants
+                ' #{race.entries.count} entries
             - if cols.include?(:time)
               td.align-right.nowrap
                 - if race.in_progress?

@@ -10,10 +10,10 @@ class User < ApplicationRecord
 
   has_many :run_likes, dependent: :destroy
 
-  has_many :entrants
-  has_many :races,       through: :entrants, source: :raceable, source_type: 'Race'
-  has_many :bingos,      through: :entrants, source: :raceable, source_type: 'Bingo'
-  has_many :randomizers, through: :entrants, source: :raceable, source_type: 'Randomizer'
+  has_many :entries
+  has_many :races,       through: :entries, source: :raceable, source_type: 'Race'
+  has_many :bingos,      through: :entries, source: :raceable, source_type: 'Bingo'
+  has_many :randomizers, through: :entries, source: :raceable, source_type: 'Randomizer'
 
   has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
   has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
@@ -122,11 +122,11 @@ class User < ApplicationRecord
   end
 
   def in_race?
-    entrants.where(finished_at: nil, forfeited_at: nil).any?
+    entries.where(finished_at: nil, forfeited_at: nil).any?
   end
 
   def active_raceables
-    entrants.where(finished_at: nil, forfeited_at: nil).map(&:raceable)
+    entries.where(finished_at: nil, forfeited_at: nil).map(&:raceable)
   end
 
   # comprable_runs returns some runs by this user that could be usefully compared to the given run.

@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.string "raceable_type"
     t.uuid "raceable_id"
     t.bigint "user_id", null: false
-    t.boolean "entrant", null: false
+    t.boolean "from_entrant", null: false
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "entrants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "raceable_type"
     t.uuid "raceable_id"
     t.bigint "user_id"
@@ -129,9 +129,9 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
     t.bigint "run_id"
-    t.index ["raceable_type", "raceable_id"], name: "index_entrants_on_raceable_type_and_raceable_id"
-    t.index ["run_id"], name: "index_entrants_on_run_id"
-    t.index ["user_id"], name: "index_entrants_on_user_id"
+    t.index ["raceable_type", "raceable_id"], name: "index_entries_on_raceable_type_and_raceable_id"
+    t.index ["run_id"], name: "index_entries_on_run_id"
+    t.index ["user_id"], name: "index_entries_on_user_id"
   end
 
   create_table "game_aliases", id: :serial, force: :cascade do |t|
@@ -464,7 +464,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   add_foreign_key "bingos", "games"
   add_foreign_key "bingos", "users"
   add_foreign_key "chat_messages", "users"
-  add_foreign_key "entrants", "users"
+  add_foreign_key "entries", "users"
   add_foreign_key "game_aliases", "games", on_delete: :cascade
   add_foreign_key "google_users", "users"
   add_foreign_key "highlight_suggestions", "runs"

@@ -13,7 +13,7 @@ class Api::V4::RaceBlueprint < Blueprinter::Base
   end
 
   association :owner, blueprint: Api::V4::UserBlueprint
-  association :entrants, blueprint: Api::V4::EntrantBlueprint
+  association :entries, blueprint: Api::V4::EntryBlueprint
   association :chat_messages, blueprint: Api::V4::ChatMessageBlueprint do |race, options|
     options[:chat] ? race.chat_messages.order(created_at: :desc).limit(100) : []
   end

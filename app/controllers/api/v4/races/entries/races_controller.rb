@@ -1,4 +1,4 @@
-class Api::V4::Races::Entrants::RandomizersController < Api::V4::Races::Entrants::ApplicationController
+class Api::V4::Races::Entries::RacesController < Api::V4::Races::Entries::ApplicationController
   def create
     super
   end
@@ -14,6 +14,6 @@ class Api::V4::Races::Entrants::RandomizersController < Api::V4::Races::Entrants
   private
 
   def set_raceable
-    super(Randomizer)
+    super(Race)
   end
 end

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :entrant do
+  factory :entry do
     user
     for_race
 

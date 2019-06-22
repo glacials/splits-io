@@ -7,11 +7,11 @@ export default {
       return
     }
 
-    this.entrant = this.raceable.entrants.find(entrant => entrant.user.id === this.currentUser.id)
+    this.entry = this.raceable.entries.find(entry => entry.user.id === this.currentUser.id)
   },
   data: () => ({
     currentUser: null,
-    entrant: null,
+    entry: null,
     errors: {},
     loading: {
       finish: false,
@@ -29,7 +29,7 @@ export default {
       this.errors.finish = false
       this.loading.finish = true
       try {
-        this.entrant = await this.updateEntrant({finished_at: new Date(ts.now())})
+        this.entry = await this.updateEntry({finished_at: new Date(ts.now())})
       } catch(error) {
         this.errors.finish = `Error: ${error}`
       } finally {
@@ -40,7 +40,7 @@ export default {
       this.errors.forfeit = false
       this.loading.forfeit = true
       try {
-        this.entrant = await this.updateEntrant({forfeited_at: new Date(ts.now())})
+        this.entry = await this.updateEntry({forfeited_at: new Date(ts.now())})
       } catch(error) {
         this.errors.forfeit = `Error: ${error}`
       } finally {
@@ -51,7 +51,7 @@ export default {
       this.errors.join = false
       this.loading.join = true
       try {
-        this.entrant = await this.updateEntrant({}, 'PUT')
+        this.entry = await this.updateEntry({}, 'PUT')
       } catch(error) {
         this.errors.join = `Error: ${error}`
       } finally {
@@ -62,8 +62,8 @@ export default {
       this.errors.leave = false
       this.loading.leave = true
       try {
-        await this.updateEntrant({}, 'DELETE')
-        this.entrant = null
+        await this.updateEntry({}, 'DELETE')
+        this.entry = null
       } catch(error) {
         this.errors.leave = `Error: ${error}`
       } finally {
@@ -74,7 +74,7 @@ export default {
       this.errors.ready = false
       this.loading.ready = true
       try {
-        this.entrant = await this.updateEntrant({readied_at: new Date(ts.now())})
+        this.entry = await this.updateEntry({readied_at: new Date(ts.now())})
       } catch(error) {
         this.errors.ready = `Error: ${error}`
       } finally {
@@ -85,7 +85,7 @@ export default {
       this.errors.unfinish = false
       this.loading.unfinish = true
       try {
-        this.entrant = await this.updateEntrant({finished_at: null})
+        this.entry = await this.updateEntry({finished_at: null})
       } catch(error) {
         this.errors.unfinish = `Error: ${error}`
       } finally {
@@ -96,7 +96,7 @@ export default {
       this.errors.unforfeit = false
       this.loading.unforfeit = true
       try {
-        this.entrant = await this.updateEntrant({forfeited_at: null})
+        this.entry = await this.updateEntry({forfeited_at: null})
       } catch(error) {
         this.errors.unforfeit = `Error: ${error}`
       } finally {
@@ -107,22 +107,22 @@ export default {
       this.errors.unready = false
       this.loading.unready = true
       try {
-        this.entrant = await this.updateEntrant({readied_at: null})
+        this.entry = await this.updateEntry({readied_at: null})
       } catch(error) {
         this.errors.unready = `Error: ${error}`
       } finally {
         this.loading.unready = false
       }
     },
-    updateEntrant: async function(params, method = 'PATCH') {
-      const response = await fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/entrant`, {
+    updateEntry: async function(params, method = 'PATCH') {
+      const response = await fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/entry`, {
         method: method,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          entrant: params,
+          entry: params,
           join_token: (new URLSearchParams(window.location.search)).get('join_token')
         }),
       })
@@ -136,7 +136,7 @@ export default {
         return
       }
 
-      return (await response.json()).entrant
+      return (await response.json()).entry
     },
   },
   name: 'race-nav',
