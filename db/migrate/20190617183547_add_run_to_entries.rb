@@ -14,8 +14,8 @@ class AddRunToEntries < ActiveRecord::Migration[6.0]
 
     # Just piggybacking this here, gametime versions of these columns have a default: false and realtime ones don't, so
     # just making them consistent.
-    change_column_default :segments, :realtime_gold,    default: false
-    change_column_default :segments, :realtime_reduced, default: false
-    change_column_default :segments, :realtime_skipped, default: false
+    change_column_default :segments, :realtime_gold,    from: nil, to: false
+    change_column_default :segments, :realtime_reduced, from: nil, to: false
+    change_column_default :segments, :realtime_skipped, from: nil, to: false
   end
 end
