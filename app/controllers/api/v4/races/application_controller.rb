@@ -41,7 +41,7 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
   end
 
   def check_user
-    return if params[:visibility].nil? || params[:visibility] == 'public' || current_user.patron?(tier: 3)
+    return if params[:visibility].nil? || params[:visibility] == 'public' || current_user.patron?(tier: 2)
 
     render status: :forbidden, json: {
       status: :forbidden,

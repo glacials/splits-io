@@ -480,6 +480,7 @@ API.
 
 | Field          | Type   | Null? | Description                                                                                                               |
 |:---------------|:-------|:------|:--------------------------------------------------------------------------------------------------------------------------|
+| `id`           | string | never | The unique ID of the user.                                                                                                |
 | `twitch_id`    | string | never | The unique Twitch ID of the user.                                                                                         |
 | `name`         | string | never | The Twitch name of the user.                                                                                              |
 | `display_name` | string | never | The Twitch display name of the user.                                                                                      |
@@ -505,6 +506,7 @@ created, but the association is not guaranteed.
 
 | Field        | Type                            | Null?          | Description                                                                                                                          |
 |:-------------|:--------------------------------|:---------------|:-------------------------------------------------------------------------------------------------------------------------------------|
+| `id`         | string                          | never          | The unique ID of the game.                                                                                                           |
 | `name`       | string                          | never          | The full title of the game, like "Super Mario Sunshine".                                                                             |
 | `shortname`  | string                          | when not known | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or Speedrun.com. |
 | `created_at` | string                          | never          | The time and date at which this game was created on Splits.io. This field conforms to [ISO 8601][iso8601].                           |
@@ -692,7 +694,7 @@ creation and must take place as a separate action afterwards.
 <summary>Updating a raceable</summary>
 
 ```sh
-curl -X PATCH https://splits.io/api/v4/races/:race
+# Races can not be updated, instead just create a new race with the correct category.
 curl -X PATCH https://splits.io/api/v4/bingos/:bingo
 curl -X PATCH https://splits.io/api/v4/randomizers/:randomizer
 ```

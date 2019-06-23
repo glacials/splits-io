@@ -82,9 +82,10 @@ module Raceable
       Api::V4::GlobalRaceableUpdateJob.perform_later(self, 'raceable_start_scheduled', 'A race is starting soon')
     end
 
-    # potentially ends the raceable if all entrants are done
+    # potentially send race end broadcast if all entrants are finished
+    # note: this can potentially send multiple ending messages if called on an already finished raceable
     def maybe_end!
-      return if finished? || entries.where(finished_at: nil, forfeited_at: nil).any?
+      return if !started? || entrants.where(finished_at: nil, forfeited_at: nil).any?
 
       Api::V4::RaceableBroadcastJob.perform_later(self, 'raceable_ended', "The #{type} has ended")
       Api::V4::GlobalRaceableUpdateJob.perform_later(self, 'raceable_ended', 'A race has ended')
