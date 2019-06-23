@@ -9,8 +9,8 @@ class Api::V4::Races::Messages::ApplicationController < Api::V4::ApplicationCont
 
   def create
     chat_message = @raceable.chat_messages.new(
-      body:    params[:body],
-      user:    current_user,
+      body:  params[:body],
+      user:  current_user,
       entry: @raceable.entry_for_user(current_user).present?
     )
     if chat_message.save
@@ -18,7 +18,7 @@ class Api::V4::Races::Messages::ApplicationController < Api::V4::ApplicationCont
       Api::V4::MessageBroadcastJob.perform_later(@raceable, chat_message)
     else
       render status: :bad_request, json: {
-        status: :bad_request,
+        status: 400,
         error:  chat_message.errors.full_messages.to_sentence
       }
     end

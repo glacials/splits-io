@@ -32,8 +32,8 @@ class Api::V4::ApplicationController < ActionController::Base
     {
       status: :not_found,
       json:   {
-        status: :not_found,
-        error: "No #{collection_name} with ID #{params[collection_name]} found."
+        status: 404,
+        error:  "No #{collection_name} with ID #{params[collection_name]} found."
       }
     }
   end
@@ -89,7 +89,10 @@ class Api::V4::ApplicationController < ActionController::Base
     @raceable = klass.find(params[:raceable])
     return unless @raceable.secret_visibility? && !@raceable.joinable?(user: current_user, token: params[:join_token])
 
-    head :unauthorized
+    render status: :forbidden, json: {
+      status: 403,
+      error:  'Must be invited to see this race'
+    }
   rescue ActiveRecord::RecordNotFound
     render not_found(klass.type)
   end

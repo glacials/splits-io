@@ -22,7 +22,7 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
       Api::V4::GlobalRaceableUpdateJob.perform_later(raceable, 'raceable_created', "A new #{raceable.type} has been created")
     else
       render status: :bad_request, json: {
-        status: :bad_request,
+        status: 400,
         error:  raceable.errors.full_messages.to_sentence
       }
     end
@@ -44,7 +44,7 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
     return if params[:visibility].nil? || params[:visibility] == 'public' || current_user.patron?(tier: 2)
 
     render status: :forbidden, json: {
-      status: :forbidden,
+      status: 403,
       error:  'Must be a tier 3 patreon to make non-public races'
     }
   end
@@ -53,7 +53,7 @@ class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
     return unless @raceable.secret_visibility? && @raceable.joinable?(token: params[:join_token])
 
     render status: :unauthorized, json: {
-      status: :forbidden,
+      status: 403,
       error:  'Invalid join token for secret race lookup.'
     }
   end

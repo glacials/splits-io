@@ -14,7 +14,7 @@ class Api::V4::Races::RacesController < Api::V4::Races::ApplicationController
 
   def update
     render status: :not_acceptable, json: {
-      status: :not_acceptable,
+      status: 406,
       error:  'Cannot update races.'
     }
   end

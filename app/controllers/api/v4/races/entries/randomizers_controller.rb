@@ -1,4 +1,8 @@
 class Api::V4::Races::Entries::RandomizersController < Api::V4::Races::Entries::ApplicationController
+  def show
+    super
+  end
+
   def create
     super
   end

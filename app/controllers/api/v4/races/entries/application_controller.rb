@@ -20,14 +20,14 @@ class Api::V4::Races::Entries::ApplicationController < Api::V4::ApplicationContr
       Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entries_updated', 'A user has joined a race')
     else
       render status: :bad_request, json: {
-        status: :bad_request,
+        status: 400,
         error:  entry.errors.full_messages.to_sentence
       }
     end
   rescue ActionController::ParameterMissing
     render status: :bad_request, json: {
-      status: :bad_request,
-      error:  'Specifying at least one entry param is required',
+      status: 400,
+      error:  'Specifying at least one entry param is required'
     }
   end
 
@@ -42,13 +42,13 @@ class Api::V4::Races::Entries::ApplicationController < Api::V4::ApplicationContr
       )
     else
       render status: :bad_request, json: {
-        status: :bad_request,
+        status: 400,
         error:  @entry.errors.full_messages.to_sentence
       }
     end
   rescue ActionController::ParameterMissing
     render status: :bad_request, json: {
-      status: :bad_request,
+      status: 400,
       error:  'Missing parameter: "entry"'
     }
   end
@@ -60,7 +60,7 @@ class Api::V4::Races::Entries::ApplicationController < Api::V4::ApplicationContr
       Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entrants_updated', 'An user has left a race')
     else
       render status: :conflict, json: {
-        status: :conflict,
+        status: 409,
         error:  @entry.errors.full_messages.to_sentence
       }
     end
@@ -76,7 +76,7 @@ class Api::V4::Races::Entries::ApplicationController < Api::V4::ApplicationContr
     return if @raceable.joinable?(token: params[:join_token], user: current_user)
 
     render status: :forbidden, json: {
-      status: :forbidden,
+      status: 403,
       error:  'Must be invited to this race'
     }
   end
@@ -92,10 +92,10 @@ class Api::V4::Races::Entries::ApplicationController < Api::V4::ApplicationContr
   end
 
   def entry_params
-    params.select { |k, _| k[-3, -1] == '_at' && v == 'now' }.each do |k, v|
+    params.select { |k, _| k[-3, -1] == '_at' && v == 'now' }.each do |k, _|
       params[k] = @now
     end
-    params.permit(:join_token, entry: [:readied_at, :finished_at, :forfeited_at, :run_id]).fetch(:entry, {})
+    params.permit(:join_token, entry: %i[readied_at finished_at forfeited_at run_id]).fetch(:entry, {})
   end
 
   def update_race

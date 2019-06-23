@@ -575,7 +575,7 @@ Nearly all raceable endpoints require user authorization based on the flow descr
 | `created_at`    | string                                 | never                            | The time and date at which this raceable was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at`    | string                                 | never                            | The time and date at which this raceable was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `owner`         | [Runner][runner]                       | never                            | The user who created the raceable.                                                                                            |
-| `entries`       | array of [Entries][entry]              | never                            | All entries currently in the raceable.                                                                                       |
+| `entries`       | array of [Entries][entry]              | never                            | All entries currently in the raceable.                                                                                        |
 | `chat_messages` | array of [Chat Messages][chat-message] | never                            | Chat messages for the raceable. Only present when fetching the raceable specifically.                                         |
 
 Races have the following extra field:
@@ -738,16 +738,16 @@ exists. Entries cannot be retrieved by ID.
 <details>
 <summary>Structure of an Entry</summary>
 
-| Field          | Type             | Null?                              | Description                                                                                                                |
-|:---------------|:-----------------|:-----------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
-| `id`           | string           | never                              | The unique ID of the Entry.                                                                                                |
-| `readied_at`   | string           | when the Entry isn't ready         | The time and date at which this Entry readied up in the raceable. This field conforms to [ISO 8601][iso8601].              |
-| `finished_at`  | string           | when the Entry has not finished    | The time and date at which this Entry finished this raceable. This field conforms to [ISO 8601][iso8601].                  |
-| `forfeited_at` | string           | when the Entry has not forfeited   | The time and date at which this Entry forfeited from this raceable. This field conforms to [ISO 8601][iso8601].            |
-| `created_at`   | string           | never                              | The time and date at which this Entry was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
-| `updated_at`   | string           | never                              | The time and date at which this Entry was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
-| `user`         | [Runner][runner] | never                              | The user represented by this Entry.                                                                                        |
-| `run`          | [Run][run]       | when not supplied by the timer     | The Run linked to the current Entry. It has more detailed info about this runner's run, such as splits and history.        |
+| Field          | Type             | Null?                            | Description                                                                                                                |
+|:---------------|:-----------------|:---------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
+| `id`           | string           | never                            | The unique ID of the Entry.                                                                                                |
+| `readied_at`   | string           | when the Entry isn't ready       | The time and date at which this Entry readied up in the raceable. This field conforms to [ISO 8601][iso8601].              |
+| `finished_at`  | string           | when the Entry has not finished  | The time and date at which this Entry finished this raceable. This field conforms to [ISO 8601][iso8601].                  |
+| `forfeited_at` | string           | when the Entry has not forfeited | The time and date at which this Entry forfeited from this raceable. This field conforms to [ISO 8601][iso8601].            |
+| `created_at`   | string           | never                            | The time and date at which this Entry was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `updated_at`   | string           | never                            | The time and date at which this Entry was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
+| `user`         | [Runner][runner] | never                            | The user represented by this Entry.                                                                                        |
+| `run`          | [Run][run]       | when not supplied by the timer   | The Run linked to the current Entry. It has more detailed info about this runner's run, such as splits and history.        |
 </details>
 
 <details>
@@ -831,7 +831,7 @@ again to rejoin.
 | 200          | Yes      | Yes           | Successfully updated. An Entry schema will be returned.                                                |
 | 400          | No       | Yes           | An error occured while updating the Entry. The `error` key will contain a user-friendly error message. |
 | 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 404          | No       | Yes           | No Entry found for the associated user.                                                                |
+| 404          | No       | Yes           | No Raceable found or Entry found for the associated user.                                              |
 </details>
 
 <details>
@@ -848,7 +848,7 @@ Leave a raceable. A raceable that has already started cannot be left, only finis
 |:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
 | 205          | Yes      | No            | Successfully deleted.                                                                                  |
 | 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 404          | No       | Yes           | No Entry found for the associated user.                                                                |
+| 404          | No       | Yes           | No Raceable found or Entry found for the associated user.                                              |
 | 409          | No       | Yes           | An error occured while deleting the Entry. The `error` key will contain a user-friendly error message. |
 </details>
 

@@ -73,7 +73,7 @@ module Raceable
       finished? && Time.now.utc > finished_at + 30.minutes
     end
 
-    # potentially starts the raceable if all entrants are now ready
+    # potentially starts the raceable if all entries are now ready
     def maybe_start!
       return if started? || entries.where(readied_at: nil).any? || entries.count < 2
 
@@ -82,10 +82,10 @@ module Raceable
       Api::V4::GlobalRaceableUpdateJob.perform_later(self, 'raceable_start_scheduled', 'A race is starting soon')
     end
 
-    # potentially send race end broadcast if all entrants are finished
+    # potentially send race end broadcast if all entries are finished
     # note: this can potentially send multiple ending messages if called on an already finished raceable
     def maybe_end!
-      return if !started? || entrants.where(finished_at: nil, forfeited_at: nil).any?
+      return if !started? || entries.where(finished_at: nil, forfeited_at: nil).any?
 
       Api::V4::RaceableBroadcastJob.perform_later(self, 'raceable_ended', "The #{type} has ended")
       Api::V4::GlobalRaceableUpdateJob.perform_later(self, 'raceable_ended', 'A race has ended')
@@ -98,14 +98,14 @@ module Raceable
     end
 
     # checks if a given user should be able to act on a given raceable, returning true if any of the following pass
-    # the user is an entrant in the race or is the race creator
-    # the race status is not public and the provided token is correct
-    # the race is public and the user is not in another race
+    # the user is an entrant in the race or is the race creator, or
+    # the race status is not public and the provided token is correct, or
+    # the race is public
     def joinable?(user: nil, token: nil)
       result = false
       result = true if entry_for_user(user).present? || belongs_to?(user)
       result = true if (invite_only_visibility? || secret_visibility?) && token == join_token
-      result = true if public_visibility? && !user.try(:in_race?)
+      result = true if public_visibility?
 
       result
     end
