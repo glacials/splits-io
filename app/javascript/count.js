@@ -13,9 +13,9 @@ window.addEventListener('load', () => {
       const diffMS = moment().diff(moment(el.dataset.abstime))
       el.textContent = moment.duration(diffMS).format('HH:mm:ss.SS', {trim: false})
       if (diffMS < 0) {
-        el.classList.add('bg-danger text-white')
+        el.classList.add('bg-danger')
       } else {
-        el.classList.remove('bg-danger text-white')
+        el.classList.remove('bg-danger')
       }
     })
   }, 10)
