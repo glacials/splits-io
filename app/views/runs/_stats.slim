@@ -40,6 +40,5 @@
           = delta(run.total_playtime, compare_run.total_playtime, subject: subject, better: :different)
       span.statcard-desc Life playtime
   .col-sm-3: .statcard.p-3
-    h3.statcard-number#time-since-upload title=run.created_at
-      = render partial: 'runs/time_since_upload', locals: {run: run}
+    h3.statcard-number = render partial: 'shared/relative_time', locals: {time: run.created_at}
     span.statcard-desc Time since upload

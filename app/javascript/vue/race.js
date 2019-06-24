@@ -2,14 +2,11 @@ const moment = require('moment')
 require("moment-duration-format")(moment)
 
 import { applyTips } from '../tooltips'
-import { createAlert } from '../dom_helpers'
 import { ts } from '../time'
 
 import consumer from '../channels/consumer'
 import raceChat from './race-chat.js'
 import raceNav from './race-nav.js'
-
-let raceSubscription
 
 export default {
   components: {
@@ -18,22 +15,6 @@ export default {
   },
   created: async function() {
     this.error = false
-
-    const countdown = alert => {
-      const interval = setInterval(() => {
-        const duration = moment.duration(moment(alert.dataset.start).valueOf() - ts.now())
-        if (duration.asSeconds() <= 0) {
-          clearInterval(interval)
-          alert.innerText = 'Race Started!'
-          alert.classList.remove('alert-warning')
-          alert.classList.add('alert-success')
-          setTimeout(() => { alert.parentNode.removeChild(alert) }, 10000)
-          return
-        }
-
-        alert.innerText = `Race starting in ${duration.format('s [seconds]')}!`
-      }, 100)
-    }
 
     const response = await fetch(`/api/v4/${this.raceableType}s/${this.raceableId}`, {
       headers: {
@@ -44,7 +25,22 @@ export default {
       throw (await response.json()).error || response.statusText
     }
 
-    raceSubscription = consumer.subscriptions.create({
+    this.globalSubscription = consumer.subscriptions.create('Api::V4::GlobalRaceableChannel', {
+      connection() {},
+
+      disconnected() {},
+
+      received(data) {
+        switch(data.type) {
+          // TODO: update races on game page with this info
+          case '...':
+            ''
+            break;
+        }
+      }
+    })
+
+    this.raceSubscription = consumer.subscriptions.create({
       channel:       'Api::V4::RaceableChannel',
       raceable_id:   this.raceableId,
       raceable_type: this.raceableType,
@@ -100,7 +96,7 @@ export default {
     })
 
     document.addEventListener('turbolinks:visit', () => {
-      consumer.subscriptions.remove(raceSubscription)
+      consumer.subscriptions.remove(this.raceSubscription)
     }, {once: true})
 
     this.raceable = (await response.json())[this.raceableType]
@@ -108,8 +104,10 @@ export default {
   },
   data: () => ({
     error: false,
+    globalSubscription: null,
     loading: true,
     raceable: null,
+    raceSubscription: null,
   }),
   methods: {
   },

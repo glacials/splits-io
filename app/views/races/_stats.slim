@@ -16,7 +16,7 @@
           span.statcard-desc class=statcard_class(race)
             ' #{race.entries.ready.count} / #{race.entries.count} ready
       - if race.started? && !race.finished?
-        h2.statcard-number class=statcard_class(race) data={ms: ((Time.now.utc - race.started_at) * 1000).floor}
+        h2.statcard-number class=statcard_class(race) data={abstime: race.started_at}
           = Duration.new(((Time.now.utc - race.started_at) * 1000).floor).format
         span.statcard-desc class=statcard_class(race) In progress
       - if race.finished?

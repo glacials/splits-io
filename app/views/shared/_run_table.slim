@@ -40,8 +40,7 @@
               td.align-right.nowrap
                 - if race.in_progress?
                   - now = Time.now.utc
-                  .text-warning data={ms: (now - race.started_at) * 1000}
-                    = Duration.new((now - race.started_at) * 1000).format
+                  .text-warning data={abstime: race.started_at} -
                 - elsif race.finished?
                   .text-success Finished
                 - else
@@ -66,7 +65,8 @@
             - if cols.include?(:rival)
               td.align-right.nowrap
             - if cols.include?(:uploaded)
-              td.align-right.nowrap title=race.created_at created #{time_ago_in_words(race.created_at)} ago
+              td.align-right.nowrap
+                = render partial: 'shared/relative_time', locals: {time: race.created_at, prefix: 'opened', ago: true}
             - if cols.include?(:owner_controls)
               td.nowrap
         /tr.progress-bar-striped.progress-bar-animated role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='font-weight: bold; background-color: #000'
@@ -108,7 +108,8 @@
                       '  against
                       = user_badge(rivalry.to_user)
             - if cols.include?(:uploaded)
-              td.align-right.nowrap title=run.created_at #{time_ago_in_words(run.created_at)} ago
+              td.align-right.nowrap
+                = render partial: 'shared/relative_time', locals: {time: run.created_at, ago: true}
             - if cols.include?(:owner_controls)
               td.nowrap: .dropleft.text-center
                 .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}

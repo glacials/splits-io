@@ -27,7 +27,7 @@
               - if entry.done?
                 b class=entry_color(entry) = entry.duration.format
               - else
-                = entry.duration.format
+                span data={abstime: race.started_at} -
               - entries = entry.user.entries
               - places = entries.map(&:place)
             td.nowrap

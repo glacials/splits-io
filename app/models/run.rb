@@ -32,7 +32,6 @@ class Run < ApplicationRecord
   has_secure_token :claim_token
 
   after_create :discover_runner
-  after_create :publish_aging
 
   validates_with RunValidator
 
@@ -175,12 +174,6 @@ class Run < ApplicationRecord
     end
   end
 
-  def publish_aging
-    publish_age_every(1.minute, 60)
-    publish_age_every(1.hour, 24)
-    publish_age_every(1.day, 30)
-  end
-
   # Calculate the various statistical information about each segments history once in the database for the whole run
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
@@ -227,12 +220,6 @@ class Run < ApplicationRecord
   end
 
   private
-
-  def publish_age_every(period, cycles)
-    cycles.times do |i|
-      BroadcastUploadJob.set(wait: (period * (i + 1))).perform_later(self)
-    end
-  end
 
   def stats_select_query(timing)
     case timing

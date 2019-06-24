@@ -11,7 +11,7 @@ class Api::V4::Raceables::Messages::ApplicationController < Api::V4::Application
     chat_message = @raceable.chat_messages.new(
       body:  params[:body],
       user:  current_user,
-      entry: @raceable.entry_for_user(current_user).present?
+      from_entrant: @raceable.entry_for_user(current_user).present?
     )
     if chat_message.save
       render status: :ok, json: Api::V4::ChatMessageBlueprint.render(chat_message)
