@@ -10,7 +10,13 @@ require('moment-duration-format')(moment)
 window.addEventListener('load', () => {
   setDriftlessInterval(() => {
     Array.from(document.querySelectorAll('[data-abstime]')).forEach(el => {
-      el.textContent = moment.duration(moment().diff(moment(el.dataset.abstime))).format('HH:mm:ss.SS', {trim: false})
+      const diffMS = moment().diff(moment(el.dataset.abstime))
+      el.textContent = moment.duration(diffMS).format('HH:mm:ss.SS', {trim: false})
+      if (diffMS < 0) {
+        el.classList.add('bg-danger text-white')
+      } else {
+        el.classList.remove('bg-danger text-white')
+      }
     })
   }, 10)
 })

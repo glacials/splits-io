@@ -16,12 +16,12 @@
           span.statcard-desc class=statcard_class(race)
             ' #{race.entries.ready.count} / #{race.entries.count} ready
       - if race.started? && !race.finished?
-        h2.statcard-number class=statcard_class(race) data={abstime: race.started_at}
-          = Duration.new(((Time.now.utc - race.started_at) * 1000).floor).format
+        h2.statcard-number class=statcard_class(race) data={abstime: race.started_at.rfc3339(3)} -
         span.statcard-desc class=statcard_class(race) In progress
       - if race.finished?
         h2.statcard-number class=statcard_class(race) Finished
-        span.statcard-desc class=statcard_class(race) title=race.finished_at #{time_ago_in_words(race.finished_at)} ago
+        span.statcard-desc class=statcard_class(race) title=race.finished_at
+          = render partial: 'shared/relative_time', locals: {time: race.finished_at}
   .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.visibility.titleize
     span.statcard-desc Visibility

@@ -24,17 +24,30 @@
         .row.mx-1.mt-3
           .card-columns.w-100 style='column-count: 2'
             - if @race.randomizer?
-              .card.shadow.my-3
-                .card-header Attachments
-                #attachments = render partial: 'races/attachments', locals: {race: @race}
-                - if @race.belongs_to?(current_user) && !@race.started?
-                  .card-footer
-                    = form_for(@race, url: api_v4_randomizer_path(@race), remote: true, method: 'PATCH', html: { \
-                      class: 'w-100 d-flex justify-content-between auth-me' \
-                    }) do |f|
-                      = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
-                      = f.submit('Attach', class: 'btn btn-outline-light')
-            #entries-table = render partial: 'races/entries_table', locals: {race: @race}
+              race-disclaimer.card.shadow.my-3 inline-template=true
+                div
+                  .bg-dark.p-4 v-if='!accepted'
+                    p
+                      ' Attachments are uploaded by the race creator. Do not download any attachments
+                      ul
+                        li that you do not recognize as necessary for your randomizer,
+                        li that are executable files, or
+                        li if you do not both know and trust the race creator.
+                      ' Splits.io is not affiliated with any attachment content and is not responsible for attachments
+                      ' or their effects.
+                    button.btn.btn-outline-light @click='accept' I understand
+                  div v-if='accepted'
+                    h6.card-header Attachments
+                    #attachments = render partial: 'races/attachments', locals: {race: @race}
+                    - if @race.belongs_to?(current_user) && !@race.started?
+                      .card-footer
+                        = form_for(@race, url: api_v4_randomizer_path(@race), remote: true, method: 'PATCH', html: { \
+                          class: 'w-100 d-flex justify-content-between auth-me' \
+                        }) do |f|
+                          = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
+                          = f.submit('Attach', class: 'btn btn-outline-light')
+            #entries-table.card.shadow.my-3
+              = render partial: 'races/entries_table', locals: {race: @race}
 
             .card.shadow.my-3#chat-card
               .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
@@ -69,4 +82,6 @@
                       img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
                       .media-body
                         span.mr-2: .badge.badge-success Splits.io
-                        span title="Sent #{@race.created_at}": i Race created
+                        i Race created
+                        .float-right.pr-2
+                          = render partial: 'shared/relative_time', locals: {time: @race.created_at}

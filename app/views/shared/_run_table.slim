@@ -27,7 +27,7 @@
           - if cols.include?(:rival)
             th.align-right.nowrap Rival
           - if cols.include?(:uploaded)
-            th.align-right.nowrap = th_sorter('Uploaded', 'created_at')
+            th.align-right.nowrap = th_sorter('Created', 'created_at')
           - if cols.include?(:owner_controls)
             th.header.align-right.nowrap
       tbody
@@ -40,7 +40,7 @@
               td.align-right.nowrap
                 - if race.in_progress?
                   - now = Time.now.utc
-                  .text-warning data={abstime: race.started_at} -
+                  .text-warning data={abstime: race.started_at.rfc3339(3)} -
                 - elsif race.finished?
                   .text-success Finished
                 - else
@@ -66,7 +66,7 @@
               td.align-right.nowrap
             - if cols.include?(:uploaded)
               td.align-right.nowrap
-                = render partial: 'shared/relative_time', locals: {time: race.created_at, prefix: 'opened', ago: true}
+                = render partial: 'shared/relative_time', locals: {time: race.created_at, ago: true}
             - if cols.include?(:owner_controls)
               td.nowrap
         /tr.progress-bar-striped.progress-bar-animated role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='font-weight: bold; background-color: #000'

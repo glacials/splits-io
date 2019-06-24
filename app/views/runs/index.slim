@@ -21,7 +21,7 @@
           span.statcard-desc Runs stored
         .col-sm-3: .statcard.p-3
           h2.statcard-number
-            span> title=current_user.created_at = time_ago_in_words(current_user.created_at)
+            = render partial: 'shared/relative_time', locals: {time: current_user.created_at.rfc3339}
           span.statcard-desc Account age
       .card.shadow
         = render partial: 'shared/run_table', locals: { \

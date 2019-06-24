@@ -16,7 +16,16 @@ module RacesHelper
     if entry.forfeited?
       'text-danger'
     elsif entry.finished?
-      'text-success'
+      case entry.place
+      when 1
+        return 'text-gold'
+      when 2
+        return 'text-silver'
+      when 3
+        return 'text-bronze'
+      else
+        return 'text-light'
+      end
     else
       ''
     end
@@ -30,6 +39,10 @@ module RacesHelper
     else
       '-'
     end
+  end
+
+  def api_v4_randomizer_path(raceable)
+    super(raceable.id)
   end
 
   def api_v4_chat_path(raceable)

@@ -100,10 +100,10 @@ class Game < ApplicationRecord
   # called on each raceable before returning them.
   def raceables(scope = nil, paginate = nil)
     [races, randomizers, bingos].map do |r|
-      break r.to_a if scope.nil?
+      next r.to_a if scope.nil?
 
       r = r.limit(100).send(scope)
-      break r.to_a if paginate.nil?
+      next r.to_a if paginate.nil?
 
       r.page(paginate).to_a
     end.flatten.sort_by(&:created_at).reverse

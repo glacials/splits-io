@@ -1,60 +1,57 @@
-.card.shadow.my-3
-  h6.card-header Entries
-  - if race.entries.none?
-    .card-body: i No one here
-  - else
-    .table-responsive: table.card-body.table.mb-0
-      thead: tr
-        th.nowrap Name
-        th.nowrap Ready
-        th.nowrap.text-center Place
-        th.w-100 Time
-        th.nowrap.text-center Current split
-        th.nowrap.text-center Stats
-        th.nowrap.text-center Twitch
-        th.nowrap.text-center Linked run
-      tbody
-        - race.entries.includes(:user).order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS LAST').order('readied_at ASC NULLS FIRST').each do |entry|
-          tr
-            td.nowrap = user_badge(entry.user)
-            td.nowrap = entry.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
-            - if entry.done?
-              td.text-center.rounded.text-monospace
-                b class=entry_color(entry) = entry_place(entry)
-            - else
-              td.text-center: b = entry_place(entry)
-            td.nowrap
+h6.card-header Entries
+- if race.entries.none?
+  .card-body: i No one here
+- else
+  .table-responsive: table.card-body.table.mb-0
+    thead: tr
+      th.nowrap Name
+      th.nowrap.text-center Status
+      th.w-100 Time
+      th.nowrap.text-center Current split
+      th.nowrap.text-center Stats
+      th.nowrap.text-center Links
+    tbody
+      - race.entries.includes(:user).order('finished_at ASC NULLS LAST').order('forfeited_at ASC NULLS LAST').order('readied_at ASC NULLS FIRST').each do |entry|
+        tr
+          td.nowrap = user_badge(entry.user)
+          td.nowrap.text-center
+            - if race.started?
               - if entry.done?
-                b class=entry_color(entry) = entry.duration.format
+                b class=entry_color(entry) = entry_place(entry)
               - else
-                span data={abstime: race.started_at} -
-              - entries = entry.user.entries
-              - places = entries.map(&:place)
-            td.nowrap
-              - if entry.run.present? && race.started?
-                - segment = entry.run.segments.order(segment_number: :asc).where(realtime_duration_ms: nil).first
-                - if segment
-                  .badge.badge-dark.mr-2 #{segment}
-                  span.count data={ms: ((Time.now.utc - race.started_at) * 1000).floor - segment.start(Run::REAL).to_ms}
-                    = Duration.new(((Time.now.utc - race.started_at) * 1000).floor - segment.start(Run::REAL).to_ms).format
-            td.nowrap.text-center
-              span.badge.badge-dark.mr-2.tip title='1sts/2nds/3rds'
-                => icon('fas', 'medal')
-                span.text-gold = places.count(1)
-                span.text-secondary = '/'
-                span.text-silver = places.count(2)
-                span.text-secondary = '/'
-                span.text-bronze = places.count(3)
-              span.badge.badge-dark.tip title='Finishes/Forfeits'
-                => icon('fas', 'receipt')
-                b.text-success = entries.count(:finished_at)
-                span.text-secondary = '/'
-                span.text-danger = entries.count(:forfeited_at)
-            td.nowrap.text-center
-              - if entry.user.twitch.present?
-                a.text-light.tip href=entry.user.twitch.url title='Watch on Twitch'
-                  = icon('fab', 'twitch')
-            td.nowrap.text-center
-              - if entry.run.present?
-                a.text-light.tip href=run_path(entry.run) title='See associated run'
-                  = icon('fas', 'scroll')
+                b = entry_place(entry)
+            - else
+              = entry.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
+          td.nowrap
+            - if entry.done?
+              b class=entry_color(entry) = entry.duration.format
+            - elsif race.started?
+              span data={abstime: race.started_at.rfc3339(3)} -
+            - entries = entry.user.entries
+            - places = entries.map(&:place)
+          td.nowrap
+            - if entry.run.present? && race.started?
+              - segment = entry.run.segments.order(segment_number: :asc).where(realtime_duration_ms: nil).first
+              - if segment
+                .badge.badge-dark.mr-2 #{segment}
+                span.count data={abstime: (race.started_at + (segment.start(Run::REAL).to_ms / 1000)).rfc3339(3)} -
+          td.nowrap.text-center
+            span.badge.badge-dark.mr-2.tip title='1sts/2nds/3rds'
+              => icon('fas', 'medal')
+              span.text-gold = places.count(1)
+              span.text-secondary = '/'
+              span.text-silver = places.count(2)
+              span.text-secondary = '/'
+              span.text-bronze = places.count(3)
+            span.badge.badge-dark.tip title='Finishes/forfeits'
+              => icon('fas', 'flag-checkered')
+              b.text-success = entries.count(:finished_at)
+              span.text-secondary = '/'
+              span.text-danger = entries.count(:forfeited_at)
+          td.nowrap.text-center
+            - if entry.user.twitch.present?
+              a.text-light.tip href=entry.user.twitch.url title='Watch on Twitch'
+                = icon('fab', 'twitch')
+            - if entry.run.present?
+              a.text-light.tip href=run_path(entry.run) title='See associated run'
+                = icon('fas', 'scroll')

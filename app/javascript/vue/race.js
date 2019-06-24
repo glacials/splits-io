@@ -6,11 +6,13 @@ import { ts } from '../time'
 
 import consumer from '../channels/consumer'
 import raceChat from './race-chat.js'
+import raceDisclaimer from './race-disclaimer.js'
 import raceNav from './race-nav.js'
 
 export default {
   components: {
     raceChat,
+    raceDisclaimer,
     raceNav
   },
   created: async function() {
