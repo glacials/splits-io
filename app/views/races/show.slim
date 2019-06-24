@@ -10,7 +10,7 @@
       li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_category_path(@race.game, @race.category))
     - else
       li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_path(@race.game))
-    li.breadcrumb-item.active = link_to(@race, polymorphic_path(@race))
+    li.breadcrumb-item.active = link_to(@race.to_param, polymorphic_path(@race))
 
 #vue-race
   race inline-template=true raceable-type=@race.type raceable-id=@race.id

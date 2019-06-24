@@ -1,4 +1,4 @@
-class Api::V4::Races::Entries::ApplicationController < Api::V4::ApplicationController
+class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationController
   before_action :set_time, only: %i[update]
   before_action :set_user
   before_action :set_raceable

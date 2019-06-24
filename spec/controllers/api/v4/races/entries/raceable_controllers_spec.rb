@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 raceables = {
-  race:       Api::V4::Races::Entries::RacesController,
-  bingo:      Api::V4::Races::Entries::BingosController,
-  randomizer: Api::V4::Races::Entries::RandomizersController
+  race:       Api::V4::Raceables::Entries::RacesController,
+  bingo:      Api::V4::Raceables::Entries::BingosController,
+  randomizer: Api::V4::Raceables::Entries::RandomizersController
 }
 
 raceables.each do |r, klass|

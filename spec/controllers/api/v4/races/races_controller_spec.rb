@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V4::Races::RacesController do
+RSpec.describe Api::V4::Raceables::RacesController do
   describe '#create' do
     context 'with no authorization header' do
       subject(:response) { post :create, params: {category_id: 1} }

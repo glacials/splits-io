@@ -1,4 +1,4 @@
-class Api::V4::Races::RandomizersController < Api::V4::Races::ApplicationController
+class Api::V4::Raceables::RandomizersController < Api::V4::Raceables::ApplicationController
   def index
     render json: Api::V4::RaceBlueprint.render(@raceables, view: :randomizer)
   end

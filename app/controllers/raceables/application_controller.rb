@@ -1,4 +1,4 @@
-class Races::ApplicationController < ApplicationController
+class Raceables::ApplicationController < ApplicationController
   before_action :set_race,         only: [:show, :update]
   before_action :check_permission, only: [:show]
   before_action :set_race_gon,     only: [:show]

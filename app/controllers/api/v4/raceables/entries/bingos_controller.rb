@@ -1,4 +1,4 @@
-class Api::V4::Races::Entries::BingosController < Api::V4::Races::Entries::ApplicationController
+class Api::V4::Raceables::Entries::BingosController < Api::V4::Raceables::Entries::ApplicationController
   def show
     super
   end

@@ -1,4 +1,4 @@
-class Api::V4::Races::ApplicationController < Api::V4::ApplicationController
+class Api::V4::Raceables::ApplicationController < Api::V4::ApplicationController
   before_action :set_raceable, only: %i[show update]
   before_action :set_raceables, only: %i[index]
   before_action :set_user, only: %i[create update]

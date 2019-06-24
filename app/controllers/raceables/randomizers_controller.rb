@@ -1,4 +1,4 @@
-class Races::RandomizersController < Races::ApplicationController
+class Raceables::RandomizersController < Raceables::ApplicationController
   def show
     render 'races/show'
   end

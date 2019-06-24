@@ -118,9 +118,9 @@ Rails.application.routes.draw do
   get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download
   get '/:run/download/:timer',            to: 'runs/exports#timer' # deprecated
 
-  get '/races/:race',         to: 'races/races#show',       as: :race
-  get '/bingos/:race',        to: 'races/bingos#show',      as: :bingo
-  get '/randomizers/:race',   to: 'races/randomizers#show', as: :randomizer
+  get '/races/:race',         to: 'raceables/races#show',       as: :race
+  get '/bingos/:race',        to: 'raceables/bingos#show',      as: :bingo
+  get '/randomizers/:race',   to: 'raceables/randomizers#show', as: :randomizer
 
   namespace :api do
     namespace :webhooks do
@@ -163,18 +163,18 @@ Rails.application.routes.draw do
       post '/convert', to: 'converts#create'
 
       Raceable::RACE_TYPES.map { |raceable| raceable.type.to_s }.each do |type|
-        get   "/#{type.pluralize}",           to: "races/#{type.pluralize}#index",  as: type.pluralize
-        post  "/#{type.pluralize}",           to: "races/#{type.pluralize}#create"
-        get   "/#{type.pluralize}/:raceable", to: "races/#{type.pluralize}#show",   as: type
-        patch "/#{type.pluralize}/:raceable", to: "races/#{type.pluralize}#update"
+        get   "/#{type.pluralize}",           to: "raceables/#{type.pluralize}#index",  as: type.pluralize
+        post  "/#{type.pluralize}",           to: "raceables/#{type.pluralize}#create"
+        get   "/#{type.pluralize}/:raceable", to: "raceables/#{type.pluralize}#show",   as: type
+        patch "/#{type.pluralize}/:raceable", to: "raceables/#{type.pluralize}#update"
 
-        get    "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#show"
-        put    "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#create"
-        patch  "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#update"
-        delete "/#{type.pluralize}/:raceable/entry", to: "races/entries/#{type.pluralize}#destroy"
+        get    "/#{type.pluralize}/:raceable/entry", to: "raceables/entries/#{type.pluralize}#show"
+        put    "/#{type.pluralize}/:raceable/entry", to: "raceables/entries/#{type.pluralize}#create"
+        patch  "/#{type.pluralize}/:raceable/entry", to: "raceables/entries/#{type.pluralize}#update"
+        delete "/#{type.pluralize}/:raceable/entry", to: "raceables/entries/#{type.pluralize}#destroy"
 
-        get  "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#index",  as: "#{type}_chat"
-        post "/#{type.pluralize}/:raceable/chat", to: "races/messages/#{type.pluralize}#create", as: "#{type}_chats"
+        get  "/#{type.pluralize}/:raceable/chat", to: "raceables/messages/#{type.pluralize}#index",  as: "#{type}_chat"
+        post "/#{type.pluralize}/:raceable/chat", to: "raceables/messages/#{type.pluralize}#create", as: "#{type}_chats"
       end
 
       post '/timesync', to: 'time#create'

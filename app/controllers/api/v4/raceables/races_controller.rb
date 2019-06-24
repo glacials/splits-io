@@ -1,4 +1,4 @@
-class Api::V4::Races::RacesController < Api::V4::Races::ApplicationController
+class Api::V4::Raceables::RacesController < Api::V4::Raceables::ApplicationController
   def index
     render json: Api::V4::RaceBlueprint.render(@raceables, view: :race)
   end
