@@ -871,6 +871,24 @@ raceable in order to send a Chat Message to it.
 | `created_at` | string           | never | The time and date at which this message was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at` | string           | never | The time and date at which this message was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `user`       | [Runner][runner] | never | The Runner that sent the message.                                                                                            |
+
+</details>
+
+<details>
+<summary>Fetching chat for a race</summary>
+
+```sh
+curl https://splits.io/api/v4/races/:race/chat
+curl https://splits.io/api/v4/bingos/:bingo/chat
+curl https://splits.io/api/v4/randomizers/:randomizer/chat
+```
+
+| Status Codes | Success? | Body Present? | Description                                                    |
+|:-------------|:---------|:--------------|:---------------------------------------------------------------|
+| 200          | Yes      | Yes           | A paginated array of all the chat messages for the raceable.   |
+| 403          | No       | Yes           | User does not have permission to read chat from this raceable. |
+| 404          | No       | Yes           | No raceable found for the ID given.                            |
+
 </details>
 
 <details>
@@ -893,6 +911,14 @@ curl -X POST https://splits.io/api/v4/randomizers/:randomizer/chat \
   -d '{"body":"a message body here"}'
 ```
 Send a Chat Message to a raceable. All fields except `body` are inferred from your access token.
+
+| Status Codes | Success? | Body Present? | Description                                                                                              |
+|:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------------|
+| 201          | Yes      | Yes           | A paginated array of all the chat messages for the raceable.                                             |
+| 400          | No       | Yes           | An error occured while creating the message. The `error` key will contain a user-friendly error message. |
+| 403          | No       | Yes           | User does not have permission to send chat to this raceable.                                             |
+| 404          | No       | Yes           | No raceable found for the ID given.                                                                      |
+
 </details>
 
 ### Websockets
@@ -903,7 +929,11 @@ ActionCable and one for performing the tasks manually.
 When dealing with frames manually, note that every new object level needs to be wrapped in a `JSON.stringify` call if
 sending or `JSON.parse` when receiving.
 
-#### Connecting With ActionCable
+#### Connecting
+
+<details>
+<summary>Connecting With ActionCable</summary>
+
 ```javascript
 // consumer.js
 import { createConsumer } from "@rails/actioncable"
@@ -912,14 +942,22 @@ export default createConsumer("wss://splits.io/api/cable")
 ```
 The connection will be automatically established for you when you create a subscription.
 
-#### Connecting Manually
+</details>
+
+<details>
+<summary>Connecting Manually</summary>
+
 ```javascript
 /* [->] */ websocket = new WebSocket("wss://splits.io/api/cable")
 /* [<-] */ {"type":"welcome"}
 ```
 Connecting is as easy as opening the socket.
 
-#### Connection Information
+</details>
+
+<details>
+<summary>General Connection Information</summary>
+
 If you would like to be able to see race updates for secret races, then supply a `access_token` parameter as well to
 authenticate as a user. Alternatively, `join_token` may be passed into the Raceable Subscription instead.
 
@@ -929,7 +967,11 @@ The `message` key will be a timestamp from the server. You should assume that if
 extended period of time that the connection has been lost. If you are using ActionCable disconnects will be handled
 for you.
 
-#### Subscribing With ActionCable
+</details>
+
+<details>
+<summary>Subscribing With ActionCable</summary>
+
 ```javascript
 // Assuming consuer.js is in the same folder from above
 import consumer from './consumer'
@@ -975,7 +1017,12 @@ consumer.subscriptions.create({
     }
   })
 ```
-##### Subscribing Manually
+
+</details>
+
+<details>
+<summary>Subscribing Manually</summary>
+
 ```javascript
 // Global Raceable Channel subscription
 /* [->] */ websocket.send(JSON.stringify({command: 'subscribe', identifier: JSON.stringify({channel: 'Api::V4::GlobalRaceableChannel'})}))
@@ -986,8 +1033,11 @@ consumer.subscriptions.create({
 /* [<-] */ {"identifier":"{\"channel\":\"Api::V4::RaceableChannel\",\"raceable_id\":\"11902182-aead-44c6-a7b8-e526951564b1\",\"raceable_type\":\"race\",\"join_token\":\"hzT5Fp6tX96wt2omLmRn4RHT\"}","type":"confirm_subscription"}
 ```
 
+</details>
 
-#### Subscription Information
+<details>
+<summary>General Subscription Information</summary>
+
 The global raceable channel will provide top level information about all raceables that are currently active. This is
 useful if you want to have a listing with basic information about all the current items. If `state: 1` is passed with
 the indentifier, you will also receive the current state of all the raceables in a separate frame.
@@ -1030,6 +1080,7 @@ possible `types`s and what extra keys they have and the data they contain.
 | new_message                 | RaceableChannel       | There is a new message for the race                                | `chat_message` which contains a new chat message schema                             |
 | new_attachment              | RaceableChannel       | There is a new randomizer attachment                               | `raceable` which contains a new raceable schema                                     |
 
+</details>
 
 [attachment]: #attachment
 [authentication]: #authentication--authorization

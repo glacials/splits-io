@@ -49,16 +49,12 @@ export default {
       join_token:    (window.gon.race || {}).join_token
     }, {
       connected: () => {
-        const alert = document.getElementById('disconnected-alert')
-        if (alert) {
-          alert.parentNode.removeChild(alert)
-        }
+        // Clean up disconnect if its shown
+        // Maybe utilize state to update the page?
       },
 
       disconnected: () => {
-        const alert = createAlert('danger', 'Disconnected')
-        alert.setAttribute('id', 'disconnected-alert')
-        document.getElementById('alerts').appendChild(alert)
+        // Maybe show disconnects?
       },
 
       received: (data) => {
@@ -73,13 +69,11 @@ export default {
             break
           case 'raceable_start_scheduled':
             this.raceable = data.data.raceable
-            const duration = moment.duration(moment(data.data.raceable.started_at).valueOf() - ts.now())
-            const startAlert = createAlert('warning', `Race starting in ${duration.format('s [seconds]')}!`)
-            startAlert.setAttribute('data-start', data.data.raceable.started_at)
-            document.getElementById('alerts').appendChild(startAlert)
-            countdown(startAlert)
             break
 
+          case 'raceable_ended':
+            this.raceable = data.data.raceable
+            break;
           case 'raceable_ended:html':
             document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html

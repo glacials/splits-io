@@ -1,3 +1,5 @@
+# This file tests all v4 API entry raceable controllers as they all share the same code
+
 require 'rails_helper'
 
 raceables = {
