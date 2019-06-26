@@ -18,10 +18,12 @@ export default {
   created: async function() {
     this.error = false
 
+    const headers = new Headers()
+    if (localStorage.getItem('splitsio_access_token')) {
+      headers.append('Authorization', `Bearer ${localStorage.getItem('splitsio_access_token')}`)
+    }
     const response = await fetch(`/api/v4/${this.raceableType}s/${this.raceableId}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
-      },
+      headers: headers
     })
     if (!response.ok) {
       throw (await response.json()).error || response.statusText
