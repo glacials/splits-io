@@ -87,6 +87,10 @@ export default {
           case 'new_attachment:html':
             document.getElementById('attachments').innerHTML = data.data.attachments_html
             break
+
+          case 'new_card':
+            document.getElementById('card-url').innerText = data.data.raceable.card_url
+            break
         }
       }
     })

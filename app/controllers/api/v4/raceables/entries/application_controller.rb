@@ -1,6 +1,7 @@
 class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationController
   before_action :set_time, only: %i[update]
   before_action :set_user
+  before_action :validate_user
   before_action :set_raceable
   before_action :check_permission, only: %i[create]
   before_action :massage_params

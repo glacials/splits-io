@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "properties": {
     "race": {
-      "$ref": "../../../../models/api/v4/raceable.json"
+      "$ref": "../../../../models/api/v4/race.json"
     }
   }
 }

@@ -75,14 +75,16 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_user
-    if request.headers['Authorization'].present? || params[:access_token].present?
-      doorkeeper_authorize!(:manage_race)
-      self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-    end
+    return unless request.headers['Authorization'].present? || params[:access_token].present?
 
-    head :unauthorized if current_user.nil?
+    doorkeeper_authorize!(:manage_race)
+    self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   rescue ActiveRecord::RecordNotFound
     head :unauthorized
+  end
+
+  def validate_user
+    head :unauthorized if current_user.nil?
   end
 
   def set_raceable(klass) # rubocop:disable Naming/AccessorMethodName

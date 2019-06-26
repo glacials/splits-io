@@ -1,5 +1,6 @@
 class Api::V4::Raceables::Messages::ApplicationController < Api::V4::ApplicationController
   before_action :set_user, only: %i[create]
+  before_action :validate_user, only: %i[create]
   before_action :set_raceable, only: %i[index create]
   before_action :set_messages, only: %i[index]
 

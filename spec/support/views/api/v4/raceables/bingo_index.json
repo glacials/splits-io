@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "bingos"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "bingos": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../models/api/v4/bingo.json"
+      }
+    }
+  }
+}

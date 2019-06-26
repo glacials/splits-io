@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "required": [
+    "bingo"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "bingo": {
+      "$ref": "../../../../models/api/v4/bingo.json"
+    }
+  }
+}

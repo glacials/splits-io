@@ -7,9 +7,9 @@ class Api::V4::RaceableBroadcastJob < ApplicationJob
       raceable: Api::V4::RaceBlueprint.render_as_hash(raceable, view: raceable.type)
     }
     onsite_msg = {
-      message:       'Updated html',
+      message:      'Updated html',
       entries_html: ApplicationController.render(partial: 'races/entries_table', locals: {race: raceable}),
-      stats_html:    ApplicationController.render(partial: 'races/stats', locals: {race: raceable})
+      stats_html:   ApplicationController.render(partial: 'races/stats', locals: {race: raceable})
     }
     if raceable.randomizer?
       onsite_msg[:attachments_html] = ApplicationController.render(partial: 'races/attachments', locals: {race: raceable})

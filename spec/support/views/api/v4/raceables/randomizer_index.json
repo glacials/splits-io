@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "randomizers"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "randomizers": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../models/api/v4/randomizer.json"
+      }
+    }
+  }
+}

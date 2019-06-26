@@ -20,6 +20,7 @@ class Api::V4::WebsocketMessage
     new_message
 
     new_attachment
+    new_card
   ].freeze
 
   HTML_TYPES = TYPES.map { |t| "#{t}:html" }.freeze

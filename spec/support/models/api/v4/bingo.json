@@ -4,12 +4,13 @@
     "id",
     "visibility",
     "notes",
+    "card_url",
     "started_at",
     "created_at",
     "updated_at",
-    "category",
     "owner",
-    "entries"
+    "entries",
+    "game"
   ],
   "properties": {
     "id": {
@@ -30,6 +31,12 @@
         "null"
       ]
     },
+    "card_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "started_at": {
       "type": [
         "string",
@@ -42,8 +49,8 @@
     "updated_at": {
       "type": "string"
     },
-    "category": {
-      "$ref": "../../../models/api/v4/category.json"
+    "game": {
+      "$ref": "../../../models/api/v4/game.json"
     },
     "owner": {
       "$ref": "../../../models/api/v4/runner.json"

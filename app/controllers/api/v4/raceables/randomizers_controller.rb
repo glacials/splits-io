@@ -1,6 +1,8 @@
 class Api::V4::Raceables::RandomizersController < Api::V4::Raceables::ApplicationController
+  before_action :check_params, only: %i[update]
+
   def index
-    render json: Api::V4::RaceBlueprint.render(@raceables, view: :randomizer)
+    super(@raceables, Randomizer)
   end
 
   def create
@@ -9,22 +11,19 @@ class Api::V4::Raceables::RandomizersController < Api::V4::Raceables::Applicatio
   end
 
   def show
-    render json: Api::V4::RaceBlueprint.render(@raceable, root: :randomizer, view: :randomizer, chat: true)
+    super(@raceable)
   end
 
   def update
-    if @raceable.started?
-      head :forbidden
-      return
+    if @raceable.attachments.attach(params[:randomizer][:attachments])
+      render json: Api::V4::RaceBlueprint.render(@raceable, view: :randomizer, root: :randomizer)
+      Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'new_attachment', 'The race owner has attached a new file')
+    else
+      render status: :bad_request, json: {
+        status: 400,
+        error:  @raceable.errors.full_messages.to_sentence
+      }
     end
-
-    if params[:randomizer].blank?
-      head :bad_request
-      return
-    end
-
-    @raceable.attachments.attach(params[:randomizer][:attachments])
-    Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'new_attachment', 'The race owner has attached a new file')
   end
 
   private
@@ -39,5 +38,23 @@ class Api::V4::Raceables::RandomizersController < Api::V4::Raceables::Applicatio
 
   def randomizer_params
     params.permit(:game_id, :visibility, :notes, :seed)
+  end
+
+  def check_params
+    if @raceable.started?
+      render status: :conflict, json: {
+        status: 409,
+        error:  'Cannot update randomizer after it has started'
+      }
+      return
+    end
+
+    if params[:randomizer].blank?
+      render status: :bad_request, json: {
+        status: 400,
+        error:  'Parameter "randomizer" cannot be blank'
+      }
+      return
+    end
   end
 end
