@@ -11,8 +11,9 @@
     - if race.notes.present?
       h5 = "Notes: #{race.notes}"
     h5
-      span> created by
-      span = user_badge(race.owner)
+      span
+        ' created by
+        = user_badge(race.owner)
       - if race.belongs_to?(current_user) && !race.public_visibility? && !race.started?
         button.btn.btn-outline-light.btn-sm.clipboard-btn.ml-2(
           data-clipboard-text=polymorphic_url(race, join_token: race.join_token)
@@ -22,6 +23,6 @@
           span#copy = icon('fas', 'share-alt')
           span#copied style='display: none;' = icon('fas', 'check')
 
-  .col-md-8
+  .col-md-12
     div v-if="false" = render partial: 'shared/spinner'
     = render partial: 'races/nav'

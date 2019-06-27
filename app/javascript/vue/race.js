@@ -16,6 +16,9 @@ export default {
     raceNav
   },
   created: async function() {
+    window.addEventListener('offline', () => this.online = false)
+    window.addEventListener('online', () => this.online = true)
+
     this.error = false
 
     const headers = new Headers()
@@ -108,6 +111,7 @@ export default {
     error: false,
     globalSubscription: null,
     loading: true,
+    online: true,
     raceable: null,
     raceSubscription: null,
   }),

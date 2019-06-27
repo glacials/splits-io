@@ -29,7 +29,8 @@ export default {
       this.errors.finish = false
       this.loading.finish = true
       try {
-        this.entry = await this.updateEntry({finished_at: new Date(ts.now())})
+        this.entry.finished_at = new Date(ts.now())
+        this.updateEntry({finished_at: new Date(ts.now())})
       } catch(error) {
         this.errors.finish = `Error: ${error}`
       } finally {
@@ -40,7 +41,8 @@ export default {
       this.errors.forfeit = false
       this.loading.forfeit = true
       try {
-        this.entry = await this.updateEntry({forfeited_at: new Date(ts.now())})
+        this.entry.forfeited_at = new Date(ts.now())
+        this.updateEntry({forfeited_at: new Date(ts.now())})
       } catch(error) {
         this.errors.forfeit = `Error: ${error}`
       } finally {
@@ -51,7 +53,8 @@ export default {
       this.errors.join = false
       this.loading.join = true
       try {
-        this.entry = await this.updateEntry({}, 'PUT')
+        this.entry = {}
+        this.updateEntry({}, 'PUT')
       } catch(error) {
         this.errors.join = `Error: ${error}`
       } finally {
@@ -62,7 +65,8 @@ export default {
       this.errors.leave = false
       this.loading.leave = true
       try {
-        await this.updateEntry({}, 'DELETE')
+        this.entry = null
+        this.updateEntry({}, 'DELETE')
         this.entry = null
       } catch(error) {
         this.errors.leave = `Error: ${error}`
@@ -74,7 +78,8 @@ export default {
       this.errors.ready = false
       this.loading.ready = true
       try {
-        this.entry = await this.updateEntry({readied_at: new Date(ts.now())})
+        this.entry.readied_at = new Date(ts.now())
+        this.updateEntry({readied_at: new Date(ts.now())})
       } catch(error) {
         this.errors.ready = `Error: ${error}`
       } finally {
@@ -85,7 +90,8 @@ export default {
       this.errors.unfinish = false
       this.loading.unfinish = true
       try {
-        this.entry = await this.updateEntry({finished_at: null})
+        this.entry.finished_at = null
+        this.updateEntry({finished_at: null})
       } catch(error) {
         this.errors.unfinish = `Error: ${error}`
       } finally {
@@ -96,7 +102,8 @@ export default {
       this.errors.unforfeit = false
       this.loading.unforfeit = true
       try {
-        this.entry = await this.updateEntry({forfeited_at: null})
+        this.entry.forfeited_at = null
+        this.updateEntry({forfeited_at: null})
       } catch(error) {
         this.errors.unforfeit = `Error: ${error}`
       } finally {
@@ -107,7 +114,8 @@ export default {
       this.errors.unready = false
       this.loading.unready = true
       try {
-        this.entry = await this.updateEntry({readied_at: null})
+        this.entry.readied_at = null
+        this.updateEntry({readied_at: null})
       } catch(error) {
         this.errors.unready = `Error: ${error}`
       } finally {
@@ -115,28 +123,37 @@ export default {
       }
     },
     updateEntry: async function(params, method = 'PATCH') {
-      const response = await fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/entry`, {
-        method: method,
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          entry: params,
-          join_token: (new URLSearchParams(window.location.search)).get('join_token')
-        }),
-      })
+      const syncEntry = async () => {
+        const response = await fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/entry`, {
+          method: method,
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            entry: params,
+            join_token: (new URLSearchParams(window.location.search)).get('join_token')
+          }),
+        })
 
-      if (!response.ok) {
-        throw (await response.json()).error || response.statusText
+        if (!response.ok) {
+          throw (await response.json()).error || response.statusText
+        }
+
+        if (response.status === 204 || response.status === 205) {
+          // No body to parse
+          return
+        }
+
+        this.entry = (await response.json()).entry
       }
 
-      if (response.status === 204 || response.status === 205) {
-        // No body to parse
-        return
+      // Protect against disconnections ruining times -- save the request for later if we're offline
+      if (navigator.onLine) {
+        syncEntry()
+      } else {
+        window.addEventListener('online', syncEntry)
       }
-
-      return (await response.json()).entry
     },
   },
   name: 'race-nav',
