@@ -21,7 +21,7 @@
       - if race.finished?
         h2.statcard-number class=statcard_class(race) Finished
         span.statcard-desc class=statcard_class(race) title=race.finished_at
-          = render partial: 'shared/relative_time', locals: {time: race.finished_at}
+          = render partial: 'shared/relative_time', locals: {time: race.finished_at, ago: true}
   .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.visibility.titleize
     span.statcard-desc Visibility
