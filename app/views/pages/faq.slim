@@ -139,7 +139,7 @@ article
     .card-body
       p This error happens when the page request times out, which is typically a sign that your splits took too long to
         load into memory and parse. This happens to LiveSplit files with a very large
-      code style='display: block; margin: 1em; white-space: nowrap;'
+      code style='display: block; margin: 1em; white-space: nowrap'
         | (# attempts) * (# splits in the run)
       p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like stats!).
       p It's my own fault that Splits.io's handling of this is not as optimized as it should be, and I'm actively working
@@ -153,6 +153,121 @@ article
       a.btn.btn-dark.text-light.float-right href='https://github.com/glacials/splits-io/labels/speed'
         => icon('fab', 'github')
         | Speed label on GitHub
+
+  .card.mb-4
+    h5.card-header
+      | My sum of best and/or possible timesave is bonkers and makes no sense!
+      .float-right: a.text-muted data={turbolinks: false} href='#sum-of-best' name='sum-of-best' ¶
+    .card-body
+      p
+        ' This is a really interesting bug! If you don't care about why it happens, just scroll to the bottom.
+      p
+        ' When LiveSplit calculates your sum of best, it's actually not a literal sum of your best segments! Take this
+        ' run:
+      pre.bg-dark.text-light.p-3.m-3: code
+        | A ---> B ---> C
+      p
+        ' Let's say a new route is discovered that foregoes
+        code> B
+        ' , so you update your splits to accomodate.
+      pre.bg-dark.text-light.p-3.m-3: code
+        | A ---> D ---> E ---> C
+      p
+        ' Because it's a new route, you're not great at
+        code> D
+        ' and
+        code> E
+        ' yet! The route is strictly better, but your time actually suffers while you grind attempts. With the simple
+        ' way of calculating sum of best, your sum-of-best suffers as well! But LiveSplit realizes this and tries to
+        ' give you what you might actually be wanting from a sum-of-best: the answer to the question "What's my fastest
+        ' possible run?".
+      p
+        ' So instead of just adding up all your gold times, LiveSplit keeps track of your route changes. Internally,
+        ' LiveSplit remembers your splits more like this:
+      pre.bg-dark.text-light.p-3.m-3: code
+        | A -------> B ------> C
+        br
+        |  \                   ^
+        br
+        |   \---> D ---> E ---/
+      p
+        ' Because it remembers your gold time for
+        code> B
+        ' , your sum-of-best will actually not change when you update your route! As odd as it may sound,
+        b> your sum-of-best is defined as the shortest path
+        ' through this network of splits. If your gold time for
+        code> B
+        ' is faster than the sum of your
+        code> D
+        ' and
+        code> E
+        ' gold times, then
+        code> A -> B -> C
+        ' is still your fastest route, and so your sum-of-best is still the sum of their gold times, even after you've
+        ' switched routes.
+      p
+        ' Now, here's where the bug comes up! Let's say again you have a run that looks like this:
+      pre.bg-dark.text-light.p-3.m-3: code
+        | A ---> B ---> C
+      p
+        ' And let's say again that a new route is discovered and it's time to update your splits. Being a reasonable
+        ' person, you might just add a new split between
+        code> B
+        ' and
+        code> C
+        ' , then rename B.
+      pre.bg-dark.text-light.p-3.m-3: code
+        | A ---> D ---> E ---> C
+        br
+        |        |
+        br
+        |  was called B
+      p
+        ' Because you've only renamed B (rather than deleting it) and changed what it actually means to complete it
+        ' in-game, LiveSplit now holds a corrupted network of the possible paths through the game:
+      pre.bg-dark.text-light.p-3.m-3: code
+        | A ---> D ----------> C
+        br
+        |         \            ^
+        br
+        |          \---> E ---/
+      p
+        ' In this corrupted map of routes,
+        code> A -> D -> C
+        ' will always be faster than
+        code> A -> D -> E -> C
+        ' , so LiveSplit will build its sum-of-best based on the sum of those segments' gold times, even though that's
+        ' not a real route through the game.
+      p
+        ' There's one workaround to this, one fix, and one way to avoid it in the future.
+      p
+        ' To
+        b> work around
+        ' this issue without damaging your splits (but also without repairing them), go into LiveSplit's settings and
+        ' check
+        i
+          ' "simple sum of best"
+        ' . This will force LiveSplit to stop being clever and actually just sum your bests to get a sum-of-best time.
+        ' However, your splits will still be corrupted under the hood, which will show when you upload them to Splits.io
+        ' or otherwise perform analysis on them or share them with others.
+      p
+        ' To
+        b> fix
+        ' this problem if it's already happened to you, go into LiveSplit and
+        b delete any repurposed splits' gold times
+        ' . You can do this by selecting the best time in the split editor and pressing Delete on your keyboard.
+        ' This will make LiveSplit forget all history about the split, so it won't remember that it used to link up with
+        ' a different split. You can manually re-type the gold time into the field again if you want to keep it.
+      p
+        ' To
+        b> avoid
+        ' this problem in the future,
+        b never repurpose a split
+        ' . If how you play a split in the game changes, delete the split and recreate it. If you want to separate one
+        ' split into two, delete the split and create two new ones. If you do this LiveSplit will remember that the
+        ' splits existed and are
+        i> a
+        ' path through the game, but won't use them to build nonsensical paths and therefore nonsensical sum-of-bests.
 
   .card
     h5.card-header
