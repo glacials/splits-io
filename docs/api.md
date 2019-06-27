@@ -871,7 +871,6 @@ raceable in order to send a Chat Message to it.
 | `created_at` | string           | never | The time and date at which this message was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at` | string           | never | The time and date at which this message was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `user`       | [Runner][runner] | never | The Runner that sent the message.                                                                                            |
-
 </details>
 
 <details>
@@ -921,64 +920,174 @@ Send a Chat Message to a raceable. All fields except `body` are inferred from yo
 
 </details>
 
-### Websockets
-Splits.io uses ActionCable for the WebSocket integration. JavaScript users will have the options to use the official
-ActionCable package on NPM to setup their integrations. Each section will be divided into 2 sections, one for using
-ActionCable and one for performing the tasks manually.
+### WebSockets
+Splits.io broadcasts updates to [raceables][raceable] in realtime over WebSockets. We use WebSockets only to push
+changes from Splits.io to clients; to send data the other way, you must use the REST APIs above.
 
-When dealing with frames manually, note that every new object level needs to be wrapped in a `JSON.stringify` call if
-sending or `JSON.parse` when receiving.
+<details>
+<summary>Why can't I use WebSockets to write data?</summary>
+
+To use WebSockets bidirectionally, clients need to do a lot of legwork. They have to nonce request messages to tell
+responses apart. They need to wait indefinitely for a response to every message they send. They have to handle the
+possibilities that a sent response might not arrive; that a delivered request might not be processed; that a response
+can error because of them, or because of the server; that they get rate limited; that their authentication expires; that
+a user expects to see any issues in the console; and many more.
+
+**All** these needs are solved by HTTP. It's free. It doesn't sound like much, but trust us -- we built raceables to be
+handled 100% over WebSockets, and got so many headaches re-implementing what were effectively basic features of HTTP or
+REST that we switched the nearly-complete implementation to the read-only WebSockets version you see today.
+
+As for the advantages of a persistent connection, [HTTP/2][1] solves this problem transparently! It keeps the TCP socket
+between client and server open during multiple requests. (Yes, we support HTTP/2!)
+
+[1]: https://en.wikipedia.org/wiki/HTTP/2
+</details>
+
+We use a light layer on top of WebSockets called Action Cable, which is part of Ruby on Rails. This layer is so light
+that you can use vanilla WebSockets without noticing it's there; but if you happen to be using JavaScript, you might opt
+to use the [Action Cable JavaScript library][actioncable-npm] to simplify your code a bit.
+
+In all examples below, we'll provide instructions for consuming Splits.io WebSockets using vanilla JavaScript as well as
+the Action Cable library. The vanilla JS instructions can roughly translate to whatever language you're using.
+
+**Note**: To assist languages that use strongly-typed schemas, Splits.io WebSocket fields that can hold one of multiple
+object types are double-encoded (its value is a string containing more JSON). What you might expect to look like
+```json
+{
+  "type": "confirm_subscription",
+  "identifier": {"channel": "Api::V4::GlobalRaceableChannel"},
+}
+```
+might instead look like
+```json
+{
+  "type": "confirm_subscription",
+  "identifier": "{\"channel\":\"Api::V4::GlobalRaceableChannel\"}",
+}
+```
+If you're not using a language with strongly-typed schemas, just decode the embedded JSON again.
+
+[actioncable-npm]: https://www.npmjs.com/package/actioncable
 
 #### Connecting
 
 <details>
-<summary>Connecting With ActionCable</summary>
+<summary>Connecting with vanilla JavaScript</summary>
 
 ```javascript
-// consumer.js
-import { createConsumer } from "@rails/actioncable"
+const websocket = new WebSocket("wss://splits.io/api/cable")
+// Splits.io's reply: {"type": "welcome"}
 
-export default createConsumer("wss://splits.io/api/cable")
+websocket.onmessage = function(event) {
+  const msg = JSON.parse(event.data)
+  switch(msg.type) {
+    case 'welcome':
+      console.log('Connected!')
+      break;
+    case 'ping':
+      // ...
+      break;
+  }
+}
 ```
-The connection will be automatically established for you when you create a subscription.
+Connecting is as easy as opening the socket and listening for messages.
 
-</details>
+**Note**: Supply an `access_token` field in the URL to access the authenticated user's secret races.
 
-<details>
-<summary>Connecting Manually</summary>
-
-```javascript
-/* [->] */ websocket = new WebSocket("wss://splits.io/api/cable")
-/* [<-] */ {"type":"welcome"}
+Once connected you'll receive a timestamped ping every ~3 seconds:
+```json
+{
+  "type": "ping",
+  "message": 1561095929
+}
 ```
-Connecting is as easy as opening the socket.
-
+You do not need to reply to pings. However if you don't get one for an extended period of time you should assume network
+conditions have killed your connection, and attempt to re-establish it.
 </details>
 
 <details>
-<summary>General Connection Information</summary>
-
-If you would like to be able to see race updates for secret races, then supply a `access_token` parameter as well to
-authenticate as a user. Alternatively, `join_token` may be passed into the Raceable Subscription instead.
-
-Once you have connected you will receive a ping frame every 3 seconds from the server. A ping frame looks like this:
-`{"type":"ping","message":1561095929}`
-The `message` key will be a timestamp from the server. You should assume that if you do not receive any pings for an
-extended period of time that the connection has been lost. If you are using ActionCable disconnects will be handled
-for you.
-
-</details>
-
-<details>
-<summary>Subscribing With ActionCable</summary>
+<summary>Connecting with Action Cable</summary>
 
 ```javascript
-// Assuming consuer.js is in the same folder from above
-import consumer from './consumer'
+import actioncable from "@rails/actioncable"
 
-consumer.subscriptions.create('Api::V4::GlobalRaceableChannel', {
+const cable = actioncable.createConsumer("wss://splits.io/api/cable")
+```
+This initiates the socket; it will be lazily connected in the next step.
+</details>
+
+</details>
+
+#### Subscribing to channels
+To receive updates from Splits.io, you first have to tell it what you want updates about. You do this by subscribing to
+**channels**.
+
+There are two channel types:
+
+| Channel               | Required params                | Optional params       | Description                                |
+|:----------------------|:-------------------------------|-----------------------|:-------------------------------------------|
+| GlobalRaceableChannel | *none*                         | `state`               | high-level information about all raceables |
+| RaceableChannel       | `raceable_type`, `raceable_id` | `state`, `join_token` | detailed information about one raceable    |
+
+There is one GlobalRaceableChannel and `n` RaceableChannels (one for each raceable). You can be subscribed to any number
+of channels at once, and they all stream over the same WebSocket connection.
+
+If you pass `state=1` when subscribing, you will get a dump of the current state of the world for that channel. You can
+use this to e.g. populate UIs when they first load.
+
+<details>
+<summary>Subscribing to a channel with vanilla JavaScript</summary>
+
+```javascript
+websocket.send(JSON.stringify({
+  command: 'subscribe',
+  identifier: JSON.stringify({
+    channel: 'Api::V4::GlobalRaceableChannel'
+  })
+}))
+
+/* Splits.io's reply:
+{
+  "type": "confirm_subscription",
+  "identifier": "{
+    \"channel\": \"Api::V4::GlobalRaceableChannel\"
+  }"
+}
+*/
+```
+
+```javascript
+websocket.send(JSON.stringify({
+  command: 'subscribe',
+  identifier: JSON.stringify({
+    channel:       "Api::V4::RaceableChannel",
+    raceable_type: "race",
+    raceable_id:   "11902182-aead-44c6-a7b8-e526951564b1",
+    join_token:    "hzT5Fp6tX96wt2omLmRn4RHT"
+  })
+}))
+
+/* Splits.io's reply:
+{
+  "type": "confirm_subscription",
+  "identifier": "{
+    \"channel\":       \"Api::V4::RaceableChannel\",
+    \"raceable_type\": \"race\",
+    \"raceable_id\":   \"11902182-aead-44c6-a7b8-e526951564b1\",
+    \"join_token\":    \"hzT5Fp6tX96wt2omLmRn4RHT\"
+  }",
+}
+*/
+```
+</details>
+
+<details>
+<summary>Subscribing to a channel with Action Cable</summary>
+
+```javascript
+cable.subscriptions.create("Api::V4::GlobalRaceableChannel", {
   connection() {
-    // Called when the subscription is ready for use on the server
+    // Called when the subscription is ready
   },
 
   disconnected() {
@@ -987,99 +1096,79 @@ consumer.subscriptions.create('Api::V4::GlobalRaceableChannel', {
 
   received(data) {
     switch(data.type) {
-      // Handle any status messages you wish to here
+      // See below for GlobalRaceableChannel message types
       case '...':
-        ''
+        // ...
         break;
     }
   }
 })
 
-consumer.subscriptions.create({
-    channel:       'Api::V4::RaceableChannel',
-    raceable_id:   "c198a25f-9f8a-43cd-92ab-472a952f9336",
+cable.subscriptions.create(
+  {
+    channel:       "Api::V4::RaceableChannel",
     raceable_type: "race"
-  }, {
+    raceable_id:   "c198a25f-9f8a-43cd-92ab-472a952f9336",
+  },
+  {
     connected: () => {
-      // Called when the subscription is ready for use on the server
+      // Called when the subscription is ready
     },
 
     disconnected: () => {
       // Called when the subscription has been terminated by the server
     },
 
-    received: (data) => {
+    received: data => {
       switch(data.type) {
-        // Handle any status messages you wish to here
+        // See below for RaceableChannel message types
         case '...':
+          // ...
           break
       }
     }
-  })
+  }
+)
 ```
-
 </details>
 
 <details>
-<summary>Subscribing Manually</summary>
+<summary>Message content & types</summary>
 
-```javascript
-// Global Raceable Channel subscription
-/* [->] */ websocket.send(JSON.stringify({command: 'subscribe', identifier: JSON.stringify({channel: 'Api::V4::GlobalRaceableChannel'})}))
-/* [<-] */ {"identifier":"{\"channel\":\"Api::V4::GlobalRaceableChannel\"}","type":"confirm_subscription"}
+`identifier` is the exact string you received when initiating the subscription, so you can compare it directly to
+determine how the message needs to be handled.
 
-// Individual Raceable subscription (join_token is optional here)
-/* [->] */ websocket.send(JSON.stringify({command: 'subscribe', identifier: JSON.stringify({channel: 'Api::V4::RaceableChannel', raceable_id: "11902182-aead-44c6-a7b8-e526951564b1", raceable_type: "race", join_token: "hzT5Fp6tX96wt2omLmRn4RHT"})}))
-/* [<-] */ {"identifier":"{\"channel\":\"Api::V4::RaceableChannel\",\"raceable_id\":\"11902182-aead-44c6-a7b8-e526951564b1\",\"raceable_type\":\"race\",\"join_token\":\"hzT5Fp6tX96wt2omLmRn4RHT\"}","type":"confirm_subscription"}
-```
-
-</details>
-
-<details>
-<summary>General Subscription Information</summary>
-
-The global raceable channel will provide top level information about all raceables that are currently active. This is
-useful if you want to have a listing with basic information about all the current items. If `state: 1` is passed with
-the indentifier, you will also receive the current state of all the raceables in a separate frame.
-
-The individual raceable channes provide information about every update on the race. If `state: 1` is also passed in
-with the indentifier, a raceable schema will also be sent in a separate frame.
-
-The basic layout of all data frames is as follows:
-```JSON
-{"identifier":"{\"channel\":\"Api::V4::RaceableChannel\",\"raceable_id\":\"63dc9840-6f5d-46c9-812c-45d4addd92f0\",\"raceable_type\":\"bingo\",\"join_token\":\"VKAqM7D3KLgFMazLMzW7ZXbz\"}","message":{"type":"new_message","data":{"message":"A new message has been created","chat_message":{"body":"you're going down scum!","created_at":"2019-06-21T11:48:36.890Z","entrant":true,"updated_at":"2019-06-21T11:48:36.890Z","user":{"avatar":"https://static-cdn.jtvnw.net/jtv_user_pictures/78b63ce9-f643-4009-aa34-af21928d5916-profile_image-300x300.png","created_at":"2019-04-04T21:01:34.224Z","display_name":"BatedUrGonnaDie","id":"1","name":"BatedUrGonnaDie","twitch_id":"18946907","updated_at":"2019-04-04T21:01:34.224Z"}}}}}
-```
-
-The identifier key is the same response as the one you received from the subscription.
-The message key will contain a JSON object that looks like the object below. This object is where all new information is stored.
-*Note: This object will not need extra deserialization*
-```JSON
+`message` is an object that contains the changes Splits.io is notifying you about. Note that the `message` object does
+not require extra deserialization.
+```json
 {
-    type: "string type identifier",
-    data: {
-        message: "human-readable message here",
-        ...
+  "identifier": "...",
+  "message": {
+    "type": "string identifier",
+    "data": {
+      "message": "human-readable description of what changed",
+      ...
     }
+  }
 }
 ```
-It is possible to have more keys in the `data` attribute, and most frame types will have more. Below is a list of all
-possible `types`s and what extra keys they have and the data they contain.
 
-| Type                        | Subscription          | Description                                                        | Extra Fields?                                                                       |
-|:----------------------------|:----------------------|:-------------------------------------------------------------------|:------------------------------------------------------------------------------------|
-| fatal_error                 | both                  | An error occured when processing the message                       | no                                                                                  |
-| raceable_start_scheduled    | both                  | The raceable is starting in a few seconds                          | no                                                                                  |
-| raceable_ended              | both                  | The raceable has finished                                          | no                                                                                  |
-| raceable_entrants_updated   | both                  | There is a change with one of the entrants (new, updated, deleted) | no                                                                                  |
-| global_state                | GlobalRaceableChannel | `state: 1` is provided to Global Subscription                      | `races`, `bingos`, and `randomizers` which contains the respective raceable schemas |
-| raceable_created            | GlobalRaceableChannel | A new raceable has been created                                    | `raceable` which contains a new raceable schema                                     |
-| raceable_updated            | RaceableChannel       | The bingo card or seed has been updated                            | `raceable` which contains a new raceable schema                                     |
-| raceable_not_found          | RaceableChannel       | No raceable found for the given ID                                 | `raceable` which contains a new raceable schema                                     |
-| raceable_invalid_join_token | RaceableChannel       | The join token is not valid for the raceable                       | `raceable` which contains a new raceable schema                                     |
-| raceable_state              | RaceableChannel       | `state: 1` is provided to the Raceable Subscription                | `raceable` which contains a new raceable schema                                     |
-| new_message                 | RaceableChannel       | There is a new message for the race                                | `chat_message` which contains a new chat message schema                             |
-| new_attachment              | RaceableChannel       | There is a new randomizer attachment                               | `raceable` which contains a new raceable schema                                     |
+`data` contains fields specific to the type of message (`message.type`):
 
+| Message type                    | Applicable channels   | Description                                                | Extra Fields                                                         |
+|:--------------------------------|:----------------------|:-----------------------------------------------------------|:---------------------------------------------------------------------|
+| `"raceable_created"`            | GlobalRaceableChannel | A new raceable was created                                 | [`raceable`][raceable]                                               |
+| `"global_state"`                | GlobalRaceableChannel | State of the world (in response to `state=1`)              | [`races`][raceable], [`bingos`][raceable], [`randomizers`][raceable] |
+| `"raceable_updated"`            | RaceableChannel       | The raceable has been changed (seed, bingo card, etc.)     | [`raceable`][raceable]                                               |
+| `"new_message"`                 | RaceableChannel       | A chat message was sent to the raceable                    | [`chat_message`][chat_message]                                       |
+| `"new_attachment"`              | RaceableChannel       | An attachment was added to the raceable (randomizers only) | [`raceable`][raceable]                                               |
+| `"raceable_state"`              | RaceableChannel       | State of the raceable (in response to `state=1`)           | [`raceable`][raceable]                                               |
+| `"raceable_not_found"`          | RaceableChannel       | No raceable found for the given ID                         | *none*                                                               |
+| `"raceable_invalid_join_token"` | RaceableChannel       | The join token is not valid for the raceable               | *none*                                                               |
+| `"raceable_start_scheduled"`    | both                  | The/a raceable is starting in a few seconds                | [`raceable`]                                                         |
+| `"raceable_ended"`              | both                  | The/a raceable has finished                                | [`raceable`]                                                         |
+| `"raceable_entrants_updated"`   | both                  | An entry was created, changed, or deleted                  | [`raceable`]                                                         |
+| `"fatal_error"`                 | both                  | An error occured when processing the message               | *none*                                                               |
 </details>
 
 [attachment]: #attachment
