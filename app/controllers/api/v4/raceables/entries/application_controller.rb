@@ -58,7 +58,7 @@ class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationC
     if @entry.destroy
       head :reset_content
       Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'raceable_entries_updated', 'A user has left the race')
-      Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entrants_updated', 'An user has left a race')
+      Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entries_updated', 'An user has left a race')
     else
       render status: :conflict, json: {
         status: 409,

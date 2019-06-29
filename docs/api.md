@@ -1025,7 +1025,7 @@ To receive updates from Splits.io, you first have to tell it what you want updat
 There are two channel types:
 
 | Channel               | Required params                | Optional params       | Description                                |
-|:----------------------|:-------------------------------|-----------------------|:-------------------------------------------|
+|:----------------------|:-------------------------------|:----------------------|:-------------------------------------------|
 | GlobalRaceableChannel | *none*                         | `state`               | high-level information about all raceables |
 | RaceableChannel       | `raceable_type`, `raceable_id` | `state`, `join_token` | detailed information about one raceable    |
 
@@ -1160,7 +1160,8 @@ not require extra deserialization.
 | `"raceable_created"`            | GlobalRaceableChannel | A new raceable was created                                 | [`raceable`][raceable]                                               |
 | `"global_state"`                | GlobalRaceableChannel | State of the world (in response to `state=1`)              | [`races`][raceable], [`bingos`][raceable], [`randomizers`][raceable] |
 | `"raceable_updated"`            | RaceableChannel       | The raceable has been changed (seed, bingo card, etc.)     | [`raceable`][raceable]                                               |
-| `"new_message"`                 | RaceableChannel       | A chat message was sent to the raceable                    | [`chat_message`][chat_message]                                       |
+| `"new_message"`                 | RaceableChannel       | A chat message was sent to the raceable                    | [`chat_message`][chat-message]                                       |
+| `"new_card"`                    | RaceableChannel       | The card URL for the raceable has changed (bingos only)    | [`raceable`][raceable]                                               |
 | `"new_attachment"`              | RaceableChannel       | An attachment was added to the raceable (randomizers only) | [`raceable`][raceable]                                               |
 | `"raceable_state"`              | RaceableChannel       | State of the raceable (in response to `state=1`)           | [`raceable`][raceable]                                               |
 | `"raceable_not_found"`          | RaceableChannel       | No raceable found for the given ID                         | *none*                                                               |

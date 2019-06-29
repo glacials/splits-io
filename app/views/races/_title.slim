@@ -3,10 +3,10 @@
 
 .row
   .col-md-12
-    - if race.try(:card_url).present?
-      h5#card-url = "Card: #{race.card_url}"
-    - if race.try(:seed).present?
-      h5 = "Seed: #{race.seed}"
+    - if race.has_attribute?(:card_url)
+      h5#card-url = "Card: #{race.card_url || 'None'}"
+    - if race.has_attribute?(:seed)
+      h5#seed-name = "Seed: #{race.seed || 'None'}"
 
     - if race.notes.present?
       h5 = "Notes: #{race.notes}"

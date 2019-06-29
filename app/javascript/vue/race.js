@@ -25,7 +25,17 @@ export default {
     if (localStorage.getItem('splitsio_access_token')) {
       headers.append('Authorization', `Bearer ${localStorage.getItem('splitsio_access_token')}`)
     }
-    const response = await fetch(`/api/v4/${this.raceableType}s/${this.raceableId}`, {
+
+    let url = `/api/v4/${this.raceableType}s/${this.raceableId}`
+    let join_token = window.gon.race.join_token
+    if (!join_token) {
+      join_token = new URLSearchParams(window.location.search).get('join_token')
+    }
+    if (join_token) {
+      url = `${url}?join_token=${join_token}`
+    }
+
+    const response = await fetch(url, {
       headers: headers
     })
     if (!response.ok) {
