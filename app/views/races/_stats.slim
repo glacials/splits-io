@@ -3,13 +3,8 @@
     .statcard.p-3.rounded
       - if !race.started?
         h2.statcard-number class=statcard_class(race)
-          - if race.visibility == 'public'
-            ' Open entry
-          - elsif race.visibility == 'invite_only'
-            ' Invite-only
-          - else
-            ' Secret race
-        - if !race.started? && race.entries.count <= 1
+          ' Accepting entries
+        - if race.entries.count <= 1
           span.statcard-desc class=statcard_class(race)
             ' Need #{2 - race.entries.count} more
         - else
@@ -23,7 +18,7 @@
         span.statcard-desc class=statcard_class(race) title=race.finished_at
           = render partial: 'shared/relative_time', locals: {time: race.finished_at, ago: true}
   .col-sm-6.col-xl-4: .statcard.p-3
-    h2.statcard-number = race.visibility.titleize
+    h2.statcard-number = race.visibility.humanize
     span.statcard-desc Visibility
   .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.entries.count

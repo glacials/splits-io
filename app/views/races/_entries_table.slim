@@ -36,14 +36,14 @@ h6.card-header Entries
                 .badge.badge-dark.mr-2 #{segment}
                 span.count data={abstime: (race.started_at + (segment.start(Run::REAL).to_ms / 1000)).rfc3339(3)} -
           td.nowrap.text-center
-            span.badge.badge-dark.mr-2 v-tippy=true title='1sts/2nds/3rds'
+            span.badge.badge-dark.mr-2
               => icon('fas', 'medal')
               span.text-gold = places.count(1)
               span.text-secondary = '/'
               span.text-silver = places.count(2)
               span.text-secondary = '/'
               span.text-bronze = places.count(3)
-            span.badge.badge-dark v-tippy=true title='Finishes/forfeits'
+            span.badge.badge-dark
               => icon('fas', 'flag-checkered')
               b.text-success = entries.count(:finished_at)
               span.text-secondary = '/'
