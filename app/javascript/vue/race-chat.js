@@ -11,7 +11,7 @@ export default {
       this.error = false
       this.loading = true
       try {
-        const response = await fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/chat`, {
+        const response = fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/chat`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
@@ -22,16 +22,18 @@ export default {
           })
         })
 
-        if (!response.ok) {
+        this.body = ''
+
+        if (!(await response).ok) {
           throw (await response.json()).error || response.statusText
         }
 
-        this.body = ''
       } catch(error) {
         this.error = error
       } finally {
         this.loading = false
-        document.getElementById('chat-submit').focus() // TODO: This doesn't work
+        // Give Vue some time to un-disable the field, otherwise it won't focus
+        document.getElementById('input-chat-text').focus()
       }
     },
   },

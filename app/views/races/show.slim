@@ -35,7 +35,6 @@
                         .input-group
                           input.form-control#input-chat-text(
                             autofocus=true
-                            :disabled='loading'
                             name='body'
                             placeholder='Chat...'
                             type='text'
@@ -43,7 +42,6 @@
                           )
                           .input-group-append
                             button.btn.btn-dark#chat-submit(
-                              :disabled='loading'
                               :title='error'
                               type='submit'
                               @click='chat'
