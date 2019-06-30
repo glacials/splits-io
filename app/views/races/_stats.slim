@@ -29,7 +29,7 @@
   - if race.entries.any?
     .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
-        = race.entries.last.user
+        = race.entries.joins(:user).order('users.created_at ASC').first.user
       span.statcard-desc Predicted winner
     .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
