@@ -39,7 +39,7 @@ module ApplicationHelper
         title = "#{user} is a Splits.io patron!"
       end
 
-      return link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title)
+      return link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title, 'v-tippy' => true, ':title' => "'#{title}'")
     end
 
     if user.patron?
@@ -57,7 +57,7 @@ module ApplicationHelper
       title = "#{user} is a Splits.io staff member!"
     end
 
-    link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title)
+    link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title, 'v-tippy' => true, ':title' => "'#{title}'")
   end
 
   def game_badge(game)
