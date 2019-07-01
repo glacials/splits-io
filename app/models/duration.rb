@@ -56,7 +56,7 @@ class Duration
   def ==(duration)
     # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
     # absent. When those are cleaned up, we can change Duration#nil? and this.
-    return false if to_ms.nil? || duration.to_ms.nil?
+    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
     return false unless duration.respond_to?(:to_ms)
 
     to_ms == duration.to_ms
@@ -72,7 +72,7 @@ class Duration
   def <(duration)
     # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
     # absent. When those are cleaned up, we can change Duration#nil? and this.
-    return false if to_ms.nil? || duration.to_ms.nil?
+    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
 
     # duration can be a Duration or a number of milliseconds
     ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
@@ -87,7 +87,7 @@ class Duration
   def >(duration)
     # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
     # absent. When those are cleaned up, we can change Duration#nil? and this.
-    return false if to_ms.nil? || duration.to_ms.nil?
+    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
 
     # duration can be a Duration or a number of milliseconds
     ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
