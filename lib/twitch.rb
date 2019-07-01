@@ -106,5 +106,23 @@ class Twitch
         {'Client-ID' => ENV['TWITCH_CLIENT_ID']}
       end
     end
+
+    # new_tokens! takes a user's current refresh token and returns a hash containing a fresh access token and refresh
+    # token e.g.
+    #
+    # {access_token: 'boop', refresh_token: 'beep'}
+    #
+    # Upon calling this method you should assume the old access token and refresh token are invalidated by Twitch.
+    # See https://dev.twitch.tv/docs/authentication/#refreshing-access-tokens.
+    def new_tokens!(refresh_token)
+      body = JSON.parse(RestClient::Resource.new('https://id.twitch.tv/oauth2')["/token?#{{
+        grant_type: 'refresh_token',
+        refresh_token: refresh_token,
+        client_id: ENV['TWITCH_CLIENT_ID'],
+        client_secret: ENV['TWITCH_CLIENT_SECRET']
+      }.to_query}"].post(nil))
+
+      {access_token: body['access_token'], refresh_token: body['refresh_token']}
+    end
   end
 end

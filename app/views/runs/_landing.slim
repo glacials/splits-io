@@ -3,10 +3,10 @@
     .col-md-12
       .text-center.vertical-center
         .m-auto.my-0.vertical-center
-          img src=asset_path('logo-imageonly.svg') style='width: 5rem'
+          = image_tag(asset_path('logo-imageonly.svg'), height: '80em')
           span.align-left
             h1.d-inline-block
-              ' Splits I/O
+              = image_tag(asset_path('logo-textonly.svg'), height: '50em')
               small.d-block style='font-size: 0.4em' speedrun statistical analysis
   .row
     .col-md-4.offset-md-4.col-sm-6.offset-sm-3

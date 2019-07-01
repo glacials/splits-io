@@ -86,14 +86,14 @@ const buildPlaytimeChart = function(runs, chartOptions = {}) {
       }
     },
     series: playtimeBetweenPBs.map((playtimeBetweenPBs, i) => ({
-      name: `${runs[i].runners[0].name}'s PBs`,
+      name: runs[i].runners.length === 0 ? 'PBs' : `${runs[i].runners[0].name}'s PBs`,
       data: playtimeBetweenPBs,
       regression: playtimeBetweenPBs.length >= 2,
       regressionSettings: {
         color: logoColors[i],
         dashStyle: 'dot',
         extrapolate: playtimeBetweenPBs.length,
-        name: `${runs[i].runners[0].name}'s Predicted PBs`,
+        name: runs[i].runners.length === 0 ? 'Predicted PBs' : `${runs[i].runners[0].name}'s Predicted PBs`,
         type: 'logarithmic'
       }
     })),

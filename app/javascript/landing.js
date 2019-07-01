@@ -11,11 +11,11 @@ document.addEventListener('turbolinks:load', () => {
     return
   }
 
-  buildRunDurationChart(            example_run,     {})
-  buildResetChart(                  example_run,     {})
-  buildPlaytimeChart(               example_run,     {})
-  buildSegmentChart(                example_run,     {})
-  buildSegmentDurationChart('real', example_segment, {})
+  buildRunDurationChart([example_run], {})
+  buildResetChart(      [example_run], {})
+  buildPlaytimeChart(   [example_run], {})
+  buildSegmentChart(    [example_run], {})
+  buildSegmentDurationChart('real', [example_run], [example_segment], {})
 
   const aboveTheFold = document.getElementById('above-the-fold')
   const belowTheFold = document.getElementById('below-the-fold')

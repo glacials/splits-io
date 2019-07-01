@@ -335,9 +335,9 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.bigint "realtime_end_ms"
     t.bigint "realtime_shortest_duration_ms"
     t.string "name", null: false
-    t.boolean "realtime_gold", default: true, null: false
-    t.boolean "realtime_reduced", default: true, null: false
-    t.boolean "realtime_skipped", default: true, null: false
+    t.boolean "realtime_gold", default: false, null: false
+    t.boolean "realtime_reduced", default: false, null: false
+    t.boolean "realtime_skipped", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "gametime_start_ms"
@@ -449,6 +449,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "url", null: false
+    t.string "refresh_token"
     t.index ["twitch_id"], name: "index_twitch_users_on_twitch_id", unique: true
     t.index ["user_id"], name: "index_twitch_users_on_user_id", unique: true
   end
