@@ -5,7 +5,11 @@ h6.card-header Entries
   .table-responsive: table.card-body.table.mb-0
     thead: tr
       th.nowrap Name
-      th.nowrap.text-center Status
+      th.nowrap.text-center
+        - if race.started?
+          ' Position
+        - else
+          ' Ready
       th.w-100 Time
       th.nowrap.text-center Current split
       th.nowrap.text-center Stats
