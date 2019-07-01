@@ -16,7 +16,6 @@ module SplitsIO
 
     config.action_controller.allow_forgery_protection = false
     config.active_job.queue_adapter = :delayed_job
-    config.active_job.queue_name_prefix = ENV['QUEUE_PREFIX']
 
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
