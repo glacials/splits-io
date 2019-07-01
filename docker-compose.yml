@@ -10,6 +10,7 @@ x-environment:
   - NODE_ENV=development
   - PATREON_CLIENT_ID
   - PATREON_CLIENT_SECRET
+  - QUEUE_PREFIX=dev
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
   - RAILS_ENV
   - RAILS_ROOT="/app"
