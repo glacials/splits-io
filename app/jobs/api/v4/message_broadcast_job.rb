@@ -1,5 +1,5 @@
 class Api::V4::MessageBroadcastJob < ApplicationJob
-  queue_as :v4_message_broadcast
+  queue_as :v4_raceables
 
   def perform(raceable, chat_message)
     msg = {
