@@ -24,7 +24,10 @@ export default {
     }
 
     let url = `/api/v4/${this.raceableType}s/${this.raceableId}`
-    let join_token = window.gon.race.join_token
+    let join_token
+    if (window.gon.race) {
+      join_token = window.gon.race.join_token
+    }
     if (!join_token) {
       join_token = new URLSearchParams(window.location.search).get('join_token')
     }
