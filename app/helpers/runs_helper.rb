@@ -65,14 +65,14 @@ module RunsHelper
     "<span class=\"text-default\">#{Duration.new(ms).format}</span>".html_safe
   end
 
-  def pretty_difference(my_ms, their_ms)
-    diff_ms = (my_ms - their_ms)
+  def pretty_difference(my_duration, their_duration)
+    diff_duration = my_duration - their_duration
 
-    return "<span class=\"text-success\">-#{Duration.new(diff_ms.abs).format_casual}</span>".html_safe if diff_ms.negative?
+    return "<span class=\"text-success\">-#{diff_duration.abs.format_casual}</span>".html_safe if diff_duration.negative?
 
-    return "<span class=\"text-danger\">+#{Duration.new(diff_ms).format_casual}</span>".html_safe if diff_ms.positive?
+    return "<span class=\"text-danger\">+#{diff_duration.format_casual}</span>".html_safe if diff_duration.positive?
 
-    "<span class=\"text-warning\">+#{Duration.new(diff_ms).format_casual}</span>".html_safe
+    "<span class=\"text-warning\">+#{diff_duration.format_casual}</span>".html_safe
   end
 
   # format_ms is deprecated. Use Duration.new(milliseconds).format instead.
