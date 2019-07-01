@@ -1,4 +1,6 @@
 class SyncUserFollowsJob < ApplicationJob
+  # Adding or deleting a job? Reflect the change in the QUEUES environment variable in docker-compose.yml and
+  # docker-compose-production.yml.
   queue_as :sync_user_follows
 
   def perform(user, twitch_user)
