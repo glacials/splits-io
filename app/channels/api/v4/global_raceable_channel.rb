@@ -6,9 +6,9 @@ class Api::V4::GlobalRaceableChannel < Api::V4::ApplicationChannel
     ws_msg = Api::V4::WebsocketMessage.new(
       'global_state',
       message:     'Global race state',
-      races:       Api::V4::RaceBlueprint.render_as_hash(Race.active, view: :race),
-      bingos:      Api::V4::RaceBlueprint.render_as_hash(Bingo.active, view: :bingo),
-      randomizers: Api::V4::RaceBlueprint.render_as_hash(Randomizer.active, view: :randomizer)
+      races:       Api::V4::RaceBlueprint.render_as_hash(Race.active.not_secret_visibility, view: :race),
+      bingos:      Api::V4::RaceBlueprint.render_as_hash(Bingo.active.not_secret_visibility, view: :bingo),
+      randomizers: Api::V4::RaceBlueprint.render_as_hash(Randomizer.active.not_secret_visibility, view: :randomizer)
     )
     transmit(ws_msg.to_h)
   rescue StandardError => e

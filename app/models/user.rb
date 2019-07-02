@@ -3,6 +3,7 @@ class User < ApplicationRecord
   include AuthenticatingUser
   include RivalUser
   include RunnerUser
+  include HasRaceable
 
   has_many :runs, dependent: :nullify
   has_many :categories, -> { distinct }, through: :runs
@@ -125,10 +126,6 @@ class User < ApplicationRecord
 
   def in_race?
     entries.where(finished_at: nil, forfeited_at: nil).any?
-  end
-
-  def active_raceables
-    entries.where(finished_at: nil, forfeited_at: nil).map(&:raceable)
   end
 
   # comprable_runs returns some runs by this user that could be usefully compared to the given run.

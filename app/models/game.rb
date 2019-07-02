@@ -2,6 +2,7 @@ require 'speedrunslive'
 
 class Game < ApplicationRecord
   include PgSearch
+  include HasRaceable
 
   extend OrderAsSpecified
 
@@ -94,19 +95,6 @@ class Game < ApplicationRecord
 
       destroy
     end
-  end
-
-  # raceables returns an array of this game's raceables (races, randomizers, and bingos). If a scope is given, it is
-  # called on each raceable before returning them.
-  def raceables(scope = nil, paginate = nil)
-    [races, randomizers, bingos].map do |r|
-      next r.to_a if scope.nil?
-
-      r = r.limit(100).send(scope)
-      next r.to_a if paginate.nil?
-
-      r.page(paginate).to_a
-    end.flatten.sort_by(&:created_at).reverse
   end
 
   private

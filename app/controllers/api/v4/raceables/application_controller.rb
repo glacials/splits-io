@@ -49,7 +49,7 @@ class Api::V4::Raceables::ApplicationController < Api::V4::ApplicationController
   private
 
   def set_raceables(klass) # rubocop:disable Naming/AccessorMethodName
-    @raceables = klass.active
+    @raceables = klass.active.not_secret_visibility
   end
 
   def check_patron

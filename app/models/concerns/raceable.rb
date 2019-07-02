@@ -30,7 +30,7 @@ module Raceable
     end
 
     # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
-    # or have more than 2 entries. this includes races that have finished (excluding secret races)
+    # or have more than 2 entries. this includes races that have finished
     def self.unabandoned
       case name # self.name refers to the class including this concern
       when 'Race'
@@ -39,14 +39,14 @@ module Raceable
         where('randomizers.updated_at > ?', 1.hour.ago)
       when 'Bingo'
         where('bingos.updated_at > ?', 1.hour.ago)
-      end.not_secret_visibility.or(
-        where(id: Entry.having('count(*) > 1').group(:raceable_id).select(:raceable_id)).not_secret_visibility
+      end.or(
+        where(id: Entry.having('count(*) > 1').group(:raceable_id).select(:raceable_id))
       )
     end
 
-    # active returns all non-finished unabandonded races (excluding secret races)
+    # active returns all non-finished unabandonded races
     def self.active
-      unabandoned.unfinished.not_secret_visibility
+      unabandoned.unfinished
     end
 
     def started?
