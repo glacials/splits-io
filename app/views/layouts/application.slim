@@ -117,9 +117,9 @@ html
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
           ' Help us out by taking the 2019 Splits I/O survey!
       - entry = current_user.present? ? current_user.entries.active.first : nil
-      - if entry.present? && request.path != polymorphic_path(entry.raceable)
+      - if entry.present? && request.path != race_path(entry.race)
         article
-          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=polymorphic_path(entry.raceable)
+          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=race_path(entry.race)
             => icon('fas', 'flag-checkered')
             | Return to race
       header#header = yield(:header)

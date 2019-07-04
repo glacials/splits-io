@@ -1,4 +1,4 @@
-class Raceables::ApplicationController < ApplicationController
+class RacesController < ApplicationController
   before_action :set_race,         only: [:show, :update]
   before_action :check_permission, only: [:show]
   before_action :set_race_gon,     only: [:show]
@@ -22,7 +22,6 @@ class Raceables::ApplicationController < ApplicationController
     token = @race.entry_for_user(current_user).present? ? @race.join_token : nil
     gon.race = {
       id:         @race.id,
-      type:       @race.type,
       join_token: token || race_params[:join_token]
     }
   end
@@ -31,9 +30,8 @@ class Raceables::ApplicationController < ApplicationController
     params.permit(:race, :join_token, :attachment)
   end
 
-  # set_race should be called from controllers that extend this one.
-  def set_race(klass)
-    @race = klass.where(
+  def set_race
+    @race = Race.where(
       'LEFT(id::text, ?) = ?',
       race_params[:race].length,
       race_params[:race]
@@ -46,12 +44,12 @@ class Raceables::ApplicationController < ApplicationController
   # (public race or the user already joined).
   def shorten_url
     if @race.visibility == :public || @race.entry_for_user(current_user).present?
-      desired_fullpath = polymorphic_path(@race)
+      desired_fullpath = race_path(@race)
       redirect_to desired_fullpath if desired_fullpath != request.fullpath
       return
     end
 
-    desired_fullpath = polymorphic_path(@race, race_params.to_hash.slice('join_token'))
+    desired_fullpath = race_path(@race, race_params.to_hash.slice('join_token'))
     redirect_to desired_fullpath if desired_fullpath != request.fullpath
   end
 end

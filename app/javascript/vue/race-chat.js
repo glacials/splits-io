@@ -11,7 +11,7 @@ export default {
       this.error = false
       this.loading = true
       try {
-        const response = fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/chat`, {
+        const response = fetch(`/api/v4/races/${this.race.id}/chat`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
@@ -38,5 +38,5 @@ export default {
     },
   },
   name: 'race-chat',
-  props: ['raceable'],
+  props: ['race'],
 }

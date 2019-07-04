@@ -1,5 +1,5 @@
 .row
-  .col-md-12: h1 = race.to_s
+  .col-md-12: h1 = race
 
 .row
   .col-md-12
@@ -16,7 +16,7 @@
         = user_badge(race.owner)
       - if race.belongs_to?(current_user) && !race.public_visibility? && !race.started?
         button.btn.btn-outline-light.btn-sm.clipboard-btn.ml-2(
-          data-clipboard-text=polymorphic_url(race, join_token: race.join_token)
+          data-clipboard-text=race_url(race, join_token: race.join_token)
           title='Copy invite link'
           v-tippy=true
         )

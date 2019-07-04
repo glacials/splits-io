@@ -1,8 +1,8 @@
-class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationController
+class Api::V4::Races::EntriesController < Api::V4::ApplicationController
   before_action :set_time, only: %i[update]
   before_action :set_user
   before_action :validate_user
-  before_action :set_raceable
+  before_action :set_race
   before_action :check_permission, only: %i[create]
   before_action :massage_params
   before_action :set_entry, only: %i[show update destroy]
@@ -13,12 +13,12 @@ class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationC
   end
 
   def create
-    entry = @raceable.entries.new(entry_params)
+    entry = @race.entries.new(entry_params)
     entry.user = current_user
     if entry.save
       render status: :created, json: Api::V4::EntryBlueprint.render(entry, root: :entry)
-      Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'raceable_entries_updated', 'A user has joined the race')
-      Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entries_updated', 'A user has joined a race')
+      Api::V4::RaceBroadcastJob.perform_later(@race, 'race_entries_updated', 'A user has joined the race')
+      Api::V4::GlobalRaceUpdateJob.perform_later(@race, 'race_entries_updated', 'A user has joined a race')
     else
       render status: :bad_request, json: {
         status: 400,
@@ -36,9 +36,9 @@ class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationC
     if @entry.update(entry_params)
       render status: :ok, json: Api::V4::EntryBlueprint.render(@entry, root: :entry)
       updated = @entry.saved_changes.keys.reject { |k| k == 'updated_at' }.to_sentence
-      Api::V4::RaceableBroadcastJob.perform_later(
-        @raceable,
-        'raceable_entries_updated',
+      Api::V4::RaceBroadcastJob.perform_later(
+        @race,
+        'race_entries_updated',
         "An entry's #{updated} has changed"
       )
     else
@@ -57,8 +57,8 @@ class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationC
   def destroy
     if @entry.destroy
       head :reset_content
-      Api::V4::RaceableBroadcastJob.perform_later(@raceable, 'raceable_entries_updated', 'A user has left the race')
-      Api::V4::GlobalRaceableUpdateJob.perform_later(@raceable, 'raceable_entries_updated', 'An user has left a race')
+      Api::V4::RaceBroadcastJob.perform_later(@race, 'race_entries_updated', 'A user has left the race')
+      Api::V4::GlobalRaceUpdateJob.perform_later(@race, 'race_entries_updated', 'An user has left a race')
     else
       render status: :conflict, json: {
         status: 409,
@@ -74,7 +74,7 @@ class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationC
   end
 
   def check_permission
-    return if @raceable.joinable?(token: params[:join_token], user: current_user)
+    return if @race.joinable?(token: params[:join_token], user: current_user)
 
     render status: :forbidden, json: {
       status: 403,
@@ -83,7 +83,7 @@ class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationC
   end
 
   def set_entry
-    @entry = Entry.find_by!(user: current_user, raceable: @raceable)
+    @entry = @race.entries.find_by!(user: current_user)
   rescue ActiveRecord::RecordNotFound
     render not_found(:entry)
   end
@@ -102,7 +102,7 @@ class Api::V4::Raceables::Entries::ApplicationController < Api::V4::ApplicationC
   def update_race
     return unless response.status == 200
 
-    @raceable.maybe_start!
-    @raceable.maybe_end!
+    @race.maybe_start!
+    @race.maybe_end!
   end
 end

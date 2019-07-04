@@ -6,97 +6,23 @@
           .modal-header.bg-primary
             h5.text-light New #{game} race
           .modal-body.bg-dark
-            input#game-id type='hidden' value=game.id
+            input type='hidden' value=game.id
             .form-group
-              select.form-control#visibility-select v-model='visibility'
+              select.form-control v-model='visibility'
                 option value='public' Public&mdash;Anyone can see or join
                 option disabled=(!current_user.patron?(tier: 2)) value='invite_only' Invite only&mdash;anyone can see, need a link to join (patrons only)
                 option disabled=(!current_user.patron?(tier: 2)) value='secret' Secret&mdash;Need a link to see or join (patrons only)
             .form-group
-              textarea.form-control#notes-textarea placeholder='Notes (optional)' v-model='notes'
-            ul.nav.nav-pills.my-3#races-tab role='tablist'
-              li.nav-item
-                .nav-link.disabled Type
-              li.nav-item
-                a.nav-link.active#category-tab(
-                  href='#category-content'
-                  data={toggle: :tab}
-                  role='tab'
-                  aria={controls: :home, selected: true}
-                ) Category
-              li.nav-item
-                a.nav-link#bingo-tab(
-                  href='#bingo-content'
-                  data={toggle: :tab}
-                  role='tab'
-                  aria={controls: :home, selected: false}
-                ) Bingo
-              li.nav-item
-                a.nav-link#randomizer-tab(
-                  href='#randomizer-content'
-                  data={toggle: :tab}
-                  role='tab'
-                  aria={controls: :home, selected: false}
-                ) Randomizer
-            .tab-content#races-tab-content style='width: 100%;'
-              .tab-pane.text-light.show.active#category-content role='tabpanel' aria={labelledby: 'category-content-tab'}
-                form#category-races-form
-                  .form-group
-                    label for='category-select' Category
-                    select.form-control#category-select v-model='categoryId'
-                      - game.categories.each do |category|
-                        option value=category.id = category.name
-                  .form-group
-                    button.btn.btn-outline-light#category-submit(
-                      type='button'
-                      @click='createRace'
-                      :disabled='loading'
-                      v-tippy=true
-                      :title='error'
-                    )
-                      template v-if="loading" = render partial: 'shared/spinner'
-                      span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
-                      template v-else=true => icon('fas', 'flag-checkered')
-                      ' Set up race
-              .tab-pane.text-light#bingo-content role='tabpanel' aria={labelledby: 'bingo-content-tab'}
-                form#bingo-races-form
-                  .form-group
-                    label for='bingo-card-input' Bingo Card
-                    input.form-control#bingo-card-input(
-                      type='text'
-                      placeholder='Bingo card URL (include https://)'
-                      required=true
-                      v-model='bingo_card_url'
-                    )
-                    .valid-feedback Looks good!
-                    .invalid-feedback Required.
-                  .form-group
-                    button.btn.btn-outline-light#bingo-submit(
-                      type='button'
-                      @click='createBingo'
-                      :disabled='loading'
-                      v-tippy=true
-                      :title='error'
-                    )
-                      template v-if="loading" = render partial: 'shared/spinner'
-                      span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
-                      template v-else=true => icon('fas', 'th')
-                      ' Set up bingo
-              .tab-pane.text-light#randomizer-content role='tabpanel' aria={labelledby: 'randomizer-content-tab'}
-                form#randomizer-races-form
-                  .form-group
-                    label for='randomizer-seed-input' Seed name (optional)
-                    input.form-control#randomizer-seed-input type='text' placeholder='Seed name' v-model='seed_name'
-                    small.form-text.text-muted You'll be able to attach a seed file once the race is created.
-                  .form-group
-                    button.btn.btn-outline-light#randomizer-submit(
-                      type='button'
-                      @click='createRandomizer'
-                      :disabled='loading'
-                      v-tippy=true
-                      :title='error'
-                    )
-                      template v-if="loading" = render partial: 'shared/spinner'
-                      span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
-                      template v-else=true => icon('fas', 'random')
-                      ' Set up randomizer
+              textarea.form-control placeholder='Notes (optional)' v-model='notes'
+            .form-group
+              button.btn.btn-outline-light(
+                type='button'
+                @click='create'
+                :disabled='loading'
+                v-tippy=true
+                :title='error'
+              )
+                template v-if="loading" = render partial: 'shared/spinner'
+                span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
+                template v-else=true => icon('fas', 'flag-checkered')
+                ' Set up race

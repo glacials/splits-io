@@ -3,7 +3,6 @@ class User < ApplicationRecord
   include AuthenticatingUser
   include RivalUser
   include RunnerUser
-  include HasRaceable
 
   has_many :runs, dependent: :nullify
   has_many :categories, -> { distinct }, through: :runs
@@ -12,9 +11,7 @@ class User < ApplicationRecord
   has_many :run_likes, dependent: :destroy
 
   has_many :entries
-  has_many :races,       through: :entries, source: :raceable, source_type: 'Race'
-  has_many :bingos,      through: :entries, source: :raceable, source_type: 'Bingo'
-  has_many :randomizers, through: :entries, source: :raceable, source_type: 'Randomizer'
+  has_many :races, through: :entries
 
   has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
   has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',

@@ -7,7 +7,7 @@ export default {
       return
     }
 
-    this.entry = this.raceable.entries.find(entry => entry.user.id === this.currentUser.id)
+    this.entry = this.race.entries.find(entry => entry.user.id === this.currentUser.id)
   },
   data: () => ({
     currentUser: null,
@@ -126,7 +126,7 @@ export default {
         })
       }
 
-      const response = await fetch(`/api/v4/${this.raceable.type}s/${this.raceable.id}/entry`, {
+      const response = await fetch(`/api/v4/races/${this.race.id}/entry`, {
         method: method,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
@@ -152,5 +152,5 @@ export default {
     },
   },
   name: 'race-nav',
-  props: ['raceable'],
+  props: ['race'],
 }

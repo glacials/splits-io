@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
-  before_action :set_game,              only: %i[show edit update]
-  before_action :set_games,             only: %i[index]
-  before_action :authorize,             only: %i[edit update]
+  before_action :set_game,  only: %i[show edit update]
+  before_action :set_games, only: %i[index]
+  before_action :authorize, only: %i[edit update]
 
   def index
   end

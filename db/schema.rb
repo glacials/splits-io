@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_17_183547) do
+ActiveRecord::Schema.define(version: 2019_07_03_182227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -68,20 +68,6 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.index ["user_id"], name: "index_authie_sessions_on_user_id"
   end
 
-  create_table "bingos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "game_id", null: false
-    t.bigint "user_id", null: false
-    t.integer "visibility", default: 0, null: false
-    t.string "join_token", null: false
-    t.string "notes"
-    t.string "card_url"
-    t.datetime "started_at", precision: 3
-    t.datetime "created_at", precision: 3, null: false
-    t.datetime "updated_at", precision: 3, null: false
-    t.index ["game_id"], name: "index_bingos_on_game_id"
-    t.index ["user_id"], name: "index_bingos_on_user_id"
-  end
-
   create_table "categories", id: :serial, force: :cascade do |t|
     t.integer "game_id"
     t.string "name"
@@ -93,14 +79,12 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   end
 
   create_table "chat_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "raceable_type"
-    t.uuid "raceable_id"
+    t.uuid "race_id"
     t.bigint "user_id", null: false
     t.boolean "from_entrant", null: false
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["raceable_type", "raceable_id"], name: "index_chat_messages_on_raceable_type_and_raceable_id"
     t.index ["user_id"], name: "index_chat_messages_on_user_id"
   end
 
@@ -120,8 +104,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   end
 
   create_table "entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "raceable_type"
-    t.uuid "raceable_id"
+    t.uuid "race_id"
     t.bigint "user_id"
     t.datetime "readied_at", precision: 3
     t.datetime "finished_at", precision: 3
@@ -129,7 +112,6 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
     t.bigint "run_id"
-    t.index ["raceable_type", "raceable_id"], name: "index_entries_on_raceable_type_and_raceable_id"
     t.index ["run_id"], name: "index_entries_on_run_id"
     t.index ["user_id"], name: "index_entries_on_user_id"
   end
@@ -231,7 +213,7 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   end
 
   create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "category_id", null: false
+    t.bigint "category_id"
     t.bigint "user_id", null: false
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
@@ -239,22 +221,10 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
     t.datetime "started_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
+    t.bigint "game_id"
     t.index ["category_id"], name: "index_races_on_category_id"
+    t.index ["game_id"], name: "index_races_on_game_id"
     t.index ["user_id"], name: "index_races_on_user_id"
-  end
-
-  create_table "randomizers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "game_id", null: false
-    t.bigint "user_id", null: false
-    t.integer "visibility", default: 0, null: false
-    t.string "join_token", null: false
-    t.string "notes"
-    t.string "seed"
-    t.datetime "started_at", precision: 3
-    t.datetime "created_at", precision: 3, null: false
-    t.datetime "updated_at", precision: 3, null: false
-    t.index ["game_id"], name: "index_randomizers_on_game_id"
-    t.index ["user_id"], name: "index_randomizers_on_user_id"
   end
 
   create_table "rivalries", id: :serial, force: :cascade do |t|
@@ -462,8 +432,6 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "bingos", "games"
-  add_foreign_key "bingos", "users"
   add_foreign_key "chat_messages", "users"
   add_foreign_key "entries", "users"
   add_foreign_key "game_aliases", "games", on_delete: :cascade
@@ -474,8 +442,6 @@ ActiveRecord::Schema.define(version: 2019_06_17_183547) do
   add_foreign_key "patreon_users", "users"
   add_foreign_key "races", "categories"
   add_foreign_key "races", "users"
-  add_foreign_key "randomizers", "games"
-  add_foreign_key "randomizers", "users"
   add_foreign_key "run_histories", "runs", on_delete: :cascade
   add_foreign_key "run_likes", "runs"
   add_foreign_key "run_likes", "users"

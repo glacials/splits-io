@@ -23,7 +23,7 @@ export default {
       headers.append('Authorization', `Bearer ${localStorage.getItem('splitsio_access_token')}`)
     }
 
-    let url = `/api/v4/${this.raceableType}s/${this.raceableId}`
+    let url = `/api/v4/races/${this.raceId}`
     let join_token
     if (window.gon.race) {
       join_token = window.gon.race.join_token
@@ -42,7 +42,7 @@ export default {
       throw (await response.json()).error || response.statusText
     }
 
-    this.globalSubscription = consumer.subscriptions.create('Api::V4::GlobalRaceableChannel', {
+    this.globalSubscription = consumer.subscriptions.create('Api::V4::GlobalRaceChannel', {
       connection() {},
 
       disconnected() {},
@@ -58,9 +58,8 @@ export default {
     })
 
     this.raceSubscription = consumer.subscriptions.create({
-      channel:       'Api::V4::RaceableChannel',
-      raceable_id:   this.raceableId,
-      raceable_type: this.raceableType,
+      channel:       'Api::V4::RaceChannel',
+      race_id:       this.raceId,
       join_token:    (window.gon.race || {}).join_token
     }, {
       connected: () => {
@@ -74,22 +73,22 @@ export default {
 
       received: (data) => {
         switch(data.type) {
-          case 'raceable_entries_updated:html':
+          case 'race_entries_updated:html':
             document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break
 
-          case 'raceable_start_scheduled:html':
+          case 'race_start_scheduled:html':
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break
-          case 'raceable_start_scheduled':
-            this.raceable = data.data.raceable
+          case 'race_start_scheduled':
+            this.race = data.data.race
             break
 
-          case 'raceable_ended':
-            this.raceable = data.data.raceable
+          case 'race_ended':
+            this.race = data.data.race
             break;
-          case 'raceable_ended:html':
+          case 'race_ended:html':
             document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
             break
@@ -102,10 +101,6 @@ export default {
           case 'new_attachment:html':
             document.getElementById('attachments').innerHTML = data.data.attachments_html
             break
-
-          case 'new_card':
-            document.getElementById('card-url').innerText = data.data.raceable.card_url
-            break
         }
       }
     })
@@ -114,18 +109,18 @@ export default {
       consumer.subscriptions.remove(this.raceSubscription)
     }, {once: true})
 
-    this.raceable = (await response.json())[this.raceableType]
+    this.race = (await response.json()).race
     this.loading = false
   },
   data: () => ({
     error: false,
     globalSubscription: null,
     loading: true,
-    raceable: null,
+    race: null,
     raceSubscription: null,
   }),
   methods: {
   },
   name: 'race',
-  props: ['raceable-type', 'raceable-id'],
+  props: ['race-id'],
 }

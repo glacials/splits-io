@@ -2,7 +2,7 @@ class EntryValidator < ActiveModel::Validator
   def validate(record)
     if record.new_record?
       # Reject new entry if race has already started
-      if record.raceable.started?
+      if record.race.started?
         record.errors[:base] << 'Cannot join race that has already started'
       end
 
@@ -13,7 +13,7 @@ class EntryValidator < ActiveModel::Validator
     end
 
     # Reject if ready status is changed on a started race
-    if record.readied_at_changed? && record.raceable.started?
+    if record.readied_at_changed? && record.race.started?
       type = record.readied_at.nil? ? 'unready' : 'ready'
       record.errors[:base] << "Cannot #{type} on a race that has already started"
     end
@@ -21,16 +21,16 @@ class EntryValidator < ActiveModel::Validator
     if record.finished_at_changed?
       # Reject finished_at changes on races that haven't started or have finished
       type = record.finished_at.nil? ? 'rejoin' : 'finish'
-      unless record.raceable.started?
+      unless record.race.started?
         record.errors[:base] << "Cannot #{type} a race that hasn't started"
       end
 
-      if record.raceable.finished?
+      if record.race.finished?
         record.errors[:base] << "Cannot #{type} a race that is already completed"
       end
 
       # Reject times before the race start time
-      if type == 'finish' && (record.raceable.started_at.nil? || record.raceable.started_at > record.finished_at)
+      if type == 'finish' && (record.race.started_at.nil? || record.race.started_at > record.finished_at)
         record.errors[:base] << 'Finish time can not be before race start'
       end
 
@@ -43,16 +43,16 @@ class EntryValidator < ActiveModel::Validator
     if record.forfeited_at_changed?
       # Reject forfeited_at changes on races that haven't started or have finished
       type = record.forfeited_at.nil? ? 'rejoin' : 'forfeit'
-      unless record.raceable.started?
+      unless record.race.started?
         record.errors[:base] << "Cannot #{type} a race that hasn't started"
       end
 
-      if record.raceable.finished?
+      if record.race.finished?
         record.errors[:base] << "Cannot #{type} a race that is already completed"
       end
 
       # Reject times before the race start time
-      if type == 'forfeit' && (record.raceable.started_at.nil? || record.raceable.started_at > record.forfeited_at)
+      if type == 'forfeit' && (record.race.started_at.nil? || record.race.started_at > record.forfeited_at)
         record.errors[:base] << 'Forfeit time can not be before race start'
       end
 

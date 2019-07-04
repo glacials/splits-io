@@ -71,15 +71,11 @@ RSpec.configure do |config|
     runner_pbs:        'spec/support/views/api/v4/runners/pbs/index.json',
     run:               'spec/support/views/api/v4/runs/show.json',
     runner:            'spec/support/views/api/v4/runners/show.json',
-    race:              'spec/support/views/api/v4/raceables/race_show.json',
-    races:             'spec/support/views/api/v4/raceables/race_index.json',
-    bingo:             'spec/support/views/api/v4/raceables/bingo_show.json',
-    bingos:            'spec/support/views/api/v4/raceables/bingo_index.json',
-    randomizer:        'spec/support/views/api/v4/raceables/randomizer_show.json',
-    randomizers:       'spec/support/views/api/v4/raceables/randomizer_index.json',
-    entry:             'spec/support/views/api/v4/raceables/entries/show.json',
-    chat_message:      'spec/support/views/api/v4/raceables/messages/show.json',
-    chat_messages:     'spec/support/views/api/v4/raceables/messages/index.json'
+    race:              'spec/support/views/api/v4/races/show.json',
+    races:             'spec/support/views/api/v4/races/index.json',
+    entry:             'spec/support/views/api/v4/races/entries/show.json',
+    chat_message:      'spec/support/views/api/v4/races/messages/show.json',
+    chat_messages:     'spec/support/views/api/v4/races/messages/index.json'
   }
 
 # The settings below are suggested to provide a good initial experience

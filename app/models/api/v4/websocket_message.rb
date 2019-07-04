@@ -4,18 +4,18 @@ class Api::V4::WebsocketMessage
   TYPES = %w[
     fatal_error
     global_state
-    raceable_created
-    raceable_started
-    raceable_updated
+    race_created
+    race_started
+    race_updated
 
-    raceable_not_found
-    raceable_invalid_join_token
-    raceable_state
+    race_not_found
+    race_invalid_join_token
+    race_state
 
-    raceable_start_scheduled
-    raceable_ended
+    race_start_scheduled
+    race_ended
 
-    raceable_entries_updated
+    race_entries_updated
 
     new_message
 

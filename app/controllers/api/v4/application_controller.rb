@@ -87,15 +87,15 @@ class Api::V4::ApplicationController < ActionController::Base
     head :unauthorized if current_user.nil?
   end
 
-  def set_raceable(klass) # rubocop:disable Naming/AccessorMethodName
-    @raceable = klass.find(params[:raceable])
-    return unless @raceable.secret_visibility? && !@raceable.joinable?(user: current_user, token: params[:join_token])
+  def set_race # rubocop:disable Naming/AccessorMethodName
+    @race = Race.find(params[:race])
+    return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
 
     render status: :forbidden, json: {
       status: 403,
       error:  'Must be invited to see this race'
     }
   rescue ActiveRecord::RecordNotFound
-    render not_found(klass.type)
+    render not_found(:race)
   end
 end

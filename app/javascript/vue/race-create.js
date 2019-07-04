@@ -3,27 +3,16 @@ export default {
     error: null,
     loading: false,
 
-    bingo_card_url: '',
     notes: '',
-    seed_name: '',
     visibility: 'public',
   }),
   methods: {
-    createBingo: function() {
-      this.create('bingo')
-    },
-    createRace: function() {
-      this.create('race')
-    },
-    createRandomizer: function() {
-      this.create('randomizer')
-    },
-    create: async function(raceableType) {
+    create: async function() {
       try {
         this.loading = true
         this.error = null
 
-        const response = await fetch(`/api/v4/${raceableType}s`, {
+        const response = await fetch(`/api/v4/races`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
@@ -34,8 +23,6 @@ export default {
             category_id: this.categoryId,
             visibility: this.visibility,
             notes: this.notes,
-            card_url: this.bingo_card_url,
-            seed: this.seed_name,
           })
         })
 
@@ -43,7 +30,7 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
-        Turbolinks.visit((await response.json())[raceableType].path)
+        Turbolinks.visit((await response.json()).race.path)
       } catch(error) {
         this.error = `Error: ${error}`
       } finally {
@@ -52,5 +39,5 @@ export default {
     },
   },
   name: 'race-create',
-  props: ['category-id', 'game-id'],
+  props: ['game-id', 'category-id'],
 }

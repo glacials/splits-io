@@ -11,7 +11,7 @@ Resources are identifiable by the following attributes:
 | [Runner][runner]     | Name          | String | Twitch username | `"glacials"` `"batedurgonnadie"` `"snarfybobo"` |
 | [Game][game]         | Shortname     | String | Shortname       | `"sms"` `"sm64"` `"portal"`                     |
 | [Category][category] | ID            | String | Base 10 number  | `"312"` `"1456"` `"11"`                         |
-| [Raceable][raceable] | ID            | String | UUID            | `"c198a25f-9f8a-43cd-92ab-472a952f9336"`        |
+| [Race][race]         | ID            | String | UUID            | `"c198a25f-9f8a-43cd-92ab-472a952f9336"`        |
 | [Entry][Entry]       | ID            | String | UUID            | `"61db2b30-e024-45c5-b188-e9986ff1c89c"`        |
 
 Your code shouldn't care too much about what these attributes actually are. They're all represented as opaque
@@ -534,70 +534,37 @@ belongs to a Game. Any number of Categories can be associated with a Game.
 | `updated_at` | string | never | The time and date at which this category was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 </details>
 
-### Race, Bingo, Randomizer
+### Race
 ```sh
 curl https://splits.io/api/v4/races
 curl https://splits.io/api/v4/races/:race
 curl https://splits.io/api/v4/races/:race/entry
 curl https://splits.io/api/v4/races/:race/chat
-
-curl https://splits.io/api/v4/bingos
-curl https://splits.io/api/v4/bingos/:bingo
-curl https://splits.io/api/v4/bingos/:bingo/entry
-curl https://splits.io/api/v4/bingos/:bingo/chat
-
-curl https://splits.io/api/v4/randomizers
-curl https://splits.io/api/v4/randomizers/:randomizer
-curl https://splits.io/api/v4/randomizers/:randomizer/entry
-curl https://splits.io/api/v4/randomizers/:randomizer/chat
 ```
-A Race, Bingo, or Randomizer is a live competition between multiple Runners who share a start time for their run. The
-three types are nearly identical except for a few minor field changes described below.
+A Race is a live competition between multiple Runners who share a start time for their run.
 
-**Note**: For simplicity we'll refer to the trio of Race, Bingo, and Randomizer as "raceables". There is no API type
-called raceable; it is a conceptual set of common properties and behaviors.
-
-Nearly all raceable endpoints require user authorization based on the flow described below in the
+Nearly all race endpoints require user authorization based on the flow described below in the
 [Authentication & authorization][authentication] section.
 
 <details>
-<summary>Structure of a raceable</summary>
+<summary>Structure of a Race</summary>
 
-| Field           | Type                                   | Null?                            | Description                                                                                                                   |
-|:----------------|:---------------------------------------|:---------------------------------|:------------------------------------------------------------------------------------------------------------------------------|
-| `id`            | string                                 | never                            | The unique ID of the raceable.                                                                                                |
-| `type`          | string                                 | never                            | The type of raceable: `race`, `bingo`, or `randomizer`. Supplied for convenience.                                             |
-| `path`          | string                                 | never                            | A user-friendly URL to the raceable.                                                                                          |
-| `visibility`    | number                                 | never                            | The permission set for the raceable. (`0`: public, `1`: invite-only, `2`: secret)                                             |
-| `join_token`    | string                                 | always, except creation response | The token needed to join invite only and secret races. This is only non-null in the returned JSON when creating the race.     |
-| `notes`         | string                                 | when not provided by creator     | Any notes associatied with the raceable.                                                                                      |
-| `started_at`    | string                                 | when the race has not started    | The time and date at which this raceable was started on Splits.io. This field conforms to [ISO 8601][iso8601].                |
-| `created_at`    | string                                 | never                            | The time and date at which this raceable was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
-| `updated_at`    | string                                 | never                            | The time and date at which this raceable was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
-| `owner`         | [Runner][runner]                       | never                            | The user who created the raceable.                                                                                            |
-| `entries`       | array of [Entries][entry]              | never                            | All entries currently in the raceable.                                                                                        |
-| `chat_messages` | array of [Chat Messages][chat-message] | never                            | Chat messages for the raceable. Only present when fetching the raceable specifically.                                         |
-
-Races have the following extra field:
-
-| Field      | Type                 | Null? | Description               |
-|:-----------|:---------------------|:------|:--------------------------|
-| `category` | [Category][category] | never | The category being raced. |
-
-Bingos have the following extra fields:
-
-| Field      | Type         | Null?                            | Description                                |
-|:-----------|:-------------|:---------------------------------|:-------------------------------------------|
-| `game`     | [Game][game] | never                            | The game the bingo is attached to.         |
-| `card_url` | string       | when not provided by the creator | The URL that the bingo card is located at. |
-
-Randomizers have the following extra fields:
-
-| Field         | Type                               | Null?                            | Description                                        |
-|:--------------|:-----------------------------------|:---------------------------------|:---------------------------------------------------|
-| `game`        | [Game][game]                       | never                            | The game the bingo is attached to.                 |
-| `seed`        | string                             | when not provided by the creator | The seed name associatied with the randomizer.     |
-| `attachments` | array of [Attachments][attachment] | never                            | Any attachments needed to complete the randomizer. |
+| Field           | Type                                   | Null?                            | Description                                                                                                               |
+|:----------------|:---------------------------------------|:---------------------------------|:--------------------------------------------------------------------------------------------------------------------------|
+| `id`            | string                                 | never                            | The unique ID of the Race.                                                                                                |
+| `path`          | string                                 | never                            | The user-friendly URL to the Race, to be given to a user when necessary.                                                  |
+| `game`          | [Game][game]                           | when not provided by the creator | The game being raced.                                                                                                     |
+| `category`      | [Category][category]                   | when not provided by the creator | The category being raced.                                                                                                 |
+| `visibility`    | number                                 | never                            | The permission set for the Race. (`0`: public, `1`: invite-only, `2`: secret)                                             |
+| `join_token`    | string                                 | always, except creation response | The token needed to join the race if it's invite-only or secret. Only provided to the owner as a response to creation.    |
+| `notes`         | string                                 | when not provided by creator     | Any notes associatied with the Race.                                                                                      |
+| `owner`         | [Runner][runner]                       | never                            | The Runner who created the Race.                                                                                          |
+| `entries`       | array of [Entries][entry]              | never                            | All Entries currently in the Race.                                                                                        |
+| `chat_messages` | array of [Chat Messages][chat-message] | never                            | Chat messages for the Race. Only present when fetching the Race individually.                                             |
+| `attachments`   | array of [Attachments][attachment]     | never                            | Any attachments supplied by the race creator for the benefit of other entrants (e.g. for randomizers).                    |
+| `started_at`    | string                                 | when the race has not started    | The time and date at which this Race was started on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `created_at`    | string                                 | never                            | The time and date at which this Race was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `updated_at`    | string                                 | never                            | The time and date at which this Race was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 
 #### Attachment
 Attachments have the following structure:
@@ -611,39 +578,35 @@ Attachments have the following structure:
 </details>
 
 <details>
-<summary>Fetching active raceables</summary>
+<summary>Fetching active Races</summary>
 
 ```sh
 curl https://splits.io/api/v4/races
-curl https://splits.io/api/v4/bingos
-curl https://splits.io/api/v4/randomizers
 ```
-These endpoints return a list of active raceables of their type. A raceable is active if it
+These endpoints return a list of active Races of their type. A Race is active if it
 1. is in progress, or
 2. has had some activity in the last 30 minutes, or
 3. has at least two entries.
 </details>
 
 <details>
-<summary>Fetching a single raceable</summary>
+<summary>Fetching a single Race</summary>
 
 ```sh
 curl https://splits.io/api/v4/races/:race
-curl https://splits.io/api/v4/bingos/:bingo
-curl https://splits.io/api/v4/randomizers/:randomizer
 ```
-Get information about a raceable. To view information about secret raceables, a `join_token` parameter must also be
+Get information about a Race. To view information about secret Races, a `join_token` parameter must also be
 provided.
 
-| Status Codes | Success? | Body Present? | Description                                                                             |
-|:-------------|:---------|:--------------|:----------------------------------------------------------------------------------------|
-| 202          | Yes      | Yes           | Raceable schema will be returned.                                                       |
-| 403          | No       | Yes           | This raceable is not viewable by the current user because they lack a valid join token. |
-| 404          | No       | Yes           | No raceable found with the provided id.                                                 |
+| Status Codes | Success? | Body Present? | Description                                                                         |
+|:-------------|:---------|:--------------|:------------------------------------------------------------------------------------|
+| 202          | Yes      | Yes           | Race schema will be returned.                                                       |
+| 403          | No       | Yes           | This Race is not viewable by the current user because they lack a valid join token. |
+| 404          | No       | Yes           | No Race found with the provided id.                                                 |
 </details>
 
 <details>
-<summary>Creating a new raceable</summary>
+<summary>Creating a new Race</summary>
 
 ```sh
 curl -X POST https://splits.io/api/v4/races \
@@ -651,66 +614,45 @@ curl -X POST https://splits.io/api/v4/races \
   -H 'Content-Type: application/json' \
   -d '{"category_id": "40", "notes": "Notes go here"}'
 ```
+Create a new Race. All types can have `notes`. Tier-2+ patrons can use a `visibility` of `invite_only` or `secret`.
 
-```sh
-curl -X POST https://splits.io/api/v4/bingos \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{"game_id": "40", "card_url": "https://google.com", "visibility": "secret"}'
-```
-
-```sh
-curl -X POST https://splits.io/api/v4/randomizers \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{"game_id": "40", "notes": "Notes go here", "seed": "asdfqweruiop"}'
-```
-Create a new raceable. All types can have `notes`. Tier-2+ patrons can use a `visibility` of `invite_only` or `secret`.
-
-Invite-only raceables can be seen by anyone but only joined with a `join_token`; secret raceables can only be seen or
+Invite-only Races can be seen by anyone but only joined with a `join_token`; secret Races can only be seen or
 joined with a `join_token`. The join token is returned after creation. You can build it into a user-friendly link:
 ```http
 https://splits.io/races/:race?join_token=:join_token
-https://splits.io/bingos/:bingo?join_token=:join_token
-https://splits.io/randomizers/:randomizer?join_token=:join_token
 ```
-This link is effectively the password for the raceable. The raceable owner can always view this link on the raceable's
-page on Splits.io.
+This link is effectively the password for the Race. The Race owner can always view this link on the Race's page on
+Splits.io.
 
 The only required parameter between all types is the Game or Category being raced. Attachments cannot be specified at
 creation and must take place as a separate action afterwards.
 
-**Note**: Races are associated with a Category, while Bingos and Randomizers are associated with a Game.
-
-| Status Codes | Success? | Body Present? | Description                                                                                        |
-|:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------|
-| 201          | Yes      | Yes           | Successfully created, a raceable schema will be returned.                                          |
-| 400          | No       | Yes           | An error occured while creating the raceable. `error` will contain a human-readable error message. |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                         |
-| 403          | No       | Yes           | Cannot create raceable with the desired visibility.                                                |
+| Status Codes | Success? | Body Present? | Description                                                                                    |
+|:-------------|:---------|:--------------|:-----------------------------------------------------------------------------------------------|
+| 201          | Yes      | Yes           | Successfully created, a Race schema will be returned.                                          |
+| 400          | No       | Yes           | An error occured while creating the Race. `error` will contain a human-readable error message. |
+| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                     |
+| 403          | No       | Yes           | Cannot create Race with the desired visibility.                                                |
 </details>
 
 <details>
-<summary>Updating a raceable</summary>
+<summary>Updating a Race</summary>
 
 ```sh
 # Races can not be updated, instead just create a new race with the correct category.
-curl -X PATCH https://splits.io/api/v4/bingos/:bingo
-curl -X PATCH https://splits.io/api/v4/randomizers/:randomizer
+curl -X PATCH https://splits.io/api/v4/races/:race
 ```
-Change a raceable. For Bingos this can be used to update the `card_url` parameter. For Randomizers this is used to add
-`attachments` to it such as seed files used in the race. This endpoint requires that the authenticated user is the
-creator of the raceable.
+Update one or more fields of the Race. This endpoint requires that the authenticated user is the creator of the Race.
 
-| Status Codes | Success? | Body Present? | Description                                                                                                     |
-|:-------------|:---------|:--------------|:----------------------------------------------------------------------------------------------------------------|
-| 200          | Yes      | Yes           | Successfully updated. A raceable schema will be returned.                                                       |
-| 400          | No       | Yes           | An error occured while saving the raceable. `error` will contain a human-readable error message.                |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user or the owner of the bingo/randomizer. |
-| 403          | No       | Yes           | The raceable has already been started and cannot be updated.                                                    |
-| 406          | No       | Yes           | This is only returned when trying to update a regular category race.                                            |
+| Status Codes | Success? | Body Present? | Description                                                                                         |
+|:-------------|:---------|:--------------|:----------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Yes           | Successfully updated. A Race schema will be returned.                                               |
+| 400          | No       | Yes           | An error occured while saving the Race. `error` will contain a human-readable error message.        |
+| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user or the owner of the race. |
+| 403          | No       | Yes           | The Race has already been started and cannot be updated.                                            |
+| 406          | No       | Yes           | This is only returned when trying to update a regular category race.                                |
 
-Raceables cannot be deleted. Once one becomes inactive for 30 minutes it will naturally disappear from the listings.
+Races cannot be deleted. Once one becomes inactive for 30 minutes it will naturally disappear from the listings.
 </details>
 
 #### Entry
@@ -719,18 +661,8 @@ curl           https://splits.io/api/v4/races/:race/entry
 curl -X PUT    https://splits.io/api/v4/races/:race/entry
 curl -X PATCH  https://splits.io/api/v4/races/:race/entry
 curl -X DELETE https://splits.io/api/v4/races/:race/entry
-
-curl           https://splits.io/api/v4/bingos/:bingo/entry
-curl -X PUT    https://splits.io/api/v4/bingos/:bingo/entry
-curl -X PATCH  https://splits.io/api/v4/bingos/:bingo/entry
-curl -X DELETE https://splits.io/api/v4/bingos/:bingo/entry
-
-curl           https://splits.io/api/v4/randomizers/:randomizer/entry
-curl -X PUT    https://splits.io/api/v4/randomizers/:randomizer/entry
-curl -X PATCH  https://splits.io/api/v4/randomizers/:randomizer/entry
-curl -X DELETE https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-An Entry represents a Runner's participation in a raceable.
+An Entry represents a Runner's participation in a Race.
 
 All endpoints in this section require an access token and implicitly operate on the authenticated user's Entry, if it
 exists. Entries cannot be retrieved by ID.
@@ -741,9 +673,9 @@ exists. Entries cannot be retrieved by ID.
 | Field          | Type             | Null?                            | Description                                                                                                                |
 |:---------------|:-----------------|:---------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
 | `id`           | string           | never                            | The unique ID of the Entry.                                                                                                |
-| `readied_at`   | string           | when the Entry isn't ready       | The time and date at which this Entry readied up in the raceable. This field conforms to [ISO 8601][iso8601].              |
-| `finished_at`  | string           | when the Entry has not finished  | The time and date at which this Entry finished this raceable. This field conforms to [ISO 8601][iso8601].                  |
-| `forfeited_at` | string           | when the Entry has not forfeited | The time and date at which this Entry forfeited from this raceable. This field conforms to [ISO 8601][iso8601].            |
+| `readied_at`   | string           | when the Entry isn't ready       | The time and date at which this Entry readied up in the Race. This field conforms to [ISO 8601][iso8601].                  |
+| `finished_at`  | string           | when the Entry has not finished  | The time and date at which this Entry finished this Race. This field conforms to [ISO 8601][iso8601].                      |
+| `forfeited_at` | string           | when the Entry has not forfeited | The time and date at which this Entry forfeited from this Race. This field conforms to [ISO 8601][iso8601].                |
 | `created_at`   | string           | never                            | The time and date at which this Entry was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at`   | string           | never                            | The time and date at which this Entry was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `user`         | [Runner][runner] | never                            | The user represented by this Entry.                                                                                        |
@@ -755,16 +687,14 @@ exists. Entries cannot be retrieved by ID.
 
 ```sh
 curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
-curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/bingos/:bingo/entry
-curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-Get information about the authenticated user's involvement in a given raceable.
+Get information about the authenticated user's involvement in a given Race.
 
-| Possible Status Codes | Success? | Body Present? | Description                                                                         |
-|:----------------------|:---------|:--------------|:------------------------------------------------------------------------------------|
-| 200                   | Yes      | Yes           | The authenticated user is entered in the given raceable; returns an [Entry][entry]. |
-| 401                   | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.          |
-| 404                   | No       | Yes           | The authenticated user is not entered into the given raceable.                      |
+| Possible Status Codes | Success? | Body Present? | Description                                                                     |
+|:----------------------|:---------|:--------------|:--------------------------------------------------------------------------------|
+| 200                   | Yes      | Yes           | The authenticated user is entered in the given Race; returns an [Entry][entry]. |
+| 401                   | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.      |
+| 404                   | No       | Yes           | The authenticated user is not entered into the given Race.                      |
 </details>
 
 <details>
@@ -772,17 +702,15 @@ Get information about the authenticated user's involvement in a given raceable.
 
 ```sh
 curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
-curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/bingos/:bingo/entry
-curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-Join a raceable. If the raceable is invite-only or secret, you must supply a `join_token`.
+Join a Race. If the Race is invite-only or secret, you must supply a `join_token`.
 
 | Status Codes | Success? | Body Present? | Description                                                                                            |
 |:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
 | 201          | Yes      | Yes           | Successfully created; returns an [Entry][entry].                                                       |
 | 400          | No       | Yes           | An error occured while creating the Entry. The `error` key will contain a user-friendly error message. |
 | 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 403          | No       | Yes           | This raceable is not joinable by the current user because they lack a valid join token.                |
+| 403          | No       | Yes           | This Race is not joinable by the current user because they lack a valid join token.                    |
 </details>
 
 <details>
@@ -793,25 +721,15 @@ curl -X PATCH https://splits.io/api/v4/races/:race/entry \
   -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
   -H 'Content-Type: application/json'
   -d '{"readied_at": "2019-06-17T03:40:48.123Z"}'
-
-curl -X PATCH https://splits.io/api/v4/bingos/:bingo/entry \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
-  -H 'Content-Type: application/json'
-  -d '{"forfeited_at": null}'
-
-curl -X PATCH https://splits.io/api/v4/randomizers/:randomizer/entry \
-  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
-  -H 'Content-Type: application/json'
-  -d '{"run_id": "gcb", "readied_at": "now"}'
 ```
 Change an Entry. Valid parameters are `readied_at`, `finished_at`, and `forfeited_at`, and `run_id`.
 
-| Field          | Type                       | Null?                            | Description                                                                                                             |
-|:---------------|:---------------------------|:---------------------------------|:------------------------------------------------------------------------------------------------------------------------|
-| `run_id`       | string                     | when not set by you              | The [Run][run] ID corresponding to the splits for this raceable. See: [replacing source files][replacing-source-files]. |
-| `readied_at`   | [ISO 8601][iso8601] string | when the runner isn't ready      | The timestamp when this runner readied up, if at all.                                                                   |
-| `finished_at`  | [ISO 8601][iso8601] string | when the runner hasn't finished  | The timestamp when this runner finished the raceable, if at all.                                                        |
-| `forfeited_at` | [ISO 8601][iso8601] string | when the runner hasn't forfeited | The timestamp when this runner forfeited the raceable, if at all.                                                       |
+| Field          | Type                       | Null?                            | Description                                                                                                         |
+|:---------------|:---------------------------|:---------------------------------|:--------------------------------------------------------------------------------------------------------------------|
+| `run_id`       | string                     | when not set by you              | The [Run][run] ID corresponding to the splits for this Race. See: [replacing source files][replacing-source-files]. |
+| `readied_at`   | [ISO 8601][iso8601] string | when the runner isn't ready      | The timestamp when this runner readied up, if at all.                                                               |
+| `finished_at`  | [ISO 8601][iso8601] string | when the runner hasn't finished  | The timestamp when this runner finished the Race, if at all.                                                        |
+| `forfeited_at` | [ISO 8601][iso8601] string | when the runner hasn't forfeited | The timestamp when this runner forfeited the Race, if at all.                                                       |
 
 The timestamps support three decimal places of precision. They serve as pseudo-booleans; they are the source of truth
 for whether a runner is ready/finished/forfeited (`null` for no; non-`null` for yes).
@@ -831,7 +749,7 @@ again to rejoin.
 | 200          | Yes      | Yes           | Successfully updated. An Entry schema will be returned.                                                |
 | 400          | No       | Yes           | An error occured while updating the Entry. The `error` key will contain a user-friendly error message. |
 | 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 404          | No       | Yes           | No Raceable found or Entry found for the associated user.                                              |
+| 404          | No       | Yes           | No Race found or Entry found for the associated user.                                                  |
 </details>
 
 <details>
@@ -839,27 +757,23 @@ again to rejoin.
 
 ```sh
 curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
-curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/bingos/:bingo/entry
-curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/randomizers/:randomizer/entry
 ```
-Leave a raceable. A raceable that has already started cannot be left, only finished or forfeited.
+Leave a Race. A Race that has already started cannot be left, only finished or forfeited.
 
 | Status Codes | Success? | Body Present? | Description                                                                                            |
 |:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
 | 205          | Yes      | No            | Successfully deleted.                                                                                  |
 | 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 404          | No       | Yes           | No Raceable found or Entry found for the associated user.                                              |
+| 404          | No       | Yes           | No Race found or Entry found for the associated user.                                                  |
 | 409          | No       | Yes           | An error occured while deleting the Entry. The `error` key will contain a user-friendly error message. |
 </details>
 
 #### Chat Message
 ```sh
 curl https://splits.io/api/v4/races/:race/chat
-curl https://splits.io/api/v4/bingos/:bingo/chat
-curl https://splits.io/api/v4/randomizers/:randomizer/chat
 ```
-A Chat Message is a shortform message sent by a user to a raceable. The user does not have to be entered into the
-raceable in order to send a Chat Message to it.
+A Chat Message is a shortform message sent by a user to a Race. The user does not have to be entered into the Race in
+order to send a Chat Message to it.
 
 <details>
 <summary>Structure of a Chat Message</summary>
@@ -878,15 +792,13 @@ raceable in order to send a Chat Message to it.
 
 ```sh
 curl https://splits.io/api/v4/races/:race/chat
-curl https://splits.io/api/v4/bingos/:bingo/chat
-curl https://splits.io/api/v4/randomizers/:randomizer/chat
 ```
 
-| Status Codes | Success? | Body Present? | Description                                                    |
-|:-------------|:---------|:--------------|:---------------------------------------------------------------|
-| 200          | Yes      | Yes           | A paginated array of all the chat messages for the raceable.   |
-| 403          | No       | Yes           | User does not have permission to read chat from this raceable. |
-| 404          | No       | Yes           | No raceable found for the ID given.                            |
+| Status Codes | Success? | Body Present? | Description                                                |
+|:-------------|:---------|:--------------|:-----------------------------------------------------------|
+| 200          | Yes      | Yes           | A paginated array of all the chat messages for the Race.   |
+| 403          | No       | Yes           | User does not have permission to read chat from this Race. |
+| 404          | No       | Yes           | No Race found for the ID given.                            |
 
 </details>
 
@@ -898,30 +810,20 @@ curl -X POST https://splits.io/api/v4/races/:race/chat \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"body":"a message body here"}'
-
-curl -X POST https://splits.io/api/v4/bingos/:bingo/chat \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"body":"a message body here"}'
-
-curl -X POST https://splits.io/api/v4/randomizers/:randomizer/chat \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"body":"a message body here"}'
 ```
-Send a Chat Message to a raceable. All fields except `body` are inferred from your access token.
+Send a Chat Message to a Race. All fields except `body` are inferred from your access token.
 
 | Status Codes | Success? | Body Present? | Description                                                                                              |
 |:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------------|
-| 201          | Yes      | Yes           | A paginated array of all the chat messages for the raceable.                                             |
+| 201          | Yes      | Yes           | A paginated array of all the chat messages for the Race.                                                 |
 | 400          | No       | Yes           | An error occured while creating the message. The `error` key will contain a user-friendly error message. |
-| 403          | No       | Yes           | User does not have permission to send chat to this raceable.                                             |
-| 404          | No       | Yes           | No raceable found for the ID given.                                                                      |
+| 403          | No       | Yes           | User does not have permission to send chat to this Race.                                                 |
+| 404          | No       | Yes           | No Race found for the ID given.                                                                          |
 
 </details>
 
 ### WebSockets
-Splits.io broadcasts updates to [raceables][raceable] in realtime over WebSockets. We use WebSockets only to push
+Splits.io broadcasts updates to [Race][race] in realtime over WebSockets. We use WebSockets only to push
 changes from Splits.io to clients; to send data the other way, you must use the REST APIs above.
 
 <details>
@@ -933,7 +835,7 @@ possibilities that a sent response might not arrive; that a delivered request mi
 can error because of them, or because of the server; that they get rate limited; that their authentication expires; that
 a user expects to see any issues in the console; and many more.
 
-**All** these needs are solved by HTTP. It's free. It doesn't sound like much, but trust us -- we built raceables to be
+**All** these needs are solved by HTTP. It's free. It doesn't sound like much, but trust us -- we built Races to be
 handled 100% over WebSockets, and got so many headaches re-implementing what were effectively basic features of HTTP or
 REST that we switched the nearly-complete implementation to the read-only WebSockets version you see today.
 
@@ -955,14 +857,14 @@ object types are double-encoded (its value is a string containing more JSON). Wh
 ```json
 {
   "type": "confirm_subscription",
-  "identifier": {"channel": "Api::V4::GlobalRaceableChannel"},
+  "identifier": {"channel": "Api::V4::GlobalRaceChannel"},
 }
 ```
 might instead look like
 ```json
 {
   "type": "confirm_subscription",
-  "identifier": "{\"channel\":\"Api::V4::GlobalRaceableChannel\"}",
+  "identifier": "{\"channel\":\"Api::V4::GlobalRaceChannel\"}",
 }
 ```
 If you're not using a language with strongly-typed schemas, just decode the embedded JSON again.
@@ -1024,13 +926,13 @@ To receive updates from Splits.io, you first have to tell it what you want updat
 
 There are two channel types:
 
-| Channel               | Required params                | Optional params       | Description                                |
-|:----------------------|:-------------------------------|:----------------------|:-------------------------------------------|
-| GlobalRaceableChannel | *none*                         | `state`               | high-level information about all raceables |
-| RaceableChannel       | `raceable_type`, `raceable_id` | `state`, `join_token` | detailed information about one raceable    |
+| Channel           | Required params | Optional params       | Description                            |
+|:------------------|:----------------|:----------------------|:---------------------------------------|
+| GlobalRaceChannel | *none*          | `state`               | high-level information about all Races |
+| RaceChannel       | `race_id`       | `state`, `join_token` | detailed information about one Race    |
 
-There is one GlobalRaceableChannel and `n` RaceableChannels (one for each raceable). You can be subscribed to any number
-of channels at once, and they all stream over the same WebSocket connection.
+There is one GlobalRaceChannel and `n` RaceChannels (one for each Race). You can be subscribed to any number of channels
+at once, and they all stream over the same WebSocket connection.
 
 If you pass `state=1` when subscribing, you will get a dump of the current state of the world for that channel. You can
 use this to e.g. populate UIs when they first load.
@@ -1042,7 +944,7 @@ use this to e.g. populate UIs when they first load.
 websocket.send(JSON.stringify({
   command: 'subscribe',
   identifier: JSON.stringify({
-    channel: 'Api::V4::GlobalRaceableChannel'
+    channel: 'Api::V4::GlobalRaceChannel'
   })
 }))
 
@@ -1050,7 +952,7 @@ websocket.send(JSON.stringify({
 {
   "type": "confirm_subscription",
   "identifier": "{
-    \"channel\": \"Api::V4::GlobalRaceableChannel\"
+    \"channel\": \"Api::V4::GlobalRaceChannel\"
   }"
 }
 */
@@ -1060,10 +962,9 @@ websocket.send(JSON.stringify({
 websocket.send(JSON.stringify({
   command: 'subscribe',
   identifier: JSON.stringify({
-    channel:       "Api::V4::RaceableChannel",
-    raceable_type: "race",
-    raceable_id:   "11902182-aead-44c6-a7b8-e526951564b1",
-    join_token:    "hzT5Fp6tX96wt2omLmRn4RHT"
+    channel:    "Api::V4::RaceChannel",
+    race_id:    "11902182-aead-44c6-a7b8-e526951564b1",
+    join_token: "hzT5Fp6tX96wt2omLmRn4RHT"
   })
 }))
 
@@ -1071,10 +972,9 @@ websocket.send(JSON.stringify({
 {
   "type": "confirm_subscription",
   "identifier": "{
-    \"channel\":       \"Api::V4::RaceableChannel\",
-    \"raceable_type\": \"race\",
-    \"raceable_id\":   \"11902182-aead-44c6-a7b8-e526951564b1\",
-    \"join_token\":    \"hzT5Fp6tX96wt2omLmRn4RHT\"
+    \"channel\":    \"Api::V4::RaceChannel\",
+    \"race_id\":    \"11902182-aead-44c6-a7b8-e526951564b1\",
+    \"join_token\": \"hzT5Fp6tX96wt2omLmRn4RHT\"
   }",
 }
 */
@@ -1085,7 +985,7 @@ websocket.send(JSON.stringify({
 <summary>Subscribing to a channel with Action Cable</summary>
 
 ```javascript
-cable.subscriptions.create("Api::V4::GlobalRaceableChannel", {
+cable.subscriptions.create("Api::V4::GlobalRaceChannel", {
   connection() {
     // Called when the subscription is ready
   },
@@ -1096,7 +996,7 @@ cable.subscriptions.create("Api::V4::GlobalRaceableChannel", {
 
   received(data) {
     switch(data.type) {
-      // See below for GlobalRaceableChannel message types
+      // See below for GlobalRaceChannel message types
       case '...':
         // ...
         break;
@@ -1106,9 +1006,8 @@ cable.subscriptions.create("Api::V4::GlobalRaceableChannel", {
 
 cable.subscriptions.create(
   {
-    channel:       "Api::V4::RaceableChannel",
-    raceable_type: "race"
-    raceable_id:   "c198a25f-9f8a-43cd-92ab-472a952f9336",
+    channel: "Api::V4::RaceChannel",
+    race_id: "c198a25f-9f8a-43cd-92ab-472a952f9336",
   },
   {
     connected: () => {
@@ -1121,7 +1020,7 @@ cable.subscriptions.create(
 
     received: data => {
       switch(data.type) {
-        // See below for RaceableChannel message types
+        // See below for RaceChannel message types
         case '...':
           // ...
           break
@@ -1155,21 +1054,20 @@ not require extra deserialization.
 
 `data` contains fields specific to the type of message (`message.type`):
 
-| Message type                    | Applicable channels   | Description                                                | Extra Fields                                                         |
-|:--------------------------------|:----------------------|:-----------------------------------------------------------|:---------------------------------------------------------------------|
-| `"raceable_created"`            | GlobalRaceableChannel | A new raceable was created                                 | [`raceable`][raceable]                                               |
-| `"global_state"`                | GlobalRaceableChannel | State of the world (in response to `state=1`)              | [`races`][raceable], [`bingos`][raceable], [`randomizers`][raceable] |
-| `"raceable_updated"`            | RaceableChannel       | The raceable has been changed (seed, bingo card, etc.)     | [`raceable`][raceable]                                               |
-| `"new_message"`                 | RaceableChannel       | A chat message was sent to the raceable                    | [`chat_message`][chat-message]                                       |
-| `"new_card"`                    | RaceableChannel       | The card URL for the raceable has changed (bingos only)    | [`raceable`][raceable]                                               |
-| `"new_attachment"`              | RaceableChannel       | An attachment was added to the raceable (randomizers only) | [`raceable`][raceable]                                               |
-| `"raceable_state"`              | RaceableChannel       | State of the raceable (in response to `state=1`)           | [`raceable`][raceable]                                               |
-| `"raceable_not_found"`          | RaceableChannel       | No raceable found for the given ID                         | *none*                                                               |
-| `"raceable_invalid_join_token"` | RaceableChannel       | The join token is not valid for the raceable               | *none*                                                               |
-| `"raceable_start_scheduled"`    | both                  | The/a raceable is starting in a few seconds                | [`raceable`]                                                         |
-| `"raceable_ended"`              | both                  | The/a raceable has finished                                | [`raceable`]                                                         |
-| `"raceable_entrants_updated"`   | both                  | An entry was created, changed, or deleted                  | [`raceable`]                                                         |
-| `"fatal_error"`                 | both                  | An error occured when processing the message               | *none*                                                               |
+| Message type                | Applicable channels | Description                                   | Extra Fields                   |
+|:----------------------------|:--------------------|:----------------------------------------------|:-------------------------------|
+| `"race_created"`            | GlobalRaceChannel   | A new Race was created                        | [`race`][race]                 |
+| `"global_state"`            | GlobalRaceChannel   | State of the world (in response to `state=1`) | [`races`][race]                |
+| `"race_updated"`            | RaceChannel         | A property of the race has changed            | [`race`][race]                 |
+| `"new_message"`             | RaceChannel         | A chat message was sent to the Race           | [`chat_message`][chat-message] |
+| `"new_attachment"`          | RaceChannel         | An attachment was added to the Race           | [`race`][race]                 |
+| `"race_state"`              | RaceChannel         | State of the Race (in response to `state=1`)  | [`race`][race]                 |
+| `"race_not_found"`          | RaceChannel         | No Race found for the given ID                | *none*                         |
+| `"race_invalid_join_token"` | RaceChannel         | The join token is not valid for the Race      | *none*                         |
+| `"race_start_scheduled"`    | both                | The/a Race is starting in a few seconds       | [`race`]                       |
+| `"race_ended"`              | both                | The/a Race has finished                       | [`race`]                       |
+| `"race_entrants_updated"`   | both                | An entry was created, changed, or deleted     | [`race`]                       |
+| `"fatal_error"`             | both                | An error occured when processing the message  | *none*                         |
 </details>
 
 [attachment]: #attachment
@@ -1179,7 +1077,7 @@ not require extra deserialization.
 [entry]: #entry
 [game]: #game
 [iso8601]: https://en.wikipedia.org/wiki/ISO_8601
-[raceable]: #race-bingo-randomizer
+[race]: #race
 [run]: #run
 [runner]: #runner
 [segment]: #segment

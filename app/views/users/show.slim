@@ -21,7 +21,7 @@ article
       .card.shadow
         = render partial: 'shared/run_table', locals: { \
           runs: @user.pbs, \
-          races: @user.raceables([:active, :not_secret_visibility]),
+          races: @user.races.active.not_secret_visibility,
           cols: %i[time video name uploaded], \
           col_options: {time: [:archived]}, \
           description: 'Personal Bests', \

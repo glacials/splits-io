@@ -3,17 +3,15 @@
 - content_for(:header) do
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
-    li.breadcrumb-item = link_to('Games', games_path)
-    li.breadcrumb-item = link_to(@race.game, game_path(@race.game))
-    - if @race.try(:category)
+    - if @race.game
+      li.breadcrumb-item = link_to('Games', games_path)
+      li.breadcrumb-item = link_to(@race.game, game_path(@race.game))
+    - if @race.category
       li.breadcrumb-item = link_to(@race.category, game_category_path(@race.game, @race.category))
-      li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_category_path(@race.game, @race.category))
-    - else
-      li.breadcrumb-item = link_to(@race.type.to_s.capitalize.pluralize, game_path(@race.game))
-    li.breadcrumb-item.active = link_to(@race.to_param, polymorphic_path(@race))
+    li.breadcrumb-item.active = link_to(@race.to_param, race_path(@race))
 
 #vue-race
-  race inline-template=true raceable-type=@race.type raceable-id=@race.id
+  race inline-template=true race-id=@race.id
     div
       .text-center v-if="loading" = render partial: 'shared/spinner'
       div v-show="!loading"
@@ -29,9 +27,9 @@
             .card.shadow.my-3#chat-card
               .list-group.list-group-flush style='max-height: 500px; overflow-y: auto'
                 - unless @race.locked?
-                  race-chat inline-template=true v-if='raceable' :raceable='raceable'
+                  race-chat inline-template=true v-if='race' :race='race'
                     .list-group-item#input-list-item.p-0
-                      = form_for(:chat, remote: true, html: {onsubmit: 'event.preventDefault()'}) do |f|
+                      = form_for(:chat, html: {onsubmit: 'event.preventDefault()'}) do |f|
                         .input-group
                           input.form-control#input-chat-text(
                             autofocus=true
@@ -60,27 +58,26 @@
                         i Race created
                         .float-right.pr-2
                           = render partial: 'shared/relative_time', locals: {time: @race.created_at}
-        - if @race.randomizer?
-          .col-md-6
-            race-disclaimer.card.shadow.my-3 inline-template=true
-              div
-                .bg-dark.p-4 v-if='!accepted'
-                  p
-                    ' Attachments are uploaded by the race creator. Do not download any attachments
-                    ul
-                      li that you do not recognize as necessary for your randomizer,
-                      li that are executable files, or
-                      li if you do not both know and trust the race creator.
-                    ' Splits.io is not affiliated with any attachment content and is not responsible for attachments
-                    ' or their effects.
-                  button.btn.btn-outline-light @click='accept' I understand
-                div v-if='accepted'
-                  h6.card-header Attachments
-                  #attachments = render partial: 'races/attachments', locals: {race: @race}
-                  - if @race.belongs_to?(current_user) && !@race.started?
-                    .card-footer
-                      = form_for(@race, url: api_v4_randomizer_path(@race), remote: true, method: 'PATCH', html: { \
-                        class: 'w-100 d-flex justify-content-between auth-me' \
-                      }) do |f|
-                        = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
-                        = f.submit('Attach', class: 'btn btn-outline-light')
+        .col-md-6
+          race-disclaimer.card.shadow.my-3 inline-template=true
+            div
+              .bg-dark.p-4 v-if='!accepted'
+                p
+                  ' Attachments are uploaded by the race creator. Do not download any attachments
+                  ul
+                    li that you do not recognize as necessary for your race,
+                    li that are executable files, or
+                    li if you do not both know and trust the race creator.
+                  ' Splits.io is not affiliated with any attachment content and is not responsible for attachments
+                  ' or their effects.
+                button.btn.btn-outline-light @click='accept' I understand
+              div v-if='accepted'
+                h6.card-header Attachments
+                #attachments = render partial: 'races/attachments', locals: {race: @race}
+                - if @race.belongs_to?(current_user) && !@race.started?
+                  .card-footer
+                    = form_for(@race, url: api_v4_race_path(@race), remote: true, method: 'PATCH', html: { \
+                      class: 'w-100 d-flex justify-content-between auth-me' \
+                    }) do |f|
+                      = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
+                      = f.submit('Attach', class: 'btn btn-outline-light')

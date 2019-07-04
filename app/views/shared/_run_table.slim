@@ -50,16 +50,11 @@
                     .text-warning Invite-Only
             - if cols.include?(:video)
               td.text-center.nowrap
-                - if race.bingo?
-                  .tip title='Bingo' => icon('fas', 'th')
-                - if race.randomizer?
-                  .tip title='Randomizer' => icon('fas', 'random')
-                - if race.race?
-                  .tip title="#{race.category} Race" => icon('fas', 'flag-checkered')
+                .tip title="#{race.category} Race" => icon('fas', 'flag-checkered')
             - if cols.include?(:name)
               td width='100%'
                 .badge.badge-dark.mr-2 style='text-transform: uppercase' Race
-                = link_to race, polymorphic_path(race), class: 'text-warning'
+                = link_to race, race_path(race), class: 'text-warning'
                 - if race.notes.present?
                   span.ml-2.tip title=race.notes = icon('far', 'sticky-note')
             - if cols.include?(:rival)
