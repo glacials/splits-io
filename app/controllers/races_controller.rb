@@ -1,13 +1,21 @@
 class RacesController < ApplicationController
+  before_action :set_races,        only: [:index]
   before_action :set_race,         only: [:show, :update]
   before_action :check_permission, only: [:show]
   before_action :set_race_gon,     only: [:show]
   before_action :shorten_url,      only: [:show]
 
+  def index
+  end
+
   def show
   end
 
   private
+
+  def set_races
+    @races = Race.active.not_secret_visibility
+  end
 
   def check_permission
     return unless @race.secret_visibility?

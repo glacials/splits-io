@@ -9,43 +9,41 @@
   / Specify the full partial path because this view is used by different controllers
   = render partial: 'games/categories/title', locals: {category: @category}
 
-article data-turbolinks-temporary=true
-  .row
-    - route = @category.route
-    - if @category.route.present?
-      .col-md-4: .card.mb-4
-        h5.card-header #{@category.name} Route
-        .card-body
-          p.card-text Automatically determined based on popularity
-          = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download splits', force_route_only: true}
+.row.mx-2
+  - route = @category.route
+  - if @category.route.present?
+    .col-md-4: .card.mb-4
+      h5.card-header #{@category.name} Route
+      .card-body
+        p.card-text Automatically determined based on popularity
+        = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download splits', force_route_only: true}
 
-    - if current_user.present?
-      .col-md-4: .card.mb-4
-        h5.card-header Set up race
-        .card-body
-          p.card-text Race #{@category.game} against others
-          button.btn.btn-outline-light(
-            data={toggle: :modal, target: '#race-modal'}
-          )
-            => icon('fas', 'flag-checkered')
-            ' Set up race
-      = render partial: 'races/new', locals: {game: @game}
-  .card
-    .card-header
-      = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
-    = render partial: 'shared/run_table', locals: { \
-      runs: @category.runs.nonempty.unarchived, \
-      races: @game.races.active.not_secret_visibility,
-      cols: %i[runner time name video uploaded], \
-    }.merge(sorting_info)
-  center
-    small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'
+  - if current_user.present?
+    .col-md-4: .card.mb-4
+      h5.card-header Set up race
+      .card-body
+        p.card-text Race #{@category.game} against others
+        button.btn.btn-outline-light(
+          data={toggle: :modal, target: '#race-modal'}
+        )
+          => icon('fas', 'flag-checkered')
+          ' Set up race
+    = render partial: 'races/new', locals: {game: @game}
 
-article
-  .card
-    = render partial: 'shared/run_table', locals: { \
-      runs: Run.none, \
-      races: @game.races.finished.not_secret_visibility.page(params[:page]), \
-      cols: %i[runner time name video uploaded], \
-      description: 'Completed Races', \
-    }.merge(sorting_info)
+.row.mx-2
+  .col-md-6: .card
+    = render partial: 'shared/race_table', locals: { \
+      races: @game.races.finished.not_secret_visibility, \
+      active_races: @game.races.active.not_secret_visibility \
+    }
+
+  .col-md-6
+    .card
+      .card-header
+        = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
+      = render partial: 'shared/run_table', locals: { \
+        runs: @category.runs.nonempty.unarchived, \
+        cols: %i[runner time name video uploaded], \
+      }.merge(sorting_info)
+      center.my-2
+        small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'

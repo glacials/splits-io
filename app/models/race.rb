@@ -81,7 +81,7 @@ class Race < ApplicationRecord
     return if started? || entries.where(readied_at: nil).any? || entries.count < 2
 
     update(started_at: Time.now.utc + 20.seconds)
-    Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', "The race is starting soon")
+    Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', 'The race is starting soon')
     Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_start_scheduled', 'A race is starting soon')
   end
 
@@ -102,7 +102,7 @@ class Race < ApplicationRecord
 
   # checks if a given user should be able to act on a given race, returning true if any of the following pass
   # the user is an entrant in the race or is the race creator, or
-  # the race status is not public and the provided token is correct, or
+  # the race visibility is not public and the provided token is correct, or
   # the race is public
   def joinable?(user: nil, token: nil)
     result = false
@@ -129,6 +129,13 @@ class Race < ApplicationRecord
   end
 
   def title
-    notes.split('\n')[0]
+    notes.try(:split, '\n').try(:[], 0)
+  end
+
+  def duration
+    return Duration.new((finished_at - started_at) * 1000) if finished_at.present?
+    return Duration.new((Time.now.utc - started_at) * 1000) if in_progress?
+
+    Duration.new(nil)
   end
 end

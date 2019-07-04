@@ -13,7 +13,8 @@ class Game < ApplicationRecord
   has_many :runners, -> { distinct }, through: :runs, class_name: 'User'
   has_many :aliases, class_name: 'GameAlias', dependent: :destroy
 
-  has_many :races, through: :categories
+  has_many :races
+
 
   has_one :srdc, class_name: 'SpeedrunDotComGame', dependent: :destroy
   has_one :srl,  class_name: 'SpeedRunsLiveGame',  dependent: :destroy
@@ -42,6 +43,11 @@ class Game < ApplicationRecord
     return nil if name.blank?
 
     joins(:aliases).where(game_aliases: {name: name}).first_or_create(name: name)
+  end
+
+  def races
+    category_ids = categories.pluck(:id)
+    Race.where(game_id: id).or(Race.where(category_id: category_ids))
   end
 
   def to_param
