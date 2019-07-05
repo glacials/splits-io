@@ -89,14 +89,14 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
   end
 
   def massage_params
-    params[:entry][:run_id] = Run.find36(params[:entry][:run_id]).id if params[:entry].try(:[], :run_id).present?
+    params[:entry][:run_id] = params[:entry][:run_id].to_i(36) if params[:entry].try(:[], :run_id).present?
   end
 
   def entry_params
     params.select { |k, _| k[-3, -1] == '_at' && v == 'now' }.each do |k, _|
       params[k] = @now
     end
-    params.permit(:join_token, entry: %i[readied_at finished_at forfeited_at run_id]).fetch(:entry, {})
+    params.permit(:race, :join_token, entry: %i[readied_at finished_at forfeited_at run_id]).fetch(:entry, {})
   end
 
   def update_race

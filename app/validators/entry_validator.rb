@@ -63,8 +63,12 @@ class EntryValidator < ActiveModel::Validator
     end
 
     if record.run_id_changed?
-      if !record.run_id.nil? && Run.find(record.run_id).user != record.user
-        record.errors[:run_id] << 'Run and Entry must be owned by the same user'
+      begin
+        if record.run_id.present? && Run.find(record.run_id).user != record.user
+          record.errors[:run_id] << 'Run and Entry must be owned by the same user'
+        end
+      rescue ActiveRecord::RecordNotFound
+        record.errors[:run_id] << 'No run with that ID exists'
       end
     end
   end

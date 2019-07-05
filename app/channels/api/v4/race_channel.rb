@@ -1,8 +1,8 @@
 class Api::V4::RaceChannel < Api::V4::ApplicationChannel
   def subscribed
-    @race = Race.find_by(id: params[:race])
+    @race = Race.find_by(id: params[:race_id])
     if @race.nil?
-      transmit_user('race_not_found', "No race found with id: #{params[:race]}")
+      transmit_user('race_not_found', "No race found with id: #{params[:race_id]}")
       reject
       return
     end

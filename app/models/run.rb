@@ -92,8 +92,10 @@ class Run < ApplicationRecord
       end
     end
 
+    # Return a random run. As a special case for development setups, if no runs exist a fake run with a fake ID is
+    # returned.
     def random
-      Run.offset(rand(Run.count)).first
+      Run.offset(rand(Run.count)).first || Run.new(id: 0)
     end
   end
 
