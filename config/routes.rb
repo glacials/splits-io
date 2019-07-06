@@ -90,6 +90,9 @@ Rails.application.routes.draw do
       to: 'games/categories/leaderboards/sum_of_bests#index',
       as: :game_category_sum_of_bests
 
+  get '/races',       to: 'races#index',  as: :races
+  get '/races/:race', to: 'races#show',   as: :race
+
   get '/tools', to: 'tools#index'
 
   get  '/settings',   to: 'settings#index', as: :settings
@@ -117,8 +120,6 @@ Rails.application.routes.draw do
   get '/:run/export/segment_history.csv', to: 'runs/exports#segment_history_csv', as: :segment_history_csv
   get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download
   get '/:run/download/:timer',            to: 'runs/exports#timer' # deprecated
-
-  get '/races/:race', to: 'races#show',       as: :race
 
   namespace :api do
     namespace :webhooks do

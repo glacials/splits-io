@@ -537,6 +537,7 @@ belongs to a Game. Any number of Categories can be associated with a Game.
 ### Race
 ```sh
 curl https://splits.io/api/v4/races
+curl https://splits.io/api/v4/races?historic=1
 curl https://splits.io/api/v4/races/:race
 curl https://splits.io/api/v4/races/:race/entry
 curl https://splits.io/api/v4/races/:race/chat
@@ -578,15 +579,18 @@ Attachments have the following structure:
 </details>
 
 <details>
-<summary>Fetching active Races</summary>
+<summary>Fetching Races</summary>
 
 ```sh
 curl https://splits.io/api/v4/races
 ```
-These endpoints return a list of active Races of their type. A Race is active if it
+This endpoint return a list of active Races of their type. A Race is active if it
 1. is in progress, or
 2. has had some activity in the last 30 minutes, or
 3. has at least two entries.
+
+If you wish to retrieve a listing of previous completed races, pass `historic=1` to the request. This response will be
+paginated unlike the active races version.
 </details>
 
 <details>
@@ -614,7 +618,7 @@ curl -X POST https://splits.io/api/v4/races \
   -H 'Content-Type: application/json' \
   -d '{"category_id": "40", "notes": "Notes go here"}'
 ```
-Create a new Race. All types can have `notes`. Tier-2+ patrons can use a `visibility` of `invite_only` or `secret`.
+Create a new Race.
 
 Invite-only Races can be seen by anyone but only joined with a `join_token`; secret Races can only be seen or
 joined with a `join_token`. The join token is returned after creation. You can build it into a user-friendly link:
@@ -632,7 +636,6 @@ creation and must take place as a separate action afterwards.
 | 201          | Yes      | Yes           | Successfully created, a Race schema will be returned.                                          |
 | 400          | No       | Yes           | An error occured while creating the Race. `error` will contain a human-readable error message. |
 | 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                     |
-| 403          | No       | Yes           | Cannot create Race with the desired visibility.                                                |
 </details>
 
 <details>

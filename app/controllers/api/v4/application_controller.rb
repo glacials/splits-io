@@ -87,7 +87,7 @@ class Api::V4::ApplicationController < ActionController::Base
     head :unauthorized if current_user.nil?
   end
 
-  def set_race # rubocop:disable Naming/AccessorMethodName
+  def set_race
     @race = Race.find(params[:race])
     return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
 

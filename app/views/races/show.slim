@@ -6,7 +6,7 @@
     - if @race.game
       li.breadcrumb-item = link_to('Games', games_path)
       li.breadcrumb-item = link_to(@race.game, game_path(@race.game))
-    - if @race.category
+    - if @race.category && @race.game
       li.breadcrumb-item = link_to(@race.category, game_category_path(@race.game, @race.category))
     li.breadcrumb-item.active = link_to(@race.to_param, race_path(@race))
 
