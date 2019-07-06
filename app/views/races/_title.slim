@@ -1,5 +1,5 @@
 .row
-  .col-md-12: h1 = race
+  .col-md-12: h1 = '{{title}}'
 
 .row
   .col-md-12
@@ -8,8 +8,6 @@
     - if race.has_attribute?(:seed)
       h5#seed-name = "Seed: #{race.seed || 'None'}"
 
-    - if race.notes.present?
-      h5 = "Notes: #{race.notes}"
     h5
       span
         ' created by

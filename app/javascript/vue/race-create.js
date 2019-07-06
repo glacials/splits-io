@@ -3,7 +3,6 @@ export default {
     error: null,
     loading: false,
 
-    notes: '',
     visibility: 'public',
   }),
   methods: {
@@ -22,7 +21,6 @@ export default {
             game_id: this.gameId,
             category_id: this.categoryId,
             visibility: this.visibility,
-            notes: this.notes,
           })
         })
 

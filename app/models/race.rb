@@ -50,6 +50,10 @@ class Race < ApplicationRecord
     unabandoned.unfinished
   end
 
+  def self.friendly_find(slug)
+    where('LEFT(id::text, ?) = ?', slug.length, slug).order(created_at: :asc).first
+  end
+
   def to_s
     "#{game} #{category} #{title}".presence || 'Untitled race'
   end
@@ -135,7 +139,7 @@ class Race < ApplicationRecord
   end
 
   def title
-    notes.try(:split, '\n').try(:[], 0)
+    notes.try(:lines).try(:first) || 'Untitled race'
   end
 
   def duration

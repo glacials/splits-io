@@ -13,8 +13,8 @@ class Api::V4::RacesController < Api::V4::ApplicationController
   def create
     @race = Race.create(race_params.merge(owner: current_user))
     if @race.persisted?
-      render status: :created, json: Api::V4::RaceBlueprint.render(@race, root: :race, join_token: true)
       Api::V4::GlobalRaceUpdateJob.perform_later(@race, 'race_created', 'A new race has been created')
+      render status: :created, json: Api::V4::RaceBlueprint.render(@race, root: :race, join_token: true)
     else
       render status: :bad_request, json: {
         status: 400,
@@ -27,8 +27,22 @@ class Api::V4::RacesController < Api::V4::ApplicationController
     render json: Api::V4::RaceBlueprint.render(@race, root: :race, chat: true)
   end
 
-  # define method for rubocop
   def update
+    if @race.update(race_params)
+      updated = @race.saved_changes.keys.reject { |k| k == 'updated_at' }.to_sentence
+      Api::V4::RaceBroadcastJob.perform_later(@race, 'race_updated', "The race's #{updated} has changed") if updated.present?
+      render status: :ok, json: Api::V4::RaceBlueprint.render(@race, root: :race, chat: true)
+    else
+      render status: :bad_request, json: {
+        status: 400,
+        error: @race.errors.full_messages.to_sentence
+      }
+    end
+  rescue ActionController::ParameterMissing
+    render status: :bad_request, json: {
+      status: 400,
+      error:  'Missing parameter: "race"'
+    }
   end
 
   private

@@ -42,11 +42,7 @@ class RacesController < ApplicationController
   end
 
   def set_race
-    @race = Race.where(
-      'LEFT(id::text, ?) = ?',
-      race_params[:race].length,
-      race_params[:race]
-    ).order(created_at: :asc).first
+    @race = Race.friendly_find(race_params[:race])
 
     render 'application/not_found' if @race.nil?
   end

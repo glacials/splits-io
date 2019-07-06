@@ -8,12 +8,25 @@ import consumer from '../channels/consumer'
 import raceChat from './race-chat.js'
 import raceDisclaimer from './race-disclaimer.js'
 import raceNav from './race-nav.js'
+import raceNotes from './race-notes.js'
 
 export default {
   components: {
     raceChat,
     raceDisclaimer,
-    raceNav
+    raceNav,
+    raceNotes
+  },
+  computed: {
+    title: function() {
+      if (this.race === null) {
+        return ''
+      }
+      if (this.race.game === null && this.race.category === null && this.race.notes === null) {
+        return 'Untitled race'
+      }
+      return `${(this.race.game || {}).name} ${(this.race.category || {}).name} ${(this.race.notes || '').split('\n')[0]}`
+    },
   },
   created: async function() {
     this.error = false
@@ -85,9 +98,14 @@ export default {
             this.race = data.data.race
             break
 
+          case 'race_updated':
+            this.race = data.data.race
+            break
+
           case 'race_ended':
             this.race = data.data.race
-            break;
+            break
+
           case 'race_ended:html':
             document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
