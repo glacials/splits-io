@@ -1,6 +1,8 @@
 class Race < ApplicationRecord
   validates_with RaceValidator
 
+  ABANDON_TIME = 1.hour
+
   belongs_to :user
 
   belongs_to :game,     optional: true
@@ -38,7 +40,7 @@ class Race < ApplicationRecord
   # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
   # or have more than 2 entries. this includes races that have finished
   def self.unabandoned
-    where('races.updated_at > ?', 1.hour.ago).or(
+    where('races.updated_at > ?', ABANDON_TIME.ago).or(
       where(id: Entry.having('count(*) > 1').group(:race_id).select(:race_id))
     )
   end
@@ -50,6 +52,10 @@ class Race < ApplicationRecord
 
   def to_s
     "#{game} #{category} #{title}".presence || 'Untitled race'
+  end
+
+  def abandoned?
+    updated_at < ABANDON_TIME.ago && entries.count < 2
   end
 
   def started?

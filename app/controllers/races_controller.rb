@@ -9,6 +9,9 @@ class RacesController < ApplicationController
   end
 
   def show
+    return unless @race.abandoned? && !@race.secret_visibility?
+
+    flash.now.alert = 'This race is abandoned, it will not show up in listings! Readying, joining, or leaving will list it again.'
   end
 
   private

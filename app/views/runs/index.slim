@@ -23,10 +23,18 @@
           h2.statcard-number
             = render partial: 'shared/relative_time', locals: {time: current_user.created_at}
           span.statcard-desc Account age
-      .card.shadow
+
+    .row.mx-2
+      .col-md-6.mb-3: .card.shadow
+        = render partial: 'shared/race_table', locals: { \
+          races: current_user.races.finished, \
+          active_races: current_user.races.active, \
+          description: 'My Races' \
+        }
+
+      .col-md-6.mb-3: .card.shadow
         = render partial: 'shared/run_table', locals: { \
           runs: current_user.pbs, \
-          races: current_user.races.active, \
           cols: %i[time name video uploaded owner_controls rival], \
           col_options: {time: [:archived]},
           description: 'My Personal Bests', \

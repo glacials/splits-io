@@ -4,7 +4,7 @@
 - col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options, {}))
 - runs = order_runs(runs).page(params[:page]).includes(:user, :game)
 - non_pb_runs = user.non_pbs(runs.map(&:category_id)).group_by(&:category_id) if col_options[:time].include?(:archived)
-- if runs.none? && local_assigns.fetch(:races, []).none?
+- if runs.none?
   - if description.present?
     .card-header.text-white = description
   center.p-4
@@ -31,42 +31,6 @@
           - if cols.include?(:owner_controls)
             th.header.align-right.nowrap
       tbody
-        - local_assigns.fetch(:races, []).each do |race|
-          tr.bg-dark
-            - if cols.include?(:runner)
-              td.align-right.nowrap
-                ' #{race.entries.count} entries
-            - if cols.include?(:time)
-              td.align-right.nowrap
-                - if race.in_progress?
-                  - now = Time.now.utc
-                  .text-warning data={abstime: race.started_at.rfc3339(3)} -
-                - elsif race.finished?
-                  .text-success Finished
-                - else
-                  - if race.public_visibility?
-                    .text-success Open
-                  - elsif race.invite_only_visibility?
-                    .text-warning Invite-Only
-            - if cols.include?(:video)
-              td.text-center.nowrap
-                .tip title="#{race.category} Race" => icon('fas', 'flag-checkered')
-            - if cols.include?(:name)
-              td width='100%'
-                .badge.badge-dark.mr-2 style='text-transform: uppercase' Race
-                = link_to race, race_path(race), class: 'text-warning'
-                - if race.notes.present?
-                  span.ml-2.tip title=race.notes = icon('far', 'sticky-note')
-            - if cols.include?(:rival)
-              td.align-right.nowrap
-            - if cols.include?(:uploaded)
-              td.align-right.nowrap
-                = render partial: 'shared/relative_time', locals: {time: race.created_at, ago: true}
-            - if cols.include?(:owner_controls)
-              td.nowrap
-        /tr.progress-bar-striped.progress-bar-animated role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='font-weight: bold; background-color: #000'
-          - cols.each do
-            td
         - runs.each do |run|
           - timing = params[:timing] || run.default_timing
           tr id="run_#{run.id36}"
