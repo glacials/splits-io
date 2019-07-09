@@ -34,7 +34,7 @@ module RacesHelper
   def entry_place(entry)
     if entry.forfeited?
       icon('fas', 'times')
-    elsif entry.finished?
+    elsif entry.finished? && entry.finished_at < Time.now.utc
       entry.place.ordinalize
     else
       '-'

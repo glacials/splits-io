@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_03_182227) do
+ActiveRecord::Schema.define(version: 2019_07_08_204019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -105,15 +105,18 @@ ActiveRecord::Schema.define(version: 2019_07_03_182227) do
 
   create_table "entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "race_id"
-    t.bigint "user_id"
+    t.bigint "runner_id"
     t.datetime "readied_at", precision: 3
     t.datetime "finished_at", precision: 3
     t.datetime "forfeited_at", precision: 3
     t.datetime "created_at", precision: 3, null: false
     t.datetime "updated_at", precision: 3, null: false
     t.bigint "run_id"
+    t.boolean "ghost", default: false, null: false
+    t.bigint "creator_id"
+    t.index ["creator_id"], name: "index_entries_on_creator_id"
     t.index ["run_id"], name: "index_entries_on_run_id"
-    t.index ["user_id"], name: "index_entries_on_user_id"
+    t.index ["runner_id"], name: "index_entries_on_runner_id"
   end
 
   create_table "game_aliases", id: :serial, force: :cascade do |t|
@@ -433,7 +436,7 @@ ActiveRecord::Schema.define(version: 2019_07_03_182227) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chat_messages", "users"
-  add_foreign_key "entries", "users"
+  add_foreign_key "entries", "users", column: "runner_id"
   add_foreign_key "game_aliases", "games", on_delete: :cascade
   add_foreign_key "google_users", "users"
   add_foreign_key "highlight_suggestions", "runs"

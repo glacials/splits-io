@@ -135,7 +135,7 @@ RSpec.describe Api::V4::RacesController do
         context 'with a entrants authorization header' do
           let(:user) { FactoryBot.create(:user) }
           let(:token) { FactoryBot.create(:access_token, resource_owner_id: user.id) }
-          let(:entry) { FactoryBot.create(:entry, race: race, user: user) }
+          let(:entry) { FactoryBot.create(:entry, race: race, runner: user, creator: user) }
           subject(:response) { get :show, params: {race: race.id} }
 
           before do

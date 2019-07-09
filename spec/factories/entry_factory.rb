@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :entry do
-    user
+    runner
+    creator
     race
   end
 end

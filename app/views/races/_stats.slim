@@ -26,9 +26,9 @@
   - if race.entries.any?
     .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
-        = race.entries.joins(:user).order('users.created_at ASC').first.user
+        = race.entries.joins(:runner).order('users.created_at ASC').first.runner
       span.statcard-desc Predicted winner
     .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
-        = (Entry.where(user: race.users).where.not(forfeited_at: nil).count / Entry.where(user: race.users).count * race.entries.count).floor
+        = (Entry.where(runner: race.runners).where.not(forfeited_at: nil).count / Entry.where(runner: race.runners).count * race.entries.count).floor
       span.statcard-desc Predicted forfeits

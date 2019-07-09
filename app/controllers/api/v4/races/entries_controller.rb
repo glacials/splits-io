@@ -14,7 +14,8 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
 
   def create
     entry = @race.entries.new(entry_params)
-    entry.user = current_user
+    entry.runner  = current_user # if this is a ghost, the validator will correct the runner
+    entry.creator = current_user
     if entry.save
       render status: :created, json: Api::V4::EntryBlueprint.render(entry, root: :entry)
       Api::V4::RaceBroadcastJob.perform_later(@race, 'race_entries_updated', 'A user has joined the race')
@@ -83,7 +84,8 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
   end
 
   def set_entry
-    @entry = @race.entries.find_by!(user: current_user)
+    @entry = @race.entries.find(params[:id])
+    render :unauthorized unless @entry.creator == current_user
   rescue ActiveRecord::RecordNotFound
     render not_found(:entry)
   end
@@ -96,7 +98,7 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
     params.select { |k, _| k[-3, -1] == '_at' && v == 'now' }.each do |k, _|
       params[k] = @now
     end
-    params.permit(:race, :join_token, entry: %i[readied_at finished_at forfeited_at run_id]).fetch(:entry, {})
+    params.permit(:id, :race, :join_token, entry: %i[readied_at finished_at forfeited_at run_id]).fetch(:entry, {})
   end
 
   def update_race

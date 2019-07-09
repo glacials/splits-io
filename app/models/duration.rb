@@ -157,6 +157,10 @@ class Duration
     @ms
   end
 
+  def to_sec
+    @ms / 1000
+  end
+
   def abs
     Duration.new(to_ms.try(:abs))
   end

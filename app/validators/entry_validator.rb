@@ -1,5 +1,27 @@
 class EntryValidator < ActiveModel::Validator
   def validate(record)
+    # This needs to be before `if record.new_record?` so we can check if the entry is a ghost before we check if the
+    # runner is joining multiple races. (Someone using my ghost shouldn't prevent me from joining a race.)
+    if record.run_id_changed?
+      begin
+        run = Run.find(record.run_id)
+
+        if run.completed?(Run::REAL) # If we are a ghost
+          if record.race.belongs_to?(record.creator)
+            record.assign_attributes(
+              ghost: true,
+              runner: run.user,
+              readied_at: Time.now.utc
+            )
+          else
+            record.errors[:base] << 'Only the race owner can add the ghost of a completed run'
+          end
+        end
+      rescue ActiveRecord::RecordNotFound
+        record.errors[:run_id] << 'No run with that ID exists'
+      end
+    end
+
     if record.new_record?
       # Reject new entry if race has already started
       if record.race.started?
@@ -7,7 +29,7 @@ class EntryValidator < ActiveModel::Validator
       end
 
       # Reject if entry's user is in another active race
-      if record.user.in_race?
+      if !record.ghost? && record.runner.in_race?
         record.errors[:base] << 'Cannot join more than one race at a time'
       end
     end
@@ -59,16 +81,6 @@ class EntryValidator < ActiveModel::Validator
       # Reject if `finished_at` is already set
       if record.forfeited_at.present? && record.finished_at.present?
         record.errors[:forfeited_at] << 'Cannot forfeit a race you have already finished'
-      end
-    end
-
-    if record.run_id_changed?
-      begin
-        if record.run_id.present? && Run.find(record.run_id).user != record.user
-          record.errors[:run_id] << 'Run and Entry must be owned by the same user'
-        end
-      rescue ActiveRecord::RecordNotFound
-        record.errors[:run_id] << 'No run with that ID exists'
       end
     end
   end

@@ -7,6 +7,34 @@ class Segment < ApplicationRecord
   validates :name, presence: true
   validates :segment_number, presence: true, numericality: {only_integer: true}
 
+  # with_ends modifies the returned Segments to have realtime_end_ms and gametime_end_ms fields, which represent the
+  # duration into the run when that specific segment ended.
+  #
+  # It does this using a SQL window function to sum the attempts for the segments leading up to this one, for each one.
+  # This is multiple orders of magnitude more efficient than loading these into Rails and doing it there, for n attempts
+  # and m segments.
+  def self.with_ends
+    select('
+      segments.*,
+      CAST(
+        sum(segments.realtime_duration_ms) OVER(ORDER BY segments.segment_number)
+        AS BIGINT
+      ) AS realtime_end_ms,
+      CAST(
+        sum(segments.gametime_duration_ms) OVER(ORDER BY segments.segment_number)
+        AS BIGINT
+      ) AS gametime_end_ms
+    '.squish)
+  end
+
+  # Returns the Segment the runner would be on at the given run time. A run time is a Duration since the start of the
+  # run.
+  #
+  # If the Duration takes place outside the run (i.e. is greater than Run#duration), nil is returned.
+  def self.at_run_time(run_time)
+    with_ends.order(segment_number: :asc).where('realtime_end_ms > ?', run_time.to_ms).first
+  end
+
   # start returns the Duration between the start of the run and the start of this segment. For example, the first
   # segment of the run would have a start of 0. The second segment would have a start equal to the duration of the first
   # segment. The last segment would have a start equal to the duration of the run minus the duration of the last

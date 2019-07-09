@@ -86,7 +86,7 @@ RSpec.describe Api::V4::Races::MessagesController do
       end
 
       context 'with the user present in the race' do
-        let(:entry) { FactoryBot.create(:entry, user: user, race: race) }
+        let(:entry) { FactoryBot.create(:entry, runner: user, creator: user, race: race) }
 
         before { entry }
 

@@ -166,13 +166,15 @@ Rails.application.routes.draw do
       get   '/races/:race', to: 'races#show',   as: 'race'
       patch '/races/:race', to: 'races#update'
 
-      get    '/races/:race/entry', to: 'races/entries#show'
-      put    '/races/:race/entry', to: 'races/entries#create'
-      patch  '/races/:race/entry', to: 'races/entries#update'
-      delete '/races/:race/entry', to: 'races/entries#destroy'
+      get    '/races/:race/entries/:id', to: 'races/entries#show',   as: 'race_entry'
+      post   '/races/:race/entries',     to: 'races/entries#create', as: 'race_entries'
+      patch  '/races/:race/entries/:id', to: 'races/entries#update'
+      delete '/races/:race/entries/:id', to: 'races/entries#destroy'
 
       get  '/races/:race/chat', to: 'races/messages#index',  as: 'race_chat_messages'
       post '/races/:race/chat', to: 'races/messages#create'
+
+      post '/races/:race/ghosts', to: 'races/ghosts#create'
 
       post '/timesync', to: 'time#create'
     end

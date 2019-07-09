@@ -7,7 +7,7 @@ export default {
       return
     }
 
-    this.entry = this.race.entries.find(entry => entry.user.id === this.currentUser.id)
+    this.entry = this.race.entries.find(entry => (entry.runner.id === this.currentUser.id) && !entry.ghost)
   },
   data: () => ({
     currentUser: null,
@@ -51,7 +51,7 @@ export default {
       this.errors.join = false
       this.loading.join = true
       try {
-        await this.updateEntry({}, 'PUT')
+        await this.updateEntry({}, 'POST')
       } catch(error) {
         this.errors.join = `Error: ${error}`
       } finally {
@@ -126,7 +126,14 @@ export default {
         })
       }
 
-      const response = await fetch(`/api/v4/races/${this.race.id}/entry`, {
+      let path
+      if (method === 'POST') {
+        path = `/api/v4/races/${this.race.id}/entries`
+      } else {
+        path = `/api/v4/races/${this.race.id}/entries/${this.entry.id}`
+      }
+
+      const response = await fetch(path, {
         method: method,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,

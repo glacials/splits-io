@@ -13,7 +13,7 @@ class Race < ApplicationRecord
 
   belongs_to :owner, foreign_key: :user_id, class_name: 'User'
   has_many :entries, dependent: :destroy
-  has_many :users, through: :entries
+  has_many :runners, through: :entries
   has_many :chat_messages, dependent: :destroy
 
   has_many_attached :attachments
@@ -24,7 +24,7 @@ class Race < ApplicationRecord
   scope :unstarted,  -> { where(started_at: nil) }
   scope :ongoing,    -> { started.unfinished }
 
-  after_create { entries.create(user: owner) }
+  after_create { entries.create(runner: owner, creator: owner) }
 
   def self.unfinished
     # Distinct call will not return races with no entries, so union all races with 0 entries
@@ -51,7 +51,9 @@ class Race < ApplicationRecord
   end
 
   def self.friendly_find(slug)
-    where('LEFT(id::text, ?) = ?', slug.length, slug).order(created_at: :asc).first
+    race = where('LEFT(id::text, ?) = ?', slug.length, slug).order(created_at: :asc).first
+    raise ActiveRecord::RecordNotFound if race.nil?
+    race
   end
 
   def to_s
@@ -91,6 +93,20 @@ class Race < ApplicationRecord
     return if started? || entries.where(readied_at: nil).any? || entries.count < 2
 
     update(started_at: Time.now.utc + 20.seconds)
+
+    # Schedule ghost splits and finishes
+    entries.ghosts.find_each do |entry|
+      entry.update(finished_at: started_at + (entry.run.duration(Run::REAL).to_sec))
+      Api::V4::RaceBroadcastJob.set(wait_until: started_at + entry.run.duration(Run::REAL).to_sec).perform_later(
+        self, 'race_entries_updated', 'A ghost has finished'
+      )
+      entry.run.segments.with_ends.each do |segment|
+        Api::V4::RaceBroadcastJob.set(wait_until: started_at + segment.end(Run::REAL).to_sec).perform_later(
+          self, 'race_entries_updated', 'A ghost has split'
+        )
+      end
+    end
+
     Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', 'The race is starting soon')
     Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_start_scheduled', 'A race is starting soon')
   end
@@ -107,7 +123,7 @@ class Race < ApplicationRecord
   def entry_for_user(user)
     return nil if user.nil?
 
-    entries.find_by(user_id: user.id)
+    entries.find_by(runner: user)
   end
 
   # checks if a given user should be able to act on a given race, returning true if any of the following pass

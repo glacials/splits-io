@@ -28,7 +28,7 @@
           - if cols.include?(:created)
             th.align-right.nowrap Created
       tbody
-        - (active_races + races).each do |race|
+        - (active_races + races).uniq.each do |race|
           tr class=('bg-dark' if active_races.include?(race))
             - if cols.include?(:creator)
               td.align-right.nowrap = user_badge(race.owner)

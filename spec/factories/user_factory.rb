@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :user do
+  factory :user, aliases: %i[runner creator] do
     name { SecureRandom.uuid.split('-')[0] }
     created_at { Time.now }
     updated_at { Time.now }
