@@ -88,7 +88,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_race
-    @race = Race.friendly_find(params[:race])
+    @race = Race.find(params[:race])
     return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
 
     render status: :forbidden, json: {

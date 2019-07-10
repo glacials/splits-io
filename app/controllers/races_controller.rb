@@ -42,9 +42,9 @@ class RacesController < ApplicationController
   end
 
   def set_race
-    @race = Race.friendly_find(race_params[:race])
-
-    render 'application/not_found' if @race.nil?
+    @race = Race.friendly_find!(race_params[:race])
+  rescue ActiveRecord::RecordNotFound
+    render 'application/not_found'
   end
 
   # shorten_url cuts the race ID down to its shortest unique form, and strips the join token param if it's not needed
