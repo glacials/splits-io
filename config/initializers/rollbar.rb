@@ -1,6 +1,7 @@
 require 'rollbar'
 Rollbar.configure do |config|
   config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
+  config.environment = ENV['ROLLBAR_ENV']
 
   config.enabled = (Rails.env == 'production')
   config.js_enabled = false # Somehow adds a '<' to the top of every page when on ¯\_(ツ)_/¯
