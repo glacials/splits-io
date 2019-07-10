@@ -76,7 +76,7 @@ h6.card-header Entries
       )
         ' Add ghost
       .dropdown-menu.bg-dark.p-4 aria={labelledby: 'ghost-btn'} style='width: 18rem'
-        = form_for(:entry, remote: true, url: api_v4_race_entries_path(race), html: {class: 'auth-me'}) do |f|
+        = form_for(:entry, remote: true, url: api_v4_race_entries_path(race.id), html: {class: 'auth-me'}) do |f|
           .form-group
             = f.text_field(:run_id, class: 'form-control', placeholder: 'Run ID; e.g. g23b', id: 'ghost-input')
           = f.submit('Add ghost', class: 'btn btn-outline-light')
