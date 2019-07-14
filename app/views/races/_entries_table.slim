@@ -1,4 +1,5 @@
 - timing = Run::REAL
+- add_ghost = local_assigns.fetch(:add_ghost, true)
 
 h6.card-header Entries
 - if race.entries.none?
@@ -13,7 +14,8 @@ h6.card-header Entries
         - else
           ' Ready
       th.w-100 Time
-      th.nowrap.text-center Current split
+      - unless race.finished?
+        th.nowrap.text-center Current split
       th.nowrap.text-center Stats
       th.nowrap.text-center Links
     tbody
@@ -37,12 +39,13 @@ h6.card-header Entries
               b class=entry_color(entry) = entry.duration.format
             - elsif race.started?
               span data={abstime: race.started_at.rfc3339(3)} -
-          td.nowrap
-            - if entry.run.present? && race.started?
-              - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))
-              - if segment
-                .badge.badge-dark.mr-2 #{segment}
-                span.count data={abstime: (race.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
+          - unless race.finished?
+            td.nowrap
+              - if entry.run.present?
+                - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))
+                - if segment
+                  .badge.badge-dark.mr-2 #{segment}
+                  span.count data={abstime: (race.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
           td.nowrap.text-center
             - entries = entry.runner.entries
             - places = entries.map(&:place)
@@ -65,7 +68,7 @@ h6.card-header Entries
             - if entry.run.present?
               a.text-light.tip.mr-2 href=run_path(entry.run) title='See associated run'
                 = icon('fas', 'scroll')
-- if race.belongs_to?(current_user)
+- if race.belongs_to?(current_user) && !race.started? && add_ghost
   .card-footer: .float-right
     .dropdown.mr-2
       button.btn.btn-outline-light.dropdown-toggle#ghost-btn(

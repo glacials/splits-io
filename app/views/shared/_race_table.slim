@@ -1,5 +1,5 @@
 - description ||= nil
-- cols ||= [:creator, :time, :entries, :name, :status, :created]
+- cols ||= [:creator, :time, :entries, :name, :status, :created, :results]
 - races = races.page(params[:page]).includes(:owner)
 - active_races ||= []
 
@@ -27,6 +27,8 @@
             th.align-right.nowrap Status
           - if cols.include?(:created)
             th.align-right.nowrap Created
+          - if cols.include?(:results)
+            th.align-right.nowrap Results
       tbody
         - (active_races + races).uniq.each do |race|
           tr class=('bg-dark' if active_races.include?(race))
@@ -60,3 +62,11 @@
             - if cols.include?(:created)
               td.align-right.nowrap
                  = render partial: 'shared/relative_time', locals: {time: race.created_at, ago: true}
+            - if cols.include?(:results)
+              td.align-right.text-primary.cursor-pointer data={toggle: 'collapse', target: "#accordion-#{race.id}"}
+                = icon('fas', 'list-ol')
+          - if cols.include?(:results)
+            tr.collapse id="accordion-#{race.id}"
+              td.m-0.p-0 colspan='999'
+                card
+                  = render partial: 'races/entries_table', locals: {race: race, add_ghost: false}

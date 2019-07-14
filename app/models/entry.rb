@@ -1,6 +1,4 @@
 class Entry < ApplicationRecord
-  # On validation error, entries will have the error key :status_message to indicate what went wrong with the request
-  # to clients, this should be removed if you plan to display all error messages to users
   belongs_to :race, touch: true
   belongs_to :runner, class_name: 'User'
   belongs_to :creator, class_name: 'User'

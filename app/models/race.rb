@@ -45,7 +45,7 @@ class Race < ApplicationRecord
     )
   end
 
-  # active returns all non-finished unabandonded races
+  # active returns all non-finished unabandoned races
   def self.active
     unabandoned.unfinished
   end
