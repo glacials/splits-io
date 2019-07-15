@@ -1,8 +1,6 @@
 - if current_user.nil? && action_name == 'index'
   - content_for(:head) do
     sass:
-      #alerts, #footer
-        visibility: hidden
       #survey-container
         display: none !important
 = render template: 'layouts/application'

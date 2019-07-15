@@ -6,22 +6,24 @@ import {buildSegmentDurationChart} from "charts/segment_duration.js"
 import {example_run} from "example_run.js"
 import {example_segment} from "example_run.js"
 
+const options = {
+  exporting: {enabled: false},
+  title: {text: ''},
+}
+
 document.addEventListener('turbolinks:load', () => {
   if (window.location.pathname !== '/' || gon.user !== null) {
     return
   }
 
-  buildRunDurationChart([example_run], {})
-  buildResetChart(      [example_run], {})
-  buildPlaytimeChart(   [example_run], {})
-  buildSegmentChart(    [example_run], {})
+  buildRunDurationChart([example_run], options)
+  buildResetChart(      [example_run], options)
+  buildPlaytimeChart(   [example_run], options)
+  buildSegmentChart(    [example_run], options)
   buildSegmentDurationChart('real', [example_run], [example_segment], {})
 
   const aboveTheFold = document.getElementById('above-the-fold')
   const belowTheFold = document.getElementById('below-the-fold')
-
-  aboveTheFold.style['min-height'] = `${window.innerHeight}px`
-  belowTheFold.style.visibility = 'visible'
 })
 
 document.addEventListener('click', event => {

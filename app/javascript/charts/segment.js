@@ -1,9 +1,12 @@
 import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
-import {logoYellow, logoBlue, logoGreen} from '../colors.js'
 Exporting(Highcharts)
 
-const buildSegmentChart = function(runs, chartOptions) {
+const defaults = require('deep-defaults')
+
+import {logoYellow, logoBlue, logoGreen} from '../colors.js'
+
+const buildSegmentChart = function(runs, options) {
   if (document.getElementById('segment-chart') === null) {
     return
   }
@@ -63,15 +66,15 @@ const buildSegmentChart = function(runs, chartOptions) {
     }
   })
 
-  Highcharts.chart('segment-chart', {
+  Highcharts.chart('segment-chart', defaults(_.clone(options), {
     exporting: {
-      chartOptions: Object.assign(chartOptions, {
+      chartOptions: {
         plotOptions: {
           series: {
             dataLabels: {enabled: true}
           }
         }
-      }),
+      },
       fallbackToExportServer: false
     },
     chart: {
@@ -122,7 +125,7 @@ const buildSegmentChart = function(runs, chartOptions) {
       gridLineColor: 'rgba(255, 255, 255, 0.2)',
       tickColor: 'rgba(255, 255, 255, 0.2)'
     }]
-  })
+  }))
 }
 
 export {buildSegmentChart}

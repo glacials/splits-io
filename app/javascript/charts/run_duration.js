@@ -1,9 +1,12 @@
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
+
+const defaults = require('deep-defaults')
 const moment = require('moment')
+
 import {logoColors} from '../colors.js'
 
-const buildRunDurationChart = function(runs, chartOptions) {
+const buildRunDurationChart = function(runs, options = {}) {
   if (document.getElementById('run-duration-chart') === null ) {
     return
   }
@@ -11,14 +14,13 @@ const buildRunDurationChart = function(runs, chartOptions) {
   const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
   const duration = `${timing}time_duration_ms`
 
-  return Highcharts.chart('run-duration-chart', {
+  return Highcharts.chart('run-duration-chart', defaults(_.clone(options), {
     chart: {
       type: 'spline',
       zoomType: 'x'
     },
     colors: logoColors,
     exporting: {
-      chartOptions: chartOptions,
       fallbackToExportServer: false
     },
     plotOptions: {
@@ -53,7 +55,7 @@ const buildRunDurationChart = function(runs, chartOptions) {
       tickColor: 'rgba(255, 255, 255, 0.2)',
       title: {text: 'Run Duration'}
     }
-  })
+  }))
 }
 
 export {buildRunDurationChart}

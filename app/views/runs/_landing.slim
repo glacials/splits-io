@@ -1,119 +1,100 @@
-#above-the-fold
-  .row.mb-5
-    .col-md-12
-      .text-center.vertical-center
-        .m-auto.my-0.vertical-center
-          = image_tag(asset_path('logo-imageonly.svg'), height: '80em')
-          span.align-left
-            h1.d-inline-block
-              = image_tag(asset_path('logo-textonly.svg'), height: '50em')
-              small.d-block style='font-size: 0.4em' speedrun statistical analysis
-  .row
-    .col-md-4.offset-md-4.col-sm-6.offset-sm-3
-      .card style='background: none; border: none'
-        .card-body.text-center.bg-dark
-          div
-            a.btn.btn-twitch.btn-lg.m-0 href='/auth/twitch'
-              => icon('fab', 'twitch')
-              ' Sign In with Twitch
-            b.text-secondary.d-block.tip-bottom title='Many features get better with a Twitch link, like highlighting runs on Twitch and comparing with runners you follow.' = '(recommended)'
-          div.mt-3
-            a.btn.btn-google.m-2 href='/auth/google'
-              => icon('fab', 'google')
-              ' Sign In with Google
-        .card-footer.align-right.py-0.px-1 style='background: none'
-          b.text-secondary
-            => icon('fas', 'upload')
-            ' Or drag and drop to upload a speedrun
-  .row.my-5.py-5: .col-md-12.text-center
-    button#scroll-down.btn.btn-outline-secondary.btn-lg = icon('fas', 'angle-double-down')
-    big.d-block: b.text-secondary First-timer?
-#below-the-fold.mt-2 style='visibility: hidden'
-  .row
-    .col-md-8.card-columns.mx-auto.my-4 style='column-count: 2'
-      .card.border-warning
-        #run-duration-chart.card-img-top
-        .card-body
-          h3.card-title.text-warning Track
-          p.card-text See your improvements over time, all the way back to your first run.
-      .card.border-primary
-        #reset-chart.card-img-top
-        .card-body
-          h3.card-title.text-primary Diagnose
-          p.card-text Find out where you're failing to hone your practice sessions.
-      .card.border-success
-        #playtime-chart.card-img-top
-        .card-body
-          h3.card-title.text-success Predict
-          p.card-text Determine when you'll best your time based on past performance.
-      / Commented because Highcharts started rendering the scrollable area on top of other components -- check back in a bit
-      /card.border-warning
-        #segment-chart.card-img-top
-        .card-body
-          h3.card-title.text-warning Deep Dive
-          p.card-text Look at individual segments' statistics to hyper-focus your practice.
-      .card.border-primary
-        .card.border-0.m-0.p-0.bg-primary
-          .card-group
-            .card.bg-danger: .card-body
-              h6.card-title
-                ' Standard deviation
-                small.tip-right(
-                  title="A high standard deviation like this indicates inconsistency. You should practice
-                  this segment!"
-                ) = icon('fas', 'exclamation-triangle')
-              h4.card-subtitle 14s
-            .card: .card-body
-              h6.card-title Mean
-              h4.card-subtitle 00:01:08
-            .card: .card-body
-              .float-right.tip-left.text-light(
-                title="Stats based on your last 100 runs."
-              ) = icon('fas', 'info-circle')
-              h6.card-title Best
-              h4.card-subtitle 00:01:05
-          .card-group
-            .card: .card-body
-              h6.card-title
-                ' 10th percentile
-                small.tip-top(
-                  title="Only 10% of your attempts are faster than this time. Treat this number like a relaxed
-                  best&mdash;aim to beat it."
-                ) = icon('fas', 'question-circle')
-              h4.card-subtitle 00:01:06
-            .card: .card-body
-              h6.card-title
-                ' Median
-                small.tip-top(
-                  title="50% of your attempts are faster than this time. This is the time you'd expect to get
-                  in a marathon or no-reset run."
-                ) = icon('fas', 'question-circle')
-              h4.card-subtitle 00:01:09
-            .card: .card-body
-              h6.card-title
-                ' 90th percentile
-                small.tip-top(
-                  title="90% of your attempts are faster than this time. You can see this as your worst time
-                  excluding fantastic blunders."
-                ) = icon('fas', 'question-circle')
-              h4.card-subtitle 00:01:14
-            .card: .card-body
-              h6.card-title
-                ' 99th percentile
-                small.tip-top(
-                  title="99% of your attempts are faster than this time. All attempts but your absolute worst
-                  fit under this umbrella."
-                ) = icon('fas', 'question-circle')
-              h4.card-subtitle 00:01:34
-          .segment-duration-chart id="segment-duration-chart-example" data={segment: 'example'}
-        .card-body
-          h3.card-title.text-primary Learn
-          p.card-text Know when a segment's not as hot as you think it is.
-      .card.border-success
-        .card-img-top.bg-twitch.text-center style='font-size: 10em' = icon('fab', 'twitch')
-        .card-body
-          h3.card-title.text-success Link with Twitch
-          p.card-text Automatically highlight PBs and compete with friends by linking your Twitch account.
-  .row.my-5.py-5: .col-md-12.text-center
-    button#scroll-up.btn.btn-outline-secondary.btn-lg = icon('fas', 'angle-double-up')
-    big.d-block: b.text-secondary Ready to try?
+.position-relative.overflow-hidden.p-3.p-md-5.m-md-3.text-center.bg-dark
+  .col-md-5.p-lg-5.mx-auto.my-5.text-center
+    .display-4 Go faster
+    p.lead Statistical analysis for speedrunners. Let us replace your mindless grinding with hyper-targeted suggestions.
+    a.btn.btn-twitch href='/auth/twitch'
+      => icon('fab', 'twitch')
+      ' Sign in with Twitch
+    b.text-secondary.d-block.mb-5
+      => icon('fas', 'upload')
+      ' Or drag and drop splits at any time
+.d-md-flex.flex-md-equal.w-100.my-md-3.pl-md-3
+  .bg-dark.col-md-6.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden
+    .my-3.py-3
+      h2.display-5 Share
+      p.lead Link your friends to more than a video recording&mdash;link them to the hard data behind your run.
+      #run-duration-chart.card-img-top
+  .bg-dark.col-md-6.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden
+    .my-3.py-3
+      h2.display-5 Compare
+      p.lead Find out exactly what they're doing that you're not, down to the second.
+      #reset-chart.card-img-top
+.d-md-flex.flex-md-equal.w-100.my-md-3.pl-md-3
+  .bg-dark.col-md-6.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden
+    .my-3.py-3
+      h2.display-5 Predict
+      p.lead Determine when you'll best your time based on past performance.
+      #playtime-chart.card-img-top
+  .bg-dark.col-md-6.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden
+    .my-3.py-3
+      h2.display-5 Deep dive
+      p.lead Look at individual segments' statistics to hyper-focus your practice.
+      #segment-chart.card-img-top
+.d-md-flex.flex-md-equal.w-100.my-md-3.pl-md-3
+  .bg-dark.col-md-6.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden
+    .my-3.py-3
+      h2.display-5 Learn
+      p.lead Know when a segment's not as hot as you think it is.
+      .card.border-0.m-0.p-0.bg-primary
+        .card-group
+          .card.bg-danger: .card-body
+            h6.card-title
+              ' Standard deviation
+              small.tip-right(
+                title="A high standard deviation like this indicates inconsistency. You should practice
+                this segment!"
+              ) = icon('fas', 'exclamation-triangle')
+            h4.card-subtitle 14s
+          .card: .card-body
+            h6.card-title Mean
+            h4.card-subtitle 00:01:08
+          .card: .card-body
+            .float-right.tip-left.text-light(
+              title="Stats based on your last 100 runs."
+            ) = icon('fas', 'info-circle')
+            h6.card-title Best
+            h4.card-subtitle 00:01:05
+        .card-group
+          .card: .card-body
+            h6.card-title
+              ' 10th percentile
+              small.tip-top(
+                title="Only 10% of your attempts are faster than this time. Treat this number like a relaxed
+                best&mdash;aim to beat it."
+              ) = icon('fas', 'question-circle')
+            h4.card-subtitle 00:01:06
+          .card: .card-body
+            h6.card-title
+              ' Median
+              small.tip-top(
+                title="50% of your attempts are faster than this time. This is the time you'd expect to get
+                in a marathon or no-reset run."
+              ) = icon('fas', 'question-circle')
+            h4.card-subtitle 00:01:09
+          .card: .card-body
+            h6.card-title
+              ' 90th percentile
+              small.tip-top(
+                title="90% of your attempts are faster than this time. You can see this as your worst time
+                excluding fantastic blunders."
+              ) = icon('fas', 'question-circle')
+            h4.card-subtitle 00:01:14
+          .card: .card-body
+            h6.card-title
+              ' 99th percentile
+              small.tip-top(
+                title="99% of your attempts are faster than this time. All attempts but your absolute worst
+                fit under this umbrella."
+              ) = icon('fas', 'question-circle')
+            h4.card-subtitle 00:01:34
+        .segment-duration-chart id="segment-duration-chart-example" data={segment: 'example'}
+  .bg-dark.col-md-6.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden
+    .my-3.py-3
+      h2.display-5 Link with Twitch
+      p.lead Automatically highlight PBs and compete with friends by linking your Twitch account.
+      a.btn.btn-twitch href='/auth/twitch'
+        => icon('fab', 'twitch')
+        ' Link with Twitch
+.row.my-5.py-5: .col-md-12.text-center
+  button#scroll-up.btn.btn-outline-secondary.btn-lg = icon('fas', 'angle-double-up')
+  big.d-block: b.text-secondary Ready to try?
