@@ -36,7 +36,7 @@
               template v-if="loading" = render partial: 'shared/spinner'
               span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
               template v-else=true => icon('fas', 'flag-checkered')
-              ' Create race
+              ' Create public race
             button.btn.btn-primary.dropdown-toggle.dropdown-toggle-split(
               type='button'
               data={toggle: 'dropdown'}
@@ -44,8 +44,8 @@
             )
               span.sr-only Toggle dropdown
             .dropdown-menu.bg-dark
-              button.dropdown-item.text-secondary @click='createInviteOnly' Invite-only race
-              button.dropdown-item.text-secondary @click='createSecret' Secret race
+              button.dropdown-item.text-secondary @click='createInviteOnly' Create invite-only race
+              button.dropdown-item.text-secondary @click='createSecret' Create secret race
 
 .row.mx-2
   .col-md-6.mb-3: .card

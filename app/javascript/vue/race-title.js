@@ -1,9 +1,25 @@
+import raceNav from './race-nav.js'
+
 export default {
+  components: {
+    raceNav,
+  },
+  computed: {
+    title: function() {
+      if (this.race === null) {
+        return ''
+      }
+      if (this.race.game === null && this.race.category === null && this.race.notes === null) {
+        return 'Untitled race'
+      }
+      return `${(this.race.game || {}).name} ${(this.race.category || {}).name} ${(this.race.notes || '').split('\n')[0]}`
+    },
+  },
   created: function() {
-    this.body = this.race.notes
+    this.notes = this.race.notes
   },
   data: () => ({
-    body: '',
+    notes: '',
     editing: false,
     error: null,
     loading: false,
@@ -27,7 +43,7 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            notes: this.body,
+            notes: this.notes,
           })
         })
 
@@ -44,6 +60,6 @@ export default {
       }
     },
   },
-  name: 'race-notes',
+  name: 'race-title',
   props: ['race'],
 }

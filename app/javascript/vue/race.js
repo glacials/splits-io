@@ -7,28 +7,15 @@ import { ts } from '../time'
 import consumer from '../channels/consumer'
 import raceChat from './race-chat.js'
 import raceDisclaimer from './race-disclaimer.js'
-import raceNav from './race-nav.js'
-import raceNotes from './race-notes.js'
+import raceTitle from './race-title.js'
 import raceStreams from './race-streams.js'
 
 export default {
   components: {
     raceChat,
     raceDisclaimer,
-    raceNav,
-    raceNotes,
+    raceTitle,
     raceStreams
-  },
-  computed: {
-    title: function() {
-      if (this.race === null) {
-        return ''
-      }
-      if (this.race.game === null && this.race.category === null && this.race.notes === null) {
-        return 'Untitled race'
-      }
-      return `${(this.race.game || {}).name} ${(this.race.category || {}).name} ${(this.race.notes || '').split('\n')[0]}`
-    },
   },
   created: async function() {
     this.error = false
@@ -142,8 +129,6 @@ export default {
     race: null,
     raceSubscription: null,
   }),
-  methods: {
-  },
   name: 'race',
   props: ['race-id'],
 }
