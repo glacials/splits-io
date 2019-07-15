@@ -488,6 +488,7 @@ API.
 |:---------------|:-------|:------|:--------------------------------------------------------------------------------------------------------------------------|
 | `id`           | string | never | The unique ID of the user.                                                                                                |
 | `twitch_id`    | string | never | The unique Twitch ID of the user.                                                                                         |
+| `twitch_name`  | string | never | The unique Twitch name of the user.                                                                                       |
 | `name`         | string | never | The Twitch name of the user.                                                                                              |
 | `display_name` | string | never | The Twitch display name of the user.                                                                                      |
 | `avatar`       | string | never | The Twitch avatar of the user.                                                                                            |

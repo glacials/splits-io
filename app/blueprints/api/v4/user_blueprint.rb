@@ -12,4 +12,8 @@ class Api::V4::UserBlueprint < Blueprinter::Base
   field :twitch_id do |user, _|
     user.twitch.try(:twitch_id)
   end
+
+  field :twitch_name do |user, _|
+    user.twitch.try(:name)
+  end
 end
