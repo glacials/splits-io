@@ -2,11 +2,18 @@ export default {
   data: () => ({
     error: null,
     loading: false,
-
-    visibility: 'public',
   }),
   methods: {
-    create: async function() {
+    createPublic: async function() {
+      return this.create('public')
+    },
+    createSecret: async function() {
+      return this.create('secret')
+    },
+    createInviteOnly: async function() {
+      return this.create('invite_only')
+    },
+    create: async function(visibility) {
       try {
         this.loading = true
         this.error = null
@@ -20,7 +27,7 @@ export default {
           body: JSON.stringify({
             game_id: this.gameId,
             category_id: this.categoryId,
-            visibility: this.visibility,
+            visibility: visibility,
           })
         })
 

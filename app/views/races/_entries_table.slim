@@ -39,13 +39,12 @@ h6.card-header Entries
               b class=entry_color(entry) = entry.duration.format
             - elsif race.started?
               span data={abstime: race.started_at.rfc3339(3)} -
-          - unless race.finished?
-            td.nowrap
-              - if entry.run.present?
-                - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))
-                - if segment
-                  .badge.badge-dark.mr-2 #{segment}
-                  span.count data={abstime: (race.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
+          td.nowrap
+            - if race.in_progress? && entry.run.present?
+              - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))
+              - if segment.present?
+                .badge.badge-dark.mr-2 #{segment}
+                span.count data={abstime: (race.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
           td.nowrap.text-center
             - entries = entry.runner.entries
             - places = entries.map(&:place)

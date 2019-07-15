@@ -9,7 +9,8 @@
   / Specify the full partial path because this view is used by different controllers
   = render partial: 'games/categories/title', locals: {category: @category}
 
-.row.mx-2
+
+#vue-race.row.mx-2
   - route = @category.route
   - if @category.route.present?
     .col-md-4: .card.mb-4
@@ -19,16 +20,32 @@
         = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download splits', force_route_only: true}
 
   - if current_user.present?
-    .col-md-4: .card.mb-4
-      h5.card-header Set up race
-      .card-body
-        p.card-text Race #{@category.game} against others
-        button.btn.btn-outline-light(
-          data={toggle: :modal, target: '#race-modal'}
-        )
-          => icon('fas', 'flag-checkered')
-          ' Set up race
-    = render partial: 'races/new', locals: {game: @game}
+    race-create inline-template=true game-id=@game.id category-id=@category.id
+      .col-md-4: .card.mb-4
+        h5.card-header Create race
+        .card-body
+          p.card-text Race #{@category.game} against others
+          .btn-group
+            button.btn.btn-primary(
+              type='button'
+              @click='createPublic'
+              :disabled='loading'
+              :title='error'
+              v-tippy=true
+            )
+              template v-if="loading" = render partial: 'shared/spinner'
+              span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
+              template v-else=true => icon('fas', 'flag-checkered')
+              ' Create race
+            button.btn.btn-primary.dropdown-toggle.dropdown-toggle-split(
+              type='button'
+              data={toggle: 'dropdown'}
+              aria={haspopup: true, expanded: false}
+            )
+              span.sr-only Toggle dropdown
+            .dropdown-menu.bg-dark
+              button.dropdown-item.text-secondary @click='createInviteOnly' Invite-only race
+              button.dropdown-item.text-secondary @click='createSecret' Secret race
 
 .row.mx-2
   .col-md-6.mb-3: .card

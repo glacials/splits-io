@@ -29,30 +29,31 @@
                   template v-if='editing'
                     textarea.bg-dark.text-light style='font-family: monospace; width: 100%' rows=10 v-model='body'
                     small.form-text.text-muted Use the first line as a title.
-                .card-footer
-                  .btn-group.float-right
-                    button.btn.btn-outline-light(
-                    :disabled='loading'
-                    :title='error'
-                      @click='edit'
-                      v-if='!editing'
-                      v-tippy=true
-                    )
-                      template v-if='loading' = render partial: 'shared/spinner'
-                      template v-else-if='error' = icon('fas', 'times')
-                      template v-else=true = icon('fas', 'edit')
-                    button.btn.btn-outline-light @click='cancel' v-if='editing'
-                      = icon('fas', 'times')
-                    button.btn.btn-outline-light(
+                - if @race.belongs_to?(current_user)
+                  .card-footer
+                    .btn-group.float-right
+                      button.btn.btn-outline-light(
                       :disabled='loading'
                       :title='error'
-                      @click='save'
-                      v-if='editing'
-                      v-tippy=true
-                    )
-                      template v-if='loading' = render partial: 'shared/spinner'
-                      template v-else-if='error' = icon('fas', 'times')
-                      template v-else=true = icon('fas', 'check')
+                        @click='edit'
+                        v-if='!editing'
+                        v-tippy=true
+                      )
+                        template v-if='loading' = render partial: 'shared/spinner'
+                        template v-else-if='error' = icon('fas', 'times')
+                        template v-else=true = icon('fas', 'edit')
+                      button.btn.btn-outline-light @click='cancel' v-if='editing'
+                        = icon('fas', 'times')
+                      button.btn.btn-outline-light(
+                        :disabled='loading'
+                        :title='error'
+                        @click='save'
+                        v-if='editing'
+                        v-tippy=true
+                      )
+                        template v-if='loading' = render partial: 'shared/spinner'
+                        template v-else-if='error' = icon('fas', 'times')
+                        template v-else=true = icon('fas', 'check')
           .col-md-6
             #entries-table.card.shadow.my-3
               = render partial: 'races/entries_table', locals: {race: @race}
