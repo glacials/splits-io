@@ -114,3 +114,31 @@
                     }) do |f|
                       = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
                       = f.submit('Attach', class: 'btn btn-outline-light')
+
+        .col-md-12
+          race-streams inline-template=true  v-if='race' :race='race'
+            .card
+              .card-header: .row.d-flex.align-items-center
+                h6.col-md-6 Stream Deck
+                .col-md-6
+                  multiselect(
+                    v-model="value"
+                    :options="options"
+                    :multiple='true'
+                    :clear-on-select='false'
+                    :close-on-select='false'
+                    :searchable='false'
+                    :preselect-first='false'
+                    placeholder="Streams"
+                    label="name"
+                    track-by="name"
+                  )
+                    template slot="selection" slot-scope="{ values, search, isOpen }"
+                      span class="multiselect__single" v-if="values.length && !isOpen"
+                        ' {{ value.length }}/{{ options.length }} options selected
+              .card-body
+                .card-deck
+                  .card v-for='stream in value'
+                    .card-body
+                      ' {{ stream.id }}
+

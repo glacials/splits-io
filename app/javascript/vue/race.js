@@ -9,13 +9,15 @@ import raceChat from './race-chat.js'
 import raceDisclaimer from './race-disclaimer.js'
 import raceNav from './race-nav.js'
 import raceNotes from './race-notes.js'
+import raceStreams from './race-streams.js'
 
 export default {
   components: {
     raceChat,
     raceDisclaimer,
     raceNav,
-    raceNotes
+    raceNotes,
+    raceStreams
   },
   computed: {
     title: function() {
@@ -89,6 +91,9 @@ export default {
           case 'race_entries_updated:html':
             document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
+            break
+          case 'race_entries_updated':
+            this.race = data.data.race
             break
 
           case 'race_start_scheduled:html':
