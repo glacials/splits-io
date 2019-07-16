@@ -1,5 +1,5 @@
 race-title inline-template=true v-if='race' :race='race'
-  div
+  div v-cloak=true
     .row: .col-md-12
       h1 v-if='!editing' = '{{title}}'
       = form_for race, url: race_path(race), html: {'v-if' => 'editing'} do |f|
