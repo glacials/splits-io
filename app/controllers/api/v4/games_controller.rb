@@ -3,10 +3,10 @@ class Api::V4::GamesController < Api::V4::ApplicationController
 
   def index
     if params[:search].blank?
-      render status: :bad_request, json: {status: 400, message: 'You must supply a `search` term.'}
-      return
+      @games = Game.joins(:srdc).includes(:categories)
+    else
+      @games = Game.search(params[:search]).includes(:categories)
     end
-    @games = Game.search(params[:search]).includes(:categories)
     render json: Api::V4::GameBlueprint.render(@games, root: :games, toplevel: :game)
   end
 

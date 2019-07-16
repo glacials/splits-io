@@ -23,7 +23,7 @@ class RaceValidator < ActiveModel::Validator
 
   def validate_category(record)
     return if record.category_id.nil?
-    return if Game.find(record.game_id).categories.find_by(id: record.category_id)
+    return if record.game_id.present? && Game.find(record.game_id).categories.find_by(id: record.category_id)
 
     record.errors[:base] << "Category with id '#{record.category_id}' inside game with id '#{record.game_id}' does not exist"
   end
