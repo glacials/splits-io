@@ -61,7 +61,7 @@ race-title inline-template=true v-if='race' :race='race'
         = render partial: 'races/nav'
       .col-md-12.mt-2
         pre.text-light v-show='!editing'
-          ' {{race.notes.split('\n').splice(1).filter(s => s !== '').join('\n')}}
+          ' {{(race.notes || '').split('\n').splice(1).filter(s => s !== '').join('\n')}}
         template v-if='editing'
           small.form-text.text-muted.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2 Use the first line as a title supplement.
           textarea.bg-dark.text-light style='font-family: monospace; width: 100%' rows=10 v-model='notes'
