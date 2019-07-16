@@ -104,5 +104,5 @@
             .card-body
               .card-deck
                 .card v-for='stream in value'
-                  .card-body.p-0 :id='`twitch-${stream.id}`' v-bind:style='{minHeight: minHeight}'
+                  .card-body.p-0 :id='`twitch-${stream.id}`'
               .center v-if='value.length === 0' Nothing Here Yet

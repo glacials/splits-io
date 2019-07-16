@@ -11,16 +11,6 @@ export default {
       }).filter((entry) => {
         return entry.id !== null
       })
-    },
-
-    minHeight: function() {
-      if (this.value.length >= 3) {
-        return '300px'
-      } else if (this.value.length === 2) {
-        return '390px'
-      } else {
-        return '480px'
-      }
     }
   },
   watch: {
@@ -36,14 +26,19 @@ export default {
     value: []
   }),
   methods: {
+    ratioHeight: function(div) {
+      const width = div.offsetWidth
 
+      return (width / 16) * 9
+    }
   },
 
   updated: function() {
     this.value.forEach(stream => {
       const div = document.getElementById(`twitch-${stream.id}`)
+      const child = div.firstChild
       if (div.dataset.loaded === '1') {
-        div.firstChild.height = this.minHeight
+        child.height = this.ratioHeight(div)
         return
       }
 
@@ -52,7 +47,7 @@ export default {
         autoplay: true,
         channel: stream.id,
         muted: true,
-        height: this.minHeight,
+        height: this.ratioHeight(div),
         width: '100%'
       })
     })
