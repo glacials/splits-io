@@ -11,6 +11,10 @@ export default {
       }).filter((entry) => {
         return entry.id !== null
       })
+    },
+
+    finished: function() {
+      return this.race.entries.every(entry => entry.forfeited_at || entry.finished_at)
     }
   },
   watch: {

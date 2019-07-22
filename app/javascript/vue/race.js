@@ -78,6 +78,7 @@ export default {
           case 'race_entries_updated:html':
             document.getElementById('entries-table').innerHTML = data.data.entries_html
             document.getElementById('stats-box').innerHTML = data.data.stats_html
+            applyTips()
             break
           case 'race_entries_updated':
             this.race = data.data.race

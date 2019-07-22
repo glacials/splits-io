@@ -28,7 +28,7 @@ export default {
     this.notes = this.race.notes
     this.games = (await (fetch('/api/v4/games').then(response => response.json()))).games
 
-    this.gameId = this.race.game.id
+    this.gameId = (this.race.game || {id: null}).id
     this.categoryId = (this.race.category || {id: null}).id
   },
   data: () => ({

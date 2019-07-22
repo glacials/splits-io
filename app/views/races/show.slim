@@ -47,16 +47,16 @@
                           template v-if='loading' = render partial: 'shared/spinner'
                           span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
                           template v-else=true => icon('fas', 'comment')
-              - @race.chat_messages.each do |msg|
-                = render partial: 'chat_messages/show', locals: {chat_message: msg}
-              .list-group-item.p-0
-                .media
-                  img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
-                  .media-body
-                    span.mr-2: .badge.badge-success Splits.io
-                    i Race created
-                    .float-right.pr-2
-                      = render partial: 'shared/relative_time', locals: {time: @race.created_at}
+            - @race.chat_messages.order(created_at: :desc).each do |msg|
+              = render partial: 'chat_messages/show', locals: {chat_message: msg}
+            .list-group-item.p-0
+              .media
+                img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
+                .media-body
+                  span.mr-2: .badge.badge-success Splits.io
+                  i Race created
+                  .float-right.pr-2
+                    = render partial: 'shared/relative_time', locals: {time: @race.created_at}
         race-disclaimer.card.shadow inline-template=true
           div
             .bg-dark.p-4 v-if='!accepted' style='height: 100%'
@@ -81,8 +81,8 @@
                     = f.submit('Attach', class: 'btn btn-outline-light')
 
       .card-deck.m-2
-        race-streams inline-template=true  v-if='race' :race='race'
-          .card
+        race-streams inline-template=true  v-if='race' :race='race' v-cloak=true
+          .card v-if='!finished'
             .card-header: .row.d-flex.align-items-center
               h6.col-md-6 Stream Deck
               .col-md-6
@@ -105,4 +105,4 @@
               .card-deck
                 .card v-for='stream in value'
                   .card-body.p-0 :id='`twitch-${stream.id}`'
-              .center v-if='value.length === 0' Nothing Here Yet
+              .center v-if='value.length === 0' Select streams to show from the box above

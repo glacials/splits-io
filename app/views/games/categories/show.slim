@@ -52,7 +52,7 @@
   .col-md-6.mb-3: .card
     = render partial: 'shared/race_table', locals: { \
       races: @game.races.finished.not_secret_visibility, \
-      active_races: @game.races.active.not_secret_visibility \
+      active_races: @game.races.active.not_secret_visibility.order(created_at: :desc) \
     }
 
   .col-md-6

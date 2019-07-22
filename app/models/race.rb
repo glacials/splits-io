@@ -53,6 +53,7 @@ class Race < ApplicationRecord
   def self.friendly_find!(slug)
     race = where('LEFT(id::text, ?) = ?', slug.length, slug).order(created_at: :asc).first
     raise ActiveRecord::RecordNotFound if race.nil?
+
     race
   end
 
@@ -116,7 +117,7 @@ class Race < ApplicationRecord
   def maybe_end!
     return if !started? || entries.where(finished_at: nil, forfeited_at: nil).any?
 
-    Api::V4::RaceBroadcastJob.perform_later(self, 'race_ended', "The race has ended")
+    Api::V4::RaceBroadcastJob.perform_later(self, 'race_ended', 'The race has ended')
     Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_ended', 'A race has ended')
   end
 
