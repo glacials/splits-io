@@ -34,12 +34,12 @@ h6.card-header Entries
                 b = entry_place(entry)
             - else
               = entry.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
-          td.nowrap
+          td.nowrap.text-monospace
             - if entry.done? && (entry.finished_at.nil? || entry.finished_at < Time.now.utc)
               b class=entry_color(entry) = entry.duration.format(precise: true)
             - elsif race.started?
               span data={abstime: race.started_at.rfc3339(3)} -
-          - unless race.finished?
+          - if race.in_progress?
             td.nowrap
               - if entry.run.present?
                 - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))

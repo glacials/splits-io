@@ -35,11 +35,11 @@
             - if cols.include?(:creator)
               td.align-right.nowrap = user_badge(race.owner)
             - if cols.include?(:time)
-              td.align-right.nowrap
+              td.align-right.nowrap.text-monospace
                 - if race.finished?
-                  .text-success = race.duration.format
+                  div = race.duration.format
                 - elsif race.in_progress?
-                  .text-success data={abstime: race.started_at.rfc3339(3)} -
+                  div data={abstime: race.started_at.rfc3339(3)} -
                 - else
                   = race.duration.format
             - if cols.include?(:entries)
