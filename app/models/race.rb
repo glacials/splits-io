@@ -121,10 +121,9 @@ class Race < ApplicationRecord
     Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_ended', 'A race has ended')
   end
 
+  # Returns this race's entry for the given user, not including ghosts.
   def entry_for_user(user)
-    return nil if user.nil?
-
-    entries.find_by(runner: user)
+    entries.find_by(runner: user, ghost: false)
   end
 
   # checks if a given user should be able to act on a given race, returning true if any of the following pass

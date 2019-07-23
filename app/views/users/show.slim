@@ -20,6 +20,7 @@
     .card.shadow
       = render partial: 'shared/race_table', locals: { \
         races: @user.races.finished.not_secret_visibility, \
+        user: @user, \
         active_races: @user.races.active.not_secret_visibility, \
         description: "#{@user}'s Races" \
       }
