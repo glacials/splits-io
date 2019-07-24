@@ -10,7 +10,6 @@ html
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
-    = render partial: 'application/adsense'
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
     = content_for(:head)
@@ -113,7 +112,8 @@ html
         div.text-right
           small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
-          ' Help us out by taking the 2019 Splits I/O survey!
+          ' Help us out by taking the 2019 Splits.io survey!
+      = render partial: 'shared/ad'
       header#header = yield(:header)
       article
         .row: .col-lg-12: #alerts data-turbolinks-temporary=true
