@@ -51,6 +51,8 @@ class Race < ApplicationRecord
   end
 
   def self.friendly_find!(slug)
+    raise ActiveRecord::RecordNotFound if slug.nil?
+
     race = where('LEFT(id::text, ?) = ?', slug.length, slug).order(created_at: :asc).first
     raise ActiveRecord::RecordNotFound if race.nil?
 

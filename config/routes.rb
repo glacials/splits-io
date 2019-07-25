@@ -90,8 +90,8 @@ Rails.application.routes.draw do
       to: 'games/categories/leaderboards/sum_of_bests#index',
       as: :game_category_sum_of_bests
 
-  get '/races',       to: 'races#index',  as: :races
-  get '/races/:race', to: 'races#show',   as: :race
+  get '/races',     to: 'races#index',  as: :races
+  get '/races/:id', to: 'races#show',   as: :race
 
   get '/tools', to: 'tools#index'
 
@@ -161,20 +161,20 @@ Rails.application.routes.draw do
 
       post '/convert', to: 'converts#create'
 
-      get   '/races',       to: 'races#index',  as: 'races'
-      post  '/races',       to: 'races#create'
-      get   '/races/:race', to: 'races#show',   as: 'race'
-      patch '/races/:race', to: 'races#update'
+      get   '/races',     to: 'races#index',  as: 'races'
+      post  '/races',     to: 'races#create'
+      get   '/races/:id', to: 'races#show',   as: 'race'
+      patch '/races/:id', to: 'races#update'
 
-      get    '/races/:race/entries/:id', to: 'races/entries#show',   as: 'race_entry'
-      post   '/races/:race/entries',     to: 'races/entries#create', as: 'race_entries'
-      patch  '/races/:race/entries/:id', to: 'races/entries#update'
-      delete '/races/:race/entries/:id', to: 'races/entries#destroy'
+      get    '/races/:race_id/entries/:id', to: 'races/entries#show',   as: 'race_entry'
+      post   '/races/:race_id/entries',     to: 'races/entries#create', as: 'race_entries'
+      patch  '/races/:race_id/entries/:id', to: 'races/entries#update'
+      delete '/races/:race_id/entries/:id', to: 'races/entries#destroy'
 
-      get  '/races/:race/chat', to: 'races/messages#index',  as: 'race_chat_messages'
-      post '/races/:race/chat', to: 'races/messages#create'
+      get  '/races/:race_id/chat', to: 'races/messages#index',  as: 'race_chat_messages'
+      post '/races/:race_id/chat', to: 'races/messages#create'
 
-      post '/races/:race/ghosts', to: 'races/ghosts#create'
+      post '/races/:race_id/ghosts', to: 'races/ghosts#create'
 
       post '/timesync', to: 'time#create'
     end

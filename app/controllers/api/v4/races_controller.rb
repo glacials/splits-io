@@ -28,6 +28,11 @@ class Api::V4::RacesController < Api::V4::ApplicationController
   end
 
   def update
+    if params[:race][:attachments].present?
+      @race.attachments.attach(params[:race][:attachments])
+      Api::V4::RaceBroadcastJob.perform_later(@race, 'new_attachment', 'The race has a new attachment')
+    end
+
     if @race.update(race_params)
       updated = @race.saved_changes.keys.reject { |k| k == 'updated_at' }.to_sentence
       Api::V4::RaceBroadcastJob.perform_later(@race, 'race_updated', "The race's #{updated} has changed") if updated.present?
@@ -48,7 +53,19 @@ class Api::V4::RacesController < Api::V4::ApplicationController
   private
 
   def race_params
-    params.permit(:visibility, :notes, :category_id, :game_id)
+    params.require(:race).permit(:visibility, :notes, :category_id, :game_id)
+  end
+
+  def set_race
+    @race = Race.find(params[:id])
+    return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
+
+    render status: :forbidden, json: {
+      status: 403,
+      error:  'Must be invited to see this race'
+    }
+  rescue ActiveRecord::RecordNotFound
+    render not_found(:race)
   end
 
   def set_races

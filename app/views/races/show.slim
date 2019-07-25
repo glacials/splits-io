@@ -3,11 +3,7 @@
 - content_for(:header) do
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
-    - if @race.game
-      li.breadcrumb-item = link_to('Games', games_path)
-      li.breadcrumb-item = link_to(@race.game, game_path(@race.game))
-    - if @race.category && @race.game
-      li.breadcrumb-item = link_to(@race.category, game_category_path(@race.game, @race.category))
+    li.breadcrumb-item = link_to('Races', races_path)
     li.breadcrumb-item.active = link_to(@race.to_param, race_path(@race))
 
 #vue-race
@@ -74,7 +70,7 @@
               ul#attachments.list-group.list-group-flush = render partial: 'races/attachments', locals: {race: @race}
               - if @race.belongs_to?(current_user) && !@race.started?
                 .card-footer
-                  = form_for(@race, url: api_v4_race_path(@race), remote: true, method: 'PATCH', html: { \
+                  = form_with(model: @race, url: api_v4_race_path(@race), method: 'PATCH', html: { \
                     class: 'w-100 d-flex justify-content-between auth-me' \
                   }) do |f|
                     = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')

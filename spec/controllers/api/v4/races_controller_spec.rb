@@ -29,7 +29,7 @@ RSpec.describe Api::V4::RacesController do
 
   describe '#create' do
     context 'with no authorization header' do
-      subject(:response) { post :create, params: {category_id: 1} }
+      subject(:response) { post :create, params: {race: {category_id: 1}} }
 
       it 'returns a 403' do
         expect(response).to have_http_status(:unauthorized)
@@ -45,7 +45,7 @@ RSpec.describe Api::V4::RacesController do
       before { request.headers['Authorization'] = "Bearer #{token.token}" }
 
       context 'with a nonsense category id' do
-        subject(:response) { post :create, params: {category_id: 'bleepy blooperson'} }
+        subject(:response) { post :create, params: {race: {category_id: 'bleepy blooperson'}} }
 
         it 'returns a 400' do
           expect(response).to have_http_status(:bad_request)
@@ -53,7 +53,7 @@ RSpec.describe Api::V4::RacesController do
       end
 
       context 'with a nonsense category id' do
-        subject(:response) { post :create, params: {category_id: '1234567890'} }
+        subject(:response) { post :create, params: {race: {category_id: '1234567890'}} }
 
         it 'returns a 400' do
           expect(response).to have_http_status(:bad_request)
@@ -61,7 +61,7 @@ RSpec.describe Api::V4::RacesController do
       end
 
       context 'with a valid category id' do
-        subject(:response) { post :create, params: {category_id: category.id} }
+        subject(:response) { post :create, params: {race: {category_id: category.id}} }
 
         it 'returns a 201' do
           expect(response).to have_http_status(:created)
@@ -73,7 +73,7 @@ RSpec.describe Api::V4::RacesController do
       end
 
       context 'with a nil category id' do
-        subject(:response) { post :create, params: {category_id: nil} }
+        subject(:response) { post :create, params: {race: {category_id: nil}} }
 
         it 'returns a 201' do
           expect(response).to have_http_status(:created)
@@ -88,7 +88,7 @@ RSpec.describe Api::V4::RacesController do
 
   describe '#show' do
     context 'with a bad id' do
-      subject(:response) { get :show, params: {race: '!@#$'} }
+      subject(:response) { get :show, params: {id: '!@#$'} }
 
       it 'returns a 404' do
         expect(response).to have_http_status(:not_found)
@@ -98,7 +98,7 @@ RSpec.describe Api::V4::RacesController do
     context 'with a valid id' do
       context 'with a public race' do
         let(:race) { FactoryBot.create(:race) }
-        subject(:response) { get :show, params: {race: race.id} }
+        subject(:response) { get :show, params: {id: race.id} }
 
         it 'returns a 200' do
           expect(response).to have_http_status(:ok)
@@ -113,7 +113,7 @@ RSpec.describe Api::V4::RacesController do
         let(:race) { FactoryBot.create(:race, visibility: :secret) }
 
         context 'with no join token' do
-          subject(:response) { get :show, params: {race: race.id} }
+          subject(:response) { get :show, params: {id: race.id} }
 
           it 'returns a 403' do
             expect(response).to have_http_status(:forbidden)
@@ -121,7 +121,7 @@ RSpec.describe Api::V4::RacesController do
         end
 
         context 'with a valid join token' do
-          subject(:response) { get :show, params: {race: race.id, join_token: race.join_token} }
+          subject(:response) { get :show, params: {id: race.id, join_token: race.join_token} }
 
           it 'returns a 200' do
             expect(response).to have_http_status(:ok)
@@ -136,7 +136,7 @@ RSpec.describe Api::V4::RacesController do
           let(:user) { FactoryBot.create(:user) }
           let(:token) { FactoryBot.create(:access_token, resource_owner_id: user.id) }
           let(:entry) { FactoryBot.create(:entry, race: race, runner: user, creator: user) }
-          subject(:response) { get :show, params: {race: race.id} }
+          subject(:response) { get :show, params: {id: race.id} }
 
           before do
             request.headers['Authorization'] = "Bearer #{token.token}"

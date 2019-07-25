@@ -93,6 +93,7 @@ export default {
 
           case 'race_updated':
             this.race = data.data.race
+            document.getElementById('attachments').innerHTML = data.data.attachments_html
             break
 
           case 'race_ended':

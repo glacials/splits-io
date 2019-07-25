@@ -1,4 +1,4 @@
-class Api::V4::Races::MessagesController < Api::V4::RacesController
+class Api::V4::Races::MessagesController < Api::V4::ApplicationController
   before_action :set_user, only: %i[create]
   before_action :validate_user, only: %i[create]
   before_action :set_race, only: %i[index create]

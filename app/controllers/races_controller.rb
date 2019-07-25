@@ -38,11 +38,11 @@ class RacesController < ApplicationController
   end
 
   def race_params
-    params.permit(:race, :join_token, :attachment)
+    params.permit(:join_token, :attachment)
   end
 
   def set_race
-    @race = Race.friendly_find!(race_params[:race])
+    @race = Race.friendly_find!(params[:id])
   rescue ActiveRecord::RecordNotFound
     render 'application/not_found'
   end
