@@ -40,4 +40,9 @@ module RacesHelper
       '-'
     end
   end
+
+  # Overrides the default helper because Race#to_param returns a user-friendly ID
+  def api_v4_race_path(race)
+    super(race.id)
+  end
 end
