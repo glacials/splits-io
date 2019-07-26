@@ -157,7 +157,7 @@ class Race < ApplicationRecord
   end
 
   def title
-    notes.try(:lines).try(:first) || 'Untitled race'
+    notes.try(:lines).try(:first)
   end
 
   def duration
