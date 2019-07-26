@@ -27,7 +27,9 @@
                   = form_for(:chat, html: {onsubmit: 'event.preventDefault()'}) do |f|
                     .input-group
                       input.form-control#input-chat-text(
+                        autocomplete='off'
                         autofocus=true
+                        disabled=current_user.nil?
                         name='body'
                         placeholder='Chat...'
                         type='text'
@@ -36,6 +38,7 @@
                       .input-group-append
                         button.btn.btn-dark#chat-submit(
                           :title='error'
+                          disabled=current_user.nil?
                           type='submit'
                           @click='chat'
                           v-tippy=true
@@ -43,7 +46,7 @@
                           template v-if='loading' = render partial: 'shared/spinner'
                           span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
                           template v-else=true => icon('fas', 'comment')
-            - @race.chat_messages.order(created_at: :desc).each do |msg|
+            - @race.chat_messages.includes(user: [:twitch, :google]).order(created_at: :desc).each do |msg|
               = render partial: 'chat_messages/show', locals: {chat_message: msg}
             .list-group-item.p-0
               .media
