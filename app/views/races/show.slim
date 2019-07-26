@@ -68,7 +68,7 @@
                 ' Splits.io is not affiliated with the race creator or attachments and is not responsible for
                 ' attachments or their effects on you and your device.
               button.btn.btn-outline-light @click='accept' I understand
-            div v-if='accepted' v-cloak=true
+            div v-show='accepted' v-cloak=true
               h6.card-header Attachments
               ul#attachments.list-group.list-group-flush = render partial: 'races/attachments', locals: {race: @race}
               - if @race.belongs_to?(current_user) && !@race.started?
