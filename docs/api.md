@@ -615,11 +615,11 @@ curl https://splits.io/api/v4/races/:race
 Get information about a Race. To view information about secret Races, a `join_token` parameter must also be
 provided.
 
-| Status Codes | Success? | Body Present? | Description                                                                         |
-|:-------------|:---------|:--------------|:------------------------------------------------------------------------------------|
-| 202          | Yes      | Yes           | Race schema will be returned.                                                       |
-| 403          | No       | Yes           | This Race is not viewable by the current user because they lack a valid join token. |
-| 404          | No       | Yes           | No Race found with the provided id.                                                 |
+| Status Codes | Success? | Description                                                                         |
+|:-------------|:---------|:------------------------------------------------------------------------------------|
+| 202          | Yes      | Race schema will be returned.                                                       |
+| 403          | No       | This Race is not viewable by the current user because they lack a valid join token. |
+| 404          | No       | No Race found with the provided id.                                                 |
 </details>
 
 <details>
@@ -644,11 +644,11 @@ Splits.io.
 The only required parameter between all types is the Game or Category being raced. Attachments cannot be specified at
 creation and must take place as a separate action afterwards.
 
-| Status Codes | Success? | Body Present? | Description                                                                                    |
-|:-------------|:---------|:--------------|:-----------------------------------------------------------------------------------------------|
-| 201          | Yes      | Yes           | Successfully created, a Race schema will be returned.                                          |
-| 400          | No       | Yes           | An error occured while creating the Race. `error` will contain a human-readable error message. |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                     |
+| Status Codes | Success? | Description                                                                                    |
+|:-------------|:---------|:-----------------------------------------------------------------------------------------------|
+| 201          | Yes      | Successfully created, a Race schema will be returned.                                          |
+| 400          | No       | An error occured while creating the Race. `error` will contain a human-readable error message. |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                     |
 </details>
 
 <details>
@@ -660,13 +660,12 @@ curl -X PATCH https://splits.io/api/v4/races/:race
 ```
 Update one or more fields of the Race. This endpoint requires that the authenticated user is the creator of the Race.
 
-| Status Codes | Success? | Body Present? | Description                                                                                         |
-|:-------------|:---------|:--------------|:----------------------------------------------------------------------------------------------------|
-| 200          | Yes      | Yes           | Successfully updated. A Race schema will be returned.                                               |
-| 400          | No       | Yes           | An error occured while saving the Race. `error` will contain a human-readable error message.        |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user or the owner of the race. |
-| 403          | No       | Yes           | The Race has already been started and cannot be updated.                                            |
-| 406          | No       | Yes           | This is only returned when trying to update a regular category race.                                |
+| Status Codes | Success? | Description                                                                                         |
+|:-------------|:---------|:----------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Successfully updated. A Race schema will be returned.                                               |
+| 400          | No       | An error occured while saving the Race. `error` will contain a human-readable error message.        |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user or the owner of the race. |
+| 403          | No       | The Race has already been started and cannot be updated.                                            |
 
 Races cannot be deleted. Once one becomes inactive for 30 minutes it will naturally disappear from the listings.
 </details>
@@ -709,11 +708,11 @@ curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races
 ```
 Get information about the authenticated user's involvement in a given Race.
 
-| Possible Status Codes | Success? | Body Present? | Description                                                                     |
-|:----------------------|:---------|:--------------|:--------------------------------------------------------------------------------|
-| 200                   | Yes      | Yes           | The authenticated user is entered in the given Race; returns an [Entry][entry]. |
-| 401                   | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.      |
-| 404                   | No       | Yes           | The authenticated user is not entered into the given Race.                      |
+| Possible Status Codes | Success? | Description                                                                     |
+|:----------------------|:---------|:--------------------------------------------------------------------------------|
+| 200                   | Yes      | The authenticated user is entered in the given Race; returns an [Entry][entry]. |
+| 401                   | No       | Access token is either blank, expired, invalid, or not attached to a user.      |
+| 404                   | No       | The authenticated user is not entered into the given Race.                      |
 </details>
 
 <details>
@@ -731,12 +730,12 @@ ghost, inheriting the Run's time, splits, and runner. The authenticated user wil
 
 If the Race is invite-only or secret, you must supply a `join_token`.
 
-| Status Codes | Success? | Body Present? | Description                                                                                            |
-|:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
-| 201          | Yes      | Yes           | Successfully created; returns an [Entry][entry].                                                       |
-| 400          | No       | Yes           | An error occured while creating the Entry. The `error` key will contain a user-friendly error message. |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 403          | No       | Yes           | This Race is not joinable by the current user because they lack a valid join token.                    |
+| Status Codes | Success? | Description                                                                                            |
+|:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
+| 201          | Yes      | Successfully created; returns an [Entry][entry].                                                       |
+| 400          | No       | An error occured while creating the Entry. The `error` key will contain a user-friendly error message. |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 403          | No       | This Race is not joinable by the current user because they lack a valid join token.                    |
 </details>
 
 <details>
@@ -770,13 +769,13 @@ filter the key out, as this is different from not passing the key at all.
 **Note**: A join token is not required if the user is already entered into the race. If they leave, it must be provided
 again to rejoin.
 
-| Status Codes | Success? | Body Present? | Description                                                                                            |
-|:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
-| 200          | Yes      | Yes           | Successfully updated. An Entry schema will be returned.                                                |
-| 400          | No       | Yes           | An error occured while updating the Entry. The `error` key will contain a user-friendly error message. |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 403          | No       | No            | Access token is valid but its user does not have access to this Entry.                                 |
-| 404          | No       | Yes           | No Race found or Entry found for the associated user.                                                  |
+| Status Codes | Success? | Description                                                                                            |
+|:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Successfully updated. An Entry schema will be returned.                                                |
+| 400          | No       | An error occured while updating the Entry. The `error` key will contain a user-friendly error message. |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 403          | No       | Access token is valid but its user does not have access to this Entry.                                 |
+| 404          | No       | No Race found or Entry found for the associated user.                                                  |
 </details>
 
 <details>
@@ -787,13 +786,13 @@ curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/ap
 ```
 Leave a Race. A Race that has already started cannot be left, only finished or forfeited.
 
-| Status Codes | Success? | Body Present? | Description                                                                                            |
-|:-------------|:---------|:--------------|:-------------------------------------------------------------------------------------------------------|
-| 205          | Yes      | No            | Successfully deleted.                                                                                  |
-| 401          | No       | No            | Access token is either blank, expired, invalid, or not attached to a user.                             |
-| 403          | No       | No            | Access token is valid but its user does not have access to this Entry.                                 |
-| 404          | No       | Yes           | No Race found or Entry found for the associated user.                                                  |
-| 409          | No       | Yes           | An error occured while deleting the Entry. The `error` key will contain a user-friendly error message. |
+| Status Codes | Success? | Description                                                                                            |
+|:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Successfully deleted.                                                                                  |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 403          | No       | Access token is valid but its user does not have access to this Entry.                                 |
+| 404          | No       | No Race found or Entry found for the associated user.                                                  |
+| 409          | No       | An error occured while deleting the Entry. The `error` key will contain a user-friendly error message. |
 </details>
 
 #### Chat Message
@@ -824,11 +823,11 @@ order to send a Chat Message to it.
 curl https://splits.io/api/v4/races/:race/chat
 ```
 
-| Status Codes | Success? | Body Present? | Description                                                |
-|:-------------|:---------|:--------------|:-----------------------------------------------------------|
-| 200          | Yes      | Yes           | A paginated array of all the chat messages for the Race.   |
-| 403          | No       | Yes           | User does not have permission to read chat from this Race. |
-| 404          | No       | Yes           | No Race found for the ID given.                            |
+| Status Codes | Success? | Description                                                |
+|:-------------|:---------|:-----------------------------------------------------------|
+| 200          | Yes      | A paginated array of all the chat messages for the Race.   |
+| 403          | No       | User does not have permission to read chat from this Race. |
+| 404          | No       | No Race found for the ID given.                            |
 
 </details>
 
@@ -843,12 +842,12 @@ curl -X POST https://splits.io/api/v4/races/:race/chat \
 ```
 Send a Chat Message to a Race. All fields except `body` are inferred from your access token.
 
-| Status Codes | Success? | Body Present? | Description                                                                                              |
-|:-------------|:---------|:--------------|:---------------------------------------------------------------------------------------------------------|
-| 201          | Yes      | Yes           | A paginated array of all the chat messages for the Race.                                                 |
-| 400          | No       | Yes           | An error occured while creating the message. The `error` key will contain a user-friendly error message. |
-| 403          | No       | Yes           | User does not have permission to send chat to this Race.                                                 |
-| 404          | No       | Yes           | No Race found for the ID given.                                                                          |
+| Status Codes | Success? | Description                                                                                              |
+|:-------------|:---------|:---------------------------------------------------------------------------------------------------------|
+| 201          | Yes      | A paginated array of all the chat messages for the Race.                                                 |
+| 400          | No       | An error occured while creating the message. The `error` key will contain a user-friendly error message. |
+| 403          | No       | User does not have permission to send chat to this Race.                                                 |
+| 404          | No       | No Race found for the ID given.                                                                          |
 
 </details>
 

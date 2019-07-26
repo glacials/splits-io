@@ -3,14 +3,14 @@ class Api::V4::RaceBroadcastJob < ApplicationJob
 
   def perform(race, status, message)
     msg = {
-      message:  message,
-      race: Api::V4::RaceBlueprint.render_as_hash(race)
+      message: message,
+      race:    Api::V4::RaceBlueprint.render_as_hash(race)
     }
     onsite_msg = {
-      message:      'Updated html',
-      entries_html: ApplicationController.render(partial: 'races/entries_table', locals: {race: race}),
-      stats_html:   ApplicationController.render(partial: 'races/stats', locals: {race: race}),
-      attachments_html: ApplicationController.render(partial: 'races/attachments', locals: {race: race}),
+      message:          'Updated html',
+      entries_html:     ApplicationController.render(partial: 'races/entries_table', locals: {race: race}),
+      stats_html:       ApplicationController.render(partial: 'races/stats', locals: {race: race}),
+      attachments_html: ApplicationController.render(partial: 'races/attachments', locals: {race: race})
     }
 
     ws_msg = Api::V4::WebsocketMessage.new(status, msg)

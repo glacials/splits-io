@@ -38,6 +38,16 @@ class Api::V4::ApplicationController < ActionController::Base
     }
   end
 
+  # Add response body to unauthorized requests
+  def doorkeeper_unauthorized_render_options(error: nil)
+    {
+      json: {
+        status: 401,
+        error:  'Not authorized'
+      }
+    }
+  end
+
   def set_category
     @category = Category.find(params[:category])
   rescue ActiveRecord::RecordNotFound
@@ -80,11 +90,19 @@ class Api::V4::ApplicationController < ActionController::Base
     doorkeeper_authorize!(:manage_race)
     self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   rescue ActiveRecord::RecordNotFound
-    head :unauthorized
+    render status: :unauthorized, json: {
+      status: 401,
+      error:  'No user found for this token'
+    }
   end
 
   def validate_user
-    head :unauthorized if current_user.nil?
+    return unless current_user.nil?
+
+    render status: :unauthorized, json: {
+      status: 401,
+      error:  'A user is required for this action'
+    }
   end
 
   def set_race

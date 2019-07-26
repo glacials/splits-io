@@ -9,7 +9,7 @@ RSpec.describe Api::V4::Races::EntriesController do
     context 'with no authorization header' do
       subject(:response) { get :show, params: {race_id: race.id, id: entry.id} }
 
-      it 'returns a 403' do
+      it 'returns a 401' do
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe Api::V4::Races::EntriesController do
     context 'with no authorization header' do
       subject(:response) { put :create, params: {race_id: race.id} }
 
-      it 'returns a 403' do
+      it 'returns a 401' do
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -316,8 +316,8 @@ RSpec.describe Api::V4::Races::EntriesController do
         before { entry }
 
         context 'before the race starts' do
-          it 'returns a 205' do
-            expect(response).to have_http_status(:reset_content)
+          it 'returns a 200' do
+            expect(response).to have_http_status(:ok)
           end
         end
 

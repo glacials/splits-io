@@ -40,7 +40,7 @@ class Api::V4::RacesController < Api::V4::ApplicationController
     else
       render status: :bad_request, json: {
         status: 400,
-        error: @race.errors.full_messages.to_sentence
+        error:  @race.errors.full_messages.to_sentence
       }
     end
   rescue ActionController::ParameterMissing
@@ -88,6 +88,9 @@ class Api::V4::RacesController < Api::V4::ApplicationController
   def check_owner
     return if @race.belongs_to?(current_user)
 
-    head :unauthorized
+    render :unauthorized, json: {
+      status: 401,
+      error:  "User must own race to perform this action"
+    }
   end
 end

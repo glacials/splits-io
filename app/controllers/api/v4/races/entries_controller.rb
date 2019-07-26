@@ -57,7 +57,7 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
 
   def destroy
     if @entry.destroy
-      head :reset_content
+      render status: :ok, json: {status: 200}
       Api::V4::RaceBroadcastJob.perform_later(@race, 'race_entries_updated', 'A user has left the race')
       Api::V4::GlobalRaceUpdateJob.perform_later(@race, 'race_entries_updated', 'An user has left a race')
     else
@@ -85,7 +85,12 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
 
   def set_entry
     @entry = @race.entries.find(params[:id])
-    render :unauthorized unless @entry.creator == current_user
+    return if @entry.creator == current_user
+
+    render status: :forbidden, json: {
+      status: 403,
+      error:  'Entry does not belong to current user'
+    }
   rescue ActiveRecord::RecordNotFound
     render not_found(:entry)
   end
