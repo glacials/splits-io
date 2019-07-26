@@ -19,7 +19,7 @@ h6.card-header Entries
       th.nowrap.text-center Stats
       th.nowrap.text-center Links
     tbody
-      - race.entries.includes(:runner).order('finished_at ASC NULLS LAST, forfeited_at ASC NULLS LAST, readied_at ASC NULLS LAST, created_at ASC').each do |entry|
+      - race.entries.includes(:runner).order('finished_at ASC NULLS LAST, forfeited_at ASC NULLS FIRST, readied_at ASC NULLS LAST, created_at ASC').each do |entry|
         tr style=('filter: grayscale(100%)' if entry.ghost?)
           td.nowrap
             - if entry.ghost?
@@ -39,7 +39,7 @@ h6.card-header Entries
               b class=entry_color(entry) = entry.duration.format(precise: true)
             - elsif race.started?
               span data={abstime: race.started_at.rfc3339(3)} -
-          - if race.in_progress?
+          - unless race.finished?
             td.nowrap
               - if entry.run.present?
                 - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))
