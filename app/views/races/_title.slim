@@ -36,9 +36,9 @@ race-title inline-template=true v-if='race' :race='race'
                 button.btn.btn-outline-light.btn-sm(
                   :disabled='loading'
                   :title='error'
-                    @click='edit'
-                    v-if='!editing'
-                    v-tippy=true
+                  @click='edit'
+                  v-if='!editing'
+                  v-tippy=true
                 )
                   template v-if='loading' = render partial: 'shared/spinner'
                   template v-else-if='error' = icon('fas', 'times')

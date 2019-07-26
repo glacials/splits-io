@@ -1,7 +1,7 @@
 - description ||= nil
 - cols ||= [:creator, :time, :entries, :name, :status, :created, :results]
 - races = races.page(params[:page]).includes(:owner)
-- active_races ||= []
+- active_races ||= Race.none
 
 - if races.none? && active_races.none?
   - if description.present?
@@ -46,7 +46,7 @@
             - if cols.include?(:entries)
               td.align-right.nowrap = race.entries.count
             - if cols.include?(:name)
-              td width='100%' = link_to race, race_path(race), class: 'run-link'
+              td width='100%' = link_to(race, race_path(race), class: 'run-link')
             - if cols.include?(:status)
               td.align-right.nowrap
                 - if race.finished?

@@ -7,7 +7,12 @@
   - races = Race.finished.not_secret_visibility.order(started_at: :desc)
 - else
   - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST')
+
 article
+  #vue-race.row
+    - if current_user.present?
+      = render partial: 'races/create'
+
   .card.shadow
     .card-header
       ul.nav.nav-bordered

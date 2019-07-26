@@ -6,6 +6,10 @@ export default {
   },
   computed: {
     categories: function() {
+      if (!this.game) {
+        return []
+      }
+
       return [{id: null, name: '<N/A / Race-specific category>'}, ...this.game.categories]
     },
     category: function() {
