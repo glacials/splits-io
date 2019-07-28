@@ -6,7 +6,7 @@ class Users::PbsController < ApplicationController
   def show
     if @user.patron?(tier: 3)
       if params[:trailing_path].nil?
-        redirect_to run_path(@user.pb_for(@category))
+        redirect_to run_path(@user.pb_for(Run::REAL, @category))
       else
         redirect_to "#{run_path(@user.pb_for(@category))}/#{params[:trailing_path]}"
       end
