@@ -1,5 +1,3 @@
-import {authifyForm} from '../token'
-
 export default {
   data: () => ({
     body: '',

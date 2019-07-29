@@ -6,10 +6,8 @@ export default {
   },
   computed: {
     options: function() {
-      return this.race.entries.map((entry) => {
+      return this.race.entries.filter(entry => !entry.ghost && entry.creator.twitch_name !== null).map(entry => {
         return {name: entry.creator.display_name, id: entry.creator.twitch_name}
-      }).filter((entry) => {
-        return entry.id !== null
       })
     },
 

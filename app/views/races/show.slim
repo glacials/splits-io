@@ -37,10 +37,11 @@
                       )
                       .input-group-append
                         button.btn.btn-dark#chat-submit(
-                          :title='error'
                           disabled=current_user.nil?
                           type='submit'
                           @click='chat'
+                          :disabled='body === ""'
+                          :title='error'
                           v-tippy=true
                         )
                           template v-if='loading' = render partial: 'shared/spinner'

@@ -45,11 +45,6 @@ class Game < ApplicationRecord
     joins(:aliases).where(game_aliases: {name: name}).first_or_create(name: name)
   end
 
-  def races
-    category_ids = categories.pluck(:id)
-    Race.where(game_id: id).or(Race.where(category_id: category_ids))
-  end
-
   def to_param
     srdc.try(:shortname) || id.to_s || name.downcase.delete('/')
   end

@@ -16,11 +16,6 @@ class EntryValidator < ActiveModel::Validator
     run = Run.find(record.run_id)
     return unless run.completed?(Run::REAL) # If we are a ghost
 
-    unless record.race.belongs_to?(record.creator)
-      record.errors[:base] << 'Only the race owner can add the ghost of a completed run'
-      return
-    end
-
     record.assign_attributes(
       ghost:      true,
       runner:     run.user,

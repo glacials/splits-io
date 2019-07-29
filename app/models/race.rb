@@ -123,18 +123,13 @@ class Race < ApplicationRecord
     Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_ended', 'A race has ended')
   end
 
-  # Returns this race's entry for the given user, not including ghosts.
-  def entry_for_user(user)
-    entries.find_by(runner: user, ghost: false)
-  end
-
   # checks if a given user should be able to act on a given race, returning true if any of the following pass
   # the user is an entrant in the race or is the race creator, or
   # the race visibility is not public and the provided token is correct, or
   # the race is public
   def joinable?(user: nil, token: nil)
     result = false
-    result = true if entry_for_user(user).present? || belongs_to?(user)
+    result = true if entries.find_for(user).present? || belongs_to?(user)
     result = true if (invite_only_visibility? || secret_visibility?) && token == join_token
     result = true if public_visibility?
 

@@ -57,15 +57,7 @@ class Api::V4::RacesController < Api::V4::ApplicationController
   end
 
   def set_race
-    @race = Race.find(params[:id])
-    return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
-
-    render status: :forbidden, json: {
-      status: 403,
-      error:  'Must be invited to see this race'
-    }
-  rescue ActiveRecord::RecordNotFound
-    render not_found(:race)
+    super(param: :id)
   end
 
   def set_races

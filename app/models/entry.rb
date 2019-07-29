@@ -17,6 +17,11 @@ class Entry < ApplicationRecord
   scope :ghosts,    -> { where(ghost: true) }
   scope :nonghosts, -> { where(ghost: false) }
 
+  # Returns this race's entry for the given user, not including ghosts.
+  def self.find_for(user)
+    find_by(runner: user, ghost: false)
+  end
+
   def ready?
     readied_at.present?
   end

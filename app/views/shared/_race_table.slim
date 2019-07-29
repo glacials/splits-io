@@ -36,7 +36,7 @@
               td.align-right.nowrap = user_badge(race.owner)
             - if cols.include?(:time)
               td.align-right.nowrap.text-monospace
-                - entry = race.entry_for_user(user) if local_assigns[:user].present?
+                - entry = race.entries.find_for(user) if local_assigns[:user].present?
                 - if entry.present? && entry.done?
                   .text-success = entry.duration.format
                 - elsif race.in_progress?

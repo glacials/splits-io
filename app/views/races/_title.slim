@@ -35,7 +35,7 @@ race-title inline-template=true v-if='race' :race='race'
               - if !race.started?
                 button.btn.btn-outline-light.btn-sm(
                   :disabled='loading'
-                  :title='error'
+                  :title='error || "Edit"'
                   @click='edit'
                   v-if='!editing'
                   v-tippy=true
@@ -49,7 +49,7 @@ race-title inline-template=true v-if='race' :race='race'
                   :disabled='loading'
                   :title='error'
                   @click='save'
-                  v-if='editing'
+                  v-if='editing && !race.started_at'
                   v-tippy=true
                 )
                   template v-if='loading' = render partial: 'shared/spinner'

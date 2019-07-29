@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_08_204019) do
+ActiveRecord::Schema.define(version: 2019_07_29_221148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 2019_07_08_204019) do
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["race_id"], name: "index_chat_messages_on_race_id"
     t.index ["user_id"], name: "index_chat_messages_on_user_id"
   end
 
@@ -115,6 +116,7 @@ ActiveRecord::Schema.define(version: 2019_07_08_204019) do
     t.boolean "ghost", default: false, null: false
     t.bigint "creator_id"
     t.index ["creator_id"], name: "index_entries_on_creator_id"
+    t.index ["race_id"], name: "index_entries_on_race_id"
     t.index ["run_id"], name: "index_entries_on_run_id"
     t.index ["runner_id"], name: "index_entries_on_runner_id"
   end
@@ -435,7 +437,9 @@ ActiveRecord::Schema.define(version: 2019_07_08_204019) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chat_messages", "races"
   add_foreign_key "chat_messages", "users"
+  add_foreign_key "entries", "races"
   add_foreign_key "entries", "users", column: "runner_id"
   add_foreign_key "game_aliases", "games", on_delete: :cascade
   add_foreign_key "google_users", "users"
@@ -444,6 +448,7 @@ ActiveRecord::Schema.define(version: 2019_07_08_204019) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"
   add_foreign_key "races", "categories"
+  add_foreign_key "races", "games"
   add_foreign_key "races", "users"
   add_foreign_key "run_histories", "runs", on_delete: :cascade
   add_foreign_key "run_likes", "runs"

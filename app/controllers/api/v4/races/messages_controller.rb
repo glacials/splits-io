@@ -11,7 +11,7 @@ class Api::V4::Races::MessagesController < Api::V4::ApplicationController
   def create
     chat_message = @race.chat_messages.new(message_params.merge(
       user:         current_user,
-      from_entrant: @race.entry_for_user(current_user).present?
+      from_entrant: @race.entries.find_for(current_user).present?
     ))
     if chat_message.save
       render status: :created, json: Api::V4::ChatMessageBlueprint.render(chat_message, root: :chat_message)

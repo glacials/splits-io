@@ -149,12 +149,6 @@ export default {
         throw (await response.json()).error || response.statusText
       }
 
-      if (response.status === 204 || response.status === 205) {
-        // No body to parse
-        this.entry = null
-        return
-      }
-
       this.entry = (await response.json()).entry
     },
   },

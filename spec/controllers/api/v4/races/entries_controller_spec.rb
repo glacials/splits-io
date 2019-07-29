@@ -297,7 +297,7 @@ RSpec.describe Api::V4::Races::EntriesController do
       before { request.headers['Authorization'] = "Bearer #{token.token}" }
 
       context 'with no race found' do
-        before { race.destroy }
+        subject(:response) { delete :destroy, params: {race_id: 'beep', id: entry.id} }
 
         it 'returns a 404' do
           expect(response).to have_http_status(:not_found)

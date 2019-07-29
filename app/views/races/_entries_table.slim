@@ -68,7 +68,7 @@ h6.card-header Entries
             - if entry.run.present?
               a.text-light.tip.mr-2 href=run_path(entry.run) title='See associated run'
                 = icon('fas', 'scroll')
-- if race.belongs_to?(current_user) && !race.started? && add_ghost
+- if !race.started? && add_ghost
   .card-footer.clearfix: .float-right
     .dropdown.mr-2
       button.btn.btn-outline-light.dropdown-toggle#ghost-btn(
