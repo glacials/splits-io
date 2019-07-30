@@ -719,16 +719,21 @@ Get information about the authenticated user's involvement in a given Race.
 <summary>Creating an Entry</summary>
 
 ```sh
-curl -X PUT -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry -d '{"entry": {"run_id": "gcb"}}'
+curl -X PUT https://splits.io/api/v4/races/:race/entry \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
 ```
-Join a Race. The attached `run_id` (optional) will associate the given (not-yet-started) Run with the Entry in order to
-display splits. You can [continuously update the Run][replacing-source-files] as the user splits to keep the Race
-up-to-date for stats and comparison purposes.
+Join a Race. There are no required arguments, however you can supply any parameters specified below in *Updating an
+Entry*, e.g.
+```json
+{"entry": {"run_id": "gcb"}}
+```
 
-To make a ghost entry, supply a `run_id` of a Run that has already completed. The Entry will automatically become a
-ghost, inheriting the Run's time, splits, and runner. The authenticated user will be assigned as the Entry's `creator`.
+To make a ghost entry, simply supply a `run_id` of a Run on Splits.io that has already completed. The Entry will
+automatically become a ghost, inheriting the Run's time, splits, and runner. The authenticated user will be assigned as
+the Entry's `creator`.
 
-If the Race is invite-only or secret, you must supply a `join_token`.
+If the Race is invite-only or secret, you must supply a `join_token`. The `join_token` should be at the top-level, not
+within an `entry` object.
 
 | Status Codes | Success? | Description                                                                                            |
 |:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
@@ -744,10 +749,10 @@ If the Race is invite-only or secret, you must supply a `join_token`.
 ```sh
 curl -X PATCH https://splits.io/api/v4/races/:race/entry \
   -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
-  -H 'Content-Type: application/json'
-  -d '{"readied_at": "2019-06-17T03:40:48.123Z"}'
+  -H 'Content-Type: application/json' \
+  -d '{"entry": {"readied_at": "2019-06-17T03:40:48.123Z"}}'
 ```
-Change an Entry. Valid parameters are `readied_at`, `finished_at`, and `forfeited_at`, and `run_id`.
+Change an Entry. Valid parameters are `entry.readied_at`, `entry.finished_at`, `entry.forfeited_at`, and `entry.run_id`.
 
 | Field          | Type                       | Null?                            | Description                                                                                                         |
 |:---------------|:---------------------------|:---------------------------------|:--------------------------------------------------------------------------------------------------------------------|
@@ -755,6 +760,10 @@ Change an Entry. Valid parameters are `readied_at`, `finished_at`, and `forfeite
 | `readied_at`   | [ISO 8601][iso8601] string | when the runner isn't ready      | The timestamp when this runner readied up, if at all.                                                               |
 | `finished_at`  | [ISO 8601][iso8601] string | when the runner hasn't finished  | The timestamp when this runner finished the Race, if at all.                                                        |
 | `forfeited_at` | [ISO 8601][iso8601] string | when the runner hasn't forfeited | The timestamp when this runner forfeited the Race, if at all.                                                       |
+
+An attached `entry.run_id` (optional) will associate the given Run with the Entry in order to display splits. The run
+should not be a completed run when you attach it. You can [continuously update the Run][replacing-source-files] as the
+user splits to keep the race page up-to-date for stats and comparison purposes.
 
 The timestamps support three decimal places of precision. They serve as pseudo-booleans; they are the source of truth
 for whether a runner is ready/finished/forfeited (`null` for no; non-`null` for yes).
@@ -765,9 +774,6 @@ current time. The travel time from you to Splits.io will affect the timestamp, s
 
 To unset one of these fields (e.g. to unready the runner), simply set it to `null`. Make sure your JSON encoder does not
 filter the key out, as this is different from not passing the key at all.
-
-**Note**: A join token is not required if the user is already entered into the race. If they leave, it must be provided
-again to rejoin.
 
 | Status Codes | Success? | Description                                                                                            |
 |:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
@@ -838,7 +844,7 @@ curl https://splits.io/api/v4/races/:race/chat
 curl -X POST https://splits.io/api/v4/races/:race/chat \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"body":"a message body here"}'
+  -d '{"chat_message": {"body": "a message body here"}}'
 ```
 Send a Chat Message to a Race. All fields except `body` are inferred from your access token.
 

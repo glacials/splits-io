@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V4::Races::MessagesController do
+RSpec.describe Api::V4::Races::ChatMessagesController do
   describe '#index' do
     context 'with no race found' do
       subject(:response) { get :index, params: {race_id: '!@#$'} }
@@ -49,7 +49,7 @@ RSpec.describe Api::V4::Races::MessagesController do
 
   describe '#create' do
     let(:race) { FactoryBot.create(:race) }
-    subject(:response) { post :create, params: {race_id: race.id, body: 'test message here'} }
+    subject(:response) { post :create, params: {race_id: race.id, chat_message: {body: 'test message here'}} }
 
     context 'with no authorization header' do
       it 'returns a 401' do
@@ -64,7 +64,7 @@ RSpec.describe Api::V4::Races::MessagesController do
       before { request.headers['Authorization'] = "Bearer #{token.token}" }
 
       context 'with no race found' do
-        subject(:response) { post :create, params: {race_id: '!@#$', body: 'test message here'} }
+        subject(:response) { post :create, params: {race_id: '!@#$', chat_message: {body: 'test message here'}} }
 
         it 'returns a 404' do
           expect(response).to have_http_status(:not_found)

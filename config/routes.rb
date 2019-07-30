@@ -171,8 +171,8 @@ Rails.application.routes.draw do
       patch  '/races/:race_id/entries/:id', to: 'races/entries#update'
       delete '/races/:race_id/entries/:id', to: 'races/entries#destroy'
 
-      get  '/races/:race_id/chat', to: 'races/messages#index',  as: 'race_chat_messages'
-      post '/races/:race_id/chat', to: 'races/messages#create'
+      get  '/races/:race_id/chat', to: 'races/chat_messages#index',  as: 'race_chat_messages'
+      post '/races/:race_id/chat', to: 'races/chat_messages#create'
 
       post '/races/:race_id/ghosts', to: 'races/ghosts#create'
 

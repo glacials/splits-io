@@ -33,7 +33,7 @@ class Api::V4::ApplicationController < ActionController::Base
       status: :not_found,
       json:   {
         status: 404,
-        error:  "No #{collection_name} with ID #{params[collection_name]} found."
+        error:  "No #{collection_name} with ID #{params[collection_name] || params["#{collection_name}_id"] || params[:id]} found."
       }
     }
   end

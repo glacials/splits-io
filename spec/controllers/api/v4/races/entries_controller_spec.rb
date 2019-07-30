@@ -68,6 +68,14 @@ RSpec.describe Api::V4::Races::EntriesController do
         end
       end
 
+      context 'as a ghost' do
+        subject(:response) { put :create, params: {race_id: '!@#$%', entry: {run_id: FactoryBot.create(:run).id}} }
+
+        it 'returns a 404' do
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+
       context 'with the user in another race' do
         let(:secondary_race) { FactoryBot.create(:race) }
         let(:entry)          { FactoryBot.create(:entry, runner: user, creator: user, race: secondary_race) }
@@ -128,7 +136,7 @@ RSpec.describe Api::V4::Races::EntriesController do
     let(:entry) { FactoryBot.create(:entry, race: race, runner: user, creator: user) }
 
     context 'with no authorization header' do
-      subject(:response) { patch :update, params: {race_id: race.id, id: entry.id, readied_at: Time.now.utc} }
+      subject(:response) { patch :update, params: {race_id: race.id, id: entry.id, entry: {readied_at: Time.now.utc}} }
 
       it 'returns a 403' do
         expect(response).to have_http_status(:unauthorized)

@@ -1,4 +1,4 @@
-class Api::V4::Races::MessagesController < Api::V4::ApplicationController
+class Api::V4::Races::ChatMessagesController < Api::V4::ApplicationController
   before_action :set_user, only: %i[create]
   before_action :validate_user, only: %i[create]
   before_action :set_race, only: %i[index create]
@@ -9,7 +9,7 @@ class Api::V4::Races::MessagesController < Api::V4::ApplicationController
   end
 
   def create
-    chat_message = @race.chat_messages.new(message_params.merge(
+    chat_message = @race.chat_messages.new(chat_message_params.merge(
       user:         current_user,
       from_entrant: @race.entries.find_for(current_user).present?
     ))
@@ -22,12 +22,17 @@ class Api::V4::Races::MessagesController < Api::V4::ApplicationController
         error:  chat_message.errors.full_messages.to_sentence
       }
     end
+  rescue ActionController::ParameterMissing
+    render status: :bad_request, json: {
+      status: 400,
+      error:  'Must specify a body like {"chat_message": {"body": "Hello world!"}}.'
+    }
   end
 
   private
 
-  def message_params
-    params.permit(:body)
+  def chat_message_params
+    params.require(:chat_message).permit(:body)
   end
 
   def set_messages
