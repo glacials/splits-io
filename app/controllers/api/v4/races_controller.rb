@@ -64,8 +64,10 @@ class Api::V4::RacesController < Api::V4::ApplicationController
     if params[:historic] == '1'
       @races = paginate(Race.finished.not_secret_visibility.order(started_at: :desc))
     else
-      @races = Race.active.not_secret_visibility
+      @races = paginate(Race.active.not_secret_visibility)
     end
+
+    @races.includes(:category, :user, game: :srdc, entries: {runner: [:google, :twitch], creator: [:google, :twitch]})
   end
 
   def check_permission
