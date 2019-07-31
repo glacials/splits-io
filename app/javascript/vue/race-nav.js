@@ -1,4 +1,5 @@
 import { ts } from '../time'
+import { getAccessToken } from '../token'
 
 export default {
   created: function() {
@@ -133,12 +134,16 @@ export default {
         path = `/api/v4/races/${this.race.id}/entries/${this.entry.id}`
       }
 
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+      const accessToken = getAccessToken()
+      if (accessToken) {
+        headers.append('Authorization', `Bearer ${accessToken}`)
+      }
+
       const response = await fetch(path, {
         method: method,
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
         body: JSON.stringify({
           entry: params,
           join_token: (new URLSearchParams(window.location.search)).get('join_token')

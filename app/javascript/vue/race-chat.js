@@ -1,3 +1,5 @@
+import { getAccessToken } from '../token'
+
 export default {
   data: () => ({
     body: '',
@@ -8,13 +10,18 @@ export default {
     chat: async function() {
       this.error = false
       this.loading = true
+
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+      const accessToken = getAccessToken()
+      if (accessToken) {
+        headers.append('Authorization', `Bearer ${accessToken}`)
+      }
+
       try {
         const response = fetch(`/api/v4/races/${this.race.id}/chat`, {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
-            'Content-Type': 'application/json',
-          },
+          headers: headers,
           body: JSON.stringify({
             body: this.body,
           })

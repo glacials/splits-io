@@ -1,3 +1,5 @@
+import { getAccessToken } from '../token'
+
 export default {
   data: () => ({
     error: null,
@@ -18,12 +20,16 @@ export default {
         this.loading = true
         this.error = null
 
+        const headers = new Headers()
+        headers.append('Content-Type', 'application/json')
+        const accessToken = getAccessToken()
+        if (accessToken) {
+          headers.append('Authorization', `Bearer ${accessToken}`)
+        }
+
         const response = await fetch(`/api/v4/races`, {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
-            'Content-Type': 'application/json',
-          },
+          headers: headers,
           body: JSON.stringify({
             game_id: this.gameId,
             category_id: this.categoryId,

@@ -2,7 +2,7 @@ const moment = require('moment')
 require("moment-duration-format")(moment)
 
 import { applyTips } from '../tooltips'
-import { ts } from '../time'
+import { getAccessToken } from '../token'
 
 import consumer from '../channels/consumer'
 import raceChat from './race-chat.js'
@@ -21,20 +21,15 @@ export default {
     this.error = false
 
     const headers = new Headers()
-    if (localStorage.getItem('splitsio_access_token')) {
-      headers.append('Authorization', `Bearer ${localStorage.getItem('splitsio_access_token')}`)
+    const accessToken = getAccessToken()
+    if (accessToken) {
+      headers.append('Authorization', `Bearer ${accessToken}`)
     }
 
     let url = `/api/v4/races/${this.raceId}`
-    let join_token
-    if (window.gon.race) {
-      join_token = window.gon.race.join_token
-    }
-    if (!join_token) {
-      join_token = new URLSearchParams(window.location.search).get('join_token')
-    }
-    if (join_token) {
-      url = `${url}?join_token=${join_token}`
+    const joinToken = (window.gon.race || {}).join_token
+    if (joinToken) {
+      url += `?join_token=${joinToken}`
     }
 
     const response = await fetch(url, {

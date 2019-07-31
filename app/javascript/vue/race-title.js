@@ -1,4 +1,5 @@
 import raceNav from './race-nav.js'
+import { getAccessToken } from '../token'
 
 export default {
   components: {
@@ -55,13 +56,18 @@ export default {
       this.error = false
       this.loading = true
       this.editing = false
+
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+      const accessToken = getAccessToken()
+      if (accessToken) {
+        headers.append('Authorization', `Bearer ${accessToken}`)
+      }
+
       try {
         const response = fetch(`/api/v4/races/${this.race.id}`, {
           method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('splitsio_access_token')}`,
-            'Content-Type': 'application/json',
-          },
+          headers: headers,
           body: JSON.stringify({
             category_id: this.categoryId,
             game_id: this.game.id,

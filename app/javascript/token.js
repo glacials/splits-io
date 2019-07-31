@@ -9,6 +9,22 @@ const urlHashToObject = function(hash) {
   return params
 }
 
+// Returns undefined if token is not set, null if expired, or the token as a string
+const getAccessToken = function() {
+  const accessToken = localStorage.getItem(accessTokenKey)
+  const expireTime  = localStorage.getItem(accessTokenExpiryKey)
+  if (accessToken === undefined || expireTime === undefined) {
+    return undefined
+  }
+
+  if (new Date() > new Date(expireTime)) {
+    // If the token is expired return null to indicate the token shouldn't be used
+    return null
+  }
+
+  return accessToken
+}
+
 document.addEventListener('turbolinks:load', () => {
   // Protect dev modes that haven't set up a client yet
   if (process.env.SPLITSIO_CLIENT_ID === undefined) {
@@ -78,4 +94,4 @@ document.addEventListener('turbolinks:load', () => {
   })
 })
 
-export {accessTokenKey, accessTokenExpiryKey}
+export { getAccessToken }

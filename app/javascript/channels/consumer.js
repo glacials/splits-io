@@ -3,10 +3,10 @@
 
 import { createConsumer } from "@rails/actioncable"
 
-import { accessTokenKey } from '../token'
+import { getAccessToken } from '../token'
 
 function getWebsocketURL() {
-  const token = localStorage.getItem(accessTokenKey)
+  const token = getAccessToken()
   let url = '/api/cable'
   if (token) {
     url += `?access_token=${token}`
