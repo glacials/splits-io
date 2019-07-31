@@ -1,12 +1,14 @@
-const moment = require('moment')
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
 require('highcharts/highcharts-more')(Highcharts)
 
+const defaults = require('deep-defaults')
+const moment = require('moment')
+
 import {logoColors} from '../colors.js'
 import {quantile} from '../stats.js'
 
-const buildBoxPlot = (runs, chartOptions = {}) => {
+const buildBoxPlot = (runs, options = {}) => {
   if (document.getElementById('box-plot') === null) {
     return
   }
@@ -14,9 +16,9 @@ const buildBoxPlot = (runs, chartOptions = {}) => {
   const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
   const duration = `${timing}time_duration_ms`
 
-  Highcharts.chart('box-plot', {
+  Highcharts.chart('box-plot', defaults(_.clone(options), {
     exporting: {
-      chartOptions: Object.assign(chartOptions, {
+      chartOptions: {
         plotOptions: {
           series: {
             dataLabels: {enabled: true}
@@ -28,7 +30,7 @@ const buildBoxPlot = (runs, chartOptions = {}) => {
             }
           }
         }
-      }),
+      },
       fallbackToExportServer: false
     },
     chart: {
@@ -81,7 +83,7 @@ const buildBoxPlot = (runs, chartOptions = {}) => {
       tickColor: 'rgba(255, 255, 255, 0.2)',
       title: {text: 'Segment Durations'}
     }
-  })
+  }))
 }
 
 export {buildBoxPlot}

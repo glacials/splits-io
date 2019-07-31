@@ -1,11 +1,13 @@
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
-const moment = require('moment')
-import {logoYellow, logoBlue, logoColors} from '../colors.js'
-
 require('highcharts-regression')(Highcharts)
 
-const buildPlaytimeChart = function(runs, chartOptions = {}) {
+const defaults = require('deep-defaults')
+const moment = require('moment')
+
+import {logoYellow, logoBlue, logoColors} from '../colors.js'
+
+const buildPlaytimeChart = function(runs, options = {}) {
   if (document.getElementById('playtime-chart') === null) {
     return
   }
@@ -43,14 +45,14 @@ const buildPlaytimeChart = function(runs, chartOptions = {}) {
     }).filter(datum => datum != null)
   })
 
-  Highcharts.chart('playtime-chart', {
+  Highcharts.chart('playtime-chart', defaults(_.clone(options), {
     colors: logoColors,
     chart: {
       type: 'scatter',
       zoomType: 'x'
     },
     exporting: {
-      chartOptions: Object.assign(chartOptions, {
+      chartOptions: {
         plotOptions: {
           series: {
             dataLabels: {enabled: true}
@@ -62,7 +64,7 @@ const buildPlaytimeChart = function(runs, chartOptions = {}) {
             }
           }
         }
-      }),
+      },
       fallbackToExportServer: false
     },
     plotOptions: {
@@ -117,7 +119,7 @@ const buildPlaytimeChart = function(runs, chartOptions = {}) {
       tickColor: 'rgba(255, 255, 255, 0.2)',
       title: {text: 'PBs'}
     }
-  })
+  }))
 }
 
 export {buildPlaytimeChart}

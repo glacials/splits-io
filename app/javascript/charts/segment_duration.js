@@ -1,16 +1,19 @@
 const Highcharts = require('highcharts')
 require('highcharts/modules/exporting')(Highcharts)
+
+const defaults = require('deep-defaults')
 const moment = require('moment')
+
 import {logoColors, logoYellow, logoGreen, logoBlue} from '../colors.js'
 
-const buildSegmentDurationChart = function(timing, runs, segments, chartOptions) {
+const buildSegmentDurationChart = function(timing, runs, segments, options = {}) {
   if (document.getElementById(`segment-duration-chart-${segments[0].id}`) === null) {
     return
   }
 
   const duration = `${timing}time_duration_ms`
 
-  Highcharts.chart(`segment-duration-chart-${segments[0].id}`, {
+  Highcharts.chart(`segment-duration-chart-${segments[0].id}`, defaults(_.clone(options), {
     exporting: {enabled: false},
     chart: {
       borderRadius: 0,
@@ -53,7 +56,7 @@ const buildSegmentDurationChart = function(timing, runs, segments, chartOptions)
       tickColor: 'rgba(255, 255, 255, 0.2)',
       title: {text: 'Duration of Segment'}
     }
-  })
+  }))
 }
 
 export {buildSegmentDurationChart}

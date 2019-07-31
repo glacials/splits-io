@@ -2,20 +2,22 @@ import Highcharts from 'highcharts'
 import Exporting from 'highcharts/modules/exporting'
 Exporting(Highcharts)
 
-const buildResetChart = function(runs, chartOptions = {}) {
+const defaults = require('deep-defaults')
+
+const buildResetChart = function(runs, options = {}) {
   if (document.getElementById('reset-chart') === null) {
     return
   }
 
-  Highcharts.chart('reset-chart', {
+  Highcharts.chart('reset-chart', defaults(_.clone(options), {
     exporting: {
-      chartOptions: Object.assign(chartOptions, {
+      chartOptions: {
         plotOptions: {
           series: {
             dataLabels: {enabled: true}
           }
         }
-      }),
+      },
       fallbackToExportServer: false
     },
     chart: {type: 'pie'},
@@ -62,7 +64,7 @@ const buildResetChart = function(runs, chartOptions = {}) {
         name: (run.runners[0] || {name: '???'}).name
       }
     })
-  })
+  }))
 }
 
 export {buildResetChart}

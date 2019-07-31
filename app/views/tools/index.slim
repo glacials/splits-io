@@ -26,15 +26,6 @@ article
                       td
                         a target='_blank' href=user_pb_path(current_user, game, category)
                           = "#{request.host_with_port}#{user_pb_path(current_user, game, category)}"
-            p
-              small
-                | Hint: Like with any run, you can add relative paths to the ends of these, like
-                code<>
-                  | /stats
-                | and
-                code<>
-                  | /compare/&lt;another_run&gt;
-                | !
           - else
             p Permalink redirectors are static links that always redirect to your current PB for a given game and
               category.
