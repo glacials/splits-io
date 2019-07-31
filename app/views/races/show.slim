@@ -103,6 +103,10 @@
                       ' {{ value.length }}/{{ options.length }} options selected
             .card-body
               .card-deck
-                .card v-for='stream in value'
-                  .card-body.p-0 :id='`twitch-${stream.id}`'
+                template v-for='(stream, index) in value'
+                  .card: .card-body.p-0 :id='`twitch-${stream.id}`'
+                  .w-100.d-sm-none
+                  .w-100.d-none.d-md-block.d-lg-none v-if='(index + 1) % 2 === 0'
+                  .w-100.d-none.d-lg-block.d-xl-none v-if='(index + 1) % 3 === 0'
+                  .w-100.d-none.d-xl-block v-if='(index + 1) % 4 === 0'
               .center v-if='value.length === 0' Select streams to show from the box above
