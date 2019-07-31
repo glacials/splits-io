@@ -1,7 +1,7 @@
 class Race < ApplicationRecord
   validates_with RaceValidator
 
-  ABANDON_TIME = 1.hour
+  ABANDON_TIME = 1.hour.freeze
 
   belongs_to :user
 

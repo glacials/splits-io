@@ -83,7 +83,6 @@ export default {
         this.error = error
       } finally {
         this.loading = false
-        // Give Vue some time to un-disable the field, otherwise it won't focus
         document.getElementById('input-chat-text').focus()
       }
     },
