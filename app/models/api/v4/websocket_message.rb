@@ -2,6 +2,7 @@ class Api::V4::WebsocketMessage
   attr_reader :type, :data
 
   TYPES = %w[
+    connection_error
     fatal_error
     global_state
     race_created
