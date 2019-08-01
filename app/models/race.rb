@@ -8,7 +8,7 @@ class Race < ApplicationRecord
   belongs_to :game,     optional: true
   belongs_to :category, optional: true
 
-  # These can only be accessed from classes that include this module, not from the module itself
+
   enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
 
   belongs_to :owner, foreign_key: :user_id, class_name: 'User'
