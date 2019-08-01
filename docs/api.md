@@ -1,280 +1,60 @@
 # API v4
-The Splits I/O API supports retrieving runs, runners, games, and categories, as well as uploading, disowning, and deleting
-runs. If you only want to upload runs, skip to [Uploading][uploading].
+The Splits.io API supports retrieving runs, runners, games, and categories, as well as uploading, disowning, and deleting
+runs and managing races.
 
 ## IDs
-Resources are identifyable *only* by the following attributes:
+Resources are identifiable by the following attributes:
 
-| Resource type        | Key attribute | Description of key attribute | Examples of key attribute             |
-|:---------------------|:--------------|:-----------------------------|:--------------------------------------|
-| [Run][run]           | ID            | A base 36 number             | 1b, 3nm, 1vr                          |
-| [Runner][runner]     | Name          | A Twitch username            | glacials, batedurgonnadie, snarfybobo |
-| [Game][game]         | Shortname     | An SRL abbreviation          | sms, sm64, portal                     |
-| [Category][category] | ID            | A base 10 number             | 312, 1456, 11                         |
+| Resource type        | Key attribute | Type   | Description     | Value example(s)                                |
+|:---------------------|:--------------|:-------|:----------------|:------------------------------------------------|
+| [Run][run]           | ID            | String | Base 36 number  | `"1b"` `"3nm"` `"1vr"`                          |
+| [Runner][runner]     | Name          | String | Twitch username | `"glacials"` `"batedurgonnadie"` `"snarfybobo"` |
+| [Game][game]         | Shortname     | String | Shortname       | `"sms"` `"sm64"` `"portal"`                     |
+| [Category][category] | ID            | String | Base 10 number  | `"312"` `"1456"` `"11"`                         |
+| [Race][race]         | ID            | String | UUID            | `"c198a25f-9f8a-43cd-92ab-472a952f9336"`        |
+| [Entry][Entry]       | ID            | String | UUID            | `"61db2b30-e024-45c5-b188-e9986ff1c89c"`        |
 
-Your code shouldn't care too much about what these attributes actually are, as they're all represented as unique
-strings. But of course as a human it's nice to be able to glean some meaning out of them.
+Your code shouldn't care too much about what these attributes actually are. They're all represented as opaque
+unique strings.
 
-## Run
-```sh
-curl https://splits.io/api/v4/runs/10x
-curl https://splits.io/api/v4/runs/10x?historic=1
-```
-A Run maps 1:1 to an uploaded splits file.
+<details>
+<summary>Why are even numerical IDs strings?</summary>
 
-| Field                     | Type                         | Can it be null?                                       | Description                                                                                                                                                                                                                                   |
-|--------------------------:|:-----------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`                      | string                       | never                                                 | Unique ID for identifying the run on Splits I/O. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
-| `srdc_id`                 | string                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                         |
-| `realtime_duration_ms`    | number                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                 |
-| `realtime_sum_of_best_ms` | number                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                              |
-| `gametime_duration_ms`    | number                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                 |
-| `gametime_sum_of_best_ms` | number                       | never                                                 | Gametime sum of best in milliseconds of the run.                                                                                                                                                                                              |
-| `default_timing`          | string                       | never                                                 | The timing used for the run.  Will be either `real` or `game`.                                                                                                                                                                                |
-| `program`                 | string                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                             |
-| `attempts`                | number                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                        |
-| `image_url`               | string                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits I/O.                                                                                           |
-| `created_at`              | string                       | never                                                 | The time and date at which this run's source file was uploaded to Splits I/O. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
-| `updated_at`              | string                       | never                                                 | The time and date at which this run was most recently modified on Splits I/O (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
-| `video_url`               | string                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                           |
-| `game`                    | [Game][game]                 | when unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                           |
-| `category`                | [Category][cagegory]         | when unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                       |
-| `runners`                 | array of [Runners][runner]   | never                                                 | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                    |
-| `segments`                | array of [Segments][segment] | never                                                 | The associated segments for the run.
+IDs are opaque, and string is a more opaque primitive. It doesn't matter what the actual value is because the only
+purpose it
+serves is be given back to Splits.io later (as a string!) or to be compared for exact equality to another ID.
 
-If a `historic=1` param is included in the request, one additional field will be present:
+You don't need to look inside the ID, perform arithmetic on it, round it, floor it, rid it of leading zeroes, or convert
+it between a float and an integer. You don't need to do any numbery things to it. And if you do, you've probably broken
+it. It's a negligible hit to store them as strings, and you'd be converting them to strings for use in API requests
+anyway.
+</details>
 
-| Field          | Type                                         | Null when...                                          | Description                                                                                                                                                                                                                                   |
-|---------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `histories`    | array of History objects                     | never                                                 | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.     |
+**Note**: In the below documentation, a path component like `:run` is a substitution for a real run ID.
 
-### Segment
-Segment objects have the following format:
+## Authentication & authorization
 
-| Field                           | Type          | Can it be null? | Description                                                                                                                                                                                                                                                        |
-|--------------------------------:|:--------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `name`                          | string        | never           | Name of the segment. This value is an exact copy of timers' fields.                                                                                                                                                                                                |
-| `segment_number`                | number        | never           | The segment number of the run. (This value starts at 0)                                                                                                                                                                                                            |
-| `realtime_start_ms`             | number        | never           | The total elapsed time of the run at the moment when this segment was started in realtime. Provided in milliseconds.                                                                                                                                               |
-| `realtime_duration_ms`          | number        | never           | Realtime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
-| `realtime_end_ms`               | number        | never           | The total elapsed time of the run at the moment when this segment was finished in realtime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
-| `realtime_shortest_duration_ms` | number        | when not known  | The shortest duration the runner has ever gotten on this segment in realtime.  Provided in milliseconds                                                                                                                                                            |
-| `realtime_gold`                 | boolean       | never           | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in realtime. This field is shorthand for `realtime_duration_ms == realtime_shortest_duration_ms`.                                                                 |
-| `realtime_skipped`              | boolean       | never           | Whether or not this split was skipped in realtime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
-| `realtime_reduced`              | boolean       | never           | Whether or not this segment was "reduced" in realtime; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
-| `gametime_start_ms`             | number        | never           | The total elapsed time of the run at the moment when this segment was started in gametime. Provided in milliseconds.                                                                                                                                               |
-| `gametime_duration_ms`          | number        | never           | Gametime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
-| `gametime_end_ms`               | number        | never           | The total elapsed time of the run at the moment when this segment was finished in gametime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
-| `gametime_shortest_duration_ms` | number        | when not known  | The shortest duration the runner has ever gotten on this segment in gametime.  Provided in milliseconds                                                                                                                                                            |
-| `gametime_gold`                 | boolean       | never           | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in gametime. This field is shorthand for `duration == best`.                                                                                                      |
-| `gametime_skipped`              | boolean       | never           | Whether or not this split was skipped in gametime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
-| `gametime_reduced`              | boolean       | never           | Whether or not this segment was "reduced" in gametime; that is, had its duration affected by previous splits being skipped.
+### Simple auth (run uploads only)
+If the only thing you need to do on behalf of users is upload runs, you can do so anonymously then send the user to the
+"claim URI" in the response's `uris.claim_uri` field. Sending a logged-in user here will cause the run to be claimed to
+their account. Sending a logged-out user here will save the secret to browser local storage and prompt the user to sign
+in to claim the run. They may do so immediately or at any later time.
 
-If a `historic=1` param is included in the request, one additional field will be present:
+The user must open the claim URI in their web browser for it to become theirs. If you need to upload runs without this
+user intervention or want to do more with auth than uploading runs, use the OAuth option.
 
-| Field          | Type                                         | Null when...                                          | Description                                                                                                                                                                                                                                   |
-|---------------:|:---------------------------------------------|:------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `histories`    | array of History objects                     | never                                                 | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history.     |
-
-History objects have the following format.
-
-| Field                  | Type                                         | Null when...                                          | Description                                              |
-|-----------------------:|:---------------------------------------------|:------------------------------------------------------|:---------------------------------------------------------|
-| `attempt_number`       | number                                       | never                                                 | The correpsonding attempt number this attempt was.       |
-| `realtime_duration_ms` | number                                       | never                                                 | The realtime duration this attempt took in milliseconds. |
-| `gametime_duration_ms` | number                                       | never                                                 | The gametime duration this attempt took in milliseconds. |
-
-A note when passing `historic=1` along with your request: Adding historical data to the response can take a long time to
-render, so please only request it if you are actually using it. Be prepared for your request to time out for runs that
-have a lot of historical information present.
-
-If an `Accept` header is present, Splits I/O will try to render the run file in the format specified rather than JSON. A full list of valid values is located below.
-If the `Accept` header is valid, the `Content-Type` header in the response will be set appropriately and the run will be rendered in the specified format. If
-an invalid `Accept` header is supplied, the response `Content-Type` header will be `application/json`, and the status code will be a 406.
-In the 406 reponse there will be an array of values that can be rendered.
-
-| `Accept` Headers Supported       | Return Format              | Return `Content-Type`                 |
-|---------------------------------:|:---------------------------|:--------------------------------------|
-| None                             | JSON                       | `application/json`                    |
-| `application/json`               | JSON                       | `application/json`                    |
-| `application/splitsio`           | Splits I/O Exchange Format | `application/splitsio`                |
-| `application/wsplit`             | WSplit                     | `application/wsplit`                  |
-| `application/time-split-tracker` | Time Split Tracker         | `application/time-split-tracker`      |
-| `application/splitterz`          | SplitterZ                  | `application/splitterz`               |
-| `application/livesplit`          | LiveSplit                  | `application/livesplit`               |
-| `application/urn`                | Urn                        | `application/urn`                     |
-| `application/llanfair-gered`     | Llanfair-Gered             | `application/llanfair-gered`          |
-| `application/original-timer`     | Original Run File          | One of the following `Content-Type`'s |
-
-If the accept header is `application/original-timer` then the original file uploaded will be returned as is. Thus it is possible to get back
-any of the following `Content-Type`s.
-* `application/shitsplit`
-* `application/splitty`
-* `application/llanfair2`
-* `application/facesplit`
-* `application/portal-2-live-timer`
-* `application/llanfair-gered`
-* `application/llanfair`
-* `application/urn`
-* `application/livesplit`
-* `application/source-live-timer`
-* `application/splitsio`
-* `application/splitterz`
-* `application/time-split-tracker`
-* `application/worstrun`
-* `application/wsplit`
-
-## Runner
-```sh
-curl https://splits.io/api/v4/runners?search=glacials
-curl https://splits.io/api/v4/runners/glacials
-curl https://splits.io/api/v4/runners/glacials/runs
-curl https://splits.io/api/v4/runners/glacials/pbs
-curl https://splits.io/api/v4/runners/glacials/games
-curl https://splits.io/api/v4/runners/glacials/categories
-```
-A Runner is a user who has at least one run tied to their account. Users with zero runs are not discoverable using the
-API.
-
-| Field          | Type   | Can it be null? | Description                                                                                                                |
-|---------------:|:-------|:----------------|:---------------------------------------------------------------------------------------------------------------------------|
-| `twitch_id`    | string | never           | The numeric Twitch ID of the user.                                                                                         |
-| `name`         | string | never           | The Twitch name of the user.                                                                                               |
-| `display_name` | string | never           | The Twitch display name of the user.                                                                                               |
-| `avatar`       | string | never           | The Twitch avatar of the user.                                                                                             |
-| `created_at`   | string | never           | The time and date at which this user first authenticated with Splits I/O. This field conforms to [ISO 8601][iso8601].      |
-| `updated_at`   | string | never           | The time and date at which this user was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
-
-## Game
-```sh
-curl https://splits.io/api/v4/games?search=mario
-curl https://splits.io/api/v4/games/sms
-curl https://splits.io/api/v4/games/sms/categories
-curl https://splits.io/api/v4/games/sms/runs
-curl https://splits.io/api/v4/games/sms/runners
-```
-Most timers allow users to specify a "game" field. A Game is a collection of information about the video game specified
-in this field. By definition, Games have at least one run and have an associated shortname, usually scraped from SRL or SRDC, but
-sometimes specified manually.
-
-| Field        | Type                            | Can it be null? | Description                                                                                                                          |
-|-------------:|:--------------------------------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------|
-| `name`       | string                          | never           | The full title of the game, like "Super Mario Sunshine".                                                                             |
-| `shortname`  | string                          | when not known  | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or Speedrun.com. |
-| `created_at` | string                          | never           | The time and date at which this game was created on Splits I/O. This field conforms to [ISO 8601][iso8601].                          |
-| `updated_at` | string                          | never           | The time and date at which this game was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601].           |
-| `categories` | array of [Categories][category] | never           | The known speedrun categories for this game.                                                                                         |
-
-## Category
-```sh
-curl https://splits.io/api/v4/categories/40
-curl https://splits.io/api/v4/categories/40/runners
-curl https://splits.io/api/v4/categories/40/runs
-```
-Some timers allow users to specify a "category" or similar field (any%, 100%, MST, etc.). A Category is a collection of
-information about the type of run performed, more specific than a Game. Each Category belongs to a Game. Any number of
-Categories can be associated with a Game.
-
-| Field        | Type   | Can it be null? | Description                                                                                                                    |
-|-------------:|:-------|:----------------|:-------------------------------------------------------------------------------------------------------------------------------|
-| `id`         | string | never           | The numeric ID of the category.                                                                                                |
-| `name`       | string | never           | The name of the category.                                                                                                      |
-| `created_at` | string | never           | The time and date at which this category was created on Splits I/O. This field conforms to [ISO 8601][iso8601].                |
-| `updated_at` | string | never           | The time and date at which this category was most recently modified on Splits I/O. This field conforms to [ISO 8601][iso8601]. |
-
-## Uploading
-```sh
-curl -X POST https://splits.io/api/v4/runs # then...
-curl -X POST https://s3.amazonaws.com/splits.io --form file=@/path/to/file # some fields not shown; see below
-```
-Uploading runs is a two-step process. Our long-term storage for runs is on [S3][s3], so in the first request you'll tell
-Splits I/O that you're about to upload a run, then in the second you'll upload it directly to S3 using some parameters
-returned from the first. The two-request system is faster for you (we don't have to receive your whole run then make you
-wait for us to put it on S3) and more resilient for us (we don't have to spend a bunch of CPU time waiting on uploads).
-
-The first request will return a body like
-```json
-{
-  "status": 201,
-  "message": "Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.",
-  "id": "rez",
-  "claim_token": "pBeUPBM9IaWqbaF11ocUksXS",
-  "uris": {
-    "api_uri": "https://splits.io/api/v4/runs/rez",
-    "public_uri": "https://splits.io/rez",
-    "claim_uri": "https://splits.io/rez?claim_token=pBeUPBM9IaWqbaF11ocUksXS"
-  },
-  "presigned_request": {
-    "method": "POST",
-    "uri": "https://s3.amazonaws.com/splits.io",
-    "fields": {
-      "key": "splits/rez",
-      "policy": "gibberish",
-      "x-amz-credential": "other gibberish",
-      "x-amz-algorithm": "more gibberish",
-      "x-amz-date": "even more gibberish",
-      "x-amz-signature": "most gibberish",
-    }
-  }
-}
-```
-The above example would have your second request look like
-```sh
-curl -X POST https://s3.amazonaws.com/splits.io \
-  --form key="splits/rez" \
-  --form policy="gibberish" \
-  --form x-amz-credential="other gibberish" \
-  --form x-amz-algorithm="more gibberish" \
-  --form x-amz-date="even more gibberish" \
-  --form x-amz-signature="most gibberish" \
-  --form file='Your run here, e.g. a JSON object if using the Splits.io Exchange Format'
-```
-Or if your run is a file on disk, the last line would be:
-```
-  --form file=@/path/to/file
-```
-**Note**: Order of the parameters matters! Follow the order above if you're getting errors.
-
-This is called a presigned request. Each field above -- except `file`, that's yours -- is directly copied from the
-response of the first request. You don't need to inspect or care about the contents of the fields, as long as you
-include them. They serve as authorization for you to upload a file to S3 with Splits I/O's permission.
-
-Each presigned request can only be made once, and expires if not made within an hour.
-
-[s3]: https://aws.amazon.com/s3
-
-### File Format
-The preferred format for uploading run files is the [Splits I/O Exchange Format][exchange-format], which is a standard
-JSON schema not specific to any one timer. Splits I/O also knows how to parse some proprietary timer formats via
-livesplit-core, all documented in the [FAQ][faq].
-
-[exchange-format]: /public/schema
-[faq]: https://splits.io/faq#programs
-
-## User Authentication and Authorization
-If you want to upload, disown, or delete runs for a user (e.g. from within a timer), you have two options.
-If you only need to know who a user is on Splits I/O, skip to advanced.
-
-### Simple Option
-Upload the run without auth and direct the user to the URL in the response body's `uris.claim_uri`. If they are logged
-in when they visit it, their account will automatically claim the run. If they are not logged in, their browser will
-save the claim token in LocalStorage and show a prompt allowing them to claim the run after logging in, immediately or
-at any later time.
-
-This is the far easier method to implement, but the user must open the run in their web browser for it to become theirs.
-If you prefer to upload runs in the background, this method isn't for you.
-
-### Advanced Option
-The advanced option is a standard OAuth2 flow. You can request permission from the user to upload runs to their account
-on their behalf. If they accept, you will receive an OAuth token which you can include in your run requests in
-order to perform actions as that user.
+### OAuth (general purpose)
+Splits.io supports the standard OAuth2 flow. You can request permission from the user to upload runs to their account or
+perform other actions on their behalf. If they accept, you will receive an OAuth token which you can include in your API
+requests in order to perform actions as that user.
 
 The following instructions go into naive-case details about implementing this OAuth support in your application. If you
-want to learn more about OAuth or need general OAuth troubleshooting help, you can [research OAuth2
-online][oauth2-simplified]. Especially if your application is a website, it's likely that the language you're using has
-well-established libraries that handle much of the below OAuth flow for you.
+want to learn more about OAuth or need general OAuth troubleshooting help, you can
+[research OAuth2 online][oauth2-simplified]. Especially if your application is a website, it's likely that the language
+you're using has well-established libraries that handle much of the below OAuth flow for you. Look into those solutions
+first to take the gruntwork out.
 
-In all cases, you'll need to first go to your Splits I/O account's [settings page][1] and create an application, then
+In all cases, you'll need to first go to your Splits.io account's [settings page][1] and create an application, then
 refer to the relevant section below.
 
 *Note: Once you have an OAuth token, you can use a request like this to retrieve information about it:*
@@ -288,25 +68,28 @@ GET https://splits.io/oauth/token/info?access_token=YOUR_TOKEN
 Below is a list of all the possible scopes your application can request along with a brief description. You can specify
 multiple scopes by separating them with spaces in the auth token request.
 
-| Scope        | Description                                  | Endpoints                                                                                                           |
-|--------------|:---------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
-| `upload_run` | Upload runs on behalf of the user            | `POST https://splits.io/api/v4/runs`                                                                                |
-| `delete_run` | Delete or disown runs on behalf of the user  | `DELETE https://splits.io/api/v4/runs/:run_id` and `DELETE https://splits.io/api/v4/runs/:run_id/user` respectively |
+| Scope         | Description                                         | Endpoints                                                                                                           |
+|:--------------|:----------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
+| `upload_run`  | Upload runs on behalf of the user                   | `POST https://splits.io/api/v4/runs`                                                                                |
+| `delete_run`  | Delete or disown runs on behalf of the user         | `DELETE https://splits.io/api/v4/runs/:run_id` and `DELETE https://splits.io/api/v4/runs/:run_id/user` respectively |
+| `manage_race` | Participate in races and chat on behalf of the user | See [Race][race]                                                                                                    |
 
-#### Example 1: My application is a local program that runs on the user's computer
+<details>
+<summary>Example 1: My application is a local program that runs on the user's computer</summary>
+
 If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
-flow**. This means your application will open the Splits I/O authorization page in the user's default browser, and if
-the user accepts the authorization, Splits I/O will give your application a `code` which you should immediately exchange
-for an OAuth token using a secure API request.
+flow**. This means your application will open the Splits.io authorization page in the user's default browser, and if the
+user accepts the authorization, Splits.io will give your application a `code` which you should immediately exchange for
+an OAuth token using a secure API request.
 
 1. Configure your program to run a small web server on a port of your choosing, and listen for `GET` requests to a path
     of your choosing. In this example, let's say you're listening on port 8000 for requests to `/auth/splitsio`.
-2. On your Splits I/O [settings page][1], set your `redirect_uri` to something like
+2. On your Splits.io [settings page][1], set your `redirect_uri` to something like
     ```http
     http://localhost:8000/auth/splitsio
     ```
     *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-3. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
+3. When a user wants to grant authorization to your application for their Splits.io account, send them to a URL like
     this:
     ```http
     https://splits.io/oauth/authorize?response_type=code&scope=upload_run&redirect_uri=http://localhost:8000/auth/splitsio&client_id=YOUR_CLIENT_ID
@@ -345,6 +128,8 @@ for an OAuth token using a secure API request.
     ```http
     Authorization: Bearer YOUR_ACCESS_TOKEN
     ```
+    or by including an `access_token=YOUR_ACCESS_TOKEN` parameter.
+
     The access token expires after the duration specified in `expires_in` (measured in seconds). After it expires, you
     can retrieve a new one with no user intervention using the returned `refresh_token`:
     ```http
@@ -363,17 +148,21 @@ for an OAuth token using a secure API request.
     making it obvious when a user's stolen credentials are in use. See [RFC 6749][rfc6749-6] for more information on
     refresh tokens.
 
-#### Example 2: My application is an all-JavaScript website
+</details>
+
+<details>
+<summary>Example 2: My application is an all-JavaScript website</summary>
+
 If your application is an in-browser JavaScript application with little or no logic performed by a backend server, you
 should use OAuth's **implicit grant flow**.
 
-1. On your Splits I/O [settings page][1], set your `redirect_uri` to where you want users to land after going through
+1. On your Splits.io [settings page][1], set your `redirect_uri` to where you want users to land after going through
    the authorization flow. For this example, we'll use
     ```http
     https://YOUR_WEBSITE/auth/splitsio
     ```
     *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
+2. When a user wants to grant authorization to your application for their Splits.io account, send them to a URL like
     this:
     ```http
     https://splits.io/oauth/authorize?response_type=token&scope=upload_run&redirect_uri=https://YOUR_WEBSITE/auth/splitsio&client_id=YOUR_CLIENT_ID
@@ -394,20 +183,23 @@ should use OAuth's **implicit grant flow**.
 
     This style of expiring access tokens periodically improves security by limiting the usability of any stolen
     credentials.
+</details>
 
-#### Example 3: My application is a website
+<details>
+<summary>Example 3: My application is a website</summary>
+
 If your application is a website with a backend component, you should use OAuth's **authorization code grant flow**.
-This means your website will link the user to the Splits I/O authorization page, and if the user accepts the
-authorization, Splits I/O will give your application a `code` which it will immediately exchange for an OAuth token
-using a secure API request.
+This means your website will link the user to the Splits.io authorization page, and if the user accepts the
+authorization, Splits.io will give your application a `code` which it will immediately exchange for an OAuth token using
+a secure API request.
 
-1. On your Splits I/O [settings page][1], set your `redirect_uri` to where you want users to land after going through
+1. On your Splits.io [settings page][1], set your `redirect_uri` to where you want users to land after going through
    the authorization flow. For this example, we'll use
     ```http
     https://YOUR_WEBSITE/auth/splitsio
     ```
     *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
-2. When a user wants to grant authorization to your application for their Splits I/O account, send them to a URL like
+2. When a user wants to grant authorization to your application for their Splits.io account, send them to a URL like
     this:
     ```http
     https://splits.io/oauth/authorize?response_type=code&scope=upload_run&redirect_uri=https://YOUR_WEBSITE/auth/splitsio&client_id=YOUR_CLIENT_ID
@@ -465,33 +257,865 @@ using a secure API request.
 
 [1]: https://splits.io/settings
 [rfc6749-6]: https://tools.ietf.org/html/rfc6749#section-6
+[race]: #race
+</details>
 
-## Converting
+## Resource types
+### Run
+
 ```sh
+curl https://splits.io/api/v4/runs/:run
+curl https://splits.io/api/v4/runs/:run?historic=1
+```
+A Run maps 1:1 to an uploaded splits file.
+
+<details>
+<summary>Structure of a Run</summary>
+
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/run.json)
+
+| Field                     | Type                         | Null?                                                 | Description                                                                                                                                                                                                                                  |
+|:--------------------------|:-----------------------------|:------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`                      | string                       | never                                                 | Unique ID for identifying the run on Splits.io. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
+| `srdc_id`                 | string                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
+| `realtime_duration_ms`    | number                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                |
+| `realtime_sum_of_best_ms` | number                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                             |
+| `gametime_duration_ms`    | number                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                |
+| `gametime_sum_of_best_ms` | number                       | never                                                 | Gametime sum of best in milliseconds of the run.                                                                                                                                                                                             |
+| `default_timing`          | string                       | never                                                 | The timing used for the run.  Will be either `real` or `game`.                                                                                                                                                                               |
+| `program`                 | string                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                            |
+| `attempts`                | number                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                       |
+| `image_url`               | string                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits.io.                                                                                           |
+| `created_at`              | string                       | never                                                 | The time and date at which this run's source file was uploaded to Splits.io. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
+| `updated_at`              | string                       | never                                                 | The time and date at which this run was most recently modified on Splits.io (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
+| `video_url`               | string                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                          |
+| `game`                    | [Game][game]                 | when unable to be determined / not supplied by runner | The game which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                          |
+| `category`                | [Category][cagegory]         | when unable to be determined / not supplied by runner | The category which was run. An attempt is made at autodetermining this from the source file, but it can be later changed by the runner.                                                                                                      |
+| `runners`                 | array of [Runners][runner]   | never                                                 | The runner(s) who performed the run, if they claim credit.                                                                                                                                                                                   |
+| `segments`                | array of [Segments][segment] | never                                                 | The associated segments for the run.                                                                                                                                                                                                         |
+
+If a `historic=1` param is included in the request, one additional field will be present:
+
+|       Field | Type                     | Null? | Description                                                                                                                                                                                                                               |
+|------------:|:-------------------------|:------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `histories` | array of History objects | never | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history. |
+
+#### Segment
+Segment objects have the following format:
+
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/segment.json)
+
+| Field                           | Type    | Null?          | Description                                                                                                                                                                                                                                                        |
+|:--------------------------------|:--------|:---------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`                            | string  | never          | Internal ID of the segment.                                                                                                                                                                                                                                        |
+| `name`                          | string  | never          | Name of the segment. This value is an exact copy of timers' fields.                                                                                                                                                                                                |
+| `segment_number`                | number  | never          | The segment number of the run. (This value starts at 0)                                                                                                                                                                                                            |
+| `realtime_start_ms`             | number  | never          | The total elapsed time of the run at the moment when this segment was started in realtime. Provided in milliseconds.                                                                                                                                               |
+| `realtime_duration_ms`          | number  | never          | Realtime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
+| `realtime_end_ms`               | number  | never          | The total elapsed time of the run at the moment when this segment was finished in realtime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
+| `realtime_shortest_duration_ms` | number  | when not known | The shortest duration the runner has ever gotten on this segment in realtime.  Provided in milliseconds                                                                                                                                                            |
+| `realtime_gold`                 | boolean | never          | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in realtime. This field is shorthand for `realtime_duration_ms == realtime_shortest_duration_ms`.                                                                 |
+| `realtime_skipped`              | boolean | never          | Whether or not this split was skipped in realtime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
+| `realtime_reduced`              | boolean | never          | Whether or not this segment was "reduced" in realtime; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
+| `gametime_start_ms`             | number  | never          | The total elapsed time of the run at the moment when this segment was started in gametime. Provided in milliseconds.                                                                                                                                               |
+| `gametime_duration_ms`          | number  | never          | Gametime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
+| `gametime_end_ms`               | number  | never          | The total elapsed time of the run at the moment when this segment was finished in gametime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
+| `gametime_shortest_duration_ms` | number  | when not known | The shortest duration the runner has ever gotten on this segment in gametime.  Provided in milliseconds                                                                                                                                                            |
+| `gametime_gold`                 | boolean | never          | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in gametime. This field is shorthand for `duration == best`.                                                                                                      |
+| `gametime_skipped`              | boolean | never          | Whether or not this split was skipped in gametime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
+| `gametime_reduced`              | boolean | never          | Whether or not this segment was "reduced" in gametime; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
+
+If a `historic=1` param is included in the request, one additional field will be present:
+
+|       Field | Type                     | Null? | Description                                                                                                                                                                                                                               |
+|------------:|:-------------------------|:------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `histories` | array of History objects | never | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history. |
+
+#### History
+History objects have the following format.
+
+| Field                  | Type   | Null? | Description                                              |
+|:-----------------------|:-------|:------|:---------------------------------------------------------|
+| `attempt_number`       | number | never | The correpsonding attempt number this attempt was.       |
+| `realtime_duration_ms` | number | never | The realtime duration this attempt took in milliseconds. |
+| `gametime_duration_ms` | number | never | The gametime duration this attempt took in milliseconds. |
+</details>
+
+<details>
+<summary>Getting runs in specific formats</summary>
+Splits.io can render many different formats other than JSON. To get one, pass an Accept header with the format you want.
+
+| `Accept` Headers Supported       | Return Format             | Return `Content-Type`                 |
+|:---------------------------------|:--------------------------|:--------------------------------------|
+| None                             | JSON                      | `application/json`                    |
+| `application/json`               | JSON                      | `application/json`                    |
+| `application/splitsio`           | Splits.io Exchange Format | `application/splitsio`                |
+| `application/wsplit`             | WSplit                    | `application/wsplit`                  |
+| `application/time-split-tracker` | Time Split Tracker        | `application/time-split-tracker`      |
+| `application/splitterz`          | SplitterZ                 | `application/splitterz`               |
+| `application/livesplit`          | LiveSplit                 | `application/livesplit`               |
+| `application/urn`                | Urn                       | `application/urn`                     |
+| `application/llanfair-gered`     | Llanfair-Gered            | `application/llanfair-gered`          |
+| `application/original-timer`     | Original Run File         | One of the following `Content-Type`'s |
+
+If the Accept header is `application/original-timer`, the source file for the run will be returned as-is, in whatever
+type it was in at the time of upload. This may even be a format not listed above, as Splits.io can recognize and parse
+some types that it can't convert into. In only this case, the Content-Type may be one of these addditional values:
+
+* `application/shitsplit`
+* `application/splitty`
+* `application/llanfair2`
+* `application/facesplit`
+* `application/portal-2-live-timer`
+* `application/llanfair`
+* `application/source-live-timer`
+* `application/worstrun`
+</details>
+
+<details>
+<summary>Uploading runs</summary>
+
+```sh
+curl -X POST https://splits.io/api/v4/runs # then...
+curl -X POST https://s3.amazonaws.com/splits.io --form file=@/path/to/file # some fields not shown; see below
+```
+Uploading runs is a two-step process. Splits.io stores runs on [S3][s3], so in the first request you'll tell Splits.io
+you're about to upload a run, then in the second you'll upload it directly to S3 using some parameters returned from the
+first. The two-request system is faster for you (the run is transferred once, not twice) and more resilient for us.
+
+The first request will return a body like
+```json
+{
+  "status": 201,
+  "message": "Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.",
+  "id": "rez",
+  "claim_token": "pBeUPBM9IaWqbaF11ocUksXS",
+  "uris": {
+    "api_uri": "https://splits.io/api/v4/runs/rez",
+    "public_uri": "https://splits.io/rez",
+    "claim_uri": "https://splits.io/rez?claim_token=pBeUPBM9IaWqbaF11ocUksXS"
+  },
+  "presigned_request": {
+    "method": "POST",
+    "uri": "https://s3.amazonaws.com/splits.io",
+    "fields": {
+      "key": "splits/rez",
+      "policy": "gibberish",
+      "x-amz-credential": "other gibberish",
+      "x-amz-algorithm": "more gibberish",
+      "x-amz-date": "even more gibberish",
+      "x-amz-signature": "most gibberish"
+    }
+  }
+}
+```
+The above example would have your second request look like
+```sh
+# Uploads must be multipart requests (in curl: -F or --form, NOT -d or --data)
+curl -X POST https://s3.amazonaws.com/splits.io \
+  --form key="splits/rez" \
+  --form policy="gibberish" \
+  --form x-amz-credential="other gibberish" \
+  --form x-amz-algorithm="more gibberish" \
+  --form x-amz-date="even more gibberish" \
+  --form x-amz-signature="most gibberish" \
+  --form file='Your run here, e.g. a JSON object if using the Splits.io Exchange Format'
+```
+Or if your run is a file on disk, the last line would instead be:
+```
+  --form file=@/path/to/file
+```
+**Note**: Parameter order matters! Follow the order above if you're getting errors.
+
+This is called a presigned request. Each field above except `file` is directly copied from the response of the first
+request. You don't need to care about the contents of the fields; they serve as authorization for you to upload a file
+to S3. Each presigned request can only be made once.
+
+[s3]: https://aws.amazon.com/s3
+
+#### File Format
+The preferred format for uploading run files is the [Splits.io Exchange Format][exchange-format], which is a standard
+JSON schema not specific to any one timer. Splits.io also knows how to parse some proprietary timer formats via
+livesplit-core, documented in the [FAQ][faq].
+
+[exchange-format]: /public/schema
+[faq]: https://splits.io/faq#programs
+
+#### Replacing source files
+Occasionally you may want to update an existing run's source file to a newer version, such as when a runner splits and
+you are reporting splits in realtime (like in a race). You can do this using the same two-request system as above but
+changing your method and path to
+```http
+PUT https://splits.io/api/v4/run/:run/source_file
+```
+and following the same steps as above to upload to S3. Splits.io will automatically parse the new file and update the
+run.
+
+**Note**: When uploading in-progress source files in the Splits.io Exchange Format include all splits as normal, but do
+not include the `endedAt` field for unreached segments.
+</details>
+
+<details>
+<summary>Converting runs</summary>
+
+```sh
+# Uploads must be multipart requests (-F or --form, not -d or --data)
 curl -X POST https://splits.io/api/v4/convert?format=livesplit --form file=@/path/to/file
 ```
 When converting between timer formats, the file and program parameters must be included. If you are converting a
 LiveSplit file and would like to include the history, then the `historic=1` parameter can also be included.  The JSON
 format is outputted as described above in the form of a .json file.
 
-## FAQ
+</details>
 
-### Why are IDs strings?
-IDs are opaque. To you, the consumer, it doesn't matter what the actual number itself is because the only purpose it
-serves is be given back to Splits I/O later. You don't need to look inside it, you don't need to perform arithmetic on
-it, you don't need it rounded or floored or rid of leading zeroes. You don't need to do any numbery things to them. And
-in fact if you do do numbery things to them, even accidentally, there's a good chance you've broken them in the process.
+### Runner
+```sh
+curl https://splits.io/api/v4/runners?search=:runner
+curl https://splits.io/api/v4/runners/:runner
+curl https://splits.io/api/v4/runners/:runner/runs
+curl https://splits.io/api/v4/runners/:runner/pbs
+curl https://splits.io/api/v4/runners/:runner/games
+curl https://splits.io/api/v4/runners/:runner/categories
+```
+A Runner is a user who has at least one run tied to their account. Users with zero runs are not discoverable using the
+API.
 
-It doesn't matter that on Splits I/O's end they happen to be auto-incrementing base 10 numbers, because none of that
-matters to you. By giving you a number type, we'd be implying that it did. Strings are opaque. Strings are what you'd
-end up casting your IDs to anyway in order to hit the API with them again. So let's just take the negligible hit and
-save you a step.
+<details>
+<summary>Structure of a Runner</summary>
 
-[iso8601]: https://en.wikipedia.org/wiki/ISO_8601
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/runner.json)
 
-[run]: #run
-[segment]: #segment
-[runner]: #runner
-[game]: #game
+| Field          | Type   | Null? | Description                                                                                                               |
+|:---------------|:-------|:------|:--------------------------------------------------------------------------------------------------------------------------|
+| `id`           | string | never | The unique ID of the user.                                                                                                |
+| `twitch_id`    | string | never | The unique Twitch ID of the user.                                                                                         |
+| `twitch_name`  | string | never | The unique Twitch name of the user.                                                                                       |
+| `name`         | string | never | The Twitch name of the user.                                                                                              |
+| `display_name` | string | never | The Twitch display name of the user.                                                                                      |
+| `avatar`       | string | never | The Twitch avatar of the user.                                                                                            |
+| `created_at`   | string | never | The time and date at which this user first authenticated with Splits.io. This field conforms to [ISO 8601][iso8601].      |
+| `updated_at`   | string | never | The time and date at which this user was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
+</details>
+
+### Game
+```sh
+curl https://splits.io/api/v4/games?search=:game
+curl https://splits.io/api/v4/games/:game
+curl https://splits.io/api/v4/games/:game/categories
+curl https://splits.io/api/v4/games/:game/runs
+curl https://splits.io/api/v4/games/:game/runners
+```
+A Game is a collection of information about a game, and a container for Categories. Games are created automatically when
+a run is uploaded with an unidentified game name. They try to associate themselves with a Speedrun.com game when
+created, but the association is not guaranteed.
+
+<details>
+<summary>Structure of a Game</summary>
+
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/game.json)
+
+| Field        | Type                            | Null?          | Description                                                                                                                          |
+|:-------------|:--------------------------------|:---------------|:-------------------------------------------------------------------------------------------------------------------------------------|
+| `id`         | string                          | never          | The unique ID of the game.                                                                                                           |
+| `name`       | string                          | never          | The full title of the game, like "Super Mario Sunshine".                                                                             |
+| `shortname`  | string                          | when not known | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or Speedrun.com. |
+| `created_at` | string                          | never          | The time and date at which this game was created on Splits.io. This field conforms to [ISO 8601][iso8601].                           |
+| `updated_at` | string                          | never          | The time and date at which this game was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601].            |
+| `categories` | array of [Categories][category] | never          | The known speedrun categories for this game.                                                                                         |
+</details>
+
+### Category
+```sh
+curl https://splits.io/api/v4/categories/:category
+curl https://splits.io/api/v4/categories/:category/runners
+curl https://splits.io/api/v4/categories/:category/runs
+```
+A Category is a ruleset for a Game (Any%, 100%, MST, etc.) and an optional container for Runs. Each Category necessarily
+belongs to a Game. Any number of Categories can be associated with a Game.
+
+<details>
+<summary>Structure of a Category</summary>
+
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/category.json)
+
+| Field        | Type   | Null? | Description                                                                                                                   |
+|:-------------|:-------|:------|:------------------------------------------------------------------------------------------------------------------------------|
+| `id`         | string | never | The unique ID of the category.                                                                                                |
+| `name`       | string | never | The name of the category.                                                                                                     |
+| `created_at` | string | never | The time and date at which this category was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `updated_at` | string | never | The time and date at which this category was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
+</details>
+
+### Race
+```sh
+curl https://splits.io/api/v4/races
+curl https://splits.io/api/v4/races?historic=1
+curl https://splits.io/api/v4/races/:race
+curl https://splits.io/api/v4/races/:race/entries
+curl https://splits.io/api/v4/races/:race/chat
+```
+A Race is a live competition between multiple Runners who share a start time for their run.
+
+Nearly all race endpoints require user authorization based on the flow described below in the
+[Authentication & authorization][authentication] section.
+
+<details>
+<summary>Structure of a Race</summary>
+
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/race.json)
+
+| Field           | Type                                   | Null?                            | Description                                                                                                               |
+|:----------------|:---------------------------------------|:---------------------------------|:--------------------------------------------------------------------------------------------------------------------------|
+| `id`            | string                                 | never                            | The unique ID of the Race.                                                                                                |
+| `path`          | string                                 | never                            | The user-friendly URL to the Race, to be given to a user when necessary.                                                  |
+| `game`          | [Game][game]                           | when not provided by the creator | The game being raced.                                                                                                     |
+| `category`      | [Category][category]                   | when not provided by the creator | The category being raced.                                                                                                 |
+| `visibility`    | number                                 | never                            | The permission set for the Race. (`"public"`, `"invite_only"`, or `"secret"`)                                             |
+| `join_token`    | string                                 | always, except creation response | The token needed to join the race if it's invite-only or secret. Only provided to the owner as a response to creation.    |
+| `notes`         | string                                 | when not provided by creator     | Any notes associatied with the Race.                                                                                      |
+| `owner`         | [Runner][runner]                       | never                            | The Runner who created the Race.                                                                                          |
+| `entries`       | array of [Entries][entry]              | never                            | All Entries currently in the Race.                                                                                        |
+| `chat_messages` | array of [Chat Messages][chat-message] | never                            | Chat messages for the Race. Only present when fetching the Race individually.                                             |
+| `attachments`   | array of [Attachments][attachment]     | never                            | Any attachments supplied by the race creator for the benefit of other entrants (e.g. for randomizers).                    |
+| `started_at`    | string                                 | when the race has not started    | The time and date at which this Race was started on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `created_at`    | string                                 | never                            | The time and date at which this Race was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `updated_at`    | string                                 | never                            | The time and date at which this Race was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
+
+#### Attachment
+Attachments have the following structure:
+
+| Field        | Type   | Can it be null? | Description                                                                                                      |
+|:-------------|:-------|:----------------|:-----------------------------------------------------------------------------------------------------------------|
+| `id`         | string | never           | The unique ID of the attachment.                                                                                 |
+| `created_at` | string | never           | The time and date at which this attachment was created on Splits.io. This field conforms to [ISO 8601][iso8601]. |
+| `filename`   | string | never           | The filename of the attachment.                                                                                  |
+| `url`        | string | never           | The URL in which to download the attachment.                                                                     |
+</details>
+
+<details>
+<summary>Fetching Races</summary>
+
+```sh
+curl https://splits.io/api/v4/races
+```
+This endpoint return a list of active Races of their type. A Race is active if it
+1. is in progress, or
+2. has had some activity in the last 30 minutes, or
+3. has at least two entries.
+
+If you wish to retrieve a listing of previous completed races, pass `historic=1` to the request. This response will be
+paginated unlike the active races version.
+</details>
+
+<details>
+<summary>Fetching a single Race</summary>
+
+```sh
+curl https://splits.io/api/v4/races/:race
+```
+Get information about a Race. To view information about secret Races, a `join_token` parameter must also be
+provided.
+
+| Status Codes | Success? | Description                                                                         |
+|:-------------|:---------|:------------------------------------------------------------------------------------|
+| 202          | Yes      | Race schema will be returned.                                                       |
+| 403          | No       | This Race is not viewable by the current user because they lack a valid join token. |
+| 404          | No       | No Race found with the provided id.                                                 |
+</details>
+
+<details>
+<summary>Creating a new Race</summary>
+
+```sh
+curl -X POST https://splits.io/api/v4/races \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{"category_id": "40", "notes": "Notes go here"}'
+```
+Create a new Race.
+
+Invite-only Races can be seen by anyone but only joined with a `join_token`; secret Races can only be seen or
+joined with a `join_token`. The join token is returned after creation. You can build it into a user-friendly link:
+```http
+https://splits.io/races/:race?join_token=:join_token
+```
+This link is effectively the password for the Race. The Race owner can always view this link on the Race's page on
+Splits.io.
+
+The only required parameter between all types is the Game or Category being raced. Attachments cannot be specified at
+creation and must take place as a separate action afterwards.
+
+| Status Codes | Success? | Description                                                                                    |
+|:-------------|:---------|:-----------------------------------------------------------------------------------------------|
+| 201          | Yes      | Successfully created, a Race schema will be returned.                                          |
+| 400          | No       | An error occured while creating the Race. `error` will contain a human-readable error message. |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                     |
+</details>
+
+<details>
+<summary>Updating a Race</summary>
+
+```sh
+curl -X PATCH https://splits.io/api/v4/races/:race
+```
+Update one or more fields of the Race. This endpoint requires that the authenticated user is the creator of the Race.
+
+| Status Codes | Success? | Description                                                                                         |
+|:-------------|:---------|:----------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Successfully updated. A Race schema will be returned.                                               |
+| 400          | No       | An error occured while saving the Race. `error` will contain a human-readable error message.        |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user or the owner of the race. |
+| 403          | No       | The Race has already been started and cannot be updated.                                            |
+
+Races cannot be deleted. Once one becomes inactive for 30 minutes it will naturally disappear from the listings.
+</details>
+
+#### Entry
+```sh
+curl           https://splits.io/api/v4/races/:race/entries/:entry
+curl -X PUT    https://splits.io/api/v4/races/:race/entries
+curl -X PATCH  https://splits.io/api/v4/races/:race/entries/:entry
+curl -X DELETE https://splits.io/api/v4/races/:race/entries/:entry
+```
+An Entry represents a Runner's participation in a Race or a ghost of a past Run.
+
+All Entry endpoints require an access token.
+
+<details>
+<summary>Structure of an Entry</summary>
+
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/entry.json)
+
+| Field          | Type             | Null?                            | Description                                                                                                                         |
+|:---------------|:-----------------|:---------------------------------|:------------------------------------------------------------------------------------------------------------------------------------|
+| `id`           | string           | never                            | The unique ID of the Entry.                                                                                                         |
+| `runner`       | [Runner][runner] | never                            | The user represented by this Entry.                                                                                                 |
+| `creator`      | [Runner][runner] | never                            | The user that created this Entry; can be different from `runner` if the Entry is a ghost.                                           |
+| `run`          | [Run][run]       | when not supplied by the timer   | The Run linked to the current Entry. It has more detailed info about this runner's run, such as splits and history.                 |
+| `ghost`        | boolean          | never                            | Whether the Entry represents a past recording of a run (`true`) or a real user that has entered into the race explicitly (`false`). |
+| `readied_at`   | string           | when the Entry isn't ready       | The time and date at which this Entry readied up in the Race. This field conforms to [ISO 8601][iso8601].                           |
+| `finished_at`  | string           | when the Entry has not finished  | The time and date at which this Entry finished this Race. This field conforms to [ISO 8601][iso8601].                               |
+| `forfeited_at` | string           | when the Entry has not forfeited | The time and date at which this Entry forfeited from this Race. This field conforms to [ISO 8601][iso8601].                         |
+| `created_at`   | string           | never                            | The time and date at which this Entry was created on Splits.io. This field conforms to [ISO 8601][iso8601].                         |
+| `updated_at`   | string           | never                            | The time and date at which this Entry was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601].          |
+</details>
+
+<details>
+<summary>Fetching an Entry</summary>
+
+```sh
+curl -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
+```
+Get information about the authenticated user's involvement in a given Race.
+
+| Possible Status Codes | Success? | Description                                                                     |
+|:----------------------|:---------|:--------------------------------------------------------------------------------|
+| 200                   | Yes      | The authenticated user is entered in the given Race; returns an [Entry][entry]. |
+| 401                   | No       | Access token is either blank, expired, invalid, or not attached to a user.      |
+| 404                   | No       | The authenticated user is not entered into the given Race.                      |
+</details>
+
+<details>
+<summary>Creating an Entry</summary>
+
+```sh
+curl -X PUT https://splits.io/api/v4/races/:race/entry \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+```
+Join a Race. There are no required arguments, however you can supply any parameters specified below in *Updating an
+Entry*, e.g.
+```json
+{"entry": {"run_id": "gcb"}}
+```
+
+To make a ghost entry, simply supply a `run_id` of a Run on Splits.io that has already completed. The Entry will
+automatically become a ghost, inheriting the Run's time, splits, and runner. The authenticated user will be assigned as
+the Entry's `creator`.
+
+If the Race is invite-only or secret, you must supply a `join_token`. The `join_token` should be at the top-level, not
+within an `entry` object.
+
+| Status Codes | Success? | Description                                                                                            |
+|:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
+| 201          | Yes      | Successfully created; returns an [Entry][entry].                                                       |
+| 400          | No       | An error occured while creating the Entry. The `error` key will contain a user-friendly error message. |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 403          | No       | This Race is not joinable by the current user because they lack a valid join token.                    |
+</details>
+
+<details>
+<summary>Updating an Entry</summary>
+
+```sh
+curl -X PATCH https://splits.io/api/v4/races/:race/entry \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  -H 'Content-Type: application/json' \
+  -d '{"entry": {"readied_at": "2019-06-17T03:40:48.123Z"}}'
+```
+Change an Entry. Valid parameters are `entry.readied_at`, `entry.finished_at`, `entry.forfeited_at`, and `entry.run_id`.
+
+| Field          | Type                       | Null?                            | Description                                                                                                         |
+|:---------------|:---------------------------|:---------------------------------|:--------------------------------------------------------------------------------------------------------------------|
+| `run_id`       | string                     | when not set by you              | The [Run][run] ID corresponding to the splits for this Race. See: [replacing source files][replacing-source-files]. |
+| `readied_at`   | [ISO 8601][iso8601] string | when the runner isn't ready      | The timestamp when this runner readied up, if at all.                                                               |
+| `finished_at`  | [ISO 8601][iso8601] string | when the runner hasn't finished  | The timestamp when this runner finished the Race, if at all.                                                        |
+| `forfeited_at` | [ISO 8601][iso8601] string | when the runner hasn't forfeited | The timestamp when this runner forfeited the Race, if at all.                                                       |
+
+An attached `entry.run_id` (optional) will associate the given Run with the Entry in order to display splits. The run
+should not be a completed run when you attach it. You can [continuously update the Run][replacing-source-files] as the
+user splits to keep the race page up-to-date for stats and comparison purposes.
+
+The timestamps support three decimal places of precision. They serve as pseudo-booleans; they are the source of truth
+for whether a runner is ready/finished/forfeited (`null` for no; non-`null` for yes).
+
+You may optionally set these by passing the string `"now"`; this is a special string which will make the backend use the
+current time. The travel time from you to Splits.io will affect the timestamp, so we don't recommend doing this for
+`finished_at` where accuracy is important.
+
+To unset one of these fields (e.g. to unready the runner), simply set it to `null`. Make sure your JSON encoder does not
+filter the key out, as this is different from not passing the key at all.
+
+| Status Codes | Success? | Description                                                                                            |
+|:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Successfully updated. An Entry schema will be returned.                                                |
+| 400          | No       | An error occured while updating the Entry. The `error` key will contain a user-friendly error message. |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 403          | No       | Access token is valid but its user does not have access to this Entry.                                 |
+| 404          | No       | No Race found or Entry found for the associated user.                                                  |
+</details>
+
+<details>
+<summary>Deleting an Entry</summary>
+
+```sh
+curl -X DELETE -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' https://splits.io/api/v4/races/:race/entry
+```
+Leave a Race. A Race that has already started cannot be left, only finished or forfeited.
+
+| Status Codes | Success? | Description                                                                                            |
+|:-------------|:---------|:-------------------------------------------------------------------------------------------------------|
+| 200          | Yes      | Successfully deleted.                                                                                  |
+| 401          | No       | Access token is either blank, expired, invalid, or not attached to a user.                             |
+| 403          | No       | Access token is valid but its user does not have access to this Entry.                                 |
+| 404          | No       | No Race found or Entry found for the associated user.                                                  |
+| 409          | No       | An error occured while deleting the Entry. The `error` key will contain a user-friendly error message. |
+</details>
+
+#### Chat Message
+```sh
+curl https://splits.io/api/v4/races/:race/chat
+```
+A Chat Message is a shortform message sent by a user to a Race. The user does not have to be entered into the Race in
+order to send a Chat Message to it.
+
+<details>
+<summary>Structure of a Chat Message</summary>
+
+[Autogenerated JSON Schema documentation](http://lbovet.github.io/docson/index.html#https://raw.githubusercontent.com/glacials/splits-io/master/spec/support/models/api/v4/chat_message.json)
+
+| Field          | Type             | Null? | Description                                                                                                                  |
+|:---------------|:-----------------|:------|:-----------------------------------------------------------------------------------------------------------------------------|
+| `body`         | string           | never | The contents of the message.                                                                                                 |
+| `from_entrant` | boolean          | never | Boolean indicating wether the sender was in the race when the message was sent.                                              |
+| `created_at`   | string           | never | The time and date at which this message was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
+| `updated_at`   | string           | never | The time and date at which this message was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
+| `user`         | [Runner][runner] | never | The Runner that sent the message.                                                                                            |
+</details>
+
+<details>
+<summary>Fetching chat for a race</summary>
+
+```sh
+curl https://splits.io/api/v4/races/:race/chat
+```
+
+| Status Codes | Success? | Description                                                |
+|:-------------|:---------|:-----------------------------------------------------------|
+| 200          | Yes      | A paginated array of all the chat messages for the Race.   |
+| 403          | No       | User does not have permission to read chat from this Race. |
+| 404          | No       | No Race found for the ID given.                            |
+
+</details>
+
+<details>
+<summary>Creating a Chat Message</summary>
+
+```sh
+curl -X POST https://splits.io/api/v4/races/:race/chat \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"chat_message": {"body": "a message body here"}}'
+```
+Send a Chat Message to a Race. All fields except `body` are inferred from your access token.
+
+| Status Codes | Success? | Description                                                                                              |
+|:-------------|:---------|:---------------------------------------------------------------------------------------------------------|
+| 201          | Yes      | Successfully created; returns a [Chat Message][chat-message]                                             |
+| 400          | No       | An error occured while creating the message. The `error` key will contain a user-friendly error message. |
+| 403          | No       | User does not have permission to send chat to this Race.                                                 |
+| 404          | No       | No Race found for the ID given.                                                                          |
+
+</details>
+
+### WebSockets
+Splits.io broadcasts updates to [Race][race] in realtime over WebSockets. We use WebSockets only to push
+changes from Splits.io to clients; to send data the other way, you must use the REST APIs above.
+
+<details>
+<summary>Why can't I use WebSockets to write data?</summary>
+
+To use WebSockets bidirectionally, clients need to do a lot of legwork. They have to nonce request messages to tell
+responses apart. They need to wait indefinitely for a response to every message they send. They have to handle the
+possibilities that a sent response might not arrive; that a delivered request might not be processed; that a response
+can error because of them, or because of the server; that they get rate limited; that their authentication expires; that
+a user expects to see any issues in the console; and many more.
+
+**All** these needs are solved by HTTP. It's free. It doesn't sound like much, but trust us -- we built Races to be
+handled 100% over WebSockets, and got so many headaches re-implementing what were effectively basic features of HTTP or
+REST that we switched the nearly-complete implementation to the read-only WebSockets version you see today.
+
+As for the advantages of a persistent connection, [HTTP/2][1] solves this problem transparently! It keeps the TCP socket
+between client and server open during multiple requests. (Yes, we support HTTP/2!)
+
+[1]: https://en.wikipedia.org/wiki/HTTP/2
+</details>
+
+We use a light layer on top of WebSockets called Action Cable, which is part of Ruby on Rails. This layer is so light
+that you can use vanilla WebSockets without noticing it's there; but if you happen to be using JavaScript, you might opt
+to use the [Action Cable JavaScript library][actioncable-npm] to simplify your code a bit.
+
+In all examples below, we'll provide instructions for consuming Splits.io WebSockets using vanilla JavaScript as well as
+the Action Cable library. The vanilla JS instructions can roughly translate to whatever language you're using.
+
+**Note**: To assist languages that use strongly-typed schemas, Splits.io WebSocket fields that can hold one of multiple
+object types are double-encoded (its value is a string containing more JSON). What you might expect to look like
+```json
+{
+  "type": "confirm_subscription",
+  "identifier": {"channel": "Api::V4::GlobalRaceChannel"},
+}
+```
+might instead look like
+```json
+{
+  "type": "confirm_subscription",
+  "identifier": "{\"channel\":\"Api::V4::GlobalRaceChannel\"}",
+}
+```
+If you're not using a language with strongly-typed schemas, just decode the embedded JSON again.
+
+[actioncable-npm]: https://www.npmjs.com/package/actioncable
+
+#### Connecting
+
+<details>
+<summary>Connecting with vanilla JavaScript</summary>
+
+```javascript
+const websocket = new WebSocket("wss://splits.io/api/cable")
+// Splits.io's reply: {"type": "welcome"}
+
+websocket.onmessage = function(event) {
+  const msg = JSON.parse(event.data)
+  switch(msg.type) {
+    case 'welcome':
+      console.log('Connected!')
+      break;
+    case 'ping':
+      // ...
+      break;
+  }
+}
+```
+Connecting is as easy as opening the socket and listening for messages.
+
+**Note**: Supply an `access_token` field in the URL to access the authenticated user's secret races.
+
+Once connected you'll receive a timestamped ping every ~3 seconds:
+```json
+{
+  "type": "ping",
+  "message": 1561095929
+}
+```
+You do not need to reply to pings. However if you don't get one for an extended period of time you should assume network
+conditions have killed your connection, and attempt to re-establish it.
+</details>
+
+<details>
+<summary>Connecting with Action Cable</summary>
+
+```javascript
+import actioncable from "@rails/actioncable"
+
+const cable = actioncable.createConsumer("wss://splits.io/api/cable")
+```
+This initiates the socket; it will be lazily connected in the next step.
+</details>
+
+</details>
+
+#### Subscribing to channels
+To receive updates from Splits.io, you first have to tell it what you want updates about. You do this by subscribing to
+**channels**.
+
+There are two channel types:
+
+| Channel           | Required params | Optional params       | Description                            |
+|:------------------|:----------------|:----------------------|:---------------------------------------|
+| GlobalRaceChannel | *none*          | `state`               | high-level information about all Races |
+| RaceChannel       | `race_id`       | `state`, `join_token` | detailed information about one Race    |
+
+There is one GlobalRaceChannel and `n` RaceChannels (one for each Race). You can be subscribed to any number of channels
+at once, and they all stream over the same WebSocket connection.
+
+If you pass `state=1` when subscribing, you will get a dump of the current state of the world for that channel. You can
+use this to e.g. populate UIs when they first load.
+
+<details>
+<summary>Subscribing to a channel with vanilla JavaScript</summary>
+
+```javascript
+websocket.send(JSON.stringify({
+  command: 'subscribe',
+  identifier: JSON.stringify({
+    channel: 'Api::V4::GlobalRaceChannel'
+  })
+}))
+
+/* Splits.io's reply:
+{
+  "type": "confirm_subscription",
+  "identifier": "{
+    \"channel\": \"Api::V4::GlobalRaceChannel\"
+  }"
+}
+*/
+```
+
+```javascript
+websocket.send(JSON.stringify({
+  command: 'subscribe',
+  identifier: JSON.stringify({
+    channel:    "Api::V4::RaceChannel",
+    race_id:    "11902182-aead-44c6-a7b8-e526951564b1",
+    join_token: "hzT5Fp6tX96wt2omLmRn4RHT"
+  })
+}))
+
+/* Splits.io's reply:
+{
+  "type": "confirm_subscription",
+  "identifier": "{
+    \"channel\":    \"Api::V4::RaceChannel\",
+    \"race_id\":    \"11902182-aead-44c6-a7b8-e526951564b1\",
+    \"join_token\": \"hzT5Fp6tX96wt2omLmRn4RHT\"
+  }",
+}
+*/
+```
+</details>
+
+<details>
+<summary>Subscribing to a channel with Action Cable</summary>
+
+```javascript
+cable.subscriptions.create("Api::V4::GlobalRaceChannel", {
+  connection() {
+    // Called when the subscription is ready
+  },
+
+  disconnected() {
+    // Called when the subscription has been terminated by the server
+  },
+
+  received(data) {
+    switch(data.type) {
+      // See below for GlobalRaceChannel message types
+      case '...':
+        // ...
+        break;
+    }
+  }
+})
+
+cable.subscriptions.create(
+  {
+    channel: "Api::V4::RaceChannel",
+    race_id: "c198a25f-9f8a-43cd-92ab-472a952f9336",
+  },
+  {
+    connected: () => {
+      // Called when the subscription is ready
+    },
+
+    disconnected: () => {
+      // Called when the subscription has been terminated by the server
+    },
+
+    received: data => {
+      switch(data.type) {
+        // See below for RaceChannel message types
+        case '...':
+          // ...
+          break
+      }
+    }
+  }
+)
+```
+</details>
+
+<details>
+<summary>Message content & types</summary>
+
+`identifier` is the exact string you received when initiating the subscription, so you can compare it directly to
+determine how the message needs to be handled.
+
+`message` is an object that contains the changes Splits.io is notifying you about. Note that the `message` object does
+not require extra deserialization.
+```json
+{
+  "identifier": "...",
+  "message": {
+    "type": "string identifier",
+    "data": {
+      "message": "human-readable description of what changed",
+      ...
+    }
+  }
+}
+```
+
+`data` contains fields specific to the type of message (`message.type`):
+
+| Message type                | Applicable channels | Description                                                   | Extra Fields                   |
+|:----------------------------|:--------------------|:--------------------------------------------------------------|:-------------------------------|
+| `"race_created"`            | GlobalRaceChannel   | A new Race was created                                        | [`race`][race]                 |
+| `"global_state"`            | GlobalRaceChannel   | State of the world (in response to `state=1`)                 | [`races`][race]                |
+| `"race_updated"`            | RaceChannel         | A property of the race has changed                            | [`race`][race]                 |
+| `"new_message"`             | RaceChannel         | A chat message was sent to the Race                           | [`chat_message`][chat-message] |
+| `"new_attachment"`          | RaceChannel         | An attachment was added to the Race                           | [`race`][race]                 |
+| `"race_state"`              | RaceChannel         | State of the Race (in response to `state=1`)                  | [`race`][race]                 |
+| `"race_not_found"`          | RaceChannel         | No Race found for the given ID                                | *none*                         |
+| `"race_invalid_join_token"` | RaceChannel         | The join token is not valid for the Race                      | *none*                         |
+| `"race_start_scheduled"`    | both                | The/a Race is starting in a few seconds                       | [`race`]                       |
+| `"race_ended"`              | both                | The/a Race has finished                                       | [`race`]                       |
+| `"race_entries_updated" `   | both                | An entry was created, changed, or deleted                     | [`race`]                       |
+| `"fatal_error"`             | both                | An error occured when processing the message                  | *none*                         |
+| `"connection_error"`        | both                | Received when connecting to cable with an invalid oauth token | *none*                         |
+</details>
+
+[attachment]: #attachment
+[authentication]: #authentication--authorization
 [category]: #category
+[chat-message]: #chat-message
+[entry]: #entry
+[game]: #game
+[iso8601]: https://en.wikipedia.org/wiki/ISO_8601
+[race]: #race
+[replacing-source-files]: #replacing-source-files
+[run]: #run
+[runner]: #runner
+[segment]: #segment
 [uploading]: #uploading

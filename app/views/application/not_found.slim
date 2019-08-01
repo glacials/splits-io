@@ -1,0 +1,11 @@
+- content_for(:title, 'Not Found')
+- content_for(:header) do
+  h2
+    | 404
+    small Not Found
+article
+  p This page either never existed or was deleted.
+  p
+    | If you have reason to believe this is a mistake, please
+    a<> href="mailto:bugs@splits.io" email us
+    | this URL and why you think so.

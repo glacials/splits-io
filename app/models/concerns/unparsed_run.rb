@@ -47,11 +47,11 @@ module UnparsedRun
           attempts:                parse_result[:attempts],
           srdc_id:                 srdc_id || parse_result[:metadata][:srdc_id],
 
-          realtime_duration_ms:    parse_result[:realtime_duration_ms] || 0,
-          realtime_sum_of_best_ms: parse_result[:realtime_sum_of_best_ms],
+          realtime_duration_ms:    zero_to_nil(parse_result[:realtime_duration_ms]),
+          realtime_sum_of_best_ms: zero_to_nil(parse_result[:realtime_sum_of_best_ms]),
 
-          gametime_duration_ms:    parse_result[:gametime_duration_ms] || 0,
-          gametime_sum_of_best_ms: parse_result[:gametime_sum_of_best_ms],
+          gametime_duration_ms:    zero_to_nil(parse_result[:gametime_duration_ms]),
+          gametime_sum_of_best_ms: zero_to_nil(parse_result[:gametime_sum_of_best_ms]),
 
           total_playtime_ms:       parse_result[:total_playtime_ms],
           default_timing:          default_timing,
@@ -88,19 +88,19 @@ module UnparsedRun
           segment_number: parsed_segment[:segment_number],
           name:           parsed_segment[:name],
 
-          realtime_start_ms:             parsed_segment[:realtime_start_ms],
-          realtime_end_ms:               parsed_segment[:realtime_end_ms],
-          realtime_duration_ms:          parsed_segment[:realtime_duration_ms],
-          realtime_shortest_duration_ms: parsed_segment[:realtime_best_ms],
+          realtime_start_ms:             parsed_segment[:realtime_start_ms], # starts can be 0 (for the first segment)
+          realtime_end_ms:               zero_to_nil(parsed_segment[:realtime_end_ms]),
+          realtime_duration_ms:          zero_to_nil(parsed_segment[:realtime_duration_ms]),
+          realtime_shortest_duration_ms: zero_to_nil(parsed_segment[:realtime_best_ms]),
 
           realtime_skipped: parsed_segment[:realtime_skipped],
           realtime_reduced: false,
           realtime_gold:    parsed_segment[:realtime_gold],
 
-          gametime_start_ms:             parsed_segment[:gametime_start_ms],
-          gametime_end_ms:               parsed_segment[:gametime_end_ms],
-          gametime_duration_ms:          parsed_segment[:gametime_duration_ms],
-          gametime_shortest_duration_ms: parsed_segment[:gametime_best_ms],
+          gametime_start_ms:             parsed_segment[:gametime_start_ms], # starts can be 0 (for the first segment)
+          gametime_end_ms:               zero_to_nil(parsed_segment[:gametime_end_ms]),
+          gametime_duration_ms:          zero_to_nil(parsed_segment[:gametime_duration_ms]),
+          gametime_shortest_duration_ms: zero_to_nil(parsed_segment[:gametime_best_ms]),
 
           gametime_skipped: parsed_segment[:gametime_skipped],
           gametime_reduced: false,
@@ -156,6 +156,11 @@ module UnparsedRun
       end
 
       SegmentHistory.import(histories)
+    end
+
+    def zero_to_nil(parsed_number)
+      parsed_number = parsed_number.presence
+      parsed_number.zero? ? nil : parsed_number
     end
   end
 end

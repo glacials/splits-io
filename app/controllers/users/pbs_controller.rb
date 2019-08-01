@@ -8,7 +8,7 @@ class Users::PbsController < ApplicationController
       if params[:trailing_path].nil?
         redirect_to run_path(@user.pb_for(Run::REAL, @category))
       else
-        redirect_to "#{run_path(@user.pb_for(@category))}/#{params[:trailing_path]}"
+        redirect_to "#{run_path(@user.pb_for(Run::REAL, @category))}/#{params[:trailing_path]}"
       end
     else
       redirect_to user_path(@user), alert: 'Redirectors are not enabled for this account.'

@@ -3,7 +3,7 @@ class Api::V4::RunnersController < Api::V4::ApplicationController
 
   def index
     if params[:search].blank?
-      render status: :bad_request, json: {status: :bad_request, message: 'You must supply a `search` term.'}
+      render status: :bad_request, json: {status: 400, message: 'You must supply a `search` term.'}
       return
     end
     @runners = User.search(params[:search])

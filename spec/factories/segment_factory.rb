@@ -3,7 +3,7 @@ FactoryBot.define do
     run
 
     name           { SecureRandom.uuid }
-    segment_number { 0 }
+    segment_number { 1 }
 
     realtime_start_ms             { 0 }
     realtime_end_ms               { 1000 }

@@ -1,0 +1,73 @@
+{
+  "type": "object",
+  "required": [
+    "created_at",
+    "creator",
+    "ghost",
+    "id",
+    "finished_at",
+    "forfeited_at",
+    "readied_at",
+    "run",
+    "runner",
+    "updated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "description": "The time this entry was created.",
+      "format": "date-time",
+      "type": "string"
+    },
+    "creator": {
+      "description": "The user who created this entry. If the entry is a ghost, this can differ from the runner.",
+      "$ref": "./runner.json"
+    },
+    "finished_at": {
+      "description": "The time at which the runner finished, if at all.",
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "forfeited_at": {
+      "description": "The time at which the runner forfeited, if at all.",
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "description": "The unchanging unique ID of this entry.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "ghost": {
+      "description": "Whether the entry is a real user (false) or a ghost of user's past run (true).",
+      "type": "boolean"
+    },
+    "readied_at": {
+      "description": "The time at which the runner readied, if at all.",
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "run": {
+      "description": "The Run linked to this Entry, if any. A linked Run will let the Race show realtime splits and extra stats on the Race page.",
+      "oneOf": [{"type": "null"}, {"$ref": "./run.json"}]
+    },
+    "runner": {
+      "description": "The user participating in the race. If the entry is a ghost, this can differ from the creator.",
+      "$ref": "./runner.json"
+    },
+    "updated_at": {
+      "description": "The time this entry was most recently changed.",
+      "format": "date-time",
+      "type": "string"
+    }
+  }
+}

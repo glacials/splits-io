@@ -1,0 +1,31 @@
+- game = local_assigns.fetch(:game, Game.new)
+- category = local_assigns.fetch(:category, Category.new)
+
+// Make sure to have #vue-race be defined before calling this partial
+race-create inline-template=true game-id=game.id category-id=category.id
+  .col-md-4 v-cloak=true
+    .card.mb-4
+      h5.card-header Create race
+      .card-body
+        p.card-text Race #{game.to_s || ''} against others
+        .btn-group
+          button.btn.btn-primary(
+            type='button'
+            @click='createPublic'
+            :disabled='loading'
+            :title='error'
+            v-tippy=true
+          )
+            template v-if="loading" = render partial: 'shared/spinner'
+            span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
+            template v-else=true => icon('fas', 'flag-checkered')
+            ' Create public race
+          button.btn.btn-primary.dropdown-toggle.dropdown-toggle-split(
+            type='button'
+            data={toggle: 'dropdown'}
+            aria={haspopup: true, expanded: false}
+          )
+            span.sr-only Toggle dropdown
+          .dropdown-menu.bg-dark
+            button.dropdown-item.text-secondary @click='createInviteOnly' Create invite-only race
+            button.dropdown-item.text-secondary @click='createSecret' Create secret race

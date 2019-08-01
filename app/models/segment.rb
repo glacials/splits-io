@@ -4,6 +4,37 @@ class Segment < ApplicationRecord
   # If SegmentHistory is changed to have child records, change this back to just :destroy
   has_many :histories, -> { order(attempt_number: :asc) }, class_name: 'SegmentHistory', dependent: :delete_all
 
+  validates :name, presence: true
+  validates :segment_number, presence: true, numericality: {only_integer: true}
+
+  # with_ends modifies the returned Segments to have realtime_end_ms and gametime_end_ms fields, which represent the
+  # duration into the run when that specific segment ended.
+  #
+  # It does this using a SQL window function to sum the attempts for the segments leading up to this one, for each one.
+  # This is multiple orders of magnitude more efficient than loading these into Rails and doing it there, for n attempts
+  # and m segments.
+  def self.with_ends
+    select('
+      segments.*,
+      CAST(
+        sum(segments.realtime_duration_ms) OVER(ORDER BY segments.segment_number)
+        AS BIGINT
+      ) AS realtime_end_ms,
+      CAST(
+        sum(segments.gametime_duration_ms) OVER(ORDER BY segments.segment_number)
+        AS BIGINT
+      ) AS gametime_end_ms
+    '.squish)
+  end
+
+  # Returns the Segment the runner would be on at the given run time. A run time is a Duration since the start of the
+  # run.
+  #
+  # If the Duration takes place outside the run (i.e. is greater than Run#duration), nil is returned.
+  def self.at_run_time(run_time)
+    with_ends.order(segment_number: :asc).where('realtime_end_ms > ?', run_time.to_ms).first
+  end
+
   # start returns the Duration between the start of the run and the start of this segment. For example, the first
   # segment of the run would have a start of 0. The second segment would have a start equal to the duration of the first
   # segment. The last segment would have a start equal to the duration of the run minus the duration of the last
@@ -11,9 +42,13 @@ class Segment < ApplicationRecord
   def start(timing)
     case timing
     when Run::REAL
-      Duration.new(realtime_start_ms)
+      Duration.new(
+        realtime_start_ms || run.segments.find_by(segment_number: segment_number - 1).try(:end, timing).try(:to_ms)
+      )
     when Run::GAME
-      Duration.new(gametime_start_ms)
+      Duration.new(
+        gametime_start_ms || run.segments.find_by(segment_number: segment_number - 1).try(:end, timing).try(:to_ms)
+      )
     end
   end
 
@@ -97,8 +132,16 @@ class Segment < ApplicationRecord
     segment_number == run.segments.count - 1
   end
 
+  # proportion returns a number from 0 to 1 representing the segment's proportion of the run it should represent, mostly
+  # for display purposes.
+  def proportion(timing, scale_to = run.duration(timing))
+    return (1.0 / run.segments.count) if scale_to.nil?
+
+    duration(timing) / scale_to
+  end
+
   def second_half?(timing)
-    (end_ms(timing) - (duration_ms(timing) / 2)) > (run.duration_ms(timing) / 2)
+    (self.end(timing) - (duration(timing) / 2)) > (run.duration(timing) / 2)
   end
 
   # gold? returns something truthy if this segment's PB time is the fastest (or tied for the fastest) ever recorded by

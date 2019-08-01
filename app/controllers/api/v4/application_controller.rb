@@ -10,14 +10,17 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def read_only_mode
-    write_actions = %w[create edit destroy]
-    write_methods = %w[POST PUT DELETE PATCH]
-    if write_actions.include?(action_name) || write_methods.include?(request.method)
-      render template: 'pages/read_only_mode'
-    end
+    write_actions = %w[create edit destroy].freeze
+    write_methods = %w[POST PUT DELETE PATCH].freeze
+    return unless write_actions.include?(action_name) || write_methods.include?(request.method)
+
+    render template: 'pages/read_only_mode'
   end
 
   private
+
+  # override authie's current_user methods for API, so we don't set or obey cookies
+  attr_accessor :current_user
 
   def build_link_headers(links)
     links.map do |link|
@@ -27,9 +30,20 @@ class Api::V4::ApplicationController < ActionController::Base
 
   def not_found(collection_name)
     {
-      status: 404,
+      status: :not_found,
+      json:   {
+        status: 404,
+        error:  "No #{collection_name} with ID #{params[collection_name] || params["#{collection_name}_id"] || params[:id]} found."
+      }
+    }
+  end
+
+  # Add response body to unauthorized requests
+  def doorkeeper_unauthorized_render_options(error: nil)
+    {
       json: {
-        error: "No #{collection_name} with ID #{params[collection_name]} found."
+        status: 401,
+        error:  'Not authorized'
       }
     }
   end
@@ -68,5 +82,38 @@ class Api::V4::ApplicationController < ActionController::Base
     elsif params[:claim_token] != @run.claim_token
       head 403
     end
+  end
+
+  def set_user
+    return unless request.headers['Authorization'].present? || params[:access_token].present?
+
+    doorkeeper_authorize!(:manage_race)
+    self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  rescue ActiveRecord::RecordNotFound
+    render status: :unauthorized, json: {
+      status: 401,
+      error:  'No user found for this token'
+    }
+  end
+
+  def validate_user
+    return unless current_user.nil?
+
+    render status: :unauthorized, json: {
+      status: 401,
+      error:  'A user is required for this action'
+    }
+  end
+
+  def set_race(param: :race_id)
+    @race = Race.find(params[param])
+    return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
+
+    render status: :forbidden, json: {
+      status: 403,
+      error:  'Must be invited to see this race'
+    }
+  rescue ActiveRecord::RecordNotFound
+    render not_found(:race)
   end
 end

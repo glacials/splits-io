@@ -1,6 +1,6 @@
 module ApplicationHelper
   def site_title
-    ENV['SITE_TITLE'] || 'Splits I/O'
+    ENV['SITE_TITLE'] || 'Splits.io'
   end
 
   def order_runs(runs)
@@ -31,33 +31,33 @@ module ApplicationHelper
 
       if override == :gold
         badge = 'badge-warning'
-        title = "#{user} is a Splits I/O patron!"
+        title = "#{user} is a Splits.io patron!"
       end
 
       if override == :silver
         badge = 'badge-secondary'
-        title = "#{user} is a Splits I/O patron!"
+        title = "#{user} is a Splits.io patron!"
       end
 
-      return link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title)
+      return link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title, 'v-tippy' => true, ':title' => "'#{title}'")
     end
 
     if user.patron?
       badge = 'badge-secondary'
-      title = "#{user} is a Splits I/O patron!"
+      title = "#{user} is a Splits.io patron!"
     end
 
     if user.patron?(tier: 2)
       badge = 'badge-warning'
-      title = "#{user} is a Splits I/O patron!"
+      title = "#{user} is a Splits.io patron!"
     end
 
     if user.admin?
       badge = 'badge-danger'
-      title = "#{user} is a Splits I/O staff member!"
+      title = "#{user} is a Splits.io staff member!"
     end
 
-    link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title)
+    link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title, 'v-tippy' => true, ':title' => "'#{title}'")
   end
 
   def game_badge(game)
@@ -66,10 +66,10 @@ module ApplicationHelper
     link_to(game.srdc.try(:shortname), game_path(game), class: 'badge badge-primary', title: game.name)
   end
 
-  # patreon_url returns the URL for the Splits I/O Patreon page. If checkout is true, it returns the URL for the
+  # patreon_url returns the URL for the Splits.io Patreon page. If checkout is true, it returns the URL for the
   # checkout page -- use this if the UX of your situation implies the user already decided to contribute. If checkout is
   # :bronze, :silver, or :gold, it returns the URL for the checkout flow for the corresponding tier (i.e. one click past
-  # a checkout of true; two clicks past the Splits I/O Patreon page).
+  # a checkout of true; two clicks past the Splits.io Patreon page).
   def patreon_url(checkout: false)
     return 'https://www.patreon.com/join/glacials/checkout?rid=493467' if checkout == :bronze
     return 'https://www.patreon.com/join/glacials/checkout?rid=493468' if checkout == :silver

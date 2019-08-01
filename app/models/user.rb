@@ -10,6 +10,10 @@ class User < ApplicationRecord
 
   has_many :run_likes, dependent: :destroy
 
+  has_many :entries, foreign_key: 'runner_id'
+  has_many :created_entries, foreign_key: 'creator_id'
+  has_many :races, through: :entries
+
   has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
   has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
                                 class_name: 'Rivalry'
@@ -96,7 +100,7 @@ class User < ApplicationRecord
 
     case tier
     when 0
-      patreon.pledge_cents > 0
+      patreon.pledge_cents.positive?
     when 1
       patreon.pledge_cents >= 200
     when 2
@@ -116,6 +120,10 @@ class User < ApplicationRecord
 
   def likes?(run)
     RunLike.find_by(user: self, run: run)
+  end
+
+  def in_race?
+    entries.where(finished_at: nil, forfeited_at: nil, ghost: false).any?
   end
 
   # comprable_runs returns some runs by this user that could be usefully compared to the given run.

@@ -1,0 +1,5 @@
+- race.attachments.each do |file|
+  li.list-group-item
+    = file.filename
+    a.ml-2 href=rails_blob_path(file, disposition: 'attachment')
+      = icon('fas', 'file-download')

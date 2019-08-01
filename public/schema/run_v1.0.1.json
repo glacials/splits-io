@@ -1,0 +1,425 @@
+{
+  "$id": "https://splits.io/schema/run_v1.0.1.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "Splits.io Exchange Format",
+  "description": "The Splits.io Exchange Format is a specification for the transmission of runs between services and programs.",
+  "required": ["_schemaVersion", "timer"],
+  "additionalProperties": false,
+  "definitions": {
+    "duration": {
+      "type": "object",
+      "title": "Duration",
+      "description": "Duration holds a realtime duration and a gametime duration.",
+      "additionalProperties": false,
+      "properties": {
+        "realtimeMS": {
+          "type": "number",
+          "title": "Realtime (Milliseconds)",
+          "description": "Realtime (Milliseconds) is a duration of milliseconds in real-world time.",
+          "examples": [123456, 36000000],
+          "multipleOf": 1,
+          "minimum": 0
+        },
+        "gametimeMS": {
+          "type": "number",
+          "title": "Gametime (Milliseconds)",
+          "description": "Gametime (Milliseconds) is a duration of milliseconds in game-world time.",
+          "examples": [123456, 36000000],
+          "multipleOf": 1,
+          "minimum": 0
+        }
+      }
+    },
+    "runTime": {
+      "type": "object",
+      "title": "Run Time",
+      "description": "Run Time represents a moment inside a run, and indicates the duration of the run so far at that moment. It holds a realtime run duration so far and a gametime run duration so far.",
+      "additionalProperties": false,
+      "properties": {
+        "realtimeMS": {
+          "type": "number",
+          "title": "Realtime (Milliseconds)",
+          "description": "Realtime (Milliseconds) is a duration of a run so far in milliseconds.",
+          "examples": [123456, 36000000],
+          "multipleOf": 1,
+          "minimum": 0
+        },
+        "gametimeMS": {
+          "type": "number",
+          "title": "Gametime (Milliseconds)",
+          "description": "Gametime (Milliseconds) is a duration a run so far in milliseconds.",
+          "examples": [123456, 36000000],
+          "multipleOf": 1,
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "properties": {
+    "_schemaVersion": {
+      "description": "Specifies which version of the Splits.io Exchange Format the run was produced for. If you try to parse a run and this field doesn't validate, you probably need to update your Splits.io Exchange Format schema. All schemas accept any patch of an equivalent major-minor version, and any lesser minor version of an equivalent major version (e.g. v1.1.1 accepts v1.0.0, v1.1.0, and v1.1.2, but not v1.2.0 or v2.0.0). The exception is definition v1.0.0, which only accepts v1.0.0 runs.",
+      "examples": ["v1.0.0", "v1.0.1"],
+      "pattern": "v1\.0\.\d+",
+      "title": "Splits.io Exchange Format Version",
+      "type": "string"
+    },
+    "links": {
+      "type": "object",
+      "title": "Links",
+      "description": "Links specifies the run's identity in other services.",
+      "additionalProperties": false,
+      "properties": {
+        "speedruncomID": {
+          "type": "string",
+          "title": "Speedrun.com ID",
+          "description": "Speedrun.com ID is the run's ID on Speedrun.com. This can be used to communicate with the Speedrun.com API.",
+          "examples": ["8y8dronz"]
+        },
+        "splitsioID": {
+          "type": "string",
+          "title": "Splits.io ID",
+          "description": "Splits.io ID is the run's ID on Splits.io. This can be used to communicate with the Splits.io API.",
+          "examples": ["oqt"]
+        }
+      }
+    },
+    "timer": {
+      "type": "object",
+      "title": "Timer",
+      "description": "Timer holds information about the timer used to record the run.",
+      "required": ["shortname", "longname", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "shortname": {
+          "type": "string",
+          "title": "Shortname",
+          "description": "Shortname is a machine-readable timer name, intended for use in APIs, databases, URLs, and filenames.",
+          "examples": ["livesplit", "wsplit", "timesplittracker", "llanfair", "llanfair_gered"]
+        },
+        "longname": {
+          "type": "string",
+          "title": "Longname",
+          "description": "Longname is a human-readable timer name, intended for display to users.",
+          "examples": ["LiveSplit", "WSplit", "Time Split Tracker", "Llanfair", "Llanfair (Gered's Fork)"]
+        },
+        "version": {
+          "type": "string",
+          "title": "Version",
+          "description": "Version is the version of the timer used to record this run. Semantic Versioning is strongly recommended but not enforced.",
+          "examples": ["v1.0", "v3.1.4", "v2.3.4-alpha1"]
+        },
+        "website": {
+          "type": "string",
+          "title": "Website",
+          "description": "Website is the URL for the timer's website.",
+          "examples": ["http://livesplit.org"],
+          "format": "uri"
+        }
+      }
+    },
+    "attempts": {
+      "type": "object",
+      "title": "Attempts",
+      "description": "Attempts contains historical information about previous runs by this runner in this category.",
+      "additionalProperties": false,
+      "properties": {
+        "total": {
+          "type": "integer",
+          "title": "Total",
+          "description": "Total holds the total number of attempts for this category.",
+          "examples": [1, 12, 241, 1023],
+          "multipleOf": 1,
+          "minimum": 0
+        },
+        "histories": {
+          "type": "array",
+          "title": "Histories",
+          "description": "Histories is an array of previous attempts by this runner of this category.",
+          "default": [],
+          "items": {
+            "type": "object",
+            "title": "History",
+            "description": "History is a single recorded attempt of this category by this runner.",
+            "required": ["attemptNumber"],
+            "additionalProperties": false,
+            "properties": {
+              "attemptNumber": {
+                "type": "integer",
+                "title": "Attempt Number",
+                "description": "Attempt Number is the number of lifetime attempts the runner will have made after this one. The Attempt Number for an attempt is a label, not an index; the first attempt for a category has an Attempt Number of 1 (not 0)."
+              },
+              "duration": {"$ref": "#/definitions/duration"}
+            }
+          }
+        }
+      }
+    },
+    "imageURL": {
+      "type": "string",
+      "title": "Image URL",
+      "description": "Image URL is the location of an image associated with this run. Often this is a screenshot of the timer at run completion, but can be anything the runner wants displayed alongside the run.",
+      "examples": ["https://i.imgur.com/ebyjwLJ.jpg"],
+      "format": "uri"
+    },
+    "videoURL": {
+      "type": "string",
+      "title": "Video URL",
+      "description": "Video URL is the location of a VOD of the run.",
+      "examples": ["https://www.youtube.com/watch?v=0No0y9C1tmM", "https://www.twitch.tv/videos/180016373"],
+      "format": "uri"
+    },
+    "startedAt": {
+      "type": "string",
+      "title": "Started At",
+      "description": "Started At is the date and time at which the run was started, specified in RFC 3339 format.",
+      "examples": ["2002-10-02T10:00:00-05:00", "2002-10-02T15:00:00Z", "2002-10-02T15:00:00.05Z"],
+      "format": "date-time"
+    },
+    "endedAt": {
+      "type": "string",
+      "title": "Ended At",
+      "description": "Ended At is the date and time at which the run was ended, specified in RFC 3339 format.",
+      "examples": ["2002-10-02T11:00:00-05:00", "2002-10-02T16:00:00Z", "2002-10-02T16:00:00.05Z"],
+      "format": "date-time"
+    },
+    "pauses": {
+      "type": "array",
+      "title": "Pauses",
+      "description": "Pauses holds runner-caused pauses that took place during the run.",
+      "items": {
+        "type": "object",
+        "title": "Pause",
+        "description": "Pause is a single pause that took place during the run.",
+        "required": ["startedAt"],
+        "additionalProperties": false,
+        "properties": {
+          "startedAt": {
+            "type": "string",
+            "title": "Started At",
+            "description": "Started At is the date and time at which the pause was started, specified in RFC 3339 format.",
+            "examples": ["2002-10-02T10:00:00-05:00", "2002-10-02T15:00:00Z", "2002-10-02T15:00:00.05Z"],
+            "format": "date-time"
+          },
+          "endedAt": {
+            "type": "string",
+            "title": "Ended At",
+            "description": "Ended At is the date and time at which the pause was ended, specified in RFC 3339 format.",
+            "examples": ["2002-10-02T11:00:00-05:00", "2002-10-02T16:00:00Z", "2002-10-02T16:00:00.05Z"],
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "game": {
+      "type": "object",
+      "title": "Game",
+      "description": "Game specifies information about the game being run.",
+      "required": ["longname"],
+      "additionalProperties": false,
+      "properties": {
+        "longname": {
+          "type": "string",
+          "title": "Longname",
+          "description": "Longname is a human-readable game name, intended for display to users.",
+          "examples": ["Super Mario Sunshine", "The Legend of Zelda: Ocarina of Time", "Portal"]
+        },
+        "shortname": {
+          "type": "string",
+          "title": "Shortname",
+          "description": "Shortname is a machine-readable game name, intended for use in APIs, databases, URLs, and filenames.",
+          "examples": ["sms", "oot", "portal"]
+        },
+        "links": {
+          "type": "object",
+          "title": "Links",
+          "description": "Links specifies the game's identity in other services.",
+          "additionalProperties": false,
+          "default": {},
+          "properties": {
+            "splitsioID": {
+              "type": "string",
+              "title": "Splits.io ID",
+              "description": "Splits.io ID specifies the game's Splits.io ID.",
+              "examples": ["234"]
+            },
+            "speedruncomID": {
+              "type": "string",
+              "title": "Speedrun.com ID",
+              "description": "Speedrun.com ID specifies the game's Speedrun.com ID.",
+              "examples": ["kjpdr4jq"]
+            }
+          }
+        }
+      }
+    },
+    "category": {
+      "type": "object",
+      "title": "Category",
+      "description": "Category specifies information about the category being run.",
+      "required": ["longname"],
+      "additionalProperties": false,
+      "properties": {
+        "longname": {
+          "type": "string",
+          "title": "Longname",
+          "description": "Longname is a human-readable category name, intended for display to users.",
+          "examples": ["Any%", "100%", "Any% Hoverless"]
+        },
+        "shortname": {
+          "type": "string",
+          "title": "Shortname",
+          "description": "Shortname is a machine-readable category name, intended for use in APIs, databases, URLs, and filenames.",
+          "examples": ["anypct", "100pct", "anypct-hoverless"]
+        },
+        "links": {
+          "type": "object",
+          "title": "Links",
+          "description": "Links specifies the category's identity in other services.",
+          "additionalProperties": false,
+          "default": {},
+          "properties": {
+            "splitsioID": {
+              "type": "string",
+              "title": "Splits.io ID",
+              "description": "Splits.io ID specifies the category's Splits.io ID.",
+              "examples": ["234"]
+            },
+            "speedruncomID": {
+              "type": "string",
+              "title": "Speedrun.com ID",
+              "description": "Speedrun.com ID specifies the category's Speedrun.com ID.",
+              "examples": ["kjpdr4jq"]
+            }
+          }
+        }
+      }
+    },
+    "runners": {
+      "type": "array",
+      "title": "Runners",
+      "description": "Runners is an array of people who participated in this run. Some games and categories call for cooperative play, but otherwise this will usually be just one person.",
+      "default": [],
+      "items": {
+        "type": "object",
+        "title": "Runner",
+        "description": "Runner describes one participant in the recorded run.",
+        "required": ["shortname"],
+        "additionalProperties": false,
+        "properties": {
+          "longname": {
+            "type": "string",
+            "title": "Longname",
+            "description": "Longname is a human-readable runner name, intended for display to users.",
+            "examples": ["Glacials"]
+          },
+          "shortname": {
+            "type": "string",
+            "title": "Shortname",
+            "description": "Shortname is a machine-readable runner name, intended for use in APIs, databases, URLs, and filenames.",
+            "examples": ["glacials"]
+          },
+          "links": {
+            "type": "object",
+            "title": "Links",
+            "description": "Links specifies the runner's identity in other services.",
+            "additionalProperties": false,
+            "default": {},
+            "properties": {
+              "twitchID": {
+                "type": "string",
+                "title": "Twitch ID",
+                "description": "Twitch ID specifies the runner's Twitch ID.",
+                "examples": ["29798286"]
+              },
+              "splitsioID": {
+                "type": "string",
+                "title": "Splits.io ID",
+                "description": "Splits.io ID specifies the runner's Splits.io ID.",
+                "examples": ["234"]
+              },
+              "speedruncomID": {
+                "type": "string",
+                "title": "Speedrun.com ID",
+                "description": "Speedrun.com ID specifies the runner's Speedrun.com ID.",
+                "examples": ["kjpdr4jq"]
+              },
+              "twitterID": {
+                "type": "string",
+                "title": "Twitter ID",
+                "description": "Twitter ID specifies the runner's Twitter ID.",
+                "examples": ["119476949"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "segments": {
+      "type": "array",
+      "title": "Segments",
+      "description": "Segments is an array of all segments for this run, ordered from first to last.",
+      "items": {
+        "type": "object",
+        "title": "Segment",
+        "description": "Segment is one segment in this run.",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Name is the runner-provided name of this segment",
+            "examples": ["World 1-2", "Epilogue", "Bottle"]
+          },
+          "endedAt": {"$ref": "#/definitions/runTime"},
+          "bestDuration": {"$ref": "#/definitions/duration"},
+          "isSkipped": {
+            "type": "boolean",
+            "title": "Is Skipped",
+            "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Ended At is ignored.",
+            "default": false
+          },
+          "isReset": {
+            "type": "boolean",
+            "title": "Is Reset",
+            "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Ended Ats for this run are ignored.",
+            "default": false
+          },
+          "histories": {
+            "type": "array",
+            "title": "Histories",
+            "description": "Histories is an array of previous completions of this segment by this runner.",
+            "default": [],
+            "items": {
+              "type": "object",
+              "title": "History",
+              "description": "History is a single recorded attempt of this segment by this runner.",
+              "required": ["attemptNumber"],
+              "additionalProperties": false,
+              "properties": {
+                "attemptNumber": {
+                  "type": "integer",
+                  "title": "Attempt Number",
+                  "description": "Attempt Number is the number of lifetime attempts the runner will have made on this category after this one. Generally these attempt numbers should correspond to those in Attempts -> History, although a number given here may not be present there if the run was reset before completion."
+                },
+                "endedAt": {"$ref": "#/definitions/runTime"},
+                "isSkipped": {
+                  "type": "boolean",
+                  "title": "Is Skipped",
+                  "description": "Is Skipped should be true if the runner skipped over the split that ends this segment, rather than splitting. If so, this segment's Ended At is ignored.",
+                  "default": false
+                },
+                "isReset": {
+                  "type": "boolean",
+                  "title": "Is Reset",
+                  "description": "Is Reset should be true if the runner reset the run during this segment. If so, this and all future segments' Ended Ats for this run are ignored.",
+                  "default": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

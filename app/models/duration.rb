@@ -54,7 +54,9 @@ class Duration
   end
 
   def ==(duration)
-    return false if nil? || duration.nil?
+    # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
+    # absent. When those are cleaned up, we can change Duration#nil? and this.
+    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
     return false unless duration.respond_to?(:to_ms)
 
     to_ms == duration.to_ms
@@ -68,7 +70,9 @@ class Duration
   end
 
   def <(duration)
-    return false if nil? || duration.nil?
+    # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
+    # absent. When those are cleaned up, we can change Duration#nil? and this.
+    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
 
     # duration can be a Duration or a number of milliseconds
     ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
@@ -81,7 +85,9 @@ class Duration
   end
 
   def >(duration)
-    return false if nil? || duration.nil?
+    # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
+    # absent. When those are cleaned up, we can change Duration#nil? and this.
+    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
 
     # duration can be a Duration or a number of milliseconds
     ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
@@ -97,6 +103,12 @@ class Duration
     return nil unless duration.respond_to?(:to_ms)
 
     to_ms <=> duration.to_ms
+  end
+
+  def +(duration)
+    return Duration.new(nil) if nil? || duration.nil?
+
+    Duration.new(to_ms + duration.to_ms)
   end
 
   def -(duration)
@@ -145,16 +157,20 @@ class Duration
     @ms
   end
 
+  def to_sec
+    @ms / 1000
+  end
+
   def abs
     Duration.new(to_ms.try(:abs))
   end
 
   def positive?
-    self >= 0
+    self >= Duration.new(0)
   end
 
   def negative?
-    self < 0
+    self < Duration.new(0)
   end
 
   private

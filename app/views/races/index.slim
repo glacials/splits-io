@@ -1,0 +1,24 @@
+- content_for(:title, 'Races')
+- content_for(:header) do
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+
+- if params[:historic] == '1'
+  - races = Race.finished.not_secret_visibility.order(started_at: :desc)
+- else
+  - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST')
+
+article
+  #vue-race.row
+    - if current_user.present?
+      = render partial: 'races/create'
+
+  .card.shadow
+    .card-header
+      ul.nav.nav-bordered
+        - historic = params[:historic] == '1'
+        li.nav-item
+          = link_to('Active', races_path, class: "nav-link #{historic ? '' : 'active'}")
+        li.nav-item
+          = link_to('Historic', races_path(historic: '1'), class: "nav-link #{historic ? 'active' : ''}")
+    = render partial: 'shared/race_table', locals: {races: races}

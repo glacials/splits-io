@@ -38,8 +38,9 @@
     .col-md-6
       - if @run.completed?(timing) && @run.histories.any?
         #chart-spinner
-          = render partial: 'shared/spinner'
-          h5.text-success.text-center Loading charts
+          .text-success.text-center
+            span.mr-2 = render partial: 'shared/spinner'
+            h5.d-inline.text-success Loading charts
         #chart-alert.alert.alert-danger.my-3 hidden=true
         #chart-holder hidden=true
           #run-duration-chart.card.my-3

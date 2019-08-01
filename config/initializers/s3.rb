@@ -11,7 +11,7 @@ options = {
   retry_limit: 2
 }
 
-# When users upload runs, they do it directly to S3 using a presigned request we generate. When running Splits I/O
+# When users upload runs, they do it directly to S3 using a presigned request we generate. When running Splits.io
 # locally in Docker, the hostname for that presigned request (localhost) is different than the one the server uses to
 # interact with S3 (s3), so we need one S3 client for each hostname even though they both point to the same bucket.
 if ENV['AWS_REGION'] == 'local'

@@ -2,11 +2,12 @@ doctype html
 html
   head
     title = content_for?(:title) ? "#{yield(:title)} - #{site_title}" : site_title
-    link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'
+    link href='//fonts.googleapis.com/css?family=Open+Sans|Anonymous+Pro' rel='stylesheet' type='text/css'
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
     = javascript_pack_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
+    = javascript_pack_tag 'race', data: {turbolinks_track: 'reload'}, defer: true
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = csrf_meta_tag
@@ -36,11 +37,15 @@ html
             li.nav-item class=('active' if request.path == new_run_path)
               a.nav-link.px-3 href=new_run_path
                 => icon('fas', 'cloud-upload-alt')
-                | Upload
+                span.d-xs-inline.d-md-none.d-xl-inline Upload
             li.nav-item class=('active' if request.path == games_path)
               a.nav-link.px-3 href=games_path
                 => icon('fas', 'gamepad')
-                | Games
+                span.d-xs-inline.d-md-none.d-xl-inline Games
+            li.nav-item class=('active' if request.path == races_path)
+              a.nav-link.px-3 href=races_path
+                => icon('fas', 'flag-checkered')
+                span.d-xs-inline.d-md-none.d-xl-inline Races
             - if ENV['READ_ONLY_MODE'] == '1'
               li.nav-item
                 a.nav-link.px-3 href=read_only_mode_path
@@ -113,6 +118,12 @@ html
           small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
           ' Help us out by taking the 2019 Splits.io survey!
+      - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
+      - if entry.present? && request.path != race_path(entry.race)
+        article
+          a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=race_path(entry.race)
+            => icon('fas', 'flag-checkered')
+            | Return to race
       = render partial: 'shared/ad'
       header#header = yield(:header)
       article

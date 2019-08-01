@@ -7,6 +7,8 @@ module CompletedRun
     # duration returns the total duration of the run, from the beginning of the first segment to the end of the last
     # segment.
     def duration(timing = default_timing)
+      return Duration.new(nil) if segments.any? && segments.last.duration(timing).nil?
+
       case timing
       when Run::REAL
         Duration.new(realtime_duration_ms)
@@ -70,9 +72,9 @@ module CompletedRun
     def median_segment_duration(timing)
       case timing
       when Run::REAL
-        Duration.new(segments.pluck(:realtime_duration_ms).median.truncate)
+        Duration.new(segments.pluck(:realtime_duration_ms).extend(DescriptiveStatistics).median.truncate)
       when Run::GAME
-        Duration.new(segments.pluck(:gametime_duration_ms).median.truncate)
+        Duration.new(segments.pluck(:gametime_duration_ms).extend(DescriptiveStatistics).median.truncate)
       end
     end
 
@@ -80,9 +82,9 @@ module CompletedRun
     def median_segment_duration_ms(timing)
       case timing
       when Run::REAL
-        segments.pluck(:realtime_duration_ms).median.truncate
+        segments.pluck(:realtime_duration_ms).extend(DescriptiveStatistics).median.truncate
       when Run::GAME
-        segments.pluck(:gametime_duration_ms).median.truncate
+        segments.pluck(:gametime_duration_ms).extend(DescriptiveStatistics).median.truncate
       end
     end
 

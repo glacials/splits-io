@@ -9,7 +9,7 @@
     .pure-u.inspect(
       class='segment-inspect'
       data={run_id: run.id36, segment_number: index+1}
-      style="width: #{segment.duration(timing) / scale_to * 100.0}%; visibility: hidden;"
+      style="width: #{segment.proportion(timing) * 100.0}%; visibility: hidden;"
     )
       .bar
         p

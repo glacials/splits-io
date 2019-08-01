@@ -1,0 +1,112 @@
+- content_for(:title, @race)
+
+- content_for(:header) do
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Races', races_path)
+    li.breadcrumb-item.active = link_to(@race.to_param, race_path(@race))
+
+#vue-race
+  race inline-template=true race-id=@race.id
+    div
+      .text-center v-if="loading" = render partial: 'shared/spinner'
+      div v-show="!loading"
+        .row.mx-2
+          .col-md-6 = render partial: 'races/title', locals: {race: @race}
+          #stats-box.col-md-6 = render partial: 'races/stats', locals: {race: @race}
+
+      .card-deck.m-2
+        #entries-table.card.shadow
+          = render partial: 'races/entries_table', locals: {race: @race}
+      .card-deck.m-2
+        .card.shadow
+          .list-group.list-group-flush style='max-height: 500px; overflow-y: scroll'
+            - unless @race.locked?
+              race-chat inline-template=true v-if='race' :race='race'
+                .list-group-item#input-list-item.p-0
+                  = form_for(:chat, html: {onsubmit: 'event.preventDefault()'}) do |f|
+                    .input-group
+                      input.form-control#input-chat-text(
+                        autocomplete='off'
+                        autofocus=true
+                        disabled=current_user.nil?
+                        name='body'
+                        placeholder='Chat...'
+                        type='text'
+                        v-model='body'
+                      )
+                      .input-group-append
+                        button.btn.btn-dark#chat-submit(
+                          disabled=current_user.nil?
+                          type='submit'
+                          @click='chat'
+                          :disabled='body === ""'
+                          :title='error'
+                          v-tippy=true
+                        )
+                          template v-if='loading' = render partial: 'shared/spinner'
+                          span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
+                          template v-else=true => icon('fas', 'comment')
+            - @race.chat_messages.includes(user: [:twitch, :google]).order(created_at: :desc).each do |msg|
+              = render partial: 'chat_messages/show', locals: {chat_message: msg}
+            .list-group-item.p-0
+              .media
+                img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
+                .media-body
+                  span.mr-2: .badge.badge-success Splits.io
+                  i Race created
+                  .float-right.pr-2
+                    = render partial: 'shared/relative_time', locals: {time: @race.created_at}
+        race-disclaimer.card.shadow inline-template=true
+          div
+            .bg-dark.p-4 v-if='!accepted' style='height: 100%'
+              p
+                ' Attachments are uploaded by the race creator. Do not download any attachments
+                ul
+                  li that you do not recognize as necessary for your race,
+                  li that are executable files, or
+                  li if you do not both know and trust the race creator.
+                ' Splits.io is not affiliated with the race creator or attachments and is not responsible for
+                ' attachments or their effects on you and your device.
+              button.btn.btn-outline-light @click='accept' I understand
+            div v-show='accepted' v-cloak=true
+              h6.card-header Attachments
+              ul#attachments.list-group.list-group-flush = render partial: 'races/attachments', locals: {race: @race}
+              - if @race.belongs_to?(current_user) && !@race.started?
+                .card-footer
+                  = form_with(model: @race, url: api_v4_race_path(@race), method: 'PATCH', html: { \
+                    class: 'w-100 d-flex justify-content-between auth-me' \
+                  }) do |f|
+                    = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
+                    = f.submit('Attach', class: 'btn btn-outline-light')
+
+      .card-deck.m-2
+        race-streams inline-template=true  v-if='race' :race='race' v-cloak=true
+          .card v-if='!finished'
+            .card-header: .row.d-flex.align-items-center
+              h6.col-md-6 Stream Deck
+              .col-md-6
+                multiselect(
+                  v-model="value"
+                  :options="options"
+                  :multiple='true'
+                  :clear-on-select='false'
+                  :close-on-select='false'
+                  :searchable='false'
+                  :preselect-first='false'
+                  placeholder="Streams"
+                  label="name"
+                  track-by="name"
+                )
+                  template slot="selection" slot-scope="{ values, search, isOpen }"
+                    span class="multiselect__single" v-if="values.length && !isOpen"
+                      ' {{ value.length }}/{{ options.length }} options selected
+            .card-body
+              .card-deck
+                template v-for='(stream, index) in value'
+                  .card: .card-body.p-0 :id='`twitch-${stream.id}`'
+                  .w-100.d-sm-none
+                  .w-100.d-none.d-md-block.d-lg-none v-if='(index + 1) % 2 === 0'
+                  .w-100.d-none.d-lg-block.d-xl-none v-if='(index + 1) % 3 === 0'
+                  .w-100.d-none.d-xl-block v-if='(index + 1) % 4 === 0'
+              .center v-if='value.length === 0' Select streams to show from the box above

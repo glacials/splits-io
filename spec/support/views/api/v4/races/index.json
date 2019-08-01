@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "races"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "races": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../models/api/v4/race.json"
+      }
+    }
+  }
+}

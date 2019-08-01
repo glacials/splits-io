@@ -9,20 +9,33 @@
   / Specify the full partial path because this view is used by different controllers
   = render partial: 'games/categories/title', locals: {category: @category}
 
-article data-turbolinks-temporary=true
+
+#vue-race.row.mx-2
   - route = @category.route
   - if @category.route.present?
-    .card.mb-4 style='width: 18rem'
+    .col-md-4: .card.mb-4
+      h5.card-header #{@category.name} Route
       .card-body
-        h5.card-title #{@category.name} Route
         p.card-text Automatically determined based on popularity
-        = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download', force_route_only: true}
-  .card
-    .card-header
-      = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
-    = render partial: 'shared/run_table', locals: { \
-      runs: @category.runs.nonempty.unarchived, \
-      cols: %i[runner time name video uploaded], \
-    }.merge(sorting_info)
-  center
-    small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'
+        = render partial: 'runs/export_button', locals: {run: route, button_text: 'Download splits', force_route_only: true}
+
+  - if current_user.present?
+    = render partial: 'races/create', locals: {game: @game, category: @category}
+
+.row.mx-2
+  .col-md-6.mb-3: .card
+    = render partial: 'shared/race_table', locals: { \
+      races: @game.races.finished.not_secret_visibility.order(created_at: :desc), \
+      active_races: @game.races.active.not_secret_visibility.order(created_at: :desc) \
+    }
+
+  .col-md-6
+    .card
+      .card-header
+        = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
+      = render partial: 'shared/run_table', locals: { \
+        runs: @category.runs.nonempty.unarchived, \
+        cols: %i[runner time name video uploaded], \
+      }.merge(sorting_info)
+      center.my-2
+        small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'

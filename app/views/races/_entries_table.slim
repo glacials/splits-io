@@ -1,0 +1,85 @@
+- timing = Run::REAL
+- add_ghost = local_assigns.fetch(:add_ghost, true)
+
+h6.card-header Entries
+- if race.entries.none?
+  .card-body: i No one here
+- else
+  .table-responsive: table.card-body.table.mb-0
+    thead: tr
+      th.nowrap Name
+      th.nowrap.text-center
+        - if race.started?
+          ' Position
+        - else
+          ' Ready
+      th.w-100 Time
+      - unless race.finished?
+        th.nowrap.text-center Current split
+      th.nowrap.text-center Stats
+      th.nowrap.text-center Links
+    tbody
+      - race.entries.includes(:runner).order('finished_at ASC NULLS LAST, forfeited_at ASC NULLS FIRST, readied_at ASC NULLS LAST, created_at ASC').each do |entry|
+        tr style=('filter: grayscale(100%)' if entry.ghost?)
+          td.nowrap
+            - if entry.ghost?
+              big.mr-2 v-tippy=true title="Ghost of #{entry.runner}'s past run 😱"
+                = icon('fas', 'ghost')
+            span.mr-2 = user_badge(entry.runner)
+          td.nowrap.text-center
+            - if race.started?
+              - if entry.done?
+                b class=entry_color(entry) = entry_place(entry)
+              - else
+                b = entry_place(entry)
+            - else
+              = entry.ready? ? icon('fas', 'check', class: 'text-success') : icon('fas', 'times', class: 'text-danger')
+          td.nowrap.text-monospace
+            - if entry.done? && (entry.finished_at.nil? || entry.finished_at < Time.now.utc)
+              b class=entry_color(entry) = entry.duration.format(precise: true)
+            - elsif race.started?
+              span data={abstime: race.started_at.rfc3339(3)} -
+          - unless race.finished?
+            td.nowrap
+              - if entry.run.present? && race.started?
+                - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))
+                - if segment.present?
+                  .badge.badge-dark.mr-2 #{segment}
+                  span.count data={abstime: (race.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
+          td.nowrap.text-center
+            - entries = entry.runner.entries
+            - places = entries.map(&:place)
+            span.badge.badge-dark.mr-2
+              => icon('fas', 'medal')
+              span.text-gold = places.count(1)
+              span.text-secondary = '/'
+              span.text-silver = places.count(2)
+              span.text-secondary = '/'
+              span.text-bronze = places.count(3)
+            span.badge.badge-dark
+              => icon('fas', 'flag-checkered')
+              b.text-success = entries.count(:finished_at)
+              span.text-secondary = '/'
+              span.text-danger = entries.count(:forfeited_at)
+          td.nowrap.text-center
+            - if entry.runner.twitch.present?
+              a.text-light.tip.mr-2 href=entry.runner.twitch.url title='Watch on Twitch'
+                = icon('fab', 'twitch')
+            - if entry.run.present?
+              a.text-light.tip.mr-2 href=run_path(entry.run) title='See associated run'
+                = icon('fas', 'scroll')
+- if !race.started? && add_ghost
+  .card-footer.clearfix: .float-right
+    .dropdown.mr-2
+      button.btn.btn-outline-light.dropdown-toggle#ghost-btn(
+        type='button'
+        data={toggle: 'dropdown'}
+        aria={haspopup: true, expanded: false}
+        onclick='window.setTimeout(() => document.getElementById("ghost-input").focus(), 100)'
+      )
+        ' Add ghost
+      .dropdown-menu.bg-dark.p-4 aria={labelledby: 'ghost-btn'} style='width: 18rem'
+        = form_for(:entry, remote: true, url: api_v4_race_entries_path(race.id), html: {class: 'auth-me'}) do |f|
+          .form-group
+            = f.text_field(:run_id, class: 'form-control', placeholder: 'Run ID; e.g. g23b', id: 'ghost-input')
+          = f.submit('Add ghost', class: 'btn btn-outline-light')

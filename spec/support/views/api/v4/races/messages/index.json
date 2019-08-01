@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "chat_messages"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "chat_messages": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../../../models/api/v4/chat_message.json"
+      }
+    }
+  }
+}

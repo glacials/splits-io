@@ -15,14 +15,22 @@
       a.btn.btn-srdc.tip title='Visit on Speedrun.com' href=@user.srdc.url
         => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
 
-article
-  .row
-    .col-lg-12
-      .card.shadow
-        = render partial: 'shared/run_table', locals: { \
-          runs: @user.pbs, \
-          cols: %i[time video name uploaded], \
-          col_options: {time: [:archived]}, \
-          description: 'Personal Bests', \
-          user: @user \
-        }.merge(sorting_info)
+.row.mx-2
+  .col-md-6.mb-3
+    .card.shadow
+      = render partial: 'shared/race_table', locals: { \
+        races: @user.races.finished.not_secret_visibility.order(created_at: :desc), \
+        user: @user, \
+        active_races: @user.races.active.not_secret_visibility, \
+        description: "#{@user}'s Races" \
+      }
+
+  .col-md-6.mb-3
+    .card.shadow
+      = render partial: 'shared/run_table', locals: { \
+        runs: @user.pbs, \
+        cols: %i[time video name uploaded], \
+        col_options: {time: [:archived]}, \
+        description: 'Personal Bests', \
+        user: @user \
+      }.merge(sorting_info)

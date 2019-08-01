@@ -9,7 +9,7 @@
 // e.g. "dismissed_claim_tokens/gcb": "wYJm4S9uAAra6TMyzLkvhC5y"
 
 const activateClaimLink = function(claimToken) {
-  if(window.gon.user !== null) {
+  if(window.gon.user !== null && document.getElementById('claim-nav-link') !== null) {
     document.getElementById('claim-nav-link').href = `/${window.gon.run.id}?claim_token=${claimToken}`
   }
 

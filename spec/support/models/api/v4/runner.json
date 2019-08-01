@@ -1,7 +1,9 @@
 {
   "type": "object",
   "required": [
+    "id",
     "twitch_id",
+    "twitch_name",
     "name",
     "avatar",
     "created_at",
@@ -9,7 +11,14 @@
   ],
   "additionalProperties": false,
   "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
     "twitch_id": {
+      "type": "string"
+    },
+    "twitch_name": {
       "type": "string"
     },
     "name": {

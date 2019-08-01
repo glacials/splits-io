@@ -1,0 +1,74 @@
+- description ||= nil
+- cols ||= [:creator, :time, :entries, :name, :status, :created, :results]
+- races = races.page(params[:page]).includes(:owner)
+- active_races ||= Race.none
+
+- if races.none? && active_races.none?
+  - if description.present?
+    .card-header.text-white = description
+  .center.p-4
+    i Nothing to show!
+- else
+  - if description.present?
+    .card-header.text-white = description
+  .table-responsive
+    table.card-body.table.table-striped.table-hover.mb-0
+      thead
+        tr
+          - if cols.include?(:creator)
+            th.align-right.nowrap Creator
+          - if cols.include?(:time)
+            th.align-right.nowrap Time
+          - if cols.include?(:entries)
+            th.align-right.nowrap Entries
+          - if cols.include?(:name)
+            th width='100%' Title
+          - if cols.include?(:status)
+            th.align-right.nowrap Status
+          - if cols.include?(:created)
+            th.align-right.nowrap Created
+          - if cols.include?(:results)
+            th.align-right.nowrap Results
+      tbody
+        - (active_races + races).uniq.each do |race|
+          tr class=('bg-dark' if active_races.include?(race))
+            - if cols.include?(:creator)
+              td.align-right.nowrap = user_badge(race.owner)
+            - if cols.include?(:time)
+              td.align-right.nowrap.text-monospace
+                - entry = race.entries.find_for(user) if local_assigns[:user].present?
+                - if entry.present? && entry.done?
+                  .text-success = entry.duration.format
+                - elsif race.in_progress?
+                  div data={abstime: race.started_at.rfc3339(3)} -
+                - else
+                  = race.duration.format
+            - if cols.include?(:entries)
+              td.align-right.nowrap = race.entries.count
+            - if cols.include?(:name)
+              td width='100%' = link_to(race, race_path(race), class: 'run-link')
+            - if cols.include?(:status)
+              td.align-right.nowrap
+                - if race.finished?
+                  .text-success Completed
+                - elsif race.in_progress?
+                  .text-warning In Progress
+                - else
+                  - if race.public_visibility?
+                    .text-success Open
+                  - elsif race.invite_only_visibility?
+                    .text-warning Invite Only
+                  - else
+                    - raise # raise if we get an unexpected visibility
+            - if cols.include?(:created)
+              td.align-right.nowrap
+                 = render partial: 'shared/relative_time', locals: {time: race.created_at, ago: true}
+            - if cols.include?(:results)
+              td.align-right.text-primary.cursor-pointer data={toggle: 'collapse', target: "#accordion-#{race.id}"}
+                = icon('fas', 'list-ol')
+          - if cols.include?(:results)
+            tr
+              td.m-0.p-0 colspan='999'
+                .collapse id="accordion-#{race.id}"
+                  .card
+                    = render partial: 'races/entries_table', locals: {race: race, add_ghost: false}

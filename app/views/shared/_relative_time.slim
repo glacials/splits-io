@@ -1,0 +1,6 @@
+- if local_assigns[:prefix].present?
+  => prefix
+span data={reltime: time.rfc3339} title=time
+  = time_ago_in_words(time).sub('about ', '')
+- if local_assigns[:ago]
+  =< 'ago'

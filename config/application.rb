@@ -24,5 +24,9 @@ module SplitsIO
     config.to_prepare do
       Doorkeeper::AuthorizationsController.layout 'application'
     end
+
+    config.action_cable.disable_request_forgery_protection = true
+    config.action_cable.url = '/api/cable'
+    config.action_cable.mount_path = '/api/cable'
   end
 end

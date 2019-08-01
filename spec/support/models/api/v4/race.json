@@ -1,0 +1,112 @@
+{
+  "type": "object",
+  "required": [
+    "attachments",
+    "category",
+    "chat_messages",
+    "created_at",
+    "entries",
+    "game",
+    "id",
+    "join_token",
+    "notes",
+    "owner",
+    "path",
+    "started_at",
+    "updated_at",
+    "visibility"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "created_at",
+          "filename",
+          "id",
+          "url"
+        ],
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "category": {
+      "anyOf": [
+        {"$ref": "../../../models/api/v4/category.json"},
+        {"type": "null"} 
+      ]
+    },
+    "chat_messages": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../models/api/v4/chat_message.json"
+      }
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../models/api/v4/entry.json"
+      }
+    },
+    "game": {
+      "anyOf": [
+        {"$ref": "../../../models/api/v4/game.json"},
+        {"type": "null"}
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "join_token": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "owner": {
+      "$ref": "../../../models/api/v4/runner.json"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^/.*$"
+    },
+    "started_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string"
+    }
+  }
+}

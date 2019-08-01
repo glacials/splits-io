@@ -90,6 +90,9 @@ Rails.application.routes.draw do
       to: 'games/categories/leaderboards/sum_of_bests#index',
       as: :game_category_sum_of_bests
 
+  get '/races',     to: 'races#index',  as: :races
+  get '/races/:id', to: 'races#show',   as: :race
+
   get '/tools', to: 'tools#index'
 
   get  '/settings',   to: 'settings#index', as: :settings
@@ -151,9 +154,29 @@ Rails.application.routes.draw do
       put    '/runs/:run', to: 'runs#update'
       delete '/runs/:run', to: 'runs#destroy'
 
+      get '/runs/:run/source_file', to: 'runs/source_files#show', as: 'run_source_file'
+      put '/runs/:run/source_file', to: 'runs/source_files#update'
+
       delete '/runs/:run/user', to: 'runs/users#destroy'
 
       post '/convert', to: 'converts#create'
+
+      get   '/races',     to: 'races#index',  as: 'races'
+      post  '/races',     to: 'races#create'
+      get   '/races/:id', to: 'races#show',   as: 'race'
+      patch '/races/:id', to: 'races#update'
+
+      get    '/races/:race_id/entries/:id', to: 'races/entries#show',   as: 'race_entry'
+      post   '/races/:race_id/entries',     to: 'races/entries#create', as: 'race_entries'
+      patch  '/races/:race_id/entries/:id', to: 'races/entries#update'
+      delete '/races/:race_id/entries/:id', to: 'races/entries#destroy'
+
+      get  '/races/:race_id/chat', to: 'races/chat_messages#index',  as: 'race_chat_messages'
+      post '/races/:race_id/chat', to: 'races/chat_messages#create'
+
+      post '/races/:race_id/ghosts', to: 'races/ghosts#create'
+
+      post '/timesync', to: 'time#create'
     end
 
     namespace :v3 do

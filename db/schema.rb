@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_11_153212) do
+ActiveRecord::Schema.define(version: 2019_07_29_221148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -18,6 +18,26 @@ ActiveRecord::Schema.define(version: 2019_05_11_153212) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.uuid "record_id", null: false
+    t.string "record_type", null: false
+    t.uuid "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
 
   create_table "authie_sessions", id: :serial, force: :cascade do |t|
     t.string "token"
@@ -58,6 +78,17 @@ ActiveRecord::Schema.define(version: 2019_05_11_153212) do
     t.index ["name"], name: "index_categories_on_name"
   end
 
+  create_table "chat_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "race_id"
+    t.bigint "user_id", null: false
+    t.boolean "from_entrant", null: false
+    t.text "body", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["race_id"], name: "index_chat_messages_on_race_id"
+    t.index ["user_id"], name: "index_chat_messages_on_user_id"
+  end
+
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -71,6 +102,23 @@ ActiveRecord::Schema.define(version: 2019_05_11_153212) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "race_id"
+    t.bigint "runner_id"
+    t.datetime "readied_at", precision: 3
+    t.datetime "finished_at", precision: 3
+    t.datetime "forfeited_at", precision: 3
+    t.datetime "created_at", precision: 3, null: false
+    t.datetime "updated_at", precision: 3, null: false
+    t.bigint "run_id"
+    t.boolean "ghost", default: false, null: false
+    t.bigint "creator_id"
+    t.index ["creator_id"], name: "index_entries_on_creator_id"
+    t.index ["race_id"], name: "index_entries_on_race_id"
+    t.index ["run_id"], name: "index_entries_on_run_id"
+    t.index ["runner_id"], name: "index_entries_on_runner_id"
   end
 
   create_table "game_aliases", id: :serial, force: :cascade do |t|
@@ -169,6 +217,21 @@ ActiveRecord::Schema.define(version: 2019_05_11_153212) do
     t.index ["user_id"], name: "index_patreon_users_on_user_id"
   end
 
+  create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "category_id"
+    t.bigint "user_id", null: false
+    t.integer "visibility", default: 0, null: false
+    t.string "join_token", null: false
+    t.string "notes"
+    t.datetime "started_at", precision: 3
+    t.datetime "created_at", precision: 3, null: false
+    t.datetime "updated_at", precision: 3, null: false
+    t.bigint "game_id"
+    t.index ["category_id"], name: "index_races_on_category_id"
+    t.index ["game_id"], name: "index_races_on_game_id"
+    t.index ["user_id"], name: "index_races_on_user_id"
+  end
+
   create_table "rivalries", id: :serial, force: :cascade do |t|
     t.integer "category_id"
     t.integer "from_user_id"
@@ -242,14 +305,14 @@ ActiveRecord::Schema.define(version: 2019_05_11_153212) do
   create_table "segments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.integer "run_id", null: false
     t.integer "segment_number", null: false
-    t.bigint "realtime_duration_ms", null: false
-    t.bigint "realtime_start_ms", null: false
-    t.bigint "realtime_end_ms", null: false
-    t.bigint "realtime_shortest_duration_ms", null: false
+    t.bigint "realtime_duration_ms"
+    t.bigint "realtime_start_ms"
+    t.bigint "realtime_end_ms"
+    t.bigint "realtime_shortest_duration_ms"
     t.string "name", null: false
-    t.boolean "realtime_gold", null: false
-    t.boolean "realtime_reduced", null: false
-    t.boolean "realtime_skipped", null: false
+    t.boolean "realtime_gold", default: false, null: false
+    t.boolean "realtime_reduced", default: false, null: false
+    t.boolean "realtime_skipped", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "gametime_start_ms"
@@ -373,12 +436,20 @@ ActiveRecord::Schema.define(version: 2019_05_11_153212) do
     t.index ["name"], name: "index_users_on_name", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chat_messages", "races"
+  add_foreign_key "chat_messages", "users"
+  add_foreign_key "entries", "races"
+  add_foreign_key "entries", "users", column: "runner_id"
   add_foreign_key "game_aliases", "games", on_delete: :cascade
   add_foreign_key "google_users", "users"
   add_foreign_key "highlight_suggestions", "runs"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "patreon_users", "users"
+  add_foreign_key "races", "categories"
+  add_foreign_key "races", "games"
+  add_foreign_key "races", "users"
   add_foreign_key "run_histories", "runs", on_delete: :cascade
   add_foreign_key "run_likes", "runs"
   add_foreign_key "run_likes", "users"

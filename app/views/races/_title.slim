@@ -1,0 +1,67 @@
+race-title inline-template=true v-if='race' :race='race'
+  div v-cloak=true
+    .row: .col-md-12
+      h1 v-if='!editing' = '{{title}}'
+      = form_for race, url: race_path(race), html: {'v-if' => 'editing'} do |f|
+        .form-row
+          .col-md-6.my-1
+            label.sr-only for='game-selector'
+            select.form-control v-model='gameId'
+              option v-for='game in games' :value='game.id' {{game.name}}
+          .col-md-6.my-1
+            label.sr-only for='category-selector'
+            select.form-control v-model='categoryId'
+              option v-for='category in categories' :value='category.id' {{category.name}}
+    .row
+      .col-md-12
+        - if race.has_attribute?(:card_url)
+          h5#card-url = "Card: #{race.card_url || 'None'}"
+        - if race.has_attribute?(:seed)
+          h5#seed-name = "Seed: #{race.seed || 'None'}"
+
+        h5
+          span
+            ' created by
+            = user_badge(race.owner)
+          - if race.belongs_to?(current_user)
+            .btn-group.ml-2
+              button.btn.btn-outline-light.btn-sm.clipboard-btn(
+                data-clipboard-text=race_url(race, join_token: race.join_token)
+                title='Copy invite link'
+                v-tippy=true
+              )
+                span#copy = icon('fas', 'share-alt')
+                span#copied style='display: none;' = icon('fas', 'check')
+              - if !race.started?
+                button.btn.btn-outline-light.btn-sm(
+                  :disabled='loading'
+                  :title='error || "Edit"'
+                  @click='edit'
+                  v-if='!editing'
+                  v-tippy=true
+                )
+                  template v-if='loading' = render partial: 'shared/spinner'
+                  template v-else-if='error' = icon('fas', 'times')
+                  template v-else=true = icon('fas', 'edit')
+                button.btn.btn-outline-light @click='cancel' v-if='editing'
+                  = icon('fas', 'times')
+                button.btn.btn-outline-light(
+                  :disabled='loading'
+                  :title='error'
+                  @click='save'
+                  v-if='editing && !race.started_at'
+                  v-tippy=true
+                )
+                  template v-if='loading' = render partial: 'shared/spinner'
+                  template v-else-if='error' = icon('fas', 'times')
+                  template v-else=true = icon('fas', 'check')
+
+      .col-md-12
+        div v-if="false" = render partial: 'shared/spinner'
+        = render partial: 'races/nav'
+      .col-md-12.mt-2
+        pre.text-light v-show='!editing'
+          ' {{(race.notes || '').split('\n').splice(1).filter(s => s !== '').join('\n')}}
+        template v-if='editing'
+          small.form-text.text-muted.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2 Use the first line as a title supplement.
+          textarea.bg-dark.text-light style='font-family: monospace; width: 100%' rows=10 v-model='notes'

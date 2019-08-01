@@ -8,6 +8,7 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import "jquery"
+require("@rails/activestorage").start()
 require("@rails/ujs").start()
 require("turbolinks").start()
 require("channels")
@@ -24,10 +25,12 @@ window.Chartkick = Chartkick
 import "../ad_cleanup.js"
 import "../analytics.js"
 import "../convert.js"
+import "../count.js"
 import "../highchart_theme.js"
 import "../chart_builder.js"
 import "../landing.js"
 import "../like.js"
+import "../race_attach.js"
 import "../run_claim.js"
 import '../run_delete.js'
 import '../run_disown.js'

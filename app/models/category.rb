@@ -3,6 +3,7 @@ class Category < ApplicationRecord
 
   has_many :runs,      dependent: :nullify
   has_many :rivalries, dependent: :destroy
+  has_many :races,     dependent: :nullify, class_name: 'Race'
 
   has_many :users, through: :runs
 

@@ -70,7 +70,12 @@ RSpec.configure do |config|
     runner_runs:       'spec/support/views/api/v4/runners/runs/index.json',
     runner_pbs:        'spec/support/views/api/v4/runners/pbs/index.json',
     run:               'spec/support/views/api/v4/runs/show.json',
-    runner:            'spec/support/views/api/v4/runners/show.json'
+    runner:            'spec/support/views/api/v4/runners/show.json',
+    race:              'spec/support/views/api/v4/races/show.json',
+    races:             'spec/support/views/api/v4/races/index.json',
+    entry:             'spec/support/views/api/v4/races/entries/show.json',
+    chat_message:      'spec/support/views/api/v4/races/messages/show.json',
+    chat_messages:     'spec/support/views/api/v4/races/messages/index.json'
   }
 
 # The settings below are suggested to provide a good initial experience

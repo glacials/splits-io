@@ -1,0 +1,34 @@
+.row
+  .col-sm-6.col-xl-4
+    .statcard.p-3.rounded
+      - if !race.started?
+        h2.statcard-number class=statcard_class(race)
+          ' Accepting entries
+        - if race.entries.count <= 1
+          span.statcard-desc class=statcard_class(race)
+            ' Need #{2 - race.entries.count} more
+        - else
+          span.statcard-desc class=statcard_class(race)
+            ' #{race.entries.ready.count} / #{race.entries.count} ready
+      - if race.started? && !race.finished?
+        h2.statcard-number class=statcard_class(race) data={abstime: race.started_at.rfc3339(3)} -
+        span.statcard-desc class=statcard_class(race) In progress
+      - if race.finished?
+        h2.statcard-number class=statcard_class(race) Finished
+        span.statcard-desc class=statcard_class(race) title=race.finished_at
+          = render partial: 'shared/relative_time', locals: {time: race.finished_at, ago: true}
+  .col-sm-6.col-xl-4: .statcard.p-3
+    h2.statcard-number = race.visibility.humanize
+    span.statcard-desc Visibility
+  .col-sm-6.col-xl-4: .statcard.p-3
+    h2.statcard-number = race.entries.count
+    span.statcard-desc Entries
+  - if race.entries.any?
+    .col-sm-6.col-xl-4: .statcard.p-3
+      h2.statcard-number
+        = (Entry.where(runner: race.runners).where.not(forfeited_at: nil).count / Entry.where(runner: race.runners).count * race.entries.count).floor
+      span.statcard-desc Predicted forfeits
+    .col-sm-6.col-xl-4: .statcard.p-3
+      h2.statcard-number
+        = race.entries.joins(:runner).order('users.created_at ASC').first.runner
+      span.statcard-desc Predicted winner

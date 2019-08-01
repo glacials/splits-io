@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "required": [
+    "body",
+    "from_entrant",
+    "created_at",
+    "updated_at",
+    "user"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "type": "string"
+    },
+    "from_entrant": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "user": {
+      "$ref": "../../../models/api/v4/runner.json"
+    }
+  }
+}

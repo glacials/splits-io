@@ -12,7 +12,7 @@ class HighlightSuggestion < ApplicationRecord
 
       return run.highlight_suggestion if run.highlight_suggestion.present?
 
-      pb = run.histories.where.not(started_at: nil, ended_at: nil).find_by(
+      pb = run.histories.where.not(started_at: nil).where.not(ended_at: nil).find_by(
         realtime_duration_ms: run.duration_ms(Run::REAL),
         gametime_duration_ms: run.duration_ms(Run::GAME)
       )
