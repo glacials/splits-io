@@ -58,6 +58,8 @@
                     .text-success Open
                   - elsif race.invite_only_visibility?
                     .text-warning Invite Only
+                  - elsif race.secret_visibility?
+                    .text-danger Secret
                   - else
                     - raise # raise if we get an unexpected visibility
             - if cols.include?(:created)
