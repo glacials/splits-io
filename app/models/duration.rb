@@ -1,4 +1,6 @@
 class Duration
+  include Comparable
+
   def initialize(milliseconds)
     @ms = milliseconds
   end
@@ -50,87 +52,58 @@ class Duration
     d = d.first(num_units).to_h.map { |k, v| "#{v.to_i}#{k}" }.join(' ')
     return "+#{d}" if sign == :always && positive?
     return "-#{d}" if [:always, :negatives].include?(sign) && negative?
+
     d
   end
 
-  def ==(duration)
-    # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
-    # absent. When those are cleaned up, we can change Duration#nil? and this.
-    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
-    return false unless duration.respond_to?(:to_ms)
-
-    to_ms == duration.to_ms
+  def !=(other)
+    !(self == other)
   end
 
-  def !=(duration)
-    return false if nil? || duration.nil?
-    return false unless duration.respond_to?(:to_ms)
+  def <=>(other)
+    other = Duration.new(other) if other.is_a?(Numeric)
+    return nil unless other.respond_to?(:to_ms)
+    return 0 if to_ms.nil? && other.to_ms.nil?
 
-    to_ms != duration.to_ms
+    if to_ms.nil?
+      -1
+    elsif other.to_ms.nil?
+      1
+    else
+      to_ms <=> other.to_ms
+    end
   end
 
-  def <(duration)
-    # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
-    # absent. When those are cleaned up, we can change Duration#nil? and this.
-    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
+  def +(other)
+    return Duration.new(nil) if nil? || other.nil?
 
-    # duration can be a Duration or a number of milliseconds
-    ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
-
-    to_ms < ms
+    # other can be a number or a Duration
+    other = Duration.new(other) if other.is_a?(Numeric)
+    Duration.new(to_ms + other.to_ms)
   end
 
-  def <=(duration)
-    self < duration || self == duration
+  def -(other)
+    return Duration.new(nil) if nil? || other.nil?
+
+    # other can be a number or a Duration
+    other = Duration.new(other) if other.is_a?(Numeric)
+    Duration.new(to_ms - other.to_ms)
   end
 
-  def >(duration)
-    # Normally we'd call Duration#nil? here, but it treats 0 as nil to deal with old durations in the db where 0 means
-    # absent. When those are cleaned up, we can change Duration#nil? and this.
-    return false if duration == nil || to_ms.nil? || (duration.respond_to?(:to_ms) && duration.to_ms.nil?)
+  def /(other)
+    return Duration.new(nil) if nil? || other.nil?
 
-    # duration can be a Duration or a number of milliseconds
-    ms = duration.respond_to?(:to_ms) ? duration.to_ms : duration
-
-    to_ms > ms
+    # other can be a number or a Duration
+    other = Duration.new(other) if other.is_a?(Numeric)
+    Duration.new(to_ms.to_f / other.to_ms)
   end
 
-  def >=(duration)
-    self > duration || self == duration
-  end
+  def *(other)
+    return Duration.new(nil) if nil? || other.nil?
 
-  def <=>(duration)
-    return nil unless duration.respond_to?(:to_ms)
-
-    to_ms <=> duration.to_ms
-  end
-
-  def +(duration)
-    return Duration.new(nil) if nil? || duration.nil?
-
-    Duration.new(to_ms + duration.to_ms)
-  end
-
-  def -(duration)
-    return Duration.new(nil) if nil? || duration.nil?
-
-    Duration.new(to_ms - duration.to_ms)
-  end
-
-  def /(duration)
-    return Duration.new(nil) if nil? || duration.nil?
-
-    # duration can be a number or a Duration
-    ms = (duration == duration.to_i) ? duration : duration.to_ms
-    Duration.new(to_ms.to_f / ms)
-  end
-
-  def *(duration)
-    return Duration.new(nil) if nil? || duration.nil?
-
-    # duration can be a number or a Duration
-    ms = (duration == duration.to_i) ? duration : duration.to_ms
-    Duration.new(to_ms * ms)
+    # other can be a number or a Duration
+    other = Duration.new(other) if other.is_a?(Numeric)
+    Duration.new(to_ms * other.to_ms)
   end
 
   def to_i
