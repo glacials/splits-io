@@ -57,7 +57,7 @@ class Duration
   end
 
   def !=(other)
-    !to_ms == other.to_ms
+    !(self == other)
   end
 
   def <=>(other)
