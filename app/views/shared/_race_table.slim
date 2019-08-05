@@ -74,3 +74,5 @@
                 .collapse id="accordion-#{race.id}"
                   .card
                     = render partial: 'races/entries_table', locals: {race: race, add_ghost: false}
+  .mx-auto
+    = paginate(races, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')

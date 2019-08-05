@@ -10,7 +10,7 @@ h5
   - if run.srdc_id.present?
     a.badge.badge-dark.tip title='See on Speedrun.com' href=run.srdc_url
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-  - if run.entry.present?
+  - if run.entry.present? && !run.entry.ghost?
     a.badge.badge-dark.tip title='Recorded as part of a race' href=race_path(run.entry.race)
       = icon('fas', 'flag-checkered')
   - if run.video_url.present?

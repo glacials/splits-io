@@ -8,7 +8,13 @@ export default {
       return
     }
 
-    this.entry = this.race.entries.find(entry => (entry.runner.id === this.currentUser.id) && !entry.ghost)
+    this.entry = this.race.entries.find((entry) => {
+      if (!entry.runner || entry.ghost) {
+        return false
+      }
+
+      return entry.runner.id === this.currentUser.id
+    })
   },
   data: () => ({
     currentUser: null,

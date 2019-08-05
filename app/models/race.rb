@@ -8,7 +8,6 @@ class Race < ApplicationRecord
   belongs_to :game,     optional: true
   belongs_to :category, optional: true
 
-
   enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
 
   belongs_to :owner, foreign_key: :user_id, class_name: 'User'
@@ -34,7 +33,7 @@ class Race < ApplicationRecord
   end
 
   def self.finished
-    joins(:entries).where.not(entries: {finished_at: nil}).or(joins(:entries).where.not(entries: {forfeited_at: nil})).group(:id)
+    joins(:entries).where.not(entries: {finished_at: nil, forfeited_at: nil}).distinct
   end
 
   # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
