@@ -23,7 +23,7 @@ h6.card-header Entries
         tr style=('filter: grayscale(100%)' if entry.ghost?)
           td.nowrap
             - if entry.ghost?
-              big.mr-2 v-tippy=true title="Ghost of #{entry.runner}'s past run 😱"
+              big.mr-2 v-tippy=true title="Ghost of #{entry.runner ? entry.runner.to_s + "'s" : 'a'} past run 😱"
                 = icon('fas', 'ghost')
             span.mr-2 = user_badge(entry.runner)
           td.nowrap.text-center
@@ -47,22 +47,23 @@ h6.card-header Entries
                   .badge.badge-dark.mr-2 #{segment}
                   span.count data={abstime: (race.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
           td.nowrap.text-center
-            - entries = entry.runner.entries
-            - places = entries.map(&:place)
-            span.badge.badge-dark.mr-2
-              => icon('fas', 'medal')
-              span.text-gold = places.count(1)
-              span.text-secondary = '/'
-              span.text-silver = places.count(2)
-              span.text-secondary = '/'
-              span.text-bronze = places.count(3)
-            span.badge.badge-dark
-              => icon('fas', 'flag-checkered')
-              b.text-success = entries.count(:finished_at)
-              span.text-secondary = '/'
-              span.text-danger = entries.count(:forfeited_at)
+            - if entry.runner.present?
+              - entries = entry.runner.entries
+              - places = entries.map(&:place)
+              span.badge.badge-dark.mr-2
+                => icon('fas', 'medal')
+                span.text-gold = places.count(1)
+                span.text-secondary = '/'
+                span.text-silver = places.count(2)
+                span.text-secondary = '/'
+                span.text-bronze = places.count(3)
+              span.badge.badge-dark
+                => icon('fas', 'flag-checkered')
+                b.text-success = entries.count(:finished_at)
+                span.text-secondary = '/'
+                span.text-danger = entries.count(:forfeited_at)
           td.nowrap.text-center
-            - if entry.runner.twitch.present?
+            - if entry.runner.try(:twitch).try(:present?)
               a.text-light.tip.mr-2 href=entry.runner.twitch.url title='Watch on Twitch'
                 = icon('fab', 'twitch')
             - if entry.run.present?
