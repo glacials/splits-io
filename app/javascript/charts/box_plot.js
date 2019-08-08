@@ -21,17 +21,15 @@ const buildBoxPlot = (runs, options = {}) => {
       chartOptions: {
         plotOptions: {
           series: {
-            dataLabels: {enabled: true}
+            dataLabels: {enabled: false}
           },
           line: {
             dataLabels: {
-              enabled: true,
-              formatter: () => this.x
+              enabled: false
             }
           }
         }
-      },
-      fallbackToExportServer: false
+      }
     },
     chart: {
       type: 'boxplot',

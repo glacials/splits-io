@@ -12,13 +12,10 @@ const buildResetChart = function(runs, options = {}) {
   Highcharts.chart('reset-chart', defaults(_.clone(options), {
     exporting: {
       chartOptions: {
-        plotOptions: {
-          series: {
-            dataLabels: {enabled: true}
-          }
+        legend: {
+          enabled: false
         }
-      },
-      fallbackToExportServer: false
+      }
     },
     chart: {type: 'pie'},
     title: {text: 'Resets Per Split'},
@@ -33,7 +30,12 @@ const buildResetChart = function(runs, options = {}) {
             let chart = this.chart
             let legend = chart.legend
             let tooltip = this.chart.tooltip
-            for (let item of legend.allItems) {
+            for (let item of legend.getAllItems()) {
+              if (!item.legendItem) {
+                // exporting with no legend
+                return
+              }
+
               item.legendItem.on('mouseover', function (e) {
                 let data = item.series.data[item.index]
                 tooltip.refresh(data)

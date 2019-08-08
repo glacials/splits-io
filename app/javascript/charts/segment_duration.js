@@ -4,7 +4,7 @@ require('highcharts/modules/exporting')(Highcharts)
 const defaults = require('deep-defaults')
 const moment = require('moment')
 
-import {logoColors, logoYellow, logoGreen, logoBlue} from '../colors.js'
+import {logoColors} from '../colors.js'
 
 const buildSegmentDurationChart = function(timing, runs, segments, options = {}) {
   if (document.getElementById(`segment-duration-chart-${segments[0].id}`) === null) {
