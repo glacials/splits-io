@@ -2,6 +2,24 @@ require 'rails_helper'
 
 describe Api::V4::GamesController do
   describe '#index' do
+    let(:games) { FactoryBot.create_list(:game, 5, :shortnamed) }
+
+    context 'with a normal search' do
+      subject { get :index, params: {search: 'The Legend of Mario: Melee Crossing'} }
+
+      it 'returns a 200' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'with an id search' do
+      let(:game) { FactoryBot.create(:game, name: 'Minesweeper') }
+      subject { get :index, params: {search: game.id} }
+
+      it 'returns a 200' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
   end
 
   describe '#show' do

@@ -7,7 +7,7 @@ class Api::V4::GamesController < Api::V4::ApplicationController
     else
       id_search = Game.find_by(id: params[:search])
       @games = Game.search(params[:search]).includes(:categories)
-      @games.unshift(id_search) if id_search.present?
+      @games = @games.to_ary.unshift(id_search) if id_search.present?
     end
     render json: Api::V4::GameBlueprint.render(@games, root: :games, toplevel: :game)
   end
