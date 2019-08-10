@@ -509,8 +509,8 @@ A Game is a collection of information about a game, and a container for Categori
 a run is uploaded with an unidentified game name. They try to associate themselves with a Speedrun.com game when
 created, but the association is not guaranteed.
 
-By default, these endpoints use shortname to lookup the game. This can be problematic, so you can change to ID lookup by
-adding `?game_value=id` as a query parameter to the request.
+When searching for games, it is possible to pass in a game ID. If a game with this ID exists, it will be prepended to
+the search response array.
 
 <details>
 <summary>Structure of a Game</summary>

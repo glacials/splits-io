@@ -55,11 +55,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_game
-    if params[:game_value] == 'id'
-      @game = Game.find(params[:game])
-    else
-      @game = Game.joins(:srdc).find_by!(speedrun_dot_com_games: {shortname: params[:game]})
-    end
+    @game = Game.joins(:srdc).find_by!(speedrun_dot_com_games: {shortname: params[:game]})
   rescue ActiveRecord::RecordNotFound
     render not_found(:game)
   end
