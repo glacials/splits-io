@@ -395,11 +395,17 @@ ActiveRecord::Schema.define(version: 2019_09_15_142043) do
     t.index ["run_id"], name: "index_splits_on_run_id"
   end
 
-  create_table "subscriptions", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "stripe_session_id"
+    t.string "stripe_plan_id", null: false
     t.string "stripe_subscription_id"
-    t.string "stripe_plan_id"
+    t.string "stripe_payment_intent_id"
     t.string "stripe_customer_id"
+    t.datetime "canceled_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "ended_at"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 

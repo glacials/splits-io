@@ -383,6 +383,9 @@ GEM
     redis (4.1.2)
     request_store (1.4.1)
       rack (>= 1.4)
+    responders (3.0.0)
+      actionpack (>= 5.0)
+      railties (>= 5.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -462,6 +465,11 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.12)
+    stripe (5.1.0)
+    stripe-rails (1.9.0)
+      rails (>= 3)
+      responders
+      stripe (>= 1.36.2)
     strong_migrations (0.4.1)
       activerecord (>= 5)
     temple (0.8.1)
@@ -507,7 +515,7 @@ DEPENDENCIES
   doorkeeper
   factory_bot_rails
   flamegraph
-  font-awesome-sass (~> 5.1)
+  font-awesome-sass (~> 5.9)
   foreman
   gon
   groupdate
@@ -551,6 +559,7 @@ DEPENDENCIES
   skylight (~> 4.0.0)
   slim
   stackprof
+  stripe-rails
   strong_migrations
   tzinfo-data
   webpacker (>= 4.0.x)

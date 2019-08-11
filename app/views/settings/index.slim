@@ -10,7 +10,11 @@
   article
     = render partial: 'username'
     = render partial: 'account_links'
-    = render partial: 'patreon_benefits'
+    .row
+      - if current_user.subscriptions.active.any?
+        .col-md-6 = render partial: 'subscription'
+      - if current_user.patron?
+        .col-md-6 = render partial: 'patreon_benefits'
     = render partial: 'authorized_applications'
     = render partial: 'my_applications'
     = render partial: 'delete'

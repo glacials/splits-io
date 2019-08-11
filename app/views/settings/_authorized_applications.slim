@@ -26,7 +26,7 @@
                 td
                   div title=auth.created_at #{time_ago_in_words(auth.created_at)} ago
                 td
-                  = button_to authorization_path(application.id), class: 'btn btn-primary', method: :delete, data: {\
+                  = button_to authorization_path(application.id), class: 'btn btn-outline-light', method: :delete, data: {\
                     confirm: "Really revoke permissions from #{application.name}?"\
                   }
                     span = icon('fas', 'times')

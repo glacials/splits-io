@@ -1,5 +1,5 @@
 version: '3.7'
-x-environment:
+x-server-environment:
   &server-environment
   - AWS_REGION=local
   - AWS_ACCESS_KEY_ID=beep
@@ -18,10 +18,19 @@ x-environment:
   - REDIS_URL="redis/0"
   - S3_BUCKET=splits-io
   - SITE_TITLE=Splits.io (Local)
-  - SPLITSIO_CLIENT_ID
   - SPLITSIO_CLIENT_SECRET
+  - SPLITSIO_CLIENT_ID
+  - STRIPE_PLAN_ID_TIER1=plan_FmRDE979W782Zj
+  - STRIPE_PLAN_ID_TIER2=plan_FmRDa9Hhf1lwMQ
+  - STRIPE_PUBLISHABLE_KEY=pk_test_8XH713ExTipOnBebjfsHHffm
+  - STRIPE_SECRET_KEY
+  - STRIPE_WEBHOOK_SECRET
   - TWITCH_CLIENT_ID
   - TWITCH_CLIENT_SECRET
+x-client-environment:
+  &client-environment
+  - SPLITSIO_CLIENT_ID
+  - STRIPE_PUBLISHABLE_KEY=pk_test_8XH713ExTipOnBebjfsHHffm
 x-logging:
   &default-logging
   driver: json-file
@@ -45,8 +54,7 @@ services:
   webpacker:
     build: .
     command: bash -c "yarn install && ruby bin/webpack-dev-server"
-    environment:
-      - SPLITSIO_CLIENT_ID
+    environment: *client-environment
     expose:
       - "3035"
     image: webpacker

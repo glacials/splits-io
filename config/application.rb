@@ -28,5 +28,7 @@ module SplitsIO
     config.action_cable.disable_request_forgery_protection = true
     config.action_cable.url = '/api/cable'
     config.action_cable.mount_path = '/api/cable'
+
+    Webpacker::Compiler.env['STRIPE_PUBLISHABLE_KEY'] = ENV['STRIPE_PUBLISHABLE_KEY']
   end
 end
