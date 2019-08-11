@@ -16,7 +16,7 @@ class Runs::ExportsController < Runs::ApplicationController
       return
     end
 
-    if timer == Run.program(@run.timer)
+    if timer == Run.program(@run.timer) && params[:blank] != '1'
       begin
         s3_file = $s3_bucket_internal.object("splits/#{@run.s3_filename}")
         if s3_file.exists?
