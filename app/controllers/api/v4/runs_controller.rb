@@ -132,8 +132,9 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     if timer == Run.program(@run.timer)
       @run.file
     else
-      render_to_string(
-        file:   Rails.root.join('app', 'views', 'runs', 'exports', "#{timer.to_sym}.html.erb"),
+      ApplicationController.render(
+        "runs/exports/#{timer.to_sym}.html.erb",
+        assigns: {run: @run},
         layout: false
       )
     end
