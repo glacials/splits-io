@@ -18,7 +18,6 @@ const buildSegmentChart = function(runs, options) {
 
   const pbData = []
   const meanData = []
-  const finished = run[duration] > 0
   let resetCounter = run.attempts
   const resetData = []
 
@@ -67,16 +66,6 @@ const buildSegmentChart = function(runs, options) {
   })
 
   Highcharts.chart('segment-chart', defaults(_.clone(options), {
-    exporting: {
-      chartOptions: {
-        plotOptions: {
-          series: {
-            dataLabels: {enabled: true}
-          }
-        }
-      },
-      fallbackToExportServer: false
-    },
     chart: {
       type: 'column',
       scrollablePlotArea: {minWidth: 75 * run.segments.length},
@@ -91,6 +80,9 @@ const buildSegmentChart = function(runs, options) {
     series: [{
       name: 'Difference of PB and Gold',
       data: pbData,
+      dataLabels: {
+        format: '{y:.1f}'
+      },
       color: logoYellow,
       tooltip: {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.1f}s</b><br/>'
@@ -98,6 +90,9 @@ const buildSegmentChart = function(runs, options) {
     }, {
       name: 'Difference of Average and Gold',
       data: meanData,
+      dataLabels: {
+        format: '{y:.1f}'
+      },
       color: logoBlue,
       tooltip: {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.1f}s</b><br/>'
@@ -105,6 +100,9 @@ const buildSegmentChart = function(runs, options) {
     }, {
       name: 'Reset Rate',
       data: resetData,
+      dataLabels: {
+        format: '{y:.1f}%'
+      },
       color: logoGreen,
       tooltip: {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.1f}%</b><br/>'

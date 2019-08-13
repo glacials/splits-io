@@ -20,9 +20,6 @@ const buildRunDurationChart = function(runs, options = {}) {
       zoomType: 'x'
     },
     colors: logoColors,
-    exporting: {
-      fallbackToExportServer: false
-    },
     plotOptions: {
       series: {
         connectNulls: true,
@@ -36,7 +33,10 @@ const buildRunDurationChart = function(runs, options = {}) {
       name: (run.runners[0] || {name: '???'}).name,
       data: run.histories.map(attempt => {
         return [attempt.attempt_number, attempt[duration] === 0 ? null : attempt[duration]]
-      }).sort((a, b) => a[0] - b[0])
+      }).sort((a, b) => a[0] - b[0]),
+      dataLabels: {
+        formatter: function() { return moment.duration(this.y).format('H:mm:ss') }
+      }
     })),
     title: {text: 'Run Duration over Time'},
     tooltip: {

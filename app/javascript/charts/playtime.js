@@ -5,7 +5,7 @@ require('highcharts-regression')(Highcharts)
 const defaults = require('deep-defaults')
 const moment = require('moment')
 
-import {logoYellow, logoBlue, logoColors} from '../colors.js'
+import {logoColors} from '../colors.js'
 
 const buildPlaytimeChart = function(runs, options = {}) {
   if (document.getElementById('playtime-chart') === null) {
@@ -55,12 +55,9 @@ const buildPlaytimeChart = function(runs, options = {}) {
       chartOptions: {
         plotOptions: {
           series: {
-            dataLabels: {enabled: true}
-          },
-          line: {
             dataLabels: {
               enabled: true,
-              formatter: () => this.x
+              formatter: function() { return moment.duration(this.x).format('H:mm:ss') }
             }
           }
         }
