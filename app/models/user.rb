@@ -56,6 +56,10 @@ class User < ApplicationRecord
     [twitch, google].compact.map(&:avatar).first
   end
 
+  def email
+    [google, twitch].compact.map(&:email).first
+  end
+
   def to_param
     name.downcase
   end

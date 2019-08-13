@@ -50,7 +50,12 @@ class ApplicationController < ActionController::Base
     gon.user = if current_user.nil?
                  nil
                else
-                 {id: current_user.id.to_s, name: current_user.name}
+                 {
+                   id: current_user.id.to_s,
+                   name: current_user.name,
+                   email: current_user.email,
+                   avatar: current_user.avatar
+                 }
                end
   end
 
