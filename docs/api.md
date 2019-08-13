@@ -509,6 +509,9 @@ A Game is a collection of information about a game, and a container for Categori
 a run is uploaded with an unidentified game name. They try to associate themselves with a Speedrun.com game when
 created, but the association is not guaranteed.
 
+When searching for games, it is possible to pass in a game ID. If a game with this ID exists, it will be prepended to
+the search response array.
+
 <details>
 <summary>Structure of a Game</summary>
 
@@ -630,7 +633,7 @@ provided.
 curl -X POST https://splits.io/api/v4/races \
   -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
   -H 'Content-Type: application/json' \
-  -d '{"category_id": "40", "notes": "Notes go here"}'
+  -d '{"race": {"category_id": "40", "notes": "Notes go here"}'
 ```
 Create a new Race.
 
@@ -667,7 +670,8 @@ Update one or more fields of the Race. This endpoint requires that the authentic
 | 401          | No       | Access token is either blank, expired, invalid, or not attached to a user or the owner of the race. |
 | 403          | No       | The Race has already been started and cannot be updated.                                            |
 
-Races cannot be deleted. Once one becomes inactive for 30 minutes it will naturally disappear from the listings.
+Races can only be updated before they have started.
+Races cannot be deleted. Once one becomes inactive for 1 hour it will naturally disappear from the listings.
 </details>
 
 #### Entry
