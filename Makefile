@@ -1,6 +1,6 @@
-.PHONY: all build lint test run console update_lsc clean
+.PHONY: all build seed lint test run console profile derailed update_lsc attach clean
 
-all: build seed lint test run console update_lsc attach clean
+all: build run
 
 ifeq ($(OS),Windows_NT)
   detectedOS := Windows
@@ -24,6 +24,7 @@ build:
 	$(docker-compose) run web rails db:migrate
 	@[ -e tmp/seed ] || make seed
 	$(docker-compose) run web skylight disable_dev_warning
+	$(docker-compose) stop
 
 seed:
 	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
