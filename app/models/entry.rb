@@ -9,13 +9,16 @@ class Entry < ApplicationRecord
   before_destroy :validate_destroy
 
   scope :ready,    -> { where.not(readied_at: nil) }
-  scope :nonready, -> { where(readied_at: nil) }
+  scope :nonready, -> { where(readied_at: nil)     }
 
   scope :active,   -> { where(finished_at: nil, forfeited_at: nil) }
   scope :inactive, -> { where(finished_at: nil, forfeited_at: nil) }
 
-  scope :ghosts,    -> { where(ghost: true) }
+  scope :ghosts,    -> { where(ghost: true)  }
   scope :nonghosts, -> { where(ghost: false) }
+
+  scope :unfinished, ->  { where(finished_at: nil)  }
+  scope :unforfeited, -> { where(forfeited_at: nil) }
 
   # Returns this race's entry for the given user, not including ghosts.
   def self.find_for(user)

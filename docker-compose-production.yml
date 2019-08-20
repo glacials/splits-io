@@ -15,7 +15,7 @@ x-environment:
   - PATREON_CLIENT_ID
   - PATREON_CLIENT_SECRET
   - PATREON_WEBHOOK_SECRET
-  - QUEUES=discover_runner,highlight_cleanup,refresh_game,sync_user_follows,v4_races # keep this in sync with every job in app/jobs
+  - QUEUES=discover_runner,highlight_cleanup,race_cleanup,refresh_game,sync_user_follows,v4_races # keep this in sync with every job in app/jobs
   - RACK_ENV=production
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
   - RAILS_SERVE_STATIC_FILES=1
