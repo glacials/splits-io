@@ -58,6 +58,17 @@ class Race < ApplicationRecord
     race
   end
 
+  # with_ends modifies the returned Races to have an ended_at field, which represents the timestamp at which the last
+  # entry finished or forfeited, or null if at least one entry has neither finished nor forfeited.
+  def self.with_ends
+    select('races.*,
+      case
+        when bool_or(entries.finished_at is null and entries.forfeited_at is null) then null
+        else greatest(max(entries.finished_at), max(entries.forfeited_at))
+      end as ended_at
+    '.squish).left_outer_joins(:entries).group(:id)
+  end
+
   def to_s
     "#{game} #{category} #{title}".presence || 'Untitled race'
   end
