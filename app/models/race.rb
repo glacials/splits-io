@@ -66,7 +66,7 @@ class Race < ApplicationRecord
         when bool_or(entries.finished_at is null and entries.forfeited_at is null) then null
         else greatest(max(entries.finished_at), max(entries.forfeited_at))
       end as ended_at
-    ').left_outer_joins(:entries).group(:id)
+    '.squish).left_outer_joins(:entries).group(:id)
   end
 
   def to_s
