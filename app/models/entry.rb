@@ -1,6 +1,6 @@
 class Entry < ApplicationRecord
   belongs_to :race, touch: true
-  belongs_to :runner, class_name: 'User'
+  belongs_to :runner, class_name: 'User', optional: true
   belongs_to :creator, class_name: 'User'
   belongs_to :run, dependent: :destroy, optional: true
 
