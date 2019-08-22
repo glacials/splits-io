@@ -120,6 +120,9 @@ class Race < ApplicationRecord
       end
     end
 
+    # Schedule cleanup job for a started race that was abandoned
+     RaceCleanupJob.set(wait_until: started_at + 48.hours).perform_later(self)
+
     Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', 'The race is starting soon')
     Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_start_scheduled', 'A race is starting soon')
   end
