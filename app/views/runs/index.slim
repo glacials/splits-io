@@ -27,7 +27,7 @@
     .row.mx-2
       .col-md-6.mb-3: .card.shadow
         = render partial: 'shared/race_table', locals: { \
-          races: current_user.races.finished.order(created_at: :desc), \
+          races: current_user.races.with_ends.finished.order(ended_at: :desc), \
           user: current_user, \
           active_races: current_user.races.unfinished, \
           description: 'My Races' \

@@ -1,5 +1,5 @@
 - description ||= nil
-- cols ||= [:creator, :time, :entries, :name, :status, :created, :results]
+- cols ||= [:creator, :time, :entries, :name, :status, :finished, :results]
 - races = races.page(params[:page]).includes(:owner)
 - active_races ||= Race.none
 
@@ -25,8 +25,8 @@
             th width='100%' Title
           - if cols.include?(:status)
             th.align-right.nowrap Status
-          - if cols.include?(:created)
-            th.align-right.nowrap Created
+          - if cols.include?(:finished)
+            th.align-right.nowrap Finished
           - if cols.include?(:results)
             th.align-right.nowrap Results
       tbody
@@ -62,9 +62,13 @@
                     .text-danger Secret
                   - else
                     - raise # raise if we get an unexpected visibility
-            - if cols.include?(:created)
+            - if cols.include?(:finished)
               td.align-right.nowrap
-                 = render partial: 'shared/relative_time', locals: {time: race.created_at, ago: true}
+                - time = race.try(:ended_at)
+                - if time
+                  = render partial: 'shared/relative_time', locals: {time: race.ended_at, ago: true}
+                - else
+                  = '-'
             - if cols.include?(:results)
               td.align-right.text-primary.cursor-pointer data={toggle: 'collapse', target: "#accordion-#{race.id}"}
                 = icon('fas', 'list-ol')

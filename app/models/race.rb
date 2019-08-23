@@ -33,14 +33,14 @@ class Race < ApplicationRecord
   end
 
   def self.finished
-    joins(:entries).where.not(entries: {finished_at: nil, forfeited_at: nil}).distinct
+    where.not(id: unfinished)
   end
 
   # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
   # or have more than 2 entries. this includes races that have finished
   def self.unabandoned
     where('races.updated_at > ?', ABANDON_TIME.ago).or(
-      where(id: Entry.having('count(*) > 1').group(:race_id).select(:race_id))
+      where(id: Entry.nonghosts.having('count(*) > 1').group(:race_id).select(:race_id))
     )
   end
 
