@@ -40,7 +40,7 @@ class Race < ApplicationRecord
   # or have more than 2 entries. this includes races that have finished
   def self.unabandoned
     where('races.updated_at > ?', ABANDON_TIME.ago).or(
-      where(id: Entry.where(ghost: false).having('count(*) > 1').group(:race_id).select(:race_id))
+      where(id: Entry.nonghosts.having('count(*) > 1').group(:race_id).select(:race_id))
     )
   end
 

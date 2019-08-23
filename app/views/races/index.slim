@@ -6,7 +6,7 @@
 - if params[:historic] == '1'
   - races = Race.with_ends.finished.not_secret_visibility.order(ended_at: :desc)
 - else
-  - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST')
+  - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST, created_at DESC')
 
 article
   #vue-race.row
