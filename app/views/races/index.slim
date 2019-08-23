@@ -4,7 +4,7 @@
     li.breadcrumb-item = link_to(site_title, root_path)
 
 - if params[:historic] == '1'
-  - races = Race.finished.not_secret_visibility.order(started_at: :desc)
+  - races = Race.with_ends.finished.not_secret_visibility.order(ended_at: :desc)
 - else
   - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST')
 

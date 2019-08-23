@@ -19,7 +19,7 @@
   .col-md-6.mb-3
     .card.shadow
       = render partial: 'shared/race_table', locals: { \
-        races: @user.races.finished.not_secret_visibility.order(created_at: :desc), \
+        races: @user.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
         user: @user, \
         active_races: @user.races.active.not_secret_visibility, \
         description: "#{@user}'s Races" \
