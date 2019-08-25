@@ -17,7 +17,7 @@ class Api::V4::RunnersController < Api::V4::ApplicationController
 
   def me
     if current_user.nil?
-      render not_found(:runner, message: 'No authenticated runner to display')
+      head :unauthorized
       return
     end
 
