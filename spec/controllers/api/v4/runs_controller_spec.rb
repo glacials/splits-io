@@ -115,7 +115,7 @@ describe Api::V4::RunsController do
     end
 
     context 'for an existing run' do
-      let(:run) { create(:run, :owned) }
+      let(:run) { create(:run, :owned, :parsed) }
       subject { get :show, params: {run: run.id36} }
       let(:body) { JSON.parse(subject.body)['run'] }
 

@@ -141,6 +141,7 @@ Rails.application.routes.draw do
       get '/categories/:category/runners', to: 'categories/runners#index'
       get '/categories/:category/runs',    to: 'categories/runs#index'
 
+      get '/runner',          to: 'runners#me',    as: 'self_runner'
       get '/runners',         to: 'runners#index', as: 'runners'
       get '/runners/:runner', to: 'runners#show',  as: 'runner'
 

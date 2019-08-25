@@ -10,7 +10,7 @@ FactoryBot.define do
 
     trait :with_runs do
       after(:create) do |user|
-        FactoryBot.create_list(:run, 3, user: user, category: FactoryBot.create(:category))
+        FactoryBot.create_list(:run, 3, :parsed, user: user, category: FactoryBot.create(:category))
       end
     end
   end
