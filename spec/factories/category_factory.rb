@@ -5,7 +5,7 @@ FactoryBot.define do
 
     trait :with_runs do
       after(:create) do |category|
-        FactoryBot.create_list(:run, 3, category: category)
+        FactoryBot.create_list(:run, 3, :parsed, category: category)
       end
     end
 

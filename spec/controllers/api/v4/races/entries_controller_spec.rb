@@ -258,7 +258,7 @@ RSpec.describe Api::V4::Races::EntriesController do
         end
 
         context 'setting run_id' do
-          let(:run) { FactoryBot.create(:run, user: user) }
+          let(:run) { FactoryBot.create(:run, :parsed, user: user) }
           subject(:response) do
             patch :update, params: {
               race_id: race.id,

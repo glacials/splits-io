@@ -4,7 +4,9 @@ module ApplicationsHelper
     when 'upload_run'
       'Upload runs on your behalf'
     when 'delete_run'
-      'Delete/Disown runs on your behalf'
+      'Delete and/or disown your runs'
+    when 'manage_race'
+      'Manage your participation in races'
     end
   end
 end

@@ -46,12 +46,11 @@
       ]
     },
     "default_timing": {
-      "type": {
-        "enum": [
-          "real",
-          "game"
-        ]
-      }
+      "type": "string",
+      "enum": [
+        "real",
+        "game"
+      ]
     },
     "realtime_sum_of_best_ms": {
       "type": [
@@ -66,16 +65,22 @@
       ]
     },
     "program": {
-      "type": {
-        "enum": [
-          "llanfair",
-          "urn",
-          "livesplit",
-          "splitterz",
-          "timesplittracker",
-          "wsplit"
-        ]
-      }
+      "type": "string",
+      "enum": [
+        "exchange",
+        "frameperfect",
+        "floating_speedrun_timer",
+        "livesplit",
+        "llanfair",
+        "llanfair_gered",
+        "portal_2_live_timer",
+        "sourcelivetimer",
+        "splitterz",
+        "splitty",
+        "timesplittracker",
+        "urn",
+        "wsplit"
+      ]
     },
     "attempts": {
       "type": [

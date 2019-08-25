@@ -28,12 +28,12 @@ class Api::V4::ApplicationController < ActionController::Base
     end.join(', ')
   end
 
-  def not_found(collection_name)
+  def not_found(collection_name, message: nil)
     {
       status: :not_found,
       json:   {
         status: 404,
-        error:  "No #{collection_name} with ID #{params[collection_name] || params["#{collection_name}_id"] || params[:id]} found."
+        error:  message || "No #{collection_name} with ID #{params[collection_name] || params["#{collection_name}_id"] || params[:id]} found."
       }
     }
   end
