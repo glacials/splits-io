@@ -1,10 +1,10 @@
 begin
-  require File.expand_path('LiveSplitCore', __dir__)
+  require_relative('LiveSplitCore')
 rescue LoadError
-  raise 'Please follow the steps to install livesplit-core in the readme'
+  raise 'LiveSplitCore install not found'
 end
 
-class Parser
+class Parser::LivesplitCoreParser
   def self.parse(run)
     parse_result = if run.is_a?(Integer)
                      # If integer, attempt to parse the file descriptor attached to the number

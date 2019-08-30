@@ -1,5 +1,3 @@
-require 'speedrundotcom'
-
 class SpeedrunDotComGame < ApplicationRecord
   belongs_to :game
 

@@ -25,7 +25,7 @@ class TwitchUsersController < ApplicationController
   private
 
   def sign_in(user)
-    self.current_user = user
+    create_auth_session(user)
     auth_session.persist!
   end
 

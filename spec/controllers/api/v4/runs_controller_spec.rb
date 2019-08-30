@@ -175,7 +175,7 @@ describe Api::V4::RunsController do
       it 'returns the correct content-type header' do
         request.headers['Accept'] = 'application/wsplit'
 
-        expect(response.content_type).to eq('application/wsplit')
+        expect(response.media_type).to eq('application/wsplit')
       end
     end
 
@@ -192,7 +192,7 @@ describe Api::V4::RunsController do
       it 'returns the correct content-type header' do
         request.headers['Accept'] = 'application/liversplit'
 
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
       end
     end
 
@@ -209,7 +209,7 @@ describe Api::V4::RunsController do
       it 'returns the correct content-type header' do
         request.headers['Accept'] = 'application/original-timer'
 
-        expect(response.content_type).to eq('application/livesplit')
+        expect(response.media_type).to eq('application/livesplit')
       end
     end
   end

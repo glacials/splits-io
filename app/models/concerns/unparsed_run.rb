@@ -18,7 +18,7 @@ module UnparsedRun
         file do |f|
           return false if f.nil?
 
-          parse_result = Parser.parse(f.fileno)
+          parse_result = Parser::LivesplitCoreParser.parse(f.fileno)
           size = File.size(f)
         end
 

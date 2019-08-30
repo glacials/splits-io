@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   include AuthenticatingUser
   include RivalUser
   include RunnerUser

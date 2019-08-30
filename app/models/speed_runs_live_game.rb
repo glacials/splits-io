@@ -1,5 +1,3 @@
-require 'speedrunslive'
-
 class SpeedRunsLiveGame < ApplicationRecord
   belongs_to :game
 

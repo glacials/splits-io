@@ -1,7 +1,5 @@
 require 'uri'
 
-require 'speedrundotcom'
-
 class RunsController < ApplicationController
   before_action :set_run,         only: [:show, :destroy, :edit, :update]
 

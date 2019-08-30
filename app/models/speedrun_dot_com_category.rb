@@ -1,5 +1,3 @@
-require 'speedrundotcom'
-
 class SpeedrunDotComCategory < ApplicationRecord
   belongs_to :category
 

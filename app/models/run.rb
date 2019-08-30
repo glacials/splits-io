@@ -6,7 +6,7 @@ class Run < ApplicationRecord
   include ForgetfulPersonsRun
   include PadawanRun
   include S3Run
-  include SRDCRun
+  include SpeedrunDotComRun
   include UnparsedRun
 
   include ActionView::Helpers::DateHelper
