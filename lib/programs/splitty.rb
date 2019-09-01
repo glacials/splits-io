@@ -1,4 +1,4 @@
-module Splitty
+module Programs::Splitty
   def self.to_s
     'Splitty'
   end

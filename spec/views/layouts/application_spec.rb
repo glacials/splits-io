@@ -12,7 +12,11 @@ RSpec.describe 'layouts/application' do
 
   end
   context 'while logged in' do
-    before { allow(view).to receive(:current_user).and_return(FactoryBot.build(:user)) }
+    before do
+      user = FactoryBot.create(:user)
+      allow(view).to receive(:current_user).and_return(user)
+      controller.send(:create_auth_session, user)
+    end
 
     it 'renders the index template' do
       render

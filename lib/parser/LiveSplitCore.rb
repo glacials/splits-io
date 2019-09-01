@@ -24,7 +24,7 @@ module LiveSplitCore
         attach_function :BlankSpaceComponent_state_as_json, [:pointer, :pointer], :string
         attach_function :BlankSpaceComponent_state, [:pointer, :pointer], :pointer
         attach_function :BlankSpaceComponentState_drop, [:pointer], :void
-        attach_function :BlankSpaceComponentState_height, [:pointer], :uint32
+        attach_function :BlankSpaceComponentState_size, [:pointer], :uint32
         attach_function :Component_drop, [:pointer], :void
         attach_function :CurrentComparisonComponent_new, [], :pointer
         attach_function :CurrentComparisonComponent_drop, [:pointer], :void
@@ -93,13 +93,22 @@ module LiveSplitCore
         attach_function :GraphComponentState_middle, [:pointer], :float
         attach_function :GraphComponentState_is_live_delta_active, [:pointer], :bool
         attach_function :GraphComponentState_is_flipped, [:pointer], :bool
+        attach_function :HotkeyConfig_parse_json, [:string], :pointer
+        attach_function :HotkeyConfig_drop, [:pointer], :void
+        attach_function :HotkeyConfig_settings_description_as_json, [:pointer], :string
+        attach_function :HotkeyConfig_as_json, [:pointer], :string
+        attach_function :HotkeyConfig_set_value, [:pointer, :size_t, :pointer], :bool
         attach_function :HotkeySystem_new, [:pointer], :pointer
+        attach_function :HotkeySystem_with_config, [:pointer, :pointer], :pointer
         attach_function :HotkeySystem_drop, [:pointer], :void
         attach_function :HotkeySystem_deactivate, [:pointer], :void
         attach_function :HotkeySystem_activate, [:pointer], :void
+        attach_function :HotkeySystem_config, [:pointer], :pointer
+        attach_function :HotkeySystem_set_config, [:pointer, :pointer], :bool
         attach_function :Layout_new, [], :pointer
         attach_function :Layout_default_layout, [], :pointer
         attach_function :Layout_parse_json, [:string], :pointer
+        attach_function :Layout_parse_original_livesplit, [:pointer, :size_t], :pointer
         attach_function :Layout_drop, [:pointer], :void
         attach_function :Layout_clone, [:pointer], :pointer
         attach_function :Layout_settings_as_json, [:pointer], :string
@@ -255,13 +264,18 @@ module LiveSplitCore
         attach_function :SettingValue_from_transparent_gradient, [], :pointer
         attach_function :SettingValue_from_vertical_gradient, [:float, :float, :float, :float, :float, :float, :float, :float], :pointer
         attach_function :SettingValue_from_horizontal_gradient, [:float, :float, :float, :float, :float, :float, :float, :float], :pointer
+        attach_function :SettingValue_from_alternating_gradient, [:float, :float, :float, :float, :float, :float, :float, :float], :pointer
         attach_function :SettingValue_from_alignment, [:string], :pointer
+        attach_function :SettingValue_from_column_start_with, [:string], :pointer
+        attach_function :SettingValue_from_column_update_with, [:string], :pointer
+        attach_function :SettingValue_from_column_update_trigger, [:string], :pointer
         attach_function :SettingValue_drop, [:pointer], :void
         attach_function :SharedTimer_drop, [:pointer], :void
         attach_function :SharedTimer_share, [:pointer], :pointer
         attach_function :SharedTimer_read, [:pointer], :pointer
         attach_function :SharedTimer_write, [:pointer], :pointer
         attach_function :SharedTimer_replace_inner, [:pointer, :pointer], :void
+        attach_function :SplitComponentState_columns_len, [:pointer, :size_t], :size_t
         attach_function :SplitsComponent_new, [], :pointer
         attach_function :SplitsComponent_drop, [:pointer], :void
         attach_function :SplitsComponent_into_generic, [:pointer], :pointer
@@ -280,9 +294,8 @@ module LiveSplitCore
         attach_function :SplitsComponentState_icon_change_segment_index, [:pointer, :size_t], :size_t
         attach_function :SplitsComponentState_icon_change_icon, [:pointer, :size_t], :string
         attach_function :SplitsComponentState_name, [:pointer, :size_t], :string
-        attach_function :SplitsComponentState_delta, [:pointer, :size_t], :string
-        attach_function :SplitsComponentState_time, [:pointer, :size_t], :string
-        attach_function :SplitsComponentState_semantic_color, [:pointer, :size_t], :string
+        attach_function :SplitsComponentState_column_value, [:pointer, :size_t, :size_t], :string
+        attach_function :SplitsComponentState_column_semantic_color, [:pointer, :size_t, :size_t], :string
         attach_function :SplitsComponentState_is_current_split, [:pointer, :size_t], :bool
         attach_function :SumOfBestCleaner_drop, [:pointer], :void
         attach_function :SumOfBestCleaner_next_potential_clean_up, [:pointer], :pointer
@@ -757,13 +770,13 @@ module LiveSplitCore
     # The state object describes the information to visualize for this component.
     class BlankSpaceComponentStateRef
         attr_accessor :handle
-        # The height of the component.
+        # The size of the component.
         # @return [Integer]
-        def height()
+        def size()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.BlankSpaceComponentState_height(@handle.ptr)
+            result = Native.BlankSpaceComponentState_size(@handle.ptr)
             result
         end
         def initialize(ptr)
@@ -1948,6 +1961,100 @@ module LiveSplitCore
         end
     end
 
+    # The configuration to use for a Hotkey System. It describes with keys to use
+    # as hotkeys for the different actions.
+    class HotkeyConfigRef
+        attr_accessor :handle
+        # Encodes generic description of the settings available for the hotkey
+        # configuration and their current values as JSON.
+        # @return [String]
+        def settings_description_as_json()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.HotkeyConfig_settings_description_as_json(@handle.ptr)
+            result
+        end
+        # Encodes the hotkey configuration as JSON.
+        # @return [String]
+        def as_json()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.HotkeyConfig_as_json(@handle.ptr)
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The configuration to use for a Hotkey System. It describes with keys to use
+    # as hotkeys for the different actions.
+    class HotkeyConfigRefMut < HotkeyConfigRef
+        # Sets a setting's value by its index to the given value.
+        # 
+        # false is returned if a hotkey is already in use by a different action.
+        # 
+        # This panics if the type of the value to be set is not compatible with the
+        # type of the setting's value. A panic can also occur if the index of the
+        # setting provided is out of bounds.
+        # @param [Integer] index
+        # @param [SettingValue] value
+        # @return [Boolean]
+        def set_value(index, value)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if value.handle.ptr == nil
+                raise "value is disposed"
+            end
+            result = Native.HotkeyConfig_set_value(@handle.ptr, index, value.handle.ptr)
+            value.handle.ptr = nil
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The configuration to use for a Hotkey System. It describes with keys to use
+    # as hotkeys for the different actions.
+    class HotkeyConfig < HotkeyConfigRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.HotkeyConfig_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = HotkeyConfig.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        # Parses a hotkey configuration from the given JSON description. nil is
+        # returned if it couldn't be parsed.
+        # @param [String] settings
+        # @return [HotkeyConfig, nil]
+        def self.parse_json(settings)
+            result = HotkeyConfig.new(Native.HotkeyConfig_parse_json(settings))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # With a Hotkey System the runner can use hotkeys on their keyboard to control
     # the Timer. The hotkeys are global, so the application doesn't need to be in
     # focus. The behavior of the hotkeys depends on the platform and is stubbed
@@ -1971,6 +2078,15 @@ module LiveSplitCore
             end
             Native.HotkeySystem_activate(@handle.ptr)
         end
+        # Returns the hotkey configuration currently in use by the Hotkey System.
+        # @return [HotkeyConfig]
+        def config()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = HotkeyConfig.new(Native.HotkeySystem_config(@handle.ptr))
+            result
+        end
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
@@ -1982,6 +2098,23 @@ module LiveSplitCore
     # out on platforms that don't support hotkeys. You can turn off a Hotkey
     # System temporarily. By default the Hotkey System is activated.
     class HotkeySystemRefMut < HotkeySystemRef
+        # Applies a new hotkey configuration to the Hotkey System. Each hotkey is
+        # changed to the one specified in the configuration. This operation may fail
+        # if you provide a hotkey configuration where a hotkey is used for multiple
+        # operations. Returns false if the operation failed.
+        # @param [HotkeyConfig] config
+        # @return [Boolean]
+        def set_config(config)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if config.handle.ptr == nil
+                raise "config is disposed"
+            end
+            result = Native.HotkeySystem_set_config(@handle.ptr, config.handle.ptr)
+            config.handle.ptr = nil
+            result
+        end
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
@@ -2018,6 +2151,26 @@ module LiveSplitCore
             end
             result = HotkeySystem.new(Native.HotkeySystem_new(shared_timer.handle.ptr))
             shared_timer.handle.ptr = nil
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new Hotkey System for a Timer with a custom configuration for the
+        # hotkeys.
+        # @param [SharedTimer] shared_timer
+        # @param [HotkeyConfig] config
+        # @return [HotkeySystem, nil]
+        def self.with_config(shared_timer, config)
+            if shared_timer.handle.ptr == nil
+                raise "shared_timer is disposed"
+            end
+            if config.handle.ptr == nil
+                raise "config is disposed"
+            end
+            result = HotkeySystem.new(Native.HotkeySystem_with_config(shared_timer.handle.ptr, config.handle.ptr))
+            shared_timer.handle.ptr = nil
+            config.handle.ptr = nil
             if result.handle.ptr == nil
                 return nil
             end
@@ -2155,6 +2308,19 @@ module LiveSplitCore
         # @return [Layout, nil]
         def self.parse_json(settings)
             result = Layout.new(Native.Layout_parse_json(settings))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Parses a layout saved by the original LiveSplit. This is lossy, as not
+        # everything can be converted completely. nil is returned if it couldn't be
+        # parsed at all.
+        # @param [Integer] data
+        # @param [Integer] length
+        # @return [Layout, nil]
+        def self.parse_original_livesplit(data, length)
+            result = Layout.new(Native.Layout_parse_original_livesplit(data, length))
             if result.handle.ptr == nil
                 return nil
             end
@@ -4361,12 +4527,59 @@ module LiveSplitCore
             result = SettingValue.new(Native.SettingValue_from_horizontal_gradient(r1, g1, b1, a1, r2, g2, b2, a2))
             result
         end
+        # Creates a new setting value from the alternating gradient provided as two RGBA colors.
+        # @param [Float] r1
+        # @param [Float] g1
+        # @param [Float] b1
+        # @param [Float] a1
+        # @param [Float] r2
+        # @param [Float] g2
+        # @param [Float] b2
+        # @param [Float] a2
+        # @return [SettingValue]
+        def self.from_alternating_gradient(r1, g1, b1, a1, r2, g2, b2, a2)
+            result = SettingValue.new(Native.SettingValue_from_alternating_gradient(r1, g1, b1, a1, r2, g2, b2, a2))
+            result
+        end
         # Creates a new setting value from the alignment name provided. If it doesn't
         # match a known alignment, nil is returned.
         # @param [String] value
         # @return [SettingValue, nil]
         def self.from_alignment(value)
             result = SettingValue.new(Native.SettingValue_from_alignment(value))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new setting value from the column start with name provided. If it
+        # doesn't match a known column start with, nil is returned.
+        # @param [String] value
+        # @return [SettingValue, nil]
+        def self.from_column_start_with(value)
+            result = SettingValue.new(Native.SettingValue_from_column_start_with(value))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new setting value from the column update with name provided. If it
+        # doesn't match a known column update with, nil is returned.
+        # @param [String] value
+        # @return [SettingValue, nil]
+        def self.from_column_update_with(value)
+            result = SettingValue.new(Native.SettingValue_from_column_update_with(value))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new setting value from the column update trigger. If it doesn't
+        # match a known column update trigger, nil is returned.
+        # @param [String] value
+        # @return [SettingValue, nil]
+        def self.from_column_update_trigger(value)
+            result = SettingValue.new(Native.SettingValue_from_column_update_trigger(value))
             if result.handle.ptr == nil
                 return nil
             end
@@ -4466,6 +4679,58 @@ module LiveSplitCore
         end
         def dispose
             finalizer = SharedTimer.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
+    # The state object that describes a single segment's information to visualize.
+    class SplitComponentStateRef
+        attr_accessor :handle
+        # The amount of columns to visualize for the segment with the specified index.
+        # The columns are specified from right to left. You may not provide an out of
+        # bounds index. The amount of columns to visualize may differ from segment to
+        # segment.
+        # @param [Integer] index
+        # @return [Integer]
+        def columns_len(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.SplitComponentState_columns_len(@handle.ptr, index)
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object that describes a single segment's information to visualize.
+    class SplitComponentStateRefMut < SplitComponentStateRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object that describes a single segment's information to visualize.
+    class SplitComponentState < SplitComponentStateRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = SplitComponentState.finalize @handle
             finalizer.call
         end
         def with
@@ -4711,37 +4976,30 @@ module LiveSplitCore
             result = Native.SplitsComponentState_name(@handle.ptr, index)
             result
         end
-        # The delta to show for the segment with the specified index. You may not
-        # provide an out of bounds index.
+        # The column's value to show for the split and column with the specified
+        # index. The columns are specified from right to left. You may not provide an
+        # out of bounds index.
         # @param [Integer] index
+        # @param [Integer] column_index
         # @return [String]
-        def delta(index)
+        def column_value(index, column_index)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.SplitsComponentState_delta(@handle.ptr, index)
+            result = Native.SplitsComponentState_column_value(@handle.ptr, index, column_index)
             result
         end
-        # The split time to show for the segment with the specified index. You may not
-        # provide an out of bounds index.
+        # The semantic coloring information the column's value carries of the segment
+        # and column with the specified index. The columns are specified from right to
+        # left. You may not provide an out of bounds index.
         # @param [Integer] index
+        # @param [Integer] column_index
         # @return [String]
-        def time(index)
+        def column_semantic_color(index, column_index)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.SplitsComponentState_time(@handle.ptr, index)
-            result
-        end
-        # The semantic coloring information the delta time carries of the segment with
-        # the specified index. You may not provide an out of bounds index.
-        # @param [Integer] index
-        # @return [String]
-        def semantic_color(index)
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.SplitsComponentState_semantic_color(@handle.ptr, index)
+            result = Native.SplitsComponentState_column_semantic_color(@handle.ptr, index, column_index)
             result
         end
         # Describes if the segment with the specified index is the segment the active
@@ -6415,3 +6673,5 @@ module LiveSplitCore
         end
     end
 end
+
+Parser::LiveSplitCore = LiveSplitCore

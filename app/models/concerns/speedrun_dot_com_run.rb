@@ -1,8 +1,6 @@
 require 'active_support/concern'
 
-require 'speedrundotcom'
-
-module SRDCRun
+module SpeedrunDotComRun
   extend ActiveSupport::Concern
 
   included do

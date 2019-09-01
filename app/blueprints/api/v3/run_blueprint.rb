@@ -20,5 +20,5 @@ class Api::V3::RunBlueprint < Blueprinter::Base
   association :game, blueprint: Api::V3::GameBlueprint
   association :category, blueprint: Api::V3::CategoryBlueprint
   association :user, blueprint: Api::V3::UserBlueprint
-  association :segments, blueprint: Api::V3::SegmentBlueprint, name: :splits, if: ->(_, options) { options[:toplevel] == :run }
+  association :segments, blueprint: Api::V3::SegmentBlueprint, name: :splits, if: ->(_, _, options) { options[:toplevel] == :run }
 end

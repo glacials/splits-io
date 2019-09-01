@@ -1,5 +1,3 @@
-require 'speedrundotcom'
-
 class SpeedrunDotComUser < ApplicationRecord
   belongs_to :user
 

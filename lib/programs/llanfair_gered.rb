@@ -1,4 +1,4 @@
-module LlanfairGered
+module Programs::LlanfairGered
   def self.to_s
     "Llanfair (Gered's fork)"
   end

@@ -10,7 +10,7 @@
 # if you need to, which performs two queries. It is safe to expect that a Game#name will also be represented as a
 # GameAlias#name.
 class GameAlias < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
   belongs_to :game, dependent: :destroy
 
   validates :name, uniqueness: true

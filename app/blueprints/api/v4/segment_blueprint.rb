@@ -3,7 +3,7 @@ class Api::V4::SegmentBlueprint < Blueprinter::Base
          :realtime_shortest_duration_ms, :realtime_gold, :realtime_reduced, :realtime_skipped,
          :gametime_shortest_duration_ms, :gametime_gold, :gametime_reduced, :gametime_skipped
 
-  association :histories, blueprint: Api::V4::SegmentHistoryBlueprint, if: ->(_, options) { options[:historic] }
+  association :histories, blueprint: Api::V4::SegmentHistoryBlueprint, if: ->(_, _, options) { options[:historic] }
 
   # API v4 promises non-null for these fields
   field(:realtime_start_ms)    { |run, _| run.realtime_start_ms    || 0 }

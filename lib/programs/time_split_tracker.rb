@@ -1,4 +1,4 @@
-module TimeSplitTracker
+module Programs::TimeSplitTracker
   def self.to_s
     'Time Split Tracker'
   end

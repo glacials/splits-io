@@ -29,7 +29,6 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   config.force_ssl = false
-  config.read_only = false
 
   Slim::Engine.set_options(pretty: true)
 

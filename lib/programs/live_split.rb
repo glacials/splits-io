@@ -1,31 +1,31 @@
-module ShitSplit
+module Programs::LiveSplit
   def self.to_s
-    'ShitSplit'
+    'LiveSplit'
   end
 
   def self.to_sym
-    :shitsplit
+    :livesplit
   end
 
   def self.file_extension
-    'ss'
+    'lss'
   end
 
   def self.website
-    'https://www.dropbox.com/s/tje563s0c0fy6lk/ShitSplit04a.zip?dl=0'
+    'http://livesplit.org/'
   end
 
   def self.content_type
-    'application/shitsplit'
+    'application/livesplit'
   end
 
   def self.exportable?
-    false
+    true
   end
 
   # exchangeable? is true if the timer supports the Splits I/O Exchange Format for importing and exporting, false
   # otherwise. See: https://github.com/glacials/splits-io/tree/master/public/schema
   def self.exchangeable?
-    false
+    true
   end
 end

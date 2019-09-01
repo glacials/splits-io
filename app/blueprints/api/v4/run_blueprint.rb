@@ -9,7 +9,7 @@ class Api::V4::RunBlueprint < Blueprinter::Base
   association :game, blueprint: Api::V4::GameBlueprint
   association :category, blueprint: Api::V4::CategoryBlueprint
   association :segments, blueprint: Api::V4::SegmentBlueprint
-  association :histories, blueprint: Api::V4::RunHistoryBlueprint, if: ->(_, options) { options[:historic] }
+  association :histories, blueprint: Api::V4::RunHistoryBlueprint, if: ->(_, _, options) { options[:historic] }
   association :runners, blueprint: Api::V4::UserBlueprint do |run, _|
     ([] << run.user).compact
   end

@@ -5,5 +5,5 @@ class Api::V4::CategoryBlueprint < Blueprinter::Base
     category.id.to_s
   end
 
-  association :game, blueprint: Api::V4::GameBlueprint, if: ->(_, options) { options[:toplevel] == :category }
+  association :game, blueprint: Api::V4::GameBlueprint, if: ->(_, _, options) { options[:toplevel] == :category }
 end

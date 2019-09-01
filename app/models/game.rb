@@ -1,7 +1,5 @@
-require 'speedrunslive'
-
 class Game < ApplicationRecord
-  include PgSearch
+  include PgSearch::Model
 
   extend OrderAsSpecified
 

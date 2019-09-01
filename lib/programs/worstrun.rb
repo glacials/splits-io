@@ -1,4 +1,4 @@
-module Worstrun
+module Programs::Worstrun
   def self.to_s
     'worstrun'
   end
