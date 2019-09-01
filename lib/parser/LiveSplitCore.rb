@@ -1,7 +1,7 @@
 # coding: utf-8
 require 'ffi'
 
-module Parser::LiveSplitCore
+module LiveSplitCore
     module Native
         extend FFI::Library
         ffi_lib File.expand_path('../liblivesplit_core.so', __FILE__)
@@ -6673,3 +6673,5 @@ module Parser::LiveSplitCore
         end
     end
 end
+
+Parser::LiveSplitCore = LiveSplitCore

@@ -1,3 +1,6 @@
+# Since this program doesn't form 2 logical words, an inflector is used to preserve the capital W at the beginning
+# Check out config/initializers/inflections.rb to view it
+
 module Programs::WSplit
   def self.to_s
     'WSplit'
