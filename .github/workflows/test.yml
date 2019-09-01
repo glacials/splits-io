@@ -1,0 +1,16 @@
+name: Test
+
+on: [push]
+
+jobs:
+
+  build:
+ 
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v1
+    - name: Test Rails
+      run: |
+        docker-compose build
+        docker-compose run -e RAILS_ENV=test web bash -c "bundle exec rake db:migrate && bundle exec rspec"
