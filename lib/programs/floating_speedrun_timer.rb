@@ -1,4 +1,4 @@
-module FloatingSpeedrunTimer
+module Programs::FloatingSpeedrunTimer
   def self.to_s
     'Floating Speedrun Timer'
   end

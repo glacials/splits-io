@@ -16,7 +16,7 @@ class Runs::ApplicationController < ApplicationController
   end
 
   def set_blank_run
-    fake_run = Run.new(category: @run.category, program: ExchangeFormat.to_sym)
+    fake_run = Run.new(category: @run.category, program: Programs::ExchangeFormat.to_sym)
 
     # We can't use find_each here since it doesn't respect order. We need the order to be applied correctly on append,
     # because we're not persisting this run to the database so we can't sort it on "select". We have to keep all

@@ -1,4 +1,4 @@
-module Llanfair2
+module Programs::Llanfair2
   def self.to_s
     'Llanfair Rewrite'
   end

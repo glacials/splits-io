@@ -1,4 +1,4 @@
-module Urn
+module Programs::Urn
   def self.to_s
     'Urn'
   end

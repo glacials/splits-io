@@ -1,22 +1,22 @@
-module FramePerfect
+module Programs::FaceSplit
   def self.to_s
-    'FramePerfect'
+    'FaceSplit'
   end
 
   def self.to_sym
-    :frameperfect
+    :facesplit
   end
 
   def self.file_extension
-    'json'
+    'fss'
   end
 
   def self.website
-    'https://futuretrostudios.com/frameperfect/'
+    'https://github.com/pnolin/FaceSplit'
   end
 
   def self.content_type
-    'application/splitsio'
+    'application/facesplit'
   end
 
   def self.exportable?
@@ -26,6 +26,6 @@ module FramePerfect
   # exchangeable? is true if the timer supports the Splits I/O Exchange Format for importing and exporting, false
   # otherwise. See: https://github.com/glacials/splits-io/tree/master/public/schema
   def self.exchangeable?
-    true
+    false
   end
 end

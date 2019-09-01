@@ -46,10 +46,7 @@ class Run < ApplicationRecord
 
   class << self
     def programs
-      [
-        ExchangeFormat, LiveSplit, Llanfair, LlanfairGered, Llanfair2, WSplit, TimeSplitTracker, Portal2LiveTimer, Urn,
-        SplitterZ, Splitty, FaceSplit, ShitSplit, Worstrun, SourceLiveTimer, FloatingSpeedrunTimer, FramePerfect
-      ]
+      Programs.constants.map { |c| Programs.const_get(c) }
     end
 
     def exportable_programs

@@ -1,4 +1,4 @@
-module ExchangeFormat
+module Programs::ExchangeFormat
   def self.to_s
     'Splits.io Exchange Format'
   end

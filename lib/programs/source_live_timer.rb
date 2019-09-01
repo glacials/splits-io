@@ -1,4 +1,4 @@
-module SourceLiveTimer
+module Programs::SourceLiveTimer
   def self.to_s
     'SourceLiveTimer'
   end

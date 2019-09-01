@@ -1,4 +1,4 @@
-module WSplit
+module Programs::WSplit
   def self.to_s
     'WSplit'
   end

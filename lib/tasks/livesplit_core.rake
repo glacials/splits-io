@@ -50,5 +50,10 @@ task :update_lsc do
   mv("#{DEST_FOLDER}/liblivesplit_core.so", "#{PARSER_FOLDER}/liblivesplit_core.so")
   mv("#{DEST_FOLDER}/bindings/LiveSplitCore.rb", "#{PARSER_FOLDER}/LiveSplitCore.rb")
   rm_rf DEST_FOLDER
+  data = File.read("#{PARSER_FOLDER}/LiveSplitCore.rb")
+  data.sub!('module LiveSplitCore', 'module Parser::LiveSplitCore')
+  File.open("#{PARSER_FOLDER}/LiveSplitCore.rb", 'w') do |f|
+    f.write(data)
+  end
   File.open("#{PARSER_FOLDER}/livesplit_core_version", 'w') { |f| f.write(latest_release['tag_name']) }
 end

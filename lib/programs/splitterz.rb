@@ -1,4 +1,4 @@
-module SplitterZ
+module Programs::SplitterZ
   def self.to_s
     'SplitterZ'
   end

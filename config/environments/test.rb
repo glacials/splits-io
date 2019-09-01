@@ -46,6 +46,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.force_ssl = false
-  config.read_only = false
   config.log_level = :fatal
 end

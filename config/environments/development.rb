@@ -61,7 +61,6 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # Custom configuration options
-  config.read_only = false
 
   # Allow the use of better_errors from the host (not just the container)
   if defined? BetterErrors

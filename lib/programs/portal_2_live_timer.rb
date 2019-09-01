@@ -1,4 +1,4 @@
-module Portal2LiveTimer
+module Programs::Portal2LiveTimer
   def self.to_s
     'Portal 2 Live Timer'
   end
