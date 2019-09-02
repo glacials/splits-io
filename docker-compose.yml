@@ -28,6 +28,13 @@ x-logging:
   options:
     max-size: 1m
     max-file: "1"
+x-volumes:
+  &default-volumes
+  - .:/app:cached
+  - bundle:/bundle
+  - node_modules:/app/node_modules
+  - packs:/app/public/packs
+  - rails_cache:/app/tmp/cache
 
 services:
   db:
@@ -35,6 +42,7 @@ services:
     logging: *default-logging
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
+      - db:/var/lib/postgresql/data
   s3:
     expose:
       - "4569"
@@ -44,7 +52,7 @@ services:
       - 4569:4569
   webpacker:
     build: .
-    command: bash -c "yarn install && ruby bin/webpack-dev-server"
+    command: bash -c "ruby bin/webpack-dev-server"
     environment:
       - SPLITSIO_CLIENT_ID
     expose:
@@ -53,13 +61,12 @@ services:
     logging: *default-logging
     ports:
       - 3035:3035
-    volumes:
-      - .:/app
+    volumes: *default-volumes
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle install && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     depends_on:
       - db
       - s3
@@ -76,8 +83,7 @@ services:
       - 3000:3000
     stdin_open: true
     tty: true
-    volumes:
-      - ./:/app
+    volumes: *default-volumes
   worker:
     build: .
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work"
@@ -90,9 +96,20 @@ services:
     links:
       - s3:s3.localhost
     logging: *default-logging
+    volumes: *default-volumes
     ports: []
     stdin_open: true
     tty: true
   redis:
     image: redis
     logging: *default-logging
+    volumes:
+      - redis:/data
+
+volumes:
+  db:
+  redis:
+  bundle:
+  node_modules:
+  packs:
+  rails_cache:

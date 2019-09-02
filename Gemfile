@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.0'
+ruby '2.6.4'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -28,10 +28,6 @@ group :development, :hot do
 
   # profiling
   gem 'derailed_benchmarks'
-
-  # tests
-  gem 'guard', require: false
-  gem 'guard-rspec', require: false
 
   # views
   gem 'rails_real_favicon'
@@ -85,9 +81,6 @@ gem 'skylight', '~> 4.0.0'
 # external communication
 gem 'httparty'
 gem 'rest-client'
-
-# models
-gem 'nilify_blanks'
 
 # parsing
 gem 'descriptive_statistics', require: 'descriptive_statistics/safe'

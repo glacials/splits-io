@@ -62,3 +62,5 @@ services:
     image: worker
     logging: *default-logging
     ports: []
+    volumes:
+      - .:/app
