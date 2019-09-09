@@ -3,8 +3,9 @@ FROM ruby:2.6.4-alpine
 # Build base for gem's native extensions
 # tzdata for ruby timezone data
 # gcompat for ffi to load LSC
-RUN apk update \
-    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash nodejs yarn \
+RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk update \
+    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash npm \
     && rm -rf /var/cache/apk/*
 
 ENV LANG=C.UTF-8 \
@@ -17,5 +18,7 @@ ENV PATH /app/bin:$BUNDLE_BIN:$PATH
 
 RUN gem update --system
 
-RUN mkdir /app
+RUN mkdir -p /app
 WORKDIR /app
+
+RUN npm install -g yarn

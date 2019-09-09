@@ -19,7 +19,7 @@ container ?= web
 
 build:
 	$(docker-compose) build
-	$(docker-compose) run --rm web bundle install -j $(shell expr $(shell getconf _NPROCESSORS_ONLN) - 1)
+	$(docker-compose) run --rm web bundle install -j $$(expr $$(nproc) - 1)
 	$(docker-compose) run --rm web yarn install
 	$(docker-compose) run --rm web rails db:migrate
 	@[ -e tmp/seed ] || make seed
@@ -59,4 +59,7 @@ attach:
 
 clean:
 	$(docker-compose) down
+	$(docker) volume rm splits-io_bundle
+	$(docker) volume rm splits-io_node_modules
+	rm -rf node_modules/
 	rm -f tmp/seed
