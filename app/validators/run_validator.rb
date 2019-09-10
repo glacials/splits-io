@@ -18,6 +18,10 @@ class RunValidator < ActiveModel::Validator
       return
     end
 
+    unless record.video_url[/\Ahttp:\/\//] || record.video_url[/\Ahttps:\/\//]
+      record.video_url = "https://#{record.video_url}"
+    end
+
     unless valid_domain?(record.video_url)
       record.errors[:base] << 'Your video URL must be a link to a Twitch or YouTube video.'
     end
