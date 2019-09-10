@@ -13,8 +13,8 @@ class HighlightSuggestion < ApplicationRecord
       return run.highlight_suggestion if run.highlight_suggestion.present?
 
       pb = run.histories.where.not(started_at: nil).where.not(ended_at: nil).find_by(
-        realtime_duration_ms: run.duration_ms(Run::REAL),
-        gametime_duration_ms: run.duration_ms(Run::GAME)
+        realtime_duration_ms: run.duration(Run::REAL).to_ms,
+        gametime_duration_ms: run.duration(Run::GAME).to_ms
       )
       return if pb.nil?
 
@@ -31,7 +31,7 @@ class HighlightSuggestion < ApplicationRecord
 
         if video_start - 30.seconds < pb.started_at && video_end + 30.seconds > pb.ended_at
           video_time_at_pb_start = pb.started_at - video_start
-          video_time_at_pb_end   = video_time_at_pb_start + (pb.duration_ms(Run::REAL) / 1000)
+          video_time_at_pb_end   = video_time_at_pb_start + (pb.duration(Run::REAL).to_ms / 1000)
 
           highlight_suggestion = create(
             run: run,
@@ -39,7 +39,7 @@ class HighlightSuggestion < ApplicationRecord
               uri.query = {
                 start: [0, (video_time_at_pb_start - 10.seconds).to_i].max,
                 end:   [video_duration.to_i, (video_time_at_pb_end + 10.seconds).to_i].min,
-                title: "PB: #{run.game} #{run.category} in #{Duration.new(run.duration_ms(run.default_timing)).format}"
+                title: "PB: #{run.game} #{run.category} in #{run.duration(run.default_timing).format}"
               }.to_query
             end
           )
