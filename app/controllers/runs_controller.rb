@@ -136,6 +136,10 @@ class RunsController < ApplicationController
     @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
     @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
+    if ![Run::REAL, Run::GAME].include?(timing)
+      redirect_to(request.path, alert: 'Timing can only be real or game.')
+      return
+    end
 
     gon.run = {
       id: @run.id36,

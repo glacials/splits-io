@@ -19,7 +19,7 @@ h5
       a.badge.badge-dark.tip href=run.video_url title='Watch on YouTube' => icon('fab', 'youtube')
     - elsif !uri.host.match?(/^(www\.)?(twitch\.tv)$/)
       a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
-  - if run.segments.last.duration(timing).nil?
+  - if run.segments.last.try(:duration, timing).nil?
     a.badge.badge-dark.tip.p-0 title='In progress'
       .text-danger = icon('fas', 'satellite-dish')
 

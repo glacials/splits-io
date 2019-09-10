@@ -36,7 +36,16 @@ class Api::V3::Users::Games::Categories::PbsController < Api::V3::ApplicationCon
   end
 
   def set_pb
-    @pb = @user.pb_for(@category)
+    timing = params[:timing] || Run::REAL
+    if ![Run::REAL, Run::GAME].include?(timing)
+      render status: :bad_request, json: {
+        status: 401,
+        message: 'Timing must be "real" or "game".',
+      }
+      return
+    end
+
+    @pb = @user.pb_for(timing, @category)
     return if @pb.present?
 
     render status: :not_found, json: {
