@@ -39,7 +39,7 @@ class Api::V3::Users::Games::Categories::PbsController < Api::V3::ApplicationCon
     timing = params[:timing] || Run::REAL
     if ![Run::REAL, Run::GAME].include?(timing)
       render status: :bad_request, json: {
-        status: 401,
+        status: 400,
         message: 'Timing must be "real" or "game".',
       }
       return
