@@ -48,8 +48,6 @@ x-backend: &backend
     - db
     - s3
     - redis
-  links:
-    - s3:s3.localhost
 
 services:
   db:
@@ -84,8 +82,6 @@ services:
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment: *server-environment
     image: web
-    links:
-      - webpacker:webpacker.localhost
     logging: *default-logging
     ports:
       - 3000:3000
