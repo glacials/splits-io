@@ -41,7 +41,7 @@ group :production do
 end
 
 # administration
-gem 'administrate', github: 'thoughtbot/administrate'
+gem 'administrate', '~> 0.12'
 gem 'chartkick'
 gem 'groupdate'
 
@@ -114,7 +114,7 @@ gem 'webpacker', '>= 4.0.x'
 
 # workers/jobs
 gem 'daemons'
-gem 'delayed_job_active_record', github: 'collectiveidea/delayed_job_active_record', branch: 'rails-6-compatibility'
+gem 'delayed_job_active_record'
 gem 'foreman'
 gem 'redis'
 
