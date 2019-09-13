@@ -108,7 +108,7 @@ gem 'font-awesome-sass', '~> 5.1'
 gem 'gon'
 gem 'kaminari'
 gem 'purecss-rails', github: 'glacials/purecss-rails'
-gem 'sass-rails', '~> 5.0.7'
+gem 'sassc-rails'
 gem 'slim'
 gem 'webpacker', '>= 4.0.x'
 

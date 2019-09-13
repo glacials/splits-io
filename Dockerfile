@@ -5,7 +5,7 @@ FROM ruby:2.6.4-alpine
 # gcompat for ffi to load LSC
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk update \
-    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash npm \
+    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash yarn \
     && rm -rf /var/cache/apk/*
 
 ENV LANG=C.UTF-8 \
@@ -21,4 +21,5 @@ RUN gem update --system
 RUN mkdir -p /app
 WORKDIR /app
 
-RUN npm install -g yarn
+COPY package.json yarn.lock ./
+RUN yarn install

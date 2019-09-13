@@ -60,6 +60,5 @@ attach:
 clean:
 	$(docker-compose) down
 	$(docker) volume rm splits-io_bundle
-	$(docker) volume rm splits-io_node_modules
 	rm -rf node_modules/
 	rm -f tmp/seed
