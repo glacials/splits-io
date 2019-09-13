@@ -218,6 +218,11 @@ class Run < ApplicationRecord
     duration(timing) - sum_of_best(timing)
   end
 
+  def video
+    return @video if @video && @video.url == video_url
+    @video = Video.new(video_url)
+  end
+
   private
 
   def stats_select_query(timing)

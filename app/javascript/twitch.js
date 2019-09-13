@@ -9,7 +9,7 @@ document.addEventListener('turbolinks:load', function() {
 
     const player = new Twitch.Player(el.id, {
       autoplay: false,
-      video: el.dataset.video_url.split('/').slice(-1)[0],
+      video: el.dataset.video_id,
       muted: true,
       height: '100%',
       width: '100%'

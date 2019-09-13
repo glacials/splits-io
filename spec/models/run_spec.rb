@@ -95,6 +95,20 @@ describe Run, type: :model do
     end
   end
 
+  context 'with a valid video URL' do
+    it 'updates the video helper as the URL changes' do
+      video_url = 'https://www.twitch.tv/videos/12345678'
+      run = FactoryBot.build(:run, video_url: video_url)
+      expect(run.video.url).to eq video_url
+      expect(run.video.twitch?).to be true
+
+      video_url = 'https://www.youtube.com/watch?v=asdf1234&feature=related'
+      run.video_url = video_url
+      expect(run.video.url).to eq video_url
+      expect(run.video.youtube?).to be true
+    end
+  end
+
   context 'just created' do
     it 'has a non-nil claim token' do
       expect(run.claim_token).not_to be_nil
