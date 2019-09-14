@@ -176,22 +176,18 @@ class Run < ApplicationRecord
   # Calculate the various statistical information about each segments history once in the database for the whole run
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
-    stats = SegmentHistory.joins(segment: :run)
-                          .where(segment: {runs: {id: id}})
-                          .where.not(Run.duration_type(timing) => [0, nil])
-                          .group(:segment_id)
-                          .select(stats_select_query(timing))
+    stats = segment_history_stats_query(timing)
 
     h = {}
     stats.each do |stat|
-      h[stat.segment_id] = {
-        standard_deviation: stat.standard_deviation,
-        mean:               stat.mean,
-        median:             stat.median,
+      h[stat['segment_id']] = {
+        standard_deviation: stat['standard_deviation'],
+        mean:               stat['mean'],
+        median:             stat['median'],
         percentiles:        {
-          10 => stat.percentile10,
-          90 => stat.percentile90,
-          99 => stat.percentile99
+          10 => stat['percentile10'],
+          90 => stat['percentile90'],
+          99 => stat['percentile99']
         }
       }
     end
@@ -220,28 +216,42 @@ class Run < ApplicationRecord
 
   private
 
-  def stats_select_query(timing)
-    case timing
-    when Run::REAL
-      'segment_id,
-      STDDEV_POP(segment_histories.realtime_duration_ms) AS standard_deviation,
-      AVG(segment_histories.realtime_duration_ms) AS mean,
-      PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS median,
-      PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile10,
-      PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile90,
-      PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile99
-      '.squish
-    when Run::GAME
-      'segment_id,
-      STDDEV_POP(segment_histories.gametime_duration_ms) AS standard_deviation,
-      AVG(segment_histories.gametime_duration_ms) AS mean,
-      PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS median,
-      PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile10,
-      PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile90,
-      PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile99
-      '.squish
-    else
-      raise 'Unsupported timing'
-    end
+  def segment_history_stats_query(timing)
+    timing_string = case timing
+                    when Run::REAL
+                      'real'
+                    when Run::GAME
+                      'game'
+                    else
+                      raise 'Unsupported timing'
+                    end
+
+    sql = %Q{
+      SELECT
+        segment_id,
+        STDDEV_POP(segment_histories.#{timing_string}time_duration_ms) AS standard_deviation,
+        AVG(segment_histories.#{timing_string}time_duration_ms) AS mean,
+        PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.#{timing_string}time_duration_ms) AS median,
+        PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.#{timing_string}time_duration_ms) AS percentile10,
+        PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.#{timing_string}time_duration_ms) AS percentile90,
+        PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.#{timing_string}time_duration_ms) AS percentile99 FROM segment_histories
+      INNER JOIN segments ON segments.id = segment_histories.segment_id
+      INNER JOIN runs ON runs.id = segments.run_id
+      LEFT JOIN (
+        SELECT segment_histories.id AS id, segment_histories.attempt_number AS attempt_number, segments.segment_number as segment_number
+        FROM segment_histories
+        INNER JOIN segments ON segments.id = segment_histories.segment_id
+        WHERE segments.run_id = #{id}
+        AND NOT ((segment_histories.#{timing_string}time_duration_ms = 0 OR segment_histories.#{timing_string}time_duration_ms IS NULL))
+      ) AS other_histories ON other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments.segment_number - 1
+      WHERE runs.id = #{id}
+        AND NOT ((segment_histories.#{timing_string}time_duration_ms = 0 OR segment_histories.#{timing_string}time_duration_ms IS NULL))
+        AND (segments.segment_number = 0 OR
+          (other_histories.attempt_number = segment_histories.attempt_number
+          AND other_histories.segment_number = segments.segment_number - 1)
+        )
+      GROUP BY segment_id
+    }.squish
+    ActiveRecord::Base.connection.execute(sql).to_a
   end
 end
