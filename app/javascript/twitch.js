@@ -1,7 +1,7 @@
 const async = require('async')
 
 document.addEventListener('turbolinks:load', function() {
-  Array.from(document.getElementsByClassName('twitch-player')).forEach(el => {
+  Array.from(document.querySelectorAll('[data-twitch]')).forEach(el => {
     if (el.dataset.loaded === '1') {
       return
     }

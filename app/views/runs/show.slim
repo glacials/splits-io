@@ -21,12 +21,9 @@
   - if [@run, *@compare_runs].map(&:video).compact.map(&:url).compact.any?
     .card-deck.mx-1
       - [@run, *@compare_runs].each do |run|
-        - if run.video.twitch?
+        - if run.video&.supports_embedding?
           .card.my-3.mx-2 style='padding-bottom: 28.125%'
-            .video-player.twitch-player id="twitch-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.id}
-        - elsif run.video.youtube?
-          .card.my-3.mx-2 style='padding-bottom: 28.125%'
-            .video-player.youtube-player id="youtube-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.id}
+            .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.video_type => true}
         - else
           .card.my-3.mx-2
             i.text-center.my-auto No video attached to this run

@@ -5,7 +5,7 @@ window.onYouTubeIframeAPIReady = () => {
 }
 
 function setupYouTubeVideos() {
-  Array.from(document.getElementsByClassName('youtube-player')).forEach(el => {
+  Array.from(document.querySelectorAll('[data-youtube]')).forEach(el => {
     if (el.dataset.loaded === '1') {
       return
     }
