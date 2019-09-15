@@ -55,7 +55,7 @@ article
   .card-deck.mb-4
     .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
       h5.card-header Edit Video
-      .card-body = f.text_field(:video_url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
+      .card-body = text_field_tag("#{@run.id36}[video_url]", @run.video&.url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
       .card-footer.clearfix: .float-right: .btn-group = f.submit 'Save', class: 'btn btn-success'
 
     .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|

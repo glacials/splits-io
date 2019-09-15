@@ -1,20 +1,38 @@
 require 'rails_helper'
 
 describe Video do
+  context 'with a valid video URL to a non-valid location' do
+    let(:video) { FactoryBot.build(:video, url: 'http://google.com/') }
+
+    it 'fails to validate' do
+      expect(video).not_to be_valid
+    end
+  end
+
+  context 'with an invalid video URL' do
+    let(:video) do
+      FactoryBot.build(:video, url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!')
+    end
+
+    it 'fails to validate' do
+      expect(video).not_to be_valid
+    end
+  end
+
   context 'Twitch' do
     it 'recognizes Twitch.tv URLs' do
       valid_urls = [
         'https://twitch.tv/videos/12345678',
         'https://www.twitch.tv/videos/12345678'
       ]
-      valid_urls.each { |url| expect(Video.new(url).twitch?).to be true }
+      valid_urls.each { |url| expect(FactoryBot.build(:video, url: url).twitch?).to be true }
 
       invalid_urls = [
         'https://witch.tv/videos/12345678',
         'https://www.snitch.tv/videos/12345678',
         'https://youtube.com/asdf1234'
       ]
-      invalid_urls.each { |url| expect(Video.new(url).twitch?).to be false }
+      invalid_urls.each { |url| expect(FactoryBot.build(:video, url: url).twitch?).to be false }
     end
 
     it 'extracts the video id from Twitch URLs' do
@@ -22,7 +40,7 @@ describe Video do
         'https://twitch.tv/videos/12345678',
         'https://www.twitch.tv/videos/12345678'
       ]
-      urls.each { |url| expect(Video.new(url).id).to eq('12345678') }
+      urls.each { |url| expect(FactoryBot.build(:video, url: url).video_id).to eq('12345678') }
     end
   end
 
@@ -33,7 +51,7 @@ describe Video do
         'http://www.youtube.com/embed/watch?feature=player_embedded&v=asdf1234',
         'https://youtu.be/asdf1234'
       ]
-      valid_urls.each { |url| expect(Video.new(url).youtube?).to be true }
+      valid_urls.each { |url| expect(FactoryBot.build(:video, url: url).youtube?).to be true }
 
       invalid_urls = [
         'https://www.metube.com/watch?v=asdf1234&feature=related',
@@ -41,7 +59,7 @@ describe Video do
         'https://youto.be/asdf1234',
         'http://www.youtube.net/embed/watch?feature=player_embedded&v=asdf1234'
       ]
-      invalid_urls.each { |url| expect(Video.new(url).youtube?).to be false }
+      invalid_urls.each { |url| expect(FactoryBot.build(:video, url: url).youtube?).to be false }
     end
 
     it 'extracts the video id from YouTube URLs' do
@@ -50,7 +68,7 @@ describe Video do
         'http://www.youtube.com/embed/watch?feature=player_embedded&v=asdf1234',
         'https://youtu.be/asdf1234'
       ]
-      urls.each { |url| expect(Video.new(url).id).to eq('asdf1234') }
+      urls.each { |url| expect(FactoryBot.build(:video, url: url).video_id).to eq('asdf1234') }
     end
   end
 

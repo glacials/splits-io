@@ -13,12 +13,11 @@ h5
   - if run.entry.present? && !run.entry.ghost?
     a.badge.badge-dark.tip title='Recorded as part of a race' href=race_path(run.entry.race)
       = icon('fas', 'flag-checkered')
-  - if run.video_url.present?
-    - uri = URI.parse(run.video_url)
-    - if uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
-      a.badge.badge-dark.tip href=run.video_url title='Watch on YouTube' => icon('fab', 'youtube')
-    - elsif !uri.host.match?(/^(www\.)?(twitch\.tv)$/)
-      a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
+  - if run.video&.supports_embedding?
+    - if run.video.youtube?
+      a.badge.badge-dark.tip href=run.video.url title='Watch on YouTube' => icon('fab', 'youtube')
+    - elsif !run.video.twitch?
+      a.badge.badge-dark.tip href=run.video.url title='Watch video' => icon('fas', 'video')
   - if run.segments.last.try(:duration, timing).nil?
     a.badge.badge-dark.tip.p-0 title='In progress'
       .text-danger = icon('fas', 'satellite-dish')
@@ -58,7 +57,7 @@ h5
       ' 🎉
       = run.likes.count
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-    - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+    - if run.belongs_to?(current_user) && run.video && run.highlight_suggestion.present?
       a.btn.btn-twitch.tip-top(
         href='#'
         data={toggle: :modal, target: '#highlight'}
@@ -66,7 +65,7 @@ h5
       )
         => icon('fab', 'twitch')
         span Auto-Highlight Possible
-- if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+- if run.belongs_to?(current_user) && run.video && run.highlight_suggestion.present?
   #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
     .modal-dialog role='document'
       .modal-content

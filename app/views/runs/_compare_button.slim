@@ -20,7 +20,7 @@
         - comparable_runs.each do |comparable_run|
           a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
             = comparable_run.duration(timing).format
-            - if comparable_run.video_url.present? && URI.parse(comparable_run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+            - if comparable_run.video&.twitch?
               span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
         - recommended_comparison = run.recommended_comparison(timing)
         .dropdown-header.text-light Recommended
@@ -30,14 +30,14 @@
           a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: recommended_comparison))
             b> #{recommended_comparison.user.name}'s
             ' #{recommended_comparison.duration(timing).format}
-            - if recommended_comparison.video_url.present? && URI.parse(recommended_comparison.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+            - if recommended_comparison.video&.twitch?
               span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
         - run.category.runners.where.not(id: run.user.try(:id)).limit(100).each do |comparable_runner|
           .dropdown-header.text-light = comparable_runner
           - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
             a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
               = comparable_run.duration(timing).format
-              - if comparable_run.video_url.present? && URI.parse(comparable_run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+              - if comparable_run.video&.twitch?
                 span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
     - if compare_runs.any?
       .btn-group

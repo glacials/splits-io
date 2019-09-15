@@ -81,7 +81,8 @@ class RunsController < ApplicationController
     end
 
     if params[@run.id36][:video_url]
-      if @run.update(video_url: params[@run.id36][:video_url])
+      @run.build_video unless @run.video
+      if @run.video.update(url: params[@run.id36][:video_url])
         redirect_back(fallback_location: edit_run_path(@run), notice: 'Video saved! 📹')
       else
         redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
@@ -146,7 +147,7 @@ class RunsController < ApplicationController
 
       splits:         @run.collapsed_segments(timing),
       timer:          @run.timer,
-      video_url:      @run.video_url,
+      video_url:      @run.video&.url,
       default_timing: @run.default_timing
     }
 

@@ -52,7 +52,7 @@
                 = run.duration.format
             - if cols.include?(:video)
               td.text-center.nowrap
-                - if run.video_url.present?
+                - if run.video&.url.present?
                   = icon('fas', 'video')
             - if cols.include?(:name)
               td width='100%' = link_to run, run_path(run), class: 'run-link'

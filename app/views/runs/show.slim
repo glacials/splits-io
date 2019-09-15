@@ -18,7 +18,7 @@
 = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
 - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:patron?, tier: 3))
-  - if [@run, *@compare_runs].map(&:video_url).compact.any?
+  - if [@run, *@compare_runs].map(&:video).compact.map(&:url).compact.any?
     .card-deck.mx-1
       - [@run, *@compare_runs].each do |run|
         - if run.video.twitch?

@@ -21,7 +21,7 @@ class RunDashboard < Administrate::BaseDashboard
     program: Field::String,
     claim_token: Field::Password,
     archived: Field::Boolean,
-    video_url: Field::String,
+    video: Field::HasOne,
     srdc_id: Field::String,
     attempts: Field::Number,
     s3_filename: Field::String,
@@ -63,7 +63,7 @@ class RunDashboard < Administrate::BaseDashboard
     program
     claim_token
     archived
-    video_url
+    video
     attempts
     srdc_id
     s3_filename
@@ -79,7 +79,7 @@ class RunDashboard < Administrate::BaseDashboard
     nick
     image_url
     archived
-    video_url
+    video
     srdc_id
     attempts
     s3_filename
