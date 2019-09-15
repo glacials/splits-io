@@ -1,6 +1,6 @@
 class MigrateRunVideoUrlsToVideos < ActiveRecord::Migration[6.0]
+  # video_url is included in ignored_columns in Run, so we can't use standard ActiveRecord stuff to create Videos or rollback the migration
   def up
-    # video_url is included in ignored_columns in Run, so we can't use standard ActiveRecord stuff to create Videos
     sql = "INSERT INTO videos (run_id, url, created_at, updated_at)
            SELECT id, video_url, now(), now()
            FROM runs
@@ -12,8 +12,11 @@ class MigrateRunVideoUrlsToVideos < ActiveRecord::Migration[6.0]
   end
 
   def down
-    Video.find_each do |video|
-      video.run.update(video_url: video.url)
-    end
+    sql = "UPDATE runs
+           SET video_url = videos.url
+           FROM runs t1
+           INNER JOIN videos ON videos.run_id = t1.id
+    ".squish
+    ActiveRecord::Base.connection.exec_update(sql)
   end
 end
