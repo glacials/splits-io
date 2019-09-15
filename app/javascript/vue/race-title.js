@@ -26,7 +26,7 @@ export default {
       if (this.race.game === null && this.race.category === null && this.race.notes === null) {
         return 'Untitled race'
       }
-      return `${(this.race.game || {}).name} ${(this.race.category || {name: ''}).name} ${(this.race.notes || '').split('\n')[0]}`
+      return `${(this.race.game || {name: ''}).name} ${(this.race.category || {name: ''}).name} ${(this.race.notes || '').split('\n')[0]}`
     },
   },
   created: async function() {
@@ -70,7 +70,7 @@ export default {
           headers: headers,
           body: JSON.stringify({
             category_id: this.categoryId,
-            game_id: this.game.id,
+            game_id: (this.game || {}).id,
             notes: this.notes,
           })
         })
