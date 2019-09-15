@@ -20,7 +20,10 @@ FactoryBot.define do
     compare_object:           {filename: 'compare_object.lss'},
 
     # specific-content runs
-    with_segments_bests:       {filename: 'with_segments_bests.lss'}
+    with_segments_bests:      {filename: 'with_segments_bests.lss'},
+
+    # skipped splits
+    skipped_splits:           {filename: 'livesplit_skipped_splits.lss'},
   }
 
   test_files.each do |_factory_name, file|
