@@ -32,22 +32,8 @@ const buildSegmentChart = function(runs, options) {
     // Start mean info collection
     time = 0
     let counter = 0
-    if (segment.histories.length !== 0) {
-      segment.histories.forEach((attempt) => {
-        if (attempt[duration] === 0) {
-          // Reject attempts that have no duration (skipped splits)
-          return
-        } else if (run.segments[i - 1] !== undefined) {
-          const prevSegAttempt = run.segments[i - 1].histories.find((prevAttempt) => {
-            // Find the previous splits attempt for this same attempt id to make sure it wasn't skipped
-            return prevAttempt.attempt_number === attempt.attempt_number
-          })
-          if (prevSegAttempt !== undefined && prevSegAttempt[duration] === 0) {
-            // Reject the first split after a series of skipped splits to prevent data pollution
-            return
-          }
-        }
-
+    if ((segment.filteredHistories || segment.histories).length !== 0) {
+      (segment.filteredHistories || segment.histories).forEach((attempt) => {
         time += attempt[duration]
         counter++
       })
