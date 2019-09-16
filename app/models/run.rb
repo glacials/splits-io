@@ -177,12 +177,12 @@ class Run < ApplicationRecord
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
     stats = SegmentHistory.joins(segment: :run)
-              .joins(stats_join_additional_histories_query(timing))
-              .where(segment: {runs: {id: id}})
-              .where.not(Run.duration_type(timing) => [0, nil])
-              .where("segments_segment_histories.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments_segment_histories.segment_number - 1)")
-              .group(:segment_id)
-              .select(stats_select_query(timing))
+                          .joins(stats_join_additional_histories_query(timing))
+                          .where(segment: {runs: {id: id}})
+                          .where.not(Run.duration_type(timing) => [0, nil])
+                          .where("segments_segment_histories.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments_segment_histories.segment_number - 1)")
+                          .group(:segment_id)
+                          .select(stats_select_query(timing))
 
     h = {}
     stats.each do |stat|
