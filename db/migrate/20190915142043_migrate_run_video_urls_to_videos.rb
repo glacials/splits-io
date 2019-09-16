@@ -14,8 +14,8 @@ class MigrateRunVideoUrlsToVideos < ActiveRecord::Migration[6.0]
   def down
     sql = "UPDATE runs
            SET video_url = videos.url
-           FROM runs t1
-           INNER JOIN videos ON videos.run_id = t1.id
+           FROM videos
+           WHERE videos.run_id = runs.id
     ".squish
     ActiveRecord::Base.connection.exec_update(sql)
   end
