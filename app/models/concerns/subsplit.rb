@@ -3,6 +3,18 @@ require 'active_support/concern'
 module Subsplit
   extend ActiveSupport::Concern
 
+  def subsplit_as_segment
+    Struct.new(:segment) do
+      def id
+        "#{segment.id}-subsplit"
+      end
+
+      def shortest_duration(timing)
+        segment.subsplit_shortest_duration(timing)
+      end
+    end.new(self)
+  end
+
   def first_subsplit?
     return false unless subsplit?
     return true if segment_number == 0
