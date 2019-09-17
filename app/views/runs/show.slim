@@ -18,15 +18,15 @@
 = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
 - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:patron?, tier: 3))
-  - if [@run, *@compare_runs].map(&:video_url).compact.any?
+  - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
     .card-deck.mx-1
       - [@run, *@compare_runs].each do |run|
-        - if run.video_url.present? && URI.parse(run.video_url).host.match?(/^(www\.)?(twitch\.tv)$/)
+        - if run.video&.supports_embedding?
           .card.my-3.mx-2 style='padding-bottom: 28.125%'
-            .twitch-player id="twitch-player-#{run.id36}" data={run_id: run.id36, video_url: run.video_url}
+            .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
         - else
           .card.my-3.mx-2
-            i.text-center.my-auto No Twitch video attached to this run
+            i.text-center.my-auto No video attached to this run
       - if @compare_runs.none?
         .card.my-3.mx-2
           i.text-center.my-auto Select a comparison to see another run's video here

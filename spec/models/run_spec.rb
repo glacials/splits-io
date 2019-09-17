@@ -77,24 +77,6 @@ describe Run, type: :model do
     end
   end
 
-  context 'with a valid video URL to a non-valid location' do
-    let(:run) { FactoryBot.build(:run, video_url: 'http://google.com/') }
-
-    it 'fails to validate' do
-      expect(run).not_to be_valid
-    end
-  end
-
-  context 'with an invalid video URL' do
-    let(:run) do
-      FactoryBot.build(:run, video_url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!')
-    end
-
-    it 'fails to validate' do
-      expect(run).not_to be_valid
-    end
-  end
-
   context 'just created' do
     it 'has a non-nil claim token' do
       expect(run.claim_token).not_to be_nil

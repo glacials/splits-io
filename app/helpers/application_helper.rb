@@ -5,7 +5,7 @@ module ApplicationHelper
 
   def order_runs(runs)
     dir = %w[asc desc].include?(params[:order]) ? params[:order] : 'desc'
-    runs.order(by(params[:by]) => dir)
+    runs.includes(:video).order(by(params[:by]) => dir)
   end
 
   def on_a_profile_page?
@@ -87,7 +87,7 @@ module ApplicationHelper
       'created_at' => :created_at,
       'time'       => :realtime_duration_ms,
       'user_id'    => :user_id,
-      'video_url'  => :video_url
+      'video_url'  => :"videos.url"
     }[param] || :created_at
   end
 end

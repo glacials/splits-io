@@ -24,8 +24,8 @@
   <% if @run.image_url.present? %>
     "imageURL": "<%= @run.image_url %>",
   <% end %>
-  <% if @run.video_url.present? %>
-    "videoURL": "<%= @run.video_url %>",
+  <% if @run.video&.url.present? %>
+    "videoURL": "<%= @run.video.url %>",
   <% end %>
   <% if @run.game.present? %>
     "game": {
