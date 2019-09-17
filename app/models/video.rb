@@ -14,7 +14,7 @@ class Video < ApplicationRecord
     url ? /^(?:https?:\/\/)?(?:www\.)?youtu(?:be\.com|\.be)\/.+/i.match?(url) : false
   end
 
-  def video_type
+  def provider
     if twitch?
       TWITCH
     elsif youtube?

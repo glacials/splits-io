@@ -23,7 +23,7 @@
       - [@run, *@compare_runs].each do |run|
         - if run.video&.supports_embedding?
           .card.my-3.mx-2 style='padding-bottom: 28.125%'
-            .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.video_type => true}
+            .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
         - else
           .card.my-3.mx-2
             i.text-center.my-auto No video attached to this run
