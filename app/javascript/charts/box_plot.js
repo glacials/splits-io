@@ -45,7 +45,7 @@ const buildBoxPlot = (runs, options = {}) => {
     },
     series: runs.map(run => ({
       data: run.segments.map(segment => {
-        const histories = segment.histories.map(attempt => attempt[duration]).filter(duration => duration > 0)
+        const histories = segment.filteredHistories.map(attempt => attempt[duration])
         const q1 = quantile(histories, .25)
         const q3 = quantile(histories, .75)
         const iqr = q3 - q1 // interquartile range, used for finding outliers (below)

@@ -48,13 +48,40 @@ document.addEventListener('turbolinks:load', function() {
     }
     throw new Error('Request for run from API failed')
   }).then(function(bodies) {
-    const runs = bodies.map(body => body.run)
+    let runs = bodies.map(body => body.run)
     const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
 
     document.getElementById('chart-spinner').hidden = true
     document.getElementById('chart-holder').hidden = false
     if (runs[0].histories.length !== 0) {
       const skipped = `${timing}time_skipped`
+      const duration = `${timing}time_duration_ms`
+      runs = runs.map((run) => (
+        {
+          ...run,
+          segments: run.segments.map((segment, i) => (
+            {
+              ...segment,
+              filteredHistories: segment.histories.filter((attempt) => {
+                if (attempt[duration] === 0) {
+                  return false
+                }
+                if (run.segments[i - 1] !== undefined) {
+                  const prevSegAttempt = run.segments[i - 1].histories.find((prevAttempt) => {
+                    // Find the previous splits attempt for this same attempt id to make sure it wasn't skipped
+                    return prevAttempt.attempt_number === attempt.attempt_number
+                  })
+                  if (prevSegAttempt !== undefined && prevSegAttempt[duration] === 0) {
+                    // Reject the first split after a series of skipped splits to prevent data pollution
+                    return false
+                  }
+                }
+                return true
+              })
+            }
+          ))
+        }
+      ))
 
       buildRunDurationChart(runs, chartOptions)
       buildBoxPlot(runs, chartOptions)
