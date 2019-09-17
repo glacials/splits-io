@@ -571,4 +571,42 @@ describe Run, type: :model do
       expect(run.total_playtime_ms).to eq 8_589_280
     end
   end
+
+  context 'skipped splits stats' do
+    let(:run) do
+      r = FactoryBot.create(:skipped_splits_run)
+      r.parse_into_db
+      r.reload
+      r
+    end
+
+    it 'has the correct stats' do
+      stats = run.segment_history_stats(Run::REAL)
+      ids = run.segments.order(:segment_number).map(&:id)
+
+      expect(stats[ids[0]][:standard_deviation].to_f).to be_within(1)
+                                                           .of(48_989)
+      expect(stats[ids[0]][:mean].to_f).to eq 120_000
+      expect(stats[ids[0]][:median].to_f).to eq 120_000
+      expect(stats[ids[0]][:percentiles][10].to_f).to eq 72_000
+      expect(stats[ids[0]][:percentiles][90].to_f).to eq 168_000
+      expect(stats[ids[0]][:percentiles][99].to_f).to eq 178_800
+
+      expect(stats[ids[1]][:standard_deviation].to_f).to be_within(1)
+                                                           .of(450_000)
+      expect(stats[ids[1]][:mean].to_f).to eq 1_950_000
+      expect(stats[ids[1]][:median].to_f).to eq 1_500_000
+      expect(stats[ids[1]][:percentiles][10].to_f).to eq 1_590_000
+      expect(stats[ids[1]][:percentiles][90].to_f).to eq 2_310_000
+      expect(stats[ids[1]][:percentiles][99].to_f).to eq 2_391_000
+
+      expect(stats[ids[2]][:standard_deviation].to_f).to be_within(1)
+                                                           .of(180_000)
+      expect(stats[ids[2]][:mean].to_f).to eq 660_000
+      expect(stats[ids[2]][:median].to_f).to eq 480_000
+      expect(stats[ids[2]][:percentiles][10].to_f).to eq 516_000
+      expect(stats[ids[2]][:percentiles][90].to_f).to eq 804_000
+      expect(stats[ids[2]][:percentiles][99].to_f).to eq 836_400
+    end
+  end
 end
