@@ -53,10 +53,12 @@ article
       .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
 
   .card-deck.mb-4
-    .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
+    .card = form_for(@run.video || @run.build_video, url: run_video_path(@run), method: :put) do |f|
       h5.card-header Edit Video
-      .card-body = text_field_tag("#{@run.id36}[video_url]", @run.video&.url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
-      .card-footer.clearfix: .float-right: .btn-group = f.submit 'Save', class: 'btn btn-success'
+      .card-body
+        = f.text_field(:url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
+      .card-footer.clearfix: .float-right: .btn-group
+        = f.submit('Save', class: 'btn btn-success')
 
     .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
       h5.card-header Edit Speedrun.com Link
@@ -67,9 +69,9 @@ article
     .card
       h5.card-header Reparse
       .card-body
-        p This button forces Splits I/O to reparse your run's original file, repopulating your on-site splits and
-          stats. This can sometimes resolve bugs, but may revert your run's game and category if you've previously made
-          changes to them on this page.
+        p This button forces Splits.io to reparse your run's original file, repopulating your on-site splits and stats.
+          This can sometimes resolve bugs, but may revert your run's game and category if you've previously made changes
+          to them on this page.
         p This is not reversible.
       .card-footer
         .float-right: a.btn.btn-warning href=edit_run_path(@run, reparse: '1') Reparse

@@ -116,6 +116,8 @@ Rails.application.routes.draw do
   put    '/:run/like', to: 'runs/likes#create',  as: :create_run_like
   delete '/:run/like', to: 'runs/likes#destroy', as: :destroy_run_like
 
+  put '/:run/video', to: 'runs/videos#update', as: :run_video
+
   get '/:run/export/history.csv',         to: 'runs/exports#history_csv',         as: :history_csv
   get '/:run/export/segment_history.csv', to: 'runs/exports#segment_history_csv', as: :segment_history_csv
   get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download
