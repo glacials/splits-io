@@ -27,7 +27,7 @@ const buildSegmentChart = function(runs, options) {
     if (time < 0) {
       time = 0
     }
-    pbData.push([segment.name, time])
+    pbData.push([segment.display_name, time])
 
     // Start mean info collection
     time = 0
@@ -40,14 +40,14 @@ const buildSegmentChart = function(runs, options) {
 
       time = ((time / counter) - segment[shortest]) / 1000
     }
-    meanData.push([segment.name, time])
+    meanData.push([segment.display_name, time])
 
     // Start reset info collection
     if (resetCounter - segment.histories.length > 0) {
-      resetData.push([segment.name, (1 - (segment.histories.length / resetCounter)) * 100])
+      resetData.push([segment.display_name, (1 - (segment.histories.length / resetCounter)) * 100])
       resetCounter = segment.histories.length
     } else {
-      resetData.push([segment.name, 0])
+      resetData.push([segment.display_name, 0])
     }
   })
 

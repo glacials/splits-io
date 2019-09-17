@@ -1,4 +1,6 @@
 class Segment < ApplicationRecord
+  include Subsplit
+
   belongs_to :run
   # dependent: :delete_all requires there be no child items that need to be deleted
   # If SegmentHistory is changed to have child records, change this back to just :destroy

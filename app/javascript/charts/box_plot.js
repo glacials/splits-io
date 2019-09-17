@@ -73,7 +73,7 @@ const buildBoxPlot = (runs, options = {}) => {
     title: {text: 'Segment Box Plot'},
     xAxis: {
       title: {text: 'Segment'},
-      categories: runs[0].segments.map(segment => segment.name)
+      categories: runs[0].segments.map(segment => segment.display_name)
     },
     yAxis: {
       gridLineColor: 'rgba(255, 255, 255, 0.2)',

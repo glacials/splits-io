@@ -177,6 +177,18 @@ class Run < ApplicationRecord
     end
   end
 
+  def subsplits
+    segments.map do |segment|
+      next unless segment.first_subsplit?
+      {
+        id: "#{segment.id}-subsplit",
+        name: segment.subsplit_title,
+        segment_number: segment.segment_number,
+        histories: segment.subsplit_durations
+      }
+    end.compact
+  end
+
   # Calculate the various statistical information about each segments history once in the database for the whole run
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
