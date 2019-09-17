@@ -177,7 +177,7 @@ class Run < ApplicationRecord
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
     stats = SegmentHistory.joins(segment: :run)
-                          .joins(stats_join_additional_histories_query(timing))
+                          .without_statistically_invalid_histories_for_run(self, timing)
                           .where(segment: {runs: {id: id}})
                           .where.not(Run.duration_type(timing) => [0, nil])
                           .where("segments_segment_histories.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments_segment_histories.segment_number - 1)")
@@ -221,41 +221,6 @@ class Run < ApplicationRecord
   end
 
   private
-
-  def stats_join_additional_histories_query(timing)
-    case timing
-    when Run::REAL
-      Run.sanitize_sql_array [%Q{
-        LEFT JOIN (
-          SELECT segment_histories.id AS id,
-            segment_histories.attempt_number AS attempt_number,
-            segments.segment_number as segment_number
-          FROM segment_histories
-          INNER JOIN segments ON segments.id = segment_histories.segment_id
-            WHERE segments.run_id = :run_id
-            AND NOT ((segment_histories.realtime_duration_ms = 0
-              OR segment_histories.realtime_duration_ms IS NULL))
-        ) AS other_histories ON
-          other_histories.attempt_number = segment_histories.attempt_number
-          AND other_histories.segment_number = segments_segment_histories.segment_number - 1}.squish, run_id: id]
-    when Run::GAME
-      Run.sanitize_sql_array [%Q{
-        LEFT JOIN (
-          SELECT segment_histories.id AS id,
-            segment_histories.attempt_number AS attempt_number,
-            segments.segment_number as segment_number
-          FROM segment_histories
-          INNER JOIN segments ON segments.id = segment_histories.segment_id
-            WHERE segments.run_id = :run_id
-            AND NOT ((segment_histories.gametime_duration_ms = 0
-              OR segment_histories.gametime_duration_ms IS NULL))
-        ) AS other_histories ON
-          other_histories.attempt_number = segment_histories.attempt_number
-          AND other_histories.segment_number = segments_segment_histories.segment_number - 1}.squish, run_id: id]
-    else
-      raise 'Unsupported timing'
-    end
-  end
 
   def stats_select_query(timing)
     case timing
