@@ -18,7 +18,7 @@
 = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
 - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:patron?, tier: 3))
-  - if [@run, *@compare_runs].map(&:video).compact.map(&:url).compact.any?
+  - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
     .card-deck.mx-1
       - [@run, *@compare_runs].each do |run|
         - if run.video&.supports_embedding?
