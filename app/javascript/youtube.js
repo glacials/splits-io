@@ -37,6 +37,8 @@ function setupYouTubeVideos() {
   })
 }
 
+// TODO: Is there a way we can deal with YouTube's async loading
+// and Turbolinks without polling?
 function waitForYouTubeAPI() {
   if (window.YT !== undefined && typeof(window.YT.Player) === "function") {
     setupYouTubeVideos()
