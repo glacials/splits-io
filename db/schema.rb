@@ -437,8 +437,8 @@ ActiveRecord::Schema.define(version: 2019_09_15_142043) do
   end
 
   create_table "videos", force: :cascade do |t|
-    t.bigint "run_id"
-    t.string "url"
+    t.bigint "run_id", null: false
+    t.string "url", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["run_id"], name: "index_videos_on_run_id"
