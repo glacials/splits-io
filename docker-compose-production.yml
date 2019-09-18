@@ -53,6 +53,7 @@ services:
       - 3000:3000
     volumes:
       - .:/app
+      - bundle:/bundle
   worker:
     build:
       context: .
@@ -64,3 +65,9 @@ services:
     ports: []
     volumes:
       - .:/app
+      - bundle:/bundle
+
+volumes:
+  bundle:
+  packs:
+  rails_cache:
