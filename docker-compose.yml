@@ -69,7 +69,7 @@ services:
       - s3:/fakes3_root
   webpacker:
     <<: *app
-    command: ruby bin/webpack-dev-server
+    command: bash -c "yarn install && ruby bin/webpack-dev-server"
     environment:
       - SPLITSIO_CLIENT_ID
     image: webpacker
