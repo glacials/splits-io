@@ -1,10 +1,37 @@
 let currentTimelineRunId = ''
+const animationIntervals = {}
 const timelineMouseOverTimers = {}
 const timelineMouseOutTimers = {}
 
+const moveTimeline = (timeline, goldTimeline, videoProgressLine, offset) => {
+  let left = parseFloat(timeline.style.left) || 0
+  const step = (offset - left) / 10
+  if (animationIntervals[timeline.dataset.run_id]) {
+    clearInterval(animationIntervals[timeline.dataset.run_id])
+  }
+  animationIntervals[timeline.dataset.run_id] = setInterval(() => {
+    left += step
+    let position = 'relative'
+    if ((step > 0 && left >= offset) || (step < 0 && left <= offset)) {
+      left = offset
+      clearInterval(animationIntervals[timeline.dataset.run_id])
+      animationIntervals[timeline.dataset.run_id] = undefined
+      if (offset === 0) {
+        position = ''
+      }
+    }
+    timeline.style.position = position
+    timeline.style.left = `${left}px`
+    goldTimeline.style.position = position
+    goldTimeline.style.left = `${left}px`
+    if (videoProgressLine !== null) {
+      videoProgressLine.style.left = `${left}px`
+    }
+  }, 10)
+}
+
 const mouseOverSegment = (segment) => {
   const run_id = segment.dataset.run_id
-  currentTimelineRunId = run_id
   const segment_number = segment.dataset.segment_number
   const timerKey = `${run_id}-${segment_number}`
   timelineMouseOverTimers[timerKey] = undefined
@@ -20,13 +47,7 @@ const mouseOverSegment = (segment) => {
     const goldTimeline = timeline.parentElement.querySelector('.gold.timeline')
     const videoProgressLine = document.getElementById(`video-progress-line-${el.dataset.run_id}`)
     const offset = leftEdge - otherLeftEdge
-    timeline.style.position = 'relative'
-    timeline.style.left = `${offset}px`
-    goldTimeline.style.position = 'relative'
-    goldTimeline.style.left = `${offset}px`
-    if (videoProgressLine !== null) {
-      videoProgressLine.style.left = `${offset}px`
-    }
+    moveTimeline(timeline, goldTimeline, videoProgressLine, offset)
   })
 }
 
@@ -51,13 +72,9 @@ const mouseOutSegment = (segment) => {
     const timeline = el.closest('.timeline-background')
     const goldTimeline = timeline.parentElement.querySelector('.gold.timeline')
     const videoProgressLine = document.getElementById(`video-progress-line-${el.dataset.run_id}`)
-    timeline.style.position = ""
-    timeline.style.left = ""
-    goldTimeline.style.position = ""
-    goldTimeline.style.left = ""
-    if (videoProgressLine !== null) {
-      videoProgressLine.style.left = ""
-    }
+    clearInterval(animationIntervals[timeline.dataset.run_id])
+    animationIntervals[timeline.dataset.run_id] = undefined
+    moveTimeline(timeline, goldTimeline, videoProgressLine, 0)
   })
 }
 
@@ -70,6 +87,7 @@ document.addEventListener('mouseover', event => {
   }
 
   const run_id = segment.dataset.run_id
+  currentTimelineRunId = run_id
   const segment_number = segment.dataset.segment_number
   const timerKey = `${run_id}-${segment_number}`
   if (timelineMouseOutTimers[timerKey] !== undefined) {
