@@ -52,8 +52,21 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - .:/app
-      - bundle:/bundle
+      - type: volume
+        source: app
+        target: /app
+      - type: volume
+        source: bundle
+        target: /bundle
+      - type: volume
+        source: packs
+        target: /app/public/packs
+      - type: volume
+        source: rails_cache
+        target: /app/tmp/cache
+      - type: volume
+        source: yarn
+        target: /app/node_modules
   worker:
     build:
       context: .
@@ -64,10 +77,25 @@ services:
     logging: *default-logging
     ports: []
     volumes:
-      - .:/app
-      - bundle:/bundle
+      - type: volume
+        source: app
+        target: /app
+      - type: volume
+        source: bundle
+        target: /bundle
+      - type: volume
+        source: packs
+        target: /app/public/packs
+      - type: volume
+        source: rails_cache
+        target: /app/tmp/cache
+      - type: volume
+        source: yarn
+        target: /app/node_modules
 
 volumes:
+  app:
   bundle:
   packs:
   rails_cache:
+  yarn:

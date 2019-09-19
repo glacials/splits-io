@@ -43,15 +43,21 @@ x-backend: &backend
   stdin_open: true
   tty: true
   volumes:
-    - .:/app
+    - type: volume
+      source: app
+      target: /app
     - type: volume
       source: bundle
       target: /bundle
     - type: volume
+      source: packs
+      target: /app/public/packs
+    - type: volume
+      source: rails_cache
+      target: /app/tmp/cache
+    - type: volume
       source: yarn
       target: /app/node_modules
-    - packs:/app/public/packs
-    - rails_cache:/app/tmp/cache
   depends_on:
     - db
     - s3
@@ -81,14 +87,21 @@ services:
     ports:
       - 3035:3035
     volumes:
-      - .:/app
+      - type: volume
+        source: app
+        target: /app
       - type: volume
         source: bundle
         target: /bundle
       - type: volume
+        source: packs
+        target: /app/public/packs
+      - type: volume
+        source: rails_cache
+        target: /app/tmp/cache
+      - type: volume
         source: yarn
         target: /app/node_modules
-      - packs:/app/public/packs
   web:
     <<: *backend
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
@@ -110,6 +123,7 @@ services:
       - redis:/data
 
 volumes:
+  app:
   bundle:
   db:
   packs:
