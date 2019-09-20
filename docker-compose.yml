@@ -43,8 +43,8 @@ x-backend: &backend
   stdin_open: true
   tty: true
   volumes:
-    - type: volume
-      source: app
+    - type: bind
+      source: .
       target: /app
     - type: volume
       source: bundle
@@ -87,8 +87,8 @@ services:
     ports:
       - 3035:3035
     volumes:
-      - type: volume
-        source: app
+      - type: bind
+        source: .
         target: /app
       - type: volume
         source: bundle
@@ -123,7 +123,6 @@ services:
       - redis:/data
 
 volumes:
-  app:
   bundle:
   db:
   packs:

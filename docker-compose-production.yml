@@ -52,8 +52,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - type: volume
-        source: app
+      - type: bind
+        source: ./
         target: /app
       - type: volume
         source: bundle
@@ -77,8 +77,8 @@ services:
     logging: *default-logging
     ports: []
     volumes:
-      - type: volume
-        source: app
+      - type: bind
+        source: ./
         target: /app
       - type: volume
         source: bundle
@@ -94,7 +94,6 @@ services:
         target: /app/node_modules
 
 volumes:
-  app:
   bundle:
   packs:
   rails_cache:
