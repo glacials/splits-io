@@ -4,6 +4,7 @@ import {buildSegmentChart} from "charts/segment.js"
 import {buildPlaytimeChart} from "charts/playtime.js"
 import {buildResetChart} from "charts/reset.js"
 import {buildBoxPlot} from "charts/box_plot.js"
+import {buildFunnelChart} from "charts/funnel.js"
 import {chartOptions} from "consts.js"
 import {createSpinner} from 'spinner.js'
 import Highcharts from 'highcharts'
@@ -87,6 +88,7 @@ document.addEventListener('turbolinks:load', function() {
       buildBoxPlot(runs, chartOptions)
       buildSegmentChart(runs, chartOptions)
       buildResetChart(runs, chartOptions)
+      buildFunnelChart(runs, chartOptions)
       buildPlaytimeChart(runs, chartOptions)
 
       runs[0].segments.filter(segment => !segment.skipped).forEach((segment, i) => {
