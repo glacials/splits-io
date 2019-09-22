@@ -35,7 +35,7 @@ const buildFunnelChart = function(runs, options = {}) {
     },
     series: runs.map((run, i) => (
       {
-        center: [`${(100/(runs.length+1))*(i+1)}%`, '50%'],
+        center: [runs.length === 1 ? '40%' : `${(100/(runs.length+1))*(i+1)}%`, '50%'],
         data: run.segments.map((segment) => (
           [segment.name, segment.histories.length]
         )),
