@@ -44,6 +44,8 @@ x-backend: &backend
     - ./node_modules:/app/node_modules
     - packs:/app/public/packs
     - rails_cache:/app/tmp/cache
+  links:
+    - s3:s3.localhost
   depends_on:
     - db
     - s3
