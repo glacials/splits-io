@@ -43,7 +43,14 @@ RUN rm -rf node_modules/ tmp/cache app/assets vendor/assets spec
 FROM ruby:2.6.4-alpine
 
 ENV RAILS_ENV=production \
-    NODE_ENV=production
+    NODE_ENV=production \
+    LANG=C.UTF-8 \
+    GEM_HOME=/bundle
+ENV BUNDLE_PATH=$GEM_HOME
+ENV BUNDLE_APP_CONFIG=$BUNDLE_PATH \
+    BUNDLE_BIN=$BUNDLE_PATH/bin
+# Add bundle dir to path to be able to access commands outside of `bundle exec`
+ENV PATH=/app/bin:$BUNDLE_BIN:$PATH
 
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk update \
@@ -51,3 +58,6 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/reposit
     && rm -rf /var/cache/apk/*
 
 COPY --from=builder /app /app
+COPY --from=builder /bundle /bundle
+
+WORKDIR /app
