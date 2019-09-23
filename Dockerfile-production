@@ -26,7 +26,7 @@ WORKDIR /app
 
 COPY Gemfile* package.json yarn.lock ./
 
-RUN bundle install --without development:test -j5 \
+RUN bundle install --without development:test \
     && rm -rf $BUNDLE_PATH/cache/*.gem \
     && find $BUNDLE_PATH/gems/ -name "*.c" -delete \
     && find $BUNDLE_PATH/gems/ -name "*.o" -delete

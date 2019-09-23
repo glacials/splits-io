@@ -19,7 +19,7 @@ options = {
 if ENV['AWS_REGION'] == 'local'
   options.merge!(force_path_style: true)
 
-  options_internal = options.clone.merge!(endpoint: 'http://s3:4569')
+  options_internal = options.clone.merge!(endpoint: 'http://s3.localhost:4569')
   options_external = options.clone.merge!(endpoint: 'http://localhost:4569')
 else
   options_internal = options
