@@ -1,59 +1,23 @@
 .card.mb-3
-  .card-header My Patreon Benefits
+  .card-header: h4.my-0.font-weight-normal Patreon Benefits
   - pledge_cents = current_user.patreon.try(:pledge_cents) || 0
-  .list-group
-    .list-group-item
-      .d-flex.w-100.justify-content-between
-        - if current_user.patron?(tier: 1)
-          h5.mb1
-            span.text-success> ✓
-            ' No Ads
-          i.btn.btn-outline-light.disabled Complete!
-        - else
-          h5.mb1
-            span.text-danger> ✗
-            ' No Ads
-          a.btn.btn-outline-patreon href=patreon_url(checkout: :bronze)
-            => icon('fab', 'patreon')
-            ' Subscribe
-      p.mb-1
-        ' Make the ad at the top of the page go away, but without feeling guilty about it. Comes with a
-        ' #{user_badge(current_user, override: :standard)} → #{user_badge(current_user, override: :silver)} username
-        ' upgrade.
-    .list-group-item
-      .d-flex.w-100.justify-content-between
-        - if current_user.patron?(tier: 2)
-          h5.mb1
-            span.text-success> ✓
-            ' PB Predictions
-          i.btn.btn-outline-light.disabled Complete!
-        - else
-          h5.mb1
-            span.text-danger> ✗
-            ' PB Predictions
-          a.btn.btn-outline-patreon href=patreon_url(checkout: :silver)
-            => icon('fab', 'patreon')
-            ' Subscribe
-      p.mb-1
-        ' No ads, and predict how many hours of attempts you need to hit specific PBs (as a chart). Comes with a
-        ' #{user_badge(current_user, override: :silver)} → #{user_badge(current_user, override: :gold)}
-        ' username upgrade.
-    .list-group-item
-      .d-flex.w-100.justify-content-between
-        - if current_user.patron?(tier: 3)
-          h5.mb1
-            span.text-success> ✓
-            ' Permalink Redirectors
-          i: a.btn.btn-outline-light.disabled href=tools_path Complete!
-        - else
-          h5.mb1
-            span.text-danger> ✗
-            ' Permalink Redirectors
-          a.btn.btn-outline-patreon href=patreon_url(checkout: :gold)
-            => icon('fab', 'patreon')
-            ' Subscribe
-      p.mb-1
-        ' No ads, get PB predictions, and get special static links that always redirect to your current PB, even when it
-        ' improves.
-  .card-footer
-    p All tiers also put you in the footer of the site! 😍 See Patreon for how much the site costs to run.
+  .card-body
+    h1.card-title.pricing-card-title
+      - if pledge_cents.zero?
+        ' Not active
+      - else
+        ' $#{pledge_cents / 100}
+        small.text-muted = '/ mo'
+    ul.list-unstyled.mt-3.mb-4
+      - if current_user.patron?(tier: 1)
+        li Disable ads
+      - if current_user.patron?(tier: 2)
+        li Predict when you'll PB
+      - if current_user.patron?(tier: 3)
+        li
+          ' Upgrade permalinks to redirectors
+          small.tip style='cursor: default' title='Permalink redirectors are links that always redirect to your PB, even when it improves.'
+            ' ?
+        li Compare splits with other runners
+  .card-footer: .float-right
+    a.btn.btn-outline-light href=patreon_url Visit Patreon

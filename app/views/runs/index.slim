@@ -43,27 +43,35 @@
         }.merge(sorting_info)
   - else
     article
+      .card.mb-4
+        .card-body.text-center
+          h4.card-title Upload
+          p
+            ' To help you get better, Splits.io needs access to your splits. This will let us generate charts, comparisons,
+            ' and statistics!
+          form#upload method='post' enctype='multipart/form-data'
+            input#file.d-none type='file' name='file' onchange="document.forms[0].submit();"
+            label.btn.btn-primary.m-0 for='file' onclick='document.getElemenyById("file").click()' Upload your splits
       .card.col-md-12
         .card-body
-          h2.card-title Time to Upload Your First Run 😃
-          p.card-text There are three ways to upload your run to Splits I/O!
+          h4.card-title Other ways to upload
       .card-group.col-md-12.p-0
-        .card.bg-warning
+        .card
           .card-body
-            h3.card-title.text-dark LiveSplit
-            p.card-text.text-dark
+            h4.card-title LiveSplit
+            p.card-text
               ' If you use LiveSplit, right-click on the LiveSplit window and select
               i Share
               ' , then choose Splits.io from the menu.
-        .card.bg-primary
+        .card
           .card-body
-            h3.card-title Drag and Drop
+            h4.card-title Drag and Drop
             p.card-text.text-light
               ' You can drag and drop your run files from your computer's file browser, one at a time or all at once.
-        .card.bg-success
+        .card
           .card-body
-            h3.card-title.text-dark Choose Manually
-            p.card-text.text-dark
+            h4.card-title Choose Manually
+            p.card-text
               ' Navigate to the
               a> href=new_run_path Upload page
               ' to choose a run using a file selector.

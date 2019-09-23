@@ -6,8 +6,10 @@ html
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
-    = javascript_pack_tag 'application', data: {turbolinks_track: 'reload'}, defer: true
-    = javascript_pack_tag 'race', data: {turbolinks_track: 'reload'}, defer: true
+    script src='https://js.stripe.com/v3/' defer='defer'
+    = javascript_pack_tag('application',   data: {turbolinks_track: 'reload'}, defer: true)
+    = javascript_pack_tag('race',          data: {turbolinks_track: 'reload'}, defer: true)
+    = javascript_include_tag('https://checkout.stripe.com/checkout.js', defer: true)
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     script src='https://www.youtube.com/iframe_api' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
@@ -15,7 +17,7 @@ html
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
     = content_for(:head)
-  body data-controller=controller_name data-action=action_name
+  body data-controller=controller_name data-action=action_name class=('subscribe' if controller_name == 'subscriptions')
     = Gon::Base.render_data
     #dropzone
       #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
@@ -37,25 +39,28 @@ html
           ul.navbar-nav.mr-auto
             li.nav-item class=('active' if request.path == new_run_path)
               a.nav-link.px-3 href=new_run_path
-                => icon('fas', 'cloud-upload-alt')
-                span.d-xs-inline.d-md-none.d-xl-inline Upload
+                => icon('fas', 'cloud-upload-alt', class: 'd-none d-md-inline d-xl-none')
+                span.d-md-none.d-xl-inline Upload
             li.nav-item class=('active' if request.path == games_path)
               a.nav-link.px-3 href=games_path
-                => icon('fas', 'gamepad')
-                span.d-xs-inline.d-md-none.d-xl-inline Games
+                => icon('fas', 'gamepad', class: 'd-none d-md-inline d-xl-none')
+                span.d-md-none.d-xl-inline Games
             li.nav-item class=('active' if request.path == races_path)
               a.nav-link.px-3 href=races_path
-                => icon('fas', 'flag-checkered')
-                span.d-xs-inline.d-md-none.d-xl-inline Races
+                => icon('fas', 'flag-checkered', class: 'd-none d-md-inline d-xl-none')
+                span.d-md-none.d-xl-inline Races
             - if ENV['READ_ONLY_MODE'] == '1'
               li.nav-item
                 a.nav-link.px-3 href=read_only_mode_path
                   span.text-warning Read-Only Mode Active
-            - if current_user.nil?
-              li.nav-item class=('active' if request.path == faq_path)
-                a.nav-link.px-3 href=faq_path
-                  => icon('fas', 'info-circle')
-                  | FAQ
+            li.nav-item class=('active' if request.path == subscriptions_path)
+              a.nav-link.px-3 href=subscriptions_path
+                => icon('fas', 'fan', class: 'd-none d-md-inline d-xl-none')
+                span.d-md-none.d-xl-inline Pricing
+            li.nav-item class=('active' if request.path == faq_path)
+              a.nav-link.px-3 href=faq_path
+                => icon('fas', 'info-circle', class: 'd-none d-md-inline d-xl-none')
+                span.d-md-none.d-xl-inline FAQ
             = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
               .input-group
                 = f.text_field(:q, name: :q, class: 'form-control search', value: @query, placeholder: 'Search...')
@@ -64,12 +69,6 @@ html
                     = icon('fas', 'search')
           ul.nav.navbar-nav
             - if current_user.present?
-              li.nav-item
-                a.patreon.nav-link.px-3.border-0 href=patreon_url target='_blank'
-                  img src=asset_path('patreon.svg') height='20'
-              li.nav-item.d-lg-inline
-                a.discord.nav-link.px-3.border-0 href='https://discord.gg/yGaxX39' target='_blank'
-                  img src=asset_path('discord.svg') height='20'
               li.nav-item.dropdown class=('active' if on_a_profile_page?)
                 a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
                   - if current_user.avatar.present?
@@ -98,7 +97,7 @@ html
                 .modal-dialog role='document'
                   .modal-content
                     .modal-header.bg-primary
-                      h5.text-light Sign In
+                      h5.text-light Sign in
                     .modal-body.bg-dark
                       .row
                         a.btn.btn-twitch.mx-auto href='/auth/twitch'
@@ -108,7 +107,7 @@ html
                           => icon('fab', 'google')
                           ' Sign in with Google
                       .row.text-light.m-2
-                        p Splits I/O accounts are based strictly on linked accounts. This makes the platform simpler to
+                        p Splits.io accounts are based strictly on linked accounts. This makes the platform simpler to
                           maintain, especially with regards to security.
                         p
                           ' We are
@@ -151,10 +150,10 @@ html
                 span<> &bull;
                 a href=brand_path Brand
                 br
-                a href=faq_path FAQ
-                span<> &bull;
                 a href='https://discord.gg/yGaxX39' Discord
                 span<> &bull;
                 a href='https://twitter.com/splitsio' Twitter
                 span<> &bull;
-                a href='mailto:help@splits.io' Email
+                a href='mailto:help@splits.io' Contact
+                br
+                a href=privacy_policy_path Privacy Policy

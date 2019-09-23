@@ -17,7 +17,7 @@
 = render partial: 'runs/claim', locals: {run: @run}
 = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
-- if @compare_runs.none? || (@compare_runs.any? && current_user.try(:patron?, tier: 3))
+- if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?))
   - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
     .card-deck.mx-1
       - [@run, *@compare_runs].each do |run|
@@ -48,33 +48,43 @@
           #segment-chart.card.my-3
           #reset-chart.card.my-3
           - if @run.histories.any?
-            - if @run.user.try(:patron?, tier: 2) || @run.user.try(:admin?)
+            - if @run.user.try(:has_predictions?)
               .my-3
                 span => icon('fas', 'lock-open')
                 - if @run.belongs_to?(current_user)
-                  span Thanks for being a tier-2 patron! The below chart is unlocked.
+                  span Thanks for supporting Splits.io! The below chart is unlocked.
                 - else
-                  span #{@run.user} is a tier-2 patron, so the below chart can be viewed.
+                  span #{@run.user} supports Splits.io, so the below chart can be viewed.
               #playtime-chart.card.my-3
             - elsif @run.belongs_to?(current_user)
-              .my-3.d-flex.justify-content-between
-                span.mr-2
-                  a.text-muted> href=patreon_url Become a tier-2 patron
-                  ' to unlock the below chart, which predicts how much more practice you need to achieve specific PBs.
-                  a.text-muted href=faq_path(anchor: 'programs') LiveSplit only
-                  ' .
-                span.text-secondary style='white-space: nowrap'
-                  span => icon('fas', 'lock')
-                  span Only you can see this.
               .card.my-3
                 #paywall-container
                   /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
                   #paywall.bg-dark
+                    .mt-4.mx-4
+                      .my-3.d-flex.justify-content-between
+                        span.mr-2
+                          ' Support Splits.io to predict how much more practice you need to hit specific PBs.
+                          ' LiveSplit only.
+                        span.text-secondary style='white-space: nowrap'
+                          span => icon('fas', 'lock')
+                          span Only you can see this.
+                      .my-3
+                        a.btn.btn-primary.mr-2 href=subscriptions_path
+                          => icon('fas', 'credit-card')
+                          ' Subscribe
+                        a.btn.btn-patreon href=patreon_url
+                          => icon('fab', 'patreon')
+                          ' Subscribe through Patreon
                   #playtime-chart
 - else
   article: .col-md-6.offset-md-3: .card
-    .card-body: i Become a tier-3 patron to compare videos, charts, and splits.
+    .card-body Support Splits.io to compare videos, charts, and splits.
     .card-footer
-      a.btn.btn-patreon.float-right href=patreon_url
-        => icon('fab', 'patreon')
-        | Become a tier-3 patron
+      .float-right
+        a.btn.btn-primary.mr-2 href=subscriptions_path
+          => icon('fas', 'credit-card')
+          ' Subscribe
+        a.btn.btn-patreon href=patreon_url
+          => icon('fab', 'patreon')
+          | Subscribe through Patreon

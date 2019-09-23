@@ -69,4 +69,9 @@ Rails.application.configure do
     BetterErrors::Middleware.allow_ip! '172.16.0.0/12'
     BetterErrors::Middleware.allow_ip! '192.168.0.0/16'
   end
+
+  config.stripe.secret_key = ENV['STRIPE_PUBLISHABLE_KEY']
+  config.stripe.publishable_key = ENV['STRIPE_SECRET_KEY']
+
+  config.hosts << /.+\.ngrok.io/
 end
