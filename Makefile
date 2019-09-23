@@ -24,7 +24,7 @@ build:
 	$(docker-compose) stop
 
 seed:
-	$(docker-compose) run --rm web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
+	$(docker-compose) run --rm web bash -c "bundle exec rails db:seed"
 	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > tmp/seed
 
 lint:
@@ -56,6 +56,6 @@ attach:
 
 clean:
 	$(docker-compose) down
-	$(docker) volume rm splits-io_bundle
+	rm -rf bundle/
 	rm -rf node_modules/
 	rm -f tmp/seed

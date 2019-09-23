@@ -8,11 +8,11 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/reposit
     && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash yarn \
     && rm -rf /var/cache/apk/*
 
-ENV LANG=C.UTF-8 \
-    GEM_HOME=/bundle
+ENV LANG C.UTF-8
+ENV GEM_HOME /bundle
 ENV BUNDLE_PATH $GEM_HOME
-ENV BUNDLE_APP_CONFIG=$BUNDLE_PATH \
-    BUNDLE_BIN=$BUNDLE_PATH/bin
+ENV BUNDLE_APP_CONFIG $BUNDLE_PATH
+ENV BUNDLE_BIN $BUNDLE_PATH/bin
 # Add bundle dir to path to be able to access commands outside of `bundle exec`
 ENV PATH /app/bin:$BUNDLE_BIN:$PATH
 

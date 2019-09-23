@@ -40,7 +40,7 @@ x-backend: &backend
   tty: true
   volumes:
     - .:/app
-    - bundle:/bundle
+    - ./bundle:/bundle
     - ./node_modules:/app/node_modules
     - packs:/app/public/packs
     - rails_cache:/app/tmp/cache
@@ -67,7 +67,7 @@ services:
       - s3:/fakes3_root
   webpacker:
     <<: *app
-    command: ruby bin/webpack-dev-server
+    command: bash -c "ruby bin/webpack-dev-server"
     environment:
       - SPLITSIO_CLIENT_ID
     image: webpacker
@@ -76,9 +76,9 @@ services:
       - 3035:3035
     volumes:
       - .:/app
-      - bundle:/bundle
-      - ./node_modules:/app/node_modules
+      - ./bundle:/bundle
       - packs:/app/public/packs
+      - rails_cache:/app/tmp/cache
   web:
     <<: *backend
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
@@ -101,8 +101,7 @@ services:
 
 volumes:
   db:
-  redis:
-  s3:
-  bundle:
   packs:
   rails_cache:
+  redis:
+  s3:

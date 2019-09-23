@@ -38,10 +38,10 @@
     "vue-tippy": "^2.1.2",
     "vue-turbolinks": "^2.0.4",
     "webpack": "^4.29.3",
+    "webpack-cli": "^3.3.9",
     "webpack-merge": "^4.1.1"
   },
   "devDependencies": {
-    "webpack-cli": "^3.3.8",
     "webpack-dev-server": "^3.3.1"
   }
 }
