@@ -36,7 +36,7 @@
           li Disable ads
           li Predict when you'll PB
       .card-footer
-        - if plan && plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER1']
+        - if plan&.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER1']
           - if plan.canceled?
             button.btn.btn-lg.btn-block.btn-outline-light.disabled.tip(
               title='Your subscription is canceled. It will last until the end of your billing period.'

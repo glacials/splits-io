@@ -10,10 +10,14 @@
         small.text-muted = '/ mo'
     ul.list-unstyled.mt-3.mb-4
       - if current_user.patron?(tier: 1)
-        li No Ads
+        li Disable ads
       - if current_user.patron?(tier: 2)
-        li PB Predictions
+        li Predict when you'll PB
       - if current_user.patron?(tier: 3)
-        li Permalink Redirectors
+        li
+          ' Upgrade permalinks to redirectors
+          small.tip style='cursor: default' title='Permalink redirectors are links that always redirect to your PB, even when it improves.'
+            ' ?
+        li Compare splits with other runners
   .card-footer: .float-right
     a.btn.btn-outline-light href=patreon_url Visit Patreon
