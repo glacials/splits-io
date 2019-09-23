@@ -38,6 +38,9 @@ end
 group :production do
   # errors+logging
   gem 'rollbar'
+
+  # null db for asset precompile in docker
+  gem 'activerecord-nulldb-adapter'
 end
 
 # administration

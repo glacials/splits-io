@@ -1,5 +1,6 @@
 # bundler config.
 /.bundle
+/bundle
 
 # the default SQLite database.
 /db/*.sqlite3

@@ -9,7 +9,7 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/reposit
     && rm -rf /var/cache/apk/*
 
 ENV LANG C.UTF-8
-ENV GEM_HOME bundle
+ENV GEM_HOME /bundle
 ENV BUNDLE_PATH $GEM_HOME
 ENV BUNDLE_APP_CONFIG $BUNDLE_PATH
 ENV BUNDLE_BIN $BUNDLE_PATH/bin

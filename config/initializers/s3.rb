@@ -1,3 +1,5 @@
+return if ARGV.include?('assets:precompile')
+
 options = {
   region: ENV['AWS_REGION'],
   credentials: Aws::Credentials.new(
