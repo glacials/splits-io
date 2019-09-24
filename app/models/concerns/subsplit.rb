@@ -64,11 +64,11 @@ module Subsplit
     values = subsplit_durations_by_attempt[timing].values.sort
     mean = values.sum / subsplit_durations_by_attempt[timing].keys.length.to_f
     variance_sum = values.inject(0) { |accum, i| accum + (i-mean)**2 }
-    sample_variance = variance_sum / (subsplit_durations_by_attempt[timing].keys.length - 1).to_f
+    sample_variance = values.length == 1 ? 0 : variance_sum / (subsplit_durations_by_attempt[timing].keys.length - 1).to_f
     {
       standard_deviation: Math.sqrt(sample_variance),
       mean: mean,
-      median: values[values.length / 2 + 1], # Not actual median, but matches the DB query
+      median: values.length == 1 ? values[0] : values[values.length / 2 + 1], # Not actual median, but matches the DB query
       percentiles: {
         10 => percentile(values, 0.1),
         90 => percentile(values, 0.9),
@@ -128,6 +128,7 @@ module Subsplit
   end
 
   def percentile(values_sorted, percent)
+    return values_sorted[0] if values_sorted.length == 1
     k = (percent * (values_sorted.length - 1) + 1).floor - 1
     f = (percent * (values_sorted.length - 1) + 1).modulo(1)
 
