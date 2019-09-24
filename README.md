@@ -7,12 +7,12 @@
 <h3 align="center">Splits.io</h3>
 
 <p align="center">
-	
+
   [![View performance data on Skylight](https://badges.skylight.io/typical/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
   [![View performance data on Skylight](https://badges.skylight.io/problem/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
   [![View performance data on Skylight](https://badges.skylight.io/rpm/l4aQWIYa50pX.svg)](https://oss.skylight.io/app/applications/l4aQWIYa50pX)
   [![License](https://img.shields.io/github/license/glacials/splits-io.svg)](/LICENSE)
-  
+
 </p>
 
 ---
@@ -152,7 +152,7 @@ If you want to reset from scratch, you can run
 ```sh
 make clean
 ```
-which will run `docker-compose down`, resetting your local database and any Docker image builds.
+which will run `docker-compose down`, remove the bundler volume, and remove `node_modules/`.
 
 ## Things You Probably Don't Need to Know
 ### Infrastructure

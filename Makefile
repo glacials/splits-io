@@ -18,40 +18,37 @@ endif
 container ?= web
 
 build:
-	$(docker-compose) run web bundle install
-	$(docker-compose) run web yarn install
 	$(docker-compose) build
-	$(docker-compose) run web rails db:migrate
+	$(docker-compose) run --rm web bash -c 'bundle install --jobs $$((`nproc` - 1)) && yarn install && rails db:migrate && skylight disable_dev_warning'
 	@[ -e tmp/seed ] || make seed
-	$(docker-compose) run web skylight disable_dev_warning
 	$(docker-compose) stop
 
 seed:
-	$(docker-compose) run web bash -c "bundle exec rails db:migrate && bundle exec rails db:seed"
+	$(docker-compose) run --rm web bash -c "bundle exec rails db:seed"
 	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > tmp/seed
 
 lint:
 	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
 
 test:
-	$(docker-compose) run -e RAILS_ENV=test web bundle exec rspec $(path)
+	$(docker-compose) run --rm -e RAILS_ENV=test web bundle exec rspec $(path)
 
 run: # Run docker-compose up, but work around Ctrl-C sometimes not stopping containers. See https://github.com/docker/compose/issues/3317#issuecomment-416552656
 	bash -c "trap '$(docker-compose) stop' EXIT; $(docker-compose) up"
 
 console:
-	$(docker-compose) run web rails console
+	$(docker-compose) run --rm web rails console
 
 profile:
-	$(docker-compose) run -e RAILS_ENV=profiling web rake assets:precompile
-	$(docker-compose) run -e RAILS_ENV=profiling --service-ports web rails s
-	$(docker-compose) run -e RAILS_ENV=profiling web rake assets:clobber
+	$(docker-compose) run --rm -e RAILS_ENV=profiling web rake assets:precompile
+	$(docker-compose) run --rm -e RAILS_ENV=profiling --service-ports web rails s
+	$(docker-compose) run --rm -e RAILS_ENV=profiling web rake assets:clobber
 
 derailed:
-	$(docker-compose) run -e RAILS_ENV=profiling $(env) web bundle exec derailed $(command)
+	$(docker-compose) run --rm -e RAILS_ENV=profiling $(env) web bundle exec derailed $(command)
 
 update_lsc:
-	$(docker-compose) run web bundle exec rake update_lsc
+	$(docker-compose) run --rm web bundle exec rake update_lsc
 
 attach:
 	@echo Do not use ctrl + c to exit this session, use ctrl + p then ctrl + q
@@ -59,4 +56,6 @@ attach:
 
 clean:
 	$(docker-compose) down
+	rm -rf bundle/
+	rm -rf node_modules/
 	rm -f tmp/seed

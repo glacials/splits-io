@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.0'
+ruby '2.6.4'
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -29,10 +29,6 @@ group :development, :hot do
   # profiling
   gem 'derailed_benchmarks'
 
-  # tests
-  gem 'guard', require: false
-  gem 'guard-rspec', require: false
-
   # views
   gem 'rails_real_favicon'
 
@@ -42,10 +38,13 @@ end
 group :production do
   # errors+logging
   gem 'rollbar'
+
+  # null db for asset precompile in docker
+  gem 'activerecord-nulldb-adapter'
 end
 
 # administration
-gem 'administrate', github: 'thoughtbot/administrate'
+gem 'administrate', '~> 0.12'
 gem 'chartkick'
 gem 'groupdate'
 
@@ -87,9 +86,6 @@ gem 'httparty'
 gem 'rest-client'
 gem 'stripe-rails'
 
-# models
-gem 'nilify_blanks'
-
 # parsing
 gem 'descriptive_statistics', require: 'descriptive_statistics/safe'
 gem 'moving_average'
@@ -116,13 +112,13 @@ gem 'font-awesome-sass', '~> 5.9'
 gem 'gon'
 gem 'kaminari'
 gem 'purecss-rails', github: 'glacials/purecss-rails'
-gem 'sass-rails', '~> 5.0.7'
+gem 'sassc-rails'
 gem 'slim'
 gem 'webpacker', '>= 4.0.x'
 
 # workers/jobs
 gem 'daemons'
-gem 'delayed_job_active_record', github: 'collectiveidea/delayed_job_active_record', branch: 'rails-6-compatibility'
+gem 'delayed_job_active_record'
 gem 'foreman'
 gem 'redis'
 

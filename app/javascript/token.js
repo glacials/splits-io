@@ -70,6 +70,7 @@ document.addEventListener('turbolinks:load', () => {
 
     if (accessToken === 'undefined') {
       console.warn("Can't get a Splits.io access token. Your SPLITSIO_CLIENT_ID/SPLITSIO_CLIENT_SECRET may be wrong.")
+      return
     }
 
     localStorage.setItem(accessTokenKey, hash.access_token)

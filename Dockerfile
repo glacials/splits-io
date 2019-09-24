@@ -1,20 +1,25 @@
-FROM ruby:2.6.0
+FROM ruby:2.6.4-alpine
 
-# Setup for current nodejs
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+# Build base for gem's native extensions
+# tzdata for ruby timezone data
+# gcompat for ffi to load LSC
+RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk update \
+    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash yarn \
+    && rm -rf /var/cache/apk/*
 
-# Setup for yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -\
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+ENV LANG C.UTF-8
+ENV GEM_HOME /bundle
+ENV BUNDLE_PATH $GEM_HOME
+ENV BUNDLE_APP_CONFIG $BUNDLE_PATH
+ENV BUNDLE_BIN $BUNDLE_PATH/bin
+# Add bundle dir to path to be able to access commands outside of `bundle exec`
+ENV PATH /app/bin:$BUNDLE_BIN:$PATH
 
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn
+RUN gem update --system
 
-RUN mkdir /app
+RUN mkdir -p /app
 WORKDIR /app
-COPY Gemfile Gemfile.lock ./
-RUN bundle install -j "$(expr "$(getconf _NPROCESSORS_ONLN)" - 1)"
+
 COPY package.json yarn.lock ./
 RUN yarn install
-
-COPY . /app
-EXPOSE 3000

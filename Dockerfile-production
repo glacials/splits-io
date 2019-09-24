@@ -1,0 +1,63 @@
+FROM ruby:2.6.4-alpine AS builder
+
+# Build base for gem's native extensions
+# tzdata for ruby timezone data
+# gcompat for ffi to load LSC
+RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk update \
+    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash yarn \
+    && rm -rf /var/cache/apk/*
+
+ENV LANG C.UTF-8
+ENV GEM_HOME /bundle
+ENV BUNDLE_PATH $GEM_HOME
+ENV BUNDLE_APP_CONFIG $BUNDLE_PATH
+ENV BUNDLE_BIN $BUNDLE_PATH/bin
+# Add bundle dir to path to be able to access commands outside of `bundle exec`
+ENV PATH /app/bin:$BUNDLE_BIN:$PATH
+
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
+
+RUN gem update --system
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY Gemfile* package.json yarn.lock ./
+
+RUN bundle install --without development:test \
+    && rm -rf $BUNDLE_PATH/cache/*.gem \
+    && find $BUNDLE_PATH/gems/ -name "*.c" -delete \
+    && find $BUNDLE_PATH/gems/ -name "*.o" -delete
+
+RUN yarn install
+COPY . .
+RUN DATABASE_URL=nulldb://host/db SECRET_KEY_BASE="$(bundle exec rails secret)" REDIS_URL=redis://redis:6379/1 \
+    bin/rails assets:precompile
+
+RUN rm -rf node_modules/ tmp/cache app/assets vendor/assets spec
+
+#############
+
+FROM ruby:2.6.4-alpine
+
+ENV RAILS_ENV=production \
+    NODE_ENV=production \
+    LANG=C.UTF-8 \
+    GEM_HOME=/bundle
+ENV BUNDLE_PATH=$GEM_HOME
+ENV BUNDLE_APP_CONFIG=$BUNDLE_PATH \
+    BUNDLE_BIN=$BUNDLE_PATH/bin
+# Add bundle dir to path to be able to access commands outside of `bundle exec`
+ENV PATH=/app/bin:$BUNDLE_BIN:$PATH
+
+RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk update \
+    && apk add -u --no-cache tzdata gcompat postgresql-dev bash nodejs-current \
+    && rm -rf /var/cache/apk/*
+
+COPY --from=builder /app /app
+COPY --from=builder /bundle /bundle
+
+WORKDIR /app

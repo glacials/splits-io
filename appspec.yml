@@ -16,3 +16,4 @@ hooks:
     - location: scripts/application_stop.sh
       timeout: 60
       runas: root
+
