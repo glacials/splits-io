@@ -27,7 +27,6 @@ const buildPlaytimeChart = function(runs, options = {}) {
 
   const playtimeBetweenPBs = runs.map(run => {
     let lastPB = null
-    let playtime = 0
 
     return run.histories.sort(attemptSort).filter(runAttempt => runAttempt[duration] > 0).map(runAttempt => {
       if (lastPB === null || runAttempt[duration] < lastPB[duration]) {
