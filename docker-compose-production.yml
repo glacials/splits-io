@@ -47,6 +47,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-production
+      args:
+        SPLITSIO_CLIENT_ID: $SPLITSIO_CLIENT_ID
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment: *server-environment
     image: web-production
@@ -57,6 +59,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-production
+      args:
+        SPLITSIO_CLIENT_ID: $SPLITSIO_CLIENT_ID
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work" # bin/delayed_job doesn't obey QUEUES
     environment: *server-environment
     image: worker-production
