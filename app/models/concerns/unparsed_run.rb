@@ -145,8 +145,8 @@ module UnparsedRun
         history = RunHistory.new(
           run_id:               id,
           attempt_number:       attempt.index.to_i,
-          realtime_duration_ms: attempt.time.real_time&.total_seconds&.*(1000) || 0,
-          gametime_duration_ms: attempt.time.game_time&.total_seconds&.*(1000) || 0,
+          realtime_duration_ms: attempt.time.real_time&.total_seconds&.*(1000) || nil,
+          gametime_duration_ms: attempt.time.game_time&.total_seconds&.*(1000) || nil,
           pause_duration_ms:    attempt.pause_time&.total_seconds&.*(1000) || 0,
           started_at:           dates[0] && DateTime.parse(dates[0].to_rfc3339),
           ended_at:             dates[1] && DateTime.parse(dates[1].to_rfc3339)
