@@ -25,6 +25,7 @@ group :development, :hot do
   # pretty things
   gem 'rails-erd', require: false
   gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
 
   # profiling
   gem 'derailed_benchmarks'

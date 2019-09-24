@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_15_142043) do
+ActiveRecord::Schema.define(version: 2019_09_21_232640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(version: 2019_09_15_142043) do
     t.datetime "updated_at", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
+    t.bigint "pause_duration_ms", null: false
     t.index ["run_id"], name: "index_run_histories_on_run_id"
   end
 
@@ -322,6 +323,7 @@ ActiveRecord::Schema.define(version: 2019_09_15_142043) do
     t.boolean "gametime_gold", default: false, null: false
     t.boolean "gametime_reduced", default: false, null: false
     t.boolean "gametime_skipped", default: false, null: false
+    t.string "icon"
     t.index ["run_id"], name: "index_segments_on_run_id"
   end
 

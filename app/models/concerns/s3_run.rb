@@ -11,7 +11,6 @@ module S3Run
       # If a block is passed in, a standard File object will be opened, passed to the block, and then closed
       # If no block is passed, the file will be read into memory from S3 and returned as a string
       file = $s3_bucket_internal.object("splits/#{s3_filename}")
-
       return nil unless file.exists?
 
       raise RunTooLarge if file.content_length >= (100 * 1024 * 1024) # 100 MiB
