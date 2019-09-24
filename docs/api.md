@@ -307,11 +307,13 @@ If a `historic=1` param is included in the request, one additional field will be
 #### History
 History objects have the following format.
 
-| Field                  | Type   | Null? | Description                                              |
-|:-----------------------|:-------|:------|:---------------------------------------------------------|
-| `attempt_number`       | number | never | The correpsonding attempt number this attempt was.       |
-| `realtime_duration_ms` | number | never | The realtime duration this attempt took in milliseconds. |
-| `gametime_duration_ms` | number | never | The gametime duration this attempt took in milliseconds. |
+| Field                  | Type   | Null? | Description                                                |
+|:-----------------------|:-------|:------|:-----------------------------------------------------------|
+| `attempt_number`       | number | never | The correpsonding attempt number this attempt was.         |
+| `realtime_duration_ms` | number | never | The realtime duration this attempt took in milliseconds.   |
+| `gametime_duration_ms` | number | never | The gametime duration this attempt took in milliseconds.   |
+| `started_at_ms`        | number | never | The timestamp in milliseconds of when the attempt started. |
+| `ended_at_ms`          | number | never | The timestamp in milliseconds of when the attempt ended.   |
 </details>
 
 <details>
