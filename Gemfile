@@ -84,6 +84,7 @@ gem 'skylight', '~> 4.0.0'
 # external communication
 gem 'httparty'
 gem 'rest-client'
+gem 'stripe-rails'
 
 # parsing
 gem 'descriptive_statistics', require: 'descriptive_statistics/safe'
@@ -107,7 +108,7 @@ gem 'dalli'
 
 # views
 gem 'bootstrap4-kaminari-views'
-gem 'font-awesome-sass', '~> 5.1'
+gem 'font-awesome-sass', '~> 5.9'
 gem 'gon'
 gem 'kaminari'
 gem 'purecss-rails', github: 'glacials/purecss-rails'

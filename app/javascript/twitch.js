@@ -1,7 +1,7 @@
 const async = require('async')
 
 document.addEventListener('turbolinks:load', function() {
-  Array.from(document.getElementsByClassName('twitch-player')).forEach(el => {
+  Array.from(document.querySelectorAll('[data-twitch]')).forEach(el => {
     if (el.dataset.loaded === '1') {
       return
     }
@@ -9,7 +9,7 @@ document.addEventListener('turbolinks:load', function() {
 
     const player = new Twitch.Player(el.id, {
       autoplay: false,
-      video: el.dataset.video_url.split('/').slice(-1)[0],
+      video: el.dataset.video_id,
       muted: true,
       height: '100%',
       width: '100%'

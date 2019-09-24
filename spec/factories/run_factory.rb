@@ -20,7 +20,10 @@ FactoryBot.define do
     compare_object:           {filename: 'compare_object.lss'},
 
     # specific-content runs
-    with_segments_bests:       {filename: 'with_segments_bests.lss'}
+    with_segments_bests:      {filename: 'with_segments_bests.lss'},
+
+    # skipped splits
+    skipped_splits:           {filename: 'livesplit_skipped_splits.lss'},
   }
 
   test_files.each do |_factory_name, file|
@@ -34,7 +37,6 @@ FactoryBot.define do
   factory :run do
     category
 
-    video_url   { 'http://www.twitch.tv/glacials/c/3463112' }
     s3_filename { test_files[:livesplit14][:s3_filename] }
 
     trait :owned do
@@ -65,6 +67,10 @@ FactoryBot.define do
     trait :attemptless do
       realtime_duration_ms    { 0 }
       realtime_sum_of_best_ms { 0 }
+    end
+
+    trait :with_video do
+      video { |instance| FactoryBot.build(:video, run: instance) }
     end
 
     factory :speedrundotcom_run do

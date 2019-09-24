@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_29_221148) do
+ActiveRecord::Schema.define(version: 2019_09_15_142043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -395,11 +395,17 @@ ActiveRecord::Schema.define(version: 2019_07_29_221148) do
     t.index ["run_id"], name: "index_splits_on_run_id"
   end
 
-  create_table "subscriptions", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
+  create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "stripe_session_id"
+    t.string "stripe_plan_id", null: false
     t.string "stripe_subscription_id"
-    t.string "stripe_plan_id"
+    t.string "stripe_payment_intent_id"
     t.string "stripe_customer_id"
+    t.datetime "canceled_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "ended_at"
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
@@ -434,6 +440,14 @@ ActiveRecord::Schema.define(version: 2019_07_29_221148) do
     t.datetime "updated_at"
     t.citext "name"
     t.index ["name"], name: "index_users_on_name", unique: true
+  end
+
+  create_table "videos", force: :cascade do |t|
+    t.bigint "run_id", null: false
+    t.string "url", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["run_id"], name: "index_videos_on_run_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

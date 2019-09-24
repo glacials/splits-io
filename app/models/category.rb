@@ -69,6 +69,8 @@ class Category < ApplicationRecord
   end
 
   def shortname
+    return nil if name.nil?
+
     name.downcase.gsub(/ *%/, 'pct').gsub(/ +/, '-')
   end
 

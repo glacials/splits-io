@@ -196,6 +196,27 @@ RSpec.describe Api::V4::Races::EntriesController do
           end
         end
 
+        context 'with a readied_at of "now"' do
+          let(:time) { Time.now.utc }
+          before { allow(Time).to receive(:now).and_return(time) }
+
+          subject(:response) do
+            patch :update, params: {race_id: race.id, id: entry.id, entry: {readied_at: 'now'}, format: :json}
+          end
+
+          it 'returns a 200' do
+            expect(response).to have_http_status(:ok)
+          end
+
+          it 'renders an entry schema' do
+            expect(response.body).to match_json_schema(:entry)
+          end
+
+          it 'matches the given time' do
+            expect(JSON.parse(response.body)['entry']['readied_at']).to eq(time.iso8601(3))
+          end
+        end
+
         context 'who unreadies' do
           context 'before the race starts' do
             subject(:response) do

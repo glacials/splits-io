@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   get '/faq',       to: 'pages#faq',            as: :faq
   get '/brand',     to: 'pages#brand',          as: :brand
   get '/read-only', to: 'pages#read_only_mode', as: :read_only_mode
+  get '/privacy',   to: 'pages#privacy_policy', as: :privacy_policy
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
   get '/why/darkmode',   to: 'why#darkmode',   as: :why_darkmode
@@ -107,6 +108,11 @@ Rails.application.routes.draw do
   delete '/settings/applications/:application',      to: 'applications#destroy'
   delete '/settings/authorizations/:application',    to: 'authorized_applications#destroy',                      as: :authorization
 
+  get   '/subscriptions',         to: 'subscriptions#index',   as: :subscriptions
+  get   '/subscriptions/success', to: 'subscriptions#show',    as: :subscription
+  patch '/subscriptions',         to: 'subscriptions#update'
+  delete '/subscriptions',        to: 'subscriptions#destroy'
+
   get    '/:run/edit',  to: 'runs#edit', as: :edit_run
   get    '/:run',       to: 'runs#show', as: :run, format: false # disable format so requests like /ads.txt don't render a run
   get    '/:run/stats', to: redirect('/%{run}') # to support old links floating around the internet; RIP stats page
@@ -115,6 +121,8 @@ Rails.application.routes.draw do
 
   put    '/:run/like', to: 'runs/likes#create',  as: :create_run_like
   delete '/:run/like', to: 'runs/likes#destroy', as: :destroy_run_like
+
+  put '/:run/video', to: 'runs/videos#update', as: :run_video
 
   get '/:run/export/history.csv',         to: 'runs/exports#history_csv',         as: :history_csv
   get '/:run/export/segment_history.csv', to: 'runs/exports#segment_history_csv', as: :segment_history_csv
@@ -125,6 +133,7 @@ Rails.application.routes.draw do
     namespace :webhooks do
       post '/patreon', to: 'patreon#create'
       post '/parse',   to: 'parse#create'
+      post '/stripe',  to: 'stripe#create'
     end
 
     namespace :v4 do

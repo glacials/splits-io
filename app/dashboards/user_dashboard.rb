@@ -15,7 +15,6 @@ class UserDashboard < Administrate::BaseDashboard
     rivalries:          Field::HasMany,
     incoming_rivalries: Field::HasMany.with_options(class_name: 'Rivalry'),
     name:               Field::String,
-    avatar:             Field::String,
     created_at:         Field::DateTime,
     updated_at:         Field::DateTime
   }.freeze

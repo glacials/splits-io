@@ -47,6 +47,7 @@ const buildRunDurationChart = function(runs, options = {}) {
       }
     },
     xAxis: {
+      allowDecimals: false,
       title: {text: 'Attempt Number'}
     },
     yAxis: {

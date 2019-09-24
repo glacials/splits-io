@@ -77,24 +77,6 @@ describe Run, type: :model do
     end
   end
 
-  context 'with a valid video URL to a non-valid location' do
-    let(:run) { FactoryBot.build(:run, video_url: 'http://google.com/') }
-
-    it 'fails to validate' do
-      expect(run).not_to be_valid
-    end
-  end
-
-  context 'with an invalid video URL' do
-    let(:run) do
-      FactoryBot.build(:run, video_url: 'Huge improvement. That King Boo fight tho... :/ 4 HP strats!')
-    end
-
-    it 'fails to validate' do
-      expect(run).not_to be_valid
-    end
-  end
-
   context 'just created' do
     it 'has a non-nil claim token' do
       expect(run.claim_token).not_to be_nil
@@ -193,7 +175,7 @@ describe Run, type: :model do
     end
 
     it 'reports the correct history' do
-      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:nil?)).to match_array [
         6_911_142, 6_261_793, 6_123_664, 5_944_515, 5_694_823, 5_410_111, 5_746_188,
         5_390_459, 5_258_001, 5_236_112, 5_102_848, 5_126_404, 5_055_563
       ]
@@ -245,7 +227,7 @@ describe Run, type: :model do
     end
 
     it 'reports the correct history' do
-      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:nil?)).to match_array [
         823_173
       ]
     end
@@ -310,7 +292,7 @@ describe Run, type: :model do
     end
 
     it 'reports the correct history' do
-      expect(run.histories.map(&:realtime_duration_ms).reject(&:zero?)).to match_array [
+      expect(run.histories.map(&:realtime_duration_ms).reject(&:nil?)).to match_array [
         912_296, 859_304, 801_458, 755_249, 793_755, 744_211, 741_924, 815_122, 761_782, 696_490,
         710_935, 727_007, 715_404, 730_922, 705_515, 728_286, 714_258, 705_742, 691_061, 685_671
       ]
@@ -587,6 +569,44 @@ describe Run, type: :model do
 
     it 'reports its total playtime' do
       expect(run.total_playtime_ms).to eq 8_589_280
+    end
+  end
+
+  context 'skipped splits stats' do
+    let(:run) do
+      r = FactoryBot.create(:skipped_splits_run)
+      r.parse_into_db
+      r.reload
+      r
+    end
+
+    it 'has the correct stats' do
+      stats = run.segment_history_stats(Run::REAL)
+      ids = run.segments.order(:segment_number).map(&:id)
+
+      expect(stats[ids[0]][:standard_deviation].to_f).to be_within(1)
+                                                           .of(48_989)
+      expect(stats[ids[0]][:mean].to_f).to eq 120_000
+      expect(stats[ids[0]][:median].to_f).to eq 120_000
+      expect(stats[ids[0]][:percentiles][10].to_f).to eq 72_000
+      expect(stats[ids[0]][:percentiles][90].to_f).to eq 168_000
+      expect(stats[ids[0]][:percentiles][99].to_f).to eq 178_800
+
+      expect(stats[ids[1]][:standard_deviation].to_f).to be_within(1)
+                                                           .of(450_000)
+      expect(stats[ids[1]][:mean].to_f).to eq 1_950_000
+      expect(stats[ids[1]][:median].to_f).to eq 1_500_000
+      expect(stats[ids[1]][:percentiles][10].to_f).to eq 1_590_000
+      expect(stats[ids[1]][:percentiles][90].to_f).to eq 2_310_000
+      expect(stats[ids[1]][:percentiles][99].to_f).to eq 2_391_000
+
+      expect(stats[ids[2]][:standard_deviation].to_f).to be_within(1)
+                                                           .of(180_000)
+      expect(stats[ids[2]][:mean].to_f).to eq 660_000
+      expect(stats[ids[2]][:median].to_f).to eq 480_000
+      expect(stats[ids[2]][:percentiles][10].to_f).to eq 516_000
+      expect(stats[ids[2]][:percentiles][90].to_f).to eq 804_000
+      expect(stats[ids[2]][:percentiles][99].to_f).to eq 836_400
     end
   end
 end

@@ -30,6 +30,8 @@ class User < ApplicationRecord
   has_one :google,  dependent: :destroy, class_name: 'GoogleUser'
   has_one :srdc,    dependent: :destroy, class_name: 'SpeedrunDotComUser'
 
+  has_many :subscriptions, dependent: :destroy
+
   has_many :applications,  class_name: 'Doorkeeper::Application', dependent: :destroy, foreign_key: :owner_id,
                            inverse_of: 'owner'
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id
@@ -74,7 +76,10 @@ class User < ApplicationRecord
   end
 
   def pbs
-    runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
+    # TODO: Put the SELECT * back in after Run.ignored_columns is removed
+    # runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
+    column_names = Run.attribute_names.join(',')
+    runs.where.not(category: nil).select("DISTINCT ON (category_id) #{column_names}").order('category_id, realtime_duration_ms ASC')
         .union_all(runs.by_category(nil))
   end
 
@@ -95,7 +100,19 @@ class User < ApplicationRecord
   end
 
   def should_see_ads?
-    !patron?(tier: 1)
+    !patron?(tier: 1) && subscriptions.active.none? && !admin? && ENV['ENABLE_ADS'] == '1'
+  end
+
+  def has_predictions?
+    patron?(tier: 2) || subscriptions.tier1.active.any? || admin?
+  end
+
+  def has_redirectors?
+    patron?(tier: 3) || subscriptions.tier2.active.any? || admin?
+  end
+
+  def has_advanced_comparisons?
+    patron?(tier: 3) || subscriptions.tier2.active.any? || admin?
   end
 
   def patron?(tier: 0)
@@ -116,9 +133,9 @@ class User < ApplicationRecord
 
   def admin?
     [
-      '29798286', # Glacials
-      '18946907', # Batedurgonnadie
-      '32102533'  # Squishy
+      '29798286',  # Glacials
+      '18946907',  # Batedurgonnadie
+      '461527654', # tuna_can_ball
     ].include?(twitch.try(:twitch_id))
   end
 

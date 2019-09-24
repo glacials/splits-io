@@ -70,8 +70,8 @@ module UnparsedRun
           run_id: id,
 
           attempt_number:       history[:attempt_number],
-          realtime_duration_ms: history[:realtime_duration_ms],
-          gametime_duration_ms: history[:gametime_duration_ms],
+          realtime_duration_ms: zero_to_nil(history[:realtime_duration_ms]),
+          gametime_duration_ms: zero_to_nil(history[:gametime_duration_ms]),
 
           started_at: history[:started_at],
           ended_at:   history[:ended_at]

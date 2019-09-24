@@ -1,5 +1,5 @@
 class Api::V3::RunBlueprint < Blueprinter::Base
-  fields :id, :video_url, :program, :attempts, :image_url, :created_at, :updated_at
+  fields :id, :program, :attempts, :image_url, :created_at, :updated_at
 
   field :name do |run, _|
     run.to_s
@@ -15,6 +15,11 @@ class Api::V3::RunBlueprint < Blueprinter::Base
 
   field :time do |run, _|
     (run.realtime_duration_ms || 0).to_f / 1000
+  end
+
+  # video_url no longer exists directly on a run
+  field :video_url do |run, _|
+    run.video&.url
   end
 
   association :game, blueprint: Api::V3::GameBlueprint

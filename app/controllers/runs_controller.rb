@@ -80,14 +80,6 @@ class RunsController < ApplicationController
       return
     end
 
-    if params[@run.id36][:video_url]
-      if @run.update(video_url: params[@run.id36][:video_url])
-        redirect_back(fallback_location: edit_run_path(@run), notice: 'Video saved! 📹')
-      else
-        redirect_to edit_run_path(@run), alert: @run.errors.full_messages.join(' ')
-      end
-    end
-
     if params[@run.id36][:archived]
       if @run.update(archived: params[@run.id36][:archived])
         if params[@run.id36][:archived] == 'true'
@@ -136,13 +128,17 @@ class RunsController < ApplicationController
     @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
     @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
+    if ![Run::REAL, Run::GAME].include?(timing)
+      redirect_to(request.path, alert: 'Timing can only be real or game.')
+      return
+    end
 
     gon.run = {
       id: @run.id36,
 
       splits:         @run.collapsed_segments(timing),
       timer:          @run.timer,
-      video_url:      @run.video_url,
+      video_url:      @run.video&.url,
       default_timing: @run.default_timing
     }
 

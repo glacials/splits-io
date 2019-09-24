@@ -10,8 +10,8 @@ article
       .card.mb-3
         .card-header.text-white Permalink Redirectors
         .card-body
-          - if current_user.present? && current_user.patron?(tier: 3)
-            p Thanks for being a tier-3 patron! You get access to permalink redirectors, which are static links that
+          - if current_user&.has_redirectors?
+            p Thanks for being a supporter! You get access to permalink redirectors, which are static links that
               will always redirect to your current PB for a given game and category. Here they are:
             .table-responsive
               table.table
@@ -29,10 +29,16 @@ article
           - else
             p Permalink redirectors are static links that always redirect to your current PB for a given game and
               category.
-            p Permalink redirectors are a tier reward for patrons.
-        .card-footer
-          .float-right
-            a.btn.btn-outline-light href=patreon_url Become a Patron
+            p Permalink redirectors are a reward for supporters.
+        - if !current_user.has_redirectors?
+          .card-footer
+            .float-right
+              a.btn.btn-primary.mr-2 href=subscriptions_path
+                => icon('fas', 'credit-card')
+                ' Subscribe
+              a.btn.btn-patreon href=patreon_url
+                => icon('fab', 'patreon')
+                ' Subscribe through Patreon
 
   .row
     .col-lg-6

@@ -97,12 +97,12 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
 
   def massage_params
     params[:entry][:run_id] = params[:entry][:run_id].to_i(36) if params[:entry].try(:[], :run_id).present?
+    params[:entry][:readied_at] = @now if params[:entry].try(:[], :readied_at) == 'now'
+    params[:entry][:finished_at] = @now if params[:entry].try(:[], :finished_at) == 'now'
+    params[:entry][:forfeited_at] = @now if params[:entry].try(:[], :forfeited_at) == 'now'
   end
 
   def entry_params
-    params.select { |k, _| k[-3, -1] == '_at' && v == 'now' }.each do |k, _|
-      params[k] = @now
-    end
     params[:entry].present? ? params.require(:entry).permit(:readied_at, :finished_at, :forfeited_at, :run_id) : {}
   end
 

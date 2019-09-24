@@ -1,0 +1,159 @@
+.pricing-header.px-3.py-3.pt-md-5.pb-md-4.mx-auto.text-center style='max-width: 700px'
+  h1.display-4.text-monospace Time to choose
+  p.lead
+    ' Get access to premium features and help us continue improving the best speedrunning analytics system in the
+    ' universe 🌌
+.container
+  .card-deck.mb-3.text-center
+    - plan = current_user&.subscriptions&.active&.first
+    .card
+      .card-header
+        h4.my-0.font-weight-normal
+          ' Basic
+      .card-body
+        h1.card-title.pricing-card-title Free
+        ul.list-unstyled.mt-3.mb-4
+          li Basic analytics
+          li Ad-supported
+      .card-footer
+        .d-flex
+          button.btn.btn-lg.btn-outline-light.disabled.mr-2.flex-fill.tip(
+            style='cursor: default'
+            title="Active since #{current_user&.created_at&.to_date}"
+          ) Active
+          button.btn.btn-lg.btn-outline-light.tip-top.disabled title='This plan lasts forever.' style='cursor: default'
+            = icon('fas', 'infinity')
+    .card
+      .card-header
+        h4.my-0.font-weight-normal
+          ' Gold
+      .card-body
+        h1.card-title.pricing-card-title
+          ' $4
+          small.text-muted
+            ' / mo
+        ul.list-unstyled.mt-3.mb-4
+          li Disable ads
+          li Predict when you'll PB
+      .card-footer
+        - if plan&.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER1']
+          - if plan.canceled?
+            button.btn.btn-lg.btn-block.btn-outline-light.disabled.tip(
+              title='Your subscription is canceled. It will last until the end of your billing period.'
+              style='cursor: default'
+            ) Canceled
+          - else
+            .d-flex
+              button.btn.btn-lg.btn-outline-light.disabled.flex-fill.mr-2.tip(
+                style='cursor: default'
+                title="Active since #{plan.created_at.to_date}"
+              ) Active
+              = form_for(:subscription, method: :delete) do |f|
+                = f.button(icon('fas', 'times'),
+                  data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
+                  class: 'btn btn-lg btn-outline-danger tip', \
+                  title: 'Cancel your subscription. You will keep your benefits until we would have next billed you.' \
+                )
+        - elsif plan
+          .d-flex
+            button.btn.btn-lg.btn-outline-light.flex-fill.mr-2.disabled.tip(
+              style='cursor: default'
+              title='A strictly better subscription is making you inherit this one.'
+            ) Inherited
+            = form_for(:subscription, method: :patch) do |f|
+              = f.hidden_field(:stripe_plan_id, value: ENV['STRIPE_PLAN_ID_TIER1'])
+              = f.button(icon('fas', 'angle-double-down').html_safe, \
+                data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
+                class: 'btn btn-lg btn-block btn-outline-warning tip', \
+                title: 'Downgrade your subscription to Gold level immediately. The prorated difference in price will be discounted from your next bill.' \
+              )
+        - else
+          / TODO: disable_with doesn't work in button_tag for some reason
+          = button_tag(current_user ? 'Subscribe' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
+              disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
+              plan_id: ENV['STRIPE_PLAN_ID_TIER1'] \
+            }, \
+            class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
+          )
+    .card
+      .card-header
+        h4.my-0.font-weight-normal
+          ' Noclip
+      .card-body
+        h1.card-title.pricing-card-title
+          ' $6
+          small.text-muted
+            ' / mo
+        ul.list-unstyled.mt-3.mb-4
+          li Disable ads
+          li Predict when you'll PB
+          li
+            ' Upgrade permalinks to redirectors
+            small.tip style='cursor: default' title='Permalink redirectors are links that always redirect to your PB, even when it improves.'
+              ' ?
+          li Compare splits with other runners
+      .card-footer
+        - if plan && plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
+          - if plan.canceled?
+            button.btn.btn-lg.btn-block.btn-outline-light.disabled.tip(
+              title='Your subscription is canceled. It will last until the end of your billing period.'
+              style='cursor: default'
+            ) Canceled
+          - else
+            .d-flex
+              button.btn.btn-lg.btn-outline-light.disabled.flex-fill.mr-2.tip(
+                style='cursor: default'
+                title="Active since #{plan.created_at.to_date}"
+              ) Active
+              = form_for(:subscription, method: :delete) do |f|
+                = f.button(icon('fas', 'times'),
+                  data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
+                  class: 'btn btn-lg btn-outline-danger tip', \
+                  title: 'Cancel your subscription. You will keep your benefits until we would have next billed you.' \
+                )
+        - elsif plan
+          = form_for(:subscription, method: :patch) do |f|
+            = f.hidden_field(:stripe_plan_id, value: ENV['STRIPE_PLAN_ID_TIER2'])
+            = f.button('Upgrade to Noclip', \
+              data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
+              class: 'btn btn-lg btn-block btn-outline-primary tip', \
+              title: 'Upgrade your subscription to Noclip level immediately. The prorated difference in price will be added to your next bill.' \
+            )
+        - else
+          / TODO: disable_with doesn't work in button_tag for some reason
+          = button_tag(current_user ? 'Subscribe' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
+              disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
+              plan_id: ENV['STRIPE_PLAN_ID_TIER2'] \
+            }, \
+            class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
+          )
+  .card-deck.mb-3.text-center
+    .card.mb-4.text-center
+      .card-header
+        h4.my-0.font-weight-normal Esports
+      .card-body
+        h1.card-title.pricing-card-title
+          ' $99
+          small.text-muted = '/ mo'
+        ul.list-unstyled.mt-3.mb-4
+          li Dedicated advisor
+          li Regular emails or meetings with new finds
+          li Includes Noclip tier
+      .card-footer
+        a.btn.btn-lg.btn-block.btn-primary href='mailto:ben@splits.io?Splits.io esports tier' Contact us
+    .card.mb-4.text-center
+      .card-header
+        h4.my-0.font-weight-normal Organization
+      .card-body
+        h1.card-title.pricing-card-title
+          ' Email us
+        ul.list-unstyled.mt-3.mb-4
+          li Hire us to expose and visualize analytics
+          li Custom-built to your specifications
+          li Fuel your commentary, stream layout, or players
+          li Bulk discounts for Splits.io subs
+      .card-footer
+        a.btn.btn-lg.btn-block.btn-primary href='mailto:ben@splits.io?subject=Splits.io custom analytics' Contact us
+  .card.mb-4.text-center
+    .card-body
+      a href=patreon_url Looking for Patreon?

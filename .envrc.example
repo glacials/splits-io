@@ -7,26 +7,34 @@
 # - Required for Google sign-in & linking
 # - Create one at https://console.developers.google.com/apis/credentials
 # - Set redirect URI to http://localhost:3000/auth/google/callback
-export GOOGLE_CLIENT_ID=fafaf
-export GOOGLE_CLIENT_SECRET=fafaf
+export GOOGLE_CLIENT_ID=changeme
+export GOOGLE_CLIENT_SECRET=changeme
 
 # Patreon
 # - Required for Patreon linking
 # - Create one at https://www.patreon.com/portal/registration/register-clients
 # - Set redirect URI to http://localhost:3000/auth/patreon/callback
-export PATREON_CLIENT_ID=fafaf
-export PATREON_CLIENT_SECRET=fafaf
+export PATREON_CLIENT_ID=changeme
+export PATREON_CLIENT_SECRET=changeme
 
 # Splits.io
 # - Required for some JavaScript->Rails API calls to work, including WebSockets features like races
 # - Create one at http://localhost:3000/settings/applications/new
 # - Set redirect URI to http://localhost:3000/auth/splitsio/callback
-export SPLITSIO_CLIENT_ID=fafaf
-export SPLITSIO_CLIENT_SECRET=fafaf
+export SPLITSIO_CLIENT_ID=changeme
+export SPLITSIO_CLIENT_SECRET=changeme
+
+# Stripe
+# - Required for Stripe payments to work (even in test mode)
+# - Create one at https://stripe.com/
+# - Create a Subscription with two Plans and set their plan IDs in docker-compose.yml
+# - Make a webhook for /api/webhooks/stripe subscribed to customer.subscription.deleted and checkout.session.completed
+export STRIPE_PUBLISHABLE_KEY=changeme
+export STRIPE_SECRET_KEY=changeme
 
 # Twitch
 # - Required for Twitch sign-in & linking
 # - Create one at https://dev.twitch.tv/dashboard/apps
 # - Set redirect URI to http://localhost:3000/auth/twitch/callback
-export TWITCH_CLIENT_ID=fafaf
-export TWITCH_CLIENT_SECRET=fafaf
+export TWITCH_CLIENT_ID=changeme
+export TWITCH_CLIENT_SECRET=changeme

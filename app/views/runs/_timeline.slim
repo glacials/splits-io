@@ -2,7 +2,7 @@
 - if run.duration(timing).present? && !run.completed?(timing)
   .card: .card-body: i This run doesn't have #{timing}time splits.
 - else
-  - if run.video_url.present? && URI.parse(run.video_url).host.match?(/^(www\.)?twitch\.tv$/)
+  - if run.video&.supports_embedding?
     div style="height: 1em": span.video-progress-line id="video-progress-line-#{run.id36}"
   .timeline-background
     .timeline.shadow style="width: #{run.duration(timing) / scale_to * 100.0}%"
@@ -11,7 +11,7 @@
           id="#{run.id36}-split-#{index}"
           data={start_ms: segment.start(timing).to_ms, run_id: run.id36, segment_number: index+1}
           class="#{next_timeline_color(run.id36)} #{'progress-bar-striped progress-bar-animated' if segment.duration(timing).nil?}"
-          style="width: #{segment.proportion(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video_url.present?}"
+          style="width: #{segment.proportion(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video}"
         )
           .p-2
             .text-light = segment.name.presence || '-'

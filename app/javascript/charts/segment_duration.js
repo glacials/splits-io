@@ -31,7 +31,7 @@ const buildSegmentDurationChart = function(timing, runs, segments, options = {})
     },
     series: segments.map((segment, i) => ({
       name: `${(runs[i].runners[0] || {name: '???'}).name}'s ${segment.name}`,
-      data: segment.histories.filter(attempt => attempt[duration] > 0).map(attempt => {
+      data: (segment.filteredHistories || segment.histories).map(attempt => {
         return [`Attempt #${attempt.attempt_number}`, attempt[duration]]
       }),
       pointStart: 1

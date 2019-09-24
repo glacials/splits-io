@@ -5,6 +5,9 @@ RSpec.describe 'users/pbs/export/panels/index' do
     run = FactoryBot.create(:run)
 
     runs = double
+    allow(runs).to receive(:includes).and_return(runs)
+    allow(runs).to receive(:left_joins).and_return(runs)
+    allow(runs).to receive(:joins).and_return(runs)
     allow(runs).to receive(:order).and_return(runs)
     allow(runs).to receive(:where).and_return(runs)
     allow(runs).to receive(:not).and_return(runs)

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Run version="1.6.0">
+  <GameIcon />
+  <GameName>NES Open Tournament Golf</GameName>
+  <CategoryName>US Course</CategoryName>
+  <Metadata>
+    <Run id="" />
+    <Platform usesEmulator="False">
+    </Platform>
+    <Region>
+    </Region>
+    <Variables />
+  </Metadata>
+  <Offset>00:00:00</Offset>
+  <AttemptCount>3</AttemptCount>
+  <AttemptHistory>
+    <Attempt id="1" started="08/30/2015 19:18:51" isStartedSynced="True" ended="08/30/2015 20:18:51" isEndedSynced="True">
+      <RealTime>01:00:00.0000000</RealTime>
+    </Attempt>
+    <Attempt id="2" started="08/31/2015 19:36:33" isStartedSynced="True" ended="08/31/2015 20:26:33" isEndedSynced="True">
+      <RealTime>00:50:00.0000000</RealTime>
+    </Attempt>
+    <Attempt id="3" started="09/01/2015 19:57:51" isStartedSynced="True" ended="09/01/2015 20:37:51" isEndedSynced="True">
+      <RealTime>00:40:00.0000000</RealTime>
+    </Attempt>
+  </AttemptHistory>
+  <Segments>
+    <Segment>
+      <Name>Segment 1</Name>
+      <Icon />
+      <SegmentHistory>
+        <Time id="1">
+          <RealTime>00:03:00.0000000</RealTime>
+        </Time>
+        <Time id="2">
+          <RealTime>00:02:00.0000000</RealTime>
+        </Time>
+        <Time id="3">
+          <RealTime>00:01:00.0000000</RealTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Segment 2</Name>
+      <Icon />
+      <SegmentHistory>
+        <Time id="1" />
+        <Time id="2">
+          <RealTime>00:40:00.0000000</RealTime>
+        </Time>
+        <Time id="3">
+          <RealTime>00:25:00.0000000</RealTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Segment 3</Name>
+      <Icon />
+      <SegmentHistory>
+        <Time id="1">
+          <RealTime>00:57:00.0000000</RealTime>
+        </Time>
+        <Time id="2">
+          <RealTime>00:08:00.0000000</RealTime>
+        </Time>
+        <Time id="3">
+          <RealTime>00:14:00.0000000</RealTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+  </Segments>
+  <AutoSplitterSettings />
+</Run>

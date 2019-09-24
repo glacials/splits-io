@@ -37,8 +37,8 @@ article data-turbolinks-temporary=true
               tr id=[:run, pb.id]
                 td.align-right = i += 1
                 td.align-left = user_badge(runner)
-                td.align-left = format_ms(pb.sum_of_best_ms(Run::REAL))
-                td.align-left = link_to format_ms(pb.duration_ms(Run::REAL)), pb
-                td.align-left = format_ms(pb.duration_ms(Run::REAL) - pb.sum_of_best_ms(Run::REAL))
+                td.align-left = pb.sum_of_best(Run::REAL).format
+                td.align-left = link_to(pb.duration(Run::REAL).format, pb)
+                td.align-left = (pb.duration(Run::REAL) - pb.sum_of_best(Run::REAL)).format
   center
     small = link_to 'normal run list', game_category_path(@game, @category), class: 'category-link'

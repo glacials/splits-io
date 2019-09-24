@@ -1,0 +1,24 @@
+.card.mb-3
+  .card-header: h4.my-0.font-weight-normal Subscription
+  - plan = current_user.subscriptions.active.first
+  .card-body
+    h1.card-title.pricing-card-title
+      - if plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER1']
+        ' $4
+      - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
+        ' $6
+      small.text-muted = '/ mo'
+    ul.list-unstyled.mt-3.mb-4
+      - if plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER1']
+        li Disable ads
+        li Predict when you'll PB
+      - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
+        li Disable ads
+        li Predict when you'll PB
+        li
+          ' Upgrade permalinks to redirectors
+          small.tip style='cursor: default' title='Permalink redirectors are links that always redirect to your PB, even when it improves.'
+            ' ?
+        li Compare splits with other runners
+  .card-footer: .float-right
+    a.btn.btn-outline-light href=subscriptions_path Manage

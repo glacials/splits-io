@@ -13,13 +13,12 @@ h5
   - if run.entry.present? && !run.entry.ghost?
     a.badge.badge-dark.tip title='Recorded as part of a race' href=race_path(run.entry.race)
       = icon('fas', 'flag-checkered')
-  - if run.video_url.present?
-    - uri = URI.parse(run.video_url)
-    - if uri.host.match?(/^(www\.)?(youtube\.com|youtu\.be)$/)
-      a.badge.badge-dark.tip href=run.video_url title='Watch on YouTube' => icon('fab', 'youtube')
-    - elsif !uri.host.match?(/^(www\.)?(twitch\.tv)$/)
-      a.badge.badge-dark.tip href=run.video_url title='Watch video' => icon('fas', 'video')
-  - if run.segments.last.duration(timing).nil?
+  - if run.video&.supports_embedding?
+    - if run.video.youtube?
+      a.badge.badge-dark.tip href=run.video.url title='Watch on YouTube' => icon('fab', 'youtube')
+    - elsif !run.video.twitch?
+      a.badge.badge-dark.tip href=run.video.url title='Watch video' => icon('fas', 'video')
+  - if run.segments.last.try(:duration, timing).nil?
     a.badge.badge-dark.tip.p-0 title='In progress'
       .text-danger = icon('fas', 'satellite-dish')
 
@@ -58,26 +57,26 @@ h5
       ' 🎉
       = run.likes.count
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-    - if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+    - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
       a.btn.btn-twitch.tip-top(
         href='#'
         data={toggle: :modal, target: '#highlight'}
         title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
       )
         => icon('fab', 'twitch')
-        span Auto-Highlight Possible
-- if run.belongs_to?(current_user) && run.video_url.nil? && run.highlight_suggestion.present?
+        span Auto-highlight
+- if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
   #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
     .modal-dialog role='document'
       .modal-content
-        = form_for run, as: run.id36, url: run_path(run) do |f|
+        = form_for(run.build_video, url: run_video_path(run), method: :put) do |f|
           .modal-header.bg-primary
             h5.text-light Auto-Highlight
           .modal-body.bg-dark
             .row.text-light.m-2
-              p Splits I/O found the stream you PBed in! Click below to highlight it with 10s on either end of the
+              p Splits.io found the stream you PBed in! Click below to highlight it with 10s on either end of the
                 run.
-              p You will have a chance to edit it before publishing.
+              p You will have a chance to edit before publishing.
             .row: .btn-group.mx-auto
               a.btn.btn-twitch.mx-auto.twitch(
                 target='_blank'
@@ -87,11 +86,12 @@ h5
                 => icon('fab', 'twitch')
                 ' Highlight at Twitch
               .btn.btn-outline-twitch.tip-top(
-                title='Not taking you to the right page? Your video archive may have expired already.'
+                title='Not taking you to the right page? Your video archive may have expired.'
+                style='cursor: default'
               ) = icon('fas', 'question-circle')
             .row.text-light.m-2
               p Paste the link you get here:
-              = f.text_field(:video_url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here', spellcheck: false)
+              = f.text_field(:url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here', spellcheck: false)
           .modal-footer.bg-dark
             .float-right
               .btn-group

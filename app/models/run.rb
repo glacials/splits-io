@@ -2,6 +2,9 @@ Dir['./lib/programs/*'].each { |file| require file }
 require './lib/parser/livesplit_core_parser'
 
 class Run < ApplicationRecord
+  # TODO: Remove self.ignored_columns after the next deploy when the migration to remove the column from the DB is run
+  self.ignored_columns = ["video_url"] # Remove this after deployed and migration to remove the column runs
+
   include CompletedRun
   include ForgetfulPersonsRun
   include PadawanRun
@@ -28,6 +31,7 @@ class Run < ApplicationRecord
   has_one  :highlight_suggestion, dependent: :destroy
   has_many :likes,                dependent: :destroy,    class_name: 'RunLike'
   has_one  :entry,                dependent: :nullify
+  has_one  :video,                dependent: :destroy
 
   has_secure_token :claim_token
 
@@ -177,8 +181,10 @@ class Run < ApplicationRecord
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
     stats = SegmentHistory.joins(segment: :run)
+                          .without_statistically_invalid_histories_for_run(self, timing)
                           .where(segment: {runs: {id: id}})
                           .where.not(Run.duration_type(timing) => [0, nil])
+                          .where("segments_segment_histories.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments_segment_histories.segment_number - 1)")
                           .group(:segment_id)
                           .select(stats_select_query(timing))
 
@@ -200,7 +206,7 @@ class Run < ApplicationRecord
   end
 
   def recommended_comparison(timing)
-    query = Run.where(category: category).where.not(user: nil).where.not(category: nil)
+    query = Run.joins(:video).where(category: category).where.not(user: nil).where.not(category: nil)
 
     case timing
     when Run::REAL
@@ -211,7 +217,7 @@ class Run < ApplicationRecord
       duration_col = :gametime_duration_ms
     end
 
-    query.order(video_url: :asc, duration_col => :desc).first
+    query.order("videos.url": :asc, duration_col => :desc).first
   end
 
   def possible_timesave(timing)
