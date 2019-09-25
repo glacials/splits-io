@@ -1,6 +1,5 @@
-FROM ruby:2.6.4-alpine AS builder
-
-ARG SPLITSIO_CLIENT_ID
+ARG RUBY_VERSION
+FROM ruby:$RUBY_VERSION-alpine AS builder
 
 # Build base for gem's native extensions
 # tzdata for ruby timezone data
@@ -35,15 +34,18 @@ RUN bundle install --without development:test \
 
 RUN yarn install
 COPY . .
+ARG SPLITSIO_CLIENT_ID
+ARG STRIPE_PUBLISHABLE_KEY
 RUN DATABASE_URL=nulldb://host/db SECRET_KEY_BASE="$(bundle exec rails secret)" \
-    REDIS_URL=redis://redis:6379/1 SPLITSIO_CLIENT_ID=$SPLITSIO_CLIENT_ID  \
+    REDIS_URL=redis://redis:6379/1 \
+    SPLITSIO_CLIENT_ID=$SPLITSIO_CLIENT_ID STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY \
     bin/rails assets:precompile
 
 RUN rm -rf node_modules/ tmp/cache app/assets vendor/assets spec
 
 #############
 
-FROM ruby:2.6.4-alpine
+FROM ruby:$RUBY_VERSION-alpine
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \

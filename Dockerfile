@@ -1,4 +1,5 @@
-FROM ruby:2.6.4-alpine
+ARG RUBY_VERSION
+FROM ruby:$RUBY_VERSION-alpine
 
 # Build base for gem's native extensions
 # tzdata for ruby timezone data

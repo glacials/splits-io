@@ -41,6 +41,8 @@ x-app: &app
   build:
     context: .
     dockerfile: Dockerfile
+    args:
+      RUBY_VERSION: '2.6.3' # also update docker-compose-production.yml & Gemfile
   tmpfs:
     - /tmp
 x-backend: &backend
