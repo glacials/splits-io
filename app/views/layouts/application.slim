@@ -116,7 +116,7 @@ html
       article.pt-0#survey-container style='display: none'
         div.text-right
           small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
-        a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href='https://forms.gle/MXbpmLTPdJnVLDdc8'
+        a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
           ' Help us out by taking the 2019 Splits.io survey!
       - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
       - if entry.present? && request.path != race_path(entry.race)
@@ -156,4 +156,6 @@ html
                 span<> &bull;
                 a href='mailto:help@splits.io' Contact
                 br
+                a href=survey_url Survey
+                span<> &bull;
                 a href=privacy_policy_path Privacy Policy
