@@ -74,7 +74,8 @@ article
           to them on this page.
         p This is not reversible.
       .card-footer
-        .float-right: a.btn.btn-warning href=edit_run_path(@run, reparse: '1') Reparse
+        / This needs data-turbolinks="false" or the reparse page will refresh itself infinitely
+        .float-right: a.btn.btn-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse
 
     .card
       h5.card-header List/Unlist

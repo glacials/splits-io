@@ -10,81 +10,86 @@
       li.breadcrumb-item = link_to(@run.category, game_category_path(@run.game, @run.category))
     li.breadcrumb-item.active = link_to(@run.id36, run_path(@run))
 
-.row.mx-2
-  .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-  .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
-= render partial: 'runs/claim', locals: {run: @run}
-= render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-
-- if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?))
-  - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
-    .card-deck.mx-1
-      - [@run, *@compare_runs].each do |run|
-        - if run.video&.supports_embedding?
-          .card.my-3.mx-2 style='padding-bottom: 28.125%'
-            .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
-        - else
-          .card.my-3.mx-2
-            i.text-center.my-auto No video attached to this run
-      - if @compare_runs.none?
-        .card.my-3.mx-2
-          i.text-center.my-auto Select a comparison to see another run's video here
-          .card-footer: .float-right
-            = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-  .row.mx-1
-    .col-md-6
-      = render partial: 'runs/split_table', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-    .col-md-6
-      - if @run.completed?(timing) && @run.histories.any?
-        #chart-spinner
-          .text-success.text-center
-            span.mr-2 = render partial: 'shared/spinner'
-            h5.d-inline.text-success Loading charts
-        #chart-alert.alert.alert-danger.my-3 hidden=true
-        #chart-holder hidden=true
-          #run-duration-chart.card.my-3
-          #box-plot.card.my-3
-          #segment-chart.card.my-3
-          #reset-chart.card.my-3
-          - if @run.histories.any?
-            - if @run.user.try(:has_predictions?)
-              .my-3
-                span => icon('fas', 'lock-open')
-                - if @run.belongs_to?(current_user)
-                  span Thanks for supporting Splits.io! The below chart is unlocked.
-                - else
-                  span #{@run.user} supports Splits.io, so the below chart can be viewed.
-              #playtime-chart.card.my-3
-            - elsif @run.belongs_to?(current_user)
-              .card.my-3
-                #paywall-container
-                  /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
-                  #paywall.bg-dark
-                    .mt-4.mx-4
-                      .my-3.d-flex.justify-content-between
-                        span.mr-2
-                          ' Support Splits.io to predict how much more practice you need to hit specific PBs.
-                          ' LiveSplit only.
-                        span.text-secondary style='white-space: nowrap'
-                          span => icon('fas', 'lock')
-                          span Only you can see this.
-                      .my-3
-                        a.btn.btn-primary.mr-2 href=subscriptions_path
-                          => icon('fas', 'credit-card')
-                          ' Subscribe
-                        a.btn.btn-patreon href=patreon_url
-                          => icon('fab', 'patreon')
-                          ' Subscribe through Patreon
-                  #playtime-chart
+- if !@run.parsed?
+  #await-runs.text-success.text-center data-runs=([@run.id36, *@compare_runs.map(&:id36)].join(','))
+    span.mr-2 = render partial: 'shared/spinner'
+    h5.d-inline.text-success Processing
 - else
-  article: .col-md-6.offset-md-3: .card
-    .card-body Support Splits.io to compare videos, charts, and splits.
-    .card-footer
-      .float-right
-        a.btn.btn-primary.mr-2 href=subscriptions_path
-          => icon('fas', 'credit-card')
-          ' Subscribe
-        a.btn.btn-patreon href=patreon_url
-          => icon('fab', 'patreon')
-          | Subscribe through Patreon
+  .row.mx-2
+    .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+    .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+
+  = render partial: 'runs/claim', locals: {run: @run}
+  = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+
+  - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?))
+    - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
+      .card-deck.mx-1
+        - [@run, *@compare_runs].each do |run|
+          - if run.video&.supports_embedding?
+            .card.my-3.mx-2 style='padding-bottom: 28.125%'
+              .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
+          - else
+            .card.my-3.mx-2
+              i.text-center.my-auto No video attached to this run
+        - if @compare_runs.none?
+          .card.my-3.mx-2
+            i.text-center.my-auto Select a comparison to see another run's video here
+            .card-footer: .float-right
+              = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+    .row.mx-1
+      .col-md-6
+        = render partial: 'runs/split_table', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+      .col-md-6
+        - if @run.completed?(timing) && @run.histories.any?
+          #chart-spinner.text-success.text-center.my-5
+            span.mr-2 = render partial: 'shared/spinner'
+            h5.d-inline.text-success Processing
+          #chart-alert.alert.alert-danger.my-3 hidden=true
+          #chart-holder hidden=true
+            #run-duration-chart.card.my-3
+            #box-plot.card.my-3
+            #segment-chart.card.my-3
+            #reset-chart.card.my-3
+            - if @run.histories.any?
+              - if @run.user.try(:has_predictions?)
+                .my-3
+                  span => icon('fas', 'lock-open')
+                  - if @run.belongs_to?(current_user)
+                    span Thanks for supporting Splits.io! The below chart is unlocked.
+                  - else
+                    span #{@run.user} supports Splits.io, so the below chart can be viewed.
+                #playtime-chart.card.my-3
+              - elsif @run.belongs_to?(current_user)
+                .card.my-3
+                  #paywall-container
+                    /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
+                    #paywall.bg-dark
+                      .mt-4.mx-4
+                        .my-3.d-flex.justify-content-between
+                          span.mr-2
+                            ' Support Splits.io to predict how much more practice you need to hit specific PBs.
+                            ' LiveSplit only.
+                          span.text-secondary style='white-space: nowrap'
+                            span => icon('fas', 'lock')
+                            span Only you can see this.
+                        .my-3
+                          a.btn.btn-primary.mr-2 href=subscriptions_path
+                            => icon('fas', 'credit-card')
+                            ' Subscribe
+                          a.btn.btn-patreon href=patreon_url
+                            => icon('fab', 'patreon')
+                            ' Subscribe through Patreon
+                    #playtime-chart
+  - else
+    article: .col-md-6.offset-md-3: .card
+      .card-body Support Splits.io to compare videos, charts, and splits.
+      .card-footer
+        .float-right
+          a.btn.btn-primary.mr-2 href=subscriptions_path
+            => icon('fas', 'credit-card')
+            ' Subscribe
+          a.btn.btn-patreon href=patreon_url
+            => icon('fab', 'patreon')
+            | Subscribe through Patreon

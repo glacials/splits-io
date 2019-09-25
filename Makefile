@@ -59,3 +59,9 @@ clean:
 	rm -rf bundle/
 	rm -rf node_modules/
 	rm -f tmp/seed
+
+superclean:
+	$(docker-compose) down
+	rm -f tmp/seed
+	docker system prune --all --force
+	docker builder prune --all --force

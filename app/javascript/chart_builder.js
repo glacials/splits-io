@@ -5,7 +5,6 @@ import {buildPlaytimeChart} from "charts/playtime.js"
 import {buildResetChart} from "charts/reset.js"
 import {buildBoxPlot} from "charts/box_plot.js"
 import {chartOptions} from "consts.js"
-import {createSpinner} from 'spinner.js'
 import Highcharts from 'highcharts'
 import _ from 'underscore'
 
@@ -14,15 +13,6 @@ document.addEventListener('turbolinks:load', function() {
     return
   }
 
-  const segSpinners = document.getElementsByClassName('segment-spinner')
-  const spinners = []
-  for (const segSpinner of segSpinners) {
-    const spinner = createSpinner({
-      position: 'relative'
-    })
-    spinner.spin(segSpinner)
-    spinners.push(spinner)
-  }
   const runs = []
 
   runs.push(fetch(`/api/v4/runs/${gon.run.id}?historic=1`, {
@@ -36,13 +26,6 @@ document.addEventListener('turbolinks:load', function() {
   }
 
   Promise.all(runs).then(function(responses) {
-    spinners.forEach(spinner => {
-      spinner.stop()
-    })
-    for (const segSpinner of segSpinners) {
-      segSpinner.hidden = true
-    }
-
     if (responses.every(response => response.ok)) {
       return Promise.all(responses.map(response => response.json()))
     }
@@ -51,7 +34,6 @@ document.addEventListener('turbolinks:load', function() {
     let runs = bodies.map(body => body.run)
     const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
 
-    document.getElementById('chart-spinner').hidden = true
     document.getElementById('chart-holder').hidden = false
     if (runs[0].histories.length !== 0) {
       const skipped = `${timing}time_skipped`
@@ -97,13 +79,15 @@ document.addEventListener('turbolinks:load', function() {
           chartOptions
         )
       })
+
+    Array.from(document.getElementsByClassName('segment-spinner')).forEach(spinner => spinner.hidden = true)
+    document.getElementById('chart-spinner').hidden = true
     }
   }).catch(function(error) {
     for (const segChartAlert of document.getElementsByClassName('segment-chart-alert')) {
       segChartAlert.textContent = `Error loading charts: ${error}`
       segChartAlert.hidden = false
     }
-    document.getElementById('chart-spinner').style.display = 'none'
     document.getElementById('chart-alert').textContent = `Error loading charts: ${error}`
     document.getElementById('chart-alert').hidden = false
 
