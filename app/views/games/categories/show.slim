@@ -25,8 +25,9 @@
 .row.mx-2
   .col-md-6.mb-3: .card
     = render partial: 'shared/race_table', locals: { \
-      races: @game.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
       active_races: @game.races.active.not_secret_visibility.order(created_at: :desc) \
+      description: 'Indexed races', \
+      races: @game.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
     }
 
   .col-md-6
@@ -34,8 +35,9 @@
       .card-header
         = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
       = render partial: 'shared/run_table', locals: { \
-        runs: @category.runs.nonempty.unarchived, \
         cols: %i[runner time name video uploaded], \
+        description: 'Indexed splits', \
+        runs: @category.runs.nonempty.unarchived, \
       }.merge(sorting_info)
       center.my-2
         small = link_to 'sum of best leaderboard', game_category_sum_of_bests_path(@game, @category), class: 'leaderboard-link'
