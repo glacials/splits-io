@@ -8,9 +8,6 @@ const mouseOverSegment = (segment) => {
   const timerKey = `${run_id}-${segment_number}`
   timelineMouseOverTimers[timerKey] = undefined
 
-  const query = `.segment-inspect[data-run_id='${run_id}'][data-segment_number='${segment_number}']`
-  document.querySelector(query).style.visibility = 'visible'
-
   const leftEdge = segment.offsetLeft
   const otherTimelinesQuery = `.split[data-segment_number='${segment_number}']:not([data-run_id='${run_id}'])`
   document.querySelectorAll(otherTimelinesQuery).forEach((el) => {
@@ -32,9 +29,6 @@ const mouseOutSegment = (segment) => {
   const segment_number = segment.dataset.segment_number
   const timerKey = `${run_id}-${segment_number}`
   timelineMouseOutTimers[timerKey] = undefined
-
-  const query = `.segment-inspect[data-run_id='${run_id}'][data-segment_number='${segment_number}']`
-  document.querySelector(query).style.visibility = 'hidden'
 
   if (currentTimelineRunId === run_id) {
     // We are moving between segments on the same timeline, so don't shift
@@ -67,6 +61,12 @@ document.addEventListener('mouseover', event => {
   currentTimelineRunId = run_id
   const segment_number = segment.dataset.segment_number
   const timerKey = `${run_id}-${segment_number}`
+
+  // Go aheand and show the timeline inspector
+  const query = `.segment-inspect[data-run_id='${run_id}'][data-segment_number='${segment_number}']`
+  document.querySelector(query).style.visibility = 'visible'
+
+
   if (timelineMouseOutTimers[timerKey] !== undefined) {
     // We moved off of this segment and then back on
     // So don't do the mouseout stuff since our mouse is no longer out
@@ -89,6 +89,11 @@ document.addEventListener('mouseout', event => {
 
   const run_id = segment.dataset.run_id
   const segment_number = segment.dataset.segment_number
+
+  // Go ahead and hide the timeline inspector
+  const query = `.segment-inspect[data-run_id='${run_id}'][data-segment_number='${segment_number}']`
+  document.querySelector(query).style.visibility = 'hidden'
+
   const timerKey = `${run_id}-${segment_number}`
   if (timelineMouseOverTimers[timerKey] !== undefined) {
     // We just moved our mouse over this segment and then out of it
