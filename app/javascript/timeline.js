@@ -1,34 +1,6 @@
 let currentTimelineRunId = ''
-const animationIntervals = {}
 const timelineMouseOverTimers = {}
 const timelineMouseOutTimers = {}
-
-const moveTimeline = (timeline, goldTimeline, videoProgressLine, offset) => {
-  let left = parseFloat(timeline.style.left) || 0
-  const step = (offset - left) / 10
-  if (animationIntervals[timeline.dataset.run_id]) {
-    clearInterval(animationIntervals[timeline.dataset.run_id])
-  }
-  animationIntervals[timeline.dataset.run_id] = setInterval(() => {
-    left += step
-    let position = 'relative'
-    if ((step > 0 && left >= offset) || (step < 0 && left <= offset)) {
-      left = offset
-      clearInterval(animationIntervals[timeline.dataset.run_id])
-      animationIntervals[timeline.dataset.run_id] = undefined
-      if (offset === 0) {
-        position = ''
-      }
-    }
-    timeline.style.position = position
-    timeline.style.left = `${left}px`
-    goldTimeline.style.position = position
-    goldTimeline.style.left = `${left}px`
-    if (videoProgressLine !== null) {
-      videoProgressLine.style.left = `${left}px`
-    }
-  }, 10)
-}
 
 const mouseOverSegment = (segment) => {
   const run_id = segment.dataset.run_id
@@ -47,7 +19,11 @@ const mouseOverSegment = (segment) => {
     const goldTimeline = timeline.parentElement.querySelector('.gold.timeline')
     const videoProgressLine = document.getElementById(`video-progress-line-${el.dataset.run_id}`)
     const offset = leftEdge - otherLeftEdge
-    moveTimeline(timeline, goldTimeline, videoProgressLine, offset)
+    timeline.style.left = `${offset}px`
+    goldTimeline.style.left = `${offset}px`
+    if (videoProgressLine !== null) {
+      videoProgressLine.style.left = `${offset}px`
+    }
   })
 }
 
@@ -67,14 +43,15 @@ const mouseOutSegment = (segment) => {
     return
   }
 
-  const otherTimelinesQuery = `.split[data-segment_number='${segment_number}']:not([data-run_id='${run_id}'])`
-  document.querySelectorAll(otherTimelinesQuery).forEach((el) => {
-    const timeline = el.closest('.timeline-background')
+  const otherTimelinesQuery = `.timeline-background:not([data-run_id='${run_id}'])`
+  document.querySelectorAll(otherTimelinesQuery).forEach((timeline) => {
     const goldTimeline = timeline.parentElement.querySelector('.gold.timeline')
-    const videoProgressLine = document.getElementById(`video-progress-line-${el.dataset.run_id}`)
-    clearInterval(animationIntervals[timeline.dataset.run_id])
-    animationIntervals[timeline.dataset.run_id] = undefined
-    moveTimeline(timeline, goldTimeline, videoProgressLine, 0)
+    const videoProgressLine = document.getElementById(`video-progress-line-${timeline.dataset.run_id}`)
+    timeline.style.left = '0px'
+    goldTimeline.style.left = '0px'
+    if (videoProgressLine !== null) {
+      videoProgressLine.style.left = '0px'
+    }
   })
 }
 
@@ -97,7 +74,7 @@ document.addEventListener('mouseover', event => {
     timelineMouseOutTimers[timerKey] = undefined
   }
   if (timelineMouseOverTimers[timerKey] !== undefined) {
-    // We already have a timer running for thsi segment; don't start another
+    // We already have a timer running for this segment; don't start another
     return
   }
 
@@ -122,7 +99,7 @@ document.addEventListener('mouseout', event => {
   }
 
   if (timelineMouseOutTimers[timerKey] !== undefined) {
-    // We already have a timer running for thsi segment; don't start another
+    // We already have a timer running for this segment; don't start another
     return
   }
 
