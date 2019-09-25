@@ -33,7 +33,7 @@ const buildPlaytimeChart = function(runs, options = {}) {
         lastPB = runAttempt
         return [
           run.histories.filter(historicalAttempt => historicalAttempt.attempt_number <= runAttempt.attempt_number).
-          map(historicalAttempt => historicalAttempt.ended_at_ms - historicalAttempt.started_at_ms).
+          map(historicalAttempt => moment(historicalAttempt.ended_at).format('x') - moment(historicalAttempt.started_at).format('x')).
           reduce((playtime, attemptDuration) => playtime + attemptDuration, 0),
           runAttempt[duration]
         ]
