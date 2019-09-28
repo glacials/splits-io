@@ -8,28 +8,11 @@
       th.align-right Finished At
       th.align-right Stats
     tbody
-      - compare_segments = compare_runs.map { |r| r.segments.order(segment_number: :asc) }
-      - run.segments.zip(*compare_segments).each do |segment, *compare_segments|
+      - compare_segments = compare_runs.map { |r| r.segments_with_groups.order(segment_number: :asc) }
+      - run.segments_with_groups.zip(*compare_segments).each do |segment, *compare_segments|
         - compare_segment = compare_segments.compact.min_by { |s| s.duration(timing) }
-        - if segment.first_subsplit?
-          tr
-            td
-            td = segment.subsplit_title
-            td = segment.subsplit_duration(timing).format(precise: run.short?(timing))
-            td
-              = segment.last_subsplit.end(timing).format(precise: run.short?(timing))
-            - history_stats = segment.subsplit_stats(timing)
-            td
-              - danger = history_stats[:standard_deviation].to_f > history_stats[:mean].to_f / 2
-              - if danger
-                .segment-duration-chart-toggler.text-danger.cursor-pointer data-segment="#{segment.id}-subsplit"
-                  = icon('fas', 'chart-pie')
-              - else
-                .segment-duration-chart-toggler.text-primary.cursor-pointer data-segment="#{segment.id}-subsplit"
-                  = icon('fas', 'chart-pie')
-          = render partial: 'runs/segment_duration_card', locals: {danger: danger, history_stats: history_stats, run: run, segment: segment.subsplit_as_segment, timing: timing}
-        tr
-          td.align-right.align-middle = segment.segment_number + 1
+        tr class="#{segment.segment_group_parent? ? 'segment-group' : ''}"
+          td.align-right.align-middle = segment.segment_group_parent? ? '' : segment.segment_number + 1
           td.align-left.align-middle = segment.display_name.presence || '-'
           td.align-right.align-middle
             - if segment.skipped?(timing) || segment.reduced?(timing)

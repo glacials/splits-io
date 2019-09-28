@@ -178,11 +178,10 @@ class Run < ApplicationRecord
   end
 
   def subsplits
-    segments.map do |segment|
-      next unless segment.first_subsplit?
+    segments_with_groups.select(&:segment_group_parent?).map do |segment|
       {
-        id: "#{segment.id}-subsplit",
-        name: segment.subsplit_title,
+        id: segment.id,
+        name: segment.display_name,
         segment_number: segment.segment_number,
         histories: segment.subsplit_durations
       }
@@ -234,6 +233,28 @@ class Run < ApplicationRecord
 
   def possible_timesave(timing)
     duration(timing) - sum_of_best(timing)
+  end
+
+  def segments_with_groups
+    return @segments_with_groups if @segments_with_groups
+    @segments_with_groups = []
+    segment_group_start_index = nil
+    segment_group_end_index = nil
+    segment_array = segments.includes(:histories).order(segment_number: :asc).to_a
+    segment_array.each_with_index do |segment, i|
+      if !segment_group_start_index && segment.subsplit?
+        segment_group_start_index = i
+        segment_group_end_index = segment_array[i..-1].index { |seg| seg.last_subsplit? } + i
+        @segments_with_groups << SegmentGroup.new(segment_array[segment_group_start_index..segment_group_end_index])
+      end
+      if segment_group_end_index == i
+        segment_group_start_index = nil
+        segment_group_end_index = nil
+      end
+
+      @segments_with_groups << segment
+    end
+    @segments_with_groups
   end
 
   private
