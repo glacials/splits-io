@@ -25,7 +25,7 @@ class SegmentGroup
   end
 
   def gold?(timing)
-    false
+    shortest_duration(timing) == duration(timing)
   end
 
   def reduced?(timing)
