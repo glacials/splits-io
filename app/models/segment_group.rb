@@ -10,7 +10,8 @@ class SegmentGroup
   end
 
   def display_name
-    segments.last.display_name
+    match = /\{(.+?)}/.match(segments.last.name)
+    match[1] if match
   end
 
   def duration(timing)
