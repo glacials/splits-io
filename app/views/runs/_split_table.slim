@@ -8,7 +8,7 @@
       th.align-right Finished At
       th.align-right Stats
     tbody
-      - compare_segments = compare_runs.map { |r| r.segments_with_groups.order(segment_number: :asc) }
+      - compare_segments = compare_runs.map { |r| r.segments_with_groups }
       - run.segments_with_groups.zip(*compare_segments).each do |segment, *compare_segments|
         - compare_segment = compare_segments.compact.min_by { |s| s.duration(timing) }
         tr class="#{segment.segment_group_parent? ? 'segment-group' : ''}"
