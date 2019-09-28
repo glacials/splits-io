@@ -41,8 +41,11 @@ x-app: &app
   build:
     context: .
     dockerfile: Dockerfile
+    cache_from:
+      - "${REPOSITORY_URI:-splitsio-dev}:latest"
     args:
       RUBY_VERSION: '2.6.3' # also update docker-compose-production.yml & Gemfile
+  image: splitsio-dev
   tmpfs:
     - /tmp
 x-backend: &backend
@@ -80,7 +83,6 @@ services:
     <<: *app
     command: bash -c "ruby bin/webpack-dev-server"
     environment: *client-environment
-    image: webpacker
     logging: *default-logging
     ports:
       - 3035:3035
@@ -93,7 +95,6 @@ services:
     <<: *backend
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment: *server-environment
-    image: web
     logging: *default-logging
     ports:
       - 3000:3000
@@ -101,7 +102,6 @@ services:
     <<: *backend
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work"
     environment: *server-environment
-    image: worker
     logging: *default-logging
   redis:
     image: redis:5.0.5-alpine

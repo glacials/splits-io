@@ -1,5 +1,5 @@
 ARG RUBY_VERSION
-FROM ruby:$RUBY_VERSION-alpine AS builder
+FROM ruby:$RUBY_VERSION-alpine AS prod-builder
 
 # Build base for gem's native extensions
 # tzdata for ruby timezone data
@@ -27,7 +27,7 @@ WORKDIR /app
 
 COPY Gemfile* package.json yarn.lock ./
 
-RUN bundle install --without development:test \
+RUN bundle install -j "$(expr "$(getconf _NPROCESSORS_ONLN)" - 1)" --without development:test \
     && rm -rf $BUNDLE_PATH/cache/*.gem \
     && find $BUNDLE_PATH/gems/ -name "*.c" -delete \
     && find $BUNDLE_PATH/gems/ -name "*.o" -delete
@@ -45,7 +45,7 @@ RUN rm -rf node_modules/ tmp/cache app/assets vendor/assets spec
 
 #############
 
-FROM ruby:$RUBY_VERSION-alpine
+FROM ruby:$RUBY_VERSION-alpine AS prod-runtime
 
 ENV RAILS_ENV=production \
     NODE_ENV=production \
@@ -62,7 +62,7 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/reposit
     && apk add -u --no-cache tzdata gcompat postgresql-dev bash nodejs-current \
     && rm -rf /var/cache/apk/*
 
-COPY --from=builder /app /app
-COPY --from=builder /bundle /bundle
+COPY --from=prod-builder /app /app
+COPY --from=prod-builder /bundle /bundle
 
 WORKDIR /app
