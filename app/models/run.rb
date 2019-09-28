@@ -185,7 +185,7 @@ class Run < ApplicationRecord
         segment_number: segment.segment_number,
         histories: segment.subsplit_durations
       }
-    end.compact
+    end
   end
 
   # Calculate the various statistical information about each segments history once in the database for the whole run
