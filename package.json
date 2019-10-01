@@ -17,6 +17,7 @@
     "driftless": "^2.0.3",
     "expose-loader": "^0.7.5",
     "file-saver": "^2.0.2",
+    "fuzzyset.js": "^0.0.8",
     "handlebars": "^4.2.0",
     "highcharts": "^7.2.0",
     "highcharts-regression": "streamlinesocial/highcharts-regression",

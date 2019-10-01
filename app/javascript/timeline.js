@@ -1,3 +1,5 @@
+import FuzzySet from 'fuzzyset.js'
+
 let currentTimelineRunId = ''
 const timelineMouseOverTimers = {}
 const timelineMouseOutTimers = {}
@@ -9,8 +11,23 @@ const mouseOverSegment = (segment) => {
   timelineMouseOverTimers[timerKey] = undefined
 
   const leftEdge = segment.offsetLeft
-  const otherTimelinesQuery = `.split[data-segment_number='${segment_number}']:not([data-run_id='${run_id}'])`
-  document.querySelectorAll(otherTimelinesQuery).forEach((el) => {
+  const splits = []
+
+  document.querySelectorAll(`.timeline-background:not([data-run_id='${run_id}'])`).forEach((timeline) => {
+    const segmentNames = FuzzySet(JSON.parse(timeline.dataset.segment_names))
+    const closestSegments = segmentNames.get(segment.dataset.segment_name)
+    let segmentName = undefined
+    if (closestSegments && closestSegments[0][0] > 0.5) {
+      segmentName = closestSegments[0][1]
+      splits.push(timeline.querySelector(`.split[data-segment_name='${segmentName}']`))
+    } else {
+      const split = timeline.querySelector(`.split[data-segment_number='${segment_number}']`)
+      if (split) {
+        splits.push(split)
+      }
+    }
+  })
+  splits.forEach((el) => {
     const otherLeftEdge = el.offsetLeft
     const timeline = el.closest('.timeline-background')
     const goldTimeline = timeline.parentElement.querySelector('.gold.timeline')
