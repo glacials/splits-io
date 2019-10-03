@@ -6,7 +6,7 @@ class SegmentGroup
   end
 
   def id
-    "#{segments.first.id}-subsplit"
+    "#{segments.first.id}-segment_group"
   end
 
   def display_name
@@ -45,14 +45,14 @@ class SegmentGroup
   end
 
   def shortest_duration(timing)
-    Duration.new(subsplit_durations_by_attempt[timing].values.min)
+    Duration.new(durations_by_attempt[timing].values.min)
   end
 
   def history_stats(timing)
-    values = subsplit_durations_by_attempt[timing].values.sort
-    mean = values.sum / subsplit_durations_by_attempt[timing].keys.length.to_f
+    values = durations_by_attempt[timing].values.sort
+    mean = values.sum / durations_by_attempt[timing].keys.length.to_f
     variance_sum = values.inject(0) { |accum, i| accum + (i-mean)**2 }
-    sample_variance = values.length == 1 ? 0 : variance_sum / (subsplit_durations_by_attempt[timing].keys.length - 1).to_f
+    sample_variance = values.length == 1 ? 0 : variance_sum / (durations_by_attempt[timing].keys.length - 1).to_f
     {
       standard_deviation: Math.sqrt(sample_variance),
       mean: mean,
@@ -65,16 +65,16 @@ class SegmentGroup
     }
   end
 
-  def subsplit_durations
+  def segment_group_durations
     durations = {}
-    subsplit_durations_by_attempt.keys.each do |timing|
-      subsplit_durations_by_attempt[timing].keys.each do |attempt_number|
+    durations_by_attempt.keys.each do |timing|
+      durations_by_attempt[timing].keys.each do |attempt_number|
         durations[attempt_number] = {
           attempt_number: attempt_number,
           'realtime_duration_ms' => 0,
           'gametime_duration_ms' => 0
         } unless durations[attempt_number]
-        durations[attempt_number]["#{timing}time_duration_ms"] = subsplit_durations_by_attempt[timing][attempt_number]
+        durations[attempt_number]["#{timing}time_duration_ms"] = durations_by_attempt[timing][attempt_number]
       end
     end
     durations.values.to_a

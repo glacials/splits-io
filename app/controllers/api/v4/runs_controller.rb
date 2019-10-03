@@ -29,7 +29,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
     if timer.nil?
       options = { root: :run }
       options[:historic] = true if params[:historic] == '1'
-      options[:subsplits] = true if params[:subsplits] == '1'
+      options[:segment_groups] = true if params[:segment_groups] == '1'
       render json: Api::V4::RunBlueprint.render(@run, options)
     else
       rendered_run = render_run_to_string(timer)

@@ -149,7 +149,7 @@
         "$ref": "../../../models/api/v4/segment.json"
       }
     },
-    "subsplits": {
+    "segment_groups": {
       "type": "array",
       "items": {
         "type": "object",

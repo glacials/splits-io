@@ -25,12 +25,12 @@ document.addEventListener('turbolinks:load', function() {
   }
   const runs = []
 
-  runs.push(fetch(`/api/v4/runs/${gon.run.id}?historic=1&subsplits=1`, {
+  runs.push(fetch(`/api/v4/runs/${gon.run.id}?historic=1&segment_groups=1`, {
     headers: {accept: 'application/json'}
   }))
 
   if (gon.compare_runs !== undefined) {
-    gon.compare_runs.forEach(run => runs.push(fetch(`/api/v4/runs/${run.id}?historic=1&subsplits=1`, {
+    gon.compare_runs.forEach(run => runs.push(fetch(`/api/v4/runs/${run.id}?historic=1&segment_groups=1`, {
       headers: {accept: 'application/json'}
     })))
   }
@@ -97,11 +97,11 @@ document.addEventListener('turbolinks:load', function() {
           chartOptions
         )
       })
-      runs[0].subsplits.forEach((subsplit, i) => {
+      runs[0].segment_groups.forEach((segmentGroup, i) => {
         buildSegmentDurationChart(
           timing,
           runs,
-          runs.map(run => run.subsplits[i]),
+          runs.map(run => run.segmentGroup[i]),
           chartOptions
         )
       })

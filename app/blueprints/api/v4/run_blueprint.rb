@@ -21,7 +21,7 @@ class Api::V4::RunBlueprint < Blueprinter::Base
   field(:realtime_duration_ms) { |run, _| run.realtime_duration_ms || 0 }
   field(:gametime_duration_ms) { |run, _| run.gametime_duration_ms || 0 }
 
-  field :subsplits, if: -> (_, _, options) { options[:subsplits] }
+  field :segment_groups, if: -> (_, _, options) { options[:segment_groups] }
 
   view :convert do
     field :id do |_, _|

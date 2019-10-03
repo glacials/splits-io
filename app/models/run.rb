@@ -177,13 +177,13 @@ class Run < ApplicationRecord
     end
   end
 
-  def subsplits
+  def segment_groups
     segments_with_groups.select(&:segment_group_parent?).map do |segment|
       {
         id: segment.id,
         name: segment.display_name,
         segment_number: segment.segment_number,
-        histories: segment.subsplit_durations
+        histories: segment.segment_group_durations
       }
     end
   end
