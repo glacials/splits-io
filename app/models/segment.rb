@@ -1,6 +1,4 @@
 class Segment < ApplicationRecord
-  include Subsplit
-
   belongs_to :run
   # dependent: :delete_all requires there be no child items that need to be deleted
   # If SegmentHistory is changed to have child records, change this back to just :destroy
@@ -190,14 +188,32 @@ class Segment < ApplicationRecord
   end
 
   def to_s
-    name
+    display_name
   end
 
   def history_stats(timing)
     run.segment_history_stats(timing)[id]
   end
 
+  # segment_group_parent? returns that this segment is not the parent of a segment group
   def segment_group_parent?
     false
+  end
+
+  # subsplit? returns something truthy representing if this segment is a subsplit of a segment group
+  def subsplit?
+    return false unless name.present?
+    /^[-\{]/.match?(name)
+  end
+
+  # subsplit? returns something truthy representing if this segment is the last subsplit of a segment group
+  def last_subsplit?
+    /^\{/.match?(name)
+  end
+
+  # display_name returns the name of a normal segment and just the actual segment name of a subsplit
+  def display_name
+    return name unless subsplit?
+    /^(?:-|\{.*?}\s*)(.+)/.match(name)[1]
   end
 end
