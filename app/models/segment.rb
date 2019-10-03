@@ -200,15 +200,16 @@ class Segment < ApplicationRecord
     false
   end
 
-  # subsplit? returns something truthy representing if this segment is a subsplit of a segment group
+  # subsplit? returns something truthy representing if this segment is a subsplit of a segment group.
+  # This won't return true for the last subsplit in a group if it has no indication it is a subsplit
   def subsplit?
     return false unless name.present?
     /^[-\{]/.match?(name)
   end
 
-  # subsplit? returns something truthy representing if this segment is the last subsplit of a segment group
+  # last_subsplit? returns something truthy representing if this segment is the last subsplit of a segment group
   def last_subsplit?
-    /^\{/.match?(name)
+    /^[^-]/.match?(name)
   end
 
   # display_name returns the name of a normal segment and just the actual segment name of a subsplit

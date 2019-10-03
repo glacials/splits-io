@@ -609,4 +609,22 @@ describe Run, type: :model do
       expect(stats[ids[2]][:percentiles][99].to_f).to eq 836_400
     end
   end
+
+  context 'segment groups' do
+    it 'generates the correct segments_with_groups for segment_groups with titles' do
+      run = FactoryBot.create(:subsplits_with_titles_run)
+      run.parse_into_db
+      run.reload
+      groups = run.segments_with_groups
+      expect(groups.length).to eq 87
+    end
+
+    it 'generates the correct segments_with_groups for segment_groups without titles' do
+      run = FactoryBot.create(:subsplits_without_titles_run)
+      run.parse_into_db
+      run.reload
+      groups = run.segments_with_groups
+      expect(groups.length).to eq 53
+    end
+  end
 end
