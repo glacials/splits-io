@@ -270,12 +270,6 @@ If a `historic=1` param is included in the request, one additional field will be
 |------------:|:-------------------------|:------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `histories` | array of History objects | never | Ordered history objects of all previous runs. The first item is the first run recorded by the runner's timer into the source file. The last item is the most recent one. This field is only nonempty if the source timer records history. |
 
-If a `subsplits=1` param is included in the request, one additional field will be present:
-
-|       Field | Type                          | Null? | Description                                                 |
-|------------:|:------------------------------|:------|:------------------------------------------------------------|
-| `subsplits` | array of segment-like objects | never | Ordered subsplit objects with historical subsplit durations |
-
 #### Segment
 A Segment maps to a single piece of a run, also called a split. Its canonical ID string is a UUID, e.g.
 `"c198a25f-9f8a-43cd-92ab-472a952f9336"`, which you should substitite any time you see `:segment` in these docs.
