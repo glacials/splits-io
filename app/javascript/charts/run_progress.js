@@ -6,12 +6,12 @@ Variwide(Highcharts)
 
 const defaults = require('deep-defaults')
 
-const buildRunProgressVariwideChart = function(runs, options = {}) {
-  if (document.getElementById('run-progress-variwide-chart') === null) {
+const buildRunProgressChart = function(runs, options = {}) {
+  if (document.getElementById('run-progress-chart') === null) {
     return
   }
 
-  Highcharts.chart('run-progress-variwide-chart', defaults(_.clone(options), {
+  Highcharts.chart('run-progress-chart', defaults(_.clone(options), {
     exporting: {
       chartOptions: {
         legend: {
@@ -58,4 +58,4 @@ const buildRunProgressVariwideChart = function(runs, options = {}) {
   }))
 }
 
-export {buildRunProgressVariwideChart}
+export {buildRunProgressChart}

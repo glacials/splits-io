@@ -47,7 +47,7 @@
           #box-plot.card.my-3
           #segment-chart.card.my-3
           #reset-chart.card.my-3
-          #run-progress-variwide-chart.card.my-3
+          #run-progress-chart.my-3
           - if @run.histories.any?
             - if @run.user.try(:patron?, tier: 2) || @run.user.try(:admin?)
               .my-3

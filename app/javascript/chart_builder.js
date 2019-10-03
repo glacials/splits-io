@@ -4,7 +4,7 @@ import {buildSegmentChart} from "charts/segment.js"
 import {buildPlaytimeChart} from "charts/playtime.js"
 import {buildResetChart} from "charts/reset.js"
 import {buildBoxPlot} from "charts/box_plot.js"
-import {buildRunProgressVariwideChart} from "charts/run_progress_variwide.js"
+import {buildRunProgressChart} from "charts/run_progress.js"
 import {chartOptions} from "consts.js"
 import {createSpinner} from 'spinner.js'
 import Highcharts from 'highcharts'
