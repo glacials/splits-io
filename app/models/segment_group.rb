@@ -1,7 +1,8 @@
 class SegmentGroup
-  attr_accessor :segments
+  attr_accessor :run, :segments
 
-  def initialize(segments)
+  def initialize(run, segments)
+    self.run = run
     self.segments = segments
   end
 
