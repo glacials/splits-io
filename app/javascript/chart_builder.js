@@ -101,7 +101,7 @@ document.addEventListener('turbolinks:load', function() {
         buildSegmentDurationChart(
           timing,
           runs,
-          runs.map(run => run.segmentGroup[i]),
+          runs.map(run => run.segment_groups[i]),
           chartOptions
         )
       })
