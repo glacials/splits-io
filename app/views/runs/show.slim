@@ -53,27 +53,20 @@
             #segment-chart.card.my-3
             #reset-chart.card.my-3
             - if @run.histories.any?
-              - if @run.user.try(:has_predictions?)
+              - if current_user.try(:has_predictions?)
                 .my-3
                   span => icon('fas', 'lock-open')
-                  - if @run.belongs_to?(current_user)
-                    span Thanks for supporting Splits.io! The below chart is unlocked.
-                  - else
-                    span #{@run.user} supports Splits.io, so the below chart can be viewed.
+                  span Thanks for supporting Splits.io! The below chart is unlocked.
                 #playtime-chart.card.my-3
-              - elsif @run.belongs_to?(current_user)
+              - else
                 .card.my-3
                   #paywall-container
                     /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
                     #paywall.bg-dark
                       .mt-4.mx-4
-                        .my-3.d-flex.justify-content-between
+                        .my-3.d-flex
                           span.mr-2
-                            ' Support Splits.io to predict how much more practice you need to hit specific PBs.
-                            ' LiveSplit only.
-                          span.text-secondary style='white-space: nowrap'
-                            span => icon('fas', 'lock')
-                            span Only you can see this.
+                            ' Support Splits.io to predict practice-to-PB. LiveSplit only.
                         .my-3
                           a.btn.btn-primary.mr-2 href=subscriptions_path
                             => icon('fas', 'credit-card')
