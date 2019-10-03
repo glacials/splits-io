@@ -110,7 +110,7 @@ class SegmentGroup
     @subsplit_durations_by_attempt
   end
 
-    def percentile(values_sorted, percent)
+  def percentile(values_sorted, percent)
     return values_sorted[0] if values_sorted.length == 1
     k = (percent * (values_sorted.length - 1) + 1).floor - 1
     f = (percent * (values_sorted.length - 1) + 1).modulo(1)
