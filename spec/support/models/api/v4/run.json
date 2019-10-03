@@ -11,6 +11,7 @@
     "program",
     "attempts",
     "image_url",
+    "parsed_at",
     "created_at",
     "updated_at",
     "video_url",
@@ -89,6 +90,12 @@
       ]
     },
     "image_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "parsed_at": {
       "type": [
         "string",
         "null"

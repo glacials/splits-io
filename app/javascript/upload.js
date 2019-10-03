@@ -1,65 +1,79 @@
-import {showSpinner, hideSpinner} from 'spinner.js'
-
 import _ from 'underscore'
+import { getAccessToken } from './token'
+import waitForRunsToParse from './run_parse.js'
 
-const upload = function(file, options) {
+const upload = async function(file, options) {
   if(file === undefined) {
-    document.getElementById('droplabel').textContent = 'That looks like an empty file! :('
+    document.getElementById('droplabel').textContent = 'That file looks empty 😕'
     window.isUploading = false
-    hideSpinner()
+    document.getElementById('upload-spinner').hidden = true
     return
   }
   options = Object.assign({bulk: false}, options)
-  return fetch('/api/v4/runs', {method: 'POST', credentials: 'include'}).then(function(splitsioResponse) {
-    return splitsioResponse.json()
-  }).then(function(splitsioResponse) {
-    const formData = new FormData()
-    for(const [k, v] of Object.entries(splitsioResponse.presigned_request.fields)) {
-      formData.append(k, v)
+
+  const headers = new Headers()
+  headers.append('Content-Type', 'application/json')
+  const accessToken = getAccessToken()
+  if (accessToken) {
+    headers.append('Authorization', `Bearer ${accessToken}`)
+  }
+
+  const splitsioResponse = await fetch('/api/v4/runs', {
+    method: 'POST',
+    headers: headers,
+  }).then(r => r.json())
+  const formData = new FormData()
+  for(const [k, v] of Object.entries(splitsioResponse.presigned_request.fields)) {
+    formData.append(k, v)
+  }
+  formData.append('file', file)
+
+  return fetch(splitsioResponse.presigned_request.uri, {
+    method: splitsioResponse.presigned_request.method,
+    body: formData
+  }).then(function(s3Response) {
+    if(s3Response.status === 400 && !options.bulk) {
+      Turbolinks.visit('/cant-parse')
     }
-    formData.append('file', file)
+    document.getElementById('droplabel').textContent = 'Uploading'
 
-    return fetch(splitsioResponse.presigned_request.uri, {
-      method: splitsioResponse.presigned_request.method,
-      body: formData
-    }).then(function(s3Response) {
-      if(s3Response.status === 400 && !options.bulk) {
-        window.location = '/cant-parse'
-      }
-
-      if(!options.bulk) {
-        document.getElementById('droplabel').textContent = 'Parsing...'
-        window.location = splitsioResponse.uris.claim_uri
-      }
-    }).catch(function(error) {
-      // If we are bulk uploading, let the uploadAll function handle the error
-      if(options.bulk) {
-        throw error
-      }
-      window.isUploading = false
-      document.getElementById('droplabel').innerHTML = `Error: ${error.message}.<br />Try again, or email help@splits.io!<br />`
-      hideSpinner()
-    })
+    if(!options.bulk) {
+      Turbolinks.visit(splitsioResponse.uris.claim_uri)
+    } else {
+      return splitsioResponse.id
+    }
+  }).catch(function(error) {
+    // If we are bulk uploading, let the uploadAll function handle the error
+    window.isUploading = false
+    document.getElementById('droplabel').innerHTML = `Error: ${error.message}.<br />Try again, or email help@splits.io!<br />`
+    document.getElementById('upload-spinner').hidden = true
+    throw error
   })
 }
 
+// Reset the dropzone whenever we change pages, otherwise it will stay visible through Turbolinks.visits
+document.addEventListener('turbolinks:load', function() {
+  document.getElementById('dropzone-overlay').style.visibility = 'hidden'
+  document.getElementById('droplabel').textContent = 'Waiting for drop'
+  document.getElementById('multiupload').style.visibility = 'hidden'
+})
+
 const uploadAll = function(files) {
   document.getElementById('multiupload').style.visibility = 'visible'
-  Promise.all(files.map(function(file) {
-    return new Promise(function(resolve, reject) {
-      upload(file, {bulk: true}).then(function() {
-        const newTotal = Number(document.getElementById('successful-uploads').textContent) + 1
-        document.getElementById('successful-uploads').textContent = newTotal
-        resolve()
-      }).catch(function(error) {
-        const newTotal = Number(document.getElementById('failed-uploads').textContent) + 1
-        document.getElementById('failed-uploads').textContent = newTotal
-        resolve()
-      })
+
+  Promise.all(files.map(file => new Promise((resolve, reject) => {
+    upload(file, {bulk: true}).then(runId => {
+      const newTotal = Number(document.getElementById('successful-uploads').textContent) + 1
+      document.getElementById('successful-uploads').textContent = newTotal
+      resolve(runId)
+    }).catch(error => {
+      const newTotal = Number(document.getElementById('failed-uploads').textContent) + 1
+      document.getElementById('failed-uploads').textContent = newTotal
+      console.error(error)
+      resolve()
     })
-  })).then(function() {
-    document.getElementById('droplabel').textContent = 'Parsing...'
-    window.location = "/"
+  }))).then(runIds => {
+    waitForRunsToParse(runIds).then(() => Turbolinks.visit('/'), () => Turbolinks.visit('/'))
   })
 }
 
@@ -94,13 +108,13 @@ document.addEventListener('turbolinks:load', function() {
 
     const files = event.dataTransfer.files
     if (files.length > 1 && gon.user === null) {
-      document.getElementById('droplabel').textContent = 'To upload more than one file at a time, please sign in.'
+      document.getElementById('droplabel').textContent = 'Please sign in to bulk-upload runs'
       return
     }
 
-    document.getElementById('droplabel').textContent = 'Uploading...'
+    document.getElementById('droplabel').textContent = 'Uploading'
     window.isUploading = true
-    showSpinner()
+    document.getElementById('upload-spinner').hidden = false
 
     if (files.length > 1) {
       uploadAll(_.toArray(files))
@@ -131,7 +145,7 @@ document.addEventListener('turbolinks:load', function() {
   }
 
   form.addEventListener('change', function() {
-    showSpinner({color: '#000'})
+    document.getElementById('upload-spinner').hidden = false
     window.isUploading = true
     upload(document.getElementById('file').files[0])
   })

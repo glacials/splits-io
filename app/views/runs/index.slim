@@ -50,8 +50,8 @@
             ' To help you get better, Splits.io needs access to your splits. This will let us generate charts, comparisons,
             ' and statistics!
           form#upload method='post' enctype='multipart/form-data'
-            input#file.d-none type='file' name='file' onchange="document.forms[0].submit();"
-            label.btn.btn-primary.m-0 for='file' onclick='document.getElemenyById("file").click()' Upload your splits
+            input#file.d-none type='file' name='file' onchange="document.getElementById('file-label').classList.add('disabled')"
+            label#file-label.btn.btn-primary.m-0 for='file' Upload your splits
       .card.col-md-12
         .card-body
           h4.card-title Other ways to upload
