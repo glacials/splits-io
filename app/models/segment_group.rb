@@ -82,32 +82,39 @@ class SegmentGroup
 
   private
 
-  def subsplit_durations_by_attempt
-    return @subsplit_durations_by_attempt if @subsplit_durations_by_attempt
-    @subsplit_durations_by_attempt = {
+  # durations_by_attempt returns a hash of realtime and gametime hashes each with a key of the attempt number and a
+  # value of the real/game time duration of the entire segment_group
+  def durations_by_attempt
+    return @durations_by_attempt if @durations_by_attempt
+    @durations_by_attempt = {
       Run::REAL => Hash.new { |h, k| h[k] = [] },
       Run::GAME => Hash.new { |h, k| h[k] = [] }
     }
 
+    # First, collect all the durations for each segment in the group for each attempt
     segments.each do |segment|
       segment.histories.each do |history|
-        previous_attempt = segments[segment.segment_number - 1]&.histories&.find { |attempt| attempt.attempt_number == history.attempt_number }
-        @subsplit_durations_by_attempt[Run::REAL][history.attempt_number] << history.realtime_duration_ms unless history.realtime_duration_ms == 0 || previous_attempt&.realtime_duration_ms == 0
-        @subsplit_durations_by_attempt[Run::GAME][history.attempt_number] << history.gametime_duration_ms unless history.gametime_duration_ms == 0 || previous_attempt&.gametime_duration_ms == 0
-      end
-    end
-    @subsplit_durations_by_attempt.keys.each do |timing|
-      max_length = @subsplit_durations_by_attempt[timing].values.map(&:length).max
-      @subsplit_durations_by_attempt[timing].delete_if { |key, value| value.length < max_length}
-    end
-
-    @subsplit_durations_by_attempt.keys.each do |timing|
-      @subsplit_durations_by_attempt[timing].keys.each do |attempt_number|
-        @subsplit_durations_by_attempt[timing][attempt_number] = @subsplit_durations_by_attempt[timing][attempt_number].sum
+        previous_segment = segments[segment.segment_number - 1]&.histories&.find { |attempt| attempt.attempt_number == history.attempt_number }
+        # Don't store a segment's duration if it is 0 or if the previous segment's duration was 0 (and thus skipped)
+        @durations_by_attempt[Run::REAL][history.attempt_number] << history.realtime_duration_ms unless history.realtime_duration_ms == 0 || previous_segment&.realtime_duration_ms == 0
+        @durations_by_attempt[Run::GAME][history.attempt_number] << history.gametime_duration_ms unless history.gametime_duration_ms == 0 || previous_segment&.gametime_duration_ms == 0
       end
     end
 
-    @subsplit_durations_by_attempt
+    # Only keep attempts who have times for all segments
+    @durations_by_attempt.keys.each do |timing|
+      max_length = @durations_by_attempt[timing].values.map(&:length).max
+      @durations_by_attempt[timing].delete_if { |key, value| value.length < max_length}
+    end
+
+    # Sum the segment times for each attempt and store those as opposed to the individual segment durations
+    @durations_by_attempt.keys.each do |timing|
+      @durations_by_attempt[timing].keys.each do |attempt_number|
+        @durations_by_attempt[timing][attempt_number] = @durations_by_attempt[timing][attempt_number].sum
+      end
+    end
+
+    @durations_by_attempt
   end
 
   def percentile(values_sorted, percent)
