@@ -34,9 +34,6 @@ const buildRunProgressChart = function(runs, options = {}) {
         text: 'Percent of Runs Reached Split'
       }
     },
-    tooltip: {
-      pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: {point.y}%',
-    },
     series: runs.map((run, i) => (
       {
         data: run.segments.map((segment) => (
@@ -44,15 +41,11 @@ const buildRunProgressChart = function(runs, options = {}) {
         )),
         name: (run.runners[0] || {name: '???'}).name,
         colorByPoint: runs.length == 1,
-        // dataLabels: {
-        //   formatter: function() { return moment.duration(this.y).format('H:mm:ss') }
-        // },
-
-        // tooltip: {
-        //   pointFormatter: function() {
-        //     return `<span style="color:${this.series.color}">\u25CF</span> ${this.series.name}: ${this.y}%`
-        //   }
-        // }
+        tooltip: {
+          pointFormatter: function() {
+            return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: ${this.y}% | ${run.segments[this.index].histories.length} runs`
+          }
+        }
       }
     ))
   }))
