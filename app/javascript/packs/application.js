@@ -17,6 +17,28 @@ const momentDurationFormatSetup = require('moment-duration-format')
 
 momentDurationFormatSetup(moment)
 
+import Vue from 'vue/dist/vue.esm'
+
+import TurbolinksAdapter from 'vue-turbolinks'
+import VueTippy from 'vue-tippy'
+
+import race from '../vue/race.js'
+import raceCreate from '../vue/race-create.js'
+
+Vue.use(TurbolinksAdapter)
+Vue.use(VueTippy)
+
+document.addEventListener('turbolinks:load', () => {
+  if (document.getElementById('vue-race') === null) {
+    return
+  }
+
+  const app = new Vue({
+    el: '#vue-race',
+    components: { race, raceCreate },
+  })
+})
+
 // Using Google charts for now (a script tag in app/views/layouts/admin/application.slim) because Chartkick + Highcharts
 // doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
 import Chartkick from "chartkick"

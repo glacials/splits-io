@@ -27,7 +27,7 @@ class RunsController < ApplicationController
     if params['reparse'] == '1'
       @run.update(parsed_at: nil) if @run.parsed?
       ParseRunJob.perform_later(@run)
-      redirect_to(run_path(@run), notice: 'Your reparse is in progress.kYou will be taken to it automatically.')
+      redirect_to(run_path(@run), notice: 'Your reparse is in progress. You will be taken to it automatically.')
       return
     end
   end

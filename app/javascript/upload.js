@@ -35,6 +35,7 @@ const upload = async function(file, options) {
     if(s3Response.status === 400 && !options.bulk) {
       Turbolinks.visit('/cant-parse')
     }
+    document.getElementById('droplabel').textContent = 'Uploading'
 
     if(!options.bulk) {
       Turbolinks.visit(splitsioResponse.uris.claim_uri)
@@ -43,10 +44,10 @@ const upload = async function(file, options) {
     }
   }).catch(function(error) {
     // If we are bulk uploading, let the uploadAll function handle the error
-    throw error
     window.isUploading = false
     document.getElementById('droplabel').innerHTML = `Error: ${error.message}.<br />Try again, or email help@splits.io!<br />`
     document.getElementById('upload-spinner').hidden = true
+    throw error
   })
 }
 

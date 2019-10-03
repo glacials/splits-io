@@ -7,8 +7,7 @@ html
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
     script src='https://js.stripe.com/v3/' defer='defer'
-    = javascript_pack_tag('application',   data: {turbolinks_track: 'reload'}, defer: true)
-    = javascript_pack_tag('race',          data: {turbolinks_track: 'reload'}, defer: true)
+    = javascript_pack_tag('application', data: {turbolinks_track: 'reload'}, defer: true)
     = javascript_include_tag('https://checkout.stripe.com/checkout.js', defer: true)
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     script src='https://www.youtube.com/iframe_api' defer='defer'
