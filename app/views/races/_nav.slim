@@ -5,7 +5,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
         :disabled='loading.leave'
         :title='errors.leave'
         @click='leave'
-        v-if='entry'
+        v-if='entry && !race.started_at'
         v-tippy=true
       )
         template v-if="loading.leave" = render partial: 'shared/spinner'
@@ -30,7 +30,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
       )
         template v-if="loading.unfinish" = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.unfinish' => icon('fas', 'exclamation-triangle')
-        template v-else=true Unfinish
+        template v-else=true Undo finish
       button.btn.btn-secondary(
         :disabled='loading.unforfeit'
         :title='errors.unforfeit'
@@ -82,4 +82,6 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
 
     .btn-group.mr-2 v-if="entry && race.started_at && entry.forfeited_at"
       button.btn.btn-outline-light disabled=true Forfeited
-small.text-secondary The race will start 20 seconds after the last person readies up.
+    br
+    small.text-secondary v-if="!race.started_at"
+      ' The race will start 20 seconds after the last person readies up.
