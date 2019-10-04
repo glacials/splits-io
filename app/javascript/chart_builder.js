@@ -88,7 +88,7 @@ document.addEventListener('turbolinks:load', function() {
       buildBoxPlot(runs, chartOptions)
       buildSegmentChart(runs, chartOptions)
       buildResetChart(runs, chartOptions)
-      buildRunProgressVariwideChart(runs, chartOptions)
+      buildRunProgressChart(runs, chartOptions)
       buildPlaytimeChart(runs, chartOptions)
 
       runs[0].segments.filter(segment => !segment.skipped).forEach((segment, i) => {
