@@ -39,9 +39,7 @@ class Race < ApplicationRecord
   # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
   # or have more than 2 entries. this includes races that have finished
   def self.unabandoned
-    where('races.updated_at > ?', ABANDON_TIME.ago).or(
-      where(id: Entry.nonghosts.having('count(*) > 1').group(:race_id).select(:race_id))
-    )
+    where('races.updated_at > ?', ABANDON_TIME.ago)
   end
 
   # active returns all non-finished unabandoned races

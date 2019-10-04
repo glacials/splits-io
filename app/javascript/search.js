@@ -1,5 +1,5 @@
-require('corejs-typeahead')
-import Bloodhound from 'corejs-typeahead'
+import typeahead from "typeahead.js";
+import Bloodhound from 'bloodhound-js'
 import Handlebars from 'handlebars'
 
 document.addEventListener("turbolinks:before-cache", function() {

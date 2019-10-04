@@ -22,6 +22,11 @@ class Api::V4::WebsocketMessage
 
     new_attachment
     new_card
+
+    run_state
+    run_parsed
+    run_not_found
+    cant_parse_run
   ].freeze
 
   HTML_TYPES = TYPES.map { |t| "#{t}:html" }.freeze

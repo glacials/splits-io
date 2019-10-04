@@ -1,22 +1,24 @@
 version: '3.7'
+x-args:
+  &server-args
+    RUBY_VERSION: '2.6.3' # also update docker-compose.yml & Gemfile
+    SPLITSIO_CLIENT_ID: $SPLITSIO_CLIENT_ID
+    STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY
 x-environment:
   &server-environment
   - ASSET_HOST
   - AWS_ACCESS_KEY_ID
   - AWS_REGION
   - AWS_SECRET_KEY
-  - BUNDLE_WITHOUT=test:development
   - DATABASE_URL
   - ENABLE_ADS=1
   - GOOGLE_CLIENT_ID
   - GOOGLE_CLIENT_SECRET
   - NEW_RELIC_LICENSE_KEY
-  - NODE_ENV=production
   - PATREON_CLIENT_ID
   - PATREON_CLIENT_SECRET
   - PATREON_WEBHOOK_SECRET
-  - QUEUES=discover_runner,highlight_cleanup,race_cleanup,refresh_game,sync_user_follows,v4_races # keep this in sync with every job in app/jobs
-  - RACK_ENV=production
+  - QUEUES=discover_runner,highlight_cleanup,race_cleanup,refresh_game,sync_user_follows,v4_races,parse_run # keep this in sync with every job in app/jobs
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
   - RAILS_SERVE_STATIC_FILES=1
   - RAILS_SKIP_ASSET_COMPILATION=false
@@ -31,34 +33,39 @@ x-environment:
   - SKYLIGHT_AUTHENTICATION
   - SPLITSIO_CLIENT_ID
   - SPLITSIO_CLIENT_SECRET
+  - STRIPE_PLAN_ID_TIER1=plan_FmTrtxmjMQtRZw
+  - STRIPE_PLAN_ID_TIER2=plan_FmTrIECG2yldww
+  - STRIPE_PUBLISHABLE_KEY
+  - STRIPE_SECRET_KEY
+  - STRIPE_WEBHOOK_SECRET
   - TWITCH_CLIENT_ID
   - TWITCH_CLIENT_SECRET
 x-logging:
   &default-logging
   driver: json-file
   options:
-    max-size: 1m
+    max-size: 100m
     max-file: "1"
 
 services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
-    command: bash -c "rm -f /app/tmp/pids/server.pid && yarn install && bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      dockerfile: Dockerfile-production
+      args: *server-args
+    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment: *server-environment
-    image: web
+    image: web-production
     logging: *default-logging
     ports:
       - 3000:3000
-    volumes:
-      - .:/app
   worker:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-production
+      args: *server-args
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work" # bin/delayed_job doesn't obey QUEUES
     environment: *server-environment
-    image: worker
+    image: worker-production
     logging: *default-logging
     ports: []

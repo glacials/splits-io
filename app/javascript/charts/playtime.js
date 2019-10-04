@@ -27,16 +27,24 @@ const buildPlaytimeChart = function(runs, options = {}) {
 
   const playtimeBetweenPBs = runs.map(run => {
     let lastPB = null
-    let playtime = 0
 
     return run.histories.sort(attemptSort).filter(runAttempt => runAttempt[duration] > 0).map(runAttempt => {
       if (lastPB === null || runAttempt[duration] < lastPB[duration]) {
         lastPB = runAttempt
         return [
-          run.segments.map(segment => segment.histories).flat().
-          filter(segmentAttempt => segmentAttempt.attempt_number <= runAttempt.attempt_number).
-          map(segmentAttempt => segmentAttempt[duration]).
-          reduce((playtime, segmentAttempt) => playtime + segmentAttempt, 0),
+          run.histories.filter(historicalAttempt => historicalAttempt.attempt_number <= runAttempt.attempt_number).
+          map((historicalAttempt) => {
+            let endedAt = moment(historicalAttempt.ended_at).format('x')
+            if (endedAt === 'Invalid date') {
+              endedAt = historicalAttempt.realtime_duration_ms || 0
+            }
+            let startedAt = moment(historicalAttempt.started_at).format('x')
+            if (startedAt === 'Invalid date') {
+              startedAt = 0
+            }
+            return endedAt - startedAt
+          }).
+          reduce((playtime, attemptDuration) => playtime + attemptDuration, 0),
           runAttempt[duration]
         ]
       } else {

@@ -5,7 +5,7 @@ module ApplicationHelper
 
   def order_runs(runs)
     dir = %w[asc desc].include?(params[:order]) ? params[:order] : 'desc'
-    runs.includes(:video).order(by(params[:by]) => dir)
+    runs.left_joins(:video).order(by(params[:by]) => dir)
   end
 
   def on_a_profile_page?

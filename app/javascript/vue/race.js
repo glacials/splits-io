@@ -15,7 +15,7 @@ export default {
     raceChat,
     raceDisclaimer,
     raceTitle,
-    raceStreams
+    raceStreams,
   },
   created: async function() {
     this.error = false

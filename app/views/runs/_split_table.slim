@@ -145,5 +145,7 @@
                         ) = icon('fas', 'question-circle')
                     h4.card-subtitle = format_ms(history_stats[:percentiles][99], precise: run.short?(timing))
                 .segment-duration-chart-alert.alert.alert-danger.my-3 hidden=true
-                .segment-spinner.my-3
+                .segment-spinner.text-success.text-center.my-5
+                  span.mr-2 = render partial: 'shared/spinner'
+                  h5.d-inline.text-success Loading charts
                 .segment-duration-chart id="segment-duration-chart-#{segment.id}" data-segment=segment.id

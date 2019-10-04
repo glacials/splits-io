@@ -3,8 +3,8 @@
   .card: .card-body: i This run doesn't have #{timing}time splits.
 - else
   - if run.video&.supports_embedding?
-    div style="height: 1em": span.video-progress-line id="video-progress-line-#{run.id36}"
-  .timeline-background
+    div style="height: 1em": span.video-progress-line.timeline-animation id="video-progress-line-#{run.id36}"
+  .timeline-background.timeline-animation data={run_id: run.id36}
     .timeline.shadow style="width: #{run.duration(timing) / scale_to * 100.0}%"
       - run.collapsed_segments(timing).each.with_index do |segment, index|
         .pure-u.split(
@@ -20,7 +20,7 @@
                 = segment.duration(timing).format(precise: run.short?(timing))
               - else
                 b In progress
-  .gold.timeline style="width: #{run.duration(timing) / scale_to * 100.0}%"
+  .gold.timeline.timeline-animation style="width: #{run.duration(timing) / scale_to * 100.0}%"
     - run.collapsed_segments(timing).each_with_index do |segment, index|
       div style="width: #{segment.proportion(timing) * 100.0}%"
         - if segment.shortest_duration(timing).present?

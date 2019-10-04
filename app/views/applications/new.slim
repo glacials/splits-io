@@ -16,20 +16,15 @@
         br
         = form_for(Doorkeeper::Application.new, url: applications_path) do |f|
           .form-group
-            p
-              .row
-                .col-lg-8
-                  = f.text_field(:name, class: 'form-control', placeholder: 'Application name (what users will see)')
-            p
-              .row
-                .col-lg-8
-                  = f.text_field(:redirect_uri, class: 'form-control', placeholder: 'Redirect URI (include http:// or https://)')
-                .col-lg-4
-                  span If you haven't created a page for Splits I/O to redirect users back to yet, put
-                  code<> debug
-                  span here and change it later.
-            p
-              .row
-                .col-lg-8
-                  .input-group-btn
-                    = f.submit 'Create', class: 'btn btn-success'
+            p: .row
+              .col-lg-8
+                = f.text_field(:name, class: 'form-control', placeholder: 'Application name (what users will see)')
+            p: .row
+              .col-lg-8
+                = f.text_field(:redirect_uri, class: 'form-control', placeholder: 'Redirect URI (include http:// or https://)')
+              .col-lg-4
+                span If you haven't created a page for Splits.io to redirect users back to yet, put
+                code<> debug
+                span here and change it later.
+            p: .row: .col-lg-8: .input-group-btn
+              = f.submit 'Create', class: 'btn btn-success'
