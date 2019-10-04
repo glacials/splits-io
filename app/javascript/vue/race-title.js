@@ -11,7 +11,10 @@ export default {
         return []
       }
 
-      return [{id: null, name: '<N/A / Race-specific category>'}, ...this.game.categories.filter(category => category.srdc_id)]
+      return [
+        {id: null, name: '<N/A / Race-specific category>'},
+        ...this.game.categories.filter(category => category.srdc_id)
+      ]
     },
     category: function() {
       return this.categories.find(category => category.id === this.categoryId)
