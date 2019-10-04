@@ -3,7 +3,7 @@ class Api::V4::GamesController < Api::V4::ApplicationController
 
   def index
     if params[:search].blank?
-      @games = Game.joins(:srdc).includes(:categories)
+      @games = Game.joins(:srdc).includes(:categories).order(:name)
     else
       id_search = Game.find_by(id: params[:search])
       @games = Game.search(params[:search]).includes(:categories)
