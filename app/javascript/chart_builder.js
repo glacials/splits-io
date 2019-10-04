@@ -4,6 +4,7 @@ import {buildSegmentChart} from "charts/segment.js"
 import {buildPlaytimeChart} from "charts/playtime.js"
 import {buildResetChart} from "charts/reset.js"
 import {buildBoxPlot} from "charts/box_plot.js"
+import {buildRunProgressChart} from "charts/run_progress.js"
 import {chartOptions} from "consts.js"
 import Highcharts from 'highcharts'
 import _ from 'underscore'
@@ -69,6 +70,7 @@ document.addEventListener('turbolinks:load', function() {
       buildBoxPlot(runs, chartOptions)
       buildSegmentChart(runs, chartOptions)
       buildResetChart(runs, chartOptions)
+      buildRunProgressChart(runs, chartOptions)
       buildPlaytimeChart(runs, chartOptions)
 
       runs[0].segments.filter(segment => !segment.skipped).forEach((segment, i) => {
@@ -114,6 +116,36 @@ document.addEventListener('click', event => {
   // not in the DOM.
   const segCharts = Highcharts.charts.filter(chart => chart.renderTo.id === `segment-duration-chart-${segId}`)
   segCharts.forEach(chart => chart.reflow())
+})
+
+document.addEventListener('click', event => {
+  const resetChartToggler = event.target.querySelector('input[name="reset-chart-buttons"]')
+  if (!resetChartToggler) {
+    return
+  }
+
+  let newlySelectedChart
+  let previouslySelectedChart
+  let oldLabel
+
+  if (resetChartToggler.id === 'resets-chart-button') {
+    newlySelectedChart = document.getElementById('reset-chart')
+    previouslySelectedChart = document.getElementById('run-progress-chart')
+    oldLabel = document.getElementById('run-progress-chart-button').parentNode
+  } else if (resetChartToggler.id === 'run-progress-chart-button') {
+    newlySelectedChart = document.getElementById('run-progress-chart')
+    previouslySelectedChart = document.getElementById('reset-chart')
+    oldLabel = document.getElementById('resets-chart-button').parentNode
+  }
+
+  if (!newlySelectedChart) {
+    return
+  }
+
+  newlySelectedChart.classList.remove('d-none')
+  previouslySelectedChart.classList.add('d-none')
+  resetChartToggler.parentNode.classList.add('disabled')
+  oldLabel.classList.remove('disabled')
 })
 
 window.addEventListener('resize', () => {

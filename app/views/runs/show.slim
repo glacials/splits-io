@@ -51,7 +51,16 @@
             #run-duration-chart.card.my-3
             #box-plot.card.my-3
             #segment-chart.card.my-3
-            #reset-chart.card.my-3
+            #reset-chart-container.card.my-3
+              .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
+                label.btn.btn-sm.btn-secondary.text-white.active.disabled
+                  input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
+                  ' Resets Per Split
+                label.btn.btn-sm.btn-secondary.text-white
+                  input#run-progress-chart-button type="radio" name="reset-chart-buttons"
+                  'Run Progress
+              #reset-chart.my-3
+              #run-progress-chart.my-3.d-none
             - if @run.histories.any?
               - if current_user.try(:has_predictions?)
                 .my-3
