@@ -10,7 +10,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
       )
         template v-if="loading.leave" = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.leave' => icon('fas', 'exclamation-triangle')
-        template v-else=true Leave race
+        ' Leave race
       button.btn.btn-outline-light(
         :disabled='loading.unready'
         :title='errors.unready'
@@ -20,7 +20,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
       )
         template v-if='loading.unready' = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.unready' => icon('fas', 'exclamation-triangle')
-        template v-else=true Undo ready
+        ' Undo ready
       button.btn.btn-secondary(
         :disabled='loading.unfinish'
         :title='errors.unfinish'
@@ -30,7 +30,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
       )
         template v-if="loading.unfinish" = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.unfinish' => icon('fas', 'exclamation-triangle')
-        template v-else=true Undo finish
+        ' Undo finish
       button.btn.btn-secondary(
         :disabled='loading.unforfeit'
         :title='errors.unforfeit'
@@ -40,7 +40,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
       )
         template v-if="loading.unforfeit" = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.unforfeit' => icon('fas', 'exclamation-triangle')
-        template v-else=true Undo forfeit
+        ' Undo forfeit
 
     .btn-group.mr-2 v-if='!entry && !race.started_at'
       button.btn.btn-outline-light v-tippy=true :title='errors.join' :disabled='loading.join || !currentUser' @click='join'
