@@ -3,10 +3,10 @@ class Api::V4::GamesController < Api::V4::ApplicationController
 
   def index
     if params[:search].blank?
-      @games = Game.joins(:srdc).includes(:categories).order(:name)
+      @games = Game.joins(:srdc).includes(:srdc, categories: [:srdc]).order(:name)
     else
       id_search = Game.find_by(id: params[:search])
-      @games = Game.search(params[:search]).includes(:categories)
+      @games = Game.search(params[:search]).includes(:srdc, categories: [:srdc])
       @games = @games.to_ary.unshift(id_search) if id_search.present?
     end
     render json: Api::V4::GameBlueprint.render(@games, root: :games, toplevel: :game)
