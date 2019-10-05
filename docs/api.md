@@ -256,6 +256,7 @@ which you should substitite any time you see `:run` in these docs.
 | `program`                 | string                       | never                                                 | The name of the timer with which the run was recorded. This is typically an all lowercase, no-spaces version of the program name.                                                                                                            |
 | `attempts`                | number                       | when not supported by the source timer                | The number of run attempts recorded by the timer that generated the run's source file.                                                                                                                                                       |
 | `image_url`               | string                       | when not supplied by runner                           | A screenshot of the timer after a finished run. This is typically supplied automatically by timers which support auto-uploading runs to Splits.io.                                                                                           |
+| `parsed_at`               | string                       | when not yet parsed                                   | The time and date at which this run's source file was finished being parsed by Splits.io. This field conforms to [ISO 8601][iso8601].                                                                                                        |
 | `created_at`              | string                       | never                                                 | The time and date at which this run's source file was uploaded to Splits.io. This field conforms to [ISO 8601][iso8601].                                                                                                                     |
 | `updated_at`              | string                       | never                                                 | The time and date at which this run was most recently modified on Splits.io (modify events include disowning, adding a video or speedrun.com association, and changing the run's game/category). This field conforms to [ISO 8601][iso8601]. |
 | `video_url`               | string                       | when not supplied by runner                           | A URL for a Twitch, YouTube, or Hitbox video which can be used as proof of the run. This is supplied by the runner.                                                                                                                          |
@@ -307,11 +308,13 @@ If a `historic=1` param is included in the request, one additional field will be
 #### History
 History objects have the following format.
 
-| Field                  | Type   | Null? | Description                                              |
-|:-----------------------|:-------|:------|:---------------------------------------------------------|
-| `attempt_number`       | number | never | The correpsonding attempt number this attempt was.       |
-| `realtime_duration_ms` | number | never | The realtime duration this attempt took in milliseconds. |
-| `gametime_duration_ms` | number | never | The gametime duration this attempt took in milliseconds. |
+| Field                  | Type   | Null?          | Description                                                                                |
+|:-----------------------|:-------|:---------------|:-------------------------------------------------------------------------------------------|
+| `attempt_number`       | number | never          | The correpsonding attempt number this attempt was.                                         |
+| `realtime_duration_ms` | number | never          | The realtime duration this attempt took in milliseconds.                                   |
+| `gametime_duration_ms` | number | never          | The gametime duration this attempt took in milliseconds.                                   |
+| `started_at`           | string | when not known | The date and time of when the attempt started. This field conforms to [ISO 8601][iso8601]. |
+| `ended_at`             | string | when not known | The date and time of when the attempt ended. This field conforms to [ISO 8601][iso8601].   |
 </details>
 
 <details>

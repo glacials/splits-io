@@ -276,7 +276,6 @@ ActiveRecord::Schema.define(version: 2019_09_21_232640) do
     t.string "program"
     t.string "claim_token"
     t.boolean "archived", default: false, null: false
-    t.string "video_url"
     t.string "srdc_id"
     t.integer "attempts"
     t.string "s3_filename", null: false

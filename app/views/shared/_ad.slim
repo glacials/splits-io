@@ -1,8 +1,9 @@
-- if ENV['ENABLE_ADS'] == '1' && (current_user.nil? || current_user.should_see_ads?) && !on_landing_page?
-  article
-    div#carbonads-holder
-      .card
-        .card-body
-          script async=true type="text/javascript" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=splitsio" id="_carbonads_js"
-        .card-footer
-          a href=subscriptions_path Remove Ads
+- if ENV['ENABLE_ADS'] == '1' && (current_user.nil? || current_user.should_see_ads?)
+  - if !on_landing_page? && !current_page?(controller: 'subscriptions')
+    article
+      div#carbonads-holder
+        .card
+          .card-body
+            script async=true type="text/javascript" src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=splitsio" id="_carbonads_js"
+          .card-footer
+            a href=subscriptions_path Remove Ads

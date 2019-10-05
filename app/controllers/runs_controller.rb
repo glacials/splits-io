@@ -1,9 +1,7 @@
 require 'uri'
 
 class RunsController < ApplicationController
-  before_action :set_run,         only: [:show, :destroy, :edit, :update]
-
-  before_action :first_parse, only: [:show, :edit, :update], if: -> { @run.parsed_at.nil? }
+  before_action :set_run, only: [:show, :destroy, :edit, :update]
 
   before_action :warn_about_deprecated_url, only: [:show], if: -> { request.path == "/#{@run.nick}" }
   before_action :attempt_to_claim,          only: [:show], if: -> { params[:claim_token].present? }
@@ -11,17 +9,7 @@ class RunsController < ApplicationController
   before_action :maybe_update_followers, only: [:index]
 
   def show
-    if params['reparse'] == '1'
-      @run.parse_into_db
-      redirect_to run_path(@run)
-      return
-    end
-
-    @run.parse_into_db if @run.parsed_at.nil?
-    @run.reload
-
-    # Catch bad runs
-    render :cant_parse, status: :internal_server_error if @run.timer.nil?
+    ParseRunJob.perform_later(@run) unless @run.parsed?
   end
 
   def index
@@ -37,8 +25,9 @@ class RunsController < ApplicationController
     end
 
     if params['reparse'] == '1'
-      @run.parse_into_db
-      redirect_to edit_run_path(@run), notice: 'Reparse complete. It might take a minute for your run to update.'
+      @run.update(parsed_at: nil) if @run.parsed?
+      ParseRunJob.perform_later(@run)
+      redirect_to(run_path(@run), notice: 'Your reparse is in progress. You will be taken to it automatically.')
       return
     end
   end
@@ -126,7 +115,6 @@ class RunsController < ApplicationController
 
   def set_run
     @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
-    @run.parse_into_db unless @run.parsed?
     timing = params[:timing] || @run.default_timing
     if ![Run::REAL, Run::GAME].include?(timing)
       redirect_to(request.path, alert: 'Timing can only be real or game.')
@@ -154,14 +142,6 @@ class RunsController < ApplicationController
     gon.scale_to = @run.duration_ms(timing)
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: :not_found
-  end
-
-  def first_parse
-    @run.parse_into_db
-    return unless @run.parsed_at.nil?
-
-    @run.destroy
-    redirect_to cant_parse_path
   end
 
   def warn_about_deprecated_url

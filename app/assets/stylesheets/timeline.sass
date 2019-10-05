@@ -56,6 +56,7 @@
 .gold.timeline
   background: $green
   font-size: .5em
+  position: relative
 
 .gold-split
   background-color: $light-black
@@ -66,8 +67,14 @@
   padding: 0
   width: .45em
 
+.timeline-animation
+  left: 0px
+  transition-duration: 0.2s
+  transition-property: left
+
 .timeline-background
   background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1), 6px, rgba(0, 0, 0, .1) 6px, rgba(0, 0, 0, .1) 12px)
+  position: relative
 
 .video-progress-line
   height: 6em
