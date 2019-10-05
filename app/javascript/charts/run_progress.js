@@ -37,7 +37,7 @@ const buildRunProgressChart = function(runs, options = {}) {
     series: runs.map((run, i) => (
       {
         data: run.segments.map((segment) => (
-          [segment.name, parseFloat((segment.histories.length / run.attempts * 100).toFixed(1)), 20]
+          [segment.dispaly_name, parseFloat((segment.histories.length / run.attempts * 100).toFixed(1)), 20]
         )),
         name: (run.runners[0] || {name: '???'}).name,
         colorByPoint: runs.length == 1,
