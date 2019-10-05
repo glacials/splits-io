@@ -53,6 +53,9 @@ document.addEventListener('turbolinks:load', function() {
     }
   }
 
+  if (document.getElementById('dismiss-claim-prompt') === null) {
+    return
+  }
   document.getElementById('dismiss-claim-prompt').addEventListener('click', function() {
     document.getElementById('claim-prompt').hidden = true
     localStorage.removeItem(claimTokenKey)

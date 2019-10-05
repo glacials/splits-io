@@ -1,6 +1,6 @@
 class Api::V4::RunBlueprint < Blueprinter::Base
   fields :srdc_id, :program, :attempts, :image_url, :realtime_duration_ms, :gametime_duration_ms,
-         :realtime_sum_of_best_ms, :gametime_sum_of_best_ms, :default_timing, :created_at, :updated_at
+         :realtime_sum_of_best_ms, :gametime_sum_of_best_ms, :default_timing, :parsed_at, :created_at, :updated_at
 
   field :id do |run, _|
     run.id36

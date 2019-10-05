@@ -4,45 +4,13 @@
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('Upload', new_run_path)
 .col-md-7.col-lg-6.col-xl-5.mx-auto
-  #accordian.accordian
-    .card
-      #upload-header.card-header
-        h5.mb-0
-          button.btn.btn-link.text-light(
-            type='button'
-            data={toggle: 'collapse', target: '#upload-body'}
-            aria={expanded: true, controls: 'upload-body'}
-          ) Upload Runs
-      #upload-body.collapse.show aria={labelledby: 'upload-header'} data={parent: '#accordian'}
-        form#upload method='post' enctype='multipart/form-data'
-          .card-body
-            input#file type='file' name='file'
-            .alert.alert-info.d-none.d-sm-block.mt-4
-              b> Pssst!
-              ' You don't need to come to this page in the future. You can drag-and-drop your run files onto any Splits
-              ' I/O page.
-          .card-footer.clearfix: .float-right
-             .btn.btn-outline-light Upload
-    .card.d-sm-block
-      #convert-header.card-header
-        h5.mb-0
-          button.btn.btn-link.collapsed.text-light(
-            type='button'
-            data={toggle: 'collapse', target: '#convert-body'}
-            aria={expanded: false, controls: 'convert-body'}
-          ) Convert Runs
-      #convert-body.collapse aria={labelledby: 'convert-header'} data={parent: '#accordian'}
-        form#convert method='post' action='#' enctype='multipart/form-data'
-          .card-body
-            .form-row
-              .col-md-5
-                input#convert-file-input type='file' name='file'
-            .form-row
-              .col-md-6: h3.float-right →
-              .col-md-6
-                select.form-control#convert-format-select name='format'
-                  - Run.exportable_programs.each do |program|
-                    option value=program.to_sym = program.to_s
-                  option value='json' JSON
-          .card-footer.clearfix: .float-right
-            input.btn.btn-outline-light type='submit' value='Convert'
+  .card
+    form#upload method='post' enctype='multipart/form-data'
+      .card-body
+        input#file type='file' name='file'
+        .alert.alert-info.d-none.d-sm-block.mt-4
+          b> Pssst!
+          ' You don't need to come to this page in the future. You can drag-and-drop your run files onto any Splits.io
+          ' page.
+      .card-footer.clearfix: .float-right
+         .btn.btn-outline-light Upload

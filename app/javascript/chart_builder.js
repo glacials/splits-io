@@ -4,8 +4,8 @@ import {buildSegmentChart} from "charts/segment.js"
 import {buildPlaytimeChart} from "charts/playtime.js"
 import {buildResetChart} from "charts/reset.js"
 import {buildBoxPlot} from "charts/box_plot.js"
+import {buildRunProgressChart} from "charts/run_progress.js"
 import {chartOptions} from "consts.js"
-import {createSpinner} from 'spinner.js'
 import Highcharts from 'highcharts'
 import _ from 'underscore'
 
@@ -14,15 +14,6 @@ document.addEventListener('turbolinks:load', function() {
     return
   }
 
-  const segSpinners = document.getElementsByClassName('segment-spinner')
-  const spinners = []
-  for (const segSpinner of segSpinners) {
-    const spinner = createSpinner({
-      position: 'relative'
-    })
-    spinner.spin(segSpinner)
-    spinners.push(spinner)
-  }
   const runs = []
 
   runs.push(fetch(`/api/v4/runs/${gon.run.id}?historic=1&segment_groups=1`, {
@@ -36,13 +27,6 @@ document.addEventListener('turbolinks:load', function() {
   }
 
   Promise.all(runs).then(function(responses) {
-    spinners.forEach(spinner => {
-      spinner.stop()
-    })
-    for (const segSpinner of segSpinners) {
-      segSpinner.hidden = true
-    }
-
     if (responses.every(response => response.ok)) {
       return Promise.all(responses.map(response => response.json()))
     }
@@ -51,7 +35,6 @@ document.addEventListener('turbolinks:load', function() {
     let runs = bodies.map(body => body.run)
     const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
 
-    document.getElementById('chart-spinner').hidden = true
     document.getElementById('chart-holder').hidden = false
     if (runs[0].histories.length !== 0) {
       const skipped = `${timing}time_skipped`
@@ -87,6 +70,7 @@ document.addEventListener('turbolinks:load', function() {
       buildBoxPlot(runs, chartOptions)
       buildSegmentChart(runs, chartOptions)
       buildResetChart(runs, chartOptions)
+      buildRunProgressChart(runs, chartOptions)
       buildPlaytimeChart(runs, chartOptions)
 
       runs[0].segments.filter(segment => !segment.skipped).forEach((segment, i) => {
@@ -97,6 +81,7 @@ document.addEventListener('turbolinks:load', function() {
           chartOptions
         )
       })
+
       runs[0].segment_groups.forEach((segmentGroup, i) => {
         buildSegmentDurationChart(
           timing,
@@ -105,13 +90,15 @@ document.addEventListener('turbolinks:load', function() {
           chartOptions
         )
       })
+
+    Array.from(document.getElementsByClassName('segment-spinner')).forEach(spinner => spinner.hidden = true)
+    document.getElementById('chart-spinner').hidden = true
     }
   }).catch(function(error) {
     for (const segChartAlert of document.getElementsByClassName('segment-chart-alert')) {
       segChartAlert.textContent = `Error loading charts: ${error}`
       segChartAlert.hidden = false
     }
-    document.getElementById('chart-spinner').style.display = 'none'
     document.getElementById('chart-alert').textContent = `Error loading charts: ${error}`
     document.getElementById('chart-alert').hidden = false
 
@@ -138,6 +125,36 @@ document.addEventListener('click', event => {
   // not in the DOM.
   const segCharts = Highcharts.charts.filter(chart => chart.renderTo.id === `segment-duration-chart-${segId}`)
   segCharts.forEach(chart => chart.reflow())
+})
+
+document.addEventListener('click', event => {
+  const resetChartToggler = event.target.querySelector('input[name="reset-chart-buttons"]')
+  if (!resetChartToggler) {
+    return
+  }
+
+  let newlySelectedChart
+  let previouslySelectedChart
+  let oldLabel
+
+  if (resetChartToggler.id === 'resets-chart-button') {
+    newlySelectedChart = document.getElementById('reset-chart')
+    previouslySelectedChart = document.getElementById('run-progress-chart')
+    oldLabel = document.getElementById('run-progress-chart-button').parentNode
+  } else if (resetChartToggler.id === 'run-progress-chart-button') {
+    newlySelectedChart = document.getElementById('run-progress-chart')
+    previouslySelectedChart = document.getElementById('reset-chart')
+    oldLabel = document.getElementById('resets-chart-button').parentNode
+  }
+
+  if (!newlySelectedChart) {
+    return
+  }
+
+  newlySelectedChart.classList.remove('d-none')
+  previouslySelectedChart.classList.add('d-none')
+  resetChartToggler.parentNode.classList.add('disabled')
+  oldLabel.classList.remove('disabled')
 })
 
 window.addEventListener('resize', () => {

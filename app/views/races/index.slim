@@ -22,7 +22,8 @@ article
         li.nav-item
           = link_to('Historic', races_path(historic: '1'), class: "nav-link #{historic ? 'active' : ''}")
     = render partial: 'shared/race_table', locals: {races: races}
-    .card-footer
-      small
-        ' Showing races active in the last hour and races with more than one entrant. Races longer than 48 hours are
-        ' automatically closed.
+    - if params[:historic] == '1'
+      .card-footer
+        small
+          ' Showing races active in the last hour and races with more than one entrant. Races longer than 48 hours are
+          ' automatically closed.

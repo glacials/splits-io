@@ -2,8 +2,9 @@
 // You can generate new channels where WebSocket features live using the `rails generate channel` command.
 
 import { createConsumer } from "@rails/actioncable"
-
 import { getAccessToken } from '../token'
+
+const consumer = createConsumer(getWebsocketURL)
 
 function getWebsocketURL() {
   const token = getAccessToken()
@@ -16,4 +17,4 @@ function getWebsocketURL() {
 
 }
 
-export default createConsumer(getWebsocketURL)
+export default consumer

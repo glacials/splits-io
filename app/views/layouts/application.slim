@@ -7,8 +7,7 @@ html
     meta name='viewport' content='width=device-width, initial-scale=1'
     = render partial: 'shared/rollbarjs'
     script src='https://js.stripe.com/v3/' defer='defer'
-    = javascript_pack_tag('application',   data: {turbolinks_track: 'reload'}, defer: true)
-    = javascript_pack_tag('race',          data: {turbolinks_track: 'reload'}, defer: true)
+    = javascript_pack_tag('application', data: {turbolinks_track: 'reload'}, defer: true)
     = javascript_include_tag('https://checkout.stripe.com/checkout.js', defer: true)
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     script src='https://www.youtube.com/iframe_api' defer='defer'
@@ -21,14 +20,21 @@ html
     = Gon::Base.render_data
     #dropzone
       #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
-        h1#droplabel.inverted Drop anywhere!
+        #droplabel-container.text-success
+          span#upload-spinner.mr-2 = render partial: 'shared/spinner'
+          h5#droplabel.d-inline.text-success Waiting for drop
+          code#matrix.d-block.text-left.my-5 style='opacity: 0.5'
         #multiupload
-          h2
-            span#successful-uploads> 0
-            | uploaded
-          h2
-            span#failed-uploads> 0
-            | failures
+          .text-success
+            span#upload-spinner.mr-2 = render partial: 'shared/spinner'
+            h5.d-inline.text-success
+              span#successful-uploads> 0
+              | uploaded and processing
+          div
+            h6.d-inline
+              span#failed-uploads> 0
+              | failed to upload
+          p.text-light.mt-5 This page will update automatically.
       nav.navbar.navbar-expand-md.navbar-dark
         a.navbar-brand href=root_path
           img.logo src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'

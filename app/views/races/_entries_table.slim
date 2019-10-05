@@ -38,7 +38,7 @@ h6.card-header Entries
             - if entry.done? && (entry.finished_at.nil? || entry.finished_at < Time.now.utc)
               b class=entry_color(entry) = entry.duration.format(precise: true)
             - elsif race.started?
-              span data={abstime: race.started_at.rfc3339(3)} -
+              i In progress
           - unless race.finished?
             td.nowrap
               - if entry.run.present? && race.started?
