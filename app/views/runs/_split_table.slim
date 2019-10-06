@@ -3,7 +3,8 @@
   .table-responsive: table.card-body.table.mb-0
     thead: tr
       th.align-right #
-      th.text-center Icon
+      - if run.segments.map(&:icon).any?(&:attached?)
+        th.text-center Icon
       th.align-left Name
       th.align-right Duration
       th.align-right Finished At
@@ -14,7 +15,8 @@
         - compare_segment = compare_segments.compact.min_by { |s| s.duration(timing) }
         tr
           td.align-right.align-middle = segment.segment_number + 1
-          td.text-center.align-middle = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
+          - if run.segments.map(&:icon).any?(&:attached?)
+            td.text-center.align-middle = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
           td.align-left.align-middle = segment.name.presence || '-'
           td.align-right.align-middle
             - if segment.skipped?(timing) || segment.reduced?(timing)
