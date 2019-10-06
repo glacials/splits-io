@@ -111,6 +111,7 @@ gem 'dalli'
 gem 'bootstrap4-kaminari-views'
 gem 'font-awesome-sass', '~> 5.9'
 gem 'gon'
+gem 'image_processing'
 gem 'kaminari'
 gem 'purecss-rails', github: 'glacials/purecss-rails'
 gem 'sassc-rails'
@@ -120,7 +121,6 @@ gem 'webpacker', '>= 4.0.x'
 # workers/jobs
 gem 'daemons'
 gem 'delayed_job_active_record'
-gem 'foreman'
 gem 'redis'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

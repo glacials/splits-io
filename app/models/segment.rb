@@ -4,6 +4,8 @@ class Segment < ApplicationRecord
   # If SegmentHistory is changed to have child records, change this back to just :destroy
   has_many :histories, -> { order(attempt_number: :asc) }, class_name: 'SegmentHistory', dependent: :delete_all
 
+  has_one_attached :icon
+
   validates :name, presence: true
   validates :segment_number, presence: true, numericality: {only_integer: true}
 
@@ -189,6 +191,10 @@ class Segment < ApplicationRecord
 
   def to_s
     name
+  end
+
+  def name
+    read_attribute(:name) || '???'
   end
 
   def history_stats(timing)

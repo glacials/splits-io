@@ -15,7 +15,7 @@ module UnparsedRun
 
     def parse_into_db
       with_lock do
-        segments.delete_all
+        segments.each(&:destroy)
         histories.delete_all
 
         run = nil
@@ -138,33 +138,30 @@ module UnparsedRun
     def process_run_history(run)
       container = []
 
-      (0...run.attempt_history_len).each do |i|
-        attempt = run.attempt_history_index(i)
-        dates = [attempt.started, attempt.ended]
+      (0...run.attempt_history_len).each_slice(MAX_CONTAINER_SIZE) do |slice|
+        slice.each do |i|
+          attempt = run.attempt_history_index(i)
+          dates = [attempt.started, attempt.ended]
 
-        history = RunHistory.new(
-          run_id:               id,
-          attempt_number:       attempt.index.to_i,
-          realtime_duration_ms: attempt.time.real_time&.total_seconds&.*(1000) || nil,
-          gametime_duration_ms: attempt.time.game_time&.total_seconds&.*(1000) || nil,
-          pause_duration_ms:    attempt.pause_time&.total_seconds&.*(1000) || 0,
-          started_at:           dates[0] && DateTime.parse(dates[0].to_rfc3339),
-          ended_at:             dates[1] && DateTime.parse(dates[1].to_rfc3339)
-        )
+          history = RunHistory.new(
+            run_id:               id,
+            attempt_number:       attempt.index.to_i,
+            realtime_duration_ms: attempt.time.real_time&.total_seconds&.*(1000),
+            gametime_duration_ms: attempt.time.game_time&.total_seconds&.*(1000),
+            pause_duration_ms:    attempt.pause_time&.total_seconds&.*(1000) || 0,
+            started_at:           dates[0] && DateTime.parse(dates[0].to_rfc3339),
+            ended_at:             dates[1] && DateTime.parse(dates[1].to_rfc3339)
+          )
 
-        # See https://github.com/glacials/splits-io/pull/474/files#r241242051
-        dates.compact.each(&:dispose)
+          # See https://github.com/glacials/splits-io/pull/474/files#r241242051
+          dates.compact.each(&:dispose)
 
-        container << history
-        next if container.size < MAX_CONTAINER_SIZE
+          container << history
+        end
 
         write_run_histories(container)
         container = []
       end
-
-      return if container.blank?
-
-      write_run_histories(container)
     end
 
     def write_run_histories(histories)
@@ -176,64 +173,54 @@ module UnparsedRun
 
     def process_segments(run)
       container = {}
+      # Use an open struct here so we don't need first loop handling
       previous_segment = OpenStruct.new(realtime_end_ms: 0, gametime_end_ms: 0)
 
-      (0...run.len).each do |i|
-        lsc_segment = run.segment(i)
-        segment = Segment.new(
-          run_id:         id,
-          segment_number: i,
-          name:           lsc_segment.name || '',
-          icon:           lsc_segment.icon.presence # do something with this
-        )
+      (0...run.len).each_slice(MAX_CONTAINER_SIZE) do |slice|
+        slice.each do |i|
+          lsc_segment = run.segment(i)
+          segment = Segment.new(
+            run_id:         id,
+            segment_number: i,
+            name:           lsc_segment.name
+          )
+          icon = lsc_segment.icon
+          if icon.present?
+            segment.icon.attach(
+              # TODO: in the next LSC release, this will no longer by Data URL
+              io:       StringIO.new(Base64.decode64(icon.split('base64,')[1])),
+              filename: "#{id}_#{i}"
+            )
+          end
 
-        %w[real game].each do |timing|
-          segment.send(
-            "#{timing}time_end_ms=",
-            lsc_segment.personal_best_split_time.send("#{timing}_time")&.total_seconds&.*(1000) || 0
-          )
-          segment.send(
-            "#{timing}time_duration_ms=",
-            segment.send("#{timing}time_end_ms") - previous_segment.send("#{timing}time_end_ms")
-          )
-          segment.send(
-            "#{timing}time_start_ms=",
-            segment.send("#{timing}time_end_ms") - segment.send("#{timing}time_duration_ms")
-          )
-          segment.send(
-            "#{timing}time_shortest_duration_ms=",
-            lsc_segment.best_segment_time.send("#{timing}_time")&.total_seconds&.*(1000) || 0
-          )
-          segment.send(
-            "#{timing}time_skipped=",
-            segment.send("#{timing}time_duration_ms").zero?
-          )
-          segment.send(
-            "#{timing}time_gold=",
-            segment.send("#{timing}time_duration_ms") <= segment.send("#{timing}time_shortest_duration_ms")
-          )
-          segment.send(
-            "#{timing}time_reduced=",
-            false
-          )
+          segment.realtime_end_ms = lsc_segment.personal_best_split_time.real_time&.total_seconds&.*(1000) || 0
+          segment.realtime_duration_ms = segment.realtime_end_ms - previous_segment.realtime_end_ms
+          segment.realtime_start_ms = segment.realtime_end_ms - segment.realtime_duration_ms
+          segment.realtime_shortest_duration_ms = lsc_segment.best_segment_time.real_time&.total_seconds&.*(1000) || 0
+          segment.realtime_skipped = segment.realtime_duration_ms.zero?
+          segment.realtime_gold = segment.realtime_duration_ms <= segment.realtime_shortest_duration_ms
+          segment.realtime_reduced = false
+
+          segment.gametime_end_ms = lsc_segment.personal_best_split_time.game_time&.total_seconds&.*(1000) || 0
+          segment.gametime_duration_ms = segment.gametime_end_ms - previous_segment.gametime_end_ms
+          segment.gametime_start_ms = segment.gametime_end_ms - segment.gametime_duration_ms
+          segment.gametime_shortest_duration_ms = lsc_segment.best_segment_time.game_time&.total_seconds&.*(1000) || 0
+          segment.gametime_skipped = segment.gametime_duration_ms.zero?
+          segment.gametime_gold = segment.gametime_duration_ms <= segment.gametime_shortest_duration_ms
+          segment.gametime_reduced = false
+
+          container[lsc_segment] = segment
+          previous_segment = segment
         end
-
-        container[lsc_segment] = segment
-        previous_segment = segment
-        next if container.size < MAX_CONTAINER_SIZE
 
         result = write_segments(container.values)
         process_segment_histories(container.keys, result.ids)
         container = {}
       end
-
-      return if container.blank?
-
-      result = write_segments(container.values)
-      process_segment_histories(container.keys, result.ids)
     end
 
     def write_segments(segments)
+      # nil out all blank times here since we needed them before to be 0's for finding times
       segments.each do |seg|
         %w[real game].each do |timing|
           %w[time_end_ms time_duration_ms time_shortest_duration_ms].each do |field|
@@ -244,9 +231,12 @@ module UnparsedRun
       end
 
       result = Segment.import(segments)
-      return result unless result.failed_instances.any?
+      raise UnparsableRun if result.failed_instances.any?
 
-      raise UnparsableRun
+      segments.each do |segment|
+        segment.save
+      end
+      result
     end
 
     def process_segment_histories(lsc_segments, segment_ids)
@@ -260,8 +250,8 @@ module UnparsedRun
             container << SegmentHistory.new(
               segment_id:           segment_ids[i],
               attempt_number:       history_element.index,
-              realtime_duration_ms: history_element.time.real_time&.total_seconds&.*(1000) || 0,
-              gametime_duration_ms: history_element.time.game_time&.total_seconds&.*(1000) || 0
+              realtime_duration_ms: history_element.time.real_time&.total_seconds&.*(1000),
+              gametime_duration_ms: history_element.time.game_time&.total_seconds&.*(1000)
             )
 
             next if container.size < MAX_CONTAINER_SIZE

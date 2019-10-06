@@ -30,5 +30,7 @@ module SplitsIO
     config.action_cable.mount_path = '/api/cable'
 
     Webpacker::Compiler.env['STRIPE_PUBLISHABLE_KEY'] = ENV['STRIPE_PUBLISHABLE_KEY']
+
+    config.active_storage.variant_processor = :vips
   end
 end

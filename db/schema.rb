@@ -309,7 +309,7 @@ ActiveRecord::Schema.define(version: 2019_09_21_232640) do
     t.bigint "realtime_start_ms"
     t.bigint "realtime_end_ms"
     t.bigint "realtime_shortest_duration_ms"
-    t.string "name", null: false
+    t.string "name"
     t.boolean "realtime_gold", default: false, null: false
     t.boolean "realtime_reduced", default: false, null: false
     t.boolean "realtime_skipped", default: false, null: false
@@ -322,7 +322,6 @@ ActiveRecord::Schema.define(version: 2019_09_21_232640) do
     t.boolean "gametime_gold", default: false, null: false
     t.boolean "gametime_reduced", default: false, null: false
     t.boolean "gametime_skipped", default: false, null: false
-    t.string "icon"
     t.index ["run_id"], name: "index_segments_on_run_id"
   end
 

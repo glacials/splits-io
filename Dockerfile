@@ -6,7 +6,7 @@ FROM ruby:$RUBY_VERSION-alpine
 # gcompat for ffi to load LSC
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk update \
-    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash yarn \
+    && apk add -u --no-cache build-base vips-dev tzdata gcompat git postgresql-dev bash yarn \
     && rm -rf /var/cache/apk/*
 
 ENV LANG C.UTF-8
