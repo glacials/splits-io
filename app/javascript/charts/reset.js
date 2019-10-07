@@ -59,7 +59,7 @@ const buildResetChart = function(runs, options = {}) {
           const attemptsReachedSegment = attemptsSoFar
           attemptsSoFar = segment.histories.length
 
-          return [segment.name, attemptsReachedSegment - segment.histories.length]
+          return [segment.display_name, attemptsReachedSegment - segment.histories.length]
         }).filter(datum => datum[1] > 0),
         innerSize: '50%',
         linkedTo: ':previous',

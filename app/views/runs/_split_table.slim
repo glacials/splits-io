@@ -8,12 +8,12 @@
       th.align-right Finished At
       th.align-right Stats
     tbody
-      - compare_segments = compare_runs.map { |r| r.segments.order(segment_number: :asc) }
-      - run.segments.zip(*compare_segments).each do |segment, *compare_segments|
+      - compare_segments = compare_runs.map { |r| r.segments_with_groups }
+      - run.segments_with_groups.zip(*compare_segments).each do |segment, *compare_segments|
         - compare_segment = compare_segments.compact.min_by { |s| s.duration(timing) }
-        tr
-          td.align-right.align-middle = segment.segment_number + 1
-          td.align-left.align-middle = segment.name.presence || '-'
+        tr class="#{segment.segment_group_parent? ? 'segment-group' : ''}"
+          td.align-right.align-middle = segment.segment_group_parent? ? '' : segment.segment_number + 1
+          td.align-left.align-middle = segment.display_name.presence || '-'
           td.align-right.align-middle
             - if segment.skipped?(timing) || segment.reduced?(timing)
               span.time -

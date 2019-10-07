@@ -24,6 +24,10 @@ FactoryBot.define do
 
     # skipped splits
     skipped_splits:           {filename: 'livesplit_skipped_splits.lss'},
+
+    # subsplit
+    subsplits_with_titles:    {filename: 'livesplit_subsplits.lss'},
+    subsplits_without_titles: {filename: 'livesplit_subsplits_without_titles.lss'},
   }
 
   test_files.each do |_factory_name, file|

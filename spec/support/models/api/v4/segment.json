@@ -3,6 +3,7 @@
   "required": [
     "id",
     "name",
+    "display_name",
     "segment_number",
     "realtime_start_ms",
     "realtime_end_ms",
@@ -25,6 +26,9 @@
       "type": "string"
     },
     "name": {
+      "type": "string"
+    },
+    "display_name": {
       "type": "string"
     },
     "segment_number": {
