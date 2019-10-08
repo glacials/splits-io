@@ -1,9 +1,10 @@
 .btn-group
-  button#export-link.btn.btn-outline-light.dropdown-toggle(
+  button#export-link.btn.btn-dark.dropdown-toggle.tip(
     href='#'
     role='button'
     aria={haspopup: true, expanded: false}
     data={toggle: 'dropdown'}
+    title=local_assigns.fetch(:tooltip_text, nil)
   )
     => icon('fas', 'download')
     = local_assigns.fetch(:button_text, 'Export')

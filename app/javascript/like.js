@@ -36,7 +36,7 @@ const setLiked = (likeButton) => {
     return
   }
 
-  likeButton.classList.add('btn-light')
+  likeButton.classList.add('btn-dark')
   likeButton.classList.remove('btn-outline-light')
   likesCount.textContent = ++likesCount.dataset.value
 }
@@ -48,7 +48,7 @@ const setNotLiked = (likeButton) => {
     return
   }
 
-  likeButton.classList.remove('btn-light')
+  likeButton.classList.remove('btn-dark')
   likeButton.classList.add('btn-outline-light')
   likesCount.textContent = --likesCount.dataset.value
 }

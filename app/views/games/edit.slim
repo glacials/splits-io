@@ -5,8 +5,6 @@
     li.breadcrumb-item = link_to('Games', games_path)
     li.breadcrumb-item = link_to(@game, game_path(@game))
     li.breadcrumb-item = link_to('Edit', edit_game_path(@game))
-  h3 Edit game
-  h5 #{link_to @game, @game, class: 'stealth-link game-link'}
 article
   = form_for GameAlias.new, url: game_aliases_path(@game) do |f|
     h3 Merge games

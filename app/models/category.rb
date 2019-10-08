@@ -5,6 +5,8 @@ class Category < ApplicationRecord
   has_many :rivalries, dependent: :destroy
   has_many :races,     dependent: :nullify, class_name: 'Race'
 
+  has_many :run_histories, through: :runs, source: :histories
+
   has_many :users, through: :runs
 
   has_one :srdc, class_name: 'SpeedrunDotComCategory', dependent: :destroy
@@ -103,5 +105,17 @@ class Category < ApplicationRecord
     return nil if result.nil?
 
     Run.find(result.id)
+  end
+
+  # median_duration returns the median duration of completed attempts for this category. If attempt_number is given, it
+  # returns the median duration of completed attempts which had that attempt number.
+  def median_duration(timing, attempt_number: nil)
+    relation = run_histories.joins(:run).where(
+      runs: {archived: false}
+    ).where.not(runs: {user: nil}).where.not(Run.duration_type(timing) => nil).where.not(Run.duration_type(timing) => 0)
+
+    return Duration.new(relation.median("run_histories.#{Run.duration_type(timing)}")) if attempt_number.nil?
+
+    Duration.new(relation.where(attempt_number: attempt_number).median("run_histories.#{Run.duration_type(timing)}"))
   end
 end
