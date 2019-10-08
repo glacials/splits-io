@@ -111,7 +111,7 @@ class SegmentGroup
     # Sum the segment times for each attempt and store those as opposed to the individual segment durations
     @durations_by_attempt.keys.each do |timing|
       @durations_by_attempt[timing].keys.each do |attempt_number|
-        @durations_by_attempt[timing][attempt_number] = @durations_by_attempt[timing][attempt_number].sum
+        @durations_by_attempt[timing][attempt_number] = @durations_by_attempt[timing][attempt_number].compact.sum
       end
     end
 
