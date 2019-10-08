@@ -2,9 +2,6 @@ Dir['./lib/programs/*'].each { |file| require file }
 require './lib/parser/livesplit_core_parser'
 
 class Run < ApplicationRecord
-  # TODO: Remove self.ignored_columns after the next deploy when the migration to remove the column from the DB is run
-  self.ignored_columns = ["video_url"] # Remove this after deployed and migration to remove the column runs
-
   include CompletedRun
   include ForgetfulPersonsRun
   include PadawanRun

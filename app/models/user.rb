@@ -76,10 +76,7 @@ class User < ApplicationRecord
   end
 
   def pbs
-    # TODO: Put the SELECT * back in after Run.ignored_columns is removed
-    # runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
-    column_names = Run.attribute_names.join(',')
-    runs.where.not(category: nil).select("DISTINCT ON (category_id) #{column_names}").order('category_id, realtime_duration_ms ASC')
+    runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
         .union_all(runs.by_category(nil))
   end
 
