@@ -1,9 +1,4 @@
 version: '3.7'
-x-args:
-  &server-args
-    RUBY_VERSION: '2.6.3' # also update docker-compose.yml & Gemfile
-    SPLITSIO_CLIENT_ID: $SPLITSIO_CLIENT_ID
-    STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY
 x-environment:
   &server-environment
   - ASSET_HOST
@@ -47,25 +42,28 @@ x-logging:
     max-size: 100m
     max-file: "1"
 
+x-app: &app
+  build:
+    context: .
+    dockerfile: Dockerfile-production
+    target: "${DOCKER_BUILD_TARGET:-prod-runtime}"
+    cache_from:
+      - "${REPOSITORY_URI:-splitsio-production}:latest"
+    args:
+      RUBY_VERSION: '2.6.3' # also update docker-compose.yml & Gemfile
+      SPLITSIO_CLIENT_ID: $SPLITSIO_CLIENT_ID
+      STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY
+  environment: *server-environment
+  image: splitsio-production
+  logging: *default-logging
+
 services:
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile-production
-      args: *server-args
+    <<: *app
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    environment: *server-environment
-    image: web-production
-    logging: *default-logging
     ports:
       - 3000:3000
   worker:
-    build:
-      context: .
-      dockerfile: Dockerfile-production
-      args: *server-args
+    <<: *app
     command: bash -c "rm -f /app/tmp/pids/delayed*.pid && bundle exec rake jobs:work" # bin/delayed_job doesn't obey QUEUES
-    environment: *server-environment
-    image: worker-production
-    logging: *default-logging
     ports: []
