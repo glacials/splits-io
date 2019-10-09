@@ -106,7 +106,6 @@
                 .card v-for='stream in value' :key='stream.id'
                   .card-body.p-0.twitch-stream
                     iframe(
-                      :key='`iframe-${stream.id}`'
                       :src='`https://player.twitch.tv/?channel=${stream.id}&muted=true`'
                       height='100%'
                       width='100%'

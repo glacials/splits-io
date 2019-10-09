@@ -36,9 +36,9 @@ export default {
 
     getBreakPointDiv: function(desiredBreak) {
       const breakPointDiv = document.createElement('div')
-      const allSizes = ['xs', 'sm', 'md', 'lg', 'xl']
+      const allSizes = ['sm', 'md', 'lg', 'xl']
       const breakpoints = allSizes.map(size => size === desiredBreak ? `d-${size}-block` : `d-${size}-none`)
-      if (desiredBreak !== 'xs') { breakpoints.unshift('d-none') }
+      breakpoints.unshift(desiredBreak === 'xs' ? 'd-block' : 'd-none')
       breakPointDiv.className = `w-100 ${breakpoints.join(' ')}`
       return breakPointDiv
     }
@@ -49,7 +49,7 @@ export default {
 
     // We have to manually add and remove breakpoints in JS otherwise we cannot utilize :key on the card div
     // Without :key all iframes after the removed one will reload
-    deck.querySelectorAll('.w-100').forEach(breakpoint => {
+    deck.querySelectorAll('#stream-deck .w-100').forEach(breakpoint => {
       breakpoint.parentNode.removeChild(breakpoint)
     })
 
