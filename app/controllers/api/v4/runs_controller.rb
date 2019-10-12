@@ -35,42 +35,43 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       rendered_run = render_run_to_string(timer)
       send_data(
         rendered_run,
-        layout: false,
-        type: @accept_header.to_s,
+        layout:      false,
+        type:        @accept_header.to_s,
         disposition: 'inline',
-        filename: @run.filename(timer: timer).to_s
+        filename:    @run.filename(timer: timer).to_s
       )
     end
   end
 
   def create
     @run = Run.create(run_params.merge(s3_filename: SecureRandom.uuid, user: current_user))
+    RunCleanupJob.set(wait: 1.hour).perform_later(@run)
     unless @run.persisted?
       render status: :bad_request, json: {
-        status: 400,
+        status:  400,
         message: "Couldn't reserve run. Please try again."
       }
       return
     end
 
     presigned_request = $s3_bucket_external.presigned_post(
-      key: "splits/#{@run.s3_filename}",
+      key:                  "splits/#{@run.s3_filename}",
       content_length_range: 1..(25 * 1024 * 1024)
     )
 
     render status: :created, location: api_v4_run_url(@run), json: {
-      status: 201,
-      message: 'Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.',
-      id: @run.id36,
-      claim_token: @run.claim_token,
-      uris: {
-        api_uri: api_v4_run_url(@run),
+      status:            201,
+      message:           'Run reserved. Use the included presigned request to upload the file to S3, with an additional `file` field containing the run file.',
+      id:                @run.id36,
+      claim_token:       @run.claim_token,
+      uris:              {
+        api_uri:    api_v4_run_url(@run),
         public_uri: run_url(@run),
-        claim_uri: run_url(@run, claim_token: @run.claim_token)
+        claim_uri:  run_url(@run, claim_token: @run.claim_token)
       },
       presigned_request: {
         method: 'POST',
-        uri: presigned_request.url,
+        uri:    presigned_request.url,
         fields: presigned_request.fields
       }
     }
@@ -134,7 +135,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       ApplicationController.render(
         "runs/exports/#{timer.to_sym}.html.erb",
         assigns: {run: @run},
-        layout: false
+        layout:  false
       )
     end
   end

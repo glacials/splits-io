@@ -10,7 +10,7 @@ x-server-environment:
   - NODE_ENV=development
   - PATREON_CLIENT_ID
   - PATREON_CLIENT_SECRET
-  - QUEUES=discover_runner,highlight_cleanup,race_cleanup,refresh_game,sync_user_follows,v4_races,parse_run # also update docker-compose-production.yml
+  - QUEUES=discover_runner,highlight_cleanup,race_cleanup,refresh_game,sync_user_follows,v4_races,parse_run,cleanup_runs # also update docker-compose-production.yml
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
   - RAILS_ENV
   - RAILS_ROOT="/app"
