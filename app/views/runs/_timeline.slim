@@ -14,7 +14,7 @@
           style="width: #{segment.proportion(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video}"
         )
           .p-2
-            .text-light = segment.name.presence || '-'
+            .text-light = segment.display_name.presence || '-'
             .text-light-50
               - if segment.duration(timing).present?
                 = segment.duration(timing).format(precise: run.short?(timing))

@@ -155,6 +155,56 @@
       "items": {
         "$ref": "../../../models/api/v4/segment.json"
       }
+    },
+    "segment_groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "segment_number",
+          "histories"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "segment_number": {
+            "type": "number",
+            "minimum": 0
+          },
+          "histories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "attempt_number",
+                "realtime_duration_ms",
+                "gametime_duration_ms"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "attempt_number": {
+                  "type": "number"
+                },
+                "realtime_duration_ms": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "gametime_duration_ms": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

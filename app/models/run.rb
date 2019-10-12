@@ -1,9 +1,6 @@
 Dir['./lib/programs/*'].each { |file| require file }
 
 class Run < ApplicationRecord
-  # TODO: Remove self.ignored_columns after the next deploy when the migration to remove the column from the DB is run
-  self.ignored_columns = ["video_url"] # Remove this after deployed and migration to remove the column runs
-
   include CompletedRun
   include ForgetfulPersonsRun
   include PadawanRun
@@ -176,6 +173,17 @@ class Run < ApplicationRecord
     end
   end
 
+  def segment_groups
+    segments_with_groups.select(&:segment_group_parent?).map do |segment|
+      {
+        id: segment.id,
+        name: segment.display_name,
+        segment_number: segment.segment_number,
+        histories: segment.segment_group_durations
+      }
+    end
+  end
+
   # Calculate the various statistical information about each segments history once in the database for the whole run
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
@@ -221,6 +229,28 @@ class Run < ApplicationRecord
 
   def possible_timesave(timing)
     duration(timing) - sum_of_best(timing)
+  end
+
+  def segments_with_groups
+    return @segments_with_groups if @segments_with_groups
+    @segments_with_groups = []
+    segment_group_start_index = nil
+    segment_group_end_index = nil
+    segment_array = segments.includes(:histories).order(segment_number: :asc).to_a
+    segment_array.each_with_index do |segment, i|
+      if !segment_group_start_index && segment.subsplit?
+        segment_group_start_index = i
+        segment_group_end_index = segment_array[i..-1].index { |seg| seg.last_subsplit? } + i
+        @segments_with_groups << SegmentGroup.new(self, segment_array[segment_group_start_index..segment_group_end_index])
+      end
+      if segment_group_end_index == i
+        segment_group_start_index = nil
+        segment_group_end_index = nil
+      end
+
+      @segments_with_groups << segment
+    end
+    @segments_with_groups
   end
 
   private

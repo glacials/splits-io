@@ -1,7 +1,8 @@
 class Api::V4::SegmentBlueprint < Blueprinter::Base
   fields :id, :segment_number, :name,
          :realtime_shortest_duration_ms, :realtime_gold, :realtime_reduced, :realtime_skipped,
-         :gametime_shortest_duration_ms, :gametime_gold, :gametime_reduced, :gametime_skipped
+         :gametime_shortest_duration_ms, :gametime_gold, :gametime_reduced, :gametime_skipped,
+         :display_name
 
   association :histories, blueprint: Api::V4::SegmentHistoryBlueprint, if: ->(_, _, options) { options[:historic] }
 

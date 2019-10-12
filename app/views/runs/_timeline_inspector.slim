@@ -14,7 +14,7 @@
       .bar
         p
       div class="#{'mx-2' if segment == first || segment == last} #{'second-half' if segment.second_half?(timing)}"
-        div = segment.name
+        div = segment.display_name
         .text-light-50 #{segment.duration(timing).format(precise: run.short?(timing))} duration
         .text-light-50 #{segment.end(timing).format(precise: run.short?(timing))} finished
         - if run.has_golds?(timing)

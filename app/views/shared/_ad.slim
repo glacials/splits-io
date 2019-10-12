@@ -1,5 +1,5 @@
 - if ENV['ENABLE_ADS'] == '1' && (current_user.nil? || current_user.should_see_ads?)
-  - if !on_landing_page? && !current_page?(controller: 'subscriptions')
+  - if !on_landing_page? && !current_page?(controller: '/subscriptions')
     article
       div#carbonads-holder
         .card

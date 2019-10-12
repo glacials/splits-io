@@ -1,0 +1,906 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Run version="1.7.0">
+  <GameIcon />
+  <GameName>NieR: Automata</GameName>
+  <CategoryName>[A]ny% (Normal)</CategoryName>
+  <Metadata>
+    <Run id="" />
+    <Platform usesEmulator="False">
+    </Platform>
+    <Region>
+    </Region>
+    <Variables />
+  </Metadata>
+  <Offset>00:00:02.1800000</Offset>
+  <AttemptCount>2</AttemptCount>
+  <AttemptHistory>
+    <Attempt id="1" started="05/01/2018 11:22:22" isStartedSynced="True" ended="05/01/2018 11:23:37" isEndedSynced="True" />
+    <Attempt id="2" started="05/06/2018 08:56:09" isStartedSynced="True" ended="05/06/2018 10:53:19" isEndedSynced="True">
+      <RealTime>01:57:12.6630000</RealTime>
+      <GameTime>01:54:04.1300000</GameTime>
+    </Attempt>
+  </AttemptHistory>
+  <Segments>
+    <Segment>
+      <Name>-Shmup end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:04:52.3040000</RealTime>
+          <GameTime>00:04:47.1250000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:04:52.3040000</RealTime>
+        <GameTime>00:04:47.1250000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:04:52.3040000</RealTime>
+          <GameTime>00:04:47.1250000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Marx 1 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:05:34.1940000</RealTime>
+          <GameTime>00:05:29.0150000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:41.8900000</RealTime>
+        <GameTime>00:00:41.8900000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:41.8900000</RealTime>
+          <GameTime>00:00:41.8900000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Marx 1 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:06:18.5700000</RealTime>
+          <GameTime>00:06:13.3910000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:44.3760000</RealTime>
+        <GameTime>00:00:44.3760000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:44.3760000</RealTime>
+          <GameTime>00:00:44.3760000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Marx 2 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:10:42.8990000</RealTime>
+          <GameTime>00:10:37.7200000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:04:24.3290000</RealTime>
+        <GameTime>00:04:24.3290000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:04:24.3290000</RealTime>
+          <GameTime>00:04:24.3290000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Marx 2 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:11:47.9940000</RealTime>
+          <GameTime>00:11:42.8150000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:05.0950000</RealTime>
+        <GameTime>00:01:05.0950000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:05.0950000</RealTime>
+          <GameTime>00:01:05.0950000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Engels intermission begin</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:14:28.2920000</RealTime>
+          <GameTime>00:14:23.1130000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:02:40.2980000</RealTime>
+        <GameTime>00:02:40.2980000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:02:40.2980000</RealTime>
+          <GameTime>00:02:40.2980000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Engels intermission end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:15:33.6050000</RealTime>
+          <GameTime>00:15:28.4260000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:05.3130000</RealTime>
+        <GameTime>00:01:05.3130000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:05.3130000</RealTime>
+          <GameTime>00:01:05.3130000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Prologue</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:17:33.0650000</RealTime>
+          <GameTime>00:17:27.8860000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:59.4600000</RealTime>
+        <GameTime>00:01:59.4600000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:59.4600000</RealTime>
+          <GameTime>00:01:59.4600000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Shmup start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:20:14.1470000</RealTime>
+          <GameTime>00:19:49.5910000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:02:41.0820000</RealTime>
+        <GameTime>00:02:21.7050000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:02:41.0820000</RealTime>
+          <GameTime>00:02:21.7050000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-City Ruins discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:22:08.3790000</RealTime>
+          <GameTime>00:21:43.8230000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:54.2320000</RealTime>
+        <GameTime>00:01:54.2320000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:54.2320000</RealTime>
+          <GameTime>00:01:54.2320000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Resistance Camp discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:22:53.3030000</RealTime>
+          <GameTime>00:22:28.7470000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:44.9240000</RealTime>
+        <GameTime>00:00:44.9240000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:44.9240000</RealTime>
+          <GameTime>00:00:44.9240000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Housing District discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:30:44.1010000</RealTime>
+          <GameTime>00:30:19.5450000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:07:50.7980000</RealTime>
+        <GameTime>00:07:50.7980000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:07:50.7980000</RealTime>
+          <GameTime>00:07:50.7980000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Adam 1 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:34:06.0290000</RealTime>
+          <GameTime>00:33:41.4730000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:03:21.9280000</RealTime>
+        <GameTime>00:03:21.9280000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:03:21.9280000</RealTime>
+          <GameTime>00:03:21.9280000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Adam 1 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:35:16.3120000</RealTime>
+          <GameTime>00:34:51.7560000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:10.2830000</RealTime>
+        <GameTime>00:01:10.2830000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:10.2830000</RealTime>
+          <GameTime>00:01:10.2830000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Beauvoir start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:42:52.7840000</RealTime>
+          <GameTime>00:42:13.9630000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:07:36.4720000</RealTime>
+        <GameTime>00:07:22.2070000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:07:36.4720000</RealTime>
+          <GameTime>00:07:22.2070000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Beauvoir hacking end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:43:57.8450000</RealTime>
+          <GameTime>00:43:19.0240000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:05.0610000</RealTime>
+        <GameTime>00:01:05.0610000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:05.0610000</RealTime>
+          <GameTime>00:01:05.0610000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Beauvoir end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:45:23.1530000</RealTime>
+          <GameTime>00:44:44.3320000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:25.3080000</RealTime>
+        <GameTime>00:01:25.3080000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:25.3080000</RealTime>
+          <GameTime>00:01:25.3080000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Village discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:47:10.7100000</RealTime>
+          <GameTime>00:46:31.8890000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:47.5570000</RealTime>
+        <GameTime>00:01:47.5570000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:47.5570000</RealTime>
+          <GameTime>00:01:47.5570000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-City Engels end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:53:46.5890000</RealTime>
+          <GameTime>00:52:52.7760000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:06:35.8790000</RealTime>
+        <GameTime>00:06:20.8870000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:06:35.8790000</RealTime>
+          <GameTime>00:06:20.8870000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Negotiations end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>00:57:19.8550000</RealTime>
+          <GameTime>00:56:15.5220000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:03:33.2660000</RealTime>
+        <GameTime>00:03:22.7460000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:03:33.2660000</RealTime>
+          <GameTime>00:03:22.7460000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-4 Robots end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:03:02.4530000</RealTime>
+          <GameTime>01:01:11.3960000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:05:42.5980000</RealTime>
+        <GameTime>00:04:55.8740000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:05:42.5980000</RealTime>
+          <GameTime>00:04:55.8740000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Forest discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:03:32.3890000</RealTime>
+          <GameTime>01:01:41.3320000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:29.9360000</RealTime>
+        <GameTime>00:00:29.9360000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:29.9360000</RealTime>
+          <GameTime>00:00:29.9360000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-A2 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:07:25.0370000</RealTime>
+          <GameTime>01:05:33.9800000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:03:52.6480000</RealTime>
+        <GameTime>00:03:52.6480000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:03:52.6480000</RealTime>
+          <GameTime>00:03:52.6480000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>A2 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:08:32.2580000</RealTime>
+          <GameTime>01:06:41.2010000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:07.2210000</RealTime>
+        <GameTime>00:01:07.2210000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:07.2210000</RealTime>
+          <GameTime>00:01:07.2210000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Flooded City discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:11:44.0210000</RealTime>
+          <GameTime>01:09:20.1960000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:03:11.7630000</RealTime>
+        <GameTime>00:02:38.9950000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:03:11.7630000</RealTime>
+          <GameTime>00:02:38.9950000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Grun start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:17:09.6350000</RealTime>
+          <GameTime>01:14:45.8100000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:05:25.6140000</RealTime>
+        <GameTime>00:05:25.6140000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:05:25.6140000</RealTime>
+          <GameTime>00:05:25.6140000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Grun laser strike</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:20:40.4170000</RealTime>
+          <GameTime>01:18:16.5920000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:03:30.7820000</RealTime>
+        <GameTime>00:03:30.7820000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:03:30.7820000</RealTime>
+          <GameTime>00:03:30.7820000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Third mortar hit</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:22:10.0920000</RealTime>
+          <GameTime>01:19:46.2670000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:29.6750000</RealTime>
+        <GameTime>00:01:29.6750000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:29.6750000</RealTime>
+          <GameTime>00:01:29.6750000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Extra split to counteract double mortar split problem</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:22:16.0420000</RealTime>
+          <GameTime>01:19:52.2170000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:05.9500000</RealTime>
+        <GameTime>00:00:05.9500000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:05.9500000</RealTime>
+          <GameTime>00:00:05.9500000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Grun end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:26:45.0770000</RealTime>
+          <GameTime>01:24:21.2520000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:04:29.0350000</RealTime>
+        <GameTime>00:04:29.0350000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:04:29.0350000</RealTime>
+          <GameTime>00:04:29.0350000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Copied City discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:28:52.0940000</RealTime>
+          <GameTime>01:26:20.5490000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:02:07.0170000</RealTime>
+        <GameTime>00:01:59.2970000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:02:07.0170000</RealTime>
+          <GameTime>00:01:59.2970000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Adam 2 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:29:21.4890000</RealTime>
+          <GameTime>01:26:49.9440000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:29.3950000</RealTime>
+        <GameTime>00:00:29.3950000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:29.3950000</RealTime>
+          <GameTime>00:00:29.3950000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Adam phase 2 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:30:20.3460000</RealTime>
+          <GameTime>01:27:48.8010000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:58.8570000</RealTime>
+        <GameTime>00:00:58.8570000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:58.8570000</RealTime>
+          <GameTime>00:00:58.8570000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Adam phase 3 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:31:00.2060000</RealTime>
+          <GameTime>01:28:28.6610000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:39.8600000</RealTime>
+        <GameTime>00:00:39.8600000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:39.8600000</RealTime>
+          <GameTime>00:00:39.8600000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Adam 2 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:31:35.2220000</RealTime>
+          <GameTime>01:29:03.6770000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:35.0160000</RealTime>
+        <GameTime>00:00:35.0160000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:35.0160000</RealTime>
+          <GameTime>00:00:35.0160000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Mooks room</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:36:22.9480000</RealTime>
+          <GameTime>01:33:42.4220000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:04:47.7260000</RealTime>
+        <GameTime>00:04:38.7450000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:04:47.7260000</RealTime>
+          <GameTime>00:04:38.7450000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-So-shi end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:41:25.7130000</RealTime>
+          <GameTime>01:38:45.1870000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:05:02.7650000</RealTime>
+        <GameTime>00:05:02.7650000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:05:02.7650000</RealTime>
+          <GameTime>00:05:02.7650000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>Factory #2 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:42:45.4790000</RealTime>
+          <GameTime>01:40:04.9530000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:19.7660000</RealTime>
+        <GameTime>00:01:19.7660000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:19.7660000</RealTime>
+          <GameTime>00:01:19.7660000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Burning Resistance Camp discovery</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:44:18.1270000</RealTime>
+          <GameTime>01:41:37.6010000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:32.6480000</RealTime>
+        <GameTime>00:01:32.6480000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:32.6480000</RealTime>
+          <GameTime>00:01:32.6480000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Boku-shi end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:46:45.3770000</RealTime>
+          <GameTime>01:44:04.8510000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:02:27.2500000</RealTime>
+        <GameTime>00:02:27.2500000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:02:27.2500000</RealTime>
+          <GameTime>00:02:27.2500000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Core #1 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:47:32.9850000</RealTime>
+          <GameTime>01:44:52.4590000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:00:47.6080000</RealTime>
+        <GameTime>00:00:47.6080000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:00:47.6080000</RealTime>
+          <GameTime>00:00:47.6080000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Core #2 end</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:49:34.0170000</RealTime>
+          <GameTime>01:46:53.4910000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:02:01.0320000</RealTime>
+        <GameTime>00:02:01.0320000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:02:01.0320000</RealTime>
+          <GameTime>00:02:01.0320000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>-Eve phase 3 start</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:50:42.4100000</RealTime>
+          <GameTime>01:48:01.8840000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:01:08.3930000</RealTime>
+        <GameTime>00:01:08.3930000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:01:08.3930000</RealTime>
+          <GameTime>00:01:08.3930000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+    <Segment>
+      <Name>[A] Ending</Name>
+      <Icon />
+      <SplitTimes>
+        <SplitTime name="Personal Best">
+          <RealTime>01:57:12.6630000</RealTime>
+          <GameTime>01:54:04.1300000</GameTime>
+        </SplitTime>
+      </SplitTimes>
+      <BestSegmentTime>
+        <RealTime>00:06:30.2530000</RealTime>
+        <GameTime>00:06:02.2460000</GameTime>
+      </BestSegmentTime>
+      <SegmentHistory>
+        <Time id="2">
+          <RealTime>00:06:30.2530000</RealTime>
+          <GameTime>00:06:02.2460000</GameTime>
+        </Time>
+      </SegmentHistory>
+    </Segment>
+  </Segments>
+  <AutoSplitterSettings />
+</Run>
