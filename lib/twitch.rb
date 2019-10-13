@@ -100,11 +100,14 @@ class Twitch
     #
     # See: https://dev.twitch.tv/docs/api/guide/#rate-limits
     def headers(token: nil)
-      if token.present?
-        {'Authorization' => "Bearer #{token}"}
-      else
-        {'Client-ID' => ENV['TWITCH_CLIENT_ID']}
-      end
+      request_headers = {
+        'Client-ID' => ENV['TWITCH_CLIENT_ID'],
+        'Accept'    => 'application/vnd.twitchtv.v5+json'
+      }
+      return request_headers if token.blank?
+
+      request_headers['Authorization'] = "Bearer #{token}"
+      request_headers
     end
 
     # new_tokens! takes a user's current refresh token and returns a hash containing a fresh access token and refresh
