@@ -8,10 +8,10 @@ class ParseRunJob < ApplicationJob
 
     run.parse_into_db
 
-    raise UnparsableRun unless run.parsed?
+    raise UnparsedRun::UnparsableRun unless run.parsed?
 
     Api::V4::RunChannel.broadcast_to(run, Api::V4::WebsocketMessage.new('run_parsed', message: 'Run parsed').to_h)
-  rescue UnparsableRun, RunFileMissing
+  rescue UnparsedRun::UnparsableRun, UnparsedRun::RunFileMissing
     Api::V4::RunChannel.broadcast_to(
       run,
       Api::V4::WebsocketMessage.new('cant_parse_run', message: 'Run cannot be parsed').to_h

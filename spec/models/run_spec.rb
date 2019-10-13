@@ -627,4 +627,18 @@ describe Run, type: :model do
       expect(groups.length).to eq 53
     end
   end
+
+  context 'with nameless segments' do
+    let(:run) do
+      r = FactoryBot.create(:nameless_segments_run)
+      r.parse_into_db
+      r.reload
+      r.reload
+      r
+    end
+
+    it 'saves the correct number of segments' do
+      expect(run.segments.length).to be(4)
+    end
+  end
 end

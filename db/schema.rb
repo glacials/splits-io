@@ -252,7 +252,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.datetime "updated_at", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
-    t.bigint "pause_duration_ms", null: false
+    t.bigint "pause_duration_ms"
     t.index ["run_id"], name: "index_run_histories_on_run_id"
   end
 

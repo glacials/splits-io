@@ -15,7 +15,8 @@ module UnparsedRun
 
     def parse_into_db
       with_lock do
-        segments.each(&:destroy)
+        # Use destroy all for segments to make sure active storage images are cleaned up
+        segments.destroy_all
         histories.delete_all
 
         run = nil
@@ -24,7 +25,7 @@ module UnparsedRun
           raise RunFileMissing if f.nil?
 
           Parser::LiveSplitCore::Run.parse_file_handle(f.fileno, '', false).with do |parse_result|
-            raise UnparsableRun unless parse_result.parsed_successfully
+            raise UnparsableRun, 'Run failed to parse in LSC' unless parse_result.parsed_successfully
 
             run_data = process_run_wrapper(parse_result, run_data)
             run = parse_result.unwrap
@@ -148,7 +149,7 @@ module UnparsedRun
             attempt_number:       attempt.index.to_i,
             realtime_duration_ms: attempt.time.real_time&.total_seconds&.*(1000),
             gametime_duration_ms: attempt.time.game_time&.total_seconds&.*(1000),
-            pause_duration_ms:    attempt.pause_time&.total_seconds&.*(1000) || 0,
+            pause_duration_ms:    attempt.pause_time&.total_seconds&.*(1000),
             started_at:           dates[0] && DateTime.parse(dates[0].to_rfc3339),
             ended_at:             dates[1] && DateTime.parse(dates[1].to_rfc3339)
           )
@@ -168,7 +169,7 @@ module UnparsedRun
       result = RunHistory.import(histories)
       return result unless result.failed_instances.any?
 
-      raise UnparsableRun
+      raise UnparsableRun, 'Failed to write run histories to db'
     end
 
     def process_segments(run)
@@ -182,7 +183,7 @@ module UnparsedRun
           segment = Segment.new(
             run_id:         id,
             segment_number: i,
-            name:           lsc_segment.name
+            name:           lsc_segment.name.presence
           )
           icon = lsc_segment.icon
           if icon.present?
@@ -229,10 +230,10 @@ module UnparsedRun
           end
         end
       end
-
       result = Segment.import(segments)
-      raise UnparsableRun if result.failed_instances.any?
+      raise UnparsableRun, 'Failed to write segments to db' if result.failed_instances.any?
 
+      # active storage attachments are saved when the record is next saved, not sure if import skips this
       segments.each do |segment|
         segment.save
       end
@@ -271,7 +272,7 @@ module UnparsedRun
       result = SegmentHistory.import(histories)
       return unless result.failed_instances.any?
 
-      raise UnparsableRun
+      raise UnparsableRun, 'Failed to write segment histories to db'
     end
 
     def zero_to_nil(parsed_number)

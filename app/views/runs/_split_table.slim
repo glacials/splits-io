@@ -16,7 +16,9 @@
         tr class="#{segment.segment_group_parent? ? 'segment-group' : ''}"
           td.align-right.align-middle = segment.segment_group_parent? ? '' : segment.segment_number + 1
           - if run.segments.map(&:icon).any?(&:attached?)
-            td.text-center.align-middle = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
+            td.text-center.align-middle
+              - if segment.icon.attached?
+                = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
           td.align-left.align-middle = segment.display_name.presence || '-'
           td.align-right.align-middle
             - if segment.skipped?(timing) || segment.reduced?(timing)
@@ -25,7 +27,7 @@
               - if compare_segment.present?
                 = delta(segment.duration(timing), compare_segment.duration(timing), subject: compare_segment.run.user || '???')
               - if segment.gold?(timing)
-                .gold-badge.align-middle title='Gold'
+                .gold-badge.align-middle.tip-top title='Gold'
               = segment.duration(timing).format(precise: run.short?(timing))
           - if segment.skipped?(timing)
             td.align-right.time.align-middle -
