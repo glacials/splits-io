@@ -17,7 +17,7 @@
           td.align-right.align-middle = segment.segment_group_parent? ? '' : segment.segment_number + 1
           - if run.segments.map(&:icon).any?(&:attached?)
             td.text-center.align-middle
-              - if segment.icon.attached?
+              - if !segment.segment_group_parent? && segment.icon.attached?
                 = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
           td.align-left.align-middle = segment.display_name.presence || '-'
           td.align-right.align-middle
