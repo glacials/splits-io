@@ -28,6 +28,8 @@ FactoryBot.define do
     # subsplit
     subsplits_with_titles:    {filename: 'livesplit_subsplits.lss'},
     subsplits_without_titles: {filename: 'livesplit_subsplits_without_titles.lss'},
+
+    nameless_segments:        {filename: 'livesplit_nameless_segments.lss'}
   }
 
   test_files.each do |_factory_name, file|

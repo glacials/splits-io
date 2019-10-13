@@ -118,33 +118,33 @@ describe Run, type: :model do
     it 'has the correct splits' do
       expect(run.segments.map { |s| [s.segment_number, s.name, s.duration_ms(Run::REAL)] }).to match_array [
         [0, 'Tron City', 53_921],
-        [1, 'Start Abraxas fight', 185_453],
+        [1, 'Start Abraxas fight', 185_454],
         [2, 'Finish Abraxas fight', 108_446],
         [3, '"FLYNN!"', 151_874],
-        [4, '"Hey! Over here!"', 117_067],
-        [5, '"That was CLU. I saw him." (stack2 skip inc)', 44_819],
-        [6, '"Follow me."', 114_844],
+        [4, '"Hey! Over here!"', 117_068],
+        [5, '"That was CLU. I saw him." (stack2 skip inc)', 44_820],
+        [6, '"Follow me."', 114_845],
         [7, 'End of cycle ride (bridge skip inc)', 75_843],
-        [8, 'End of bridge thing', 431_475],
+        [8, 'End of bridge thing', 431_476],
         [9, 'Da Vinci', 18_882],
         [10, '"Hey! Over here!" #2', 418_688],
-        [11, 'Drive tank 4 feet', 372_653],
-        [12, 'Green guy', 283_038],
+        [11, 'Drive tank 4 feet', 372_654],
+        [12, 'Green guy', 283_039],
         [13, 'Beat games', 186_848],
-        [14, 'Green guy talks to me', 120_515],
-        [15, 'Get across that bridge', 484_387],
-        [16, 'Jump up and down on three lightsabers', 109_862],
+        [14, 'Green guy talks to me', 120_516],
+        [15, 'Get across that bridge', 484_388],
+        [16, 'Jump up and down on three lightsabers', 109_863],
         [17, '"That\'s Flynn\'s!"', 43_737],
-        [18, 'Race green guy', 67_095],
-        [19, 'Kill green guy', 220_725],
+        [18, 'Race green guy', 67_096],
+        [19, 'Kill green guy', 220_726],
         [20, 'Jump the bike', 278_102],
         [21, 'Grab me by the arm', 224_736],
-        [22, "Popcorn ceiling's revenge", 108_322],
+        [22, "Popcorn ceiling's revenge", 108_323],
         [23, 'Jump onto the flying staple', 112_977],
         [24, 'Ride motorbike for 9 seconds', 447_303],
-        [25, 'Final fight phase 1', 59_785],
-        [26, 'Final fight phase 2', 185_817],
-        [27, 'Final fight phase 3', 28_333]
+        [25, 'Final fight phase 1', 59_786],
+        [26, 'Final fight phase 2', 185_818],
+        [27, 'Final fight phase 3', 28_334]
       ]
     end
 
@@ -162,12 +162,12 @@ describe Run, type: :model do
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        15, 'Get across that bridge', 484_387
+        15, 'Get across that bridge', 484_388
       ]
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq 118_791
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 118_792
     end
 
     it 'reports its total playtime' do
@@ -196,7 +196,7 @@ describe Run, type: :model do
         [1, 'Castle LoLoLo', 91_940],
         [2, 'Float Islands', 127_810],
         [3, 'Bubbly Clouds', 195_180],
-        [4, 'Mt. DeDeDe', 236_439]
+        [4, 'Mt. DeDeDe', 236_440]
       ]
     end
 
@@ -214,7 +214,7 @@ describe Run, type: :model do
     it 'accurately reports its longest segment' do
       rls = run.longest_segment(Run::REAL)
       expect([rls.segment_number, rls.name, rls.duration_ms(Run::REAL)]).to match_array [
-        4, 'Mt. DeDeDe', 236_439
+        4, 'Mt. DeDeDe', 236_440
       ]
     end
 
@@ -251,13 +251,13 @@ describe Run, type: :model do
         [5, 'Hole 6', 34_972],
         [6, 'Hole 7', 20_755],
         [7, 'Hole 8', 41_221],
-        [8, 'Hole 9', 43_621],
+        [8, 'Hole 9', 43_622],
         [9, 'Hole 10', 28_662],
         [10, 'Hole 11', 37_146],
         [11, 'Hole 12', 62_913],
         [12, 'Hole 13', 41_540],
         [13, 'Hole 14', 35_332],
-        [14, 'Hole 15', 36_653],
+        [14, 'Hole 15', 36_654],
         [15, 'Hole 16', 31_277],
         [16, 'Hole 17', 37_632],
         [17, 'Hole 18', 66_083]
@@ -284,7 +284,7 @@ describe Run, type: :model do
     end
 
     it 'accurately reports its median segment duration' do
-      expect(run.median_segment_duration_ms(Run::REAL)).to eq 35_992
+      expect(run.median_segment_duration_ms(Run::REAL)).to eq 35_993
     end
 
     it 'reports its total playtime' do
@@ -345,7 +345,7 @@ describe Run, type: :model do
           [8, 'RNG Roulette', 196_420],
           [9, 'Not At Fault', 231_033],
           [10, 'Amateur Work', 355_115],
-          [11, "Don't Mind Me", 59_727],
+          [11, "Don't Mind Me", 59_728],
           [12, 'H9 U Havelock', 116_236]
         ]
       end
@@ -536,7 +536,7 @@ describe Run, type: :model do
         [0, '1', 8247],
         [1, '2', 2115],
         [2, '3', 6014],
-        [3, '4', 6766],
+        [3, '4', 6767],
         [4, '5', 3172],
         [5, '6', 5785],
         [6, '7', 4190],
@@ -625,6 +625,20 @@ describe Run, type: :model do
       run.reload
       groups = run.segments_with_groups
       expect(groups.length).to eq 53
+    end
+  end
+
+  context 'with nameless segments' do
+    let(:run) do
+      r = FactoryBot.create(:nameless_segments_run)
+      r.parse_into_db
+      r.reload
+      r.reload
+      r
+    end
+
+    it 'saves the correct number of segments' do
+      expect(run.segments.length).to be(4)
     end
   end
 end

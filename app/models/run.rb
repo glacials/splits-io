@@ -1,5 +1,4 @@
 Dir['./lib/programs/*'].each { |file| require file }
-require './lib/parser/livesplit_core_parser'
 
 class Run < ApplicationRecord
   include CompletedRun
@@ -20,7 +19,7 @@ class Run < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :category, optional: true
   has_one :game, through: :category
-  has_many :segments, -> { order(segment_number: :asc) }, dependent: :destroy
+  has_many :segments, -> { order(segment_number: :asc) }, dependent: :destroy, inverse_of: :run
 
   # dependent: :delete_all requires there be no child records that need to be deleted
   # If RunHistory is changed to have child records, change this back to just :destroy
@@ -156,7 +155,7 @@ class Run < ApplicationRecord
   end
 
   def filename(timer: Run.program(self.timer))
-    "#{to_param || ("#{game} #{category}")}.#{timer.file_extension}"
+    "#{to_param || "#{game} #{category}"}.#{timer.file_extension}"
   end
 
   def previous_pb(timing)
@@ -177,10 +176,10 @@ class Run < ApplicationRecord
   def segment_groups
     segments_with_groups.select(&:segment_group_parent?).map do |segment|
       {
-        id: segment.id,
-        name: segment.display_name,
+        id:             segment.id,
+        name:           segment.display_name,
         segment_number: segment.segment_number,
-        histories: segment.segment_group_durations
+        histories:      segment.segment_group_durations
       }
     end
   end
@@ -192,7 +191,7 @@ class Run < ApplicationRecord
                           .without_statistically_invalid_histories_for_run(self, timing)
                           .where(segment: {runs: {id: id}})
                           .where.not(Run.duration_type(timing) => [0, nil])
-                          .where("segments_segment_histories.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments_segment_histories.segment_number - 1)")
+                          .where('segments_segment_histories.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments_segment_histories.segment_number - 1)')
                           .group(:segment_id)
                           .select(stats_select_query(timing))
 
@@ -234,14 +233,15 @@ class Run < ApplicationRecord
 
   def segments_with_groups
     return @segments_with_groups if @segments_with_groups
+
     @segments_with_groups = []
     segment_group_start_index = nil
     segment_group_end_index = nil
-    segment_array = segments.includes(:histories).order(segment_number: :asc).to_a
+    segment_array = segments.with_attached_icon.includes(:histories).order(segment_number: :asc).to_a
     segment_array.each_with_index do |segment, i|
       if !segment_group_start_index && segment.subsplit?
         segment_group_start_index = i
-        segment_group_end_index = segment_array[i..-1].index { |seg| seg.last_subsplit? } + i
+        segment_group_end_index = segment_array[i..-1].index(&:last_subsplit?) + i
         @segments_with_groups << SegmentGroup.new(self, segment_array[segment_group_start_index..segment_group_end_index])
       end
       if segment_group_end_index == i

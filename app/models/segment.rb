@@ -4,6 +4,8 @@ class Segment < ApplicationRecord
   # If SegmentHistory is changed to have child records, change this back to just :destroy
   has_many :histories, -> { order(attempt_number: :asc) }, class_name: 'SegmentHistory', dependent: :delete_all
 
+  has_one_attached :icon
+
   validates :name, presence: true
   validates :segment_number, presence: true, numericality: {only_integer: true}
 
@@ -191,6 +193,10 @@ class Segment < ApplicationRecord
     display_name
   end
 
+  def name
+    read_attribute(:name) || '???'
+  end
+
   def history_stats(timing)
     run.segment_history_stats(timing)[id]
   end
@@ -203,7 +209,8 @@ class Segment < ApplicationRecord
   # subsplit? returns something truthy representing if this segment is a subsplit of a segment group.
   # This won't return true for the last subsplit in a group if it has no indication it is a subsplit
   def subsplit?
-    return false unless name.present?
+    return false if name.blank?
+
     /^[-\{]/.match?(name)
   end
 
@@ -215,6 +222,7 @@ class Segment < ApplicationRecord
   # display_name returns the name of a normal segment and just the actual segment name of a subsplit
   def display_name
     return name unless subsplit?
+
     /^(?:-|\{.*?}\s*)(.+)/.match(name)[1]
   end
 end

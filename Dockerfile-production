@@ -6,7 +6,7 @@ FROM ruby:$RUBY_VERSION-alpine AS prod-builder
 # gcompat for ffi to load LSC
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk update \
-    && apk add -u --no-cache build-base tzdata gcompat git postgresql-dev bash yarn \
+    && apk add -u --no-cache build-base vips-dev tzdata gcompat git postgresql-dev bash yarn \
     && rm -rf /var/cache/apk/*
 
 ENV LANG C.UTF-8
@@ -59,7 +59,7 @@ ENV PATH=/app/bin:$BUNDLE_BIN:$PATH
 
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk update \
-    && apk add -u --no-cache tzdata gcompat postgresql-dev bash nodejs-current \
+    && apk add -u --no-cache vips-dev tzdata gcompat postgresql-dev bash nodejs-current \
     && rm -rf /var/cache/apk/*
 
 COPY --from=prod-builder /app /app

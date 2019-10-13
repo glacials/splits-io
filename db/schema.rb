@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.datetime "updated_at", null: false
     t.datetime "started_at"
     t.datetime "ended_at"
+    t.bigint "pause_duration_ms"
     t.index ["run_id"], name: "index_run_histories_on_run_id"
   end
 
@@ -308,7 +309,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.bigint "realtime_start_ms"
     t.bigint "realtime_end_ms"
     t.bigint "realtime_shortest_duration_ms"
-    t.string "name", null: false
+    t.string "name"
     t.boolean "realtime_gold", default: false, null: false
     t.boolean "realtime_reduced", default: false, null: false
     t.boolean "realtime_skipped", default: false, null: false

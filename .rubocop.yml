@@ -1,6 +1,9 @@
-LineLength:
+require: rubocop-rails
+
+Metrics/LineLength:
   Max: 120
 AllCops:
+  TargetRubyVersion: 2.6
   Include:
     - '**/*.rb'
     - Rakefile
@@ -13,7 +16,7 @@ AllCops:
     - bin/**/*
     - node_modules/**/*
     - config/routes.rb
-Documentation:
+Style/Documentation:
   Enabled: false
 
 Layout/SpaceInsideHashLiteralBraces:
@@ -42,6 +45,3 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Max: 20
-
-Rails:
-  Enabled: true

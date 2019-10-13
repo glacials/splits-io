@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Run version="1.7.1">
+    <GameIcon/>
+    <GameName>Minesweeper</GameName>
+    <CategoryName>Beginner</CategoryName>
+    <Metadata>
+        <Run id=""/>
+        <Platform usesEmulator="False"/>
+        <Region/>
+        <Variables/>
+    </Metadata>
+    <Offset>00:00:00.0000000</Offset>
+    <AttemptCount>1</AttemptCount>
+    <AttemptHistory>
+        <Attempt ended="10/12/2019 23:37:31" id="1" isEndedSynced="False" isStartedSynced="False" started="10/12/2019 23:36:33">
+            <PauseTime>00:00:00.9802300</PauseTime>
+        </Attempt>
+    </AttemptHistory>
+    <Segments>
+        <Segment>
+            <Name/>
+            <Icon/>
+            <SplitTimes>
+                <SplitTime name="Personal Best"/>
+            </SplitTimes>
+            <BestSegmentTime>
+                <RealTime>00:00:31.1512440</RealTime>
+            </BestSegmentTime>
+            <SegmentHistory>
+                <Time id="1">
+                    <RealTime>00:00:31.1512440</RealTime>
+                </Time>
+            </SegmentHistory>
+        </Segment>
+        <Segment>
+            <Name/>
+            <Icon/>
+            <SplitTimes>
+                <SplitTime name="Personal Best"/>
+            </SplitTimes>
+            <BestSegmentTime>
+                <RealTime>00:00:21.5839500</RealTime>
+            </BestSegmentTime>
+            <SegmentHistory>
+                <Time id="1">
+                    <RealTime>00:00:21.5839500</RealTime>
+                </Time>
+            </SegmentHistory>
+        </Segment>
+        <Segment>
+            <Name/>
+            <Icon/>
+            <SplitTimes>
+                <SplitTime name="Personal Best"/>
+            </SplitTimes>
+            <BestSegmentTime/>
+            <SegmentHistory/>
+        </Segment>
+        <Segment>
+            <Name/>
+            <Icon/>
+            <SplitTimes>
+                <SplitTime name="Personal Best"/>
+            </SplitTimes>
+            <BestSegmentTime/>
+            <SegmentHistory/>
+        </Segment>
+    </Segments>
+    <AutoSplitterSettings/>
+</Run>

@@ -114,16 +114,16 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.find_by(id: params[:run].to_i(36)) || Run.find_by!(nick: params[:run])
+    @run = Run.includes(segments: {icon_attachment: :blob}).find_by(id: params[:run].to_i(36)) ||
+           Run.includes(segments: {icon_attachment: :blob}).find_by!(nick: params[:run])
     timing = params[:timing] || @run.default_timing
-    if ![Run::REAL, Run::GAME].include?(timing)
+    unless [Run::REAL, Run::GAME].include?(timing)
       redirect_to(request.path, alert: 'Timing can only be real or game.')
       return
     end
 
     gon.run = {
-      id: @run.id36,
-
+      id:             @run.id36,
       splits:         @run.collapsed_segments(timing),
       timer:          @run.timer,
       video_url:      @run.video&.url,
@@ -181,7 +181,7 @@ class RunsController < ApplicationController
   end
 
   def maybe_update_followers
-    return if current_user.nil? || current_user.twitch.nil?
+    return if (current_user&.twitch).nil?
     return if current_user.twitch.follows_synced_at > Time.now.utc - 1.day
 
     SyncUserFollowsJob.perform_later(current_user, current_user.twitch)

@@ -3,6 +3,8 @@
   .table-responsive: table.card-body.table.mb-0
     thead: tr
       th.align-right #
+      - if run.segments.map(&:icon).any?(&:attached?)
+        th.text-center Icon
       th.align-left Name
       th.align-right Duration
       th.align-right Finished At
@@ -13,6 +15,10 @@
         - compare_segment = compare_segments.compact.min_by { |s| s.duration(timing) }
         tr class="#{segment.segment_group_parent? ? 'segment-group' : ''}"
           td.align-right.align-middle = segment.segment_group_parent? ? '' : segment.segment_number + 1
+          - if run.segments.map(&:icon).any?(&:attached?)
+            td.text-center.align-middle
+              - if segment.icon.attached?
+                = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
           td.align-left.align-middle = segment.display_name.presence || '-'
           td.align-right.align-middle
             - if segment.skipped?(timing) || segment.reduced?(timing)
@@ -21,7 +27,7 @@
               - if compare_segment.present?
                 = delta(segment.duration(timing), compare_segment.duration(timing), subject: compare_segment.run.user || '???')
               - if segment.gold?(timing)
-                .gold-split title='Gold'
+                .gold-badge.align-middle.tip-top title='Gold'
               = segment.duration(timing).format(precise: run.short?(timing))
           - if segment.skipped?(timing)
             td.align-right.time.align-middle -
@@ -31,7 +37,7 @@
                 = delta(segment.end(timing), compare_segment.end(timing), subject: compare_segment.run.user || '???')
               = segment.end(timing).format(precise: run.short?(timing))
           - history_stats = segment.history_stats(timing)
-          td.align-right
+          td.align-right.align-middle
             - if history_stats.present?
               - danger = history_stats[:standard_deviation].to_f > history_stats[:mean].to_f / 2
               - if danger
