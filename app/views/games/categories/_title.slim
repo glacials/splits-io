@@ -55,7 +55,7 @@
                 h3.statcard-number = @category.median_duration(timing).format
                 span.statcard-desc
                   ' Median run length
-                  .float-right.tip-left.text-light(
+                  span.tip.text-secondary(
                     title='Half of all runs are slower, and half are faster, than this time.'
                   ) = icon('fas', 'info-circle')
             .col-sm-3.mb-3
@@ -63,7 +63,7 @@
                 h3.statcard-number = @category.median_duration(timing, attempt_number: 1).format
                 span.statcard-desc
                   ' Median blind run
-                  .float-right.tip-left.text-light(
+                  span.tip.text-secondary(
                     title='Half of all first attempts are slower, and half are faster, than this time.'
                   ) = icon('fas', 'info-circle')
             .col-sm-3.mb-3
@@ -71,7 +71,7 @@
                 h3.statcard-number = @category.median_duration(timing, attempt_number: 10).format
                 span.statcard-desc
                   ' Median 10th attempt
-                  .float-right.tip-left.text-light(
+                  span.tip.text-secondary(
                     title='Half of all 10th attempts are slower, and half are faster, than this time.'
                   ) = icon('fas', 'info-circle')
             .col-sm-3.mb-3
@@ -79,6 +79,6 @@
                 h3.statcard-number = @category.median_duration(timing, attempt_number: 100).format
                 span.statcard-desc
                   ' Median 100th attempt
-                  .float-right.tip-left.text-light(
+                  span.tip.text-secondary(
                     title='Half of all 100th attempts are slower, and half are faster, than this time.'
                   ) = icon('fas', 'info-circle')
