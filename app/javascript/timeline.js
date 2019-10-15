@@ -4,6 +4,23 @@ let currentTimelineRunId = ''
 const timelineMouseOverTimers = {}
 const timelineMouseOutTimers = {}
 
+const matchingSplitForTimeline = (segment, timeline) => {
+  const segmentNames = FuzzySet(JSON.parse(timeline.dataset.segment_names))
+  let segmentName = undefined
+  if (segment.dataset.total_segments === timeline.dataset.total_segments) {
+    const split = timeline.querySelector(`.split[data-segment_number='${segment.dataset.segment_number}']`)
+    if (split) {
+      return split
+    }
+  } else {
+    const closestSegments = segmentNames.get(segment.dataset.segment_name)
+    if (closestSegments && closestSegments[0][0] > 0.5) {
+      segmentName = closestSegments[0][1]
+      return timeline.querySelector(`.split[data-segment_name='${segmentName}']`)
+    }
+  }
+}
+
 const mouseOverSegment = (segment) => {
   const run_id = segment.dataset.run_id
   const segment_number = segment.dataset.segment_number
@@ -14,17 +31,9 @@ const mouseOverSegment = (segment) => {
   const splits = []
 
   document.querySelectorAll(`.timeline-background:not([data-run_id='${run_id}'])`).forEach((timeline) => {
-    const segmentNames = FuzzySet(JSON.parse(timeline.dataset.segment_names))
-    const closestSegments = segmentNames.get(segment.dataset.segment_name)
-    let segmentName = undefined
-    if (closestSegments && closestSegments[0][0] > 0.5) {
-      segmentName = closestSegments[0][1]
-      splits.push(timeline.querySelector(`.split[data-segment_name='${segmentName}']`))
-    } else {
-      const split = timeline.querySelector(`.split[data-segment_number='${segment_number}']`)
-      if (split) {
-        splits.push(split)
-      }
+    const split = matchingSplitForTimeline(segment, timeline)
+    if (split) {
+      splits.push(split)
     }
   })
   splits.forEach((el) => {
