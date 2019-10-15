@@ -39,7 +39,7 @@ class GamesController < ApplicationController
 
   def set_games
     @games = Hash.new { |h, k| h[k] = [] }
-    SpeedrunDotComGame.order('ASCII(name) ASC').each do |game|
+    SpeedrunDotComGame.order('ASCII(name) ASC, UPPER(name) ASC').each do |game|
       @games[game.name[0].downcase] << game
     end
   end
