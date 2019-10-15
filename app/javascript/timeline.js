@@ -5,17 +5,16 @@ const timelineMouseOverTimers = {}
 const timelineMouseOutTimers = {}
 
 const matchingSplitForTimeline = (segment, timeline) => {
-  const segmentNames = FuzzySet(JSON.parse(timeline.dataset.segment_names))
-  let segmentName = undefined
   if (segment.dataset.total_segments === timeline.dataset.total_segments) {
     const split = timeline.querySelector(`.split[data-segment_number='${segment.dataset.segment_number}']`)
     if (split) {
       return split
     }
   } else {
+    const segmentNames = FuzzySet(JSON.parse(timeline.dataset.segment_names))
     const closestSegments = segmentNames.get(segment.dataset.segment_name)
     if (closestSegments && closestSegments[0][0] > 0.5) {
-      segmentName = closestSegments[0][1]
+      const segmentName = closestSegments[0][1]
       return timeline.querySelector(`.split[data-segment_name='${segmentName}']`)
     }
   }
