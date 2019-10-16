@@ -30,7 +30,7 @@ class SegmentGroup
   end
 
   def reduced?(timing)
-    false
+    segments.first.reduced?(timing)
   end
 
   def segment_group_parent?
@@ -42,7 +42,7 @@ class SegmentGroup
   end
 
   def skipped?(timing)
-    false
+    segments.all? { |segment| segment.skipped?(timing) }
   end
 
   def shortest_duration(timing)
@@ -97,8 +97,8 @@ class SegmentGroup
       segment.histories.each do |history|
         previous_segment = segments[segment.segment_number - 1]&.histories&.find { |attempt| attempt.attempt_number == history.attempt_number }
         # Don't store a segment's duration if it is 0 or if the previous segment's duration was 0 (and thus skipped)
-        @durations_by_attempt[Run::REAL][history.attempt_number] << history.realtime_duration_ms unless history.realtime_duration_ms == 0 || previous_segment&.realtime_duration_ms == 0
-        @durations_by_attempt[Run::GAME][history.attempt_number] << history.gametime_duration_ms unless history.gametime_duration_ms == 0 || previous_segment&.gametime_duration_ms == 0
+        @durations_by_attempt[Run::REAL][history.attempt_number] << history.realtime_duration_ms unless (history.realtime_duration_ms || 0) == 0 || (previous_segment && (previous_segment.realtime_duration_ms || 0) == 0)
+        @durations_by_attempt[Run::GAME][history.attempt_number] << history.gametime_duration_ms unless (history.gametime_duration_ms || 0) == 0 || (previous_segment && (previous_segment.gametime_duration_ms || 0) == 0)
       end
     end
 
