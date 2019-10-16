@@ -30,7 +30,7 @@ class SegmentGroup
   end
 
   def reduced?(timing)
-    false
+    segments.first.reduced?(timing)
   end
 
   def segment_group_parent?
@@ -42,7 +42,7 @@ class SegmentGroup
   end
 
   def skipped?(timing)
-    false
+    segments.all? { |segment| segment.skipped?(timing) }
   end
 
   def shortest_duration(timing)
