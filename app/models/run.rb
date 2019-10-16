@@ -177,6 +177,7 @@ class Run < ApplicationRecord
     segments_with_groups.select(&:segment_group_parent?).map do |segment|
       {
         id:             segment.id,
+        display_name:   segment.display_name,
         name:           segment.display_name,
         segment_number: segment.segment_number,
         histories:      segment.segment_group_durations
