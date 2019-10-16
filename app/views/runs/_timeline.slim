@@ -10,7 +10,7 @@
       - collapsed_segments.each.with_index do |segment, index|
         .pure-u.split(
           id="#{run.id36}-split-#{index}"
-          data={start_ms: segment.start(timing).to_ms, run_id: run.id36, segment_name: segment.display_name, segment_number: index+1}
+          data={start_ms: segment.start(timing).to_ms, run_id: run.id36, segment_name: CGI.escapeHTML(segment.display_name), segment_number: index+1}
           class="#{next_timeline_color(run.id36)} #{'progress-bar-striped progress-bar-animated' if segment.duration(timing).nil?}"
           style="width: #{segment.proportion(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video}"
         )
