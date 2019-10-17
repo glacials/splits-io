@@ -14,8 +14,27 @@ const matchingSplitForTimeline = (segment, timeline) => {
     const segmentNames = FuzzySet(Array.from(timeline.getElementsByClassName('split')).map(el => el.dataset.segment_name))
     const closestSegments = segmentNames.get(segment.dataset.segment_name)
     if (closestSegments && closestSegments[0][0] > 0.5) {
+      // We have at least 1 valid segment.
+      // We need to see if there are multiple with the same name
       const segmentName = closestSegments[0][1]
-      return timeline.querySelector(`.split[data-segment_name='${segmentName}']`)
+      const segments = Array.from(timeline.querySelectorAll(`.split[data-segment_name='${segmentName}']`))
+      if (segments.length > 1) {
+        // There are multiple segments with the same name
+        // Pick the closest based on segment number
+        let minDistance = Number.MAX_SAFE_INTEGER
+        let segmentIndex = -1
+        segments.forEach((matchedSegment, index) => {
+          const distance = Math.abs(matchedSegment.dataset.segment_number - segment.dataset.segment_number)
+          if (distance < minDistance) {
+            minDistance = distance
+            segmentIndex = index
+          }
+        })
+        return segments[segmentIndex]
+      } else {
+        // Nope, just the 1 segment
+        return segments[0]
+      }
     }
   }
 }
