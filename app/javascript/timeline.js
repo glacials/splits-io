@@ -22,7 +22,7 @@ const matchingSplitForTimeline = (segment, timeline) => {
         // There are multiple segments with the same name
         // Pick the closest based on segment number
         let minDistance = Number.MAX_SAFE_INTEGER
-        let segmentIndex = -1
+        let segmentIndex = 0
         segments.forEach((matchedSegment, index) => {
           const distance = Math.abs(matchedSegment.dataset.segment_number - segment.dataset.segment_number)
           if (distance < minDistance) {
