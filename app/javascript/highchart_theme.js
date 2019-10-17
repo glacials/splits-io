@@ -2,6 +2,8 @@
 import Highcharts from 'highcharts'
 import {blue, purple, green, yellow, red, orange} from 'colors.js'
 
+const defaultFontFamily = '"Helvetica Neue", Helvetica, Arial, sans-serif'
+
 Highcharts.theme = {
   colors: [
     blue,
@@ -14,7 +16,7 @@ Highcharts.theme = {
   chart: {
     backgroundColor: 'none',
     style: {
-     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+     fontFamily: defaultFontFamily
    },
    plotBorderColor: '#606063'
   },
@@ -22,12 +24,14 @@ Highcharts.theme = {
   title: {
     style: {
       color: '#FFFFFF',
+      fontFamily: defaultFontFamily,
       fontSize: '20px'
     }
   },
   subtitle: {
     style: {
       color: '#E0E0E3',
+      fontFamily: defaultFontFamily
     }
   },
 
@@ -51,7 +55,8 @@ Highcharts.theme = {
     gridLineColor: '#707070',
     labels: {
       style: {
-        color: '#FFF'
+        color: '#FFF',
+        fontFamily: defaultFontFamily
       }
     },
     lineColor: '#707070',
@@ -60,7 +65,8 @@ Highcharts.theme = {
     tickWidth: 1,
     title: {
       style: {
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        fontFamily: defaultFontFamily
       }
     }
   },
@@ -94,7 +100,8 @@ Highcharts.theme = {
 
   legend: {
     itemStyle: {
-      color: '#E0E0E3'
+      color: '#E0E0E3',
+      fontFamily: defaultFontFamily
     },
     itemHoverStyle: {
       color: '#FFF'
