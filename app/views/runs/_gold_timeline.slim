@@ -1,0 +1,8 @@
+- if run.completed?(timing)
+  .gold.timeline.timeline-animation style="width: #{run.duration(timing) / scale_to * 100.0}%"
+    - run.collapsed_segments(timing).each_with_index do |segment, index|
+      div style="width: #{segment.proportion(timing) * 100.0}%"
+        - if segment.shortest_duration(timing).present?
+          .gold-split style="width: #{segment.shortest_duration(timing) / segment.duration(timing) * 100.0}%"
+        - else
+          .gold-split.bg-dark style='width: 100%'

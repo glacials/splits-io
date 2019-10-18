@@ -82,6 +82,7 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
+        this.setSyncing()
       } catch(error) {
         this.error = error
       } finally {
@@ -89,9 +90,18 @@ export default {
         document.getElementById('input-chat-text').focus()
       }
     },
+    setSyncing: async function() {
+      // We (in a perfect world) don't know how many ancestors up the Race component is, so just emit to every
+      // (grand)*parent
+      let vm = this.$parent
+      while (vm) {
+        vm.$emit('change')
+        vm = vm.$parent
+      }
+    },
   },
   name: 'race-title',
-  props: ['race'],
+  props: ['race', 'starting', 'syncing'],
   watch: {
     gameId: function() {
       if (this.game.categories.find(category => category.id === this.categoryId) === undefined) {

@@ -52,7 +52,7 @@ class Category < ApplicationRecord
   end
 
   def to_s
-    name
+    name || 'Untitled category'
   end
 
   def to_param

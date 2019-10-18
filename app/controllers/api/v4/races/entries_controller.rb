@@ -37,6 +37,38 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
     if @entry.update(entry_params)
       render status: :ok, json: Api::V4::EntryBlueprint.render(@entry, root: :entry)
       updated = @entry.saved_changes.keys.reject { |k| k == 'updated_at' }.to_sentence
+
+      if @entry.saved_changes.keys.include?('finished_at')
+        # If this was the last split
+        if @entry.finished_at && @entry.run&.segments&.where(Run.duration_type(Run::REAL) => nil)&.count == 1
+          @entry.run.split(
+            more: false,
+            realtime_end_ms: (@entry.finished_at - @entry.race.started_at) * 1000,
+            gametime_end_ms: nil,
+          )
+          run_history = @entry.run.histories.order(attempt_number: :asc).last
+          run_history.update(
+            realtime_duration_ms: (@entry.finished_at - @entry.race.started_at) * 1000,
+            gametime_duration_ms: nil,
+            ended_at:             run_history.started_at + (@entry.finished_at - @entry.race.started_at),
+          )
+        end
+        if @entry.finished_at.nil? && @entry.run&.segments&.where(Run.duration_type(Run::REAL) => nil)&.count == 0
+          @entry.run.segments.order(segment_number: :asc).last.update(
+            realtime_end_ms:      nil,
+            realtime_duration_ms: nil,
+            realtime_gold:        false,
+            gametime_end_ms:      nil,
+            gametime_duration_ms: nil,
+            gametime_gold:        false,
+          )
+          @entry.run.update(
+            realtime_duration_ms: nil,
+            gametime_duration_ms: nil,
+          )
+        end
+      end
+
       Api::V4::RaceBroadcastJob.perform_later(
         @race,
         'race_entries_updated',
@@ -59,7 +91,7 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
     if @entry.destroy
       render status: :ok, json: {status: 200}
       Api::V4::RaceBroadcastJob.perform_later(@race, 'race_entries_updated', 'A user has left the race')
-      Api::V4::GlobalRaceUpdateJob.perform_later(@race, 'race_entries_updated', 'An user has left a race')
+      Api::V4::GlobalRaceUpdateJob.perform_later(@race, 'race_entries_updated', 'A user has left a race')
     else
       render status: :conflict, json: {
         status: 409,
@@ -83,8 +115,8 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
     }
   end
 
-  def set_entry
-    @entry = @race.entries.find(params[:id])
+  def set_entry(param: :id)
+    @entry = @race.entries.find(params[param])
     return if @entry.creator == current_user
 
     render status: :forbidden, json: {

@@ -433,6 +433,54 @@ not include the `endedAt` field for unreached segments.
 </details>
 
 <details>
+<summary>Splitting</summary>
+```sh
+# Non-race runs
+curl -X POST https://splits.io/api/v4/runs/:run/splits \
+  -H 'Content-Type: application/json' \
+  -d '{"split": {"realtime_end_ms": 123456, "gametime_end_ms:" 123456}}'
+
+# Race runs
+curl -X POST https://splits.io/api/v4/races/:race/entries/:entry/splits?more=1
+  -H 'Content-Type: application/json' \
+  -d '{"split": {"realtime_end_ms": 123456, "gametime_end_ms:" 123456}}'
+```
+
+If you want to split an in-progress run without re-uploading the entire thing (as in *Uploading runs* -> *Replacing
+source files* above), you can split using this endpoint.
+
+This is a relatively handsfree endpoint. It will find the first segment without a time recorded, and attach the given
+`realtime_end_ms` and/or `gametime_end_ms` to it; each representing the total number of elapsed milliseconds in the
+_entire run_ at the time the segment was completed. Other fields like golds, durations, and starts will be calculated
+automatically.
+
+If you want to skip a split, just submit `null` for both `realtime_duration_ms` and `gametime_duration_ms`.
+
+If you need more control over your segments than this endpoint provides, you should instead replace the run's source
+file entirely (see *Uploading runs* -> *Replacing source files* above).
+
+#### Race runs vs non-race runs
+At the top of this section there are two equivalent splitting endpoints listed; one for normal runs and one for race
+runs.
+
+A race run is just a [Run][run] which will be completed as part of a [Race][race]. To associate the two, upload the run
+as normal and link it with an [Entry][entry] using the [Entry update endpoint][entry].
+
+Do not use the "normal run" splitting endpoint for race runs, as this will cause the race to be unaware of updates as
+the user splits.
+
+#### Blind or semi-blind runs
+If the runner is doing a run or race where you don't know how many splits there are going to be, just pass `more=1` with
+each split. Splits.io will continuously create new segments as you split in a way that displays nicely on the run and
+race pages. You can even start splitting without associating a Run with the Entry; a new Run will be created and linked
+for you, and the first call to the split endpoint will create and immediately end the first segment.
+
+When splitting like this and you're ready to perform the final split, just split _without_ `more=1`. This will be the
+final split. On race runs, this will also mark the user's race Entry as finished. (Alternatively, you can use the
+[Entry][entry] API to set `finished_at`, and this will perform the final split in the linked Run.)
+</details>
+
+<details>
 <summary>Converting runs</summary>
 
 ```sh
@@ -858,7 +906,7 @@ Send a Chat Message to a Race. All fields except `body` are inferred from your a
 </details>
 
 ### WebSockets
-Splits.io broadcasts updates to [Race][race] in realtime over WebSockets. We use WebSockets only to push
+Splits.io broadcasts updates to [Races][race] in realtime over WebSockets. We use WebSockets only to push
 changes from Splits.io to clients; to send data the other way, you must use the REST APIs above.
 
 <details>
@@ -880,9 +928,9 @@ between client and server open during multiple requests. (Yes, we support HTTP/2
 [1]: https://en.wikipedia.org/wiki/HTTP/2
 </details>
 
-We use a light layer on top of WebSockets called Action Cable, which is part of Ruby on Rails. This layer is so light
-that you can use vanilla WebSockets without noticing it's there; but if you happen to be using JavaScript, you might opt
-to use the [Action Cable JavaScript library][actioncable-npm] to simplify your code a bit.
+We use a light layer on top of WebSockets called Action Cable. This layer is so light that you can use vanilla
+WebSockets without noticing it's there; but if you happen to be using JavaScript, you might opt to use the [Action Cable
+JavaScript library][actioncable-npm] to simplify your code a bit.
 
 In all examples below, we'll provide instructions for consuming Splits.io WebSockets using vanilla JavaScript as well as
 the Action Cable library. The vanilla JS instructions can roughly translate to whatever language you're using.
@@ -1099,9 +1147,9 @@ not require extra deserialization.
 | `"race_state"`              | RaceChannel         | State of the Race (in response to `state=1`)                  | [`race`][race]                 |
 | `"race_not_found"`          | RaceChannel         | No Race found for the given ID                                | *none*                         |
 | `"race_invalid_join_token"` | RaceChannel         | The join token is not valid for the Race                      | *none*                         |
-| `"race_start_scheduled"`    | both                | The/a Race is starting in a few seconds                       | [`race`]                       |
-| `"race_ended"`              | both                | The/a Race has finished                                       | [`race`]                       |
-| `"race_entries_updated" `   | both                | An entry was created, changed, or deleted                     | [`race`]                       |
+| `"race_start_scheduled"`    | both                | The/a Race is starting in a few seconds                       | [`race`][race]                 |
+| `"race_ended"`              | both                | The/a Race has finished                                       | [`race`][race]                 |
+| `"race_entries_updated" `   | both                | An entry was created, changed, or deleted                     | [`race`][race]                 |
 | `"fatal_error"`             | both                | An error occured when processing the message                  | *none*                         |
 | `"connection_error"`        | both                | Received when connecting to cable with an invalid oauth token | *none*                         |
 </details>

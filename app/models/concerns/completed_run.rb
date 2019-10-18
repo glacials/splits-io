@@ -119,10 +119,6 @@ module CompletedRun
       end
     end
 
-    def completed?(timing)
-      duration(timing).present? && duration(timing).positive?
-    end
-
     # total_playtime returns the total amount of time logged in this game by this runner, according to the timer. This
     # includes all partial and complete runs.
     def total_playtime

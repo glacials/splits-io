@@ -7,7 +7,8 @@
     li.breadcrumb-item.active = link_to(@race.to_param, race_path(@race))
 
 #vue-race
-  race inline-template=true race-id=@race.id
+  .text-center v-if="false" = render partial: 'shared/spinner'
+  race inline-template=true race-id=@race.id v-cloak=true
     div
       .text-center v-if="loading" = render partial: 'shared/spinner', locals: {message: 'Loading realtime race'}
       div v-show="!loading"
