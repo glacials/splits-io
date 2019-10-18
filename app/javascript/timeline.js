@@ -1,6 +1,43 @@
+import FuzzySet from 'fuzzyset.js'
+
 let currentTimelineRunId = ''
 const timelineMouseOverTimers = {}
 const timelineMouseOutTimers = {}
+
+const matchingSplitForTimeline = (segment, timeline) => {
+  if (segment.closest('.timeline-background').getElementsByClassName('split').length === timeline.getElementsByClassName('split').length) {
+    const split = timeline.querySelector(`.split[data-segment_number='${segment.dataset.segment_number}']`)
+    if (split) {
+      return split
+    }
+  } else {
+    const segmentNames = FuzzySet(Array.from(timeline.getElementsByClassName('split')).map(el => el.dataset.segment_name))
+    const closestSegments = segmentNames.get(segment.dataset.segment_name)
+    if (closestSegments && closestSegments[0][0] > 0.5) {
+      // We have at least 1 valid segment.
+      // We need to see if there are multiple with the same name
+      const segmentName = closestSegments[0][1]
+      const segments = Array.from(timeline.querySelectorAll(`.split[data-segment_name='${segmentName}']`))
+      if (segments.length > 1) {
+        // There are multiple segments with the same name
+        // Pick the closest based on segment number
+        let minDistance = Number.MAX_SAFE_INTEGER
+        let segmentIndex = 0
+        segments.forEach((matchedSegment, index) => {
+          const distance = Math.abs(matchedSegment.dataset.segment_number - segment.dataset.segment_number)
+          if (distance < minDistance) {
+            minDistance = distance
+            segmentIndex = index
+          }
+        })
+        return segments[segmentIndex]
+      } else {
+        // Nope, just the 1 segment
+        return segments[0]
+      }
+    }
+  }
+}
 
 const mouseOverSegment = (segment) => {
   const run_id = segment.dataset.run_id
@@ -9,8 +46,15 @@ const mouseOverSegment = (segment) => {
   timelineMouseOverTimers[timerKey] = undefined
 
   const leftEdge = segment.offsetLeft
-  const otherTimelinesQuery = `.split[data-segment_number='${segment_number}']:not([data-run_id='${run_id}'])`
-  document.querySelectorAll(otherTimelinesQuery).forEach((el) => {
+  const splits = []
+
+  document.querySelectorAll(`.timeline-background:not([data-run_id='${run_id}'])`).forEach((timeline) => {
+    const split = matchingSplitForTimeline(segment, timeline)
+    if (split) {
+      splits.push(split)
+    }
+  })
+  splits.forEach((el) => {
     const otherLeftEdge = el.offsetLeft
     const timeline = el.closest('.timeline-background')
     const goldTimeline = timeline.parentElement.querySelector('.gold.timeline')
