@@ -24,15 +24,14 @@ article#search-results
             table.card-body.table.table-striped.mb-0
               tbody
                 - results.each do |obj|
-                  tr
-                    td
-                      - case search_type
-                      - when :games
-                        = link_to obj, game_path(obj), class: 'game-link'
-                        small.float-right = obj.categories.pluck(:name).join(', ')
-                      - when :users
-                        = link_to obj, user_path(obj), class: 'game-link'
-                        small.float-right = obj.games.pluck(:shortname).compact.uniq.join(', ')
+                  tr: td
+                    - case search_type
+                    - when :games
+                      = link_to obj, game_path(obj), class: 'game-link'
+                      small.float-right = obj.categories.pluck(:name).join(', ')
+                    - when :users
+                      = link_to obj, user_path(obj), class: 'game-link'
+                      small.float-right = obj.games.pluck(:shortname).compact.uniq.join(', ')
 article#runs
   - if @results[:games].present?
     h4 Runs

@@ -25,16 +25,16 @@ h5
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
   .btn-group.m-2 role='group' aria={label: 'Run navigation'}
     .btn-group role='group'
-      = render partial: 'export_button', locals: {run: run}
       - if can?(:edit, run)
         - if request.path_info == edit_run_path(run)
-          a.btn.btn-outline-light href=run_path(run)
+          a.btn.btn-dark href=run_path(run)
             => icon('fas', 'hand-point-left')
             ' Back
         - else
-          a.btn.btn-outline-light href=edit_run_path(run)
+          a.btn.btn-dark href=edit_run_path(run)
             => icon('fas', 'edit')
             ' Edit
+      = render partial: 'export_button', locals: {run: run}
       = render partial: 'compare_button', locals: {timing: timing, run: run, compare_runs: compare_runs}
     - if run.user.nil?
       #claim-nav-link-container.btn-group hidden=true
@@ -47,7 +47,7 @@ h5
   - if can?(:create, RunLike)
     .btn-group.m-2: button#like-button.btn.tip(
       data={liked: current_user.likes?(run) ? '1' : '0'}
-      class=(current_user.likes?(run) ? 'btn-light' : 'btn-outline-light')
+      class=(current_user.likes?(run) ? 'btn-dark' : 'btn-outline-light')
       title=tooltip(run)
     )
       ' 🎉

@@ -1,12 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
-# See https://github.com/rails/rails/issues/35812
 ActiveJob::Base.queue_adapter = Rails.application.config.active_job.queue_adapter
 
 [
@@ -68,4 +59,16 @@ end
 
 User.create(
   name: 'Alice'
+)
+
+Doorkeeper::Application.create(
+  name:                'Splits.io',
+  uid:                 ENV['SPLITSIO_CLIENT_ID'],
+  secret:              ENV['SPLITSIO_CLIENT_SECRET'],
+  redirect_uri:        'http://localhost:3000/auth/splitsio/callback',
+  scopes:              '',
+  owner_id:            2, # First user made after fresh build
+  owner_type:          'User',
+  secret_generated_at: Time.now,
+  confidential:        true,
 )

@@ -2,7 +2,7 @@
 - cols ||= [:runner, :time, :name, :video, :rival, :uploaded]
 / This allows us to blindly check the keys for items instead of wraping in `try`s
 - col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options, {}))
-- runs = order_runs(runs).page(params[:page]).includes(:user, :game)
+- runs = order_runs(runs).page(params[:page]).includes(:user, :game, :category, :video, :segments)
 - non_pb_runs = user.non_pbs(runs.map(&:category_id)).group_by(&:category_id) if col_options[:time].include?(:archived)
 - if runs.none?
   - if description.present?

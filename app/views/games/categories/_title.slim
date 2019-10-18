@@ -1,41 +1,84 @@
-h1 = @category.game
-- if @category.game.aliases.where.not(name: @category.game.name).present?
-  h6 Also known as:
-  ul
-    - @category.game.aliases.where.not(name: @category.game.name).each do |game_alias|
-      li = game_alias
-h6
-  - if @on_game_page && @category.game.srdc.try(:url).present?
-    a.btn.btn-dark.mr-2.tip href=@category.game.srdc.url title='See on Speedrun.com'
-      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-  - elsif !@on_game_page && @category.srdc.try(:url).present?
-    a.btn.btn-dark.mr-2.tip href=@category.srdc.url title='See on Speedrun.com'
-      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-  - if @category.game.srl.present?
-    a.btn.btn-dark.mr-2.tip href=@category.game.srl.url title='See on SpeedRunsLive'
-      = image_tag(asset_path('srl.png'))
-  - if can?(:edit, @category.game)
-    a.btn.btn-outline-light href=edit_game_path(@category.game)
-      => icon('fas', 'edit')
-      span Edit
-article data-turbolinks-temporary=true
-  .row
-    .col-sm-3.mb-3
-      .statcard.p-3
-        h3.statcard-number = @game.users.count
-        span.statcard-desc = 'Runner'.pluralize(@game.users.count)
-    .col-sm-3.mb-3
-      .statcard.p-3
-        h3.statcard-number = @game.runs.count
-        span.statcard-desc = 'Run'.pluralize(@game.runs.count)
-    .col-sm-3.mb-3
-      .statcard.p-3
-        h3.statcard-number = @game.categories.count
-        span.statcard-desc = 'Category'.pluralize(@game.categories.count)
-    - if @game.runs.any?
-      .col-sm-3.mb-3
-        .statcard.p-3
-          h3.statcard-number = time_ago_in_words(@game.runs.order(created_at: :desc).first.created_at)
-          span.statcard-desc
-            span> Time since
-            = link_to('last run', @game.runs.order(created_at: :desc).first, class: 'text-muted')
+.card.mb-3
+  .row.no-gutters
+    - if @game.srdc&.cover_url
+      .col-md-4 style='max-width: 200px'
+        img.card-img src=@game.srdc.cover_url
+    .col-md-8
+      .card-body
+        h1.card-title = @category.game
+        h6
+          .btn-group.mr-2
+            - if @on_game_page && @category.game.srdc.try(:url).present?
+              a.btn.btn-dark.tip href=@category.game.srdc.url title='See on Speedrun.com'
+                = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+            - elsif !@on_game_page && @category.srdc.try(:url).present?
+              a.btn.btn-dark.tip href=@category.srdc.url title='See on Speedrun.com'
+                = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+            - if @category.game.srdc&.twitch_name
+              a.btn.btn-dark.tip title='See on Twitch' href="https://www.twitch.tv/directory/game/#{@category.game.srdc.twitch_name}"
+                .text-light = icon('fab', 'twitch')
+            - if @category.game.srl.present?
+              a.btn.btn-dark.tip href=@category.game.srl.url title='See on SpeedRunsLive'
+                = image_tag(asset_path('srl.png'))
+          - if @category.route
+            span.mr-2
+              = render partial: 'runs/export_button', locals: { \
+                run: @category.route, button_text: "#{@category} splits", force_route_only: true \
+              }
+          span#vue-race.mr-2 = render partial: 'races/create', locals: {game: @game, category: @category}
+          - if can?(:edit, @category.game)
+            a.btn.btn-dark.mr-2 href=edit_game_path(@category.game)
+              => icon('fas', 'edit')
+              span Edit
+        .row
+          .col-sm-3.mb-3
+            .statcard.p-3
+              h3.statcard-number = @game.users.count
+              span.statcard-desc = 'Runner'.pluralize(@game.users.count)
+          .col-sm-3.mb-3
+            .statcard.p-3
+              h3.statcard-number = @game.runs.count
+              span.statcard-desc = 'Run'.pluralize(@game.runs.count)
+          .col-sm-3.mb-3
+            .statcard.p-3
+              h3.statcard-number = @game.categories.count
+              span.statcard-desc = 'Category'.pluralize(@game.categories.count)
+          - if @game.runs.any?
+            .col-sm-3.mb-3
+              .statcard.p-3
+                h3.statcard-number = time_ago_in_words(@game.runs.order(created_at: :desc).first.created_at)
+                span.statcard-desc
+                  span> Since
+                  = link_to('last run', @game.runs.order(created_at: :desc).first, class: 'text-muted')
+            .col-sm-3.mb-3
+              .statcard.p-3
+                h3.statcard-number = @category.median_duration(timing).format
+                span.statcard-desc
+                  ' Median run length
+                  span.tip.text-secondary(
+                    title='Half of all runs are slower, and half are faster, than this time.'
+                  ) = icon('fas', 'info-circle')
+            .col-sm-3.mb-3
+              .statcard.p-3
+                h3.statcard-number = @category.median_duration(timing, attempt_number: 1).format
+                span.statcard-desc
+                  ' Median blind run
+                  span.tip.text-secondary(
+                    title='Half of all first attempts are slower, and half are faster, than this time.'
+                  ) = icon('fas', 'info-circle')
+            .col-sm-3.mb-3
+              .statcard.p-3
+                h3.statcard-number = @category.median_duration(timing, attempt_number: 10).format
+                span.statcard-desc
+                  ' Median 10th attempt
+                  span.tip.text-secondary(
+                    title='Half of all 10th attempts are slower, and half are faster, than this time.'
+                  ) = icon('fas', 'info-circle')
+            .col-sm-3.mb-3
+              .statcard.p-3
+                h3.statcard-number = @category.median_duration(timing, attempt_number: 100).format
+                span.statcard-desc
+                  ' Median 100th attempt
+                  span.tip.text-secondary(
+                    title='Half of all 100th attempts are slower, and half are faster, than this time.'
+                  ) = icon('fas', 'info-circle')

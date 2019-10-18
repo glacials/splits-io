@@ -7,7 +7,7 @@
     li.breadcrumb-item = link_to(@category.game, game_path(@category.game))
     li.breadcrumb-item = link_to(@category, game_category_path(@category.game, @category))
     li.breadcrumb-item = link_to('Sum of Best Leaderboard', game_category_sum_of_bests_path(@category.game, @category))
-  = render partial: 'games/categories/title', locals: {category: @category}
+.row.mx-2: .col-md-12 = render partial: 'games/categories/title', locals: {timing: timing, category: @category}
 
 article data-turbolinks-temporary=true
   .card
@@ -24,7 +24,7 @@ article data-turbolinks-temporary=true
             tr
               th
               th.align-left Runner
-              th.align-left Sum of Best
+              th.align-left Sum of best
               th.align-left PB
               th.align-left
                 | Potential save
