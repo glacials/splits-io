@@ -51,14 +51,17 @@ class SegmentGroup
 
   def history_stats(timing)
     values = durations_by_attempt[timing].values.sort
-    mean = values.sum / durations_by_attempt[timing].keys.length.to_f
-    variance_sum = values.inject(0) { |accum, i| accum + (i-mean)**2 }
+    return {} if values.blank?
+
+    mean            = values.sum / durations_by_attempt[timing].keys.length.to_f
+    variance_sum    = values.inject(0) { |accum, i| accum + (i - mean)**2 }
     sample_variance = values.length == 1 ? 0 : variance_sum / (durations_by_attempt[timing].keys.length - 1).to_f
     {
       standard_deviation: Math.sqrt(sample_variance),
-      mean: mean,
-      median: values.length == 1 ? values[0] : values[values.length / 2 + 1], # Not actual median, but matches the DB query
-      percentiles: {
+      mean:               mean,
+      # Not actual median, but matches the DB query
+      median:             values.length == 1 ? values[0] : values[values.length / 2 + 1],
+      percentiles:        {
         10 => percentile(values, 0.1),
         90 => percentile(values, 0.9),
         99 => percentile(values, 0.99)
@@ -87,6 +90,7 @@ class SegmentGroup
   # value of the real/game time duration of the entire segment_group
   def durations_by_attempt
     return @durations_by_attempt if @durations_by_attempt
+
     @durations_by_attempt = {
       Run::REAL => Hash.new { |h, k| h[k] = [] },
       Run::GAME => Hash.new { |h, k| h[k] = [] }
@@ -97,15 +101,15 @@ class SegmentGroup
       segment.histories.each do |history|
         previous_segment = segments[segment.segment_number - 1]&.histories&.find { |attempt| attempt.attempt_number == history.attempt_number }
         # Don't store a segment's duration if it is 0 or if the previous segment's duration was 0 (and thus skipped)
-        @durations_by_attempt[Run::REAL][history.attempt_number] << history.realtime_duration_ms unless (history.realtime_duration_ms || 0) == 0 || (previous_segment && (previous_segment.realtime_duration_ms || 0) == 0)
-        @durations_by_attempt[Run::GAME][history.attempt_number] << history.gametime_duration_ms unless (history.gametime_duration_ms || 0) == 0 || (previous_segment && (previous_segment.gametime_duration_ms || 0) == 0)
+        @durations_by_attempt[Run::REAL][history.attempt_number] << history.realtime_duration_ms unless (history.realtime_duration_ms || 0).zero? || (previous_segment && (previous_segment.realtime_duration_ms || 0).zero?)
+        @durations_by_attempt[Run::GAME][history.attempt_number] << history.gametime_duration_ms unless (history.gametime_duration_ms || 0).zero? || (previous_segment && (previous_segment.gametime_duration_ms || 0).zero?)
       end
     end
 
     # Only keep attempts who have times for all segments
     @durations_by_attempt.keys.each do |timing|
       max_length = @durations_by_attempt[timing].values.map(&:length).max
-      @durations_by_attempt[timing].delete_if { |key, value| value.length < max_length}
+      @durations_by_attempt[timing].delete_if { |_key, value| value.length < max_length }
     end
 
     # Sum the segment times for each attempt and store those as opposed to the individual segment durations
@@ -119,10 +123,12 @@ class SegmentGroup
   end
 
   def percentile(values_sorted, percent)
+    return nil if values_sorted.blank?
     return values_sorted[0] if values_sorted.length == 1
+
     k = (percent * (values_sorted.length - 1) + 1).floor - 1
     f = (percent * (values_sorted.length - 1) + 1).modulo(1)
 
-    values_sorted[k] + (f * (values_sorted[k+1] - values_sorted[k]))
+    values_sorted[k] + (f * (values_sorted[k + 1] - values_sorted[k]))
   end
 end
