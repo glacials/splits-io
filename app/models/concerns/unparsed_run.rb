@@ -174,7 +174,7 @@ module UnparsedRun
 
     def process_segments(run)
       container = {}
-      # Use an open struct here so we don't need first loop handling
+      # Use an open struct to track last known end times
       previous_segment = OpenStruct.new(realtime_end_ms: 0, gametime_end_ms: 0)
 
       (0...run.len).each_slice(MAX_CONTAINER_SIZE) do |slice|
@@ -195,23 +195,28 @@ module UnparsedRun
           end
 
           segment.realtime_end_ms = lsc_segment.personal_best_split_time.real_time&.total_seconds&.*(1000) || 0
-          segment.realtime_duration_ms = segment.realtime_end_ms - previous_segment.realtime_end_ms
+          segment.realtime_duration_ms = [0, segment.realtime_end_ms - previous_segment.realtime_end_ms].max
           segment.realtime_start_ms = segment.realtime_end_ms - segment.realtime_duration_ms
           segment.realtime_shortest_duration_ms = lsc_segment.best_segment_time.real_time&.total_seconds&.*(1000) || 0
           segment.realtime_skipped = segment.realtime_duration_ms.zero?
-          segment.realtime_gold = segment.realtime_duration_ms <= segment.realtime_shortest_duration_ms
+          if segment.realtime_duration_ms.positive?
+            segment.realtime_gold = segment.realtime_duration_ms <= segment.realtime_shortest_duration_ms
+          end
           segment.realtime_reduced = false
 
           segment.gametime_end_ms = lsc_segment.personal_best_split_time.game_time&.total_seconds&.*(1000) || 0
-          segment.gametime_duration_ms = segment.gametime_end_ms - previous_segment.gametime_end_ms
+          segment.gametime_duration_ms = [0, segment.gametime_end_ms - previous_segment.gametime_end_ms].max
           segment.gametime_start_ms = segment.gametime_end_ms - segment.gametime_duration_ms
           segment.gametime_shortest_duration_ms = lsc_segment.best_segment_time.game_time&.total_seconds&.*(1000) || 0
           segment.gametime_skipped = segment.gametime_duration_ms.zero?
-          segment.gametime_gold = segment.gametime_duration_ms <= segment.gametime_shortest_duration_ms
+          if segment.gametime_duration_ms.positive?
+            segment.gametime_gold = segment.gametime_duration_ms <= segment.gametime_shortest_duration_ms
+          end
           segment.gametime_reduced = false
 
           container[lsc_segment] = segment
-          previous_segment = segment
+          previous_segment.realtime_end_ms = segment.realtime_end_ms if segment.realtime_end_ms.positive?
+          previous_segment.gametime_end_ms = segment.gametime_end_ms if segment.gametime_end_ms.positive?
         end
 
         result = write_segments(container.values)
