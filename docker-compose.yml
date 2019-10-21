@@ -44,7 +44,7 @@ x-app: &app
     cache_from:
       - "${REPOSITORY_URI:-splitsio-dev}:latest"
     args:
-      RUBY_VERSION: '2.6.3' # also update docker-compose-production.yml & Gemfile
+      RUBY_VERSION: '2.6.5' # also update docker-compose-production.yml & Gemfile
   image: splitsio-dev
   tmpfs:
     - /tmp
