@@ -3,33 +3,35 @@ FactoryBot.define do
     # factory name:           {filename: 'filename-within-spec/factories/run_files},
 
     # timer runs
-    livesplit14:              {filename: 'livesplit1.4'},
-    livesplit15:              {filename: 'livesplit1.5.lss'},
-    livesplit16:              {filename: 'livesplit1.6'},
-    livesplit16_gametime:     {filename: 'livesplit1.6_gametime.lss'},
-    livesplit_no_realtime:    {filename: 'livesplit_no_realtime.lss'},
-    llanfair:                 {filename: 'llanfair'},
-    llanfair_gered:           {filename: 'llanfair_gered.lfs'},
-    llanfair_gered_with_refs: {filename: 'llanfair_gered_with_refs.lfs'},
-    splitsio_exchange:        {filename: 'splitsio_exchange/b.json'},
-    wsplit:                   {filename: 'wsplit'},
-    timesplittracker:         {filename: 'timesplittracker.txt'},
+    livesplit14:                     {filename: 'livesplit1.4'},
+    livesplit15:                     {filename: 'livesplit1.5.lss'},
+    livesplit16:                     {filename: 'livesplit1.6'},
+    livesplit16_gametime:            {filename: 'livesplit1.6_gametime.lss'},
+    livesplit_no_realtime:           {filename: 'livesplit_no_realtime.lss'},
+    llanfair:                        {filename: 'llanfair'},
+    llanfair_gered:                  {filename: 'llanfair_gered.lfs'},
+    llanfair_gered_with_refs:        {filename: 'llanfair_gered_with_refs.lfs'},
+    splitsio_exchange:               {filename: 'splitsio_exchange/b.json'},
+    wsplit:                          {filename: 'wsplit'},
+    timesplittracker:                {filename: 'timesplittracker.txt'},
 
     # a bad run and a better run from the same category, against which suggestions can be generated
-    compare_subject:          {filename: 'compare_subject.lss'},
-    compare_object:           {filename: 'compare_object.lss'},
+    compare_subject:                 {filename: 'compare_subject.lss'},
+    compare_object:                  {filename: 'compare_object.lss'},
 
     # specific-content runs
-    with_segments_bests:      {filename: 'with_segments_bests.lss'},
+    with_segments_bests:             {filename: 'with_segments_bests.lss'},
 
     # skipped splits
-    skipped_splits:           {filename: 'livesplit_skipped_splits.lss'},
+    skipped_splits:                  {filename: 'livesplit_skipped_splits.lss'},
 
     # subsplit
-    subsplits_with_titles:    {filename: 'livesplit_subsplits.lss'},
-    subsplits_without_titles: {filename: 'livesplit_subsplits_without_titles.lss'},
+    subsplits_braces_with_no_dashes: {filename: 'livesplit_subsplit_braces_with_no_dashes.lss'},
+    subsplits_ends_with_dash:        {filename: 'livesplit_subsplit_ends_with_dash.lss'},
+    subsplits_with_titles:           {filename: 'livesplit_subsplits.lss'},
+    subsplits_without_titles:        {filename: 'livesplit_subsplits_without_titles.lss'},
 
-    nameless_segments:        {filename: 'livesplit_nameless_segments.lss'}
+    nameless_segments:               {filename: 'livesplit_nameless_segments.lss'}
   }
 
   test_files.each do |_factory_name, file|
