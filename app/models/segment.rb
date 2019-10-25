@@ -211,7 +211,7 @@ class Segment < ApplicationRecord
   def subsplit?
     return false if name.blank?
 
-    /^[-\{]/.match?(name)
+    /^(?:-|\{.*?}\s*).+/.match?(name)
   end
 
   # last_subsplit? returns something truthy representing if this segment is the last subsplit of a segment group
@@ -223,6 +223,7 @@ class Segment < ApplicationRecord
   def display_name
     return name unless subsplit?
 
-    /^(?:-|\{.*?}\s*)(.+)/.match(name)[1]
+    matched_name = /^(?:-|\{.*?}\s*)(.+)/.match(name)
+    matched_name ? matched_name[1] : name
   end
 end
