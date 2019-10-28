@@ -242,8 +242,8 @@ class Run < ApplicationRecord
     segment_array.each_with_index do |segment, i|
       if !segment_group_start_index && segment.subsplit?
         segment_group_start_index = i
-        segment_group_end_index = segment_array[i..-1].index(&:last_subsplit?) + i
-        @segments_with_groups << SegmentGroup.new(self, segment_array[segment_group_start_index..segment_group_end_index])
+        segment_group_end_index = (segment_array[i..-1].index(&:last_subsplit?) || 0) + i
+        @segments_with_groups << SegmentGroup.new(self, segment_array[segment_group_start_index..segment_group_end_index]) unless segment_group_start_index == segment_group_end_index
       end
       if segment_group_end_index == i
         segment_group_start_index = nil

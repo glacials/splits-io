@@ -33,19 +33,22 @@ describe SegmentGroup, type: :model do
       run.segments << FactoryBot.create(:segment, run: run, segment_number: 3, name: '-Split 3')
       run.segments << FactoryBot.create(:segment, run: run, segment_number: 4, name: '-Split 4')
       run.segments << FactoryBot.create(:segment, run: run, segment_number: 5, name: 'Split 5')
+      run.segments << FactoryBot.create(:segment, run: run, segment_number: 6, name: '{Split 6}')
       run
     end
 
     it 'understands how to determine if a segment is a subsplit' do
-      segment_group = SegmentGroup.new(run, run.segments)
+      segment_group = SegmentGroup.new(run, run.segments[0..4])
       expect(segment_group.segments[0].subsplit?).to be true
       expect(segment_group.segments[0].last_subsplit?).to be false
       expect(segment_group.segments[4].last_subsplit?).to be true
+      expect(run.segments.last.subsplit?).to be false
     end
 
     it 'generates the correct display_name' do
-      segment_group = SegmentGroup.new(run, run.segments)
+      segment_group = SegmentGroup.new(run, run.segments[0..4])
       expect(segment_group.display_name).to eq('Split 5')
+      expect(run.segments.last.display_name).to eq('{Split 6}')
     end
   end
 end

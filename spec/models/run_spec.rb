@@ -626,6 +626,14 @@ describe Run, type: :model do
       groups = run.segments_with_groups
       expect(groups.length).to eq 53
     end
+
+    it 'ignores segments with dashes with no final subsplit' do
+      run = FactoryBot.create(:subsplits_ends_with_dash_run)
+      run.parse_into_db
+      run.reload
+      groups = run.segments_with_groups
+      expect(groups.length).to eq 4
+    end
   end
 
   context 'with nameless segments' do
