@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   get '/brand',     to: 'pages#brand',          as: :brand
   get '/read-only', to: 'pages#read_only_mode', as: :read_only_mode
   get '/privacy',   to: 'pages#privacy_policy', as: :privacy_policy
+  get '/partners',  to: 'pages#partners',       as: :partners
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
   get '/why/darkmode',   to: 'why#darkmode',   as: :why_darkmode

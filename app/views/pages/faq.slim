@@ -3,10 +3,7 @@
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('FAQ', faq_path)
-  h2 FAQ and Friends
 article
-  h3 FAQ
-
   a name='who'
   .card.mb-4
     h5.card-header
@@ -283,8 +280,8 @@ article
 
 article.mt-4
   h3
+    ' Open Source Friends
     => icon('fa', 'heart')
-    | Open Source Friends
     .float-right: a.text-muted data={turbolinks: false} href='#friends' name='friends' ¶
 
   .card-deck.mb-4
@@ -311,19 +308,6 @@ article.mt-4
         a.btn.btn-dark.float-right href='https://github.com/nitrofski/wsplit'
           => icon('fab', 'github')
           | Source
-
-  .card-deck
-    .card
-      h4.card-header PB Tracker
-      .card-body
-        p PB Tracker is Splits.io's spiritual sister, preferring a you-curated, diary-style progress tracking system to
-          Splits.io's more automated "give me all your splits" attitude.
-      .card-footer
-        .btn-group.float-right
-          a.btn.btn-dark href='https://github.com/rggibson/pb-tracker'
-            => icon('fab', 'github')
-            | Source
-          a.btn.btn-primary href='http://www.pbtracker.net/' Website
 
     .card
       h4.card-header SaltyBot

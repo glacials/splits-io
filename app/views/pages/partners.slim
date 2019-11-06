@@ -1,0 +1,16 @@
+- content_for(:title, 'Partnership')
+- content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Partnership Program', privacy_policy_path)
+.container
+  .card.mb-2
+    h2.card-header Splits.io Partnership Program 🎉
+    .card-body
+      p.lead We're launching our own partnership program -- and we want you in it!
+      center.my-4: img src=asset_path('partners/mario-face.jpg')
+      p
+        ' Splits.io partners get a free everlasting subscription to the site, branded partner-only swag, and a sweet icon
+        ' by their username on Splits.io.
+    .card-footer
+      .float-right: a.btn.btn-primary href='https://forms.gle/gMHEnwGWoWxSVpuf8' Apply for partnership

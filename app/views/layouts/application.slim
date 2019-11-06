@@ -123,7 +123,7 @@ html
         div.text-right
           small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
-          ' Help us out by taking the 2019 Splits.io survey!
+          ' Help us out by taking the Splits.io survey!
       - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
       - if entry.present? && request.path != race_path(entry.race)
         article
