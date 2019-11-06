@@ -77,6 +77,9 @@ Rails.application.routes.draw do
 
   get '/users/:user/pbs/:game/:category(/*trailing_path)', to: 'users/pbs#show', as: :user_pb
 
+  post   '/rivalries', to: 'rivalries#create', as: :rivalries
+  delete '/rivalries', to: 'rivalries#destroy'
+
   get   '/games',            to: 'games#index'
   get   '/games(?q=:q)',     to: redirect('/search?q=%{q}')
   get   '/games/:game',      to: 'games#show',  as: :game

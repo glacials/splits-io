@@ -40,8 +40,34 @@
               - if comparable_run.video&.twitch?
                 span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
     - if compare_runs.any?
-      .btn-group
-        a.btn.text-light.tip.pr-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
+      .btn-group.ml-1
+        a.btn.text-light.tip.px-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
           = icon('fas', 'exchange-alt')
-        a.btn.text-light.tip.pl-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
+        a.btn.text-light.tip.px-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
           = icon('fas', 'times')
+        - rivalry = current_user.rivalries.find_by(category_id: run.category_id)
+        - if rivalry.present?
+          - if rivalry.to_user_id == compare_runs.first.user_id
+            = link_to( \
+              rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
+              method: :delete, \
+              class: 'btn text-light tip px-1', \
+              title: "Remove #{rivalry.to_user} as a rival" \
+            )
+              = icon('fas', 'user-minus')
+          - else
+            = link_to( \
+              rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
+              method: :post, \
+              class: 'btn text-light tip px-1', \
+              title: "Replace #{rivalry.to_user} as a rival" \
+            )
+              = icon('fas', 'user-edit')
+        - else
+          = link_to( \
+            rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
+            method: :post, \
+            class: 'btn text-light tip px-1', \
+            title: "Add #{compare_runs.first.user} as a rival" \
+          )
+            = icon('fas', 'user-plus')
