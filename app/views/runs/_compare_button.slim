@@ -45,7 +45,7 @@
           = icon('fas', 'exchange-alt')
         a.btn.text-light.tip.px-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
           = icon('fas', 'times')
-        - rivalry = current_user.rivalries.find_by(category_id: run.category_id)
+        - rivalry = current_user&.rivalries&.find_by(category_id: run.category_id)
         - if rivalry.present?
           - if rivalry.to_user_id == compare_runs.first.user_id
             = link_to( \
