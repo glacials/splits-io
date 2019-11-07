@@ -44,6 +44,8 @@ document.addEventListener('turbolinks:load', () => {
 import Chartkick from "chartkick"
 window.Chartkick = Chartkick
 
+import './src/application.scss'
+
 import "../ad_cleanup.js"
 import "../analytics.js"
 import "../count.js"

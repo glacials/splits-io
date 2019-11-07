@@ -9,7 +9,7 @@
   - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST, created_at DESC')
 
 article
-  .card.shadow
+  .card.shadow.bg-darkish
     .card-header.d-flex.justify-content-between
       ul.nav.nav-bordered
         - historic = params[:historic] == '1'

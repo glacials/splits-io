@@ -19,7 +19,7 @@
 
 article
   .card-deck.mb-4
-    .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
+    .card.bg-darkish = form_for @run, as: @run.id36, url: run_path(@run) do |f|
       h5.card-header Edit Game/Category
       .card-body
         .form-row
@@ -50,23 +50,23 @@ article
               id: 'category-selector', \
               class: 'form-control' \
             )
-      .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-outline-primary'
 
   .card-deck.mb-4
-    .card = form_for(@run.video || @run.build_video, url: run_video_path(@run), method: :put) do |f|
+    .card.bg-darkish = form_for(@run.video || @run.build_video, url: run_video_path(@run), method: :put) do |f|
       h5.card-header Edit Video
       .card-body
         = f.text_field(:url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
       .card-footer.clearfix: .float-right: .btn-group
-        = f.submit('Save', class: 'btn btn-success')
+        = f.submit('Save', class: 'btn btn-outline-primary')
 
-    .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
+    .card.bg-darkish = form_for @run, as: @run.id36, url: run_path(@run) do |f|
       h5.card-header Edit Speedrun.com Link
       .card-body = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
-      .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-outline-primary'
 
   .card-deck.mb-4
-    .card
+    .card.bg-darkish
       h5.card-header Reparse
       .card-body
         p This button forces Splits.io to reparse your run's original file, repopulating your on-site splits and stats.
@@ -75,9 +75,9 @@ article
         p This is not reversible.
       .card-footer
         / This needs data-turbolinks="false" or the reparse page will refresh itself infinitely
-        .float-right: a.btn.btn-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse
+        .float-right: a.btn.btn-outline-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse
 
-    .card
+    .card.bg-darkish
       h5.card-header List/Unlist
       .card-body
         p An unlisted run isn't shown in category listings, search results, etc. but can still be viewed with a direct
@@ -105,7 +105,7 @@ article
                 = f.submit 'Change to Unlisted', class: 'btn btn-info'
 
     - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
-      .card
+      .card.bg-darkish
         h5.card-header Realtime / Gametime
         .card-body
           p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
@@ -131,7 +131,7 @@ article
                   = f.submit 'Change to Gametime', class: 'btn btn-info'
 article
   #delete.accordian
-    .card
+    .card.bg-darkish
       #delete-header.card-header
         h5.mb-0
           button.btn.btn-link type='button' data={toggle: 'collapse', target: '#delete-body'} aria={expanded: true, controls: 'delete-body'}
@@ -139,7 +139,7 @@ article
       #delete-body.collapse aria={labelledby: 'delete-header'} data={parent: 'delete'}
         .card-body
           .card-deck
-            .card
+            .card.bg-darkish
               h5.card-header Delete
               .card-body
                 p
@@ -149,9 +149,9 @@ article
                 p This is not reversible.
               .card-footer
                 .float-right
-                  = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'btn btn-danger'
+                  = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'btn btn-outline-danger'
                     | Delete
-            .card
+            .card.bg-darkish
               h5.card-header Disown
               .card-body
                 p Your run will continue to exist and be accessible, but it will no longer be attributed to you. It
@@ -161,5 +161,5 @@ article
                 p This is not reversible.
               .card-footer
                 .float-right
-                  = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'btn btn-warning'
+                  = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'btn btn-outline-warning'
                     | Disown

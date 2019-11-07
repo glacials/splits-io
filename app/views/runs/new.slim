@@ -4,7 +4,7 @@
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('Upload', new_run_path)
 .col-md-7.col-lg-6.col-xl-5.mx-auto
-  .card
+  .card.bg-darkish
     form#upload method='post' enctype='multipart/form-data'
       .card-body
         input#file type='file' name='file'
@@ -13,4 +13,4 @@
           ' You don't need to come to this page in the future. You can drag-and-drop your run files onto any Splits.io
           ' page.
       .card-footer.clearfix: .float-right
-         .btn.btn-outline-light Upload
+         .btn.btn-outline-primary Upload

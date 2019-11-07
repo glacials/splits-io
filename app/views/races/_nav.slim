@@ -1,7 +1,7 @@
 race-nav inline-template=true v-if='race' :race='race' v-cloak=true
   div v-if='race.entries && (race.entries.length === 0 || race.entries.some(entry => entry.finished_at === null && entry.forfeited_at === null))'
     .btn-group.mr-2 v-if='entry && (!race.started_at || entry.finished_at || entry.forfeited_at)'
-      button.btn.btn-outline-light(
+      button.btn.btn-outline-primary(
         :disabled='loading.leave'
         :title='errors.leave'
         @click='leave'
@@ -11,7 +11,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
         template v-if="loading.leave" = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.leave' => icon('fas', 'exclamation-triangle')
         ' Leave race
-      button.btn.btn-outline-light(
+      button.btn.btn-outline-primary(
         :disabled='loading.unready'
         :title='errors.unready'
         @click='unready'
@@ -43,7 +43,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
         ' Undo forfeit
 
     .btn-group.mr-2 v-if='!entry && !race.started_at'
-      button.btn.btn-outline-light v-tippy=true :title='errors.join' :disabled='loading.join || !currentUser' @click='join'
+      button.btn.btn-outline-primary v-tippy=true :title='errors.join' :disabled='loading.join || !currentUser' @click='join'
         template v-if="loading.join" = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.join' => icon('fas', 'exclamation-triangle')
         template v-if='currentUser' Join race
@@ -54,7 +54,7 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
         button.btn.btn-outline-secondary disabled=true Joined
 
     .btn-group.mr-2 v-if='entry && !race.started_at && !entry.readied_at'
-      button.btn.btn-outline-light.glow v-tippy=true :title='errors.ready' :disabled='loading.ready' @click='ready'
+      button.btn.btn-outline-primary.glow v-tippy=true :title='errors.ready' :disabled='loading.ready' @click='ready'
         template v-if='loading.ready' = render partial: 'shared/spinner'
         span.text-danger v-else-if='errors.ready' => icon('fas', 'exclamation-triangle')
         ' Set ready
@@ -65,23 +65,23 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
 
     template v-if="entry && race.started_at && !entry.finished_at && !entry.forfeited_at"
       .btn-group.mr-2
-        button.btn.btn-outline-light v-tippy=true :title="errors.forfeit" :disabled="loading.forfeit || loading.finish" @click="forfeit"
+        button.btn.btn-outline-primary v-tippy=true :title="errors.forfeit" :disabled="loading.forfeit || loading.finish" @click="forfeit"
           template v-if="loading.forfeit" = render partial: 'shared/spinner'
           span.text-danger v-else-if='errors.forfeit' => icon('fas', 'exclamation-triangle')
           template v-else=true => icon('fas', 'heart-broken')
           ' Set forfeited
       .btn-group.mr-2
-        button.btn.btn-outline-light v-tippy=true :title="errors.finish" :disabled="loading.forfeit || loading.finish" @click="finish"
+        button.btn.btn-outline-primary v-tippy=true :title="errors.finish" :disabled="loading.forfeit || loading.finish" @click="finish"
           template v-if="loading.finish" = render partial: 'shared/spinner'
           span.text-danger v-else-if='errors.finish' => icon('fas', 'exclamation-triangle')
           template v-else=true => icon('fas', 'flag-checkered')
           ' Set finished
 
     .btn-group.mr-2 v-if="entry && race.started_at && entry.finished_at"
-      button.btn.btn-outline-light disabled=true Finished
+      button.btn.btn-outline-primary disabled=true Finished
 
     .btn-group.mr-2 v-if="entry && race.started_at && entry.forfeited_at"
-      button.btn.btn-outline-light disabled=true Forfeited
+      button.btn.btn-outline-primary disabled=true Forfeited
     br
     small.text-secondary v-if="!race.started_at"
       ' The race will start 20 seconds after the last person readies up.

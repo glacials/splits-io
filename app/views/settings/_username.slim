@@ -1,10 +1,10 @@
-.card.mb-3: form action=settings_path method='POST'
+.card.mb-3.bg-darkish: form action=settings_path method='POST'
   .card-header.text-white Username
   .card-body
     .row
       .col-md-6
         .mb-3: input.form-control type='text' name='user[name]' value=current_user.name
-        .card
+        .card.bg-darkish
           .card-body
             p
               ' Letters, numbers, underscores. (For nerds:
@@ -29,4 +29,4 @@
           code: a href=run_path(sample_run) = request.host_with_port + run_path(sample_run)
         b> Changing only capitalization is safe
         | and has none of the above effects.
-  .card-footer.clearfix: .float-right: input.btn.btn-success type='submit' value='Save'
+  .card-footer.clearfix: .float-right: input.btn.btn-primary type='submit' value='Save'

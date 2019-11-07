@@ -4,7 +4,7 @@
 // Make sure to have #vue-race be defined before calling this partial
 race-create inline-template=true game-id=game.id category-id=category.id
   .btn-group v-cloak=true
-    button.btn.btn-dark(
+    button.btn.btn-outline-primary(
       type='button'
       @click='createPublic'
       :disabled='loading'
@@ -15,13 +15,13 @@ race-create inline-template=true game-id=game.id category-id=category.id
       span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
       template v-else=true => icon('fas', 'flag-checkered')
       ' Create race
-    button.btn.btn-dark.dropdown-toggle.dropdown-toggle-split(
+    button.btn.btn-outline-primary.dropdown-toggle.dropdown-toggle-split(
       type='button'
       data={toggle: 'dropdown'}
       aria={haspopup: true, expanded: false}
     )
       span.sr-only Toggle dropdown
-    .dropdown-menu.bg-dark
-      button.dropdown-item.text-secondary @click='createPublic' Create public race
-      button.dropdown-item.text-secondary @click='createInviteOnly' Create invite-only race
-      button.dropdown-item.text-secondary @click='createSecret' Create secret race
+    .dropdown-menu
+      button.dropdown-item @click='createPublic' Create public race
+      button.dropdown-item @click='createInviteOnly' Create invite-only race
+      button.dropdown-item @click='createSecret' Create secret race

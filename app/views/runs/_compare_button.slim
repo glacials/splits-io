@@ -12,38 +12,38 @@
         = compare_runs.first.duration(timing).format
       - else
         ' Compare
-    .dropdown-menu.bg-dark aria={labelledby: 'compare'} style='height: auto; max-height: 400px; overflow-x: hidden'
-        .dropdown-header.text-light Mine
+    .dropdown-menu aria={labelledby: 'compare'} style='height: auto; max-height: 400px; overflow-x: hidden'
+        .dropdown-header Mine
         - comparable_runs = current_user.present? ? current_user.comparable_runs(timing, run).where.not(id: run.id) : []
         - if comparable_runs.none?
-          .dropdown-item.disabled.text-secondary: i No comparable runs by me
+          .dropdown-item.disabled: i No comparable runs by me
         - comparable_runs.each do |comparable_run|
-          a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
+          a.dropdown-item href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
             = comparable_run.duration(timing).format
             - if comparable_run.video&.twitch?
               span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
         - recommended_comparison = run.recommended_comparison(timing)
-        .dropdown-header.text-light Recommended
+        .dropdown-header Recommended
         - if recommended_comparison.nil?
-          .dropdown-item.disabled.text-secondary: i No good comparisons right now 🤷
+          .dropdown-item.disabled: i No good comparisons right now 🤷
         - else
-          a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: recommended_comparison))
+          a.dropdown-item href=run_path(run, params.permit(:timing).merge(compare: recommended_comparison))
             b> #{recommended_comparison.user.name}'s
             ' #{recommended_comparison.duration(timing).format}
             - if recommended_comparison.video&.twitch?
               span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
         - run.category.runners.where.not(id: run.user.try(:id)).limit(100).each do |comparable_runner|
-          .dropdown-header.text-light = comparable_runner
+          .dropdown-header = comparable_runner
           - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
-            a.dropdown-item.text-secondary href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
+            a.dropdown-item href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
               = comparable_run.duration(timing).format
               - if comparable_run.video&.twitch?
                 span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
     - if compare_runs.any?
       .btn-group.ml-1
-        a.btn.text-light.tip.px-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
+        a.btn.tip.px-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
           = icon('fas', 'exchange-alt')
-        a.btn.text-light.tip.px-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
+        a.btn.tip.px-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
           = icon('fas', 'times')
         - rivalry = current_user&.rivalries&.find_by(category_id: run.category_id)
         - if rivalry.present?
@@ -51,7 +51,7 @@
             = link_to( \
               rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
               method: :delete, \
-              class: 'btn text-light tip px-1', \
+              class: 'btn tip px-1', \
               title: "Remove #{rivalry.to_user} as a rival" \
             )
               = icon('fas', 'user-minus')
@@ -59,7 +59,7 @@
             = link_to( \
               rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
               method: :post, \
-              class: 'btn text-light tip px-1', \
+              class: 'btn tip px-1', \
               title: "Replace #{rivalry.to_user} as a rival" \
             )
               = icon('fas', 'user-edit')
@@ -67,7 +67,7 @@
           = link_to( \
             rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
             method: :post, \
-            class: 'btn text-light tip px-1', \
+            class: 'btn tip px-1', \
             title: "Add #{compare_runs.first.user} as a rival" \
           )
             = icon('fas', 'user-plus')

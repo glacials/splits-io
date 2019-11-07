@@ -13,6 +13,8 @@ class Category < ApplicationRecord
 
   before_create :autodetect_shortname
 
+  validates :name, presence: true
+
   def self.global_aliases
     {
       'Any% (NG+)'        => 'Any% NG+',

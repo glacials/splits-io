@@ -19,7 +19,7 @@ h5
     - elsif !run.video.twitch?
       a.badge.badge-dark.tip href=run.video.url title='Watch video' => icon('fas', 'video')
   - if run.segments.last.try(:duration, timing).nil?
-    a.badge.badge-dark.tip.p-0 title='In progress'
+    a.badge.tip.p-0 title='In progress'
       .text-danger = icon('fas', 'satellite-dish')
 
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
