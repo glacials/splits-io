@@ -1,4 +1,4 @@
-.card.shadow.my-3.bg-darkish
+.card.shadow.my-3
   .card-header.text-white Segments
   .table-responsive: table.card-body.table.mb-0.bg-transparent
     thead: tr
@@ -49,7 +49,7 @@
         - if history_stats.present?
           tr hidden=true
             td colspan='999' style='margin: 0; padding: 0;'
-              .card.border-0.m-0.p-0.bg-darkish
+              .card.border-0.m-0.p-0
                 .card-group
                   - if danger
                     .card.bg-danger: .card-body
@@ -65,7 +65,7 @@
                             = icon('fas', 'exclamation-triangle')
                       h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
                   - else
-                    .card.bg-darkish: .card-body
+                    .card: .card-body
                       h6.card-title
                         ' Standard deviation
                         - if run.belongs_to?(current_user)
@@ -79,10 +79,10 @@
                             standard deviation of the mean, 95% within two, and 99% within three."
                           ) = icon('fas', 'question-circle')
                       h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
-                  .card.bg-darkish: .card-body
+                  .card: .card-body
                     h6.card-title Mean
                     h4.card-subtitle = format_ms(history_stats[:mean].to_f, precise: run.short?(timing))
-                  .card.bg-darkish: .card-body
+                  .card: .card-body
                     - if run.belongs_to?(current_user)
                       .float-right.tip-left.text-light(
                         title="Stats based on your last 100 runs."
@@ -94,7 +94,7 @@
                     h6.card-title Best
                     h4.card-subtitle = segment.shortest_duration(timing).format(precise: run.short?(timing))
                 .card-group
-                  .card.bg-darkish: .card-body
+                  .card: .card-body
                     h6.card-title
                       ' 10th percentile
                       - if run.belongs_to?(current_user)
@@ -108,7 +108,7 @@
                           is basically a relaxed best."
                         ) = icon('fas', 'question-circle')
                     h4.card-subtitle = format_ms(history_stats[:percentiles][10].to_f, precise: run.short?(timing))
-                  .card.bg-darkish: .card-body
+                  .card: .card-body
                     h6.card-title
                       ' Median
                       - if run.belongs_to?(current_user)
@@ -122,7 +122,7 @@
                           time they'd expect to get in a marathon or no-reset run."
                         ) = icon('fas', 'question-circle')
                     h4.card-subtitle = format_ms(history_stats[:median].to_f, precise: run.short?(timing))
-                  .card.bg-darkish: .card-body
+                  .card: .card-body
                     h6.card-title
                       ' 90th percentile
                       - if run.belongs_to?(current_user)
@@ -136,7 +136,7 @@
                           this as their worst time excluding fantastic blunders."
                         ) = icon('fas', 'question-circle')
                     h4.card-subtitle = format_ms(history_stats[:percentiles][90].to_f, precise: run.short?(timing))
-                  .card.bg-darkish: .card-body
+                  .card: .card-body
                     h6.card-title
                       ' 99th percentile
                       - if run.belongs_to?(current_user)

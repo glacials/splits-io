@@ -4,7 +4,7 @@
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('Upload', new_run_path)
 .col-md-7.col-lg-6.col-xl-5.mx-auto
-  .card.bg-darkish
+  .card
     form#upload method='post' enctype='multipart/form-data'
       .card-body
         input#file type='file' name='file'

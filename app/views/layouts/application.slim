@@ -12,6 +12,7 @@ html
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     script src='https://www.youtube.com/iframe_api' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
+    = javascript_pack_tag('bootstrap', data: {turbolinks_track: 'reload'}, defer: false)
     = csrf_meta_tag
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
@@ -20,14 +21,14 @@ html
     = Gon::Base.render_data
     #dropzone
       #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
-        #droplabel-container.text-success
-          span#upload-spinner.mr-2 = render partial: 'shared/spinner'
-          h5#droplabel.d-inline.text-success Waiting for drop
+        #droplabel-container.text-primary
+          #upload-spinner.d-inline = render partial: 'shared/spinner', locals: {message: ''}
+          #droplabel.d-inline.text-primary Waiting for drop
           code#matrix.d-block.text-left.my-5 style='opacity: 0.5'
         #multiupload
-          .text-success
-            span#upload-spinner.mr-2 = render partial: 'shared/spinner'
-            h5.d-inline.text-success
+          .text-primary
+            #upload-spinner = render partial: 'shared/spinner', locals: {message: ''}
+            h5.d-inline.text-primary
               span#successful-uploads> 0
               | uploaded and processing
           div

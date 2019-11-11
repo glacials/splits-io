@@ -12,7 +12,7 @@
 .row.mx-2: .col-md-12 = render partial: 'games/categories/title', locals: {timing: timing, category: @category}
 
 .row.mx-2
-  .col-md-6.mb-3: .card.bg-darkish
+  .col-md-6.mb-3: .card
     = render partial: 'shared/race_table', locals: { \
       active_races: @game.races.active.not_secret_visibility.order(created_at: :desc), \
       description: 'Indexed races', \
@@ -20,7 +20,7 @@
     }
 
   .col-md-6
-    .card.bg-darkish
+    .card
       .card-header
         = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
       = render partial: 'shared/run_table', locals: { \

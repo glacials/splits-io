@@ -6,7 +6,7 @@
 .container
   .card-deck.mb-3.text-center
     - plan = current_user&.subscriptions&.active&.first
-    .card.bg-darkish
+    .card
       .card-header
         h4.my-0.font-weight-normal
           ' Basic
@@ -23,7 +23,7 @@
           ) Active
           button.btn.btn-lg.btn-outline-light.tip-top.disabled title='This plan lasts forever.' style='cursor: default'
             = icon('fas', 'infinity')
-    .card.bg-darkish
+    .card
       .card-header
         h4.my-0.font-weight-normal
           ' Gold
@@ -75,7 +75,7 @@
             }, \
             class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
           )
-    .card.bg-darkish
+    .card
       .card-header
         h4.my-0.font-weight-normal
           ' Noclip
@@ -128,7 +128,7 @@
             class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
           )
   .card-deck.mb-3.text-center
-    .card.mb-4.text-center.bg-darkish
+    .card.mb-4.text-center
       .card-header
         h4.my-0.font-weight-normal Esports
       .card-body
@@ -141,7 +141,7 @@
           li Includes Noclip tier
       .card-footer
         a.btn.btn-lg.btn-block.btn-outline-primary href='mailto:ben@splits.io?Splits.io esports tier' Contact us
-    .card.mb-4.text-center.bg-darkish
+    .card.mb-4.text-center
       .card-header
         h4.my-0.font-weight-normal Organization
       .card-body
@@ -154,6 +154,6 @@
           li Bulk discounts for Splits.io subs
       .card-footer
         a.btn.btn-lg.btn-block.btn-outline-primary href='mailto:ben@splits.io?subject=Splits.io custom analytics' Contact us
-  .card.mb-4.text-center.bg-darkish
+  .card.mb-4.text-center
     .card-body
       a href=partners_path Are you a streamer? Check out our partnership program!

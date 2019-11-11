@@ -12,9 +12,10 @@
 
 
 - if !@run.parsed?
-  #await-runs.text-success.text-center data-runs=([@run.id36, *@compare_runs.map(&:id36)].join(','))
-    span.mr-2 = render partial: 'shared/spinner'
-    h5.d-inline.text-success Processing
+  #await-runs.text-center.text-primary data-runs=([@run.id36, *@compare_runs.map(&:id36)].join(','))
+    = render partial: 'shared/spinner', locals: {messages: [ \
+      'Parsing', 'Gathering', 'Analyzing', 'Sorting', 'Logging', 'Unscrambling', 'Clipping', 'Spinjumping', 'Manipulating RNG',
+    ]}
 - else
   .row.mx-2
     .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
@@ -31,10 +32,10 @@
             .card.my-3.mx-2 style='padding-bottom: 28.125%'
               .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
           - else
-            .card.my-3.mx-2.bg-darkish
+            .card.my-3.mx-2
               i.text-center.my-auto No video attached to this run
         - if @compare_runs.none?
-          .card.my-3.mx-2.bg-darkish
+          .card.my-3.mx-2
             i.text-center.my-auto Select a comparison to see another run's video here
             .card-footer: .float-right
               = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
@@ -43,22 +44,23 @@
         = render partial: 'runs/split_table', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
       .col-md-6
         - if @run.completed?(timing) && @run.histories.any?
-          #chart-spinner.text-success.text-center.my-5
-            span.mr-2 = render partial: 'shared/spinner'
-            h5.d-inline.text-success Processing
+          #chart-spinner.text-secondary.text-center.my-5
+            = render partial: 'shared/spinner', locals: {messages: [ \
+              'Generating charts', 'Still generating', 'Arranging chart data', \
+            ]}
           #chart-alert.alert.alert-danger.my-3 hidden=true
           #chart-holder hidden=true
-            #run-duration-chart.card.my-3.bg-darkish
-            #box-plot.card.my-3.bg-darkish
-            #segment-chart.card.my-3.bg-darkish
-            #reset-chart-container.card.my-3.bg-darkish
+            #run-duration-chart.card.my-3
+            #box-plot.card.my-3
+            #segment-chart.card.my-3
+            #reset-chart-container.card.my-3
               .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
                 label.btn.btn-sm.btn-outline-secondary.text-white.active.disabled
                   input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
                   ' Resets Per Split
                 label.btn.btn-sm.btn-outline-secondary.text-white
                   input#run-progress-chart-button type="radio" name="reset-chart-buttons"
-                  'Run Progress
+                  ' Run Progress
               #reset-chart.my-3
               #run-progress-chart.my-3.d-none
             - if @run.histories.any?
@@ -66,9 +68,9 @@
                 .my-3
                   span => icon('fas', 'lock-open')
                   span Thanks for supporting Splits.io! The below chart is unlocked.
-                #playtime-chart.card.my-3.bg-darkish
+                #playtime-chart.card.my-3
               - else
-                .card.my-3.bg-darkish
+                .card.my-3
                   #paywall-container
                     /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
                     #paywall.bg-dark
@@ -85,7 +87,7 @@
                             ' Subscribe through Patreon
                     #playtime-chart
   - else
-    .container: .col-md-6.offset-md-3: .card.bg-darkish
+    .container: .col-md-6.offset-md-3: .card
       .card-body Support Splits.io to compare videos, charts, and splits.
       .card-footer
         .float-right

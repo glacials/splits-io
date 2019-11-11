@@ -1,1 +1,19 @@
-= icon('fas', 'circle-notch', class: 'fa-spin')
+- if local_assigns[:message].nil?
+  - message = 'Loading'
+- if local_assigns[:messages].nil?
+  - messages = [message]
+span.spinner-border.spinner-border-sm.mx-1 role='status'
+  span.sr-only Loading...
+- messages.each.with_index do |message, i|
+  - id = SecureRandom.uuid
+  - changeEveryMS = 5000
+  span id=id hidden=true = message
+  javascript:
+    window.setTimeout(() => {
+      document.getElementById('#{id}').hidden = false
+    }, #{changeEveryMS * i})
+  - if messages[i + 1].present?
+    javascript:
+      window.setTimeout(() => {
+        document.getElementById('#{id}').hidden = true
+      }, #{changeEveryMS * (i+1)})
