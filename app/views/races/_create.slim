@@ -21,7 +21,7 @@ race-create inline-template=true game-id=game.id category-id=category.id
       aria={haspopup: true, expanded: false}
     )
       span.sr-only Toggle dropdown
-    .dropdown-menu
+    .dropdown-menu.bg-dark
       button.dropdown-item @click='createPublic' Create public race
       button.dropdown-item @click='createInviteOnly' Create invite-only race
       button.dropdown-item @click='createSecret' Create secret race

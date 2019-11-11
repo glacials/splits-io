@@ -11,6 +11,7 @@ html
     = javascript_include_tag('https://checkout.stripe.com/checkout.js', defer: true)
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     script src='https://www.youtube.com/iframe_api' defer='defer'
+    = stylesheet_pack_tag('bootstrap')
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
     = javascript_pack_tag('bootstrap', data: {turbolinks_track: 'reload'}, defer: false)
     = csrf_meta_tag
