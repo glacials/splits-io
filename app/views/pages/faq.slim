@@ -3,41 +3,7 @@
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('FAQ', faq_path)
-article
-  a name='who'
-  .card.mb-4
-    h5.card-header
-      | Who made Splits.io?
-      .float-right: a.text-muted data={turbolinks: false} href='#who' name='who' ¶
-    .card-body
-      p Glacials. You can look him up in these places:
-      .card-group
-        .card.bg-dark
-          .card-body
-            h4.text-nowrap
-              img> src=asset_path('logo-imageonly.svg') width='25' height='25'
-              | Glacials
-            a.btn.btn-outline-light.float-right href='https://splits.io/u/glacials' On Splits.io
-        .card style='background: #6441a4'
-          .card-body
-            h4.text-nowrap
-              => icon('fab', 'twitch')
-              | Glacials
-            a.btn.btn-outline-light.float-right href='https://www.twitch.tv/glacials' On Twitch
-      .card-group
-        .card style='background: #4ba0ec'
-          .card-body
-            h4.text-nowrap
-              => icon('fab', 'twitter')
-              | glcls
-            a.btn.btn-outline-light.float-right href='https://twitter.com/glcls' On Twitter
-        .card style='background: #171515'
-          .card-body
-            h4.text-nowrap
-              => icon('fab', 'github')
-              | glacials
-            a.btn.btn-outline-light.float-right href='https://github.com/glacials' On GitHub
-
+.container
   a name='programs'
   .card.mb-4
     h5.card-header
@@ -51,12 +17,12 @@ article
           h5 Timers Known to Support the Generic Format
           .list-group.mb-4
             - (Run.programs.select(&:exchangeable?) - [Programs::ExchangeFormat]).each do |program|
-              a.list-group-item.list-group-item-action href=program.website = program
+              a.list-group-item.list-group-item-action.text-light href=program.website = program
         .col-md-6
           h5 Legacy Formats Supported
           .list-group.mb-4
             - Run.programs.reject(&:exchangeable?).each do |program|
-              a.list-group-item.list-group-item-action href=program.website = program
+              a.list-group-item.list-group-item-action.text-light href=program.website = program
       p In LiveSplit, you can upload from within the program with a right click -> Share.
       .alert.alert-warning
         b> Just so you know:
@@ -67,7 +33,7 @@ article
         ' The parsing engine that powers Splits.io is actually shared code extracted from LiveSplit by its authors!
         ' Hooray open source! 🙌
     .card-footer
-      a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/tree/master/public/schema'
+      a.btn.btn-outline-primary.float-right href='https://github.com/glacials/splits-io/tree/master/public/schema'
         => icon('fas', 'exchange-alt')
         | Splits.io Exchange Format
 
@@ -90,7 +56,7 @@ article
       .card-body
         p Yes as well!
       .card-footer
-        a.btn.btn-primary.float-right href='https://github.com/glacials/splits-io/blob/master/docs/api.md'
+        a.btn.btn-outline-primary.float-right href='https://github.com/glacials/splits-io/blob/master/docs/api.md'
           => icon('fas', 'book')
           | API Documentation
 
@@ -161,13 +127,13 @@ article
       p
         ' When LiveSplit calculates your sum of best, it's actually not a literal sum of your best segments! Take this
         ' run:
-      pre.bg-dark.text-light.p-3.m-3: code
+      pre.text-light.p-3.m-3: code
         | A ---> B ---> C
       p
         ' Let's say a new route is discovered that foregoes
         code> B
         ' , so you update your splits to accomodate.
-      pre.bg-dark.text-light.p-3.m-3: code
+      pre.text-light.p-3.m-3: code
         | A ---> D ---> E ---> C
       p
         ' Because it's a new route, you're not great at
@@ -181,7 +147,7 @@ article
       p
         ' So instead of just adding up all your gold times, LiveSplit keeps track of your route changes. Internally,
         ' LiveSplit remembers your splits more like this:
-      pre.bg-dark.text-light.p-3.m-3: code
+      pre.text-light.p-3.m-3: code
         | A -------> B ------> C
         br
         |  \                   ^
@@ -204,7 +170,7 @@ article
         ' switched routes.
       p
         ' Now, here's where the bug comes up! Let's say again you have a run that looks like this:
-      pre.bg-dark.text-light.p-3.m-3: code
+      pre.text-light.p-3.m-3: code
         | A ---> B ---> C
       p
         ' And let's say again that a new route is discovered and it's time to update your splits. Being a reasonable
@@ -213,7 +179,7 @@ article
         ' and
         code> C
         ' , then rename B.
-      pre.bg-dark.text-light.p-3.m-3: code
+      pre.text-light.p-3.m-3: code
         | A ---> D ---> E ---> C
         br
         |        |
@@ -222,7 +188,7 @@ article
       p
         ' Because you've only renamed B (rather than deleting it) and changed what it actually means to complete it
         ' in-game, LiveSplit now holds a corrupted network of the possible paths through the game:
-      pre.bg-dark.text-light.p-3.m-3: code
+      pre.text-light.p-3.m-3: code
         | A ---> D ----------> C
         br
         |         \            ^
@@ -274,11 +240,11 @@ article
       p You can always email help@splits.io with issues! Or if you'd prefer, you can post them at the GitHub issues
         page! But maybe you should call the police first!
     .card-footer
-      a.btn.btn-primary.text-light.float-right href='mailto:help@splits.io'
+      a.btn.btn-outline-primary.float-right href='mailto:help@splits.io'
         => icon('fa', 'envelope')
         | Email Splits.io
 
-article.mt-4
+.container.mt-4
   h3
     ' Open Source Friends
     => icon('fa', 'heart')
@@ -297,7 +263,7 @@ article.mt-4
           a.btn.btn-dark href='https://github.com/LiveSplit/LiveSplit'
             => icon('fab', 'github')
             | Source
-          a.btn.btn-primary href='https://livesplit.org' Website
+          a.btn.btn-outline-primary href='https://livesplit.org' Website
 
     .card
       h4.card-header WSplit
@@ -319,4 +285,4 @@ article.mt-4
           a.btn.btn-dark href='https://github.com/batedurgonnadie/salty_bot'
             => icon('fab', 'github')
             | Source
-          a.btn.btn-primary href='http://leagueofnewbs.com/twitch/salty' Website
+          a.btn.btn-outline-primary href='http://leagueofnewbs.com/twitch/salty' Website

@@ -18,7 +18,7 @@ article#search-results
   - @results.each do |search_type, results|
     - if results.present?
       h4 = search_type.to_s.capitalize
-      .card.mb-3.shadow
+      .card.mb-3.shadow.bg-darkish
         .card-body.p-0
           .table-responsive
             table.card-body.table.table-striped.mb-0
@@ -35,7 +35,7 @@ article#search-results
 article#runs
   - if @results[:games].present?
     h4 Runs
-    .card.shadow = render partial: 'shared/run_table', locals: { \
+    .card.bg-darkish = render partial: 'shared/run_table', locals: { \
       runs: Run.by_game(@results[:games]).nonempty.unarchived, \
       cols: %i[runner time name uploaded] \
     }.merge(sorting_info)

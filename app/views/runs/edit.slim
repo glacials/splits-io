@@ -50,7 +50,7 @@ article
               id: 'category-selector', \
               class: 'form-control' \
             )
-      .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-outline-primary'
 
   .card-deck.mb-4
     .card = form_for(@run.video || @run.build_video, url: run_video_path(@run), method: :put) do |f|
@@ -58,12 +58,12 @@ article
       .card-body
         = f.text_field(:url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
       .card-footer.clearfix: .float-right: .btn-group
-        = f.submit('Save', class: 'btn btn-success')
+        = f.submit('Save', class: 'btn btn-outline-primary')
 
     .card = form_for @run, as: @run.id36, url: run_path(@run) do |f|
       h5.card-header Edit Speedrun.com Link
       .card-body = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
-      .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-success'
+      .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-outline-primary'
 
   .card-deck.mb-4
     .card
@@ -75,7 +75,7 @@ article
         p This is not reversible.
       .card-footer
         / This needs data-turbolinks="false" or the reparse page will refresh itself infinitely
-        .float-right: a.btn.btn-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse
+        .float-right: a.btn.btn-outline-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse
 
     .card
       h5.card-header List/Unlist
@@ -149,7 +149,7 @@ article
                 p This is not reversible.
               .card-footer
                 .float-right
-                  = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'btn btn-danger'
+                  = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'btn btn-outline-danger'
                     | Delete
             .card
               h5.card-header Disown
@@ -161,5 +161,5 @@ article
                 p This is not reversible.
               .card-footer
                 .float-right
-                  = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'btn btn-warning'
+                  = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'btn btn-outline-warning'
                     | Disown

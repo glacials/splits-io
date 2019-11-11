@@ -1,11 +1,11 @@
 - if current_user.twitch_follows.any?
   h4 Recent PBs By People You Follow
-  .card.col-md-6.p-0
-    .list-group
+  .card.col-md-6.p-0.bg-transparent
+    .list-group.bg-transparent
       - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_follows).where.not(games: {name: [nil, '']}).order('runs.created_at DESC').limit(10)
       - my_runs = current_user.pbs.where(category_id: followed_runs.map(&:category_id))
       - followed_runs.each do |run|
-        = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start')
+        = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start bg-darkish text-light')
           .media
             = image_tag(run.user.avatar, skip_pipeline: true, size: '70x70', class: 'mr-3')
             .media-body

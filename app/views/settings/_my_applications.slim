@@ -1,13 +1,12 @@
 .card.mb-3
   a.card-header.text-white name='applications' Developer Applications
   .card-body
-    .btn-group
-      a.btn.btn-primary href='/settings/applications/new'
-        => icon('fas', 'plus')
-        span Create Application
-      a.btn.btn-secondary target='_blank' href='https://github.com/glacials/splits-io/blob/master/docs/api.md#user-authentication-and-authorization'
-        => icon('fas', 'file')
-        span View Documentation
+    a.btn.btn-outline-primary.mr-2 href='/settings/applications/new'
+      => icon('fas', 'plus')
+      span Create Application
+    a.btn.btn-outline-secondary target='_blank' href='https://github.com/glacials/splits-io/blob/master/docs/api.md#user-authentication-and-authorization'
+      => icon('fas', 'file')
+      span View Documentation
     - if current_user.applications.empty?
       article
         p If you're a developer of an application like a timer, you can use this section to upload runs on behalf of
@@ -41,7 +40,7 @@
                     .input-group
                       input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1
                       .input-group-append
-                        .btn.btn-primary.clipboard-btn.tip(
+                        .btn.btn-outline-primary.clipboard-btn.tip(
                           data-clipboard-target="#client-id-#{application.uid}"
                           title='Copy to clipboard'
                         )
@@ -49,12 +48,12 @@
                           span#copied style='display: none;' = icon('fas', 'check')
                   td
                     - if (Time.now.utc - 24.hours) > application.secret_generated_at
-                      button.btn.btn-secondary.btn-block disabled=true Hidden forever
+                      button.btn.btn-outline-secondary.btn-block disabled=true Hidden forever
                     - else
                       .input-group
                         input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1
                         .input-group-append
-                          .btn.btn-primary.clipboard-btn.tip(
+                          .btn.btn-outline-primary.clipboard-btn.tip(
                             data-clipboard-target="#client-secret-#{application.uid}"
                             title='Copy to clipboard'
                           )
@@ -62,12 +61,12 @@
                             span#copied style='display: none;' = icon('fas', 'check')
                   td
                     .btn-group
-                      a.btn.btn-outline-light.tip(
+                      a.btn.btn-outline-secondary.tip(
                         href=edit_application_path(application)
                         title="Edit #{application.name}"
                       )
                         span = icon('fas', 'edit')
-                      = link_to(application_path(application), class: 'btn btn-outline-light tip', method: :delete, \
+                      = link_to(application_path(application), class: 'btn btn-outline-secondary tip', method: :delete, \
                         data: { \
                           confirm: "Really delete #{application.name}? This will also revoke all \
                                     #{application.access_tokens.count} authorizations and invalidate the associated \

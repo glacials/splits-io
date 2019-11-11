@@ -5,21 +5,8 @@
       li.breadcrumb-item = link_to(site_title, root_path)
 - if current_user.present?
   - if current_user.runs.any?
-    article
-      .row
-        .col-sm-3: .statcard.p-3
-          h2.statcard-number
-            span> = current_user.runs.count
-            small.delta-indicator.delta-positive.tip-top title='Since last year'
-              = current_user.runs.where(created_at: 1.year.ago..Time.now.utc).count
-          span.statcard-desc Runs stored
-        .col-sm-3: .statcard.p-3
-          h2.statcard-number
-            = render partial: 'shared/relative_time', locals: {time: current_user.created_at}
-          span.statcard-desc Account age
-
     .row.mx-2
-      .col-md-6.mb-3: .card.shadow
+      .col-md-6.mb-3: .card
         = render partial: 'shared/race_table', locals: { \
           races: current_user.races.with_ends.finished.order(ended_at: :desc), \
           user: current_user, \
@@ -27,7 +14,7 @@
           description: 'My Races' \
         }
 
-      .col-md-6.mb-3: .card.shadow
+      .col-md-6.mb-3: .card
         = render partial: 'shared/run_table', locals: { \
           runs: current_user.pbs, \
           cols: %i[time name video uploaded owner_controls rival], \

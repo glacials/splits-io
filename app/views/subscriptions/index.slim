@@ -69,7 +69,7 @@
               )
         - else
           / TODO: disable_with doesn't work in button_tag for some reason
-          = button_tag(current_user ? 'Subscribe' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
+          = button_tag(current_user ? 'Subscribe to Gold' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
               disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
               plan_id: ENV['STRIPE_PLAN_ID_TIER1'] \
             }, \
@@ -121,7 +121,7 @@
             )
         - else
           / TODO: disable_with doesn't work in button_tag for some reason
-          = button_tag(current_user ? 'Subscribe' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
+          = button_tag(current_user ? 'Subscribe to Noclip' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
               disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
               plan_id: ENV['STRIPE_PLAN_ID_TIER2'] \
             }, \
@@ -140,7 +140,7 @@
           li Regular emails or meetings with new finds
           li Includes Noclip tier
       .card-footer
-        a.btn.btn-lg.btn-block.btn-primary href='mailto:ben@splits.io?Splits.io esports tier' Contact us
+        a.btn.btn-lg.btn-block.btn-outline-primary href='mailto:ben@splits.io?Splits.io esports tier' Contact us
     .card.mb-4.text-center
       .card-header
         h4.my-0.font-weight-normal Organization
@@ -153,7 +153,7 @@
           li Fuel your commentary, stream layout, or players
           li Bulk discounts for Splits.io subs
       .card-footer
-        a.btn.btn-lg.btn-block.btn-primary href='mailto:ben@splits.io?subject=Splits.io custom analytics' Contact us
+        a.btn.btn-lg.btn-block.btn-outline-primary href='mailto:ben@splits.io?subject=Splits.io custom analytics' Contact us
   .card.mb-4.text-center
     .card-body
       a href=partners_path Are you a streamer? Check out our partnership program!

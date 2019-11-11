@@ -1,0 +1,38 @@
+$body-bg: #383c48;
+$body-color: #fff;
+
+$theme-colors: (
+  "primary": #f5b946,
+  "secondary": #ddd,
+  "success": #8DE191,
+  "danger": #ff4136,
+  "dark": rgba(0, 0, 0, 0.8),
+  "light": rgba(255, 255, 255, 0.8),
+  "transparent": rgba(0, 0, 0, 0.1),
+
+  "darkish": rgba(0, 0, 0, 0.2),
+  "lightish": rgba(255, 255, 255, 0.2),
+);
+
+element {
+  --font-family-sans-serif: "Open Sans"
+}
+
+$breadcrumb-bg:                 rgba(0, 0, 0, 0.2);
+
+//** Background color used for all tables.
+$table-bg:                      transparent;
+
+//** Background color used for `.table-striped`.
+$table-bg-accent:               #7c7c7c;
+//** Background color used for `.table-hover`.
+$table-bg-hover:                #7a7a7a;
+$table-bg-active:               $table-bg-hover;
+
+//** Border color for table and cell borders.
+$table-border-color:            rgba(255, 255, 255, 0.2);
+
+$card-bg: rgba(0, 0, 0, 0.2);
+$list-group-bg: rgba(0, 0, 0, 0.2);
+
+@import '~bootstrap/scss/bootstrap';

@@ -12,22 +12,23 @@ html
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     script src='https://www.youtube.com/iframe_api' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
+    = javascript_pack_tag('bootstrap', data: {turbolinks_track: 'reload'}, defer: false)
     = csrf_meta_tag
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
     = content_for(:head)
-  body data-controller=controller_name data-action=action_name class=('subscribe' if controller_name == 'subscriptions')
+  body data-controller=controller_name data-action=action_name
     = Gon::Base.render_data
     #dropzone
       #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
-        #droplabel-container.text-success
-          span#upload-spinner.mr-2 = render partial: 'shared/spinner'
-          h5#droplabel.d-inline.text-success Waiting for drop
+        #droplabel-container.text-primary
+          #upload-spinner.d-inline = render partial: 'shared/spinner', locals: {message: ''}
+          #droplabel.d-inline.text-primary Waiting for drop
           code#matrix.d-block.text-left.my-5 style='opacity: 0.5'
         #multiupload
-          .text-success
-            span#upload-spinner.mr-2 = render partial: 'shared/spinner'
-            h5.d-inline.text-success
+          .text-primary
+            #upload-spinner = render partial: 'shared/spinner', locals: {message: ''}
+            h5.d-inline.text-primary
               span#successful-uploads> 0
               | uploaded and processing
           div
@@ -35,7 +36,7 @@ html
               span#failed-uploads> 0
               | failed to upload
           p.text-light.mt-5 This page will update automatically.
-      nav.navbar.navbar-expand-md.navbar-dark
+      nav.navbar.navbar-expand-md
         a.navbar-brand href=root_path
           img.logo src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
           .d-none.d-xl-inline: img.logo src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
@@ -69,9 +70,9 @@ html
                 span.d-md-none.d-xl-inline FAQ
             = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
               .input-group
-                = f.text_field(:q, name: :q, class: 'form-control search', value: @query, placeholder: 'Search...')
+                = f.text_field(:q, name: :q, class: 'form-control search text-dark', value: @query, placeholder: 'Search...')
                 .input-group-append
-                  = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
+                  = button_tag(type: 'submit', class: 'btn btn-secondary', name: nil) do
                     = icon('fas', 'search')
           ul.nav.navbar-nav
             - if current_user.present?
@@ -83,18 +84,18 @@ html
                     => icon('fas', 'user')
                   span = current_user
                   span.caret
-                ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
+                ul.dropdown-menu.mt-0.border-top-0 role='menu'
                   li.nav-item
-                    a.dropdown-item.text-secondary href=user_path(current_user)
+                    a.dropdown-item href=user_path(current_user)
                       => icon('fas', 'user-circle')
                       ' Profile
-                    a.dropdown-item.text-secondary href=settings_path
+                    a.dropdown-item href=settings_path
                       => icon('fas', 'sliders-h')
                       ' Settings
-                    a.dropdown-item.text-secondary href=tools_path
+                    a.dropdown-item href=tools_path
                       => icon('fas', 'toolbox')
                       ' Tools
-                    a.dropdown-item.text-secondary href=session_path(auth_session) rel='nofollow' data-method='delete'
+                    a.dropdown-item href=session_path(auth_session) rel='nofollow' data-method='delete'
                       => icon('fas', 'sign-out-alt')
                       ' Sign Out
             - else
@@ -102,8 +103,8 @@ html
               #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
                 .modal-dialog role='document'
                   .modal-content
-                    .modal-header.bg-primary
-                      h5.text-light Sign in
+                    .modal-header.bg-dark
+                      h5 Sign in
                     .modal-body.bg-dark
                       .row
                         a.btn.btn-twitch.mx-auto href='/auth/twitch'
