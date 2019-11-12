@@ -5,6 +5,13 @@ class Api::V4::ApplicationController < ActionController::Base
   skip_before_action :touch_auth_session
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
 
+  rescue_from ActionController::ParameterMissing do |e|
+    render status: :bad_request, json: {
+      status: 400,
+      message: e.message,
+    }
+  end
+
   def options
     headers['Allow'] = 'POST, PUT, DELETE, GET, OPTIONS'
   end

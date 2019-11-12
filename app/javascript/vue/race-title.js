@@ -82,21 +82,12 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
-        this.setSyncing()
+        this.$emit('syncing')
       } catch(error) {
         this.error = error
       } finally {
         this.loading = false
         document.getElementById('input-chat-text').focus()
-      }
-    },
-    setSyncing: async function() {
-      // We (in a perfect world) don't know how many ancestors up the Race component is, so just emit to every
-      // (grand)*parent
-      let vm = this.$parent
-      while (vm) {
-        vm.$emit('change')
-        vm = vm.$parent
       }
     },
   },

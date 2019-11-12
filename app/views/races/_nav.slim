@@ -2,7 +2,7 @@ race-nav(
   inline-template=true
   :race='race'
   :starting='starting'
-  :syncing='syncing'
+  v-on:syncing='$emit("syncing")'
   v-cloak=true
   v-if='race'
 )

@@ -3,7 +3,7 @@ race-title(
   :race='race'
   :starting='starting'
   :syncing='syncing'
-  @change='setSyncing'
+  v-on:syncing='setSyncing()'
   v-if='race'
 )
   div v-cloak=true

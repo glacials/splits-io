@@ -89,15 +89,6 @@ export default {
         this.loading.ready = false
       }
     },
-    setSyncing: async function() {
-      // We (in a perfect world) don't know how many ancestors up the Race component is, so just emit to every
-      // (grand)*parent
-      let vm = this.$parent
-      while (vm) {
-        vm.$emit('change')
-        vm = vm.$parent
-      }
-    },
     split: async function() {
       this.errors.split = false
       this.loading.split = true
@@ -133,7 +124,7 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
-        this.setSyncing()
+        this.$emit('syncing')
       } catch(error) {
         this.errors.split = `Error: ${error}`
       } finally {
@@ -214,7 +205,7 @@ export default {
       }
 
       this.entry = (await response.json()).entry
-      this.setSyncing()
+      this.$emit('syncing')
     },
   },
   name: 'race-nav',
