@@ -10,10 +10,16 @@ span.spinner-border.spinner-border-sm.mx-1 role='status'
   span id=id hidden=true = message
   javascript:
     window.setTimeout(() => {
-      document.getElementById('#{id}').hidden = false
+      const el = document.getElementById('#{id}')
+      if (el) {
+        el.hidden = false
+      }
     }, #{changeEveryMS * i})
   - if messages[i + 1].present?
     javascript:
       window.setTimeout(() => {
-        document.getElementById('#{id}').hidden = true
+        const el = document.getElementById('#{id}')
+        if (el) {
+          el.hidden = true
+        }
       }, #{changeEveryMS * (i+1)})

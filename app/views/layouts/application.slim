@@ -77,28 +77,29 @@ html
                     = icon('fas', 'search')
           ul.nav.navbar-nav
             - if current_user.present?
-              li.nav-item.dropdown class=('active' if on_a_profile_page?)
-                a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
-                  - if current_user.avatar.present?
-                    img.mr-2 src=current_user.avatar width=20 height=20
-                  - else
-                    => icon('fas', 'user')
-                  span = current_user
-                  span.caret
-                ul.dropdown-menu.mt-0.border-top-0 role='menu'
-                  li.nav-item
-                    a.dropdown-item href=user_path(current_user)
-                      => icon('fas', 'user-circle')
-                      ' Profile
-                    a.dropdown-item href=settings_path
-                      => icon('fas', 'sliders-h')
-                      ' Settings
-                    a.dropdown-item href=tools_path
-                      => icon('fas', 'toolbox')
-                      ' Tools
-                    a.dropdown-item href=session_path(auth_session) rel='nofollow' data-method='delete'
-                      => icon('fas', 'sign-out-alt')
-                      ' Sign Out
+              li.nav-item class=('active' if on_a_profile_page?)
+                .dropdown
+                  a.nav-link.dropdown-toggle.px-3#profileDropdownLink href='#' data-toggle='dropdown' role='button' aria-expanded='false' aria-haspopup='true'
+                    - if current_user.avatar.present?
+                      img.mr-2 src=current_user.avatar width=20 height=20
+                    - else
+                      => icon('fas', 'user')
+                    span = current_user
+                    span.caret
+                  ul.dropdown-menu.mt-0.border-top-0 role='menu' aria-labelledby='profileDropdownLink'
+                    li.nav-item
+                      a.dropdown-item href=user_path(current_user)
+                        => icon('fas', 'user-circle')
+                        ' Profile
+                      a.dropdown-item href=settings_path
+                        => icon('fas', 'sliders-h')
+                        ' Settings
+                      a.dropdown-item href=tools_path
+                        => icon('fas', 'toolbox')
+                        ' Tools
+                      a.dropdown-item href=session_path(auth_session) rel='nofollow' data-method='delete'
+                        => icon('fas', 'sign-out-alt')
+                        ' Sign Out
             - else
               li.nav-item: a.nav-link.px-3 href='#' data={toggle: :modal, target: '#signin'} Sign In
               #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
