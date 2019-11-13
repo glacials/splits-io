@@ -5,19 +5,20 @@ class Api::V4::Runs::SplitsController < Api::V4::ApplicationController
   end
 
   def create
-    options = { root: :run }
-    options[:historic] = true if params[:historic] == '1'
-    options[:segment_groups] = true if params[:segment_groups] == '1'
-
     if @run.split(
       more:            params[:more] == '1',
       realtime_end_ms: split_params[:realtime_end_ms],
       gametime_end_ms: split_params[:gametime_end_ms],
     )
-      render json: Api::V4::RunBlueprint.render(@run, options)
+      render json: Api::V4::RunBlueprint.render(
+        @run,
+        root:           :run,
+        historic:       params[:historic] == '1',
+        segment_groups: params[:segment_groups] == '1',
+      )
     else
       render status: :bad_request, json: {
-        status: 400,
+        status:  400,
         message: @run.errors.full_messages.to_sentence,
       }
     end
@@ -26,9 +27,6 @@ class Api::V4::Runs::SplitsController < Api::V4::ApplicationController
   private
 
   def split_params
-    params.require(:split).permit(
-      :realtime_end_ms,
-      :gametime_end_ms,
-    )
+    params.require(:split).permit(:realtime_end_ms, :gametime_end_ms)
   end
 end
