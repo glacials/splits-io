@@ -130,13 +130,13 @@ article
                     ' Realtime
                   = f.submit 'Change to Gametime', class: 'btn btn-info'
 article
-  #delete.accordian
+  #delete
     .card
       #delete-header.card-header
         h5.mb-0
           button.btn.btn-link type='button' data={toggle: 'collapse', target: '#delete-body'} aria={expanded: true, controls: 'delete-body'}
-            ' Delete My Run
-      #delete-body.collapse aria={labelledby: 'delete-header'} data={parent: 'delete'}
+            ' Delete or disown my run
+      #delete-body.collapse aria={labelledby: 'delete-header'} data={parent: '#delete'}
         .card-body
           .card-deck
             .card

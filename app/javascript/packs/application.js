@@ -48,6 +48,7 @@ import 'bootstrap'
 
 import "../ad_cleanup.js"
 import "../analytics.js"
+import "../collapse.js"
 import "../count.js"
 import "../crisp.js"
 import "../highchart_theme.js"
