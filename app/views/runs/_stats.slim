@@ -5,7 +5,7 @@
   - subject = compare_run.try(:user).try(:name) || '???'
 .row
   .col-sm-3: .statcard.p-3
-    h2.statcard-number
+    h3.statcard-number
       = run.duration(timing).format(precise: run.short?(timing))
       - if compare_run.present?
         = delta(run.duration(timing), compare_run.try(:duration, timing), subject: subject)

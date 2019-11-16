@@ -46,6 +46,9 @@ export default {
 
   updated: function() {
     const deck = document.getElementById('stream-deck')
+    if (!deck) {
+      return
+    }
 
     // We have to manually add and remove breakpoints in JS otherwise we cannot utilize :key on the card div
     // Without :key all iframes after the removed one will reload
