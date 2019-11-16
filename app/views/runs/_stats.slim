@@ -24,7 +24,7 @@
     span.statcard-desc Possible timesave
   .col-sm-3: .statcard.p-3
     h3.statcard-number = Run.program(run.timer)
-    span.statcard-desc = link_to('Timer', Run.program(run.timer).website, target: '_blank', class: 'text-muted')
+    span.statcard-desc = link_to('Timer', timer_path(Run.program(run.timer).to_sym), class: 'text-muted')
   - if run.attempts.present?
     .col-sm-3: .statcard.p-3
       h3.statcard-number

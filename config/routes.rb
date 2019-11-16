@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   get '/privacy',   to: 'pages#privacy_policy', as: :privacy_policy
   get '/partners',  to: 'pages#partners',       as: :partners
 
+  get '/timers/:timer_id', to: 'timers#show', as: :timer
+
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
   get '/why/darkmode',   to: 'why#darkmode',   as: :why_darkmode
   get '/why/readonly',   to: 'why#readonly',   as: :why_readonly

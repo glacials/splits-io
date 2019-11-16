@@ -1,0 +1,72 @@
+- content_for(:title, @timer)
+- content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item Timers
+    li.breadcrumb-item = link_to(@timer, timer_path(@timer))
+  h2 = @timer
+  - if @timer.website
+    a.btn.btn-outline-primary href=@timer.website Website
+.container: .card-deck
+  .card.mb-2.col-md-6
+    .card-header Uploading
+    .card-body
+      h2 #{@timer} → Splits.io
+      p
+        ' Splits.io can read #{@timer} files. These files have the extension
+        code .#{@timer.file_extension}
+        ' .
+      - if @timer.exchangeable?
+        p
+          ' #{@timer} supports the generic
+          a href=Programs::ExchangeFormat.website Splits.io Exchange Format
+          ' , so Splits.io can read files exported from LiveSplit in this format. These files have the extension
+          code .#{Programs::ExchangeFormat.file_extension}
+          ' .
+      - else
+        p 
+          ' #{@timer} does not support the generic
+          a href=Programs::ExchangeFormat.website Splits.io Exchange Format
+          ' , so it cannot output runs in the standard format.
+        p
+          ' However, Splits.io has limited support for reading #{@timer}'s proprietary format. These files use the
+          ' extension
+          code .#{@timer.file_extension}
+          ' .
+  .card.mb-2.col-md-6
+    .card-header Downloading
+    .card-body
+      h2 Splits.io → #{@timer}
+      - if @timer.exchangeable?
+        p
+          ' #{@timer} supports the
+          a href=Programs::ExchangeFormat.website Splits.io Exchange Format
+          ' , so it can read all runs. Look for "#{Programs::ExchangeFormat}" in the run export dropdown menu.
+        - if @timer.exportable?
+          p
+            ' Splits.io can also try to export runs in #{@timer} format. Look for "#{@timer}" in the run export dropdown
+            ' menu.
+      - else
+        p
+          ' #{@timer} doesn't support the
+          a href=Programs::ExchangeFormat.website Splits.io Exchange Format
+          ' , so it can't import any run.
+        - if @timer.exportable?
+          p
+            ' However, Splits.io can try to export runs in #{@timer} format. Look for "#{@timer}" in the run export
+            ' dropdown menu.
+  .card.mb-2.col-md-6
+    .card-header Developer information
+    .card-body
+      - if @timer.exportable?
+        p
+          ' You can request runs from the API in #{@timer} format using this header:
+        p: code Accept: #{@timer.content_type}
+      - else
+        p
+          ' You cannot request arbitrary runs from the API in #{@timer} format. Runs originally uploaded in
+          ' #{@timer} format can be fetched in that same way using the header:
+          p: code Accept: application/original-timer
+      p
+        ' Runs returned in this format include the header:
+        p: code Content-Type: #{@timer.content_type}
