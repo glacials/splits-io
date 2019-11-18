@@ -1,5 +1,9 @@
 class AddSrdcInfoForSubmit < ActiveRecord::Migration[6.0]
   def change
+    change_table :runs do |t|
+      t.boolean :uses_emulator, default: false
+    end
+
     change_table :speedrun_dot_com_games do |t|
       t.boolean :video_required
       t.boolean :accetps_realtime
@@ -14,7 +18,7 @@ class AddSrdcInfoForSubmit < ActiveRecord::Migration[6.0]
     end
 
     create_table :speedrun_dot_com_game_variables, id: :uuid do |t|
-      t.string :srdc_id, null: false
+      t.string :srdc_id
       t.string :type, null: false
       t.string :name, null: false
       t.belongs_to :speedrun_dot_com_game, null: false

@@ -7,6 +7,8 @@ SRDC_URL = 'https://www.speedrun.com/api/v1/games?embed=categories,variables,reg
 desc 'Sync all games, categories, and variable data from srdc'
 task srdc_sync: [:environment] do
   url = SRDC_URL
+  # Disable SQL logging
+  ActiveRecord::Base.logger.level = :info
 
   loop do
     puts url
@@ -47,14 +49,17 @@ task srdc_sync: [:environment] do
       end
 
       %w[platforms regions].each do |variable|
+        srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(
+          speedrun_dot_com_game: srdc_game,
+          type:                  variable
+        )
+        srdc_variable.name = variables[0...-1].capitalize
+        srdc_variable.save!
+
         game[variable]['data'].each do |data|
-          srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(
-            type:    variable,
-            srdc_id: data['id']
-          )
-          srdc_variable.speedrun_dot_com_game = srdc_game
-          srdc_variable.name = data['name']
-          srdc_variable.save!
+          srdc_variable_value = SpeedrunDotComGameVariableValue.find_or_initialize_by(srdc_id: data['id'])
+          srdc_variable_value.speedrun_dot_com_game = srdc_game
+          srdc_variable_value.label                 = data['name']
         end
       end
 
@@ -72,7 +77,7 @@ task srdc_sync: [:environment] do
         srdc_variable.save!
 
         variable['values']['values'].each do |key, value|
-          srdc_variable_value = SpeedrunDotComGameVariableValues.find_or_initialize_by(srdc_id: key)
+          srdc_variable_value = SpeedrunDotComGameVariableValue.find_or_initialize_by(srdc_id: key)
           srdc_variable_value.speedrun_dot_com_game = srdc_game
           srdc_variable_value.label                 = value['label']
           srdc_variable_value.rules                 = value['rules']

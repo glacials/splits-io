@@ -49,6 +49,7 @@ module UnparsedRun
           program:                 run_data[:program].to_s,
           attempts:                run_data[:attempts],
           srdc_id:                 srdc_id || run_data[:metadata][:srdc_id],
+          uses_emulator:           run_data[:metadata][:uses_emulator],
 
           realtime_duration_ms:    zero_to_nil(run_data[:realtime_duration_ms]),
           realtime_sum_of_best_ms: zero_to_nil(run_data[:realtime_sum_of_best_ms]),
@@ -134,6 +135,48 @@ module UnparsedRun
       end
 
       run_data
+    end
+
+    def write_run_variables(run_data)
+      srdc_game = SpeedrunDotComGame.find_by!(name: run_data[:game])
+      if run_data[:metadata][:platform_name]
+        srdc_variable = SpeedrunDotComGameVariable.find_by!(
+          speedrun_dot_com_game: srdc_game,
+          type:                  'platforms',
+          name:                  'Platform'
+        )
+        srdc_variable_value = srdc_variable.speedrun_dot_com_game_variable_values.find_by!(
+          speedrun_dot_com_game_variable: srdc_variable,
+          label:                          run_data[:metadata][:platform_name]
+        )
+        SpeedrunDotComRunVariable.create!(run: self, speedrun_dot_com_game_variable_value: srdc_variable_value)
+      end
+
+      if run_data[:metadata][:region_name]
+        srdc_variable = SpeedrunDotComGameVariable.find_by!(
+          speedrun_dot_com_game: srdc_game,
+          type:                  'regions',
+          name:                  'Region'
+        )
+        srdc_variable_value = srdc_variable.speedrun_dot_com_game_variable_values.find_by!(
+          speedrun_dot_com_game_variable: srdc_variable,
+          label:                          run_data[:metadata][:platform_name]
+        )
+        SpeedrunDotComRunVariable.create!(run: self, speedrun_dot_com_game_variable_value: srdc_variable_value)
+      end
+
+      run_data[:metadata][:variables].each do |key, value|
+        srdc_variable = SpeedrunDotComRunVariable.find_by!(
+          speedrun_dot_com_game: srdc_game,
+          type:                  'variables',
+          name:                  key
+        )
+        srdc_variable_value = srdc_variable.speedrun_dot_com_game_variable_values.find_by!(
+          speedrun_dot_com_game_variable: srdc_variable,
+          label:                          value
+        )
+        SpeedrunDotComRunVariable.create!(run: self, speedrun_dot_com_game_variable_value: srdc_variable_value)
+      end
     end
 
     def process_run_history(run)
