@@ -4,10 +4,10 @@ article
   .card-columns
     - @games.each do |label, srdc_games|
       .card.game-section
-        .card-header.bg-dark = label
+        .card-header = label
         .list-group.list-group-flush
           - srdc_games.each do |srdc_game|
-            a.list-group-item.list-group-item-action.py-1.game(
+            a.list-group-item.list-group-item-action.py-1.game.text-light(
               href=game_path(srdc_game.shortname)
               data={name: srdc_game.name}
             ) = srdc_game.name

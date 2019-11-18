@@ -12,9 +12,10 @@
 
 
 - if !@run.parsed?
-  #await-runs.text-success.text-center data-runs=([@run.id36, *@compare_runs.map(&:id36)].join(','))
-    span.mr-2 = render partial: 'shared/spinner'
-    h5.d-inline.text-success Processing
+  #await-runs.text-center.text-primary data-runs=([@run.id36, *@compare_runs.map(&:id36)].join(','))
+    = render partial: 'shared/spinner', locals: {messages: [ \
+      'Parsing', 'Gathering', 'Analyzing', 'Sorting', 'Logging', 'Unscrambling', 'Clipping', 'Spinjumping', 'Manipulating RNG',
+    ]}
 - else
   .row.mx-2
     .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
@@ -43,9 +44,10 @@
         = render partial: 'runs/split_table', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
       .col-md-6
         - if @run.completed?(timing) && @run.histories.any?
-          #chart-spinner.text-success.text-center.my-5
-            span.mr-2 = render partial: 'shared/spinner'
-            h5.d-inline.text-success Processing
+          #chart-spinner.text-secondary.text-center.my-5
+            = render partial: 'shared/spinner', locals: {messages: [ \
+              'Generating charts', 'Still generating', 'Arranging chart data', \
+            ]}
           #chart-alert.alert.alert-danger.my-3 hidden=true
           #chart-holder hidden=true
             #run-duration-chart.card.my-3
@@ -53,12 +55,12 @@
             #segment-chart.card.my-3
             #reset-chart-container.card.my-3
               .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
-                label.btn.btn-sm.btn-secondary.text-white.active.disabled
+                label.btn.btn-sm.btn-outline-secondary.text-white.active.disabled
                   input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
                   ' Resets Per Split
-                label.btn.btn-sm.btn-secondary.text-white
+                label.btn.btn-sm.btn-outline-secondary.text-white
                   input#run-progress-chart-button type="radio" name="reset-chart-buttons"
-                  'Run Progress
+                  ' Run Progress
               #reset-chart.my-3
               #run-progress-chart.my-3.d-none
             - if @run.histories.any?
@@ -85,7 +87,7 @@
                             ' Subscribe through Patreon
                     #playtime-chart
   - else
-    article: .col-md-6.offset-md-3: .card
+    .container: .col-md-6.offset-md-3: .card
       .card-body Support Splits.io to compare videos, charts, and splits.
       .card-footer
         .float-right

@@ -39,13 +39,16 @@ document.addEventListener('turbolinks:load', () => {
   })
 })
 
-// Using Google charts for now (a script tag in app/views/layouts/admin/application.slim) because Chartkick + Highcharts
-// doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
+// Using Google charts for admin dashboards for now (a script tag in app/views/layouts/admin/application.slim) because
+// Chartkick + Highcharts doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
 import Chartkick from "chartkick"
 window.Chartkick = Chartkick
 
+import 'bootstrap'
+
 import "../ad_cleanup.js"
 import "../analytics.js"
+import "../collapse.js"
 import "../count.js"
 import "../crisp.js"
 import "../highchart_theme.js"
@@ -68,5 +71,4 @@ import "../token.js"
 import "../tooltips.js"
 import "../twitch.js"
 import "../upload.js"
-import "../vendor/toolkit.min.js"
 import "../youtube.js"

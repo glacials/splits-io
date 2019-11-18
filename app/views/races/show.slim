@@ -9,7 +9,7 @@
 #vue-race
   race inline-template=true race-id=@race.id
     div
-      .text-center v-if="loading" = render partial: 'shared/spinner'
+      .text-center v-if="loading" = render partial: 'shared/spinner', locals: {message: 'Loading realtime race'}
       div v-show="!loading"
         .row.mx-2
           .col-md-6 = render partial: 'races/title', locals: {race: @race}
@@ -19,7 +19,7 @@
         #entries-table.card.shadow
           = render partial: 'races/entries_table', locals: {race: @race}
       .card-deck.m-2
-        .card.shadow
+        .card
           .list-group.list-group-flush style='max-height: 500px; overflow-y: scroll'
             - unless @race.locked?
               race-chat inline-template=true v-if='race' :race='race'
@@ -57,7 +57,7 @@
                   i Race created
                   .float-right.pr-2
                     = render partial: 'shared/relative_time', locals: {time: @race.created_at}
-        race-disclaimer.card.shadow inline-template=true
+        race-disclaimer.card inline-template=true
           div
             .bg-dark.p-4 v-if='!accepted' style='height: 100%'
               p

@@ -12,22 +12,24 @@ html
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     script src='https://www.youtube.com/iframe_api' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
+    = stylesheet_pack_tag('bootstrap')
+    = javascript_pack_tag('bootstrap', data: {turbolinks_track: 'reload'}, defer: false)
     = csrf_meta_tag
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
     = content_for(:head)
-  body data-controller=controller_name data-action=action_name class=('subscribe' if controller_name == 'subscriptions')
+  body data-controller=controller_name data-action=action_name
     = Gon::Base.render_data
     #dropzone
       #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
-        #droplabel-container.text-success
-          span#upload-spinner.mr-2 = render partial: 'shared/spinner'
-          h5#droplabel.d-inline.text-success Waiting for drop
+        #droplabel-container.text-primary
+          #upload-spinner.d-inline = render partial: 'shared/spinner', locals: {message: ''}
+          #droplabel.d-inline.text-primary Waiting for drop
           code#matrix.d-block.text-left.my-5 style='opacity: 0.5'
         #multiupload
-          .text-success
-            span#upload-spinner.mr-2 = render partial: 'shared/spinner'
-            h5.d-inline.text-success
+          .text-primary
+            #upload-spinner = render partial: 'shared/spinner', locals: {message: ''}
+            h5.d-inline.text-primary
               span#successful-uploads> 0
               | uploaded and processing
           div
@@ -35,7 +37,7 @@ html
               span#failed-uploads> 0
               | failed to upload
           p.text-light.mt-5 This page will update automatically.
-      nav.navbar.navbar-expand-md.navbar-dark
+      nav.navbar.navbar-expand-md
         a.navbar-brand href=root_path
           img.logo src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
           .d-none.d-xl-inline: img.logo src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
@@ -69,41 +71,42 @@ html
                 span.d-md-none.d-xl-inline FAQ
             = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
               .input-group
-                = f.text_field(:q, name: :q, class: 'form-control search', value: @query, placeholder: 'Search...')
+                = f.text_field(:q, name: :q, class: 'form-control search text-dark', value: @query, placeholder: 'Search...')
                 .input-group-append
-                  = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
+                  = button_tag(type: 'submit', class: 'btn btn-secondary', name: nil) do
                     = icon('fas', 'search')
           ul.nav.navbar-nav
             - if current_user.present?
-              li.nav-item.dropdown class=('active' if on_a_profile_page?)
-                a.nav-link.dropdown-toggle.px-3 href='#' data-toggle='dropdown' role='button' aria-expanded='false'
-                  - if current_user.avatar.present?
-                    img.mr-2 src=current_user.avatar width=20 height=20
-                  - else
-                    => icon('fas', 'user')
-                  span = current_user
-                  span.caret
-                ul.dropdown-menu.mt-0.border-top-0.bg-dark role='menu'
-                  li.nav-item
-                    a.dropdown-item.text-secondary href=user_path(current_user)
-                      => icon('fas', 'user-circle')
-                      ' Profile
-                    a.dropdown-item.text-secondary href=settings_path
-                      => icon('fas', 'sliders-h')
-                      ' Settings
-                    a.dropdown-item.text-secondary href=tools_path
-                      => icon('fas', 'toolbox')
-                      ' Tools
-                    a.dropdown-item.text-secondary href=session_path(auth_session) rel='nofollow' data-method='delete'
-                      => icon('fas', 'sign-out-alt')
-                      ' Sign Out
+              li.nav-item class=('active' if on_a_profile_page?)
+                .dropdown
+                  a.nav-link.dropdown-toggle.px-3#profileDropdownLink href='#' data-toggle='dropdown' role='button' aria-expanded='false' aria-haspopup='true'
+                    - if current_user.avatar.present?
+                      img.mr-2 src=current_user.avatar width=20 height=20
+                    - else
+                      => icon('fas', 'user')
+                    span = current_user
+                    span.caret
+                  ul.dropdown-menu.mt-0.border-top-0 role='menu' aria-labelledby='profileDropdownLink'
+                    li.nav-item
+                      a.dropdown-item href=user_path(current_user)
+                        => icon('fas', 'user-circle')
+                        ' Profile
+                      a.dropdown-item href=settings_path
+                        => icon('fas', 'sliders-h')
+                        ' Settings
+                      a.dropdown-item href=tools_path
+                        => icon('fas', 'toolbox')
+                        ' Tools
+                      a.dropdown-item href=session_path(auth_session) rel='nofollow' data-method='delete'
+                        => icon('fas', 'sign-out-alt')
+                        ' Sign Out
             - else
               li.nav-item: a.nav-link.px-3 href='#' data={toggle: :modal, target: '#signin'} Sign In
               #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
                 .modal-dialog role='document'
                   .modal-content
-                    .modal-header.bg-primary
-                      h5.text-light Sign in
+                    .modal-header.bg-dark
+                      h5 Sign in
                     .modal-body.bg-dark
                       .row
                         a.btn.btn-twitch.mx-auto href='/auth/twitch'
@@ -123,7 +126,7 @@ html
         div.text-right
           small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
         a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
-          ' Help us out by taking the 2019 Splits.io survey!
+          ' Help us out by taking the Splits.io survey!
       - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
       - if entry.present? && request.path != race_path(entry.race)
         article
@@ -165,3 +168,5 @@ html
                 a href=survey_url Survey
                 span<> &bull;
                 a href=privacy_policy_path Privacy Policy
+                br
+                ' Copyright &copy; 2013 - #{Time.now.utc.year} Splits I/O, LLC

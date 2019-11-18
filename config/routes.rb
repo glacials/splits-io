@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   get '/brand',     to: 'pages#brand',          as: :brand
   get '/read-only', to: 'pages#read_only_mode', as: :read_only_mode
   get '/privacy',   to: 'pages#privacy_policy', as: :privacy_policy
+  get '/partners',  to: 'pages#partners',       as: :partners
+
+  get '/timers/:timer_id', to: 'timers#show', as: :timer
 
   get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
   get '/why/darkmode',   to: 'why#darkmode',   as: :why_darkmode
@@ -75,6 +78,9 @@ Rails.application.routes.draw do
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
 
   get '/users/:user/pbs/:game/:category(/*trailing_path)', to: 'users/pbs#show', as: :user_pb
+
+  post   '/rivalries', to: 'rivalries#create', as: :rivalries
+  delete '/rivalries', to: 'rivalries#destroy'
 
   get   '/games',            to: 'games#index'
   get   '/games(?q=:q)',     to: redirect('/search?q=%{q}')
