@@ -47,6 +47,10 @@ class User < ApplicationRecord
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
   pg_search_scope :search_for_name, against: :name, using: :trigram
 
+  # STRIPE_MIGRATION_DATE decides what the cutoff date for being grandfathered into features due to a Patreon
+  # subscription is.
+  STRIPE_MIGRATION_DATE = Time.new('2019', '12', '01').utc
+
   def self.search(term)
     term = term.strip
     return nil if term.blank?
@@ -112,9 +116,30 @@ class User < ApplicationRecord
     patron?(tier: 3) || subscriptions.tier2.active.any? || admin?
   end
 
-  def patron?(tier: 0)
-    return true if admin?
-    return false if patreon.nil?
+  def has_sum_of_best_leaderboards?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || subscriptions.tier1.active.any? || admin?
+  end
+
+  def has_hiding?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || subscriptions.tier1.active.any? || admin?
+  end
+
+  def has_advanced_video?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || subscriptions.tier1.active.any? || admin?
+  end
+
+  def has_autohighlight?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || subscriptions.tier1.active.any? || admin?
+  end
+
+  def has_advanced_analytics?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || subscriptions.tier1.active.any? || admin?
+  end
+
+  # patron? returns something truthy if the user has been a patron at or above the given tier since the given `before`
+  # time. Not passing a `before` is the same as not caring how long the user has been a patron.
+  def patron?(tier: 0, before: Time.now.utc)
+    return false if patreon&.pledge_created_at.nil? || patreon.pledge_created_at > before
 
     case tier
     when 0

@@ -6,12 +6,12 @@
 - non_pb_runs = user.non_pbs(runs.map(&:category_id)).group_by(&:category_id) if col_options[:time].include?(:archived)
 - if runs.none?
   - if description.present?
-    .card-header.text-white = description
-  center.p-4
+    h5.card-header.text-white = description
+  center.m-4
     i Nothing to show!
 - else
   - if description.present?
-    .card-header.text-white = description
+    h5.card-header.text-white = description
   .table-responsive
     table.card-body.table.table-striped.table-hover.mb-0
       thead
@@ -45,7 +45,7 @@
                   - if old_runs.present?
                     span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
                       = icon('fas', 'history')
-                    span.dropdown-menu.bg-dark aria-labelledby="#{run.id36}-history-dropdown"
+                    span.dropdown-menu aria-labelledby="#{run.id36}-history-dropdown"
                       h6.dropdown-header Past Times
                       - old_runs.each do |old_run|
                         a.dropdown-item.text-secondary href=run_path(old_run) = old_run.duration.format
@@ -73,7 +73,7 @@
               td.nowrap: .dropleft.text-center
                 .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
                   = icon('fas', 'ellipsis-v')
-                .dropdown-menu.bg-dark role=:menu aria={labelledby: "dropdown_#{run.id36}"}
+                .dropdown-menu role=:menu aria={labelledby: "dropdown_#{run.id36}"}
                   button.dropdown-item.text-danger.run-disown-button data={run: {id: run.id36}}
                     = icon('fas', 'eraser', 'Disown')
                   button.dropdown-item.text-danger.run-delete-button data={run: {id: run.id36}}

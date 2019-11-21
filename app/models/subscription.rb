@@ -5,8 +5,10 @@ class Subscription < ActiveRecord::Base
   scope :canceled, -> { where.not(canceled_at: nil) }
   scope :is_tier1, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER1']) }
   scope :is_tier2, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER2']) }
-  scope :tier1,    -> { is_tier1.or(is_tier2) }
-  scope :tier2,    -> { is_tier2 }
+  scope :is_tier3, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER3']) }
+  scope :tier1,    -> { is_tier1.or(is_tier2).or(is_tier3) }
+  scope :tier2,    -> { is_tier2.or(is_tier3) }
+  scope :tier3,    -> { is_tier3 }
 
   def tier?(tier)
     case tier
@@ -14,6 +16,8 @@ class Subscription < ActiveRecord::Base
       [ENV['STRIPE_PLAN_ID_TIER1'], ENV['STRIPE_PLAN_ID_TIER2']].include?(stripe_plan_id)
     when 2
       stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
+    when 3
+      stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3']
     end
   end
 

@@ -12,13 +12,13 @@
               a.btn.btn-dark.tip href=@category.game.srdc.url title='See on Speedrun.com'
                 = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
             - elsif !@on_game_page && @category.srdc.try(:url).present?
-              a.btn.btn-dark.tip href=@category.srdc.url title='See on Speedrun.com'
+              a.btn.btn-outline-primary.tip href=@category.srdc.url title='See on Speedrun.com'
                 = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
             - if @category.game.srdc&.twitch_name
-              a.btn.btn-dark.tip title='See on Twitch' href="https://www.twitch.tv/directory/game/#{@category.game.srdc.twitch_name}"
+              a.btn.btn-outline-primary.tip title='See on Twitch' href="https://www.twitch.tv/directory/game/#{@category.game.srdc.twitch_name}"
                 .text-light = icon('fab', 'twitch')
             - if @category.game.srl.present?
-              a.btn.btn-dark.tip href=@category.game.srl.url title='See on SpeedRunsLive'
+              a.btn.btn-outline-primary.tip href=@category.game.srl.url title='See on SpeedRunsLive'
                 = image_tag(asset_path('srl.png'))
           - if @category.route
             span.mr-2
@@ -27,7 +27,7 @@
               }
           span#vue-race.mr-2 = render partial: 'races/create', locals: {game: @game, category: @category}
           - if can?(:edit, @category.game)
-            a.btn.btn-dark.mr-2 href=edit_game_path(@category.game)
+            a.btn.btn-outline-primary.mr-2 href=edit_game_path(@category.game)
               => icon('fas', 'edit')
               span Edit
         .row

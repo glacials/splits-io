@@ -12,8 +12,8 @@ document.addEventListener('turbolinks:load', function() {
     classNames: {
       input: 'text-light bg-default',
       hint: 'text-muted',
-      menu: 'dropdown-menu bg-dark',
-      selectable: 'dropdown-item text-secondary',
+      menu: 'dropdown-menu',
+      selectable: 'dropdown-item',
       cursor: 'active'
     }
   },
