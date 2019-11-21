@@ -1,5 +1,5 @@
 - scale_to ||= run.duration(timing).to_ms
-- if run.duration(timing).present? && !run.completed?(timing)
+- unless run.completed?(timing)
   .card: .card-body: i This run doesn't have #{timing}time splits.
 - else
   - if run.video&.supports_embedding?
