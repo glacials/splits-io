@@ -18,7 +18,7 @@
           - else
             i.btn.btn-outline-light.disabled.tip-top(
               style='cursor: not-allowed'
-              title='You need at least one link to be able to sign in! Link Google to unlink Twitch.'
+              title='You need either Google or Twitch linked to be able to sign in! Link Google to unlink Twitch.'
             ) Not unlinkable
   - if current_user.google.nil?
     .card.border-google
@@ -41,7 +41,7 @@
           - else
             i.btn.btn-outline-light.disabled.tip-top(
               style='cursor: not-allowed'
-              title='You need at least one link to be able to sign in! Link Twitch to unlink Google.'
+              title='You need either Google or Twitch linked to be able to sign in! Link Twitch to unlink Google.'
             ) Not unlinkable
   - if current_user.patreon.nil?
     .card.border-patreon
