@@ -37,7 +37,7 @@
             .float-right
               .btn-group
                 = f.submit('Save', class: 'btn btn-outline-primary')
-- else
+- elsif run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
     a.btn.btn-twitch.tip.disabled(
       title='Splits.io can auto-highlight this run on Twitch. Subscribe to activate.'
