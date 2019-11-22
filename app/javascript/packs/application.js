@@ -46,7 +46,6 @@ window.Chartkick = Chartkick
 
 import 'bootstrap'
 
-import "../ad_cleanup.js"
 import "../analytics.js"
 import "../collapse.js"
 import "../count.js"
