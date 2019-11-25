@@ -61,6 +61,7 @@ html
               li.nav-item
                 a.nav-link.px-3 href=read_only_mode_path
                   span.text-warning Read-Only Mode Active
+            - if current_user.subscriptions.active.none?
             li.nav-item class=('active' if request.path == subscriptions_path)
               a.nav-link.px-3 href=subscriptions_path
                 => icon('fas', 'fan', class: 'd-none d-md-inline d-xl-none')
