@@ -259,7 +259,7 @@ class Run < ApplicationRecord
   # would cause the run to complete, a new segment will be created at the end of the run and left blank for the next
   # split to fill. This can be used to perform blind runs where the runner doesn't know how many splits there will be.
   # Just make sure to eventually call this with more=false in order to actually finish the run.
-  def split(more: false, realtime_end_ms:, gametime_end_ms:) # rubocop:todo Metrics/AbcSize Metrics/CyclomaticComplexity Metrics/MethodLength
+  def split(more: false, realtime_end_ms: nil, gametime_end_ms: nil) # rubocop:todo Metrics/AbcSize Metrics/CyclomaticComplexity Metrics/MethodLength
     prev_segment = segments.order(segment_number: :asc).where(realtime_end_ms: nil).first
     if prev_segment.nil? && more
       prev_segment = segments.order(segment_number: :asc).last

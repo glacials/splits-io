@@ -1,5 +1,5 @@
 - scale_to ||= run.duration(timing).to_ms
-- unless run.completed?(timing)
+- if (run.completed?(Run::REAL) ^ run.completed?(Run::GAME)) && !run.completed?(timing)
   .card: .card-body: i This run doesn't have #{timing}time splits.
 - else
   - if run.video&.supports_embedding?

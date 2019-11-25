@@ -8,7 +8,11 @@ class Api::V4::Races::Entries::SplitsController < Api::V4::Races::EntriesControl
   before_action :check_permission
 
   def create
-    @run.split(split_params.merge(more: params[:more] == '1'))
+    @run.split(
+      more: params[:more] == '1',
+      realtime_end_ms: split_params[:realtime_end_ms],
+      gametime_end_ms: split_params[:gametime_end_ms],
+    )
 
     # If this was the final split
     if @run.completed?(Run::REAL)
