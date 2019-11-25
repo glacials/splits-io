@@ -36,7 +36,7 @@ class Segment < ApplicationRecord
   # is to support blind runs where the number of segments is not known, and new segments can be added on to the end of
   # the run as they are reached.
   def self.at_run_time(run_time)
-    with_ends.order(segment_number: :asc).where('realtime_end_ms > ?', run_time.to_ms).first || last
+    with_ends.order(segment_number: :asc).where('realtime_end_ms > ?', run_time.to_ms).first
   end
 
   # start returns the Duration between the start of the run and the start of this segment. For example, the first

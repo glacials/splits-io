@@ -130,11 +130,6 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
     end
   end
 
-  # replace_now returns the current timestamp if val is 'now', or val otherwise.
-  def replace_now(val)
-    val == 'now' ? @now : val
-  end
-
   def entry_params
     params[:entry].present? ? params.require(:entry).permit(:readied_at, :finished_at, :forfeited_at, :run_id) : {}
   end
