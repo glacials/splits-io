@@ -51,23 +51,33 @@
           #chart-alert.alert.alert-danger.my-3 hidden=true
           #chart-holder hidden=true style='height: 80%'
             #run-duration-chart.card.my-3
-            #box-plot.card.my-3
-            #segment-chart.card.my-3
-            #reset-chart-container.card.my-3
-              .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
-                label.btn.btn-sm.btn-outline-secondary.text-white.active.disabled
-                  input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
-                  ' Resets Per Split
-                label.btn.btn-sm.btn-outline-secondary.text-white
-                  input#run-progress-chart-button type="radio" name="reset-chart-buttons"
-                  ' Run Progress
-              #reset-chart.my-3
-              #run-progress-chart.my-3.d-none
-            - if @run.histories.any?
-              #playtime-chart.card.my-3
+            - if current_user.has_advanced_analytics?
+              #box-plot.card.my-3
+              #segment-chart.card.my-3
+              #reset-chart-container.card.my-3
+                .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
+                  label.btn.btn-sm.btn-outline-secondary.text-white.active.disabled
+                    input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
+                    ' Resets Per Split
+                  label.btn.btn-sm.btn-outline-secondary.text-white
+                    input#run-progress-chart-button type="radio" name="reset-chart-buttons"
+                    ' Run Progress
+                #reset-chart.my-3
+                #run-progress-chart.my-3.d-none
+              - if @run.histories.any?
+                #playtime-chart.card.my-3
+            - else
+              .card style='height: 100%; background: linear-gradient(var(--darkish), transparent); border: none'
+                .card-body: center.m-4
+                  h1 = icon('fas', 'lock')
+                  p: i Subscribe to Splits.io to view advanced charts.
+                  p: a.btn.btn-primary.mr-2 href=subscriptions_path Subscribe
   - else
     .container: .col-md-6.offset-md-3: .card
-      .card-body Subscribe to Splits.io to compare to users other than yourself.
+      .card-body
+        p Subscribe to Splits.io to compare to other users.
+        p
+          ' (Comparing to yourself is free.)
       .card-footer.clearfix
         .float-right
           a.btn.btn-primary.mr-2 href=subscriptions_path Subscribe
