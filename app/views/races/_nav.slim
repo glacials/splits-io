@@ -1,4 +1,11 @@
-race-nav inline-template=true v-if='race' :race='race' v-cloak=true
+race-nav(
+  inline-template=true
+  :race='race'
+  :starting='starting'
+  v-on:syncing='$emit("syncing")'
+  v-cloak=true
+  v-if='race'
+)
   div v-if='race.entries && (race.entries.length === 0 || race.entries.some(entry => entry.finished_at === null && entry.forfeited_at === null))'
     .btn-group.mr-2 v-if='entry && (!race.started_at || entry.finished_at || entry.forfeited_at)'
       button.btn.btn-outline-primary(
@@ -65,17 +72,40 @@ race-nav inline-template=true v-if='race' :race='race' v-cloak=true
 
     template v-if="entry && race.started_at && !entry.finished_at && !entry.forfeited_at"
       .btn-group.mr-2
-        button.btn.btn-outline-primary v-tippy=true :title="errors.forfeit" :disabled="loading.forfeit || loading.finish" @click="forfeit"
+        button.btn.btn-outline-primary(
+          :disabled="loading.forfeit || loading.finish || loading.split || starting"
+          :title="errors.forfeit"
+          @click="forfeit"
+          v-tippy=true
+        )
           template v-if="loading.forfeit" = render partial: 'shared/spinner'
           span.text-danger v-else-if='errors.forfeit' => icon('fas', 'exclamation-triangle')
           template v-else=true => icon('fas', 'heart-broken')
           ' Set forfeited
       .btn-group.mr-2
-        button.btn.btn-outline-primary v-tippy=true :title="errors.finish" :disabled="loading.forfeit || loading.finish" @click="finish"
+        button.btn.btn-outline-primary(
+          :disabled="loading.forfeit || loading.finish || loading.split || starting"
+          :title="errors.finish"
+          @click="finish"
+          v-tippy=true
+        )
           template v-if="loading.finish" = render partial: 'shared/spinner'
           span.text-danger v-else-if='errors.finish' => icon('fas', 'exclamation-triangle')
           template v-else=true => icon('fas', 'flag-checkered')
           ' Set finished
+      .btn-group.mr-2
+        button.btn.btn-outline-light(
+          @click="split"
+          :disabled="loading.forfeit || loading.finish || loading.split || starting"
+          :title="errors.split || 'Split, or create a split if there are none left. You can use this for blind runs. You cannot use this to finish. This is in open beta and may change significantly.'"
+          v-tippy=true
+        )
+          template v-if="loading.split" = icon('fas', 'check')
+          span.text-danger v-else-if='errors.split' => icon('fas', 'exclamation-triangle')
+          template v-else=true => icon('fas', 'stopwatch')
+          ' Split
+          .badge.badge-warning
+            ' Beta
 
     .btn-group.mr-2 v-if="entry && race.started_at && entry.finished_at"
       button.btn.btn-outline-primary disabled=true Finished

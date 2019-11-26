@@ -70,43 +70,27 @@ article
       h5.card-header Reparse
       .card-body
         p This button forces Splits.io to reparse your run's original file, repopulating your on-site splits and stats.
-          This can sometimes resolve bugs, but may revert your run's game and category if you've previously made changes
-          to them on this page.
+          This can sometimes resolve bugs, but will undo some modifications made to your run on Splits.io, like
+          cloud-based splits.
         p This is not reversible.
       .card-footer
         / This needs data-turbolinks="false" or the reparse page will refresh itself infinitely
         .float-right: a.btn.btn-outline-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse
 
-    .card
-      h5.card-header List/Unlist
-      .card-body
-        p An unlisted run isn't shown in category listings, search results, etc. but can still be viewed with a direct
-          link and is still owned by and credited to you.
-        p A run will become unlisted automatically when you beat its time, but you can also manually change that
-          status here.
-        p This is reversible.
-      .card-footer
-        .float-right
-          - if @run.archived?
-            = form_for @run, as: @run.id36, url: run_path(@run) do |f|
-              = f.hidden_field(:archived, value: false)
-              .btn-group
-                = f.submit 'Change to Listed', class: 'btn btn-info'
-                button.btn.btn-info.disabled.text-white
-                  => icon('fas', 'minus-circle')
-                  ' Unlisted
-          - else
-            = form_for @run, as: @run.id36, url: run_path(@run) do |f|
-              = f.hidden_field(:archived, value: true)
-              .btn-group
-                button.btn.btn-info.disabled.text-white
-                  => icon('fas', 'globe-americas')
-                  ' Listed
-                = f.submit 'Change to Unlisted', class: 'btn btn-info'
+    - if current_user&.has_hiding?
+      = render partial: 'hide', locals: {run: @run}
+    - else
+      .card
+        h5.card-header Hide
+        .card-body: center.m-4
+          h1 = icon('fas', 'lock')
+          i Subscribe to Splits.io to hide your run from listings without deleting it.
+        .card-footer.clearfix: .float-right
+            a.btn.btn-primary href=subscriptions_path Subscribe
 
     - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
       .card
-        h5.card-header Realtime / Gametime
+        h5.card-header Default timing
         .card-body
           p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
             However, you can set the default behavior for this run here.
@@ -116,19 +100,15 @@ article
             - if @run.default_timing == 'game'
               = form_for @run, as: @run.id36, url: run_path(@run) do |f|
                 = f.hidden_field(:default_timing, value: 'real')
-                .btn-group
-                  = f.submit 'Change to Realtime', class: 'btn btn-info'
-                  button.btn.btn-info.disabled.text-white
-                    => icon('fas', 'gamepad')
-                    ' Gametime
+                => icon('fas', 'gamepad')
+                i.text-secondary.mr-2 Currently gametime
+                = f.submit 'Set to realtime', class: 'btn btn-outline-primary'
             - else
               = form_for @run, as: @run.id36, url: run_path(@run) do |f|
                 = f.hidden_field(:default_timing, value: 'game')
-                .btn-group
-                  button.btn.btn-info.disabled.text-white
-                    => icon('fas', 'globe-americas')
-                    ' Realtime
-                  = f.submit 'Change to Gametime', class: 'btn btn-info'
+                => icon('fas', 'globe-americas')
+                i.text-secondary.mr-2 Currently realtime
+                = f.submit 'Set to gametime', class: 'btn btn-outline-primary'
 article
   #delete
     .card

@@ -170,6 +170,8 @@ Rails.application.routes.draw do
       put    '/runs/:run', to: 'runs#update'
       delete '/runs/:run', to: 'runs#destroy'
 
+      post '/runs/:run/splits', to: 'runs/splits#create', as: 'run_split'
+
       get '/runs/:run/source_file', to: 'runs/source_files#show', as: 'run_source_file'
       put '/runs/:run/source_file', to: 'runs/source_files#update'
 
@@ -186,6 +188,8 @@ Rails.application.routes.draw do
       post   '/races/:race_id/entries',     to: 'races/entries#create', as: 'race_entries'
       patch  '/races/:race_id/entries/:id', to: 'races/entries#update'
       delete '/races/:race_id/entries/:id', to: 'races/entries#destroy'
+
+      post '/races/:race_id/entries/:entry_id/splits', to: 'races/entries/splits#create', as: 'race_entry_split'
 
       get  '/races/:race_id/chat', to: 'races/chat_messages#index',  as: 'race_chat_messages'
       post '/races/:race_id/chat', to: 'races/chat_messages#create'

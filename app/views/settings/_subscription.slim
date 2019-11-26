@@ -7,18 +7,31 @@
         ' $4
       - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
         ' $6
+      - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3']
+        ' $9
       small.text-muted = '/ mo'
     ul.list-unstyled.mt-3.mb-4
       - if plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER1']
-        li Disable ads
-        li Predict when you'll PB
+        li You are grandfathered in to a legacy plan. Click Manage to see your benefits.
       - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
-        li Disable ads
-        li Predict when you'll PB
-        li
-          ' Upgrade permalinks to redirectors
-          small.tip style='cursor: default' title='Permalink redirectors are links that always redirect to your PB, even when it improves.'
-            ' ?
-        li Compare splits with other runners
+        li You are grandfathered in to a legacy plan. Click Manage to see your benefits.
+      - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3']
+          li
+            ' Advanced analytics
+            .info.tip title='Advanced charts, segment-specific analysis, and more.'
+          li Compare runs with other runners
+          li
+            ' Predict when you'll PB
+            .info.tip title="Chart your PBs against your practice time, and extrapolates out when you're likely to \
+              PB next."
+          li
+            ' Upgrade permalinks to redirectors
+            .info.tip title='Links that always redirect to your PB, even when it improves.'
+          li
+            ' Side-by-side video comparisons
+            .info.tip title="When you're comparing to someone, seek through both your runs to the same split."
+          li Auto-highlight runs on Twitch
+          li Hide runs without disowning them
+          li See sum-of-best leaderboards
   .card-footer: .float-right
     a.btn.btn-outline-light href=subscriptions_path Manage

@@ -1,5 +1,5 @@
 .btn-group
-  button#export-link.btn.btn-dark.dropdown-toggle.tip(
+  button#export-link.btn.btn-outline-primary.dropdown-toggle.tip(
     href='#'
     role='button'
     aria={haspopup: true, expanded: false}
@@ -7,7 +7,7 @@
     title=local_assigns.fetch(:tooltip_text, nil)
   )
     => icon('fas', 'download')
-    = local_assigns.fetch(:button_text, 'Export')
+    span.mr-2 = local_assigns.fetch(:button_text, 'Export')
   #export-menu.dropdown-menu aria-labelledby='export-link'
     form.px-4.pt-2 style=('display: none' if local_assigns.fetch(:force_route_only, false))
       .form-group: .form-check
@@ -16,24 +16,24 @@
           ' Route only
           small.tip(
             title="When checked, Splits.io won't include attempt history and gold times in the export. Only applies to
-            Generic Formats and Local Timers. If you're not sure, leave this
+            generic formats and local timers. If you're not sure, leave this
             #{run.belongs_to?(current_user) ? 'unchecked' : 'checked'}."
           ) = icon('fas', 'question-circle')
-    h6.dropdown-header.text-success Generic Formats
+    h6.dropdown-header.font-weight-bold Generic formats
     a.dropdown-item.can-strip-history data={turbolinks: false} href=download_path(run, Programs::ExchangeFormat.to_sym)
       => icon('fas', 'file-download')
       = Programs::ExchangeFormat
-    h6.dropdown-header.text-success Local Timers
+    h6.dropdown-header.font-weight-bold Local timers
     - timer = Run.program(run.timer)
     - (Run.exportable_programs - [Programs::ExchangeFormat]).each do |timer|
       a.dropdown-item.can-strip-history data={turbolinks: false} href=download_path(run, timer.to_sym)
         => icon('fas', 'download')
         = timer
-    h6.dropdown-header.text-success Online Timers
+    h5.dropdown-header.font-weight-bold Online timers
     a.dropdown-item href="https://one.livesplit.org/#/splits-io/#{run.id36}" target='_blank'
       => icon('fas', 'cloud')
       | LiveSplit One
-    h6.dropdown-header.text-success Raw Data
+    h6.dropdown-header.font-weight-bold Raw data
     a.dropdown-item href=history_csv_path(run)
       => icon('fas', 'file-csv')
       | Run History

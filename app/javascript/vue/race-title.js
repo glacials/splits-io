@@ -82,6 +82,7 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
+        this.$emit('syncing')
       } catch(error) {
         this.error = error
       } finally {
@@ -91,7 +92,7 @@ export default {
     },
   },
   name: 'race-title',
-  props: ['race'],
+  props: ['race', 'starting', 'syncing'],
   watch: {
     gameId: function() {
       if (this.game.categories.find(category => category.id === this.categoryId) === undefined) {

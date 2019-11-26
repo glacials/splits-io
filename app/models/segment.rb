@@ -32,7 +32,9 @@ class Segment < ApplicationRecord
   # Returns the Segment the runner would be on at the given run time. A run time is a Duration since the start of the
   # run.
   #
-  # If the Duration takes place outside the run (i.e. is greater than Run#duration), nil is returned.
+  # If the Duration takes place outside the run (i.e. is greater than Run#duration), the last segment is returned. This
+  # is to support blind runs where the number of segments is not known, and new segments can be added on to the end of
+  # the run as they are reached.
   def self.at_run_time(run_time)
     with_ends.order(segment_number: :asc).where('realtime_end_ms > ?', run_time.to_ms).first
   end
@@ -136,14 +138,36 @@ class Segment < ApplicationRecord
 
   # proportion returns a number from 0 to 1 representing the segment's proportion of the run it should represent, mostly
   # for display purposes.
+  #
+  # If the run is not complete, the completed segments are sized appropriately relative to each other and altogether
+  # make up n% of the total run, and the incomplete segments are sized identically to each other and altogether make up
+  # m% of the total run, where
+  #
+  #   n = the number of completed segments / the number of total segments
+  #   m = the number of incomplete segments / the number of total segments
+  #
+  # So a run with 6 completed segments and 4 incomplete segments would have 60% of its space taken up by completed
+  # segments (sized based on their durations) and 40% of its space taken up by incomplete segments (all the same size).
   def proportion(timing, scale_to = run.duration(timing))
-    return (1.0 / run.segments.count) if scale_to.nil?
+    if scale_to.nil?
+      num_segments = run.segments.count
+      num_segments_left = run.segments.where(Run.duration_type(timing) => nil).count
+      num_segments_completed = num_segments - num_segments_left
+
+      if duration(timing).present?
+        run_duration_so_far = run.segments.where.not(Run.duration_type(timing) => nil).sum(Run.duration_type(timing))
+        return duration(timing) / run_duration_so_far * (num_segments_completed.to_f / num_segments.to_f)
+      end
+
+      return (1.0 / num_segments_left.to_f) * (num_segments_left.to_f / num_segments.to_f)
+    end
 
     duration(timing) / scale_to
   end
 
   def second_half?(timing)
-    (self.end(timing) - (duration(timing) / 2)) > (run.duration(timing) / 2)
+    run_duration = run.duration(timing) || segments.sum(Run.duration_type(timing))
+    (self.end(timing) - (duration(timing) / 2)) > (run_duration / 2)
   end
 
   # gold? returns something truthy if this segment's PB time is the fastest (or tied for the fastest) ever recorded by

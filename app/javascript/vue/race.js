@@ -45,6 +45,7 @@ export default {
       disconnected() {},
 
       received(data) {
+        this.syncing = false
         switch(data.type) {
           // TODO: update races on game page with this info
           case '...':
@@ -69,6 +70,7 @@ export default {
       },
 
       received: (data) => {
+        this.syncing = false
         switch(data.type) {
           case 'race_entries_updated:html':
             document.getElementById('entries-table').innerHTML = data.data.entries_html
@@ -81,6 +83,10 @@ export default {
 
           case 'race_start_scheduled:html':
             document.getElementById('stats-box').innerHTML = data.data.stats_html
+            if (!starting && new Date(this.race.started_at) > new Date()) {
+              this.starting = true
+              setTimeout(() => this.starting = false, new Date(this.race.started_at) - new Date())
+            }
             break
           case 'race_start_scheduled':
             this.race = data.data.race
@@ -125,7 +131,14 @@ export default {
     loading: true,
     race: null,
     raceSubscription: null,
+    starting: false, // true when we're counting down to start, false before & after that
+    syncing: false, // true when we know we're waiting on an ActionCable update
   }),
+  methods: {
+    setSyncing: function() {
+      this.syncing = true
+    },
+  },
   name: 'race',
   props: ['race-id'],
 }

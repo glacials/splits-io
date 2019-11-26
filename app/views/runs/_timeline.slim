@@ -1,30 +1,24 @@
 - scale_to ||= run.duration(timing).to_ms
-- unless run.completed?(timing)
+- if (run.completed?(Run::REAL) ^ run.completed?(Run::GAME)) && !run.completed?(timing)
   .card: .card-body: i This run doesn't have #{timing}time splits.
 - else
   - if run.video&.supports_embedding?
     div style="height: 1em": span.video-progress-line.timeline-animation id="video-progress-line-#{run.id36}"
-  - collapsed_segments = run.collapsed_segments(timing)
   .timeline-background.timeline-animation data={run_id: run.id36}
     .timeline.shadow style="width: #{run.duration(timing) / scale_to * 100.0}%"
-      - collapsed_segments.each.with_index do |segment, index|
+      - run.collapsed_segments(timing).each.with_index do |segment, index|
         .pure-u.split(
           id="#{run.id36}-split-#{index}"
           data={start_ms: segment.start(timing).to_ms, run_id: run.id36, segment_name: CGI.escapeHTML(segment.display_name), segment_number: index+1}
           class="#{next_timeline_color(run.id36)} #{'progress-bar-striped progress-bar-animated' if segment.duration(timing).nil?}"
-          style="width: #{segment.proportion(timing) * 100.0}%; z-index: #{index}; #{'cursor: pointer;' if run.video}"
+          style="width: #{segment.proportion(timing) * 100.0}%; overflow: hidden; #{'cursor: pointer;' if run.video}"
         )
           .p-2
-            .text-light = segment.display_name.presence || '-'
+            .text-light.mr-2 = segment.display_name.presence || '-'
             .text-light-50
               - if segment.duration(timing).present?
-                = segment.duration(timing).format(precise: run.short?(timing))
+                .text-monospace = segment.duration(timing).format(precise: run.short?(timing))
+              - elsif segment.start(timing).present? && run.histories.order(attempt_number: :asc).last&.started_at
+                span.count data={abstime: (run.histories.order(attempt_number: :asc).last.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
               - else
-                b In progress
-  .gold.timeline.timeline-animation style="width: #{run.duration(timing) / scale_to * 100.0}%"
-    - collapsed_segments.each_with_index do |segment, index|
-      div style="width: #{segment.proportion(timing) * 100.0}%"
-        - if segment.shortest_duration(timing).present?
-          .gold-split style="width: #{segment.shortest_duration(timing) / segment.duration(timing) * 100.0}%"
-        - else
-          .gold-split.bg-dark style='width: 100%'
+                b.text-monospace In progress

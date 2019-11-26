@@ -5,6 +5,10 @@ class Api::V4::ApplicationController < ActionController::Base
   skip_before_action :touch_auth_session
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
 
+  rescue_from ActionController::ParameterMissing do |e|
+    render status: :bad_request, json: {status:  400, message: e.message}
+  end
+
   def options
     headers['Allow'] = 'POST, PUT, DELETE, GET, OPTIONS'
   end
@@ -28,23 +32,24 @@ class Api::V4::ApplicationController < ActionController::Base
     end.join(', ')
   end
 
-  def not_found(collection_name, message: nil)
+  def not_found(collection, message: nil)
     {
       status: :not_found,
       json:   {
         status: 404,
-        error:  message || "No #{collection_name} with ID #{params[collection_name] || params["#{collection_name}_id"] || params[:id]} found."
-      }
+        error:  message ||
+          "No #{collection} with ID #{params[collection] || params["#{collection}_id"] || params[:id]} found.",
+      },
     }
   end
 
   # Add response body to unauthorized requests
-  def doorkeeper_unauthorized_render_options(error: nil)
+  def doorkeeper_unauthorized_render_options(*)
     {
       json: {
         status: 401,
-        error:  'Not authorized'
-      }
+        error:  'Not authorized',
+      },
     }
   end
 
@@ -92,7 +97,7 @@ class Api::V4::ApplicationController < ActionController::Base
   rescue ActiveRecord::RecordNotFound
     render status: :unauthorized, json: {
       status: 401,
-      error:  'No user found for this token'
+      error:  'No user found for this token',
     }
   end
 
@@ -101,17 +106,17 @@ class Api::V4::ApplicationController < ActionController::Base
 
     render status: :unauthorized, json: {
       status: 401,
-      error:  'A user is required for this action'
+      error:  'A user is required for this action',
     }
   end
 
-  def set_race(param: :race_id)
+  def set_race(param: :race_id) # rubocop:disable Naming/AccessorMethodName
     @race = Race.find(params[param])
     return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
 
     render status: :forbidden, json: {
       status: 403,
-      error:  'Must be invited to see this race'
+      error:  'Must be invited to see this race',
     }
   rescue ActiveRecord::RecordNotFound
     render not_found(:race)

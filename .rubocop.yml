@@ -19,6 +19,15 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 

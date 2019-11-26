@@ -3,6 +3,7 @@
 .m-0 style='filter: sepia(60%)'
   - compare_runs.each do |run|
     = render partial: 'runs/timeline', locals: {timing: timing, run: run, scale_to: scale_to}
+    = render partial: 'runs/gold_timeline', locals: {timing: timing, run: run, scale_to: scale_to}
 .timeline-inspectors.m-0
   - compare_runs.each do |run|
     = render partial: 'runs/timeline_inspector', locals: {timing: timing, run: run, scale_to: scale_to, overlap: true}

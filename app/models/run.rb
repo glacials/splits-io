@@ -255,6 +255,170 @@ class Run < ApplicationRecord
     @segments_with_groups
   end
 
+  # split tries to split this run by filling in the first unfilled segment with a time. If more is true and this split
+  # would cause the run to complete, a new segment will be created at the end of the run and left blank for the next
+  # split to fill. This can be used to perform blind runs where the runner doesn't know how many splits there will be.
+  # Just make sure to eventually call this with more=false in order to actually finish the run.
+  def split(more: false, realtime_end_ms: nil, gametime_end_ms: nil) # rubocop:todo Metrics/AbcSize Metrics/CyclomaticComplexity Metrics/MethodLength
+    prev_segment = segments.order(segment_number: :asc).where(realtime_end_ms: nil).first
+    if prev_segment.nil? && more
+      prev_segment = segments.order(segment_number: :asc).last
+    end
+
+    next_segment = segments.find_by(segment_number: prev_segment.segment_number + 1) if prev_segment
+
+    # Normal split
+    if !more || next_segment
+      if !prev_segment
+        errors.add(:segments, :full, message: 'are all completed; pass more=1 to add one and split')
+        return
+      end
+
+      if realtime_end_ms
+        prev_segment.assign_attributes(
+          realtime_end_ms: realtime_end_ms,
+          realtime_duration_ms: realtime_end_ms - prev_segment.start(Run::REAL).to_ms,
+          realtime_gold: prev_segment.histories.where('realtime_duration_ms < ?', realtime_end_ms - prev_segment.start(Run::REAL).to_ms).none?,
+        )
+      end
+
+      if gametime_end_ms
+        prev_segment.assign_attributes(
+          gametime_end_ms: gametime_end_ms,
+          gametime_duration_ms: gametime_end_ms - prev_segment.start(Run::GAME).to_ms,
+          gametime_gold: prev_segment.histories.where('gametime_duration_ms < ?', gametime_end_ms - prev_segment.start(Run::GAME).to_ms).none?,
+        )
+      end
+
+      prev_segment.save
+
+      prev_segment_history = prev_segment.histories.new(
+        attempt_number: attempts + 1,
+      )
+
+      if realtime_end_ms
+        prev_segment_history.assign_attributes(
+          realtime_duration_ms: realtime_end_ms - prev_segment.start(Run::REAL).to_ms,
+        )
+      end
+
+      if gametime_end_ms
+        prev_segment_history.assign_attributes(
+          gametime_duration_ms: gametime_end_ms - prev_segment.start(Run::GAME).to_ms,
+        )
+      end
+
+      prev_segment_history.save
+
+      # segment could be nil if we just finished the run.
+      if next_segment
+        next_segment.update(
+          realtime_start_ms: realtime_end_ms,
+          gametime_start_ms: gametime_end_ms,
+        )
+      else
+        update(
+          attempts: attempts + 1,
+          realtime_duration_ms: realtime_end_ms,
+          gametime_duration_ms: gametime_end_ms,
+        )
+        histories.create(
+          attempt_number: attempts,
+          realtime_duration_ms: realtime_end_ms,
+          gametime_duration_ms: gametime_end_ms,
+        )
+      end
+
+      return
+    end
+    
+    # Smart split, making new segments if none are left
+
+    # If the run was empty
+    if !prev_segment
+      prev_segment = segments.create(
+        segment_number:       0,
+        name:                 'Segment 1',
+        realtime_start_ms:    0,
+        realtime_end_ms:      realtime_end_ms,
+        realtime_duration_ms: realtime_end_ms,
+        realtime_gold:        true,
+        gametime_start_ms:    0,
+        gametime_end_ms:      gametime_end_ms,
+        gametime_duration_ms: gametime_end_ms,
+        gametime_gold:        true,
+      )
+
+      prev_segment.histories.create(
+        attempt_number:       1,
+        realtime_duration_ms: realtime_end_ms,
+        gametime_duration_ms: gametime_end_ms,
+      )
+    end
+
+    if realtime_end_ms
+      prev_segment.assign_attributes(
+        realtime_end_ms: realtime_end_ms,
+        realtime_duration_ms: realtime_end_ms - prev_segment.start(Run::REAL).to_ms,
+        realtime_gold: prev_segment.histories.where('realtime_duration_ms < ?', realtime_end_ms - prev_segment.start(Run::REAL).to_ms).none?,
+      )
+    end
+
+    if gametime_end_ms
+      prev_segment.assign_attributes(
+        gametime_end_ms: gametime_end_ms,
+        gametime_duration_ms: gametime_end_ms - prev_segment.start(Run::GAME).to_ms,
+        gametime_gold: prev_segment.histories.where('gametime_duration_ms < ?', gametime_end_ms - prev_segment.start(Run::GAME).to_ms).none?,
+      )
+    end
+
+    prev_segment.save
+
+    prev_segment_history = prev_segment.histories.build(
+      attempt_number: attempts + 1,
+    )
+
+    if realtime_end_ms
+      prev_segment_history.assign_attributes(
+        realtime_duration_ms: realtime_end_ms - prev_segment.start(Run::REAL).to_ms,
+      )
+    end
+
+    if gametime_end_ms
+      prev_segment_history.assign_attributes(
+        gametime_duration_ms: gametime_end_ms - prev_segment.start(Run::GAME).to_ms,
+      )
+    end
+
+    prev_segment_history.save
+
+    next_segment = segments.create(
+      segment_number: prev_segment.segment_number + 1,
+      name: "Segment #{prev_segment.segment_number + 2}",
+      realtime_start_ms: prev_segment.end(Run::REAL).to_ms,
+      gametime_start_ms: prev_segment.end(Run::GAME).to_ms,
+    )
+
+    $s3_bucket_internal.put_object(
+      key: "splits/#{s3_filename}",
+      body: ApplicationController.new.render_to_string(
+        template: 'runs/exports/exchange',
+        layout: false,
+        locals: {:@run => self},
+      ),
+    )
+
+    save
+  end
+
+  def in_progress?(timing)
+    !completed?(timing)
+  end
+
+  def completed?(timing)
+    duration(timing).present? && duration(timing).positive?
+  end
+
   private
 
   def stats_select_query(timing)

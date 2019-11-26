@@ -13,9 +13,8 @@ h6.card-header Entries
           ' Position
         - else
           ' Ready
-      th.w-100 Time
-      - unless race.finished?
-        th.nowrap.text-center Current split
+      th Time
+      th.nowrap.text-center.w-100 Splits
       th.nowrap.text-center Stats
       th.nowrap.text-center Links
     tbody
@@ -39,13 +38,16 @@ h6.card-header Entries
               b class=entry_color(entry) = entry.duration.format(precise: true)
             - elsif race.started?
               i In progress
-          - unless race.finished?
-            td.nowrap
-              - if entry.run.present? && race.started?
-                - segment = entry.run.segments.at_run_time(Duration.new((Time.now.utc - race.started_at) * 1000))
-                - if segment.present?
-                  .badge.badge-dark.mr-2 #{segment}
-                  span.count data={abstime: (race.started_at + (segment.start(timing).to_ms / 1000)).rfc3339(3)} -
+          td.nowrap.p-0 style='filter: grayscale(.5)'
+            - if entry.run
+              small
+                - segments = Segment.joins(run: :entry).where(run: {entries: {id: race.entries}})
+                - last_segment = segments.where(segment_number: segments.maximum(:segment_number))
+                = render partial: 'runs/timeline', locals: { \
+                  timing: Run::REAL,
+                  run: entry.run,
+                  scale_to: Run.joins(:entry).where(entries: {id: race.entries}).maximum(:realtime_duration_ms),
+                }
           td.nowrap.text-center
             - if entry.runner.present?
               - entries = entry.runner.entries
@@ -79,7 +81,7 @@ h6.card-header Entries
         onclick='window.setTimeout(() => document.getElementById("ghost-input").focus(), 100)'
       )
         ' Add ghost
-      .dropdown-menu.bg-dark.p-4 aria={labelledby: 'ghost-btn'} style='width: 18rem'
+      .dropdown-menu.p-4 aria={labelledby: 'ghost-btn'} style='width: 18rem'
         = form_for(:entry, remote: true, url: api_v4_race_entries_path(race.id), html: {class: 'auth-me'}) do |f|
           .form-group
             = f.text_field(:run_id, class: 'form-control', placeholder: 'Run ID; e.g. g23b', id: 'ghost-input')

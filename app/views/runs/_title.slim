@@ -6,20 +6,20 @@ h5
     .badge
       => icon('fas', 'check')
       span Personal Best
-  = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
+  span.mr-2 = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
   - if run.srdc_id.present?
-    a.badge.badge-dark.tip title='See on Speedrun.com' href=run.srdc_url
+    a.badge.badge-dark.tip.mr-2 title='See on Speedrun.com' href=run.srdc_url
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
   - if run.entry.present? && !run.entry.ghost?
-    a.badge.badge-dark.tip title='Recorded as part of a race' href=race_path(run.entry.race)
+    a.badge.badge-dark.tip.mr-2 title='Recorded as part of a race' href=race_path(run.entry.race)
       = icon('fas', 'flag-checkered')
   - if run.video&.supports_embedding?
     - if run.video.youtube?
-      a.badge.badge-dark.tip href=run.video.url title='Watch on YouTube' => icon('fab', 'youtube')
+      a.badge.badge-dark.tip.mr-2 href=run.video.url title='Watch on YouTube' => icon('fab', 'youtube')
     - elsif !run.video.twitch?
-      a.badge.badge-dark.tip href=run.video.url title='Watch video' => icon('fas', 'video')
-  - if run.segments.last.try(:duration, timing).nil?
-    a.badge.tip.p-0 title='In progress'
+      a.badge.badge-dark.tip.mr-2 href=run.video.url title='Watch video' => icon('fas', 'video')
+  - if run.in_progress?(timing)
+    a.badge.tip.p-0.mr-2 title='In progress'
       .text-danger = icon('fas', 'satellite-dish')
 
 .btn-toolbar role='toolbar' aria={label: 'Run navigation'}
@@ -27,11 +27,11 @@ h5
     .btn-group role='group'
       - if can?(:edit, run)
         - if request.path_info == edit_run_path(run)
-          a.btn.btn-dark href=run_path(run)
+          a.btn.btn-outline-primary href=run_path(run)
             => icon('fas', 'hand-point-left')
             ' Back
         - else
-          a.btn.btn-dark href=edit_run_path(run)
+          a.btn.btn-outline-primary href=edit_run_path(run)
             => icon('fas', 'edit')
             ' Edit
       = render partial: 'export_button', locals: {run: run}
@@ -56,43 +56,4 @@ h5
     .btn-group.m-2: .btn.btn-outline-secondary.tip.disabled title=tooltip(run)
       ' 🎉
       = run.likes.count
-  .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-    - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
-      a.btn.btn-twitch.tip-top(
-        href='#'
-        data={toggle: :modal, target: '#highlight'}
-        title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
-      )
-        => icon('fab', 'twitch')
-        span Auto-highlight
-- if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
-  #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
-    .modal-dialog role='document'
-      .modal-content
-        = form_for(run.build_video, url: run_video_path(run), method: :put) do |f|
-          .modal-header.bg-primary
-            h5.text-light Auto-Highlight
-          .modal-body.bg-dark
-            .row.text-light.m-2
-              p Splits.io found the stream you PBed in! Click below to highlight it with 10s on either end of the
-                run.
-              p You will have a chance to edit before publishing.
-            .row: .btn-group.mx-auto
-              a.btn.btn-twitch.mx-auto.twitch(
-                target='_blank'
-                rel='noopener'
-                href=run.highlight_suggestion.url
-              )
-                => icon('fab', 'twitch')
-                ' Highlight at Twitch
-              .btn.btn-outline-twitch.tip-top(
-                title='Not taking you to the right page? Your video archive may have expired.'
-                style='cursor: default'
-              ) = icon('fas', 'question-circle')
-            .row.text-light.m-2
-              p Paste the link you get here:
-              = f.text_field(:url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here', spellcheck: false)
-          .modal-footer.bg-dark
-            .float-right
-              .btn-group
-                = f.submit('Save', class: 'btn btn-success')
+  = render partial: 'highlight_button', locals: {run: run}

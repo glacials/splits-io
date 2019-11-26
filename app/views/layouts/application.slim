@@ -61,10 +61,11 @@ html
               li.nav-item
                 a.nav-link.px-3 href=read_only_mode_path
                   span.text-warning Read-Only Mode Active
-            li.nav-item class=('active' if request.path == subscriptions_path)
-              a.nav-link.px-3 href=subscriptions_path
-                => icon('fas', 'fan', class: 'd-none d-md-inline d-xl-none')
-                span.d-md-none.d-xl-inline Pricing
+            - if !current_user || current_user.subscriptions.active.none?
+              li.nav-item class=('active' if request.path == subscriptions_path)
+                a.nav-link.px-3 href=subscriptions_path
+                  => icon('fas', 'fan', class: 'd-none d-md-inline d-xl-none')
+                  span.d-md-none.d-xl-inline Pricing
             li.nav-item class=('active' if request.path == faq_path)
               a.nav-link.px-3 href=faq_path
                 => icon('fas', 'info-circle', class: 'd-none d-md-inline d-xl-none')
@@ -133,7 +134,6 @@ html
           a.btn.btn-outline-success.btn-block.mb-0.text-center.glow href=race_path(entry.race)
             => icon('fas', 'flag-checkered')
             | Return to race
-      = render partial: 'shared/ad'
       header#header = yield(:header)
       article
         .row: .col-lg-12: #alerts data-turbolinks-temporary=true

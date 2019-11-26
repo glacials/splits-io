@@ -1,4 +1,11 @@
-race-title inline-template=true v-if='race' :race='race'
+race-title(
+  inline-template=true
+  :race='race'
+  :starting='starting'
+  :syncing='syncing'
+  v-on:syncing='setSyncing()'
+  v-if='race'
+)
   div v-cloak=true
     .row: .col-md-12
       h1 v-if='!editing' = '{{title}}'
@@ -37,7 +44,7 @@ race-title inline-template=true v-if='race' :race='race'
                   :disabled='loading'
                   :title='error || "Edit"'
                   @click='edit'
-                  v-if='!editing'
+                  v-if='!editing && !race.started_at'
                   v-tippy=true
                 )
                   template v-if='loading' = render partial: 'shared/spinner'
@@ -55,6 +62,9 @@ race-title inline-template=true v-if='race' :race='race'
                   template v-if='loading' = render partial: 'shared/spinner'
                   template v-else-if='error' = icon('fas', 'times')
                   template v-else=true = icon('fas', 'check')
+          small.text-muted.mx-2 v-if='syncing'
+            => render partial: 'shared/spinner'
+            ' Syncing
 
       .col-md-12
         div v-if="false" = render partial: 'shared/spinner'

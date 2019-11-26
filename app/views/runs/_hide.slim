@@ -1,0 +1,20 @@
+.card
+  h5.card-header
+    ' Hide
+  .card-body
+    p You can choose to hide your run from public listings. The link still works, and it's still credited to you.
+    p This is reversible.
+  .card-footer
+    .float-right
+      - if run.archived?
+        = form_for run, as: run.id36, url: run_path(run) do |f|
+          = f.hidden_field(:archived, value: false)
+          i.text-secondary.mr-2 Currently hidden
+          .btn-group
+            = f.submit 'Unhide run', class: 'btn btn-outline-primary'
+      - else
+        = form_for run, as: run.id36, url: run_path(run) do |f|
+          = f.hidden_field(:archived, value: true)
+          i.text-secondary.mr-2 Currently shown
+          .btn-group
+            = f.submit 'Hide run', class: 'btn btn-outline-primary'
