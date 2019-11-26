@@ -49,7 +49,7 @@
               'Generating charts', 'Still generating', 'Arranging chart data', \
             ]}
           #chart-alert.alert.alert-danger.my-3 hidden=true
-          #chart-holder hidden=true style='height: 80%'
+          #chart-holder hidden=true
             #run-duration-chart.card.my-3
             - if current_user&.has_advanced_analytics?
               #box-plot.card.my-3
@@ -67,7 +67,7 @@
               - if @run.histories.any?
                 #playtime-chart.card.my-3
             - else
-              .card style='height: 100%; background: linear-gradient(var(--darkish), transparent); border: none'
+              .card style='background: linear-gradient(var(--darkish), transparent); border: none'
                 .card-body: center.m-4
                   h1 = icon('fas', 'lock')
                   p: i Subscribe to Splits.io to view advanced charts.
