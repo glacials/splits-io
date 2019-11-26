@@ -51,7 +51,7 @@
           #chart-alert.alert.alert-danger.my-3 hidden=true
           #chart-holder hidden=true style='height: 80%'
             #run-duration-chart.card.my-3
-            - if current_user.has_advanced_analytics?
+            - if current_user&.has_advanced_analytics?
               #box-plot.card.my-3
               #segment-chart.card.my-3
               #reset-chart-container.card.my-3
