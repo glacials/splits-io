@@ -27,11 +27,11 @@ h5
     .btn-group role='group'
       - if can?(:edit, run)
         - if request.path_info == edit_run_path(run)
-          a.btn.btn-outline-primary href=run_path(run)
+          a.btn.btn-outline-primary href=run_path(run) style='white-space: nowrap'
             => icon('fas', 'hand-point-left')
             ' Back
         - else
-          a.btn.btn-outline-primary href=edit_run_path(run)
+          a.btn.btn-outline-primary href=edit_run_path(run) style='white-space: nowrap'
             => icon('fas', 'edit')
             ' Edit
       = render partial: 'export_button', locals: {run: run}
