@@ -27,7 +27,7 @@
         .card
           h5.card-header Sum-of-best leaderboard
           - if current_user&.has_sum_of_best_leaderboards?
-            = render partial: 'sum_of_best_leaderboard', locals: {timing: timing, category: @category}
+            = render partial: 'games/categories/sum_of_best_leaderboard', locals: {timing: timing, category: @category}
           - else
             .card-body: center.m-4
               h1 = icon('fas', 'lock')
