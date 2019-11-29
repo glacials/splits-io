@@ -65,6 +65,16 @@ h5
       )
         => icon('fab', 'twitch')
         span Auto-highlight
+    // TODO: This should upsell you on SRDC integration if you don't have necessary information
+    - if run.belongs_to?(current_user) && run.user.srdc.present? && run.srdc_id.nil? && run.category.srdc.present?
+      a.btn.btn-srdc.tip-top(
+        href='#'
+        data={toggle: :modal, target: '#srdc-submit'}
+        title='Using variables from your splits, we can automatically submit your run to the relevant leaderboards.'
+      )
+        => image_tab(asset_path('srdc.png'), style: 'height: 0.8em')
+        span Auto-submit
+
 - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
   #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
     .modal-dialog role='document'
@@ -96,3 +106,62 @@ h5
             .float-right
               .btn-group
                 = f.submit('Save', class: 'btn btn-success')
+
+- if run.belongs_to?(current_user) && run.user.srdc.present? && run.srdc_id.nil? && run.category.srdc.present?
+  #srdc-submit.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'srdc-submit-label', hidden: true}
+    .modal-dialog role='document'
+      .modal-content
+        form#srdc-submit-form
+          .modal-header.bg-primary
+            h5.text-light Submit to Speedrun.com
+          .modal-body.bg-dark
+            .row.text-light.m-2
+              p Splits.io can submit your run to Speedrun.com!
+              p Please verify all information is correct below.
+            .row
+              .form-group
+                label for='srdc-category' Speedrun.com Category
+                input.form-control type='text' id='srdc-category' value=run.category.srdc.name required=true disabled=true
+
+              .form-group
+                label for='srdc-player' Speedrun.com Player
+                input.form-control type='text' id='srdc-player' value=run.user.srdc.name required=true disabled=true
+
+              - if run.game.srdc.accepts_realtime?
+                .form-group
+                  label for='srdc-realtime' Real Time
+                  input.form-control type='text' id='srdc-realtime' value=run.duration(Run::REAL).format(precise: run.srdc.game.show_ms?) required=true disabled=true
+              - if run.game.srdc.accepts_gametime?
+                .form-group
+                  label for='srdc-gametime' Game Time
+                  input.form-control type='text' id='srdc-gametime' value=run.duration(Run::GAME).format(precise: run.srdc.game.show_ms?) required=true disabled=true
+
+              - run.game.srdc.variables.where(speedrun_dot_com_category: [nil, run.category.srdc.id], type: 'variables').order(type: :desc).each do |variable|
+                .form-group
+                  label for="srdc-#{variable.name}" = variable.name
+                  select.form-control required=variable.mandatory?
+                    - variable.variable_values.each do |variable_value|
+                      - run_value = run.variables.find_by(speedrun_dot_com_game_variable_value: variable_value)
+                      option selected=(run_value == variable_value)
+
+              - if run.game.srdc.emulators_allowed?
+                .form-group
+                  label for='srdc-emulator' Emulator?
+                  input.form-control id='srdc-emulator' type='checkbox' checked=run.uses_emulator?
+
+              .form-group
+                label for='srdc-date' Date
+                // TODO: Populate date from attempt history
+                input.form-control id='srdc-date' type='date' value="" required=true
+
+              .form-group
+                label for='srdc-video' Video Link
+                input.form-control id='srdc-video' type='text' value=run.video.url required=run.game.srdc.video_required?
+
+              .form-group
+                label for='srdc-splitsio' Splits.io Link
+                input.form-control id='srdc-splitsio' type='text' value=run_path(run) required=true disabled=true
+
+              .form-group
+                label for='srdc-desc' Description
+                input.form-control id='srdc-desc' type='textarea' placeholder='Optional'

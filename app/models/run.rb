@@ -29,6 +29,8 @@ class Run < ApplicationRecord
   has_one  :entry,                dependent: :nullify
   has_one  :video,                dependent: :destroy
 
+  has_many :variables, class_name: 'SpeedrunDotComRunVariable', dependent: :destroy
+
   has_secure_token :claim_token
 
   after_create :discover_runner

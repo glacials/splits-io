@@ -134,6 +134,7 @@ module UnparsedRun
         run_data[:default_timing] = Run::GAME
       end
 
+      write_run_variables(run_data)
       run_data
     end
 

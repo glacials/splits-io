@@ -13,7 +13,6 @@ class Game < ApplicationRecord
 
   has_many :races
 
-
   has_one :srdc, class_name: 'SpeedrunDotComGame', dependent: :destroy
   has_one :srl,  class_name: 'SpeedRunsLiveGame',  dependent: :destroy
 
