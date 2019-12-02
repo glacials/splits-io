@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_06_212943) do
+ActiveRecord::Schema.define(version: 2019_12_02_011412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -287,6 +287,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.string "default_timing", default: "real", null: false
     t.bigint "total_playtime_ms"
     t.bigint "filesize_bytes", default: 0, null: false
+    t.boolean "uses_emulator", default: false
     t.index ["category_id"], name: "index_runs_on_category_id"
     t.index ["s3_filename"], name: "index_runs_on_s3_filename"
     t.index ["user_id"], name: "index_runs_on_user_id"
@@ -353,6 +354,35 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.index ["category_id"], name: "index_speedrun_dot_com_categories_on_category_id", unique: true
   end
 
+  create_table "speedrun_dot_com_game_variable_values", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "speedrun_dot_com_game_variables_id", null: false
+    t.string "srdc_id", null: false
+    t.string "label", null: false
+    t.string "rules"
+    t.boolean "miscellaneous"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["speedrun_dot_com_game_variables_id"], name: "index_srdc_game_variable_values_on_srdc_game_variables_id"
+  end
+
+  create_table "speedrun_dot_com_game_variables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "srdc_id"
+    t.string "type", null: false
+    t.string "name", null: false
+    t.bigint "speedrun_dot_com_game_id", null: false
+    t.bigint "speedrun_dot_com_category_id"
+    t.boolean "mandatory"
+    t.boolean "obsoletes"
+    t.boolean "user_defined"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "speedrun_dot_com_game_variable_values_id"
+    t.index ["speedrun_dot_com_category_id"], name: "index_srdc_game_variables_on_srdc_category_id"
+    t.index ["speedrun_dot_com_game_id"], name: "index_srdc_game_variables_on_srdc_game_id"
+    t.index ["speedrun_dot_com_game_variable_values_id"], name: "index_srdc_game_variables_on_srdc_game_variable_values_id"
+    t.index ["srdc_id", "type"], name: "index_speedrun_dot_com_game_variables_on_srdc_id_and_type", unique: true
+  end
+
   create_table "speedrun_dot_com_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id"
     t.string "srdc_id", null: false
@@ -366,9 +396,22 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "twitch_name"
+    t.boolean "video_required"
+    t.boolean "accetps_realtime"
+    t.boolean "accepts_gametime"
+    t.boolean "emulators_allowed"
     t.index ["game_id"], name: "index_speedrun_dot_com_games_on_game_id", unique: true
     t.index ["shortname"], name: "index_speedrun_dot_com_games_on_shortname", unique: true
     t.index ["srdc_id"], name: "index_speedrun_dot_com_games_on_srdc_id", unique: true
+  end
+
+  create_table "speedrun_dot_com_run_variables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "speedrun_dot_com_game_variable_value_id"
+    t.bigint "run_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["run_id"], name: "index_speedrun_dot_com_run_variables_on_run_id"
+    t.index ["speedrun_dot_com_game_variable_value_id"], name: "index_srdc_run_variables_on_srdc_game_variable_value_id"
   end
 
   create_table "speedrun_dot_com_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

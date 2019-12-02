@@ -111,6 +111,10 @@ class RunsController < ApplicationController
     end
   end
 
+  def srdc_submit
+
+  end
+
   private
 
   def set_run

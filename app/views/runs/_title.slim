@@ -111,7 +111,7 @@ h5
   #srdc-submit.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'srdc-submit-label', hidden: true}
     .modal-dialog role='document'
       .modal-content
-        form#srdc-submit-form
+        = form_with url: srdc_submit_path, id: 'srdc-submit-form' do |f|
           .modal-header.bg-primary
             h5.text-light Submit to Speedrun.com
           .modal-body.bg-dark
@@ -120,7 +120,8 @@ h5
               p Please verify all information is correct below.
             .row
               .form-group
-                label for='srdc-category' Speedrun.com Category
+                = f.label :srdc_category, 'Speedrun.com Category'
+                = f.text_field :srdc_category, value: run.category.srdc.name, required: true, disabled: true
                 input.form-control type='text' id='srdc-category' value=run.category.srdc.name required=true disabled=true
 
               .form-group

@@ -1,19 +1,15 @@
 class AddSrdcInfoForSubmit < ActiveRecord::Migration[6.0]
   def change
-    change_table :runs do |t|
-      t.boolean :uses_emulator, default: false
-    end
+    add_column :runs, :uses_emulator, :boolean, default: false
 
-    change_table :speedrun_dot_com_games do |t|
-      t.boolean :video_required
-      t.boolean :accetps_realtime
-      t.boolean :accepts_gametime
-      t.boolean :emulators_allowed
-    end
+    add_column :speedrun_dot_com_games, :video_required, :boolean
+    add_column :speedrun_dot_com_games, :accetps_realtime, :boolean
+    add_column :speedrun_dot_com_games, :accepts_gametime, :boolean
+    add_column :speedrun_dot_com_games, :emulators_allowed, :boolean
 
     reversible do |dir|
       dir.down do
-        SpeedrunDotComGame.where('created_at > ?', Time.new(2019, 11, 11)).destroy_all
+        SpeedrunDotComGame.where('created_at > ?', Time.new(2019, 12, 1)).destroy_all
       end
     end
 
@@ -21,18 +17,17 @@ class AddSrdcInfoForSubmit < ActiveRecord::Migration[6.0]
       t.string :srdc_id
       t.string :type, null: false
       t.string :name, null: false
-      t.belongs_to :speedrun_dot_com_game, null: false
-      t.belongs_to :speedrun_dot_com_category
+      t.belongs_to :speedrun_dot_com_game, null: false, index: {name: 'index_srdc_game_variables_on_srdc_game_id'}
+      t.belongs_to :speedrun_dot_com_category, index: {name: 'index_srdc_game_variables_on_srdc_category_id'}
       t.boolean :mandatory
       t.boolean :obsoletes
       t.boolean :user_defined
-      t.references :default_value, index: true, foreign_key: {to_table: :speedrun_dot_com_game_variable_values}
-      t.index[:srdc_id, :type], unique: true
+      t.index [:srdc_id, :type], unique: true
       t.timestamps
     end
 
     create_table :speedrun_dot_com_game_variable_values, id: :uuid do |t|
-      t.belongs_to :speedrun_dot_com_game_variables, null: false
+      t.belongs_to :speedrun_dot_com_game_variables, null: false, index: {name: 'index_srdc_game_variable_values_on_srdc_game_variables_id'}
       t.string :srdc_id, null: false
       t.string :label, null: false
       t.string :rules
@@ -41,7 +36,7 @@ class AddSrdcInfoForSubmit < ActiveRecord::Migration[6.0]
     end
 
     create_table :speedrun_dot_com_run_variables, id: :uuid do |t|
-      t.belongs_to :speedrun_dot_com_game_variable_value
+      t.belongs_to :speedrun_dot_com_game_variable_value, index: {name: 'index_srdc_run_variables_on_srdc_game_variable_value_id'}
       t.belongs_to :run
       t.timestamps
     end
