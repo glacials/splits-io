@@ -355,22 +355,22 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
   end
 
   create_table "speedrun_dot_com_game_variable_values", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "speedrun_dot_com_game_variables_id", null: false
+    t.uuid "speedrun_dot_com_game_variable_id", null: false
     t.string "srdc_id", null: false
     t.string "label", null: false
     t.string "rules"
     t.boolean "miscellaneous"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["speedrun_dot_com_game_variables_id"], name: "index_srdc_game_variable_values_on_srdc_game_variables_id"
+    t.index ["speedrun_dot_com_game_variable_id"], name: "index_srdc_game_variable_values_on_srdc_game_variables_id"
   end
 
   create_table "speedrun_dot_com_game_variables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "srdc_id"
-    t.string "type", null: false
+    t.string "variable_type", null: false
     t.string "name", null: false
-    t.bigint "speedrun_dot_com_game_id", null: false
-    t.bigint "speedrun_dot_com_category_id"
+    t.uuid "speedrun_dot_com_game_id", null: false
+    t.uuid "speedrun_dot_com_category_id"
     t.boolean "mandatory"
     t.boolean "obsoletes"
     t.boolean "user_defined"
@@ -380,7 +380,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
     t.index ["speedrun_dot_com_category_id"], name: "index_srdc_game_variables_on_srdc_category_id"
     t.index ["speedrun_dot_com_game_id"], name: "index_srdc_game_variables_on_srdc_game_id"
     t.index ["speedrun_dot_com_game_variable_values_id"], name: "index_srdc_game_variables_on_srdc_game_variable_values_id"
-    t.index ["srdc_id", "type"], name: "index_speedrun_dot_com_game_variables_on_srdc_id_and_type", unique: true
+    t.index ["srdc_id", "variable_type"], name: "index_srdc_game_variables_on_srdc_id_and_variable_type", unique: true
   end
 
   create_table "speedrun_dot_com_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -397,7 +397,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
     t.datetime "updated_at", null: false
     t.string "twitch_name"
     t.boolean "video_required"
-    t.boolean "accetps_realtime"
+    t.boolean "accepts_realtime"
     t.boolean "accepts_gametime"
     t.boolean "emulators_allowed"
     t.index ["game_id"], name: "index_speedrun_dot_com_games_on_game_id", unique: true
@@ -406,7 +406,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
   end
 
   create_table "speedrun_dot_com_run_variables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.bigint "speedrun_dot_com_game_variable_value_id"
+    t.uuid "speedrun_dot_com_game_variable_value_id"
     t.bigint "run_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -514,7 +514,12 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
   add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "speed_runs_live_games", "games"
   add_foreign_key "speedrun_dot_com_categories", "categories"
+  add_foreign_key "speedrun_dot_com_game_variable_values", "speedrun_dot_com_game_variables"
+  add_foreign_key "speedrun_dot_com_game_variables", "speedrun_dot_com_categories"
+  add_foreign_key "speedrun_dot_com_game_variables", "speedrun_dot_com_games"
   add_foreign_key "speedrun_dot_com_games", "games"
+  add_foreign_key "speedrun_dot_com_run_variables", "runs"
+  add_foreign_key "speedrun_dot_com_run_variables", "speedrun_dot_com_game_variable_values"
   add_foreign_key "speedrun_dot_com_users", "users"
   add_foreign_key "splits", "runs"
   add_foreign_key "twitch_users", "users"

@@ -7,16 +7,37 @@ SRDC_URL = 'https://www.speedrun.com/api/v1/games?embed=categories,variables,reg
 desc 'Sync all games, categories, and variable data from srdc'
 task srdc_sync: [:environment] do
   url = SRDC_URL
-  # Disable SQL logging
-  ActiveRecord::Base.logger.level = :info
+  # Disable SQL logging (might only need for prod)
+  # ActiveRecord::Base.logger.level = :info
 
   loop do
     puts url
     games = HTTParty.get(url, headers: {'User-Agent' => 'Splits.io-Sync/1.0'})
     break if games['data'].empty?
 
+    # TODO: Handle these exceptions better
     games['data'].each do |game|
-      srdc_game = Game.find_or_initialize_by(srdc_id: game['id'])
+      next if game['categories']['data'].all? { |category| category['type'] == 'per-level' }
+
+      if game['names']['international'] == 'God of War' && game['released'] == 2018
+        # srdc_id == 'k6qx9z1g'
+        game['names']['international'] = 'God of War (2018)'
+      end
+
+      if game['names']['international'] == 'Golden Axe' && game['released'] == 1990
+        # srdc_id == '4d79oor1'
+        game['names']['international'] = 'Golden Axe (Amiga)'
+      end
+
+      next if game['id'] == 'k6qx9z1g'
+      next if game['id'] == '9d3rq4wd'
+      next if game['id'] == 'm1zj70z6'
+      next if game['id'] == 'lde3ynj6'
+
+      game['names']['international'] = 'Point Blank (2017)' if game['id'] == '3dx4w56y'
+      game['names']['international'] = 'Road Rash (1994)' if game['id'] == 'm1mxzvk6'
+      # TODO: Use AR-import instead of individual calls
+      srdc_game = SpeedrunDotComGame.find_or_initialize_by(srdc_id: game['id'])
       srdc_game.assign_attributes(
         name:              game['names']['international'],
         twitch_name:       game['names']['twitch'],
@@ -27,46 +48,52 @@ task srdc_sync: [:environment] do
         default_timing:    game['ruleset']['default-time'] == 'ingame' ? 'game' : 'real',
         show_ms:           game['ruleset']['show-milliseconds'],
         video_required:    game['ruleset']['require-video'],
-        accepts_realtime:  game['ruleset']['run-times'].includes?('realtime'),
-        accepts_gametime:  game['ruleset']['run-times'].includes?('gametime'),
+        accepts_realtime:  game['ruleset']['run-times'].include?('realtime'),
+        accepts_gametime:  game['ruleset']['run-times'].include?('gametime'),
         emulators_allowed: game['ruleset']['emulators-allowed']
       )
       srdc_game.game = Game.find_or_create_by!(name: srdc_game.name) if srdc_game.game.nil?
       srdc_game.save!
 
       game['categories']['data'].each do |category|
-        srdc_category = Category.find_or_initialize_by(srdc_id: category['id'])
+        next if category['type'] == 'per-level'
+
+        srdc_category = SpeedrunDotComCategory.find_or_initialize_by(srdc_id: category['id'])
         srdc_category.assign_attributes(
           name:        category['name'],
           url:         category['weblink'],
           misc:        category['miscellaneous'],
           rules:       category['rules'],
-          min_players: category['players']['type'] == 'up-to' ? 1 : result['players']['value'],
+          min_players: category['players']['type'] == 'up-to' ? 1 : category['players']['value'],
           max_players: category['players']['value']
         )
-        srdc_category.category = Category.find_or_create_by!(game: srdc.game, name: srdc_category.name)
+        srdc_category.category = Category.find_or_create_by!(
+          game: srdc_game.game,
+          name: srdc_category.name
+        )
         srdc_category.save!
       end
 
       %w[platforms regions].each do |variable|
         srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(
           speedrun_dot_com_game: srdc_game,
-          type:                  variable
+          variable_type:         variable
         )
-        srdc_variable.name = variables[0...-1].capitalize
+        srdc_variable.name = variable[0...-1].capitalize
         srdc_variable.save!
 
         game[variable]['data'].each do |data|
           srdc_variable_value = SpeedrunDotComGameVariableValue.find_or_initialize_by(srdc_id: data['id'])
-          srdc_variable_value.speedrun_dot_com_game = srdc_game
-          srdc_variable_value.label                 = data['name']
+          srdc_variable_value.speedrun_dot_com_game_variable = srdc_variable
+          srdc_variable_value.label                          = data['name']
+          srdc_variable_value.save!
         end
       end
 
       game['variables']['data'].each do |variable|
         srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(
-          type:    'variables',
-          srdc_id: data['id']
+          variable_type: 'variables',
+          srdc_id:       variable['id']
         )
         srdc_variable.name                      = variable['name']
         srdc_variable.speedrun_dot_com_game     = srdc_game
@@ -78,10 +105,10 @@ task srdc_sync: [:environment] do
 
         variable['values']['values'].each do |key, value|
           srdc_variable_value = SpeedrunDotComGameVariableValue.find_or_initialize_by(srdc_id: key)
-          srdc_variable_value.speedrun_dot_com_game = srdc_game
-          srdc_variable_value.label                 = value['label']
-          srdc_variable_value.rules                 = value['rules']
-          srdc_variable_value.miscellaneous         = value['flags']['miscellaneous']
+          srdc_variable_value.speedrun_dot_com_game_variable = srdc_variable
+          srdc_variable_value.label                          = value['label']
+          srdc_variable_value.rules                          = value['rules']
+          srdc_variable_value.miscellaneous                  = value.dig('flags', 'miscellaneous')
           srdc_variable_value.save!
 
           srdc_variable.update!(default_value: srdc_variable_value) if variable['values']['default'] == key
