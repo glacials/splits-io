@@ -1,11 +1,11 @@
-.card.mb-3
+.card
   .card-header.text-white My Authorized Applications
   .card-body
     - if current_user.access_tokens.count == 0
       i There are no applications authorized to use your account.
     - else
       p These applications have partial access to your account.
-      .table-responsive
+      .table-responsive.w-100
         table.table.table-striped.table-hover.mb-0
           thead
             tr

@@ -5,20 +5,20 @@
     li.breadcrumb-item = link_to('Search', search_path)
   h2 Search
 
-article#search
-  = form_for(:search, method: :get, url: search_path) do |f|
-    .form-group
-      .input-group
-        = f.text_field(:q, name: :q, autofocus: @query.blank?, value: @query, class: 'form-control search bg-dark')
-        .input-group-append
-          = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
-            = icon('fas', 'search')
+.row.mx-2
+  #search.w-100
+    = form_for(:search, method: :get, url: search_path) do |f|
+      .form-group
+        .input-group
+          = f.text_field(:q, name: :q, autofocus: @query.blank?, value: @query, class: 'form-control search bg-dark')
+          .input-group-append
+            = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
+              = icon('fas', 'search')
 
-article#search-results
-  - @results.each do |search_type, results|
-    - if results.present?
-      h4 = search_type.to_s.capitalize
-      .card.mb-3.shadow.bg-darkish
+  #search-results.card.mb-3.w-100
+    - @results.each do |search_type, results|
+      - if results.present?
+        h5.card-header = search_type.to_s.capitalize
         .card-body.p-0
           .table-responsive
             table.card-body.table.table-striped.mb-0
@@ -32,10 +32,10 @@ article#search-results
                     - when :users
                       = link_to obj, user_path(obj), class: 'game-link'
                       small.float-right = obj.games.pluck(:shortname).compact.uniq.join(', ')
-article#runs
-  - if @results[:games].present?
-    h4 Runs
-    .card.bg-darkish = render partial: 'shared/run_table', locals: { \
-      runs: Run.by_game(@results[:games]).nonempty.unarchived, \
-      cols: %i[runner time name uploaded] \
-    }.merge(sorting_info)
+  #runs.card.mb-3.w-100
+    - if @results[:games].present?
+      h5.card-header Runs
+      = render partial: 'shared/run_table', locals: { \
+        runs: Run.by_game(@results[:games]).nonempty.unarchived, \
+        cols: %i[runner time name uploaded] \
+      }.merge(sorting_info)

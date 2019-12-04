@@ -12,71 +12,33 @@
 - else
   - if description.present?
     h5.card-header.text-white = description
-  .table-responsive
-    table.card-body.table.table-striped.table-hover.mb-0
-      thead
-        tr
-          - if cols.include?(:runner)
-            th.header.align-right.nowrap = th_sorter('Runner', 'user_id')
-          - if cols.include?(:time)
-            th.header.align-right.nowrap = th_sorter('Time', 'time')
-          - if cols.include?(:video)
-            th.nowrap = th_sorter('Video', 'video_url')
-          - if cols.include?(:name)
-            th width='100%' Game + Category
-          - if cols.include?(:rival)
-            th.align-right.nowrap Rival
-          - if cols.include?(:uploaded)
-            th.align-right.nowrap = th_sorter('Created', 'created_at')
-          - if cols.include?(:owner_controls)
-            th.header.align-right.nowrap
-      tbody
-        - runs.each do |run|
-          - timing = params[:timing] || run.default_timing
-          tr id="run_#{run.id36}"
-            - if cols.include?(:runner)
-              td.align-right.nowrap = user_badge(run.user)
-            - if cols.include?(:time)
-              td.align-right.nowrap
-                / Make sure to not group runs with no category
-                - if col_options[:time].include?(:archived) && run.category_id.present?
-                  / Gather only runs with the same category and sort by default timing ascending
-                  - old_runs = non_pb_runs[run.category_id].try(:sort_by, &:created_at).try(:reverse)
-                  - if old_runs.present?
-                    span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
-                      = icon('fas', 'history')
-                    span.dropdown-menu aria-labelledby="#{run.id36}-history-dropdown"
-                      h6.dropdown-header Past Times
-                      - old_runs.each do |old_run|
-                        a.dropdown-item.text-secondary href=run_path(old_run) = old_run.duration.format
-                = run.duration.format
-            - if cols.include?(:video)
-              td.text-center.nowrap
-                - if run.video&.url.present?
-                  = icon('fas', 'video')
-            - if cols.include?(:name)
-              td width='100%' = link_to run, run_path(run), class: 'run-link'
-            - if cols.include?(:rival)
-              td.align-right.nowrap
-                small
+    .list-group.bg-transparent
+      - runs.each do |run|
+        - timing = params[:timing] || run.default_timing
+        = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start bg-transparent text-light')
+          .media
+            - if run.game&.srdc&.cover_url
+              = image_tag(run.game&.srdc&.cover_url, skip_pipeline: true, style: 'height: 100%; width: 70px', class: 'mr-3')
+            - else
+              .mr-3 style='width: 70px; height: 70px' &nbsp;
+            .media-body
+              .d-flex.w-100.justify-content-between
+                h5.mb-1 = run.game
+                h5
+                  - if run.video
+                    small => icon('fas', 'video')
+                  = run.duration(run.default_timing).format
+              h6.mb-1
+                => run.category
+                - if cols.include?(:runner)
+                  ' by #{run.user}
+              div
+                div = render partial: 'shared/relative_time', locals: {time: run.created_at, ago: true}
+                - if cols.include?(:rival)
                   - rivalry = run.user.rivalries.includes(:to_user).detect { |r| r.category_id == run.category_id }
                   - if rivalry.present? && rivalry.to_user.pb_for(timing, run.category).present?
                     - rival_run = rivalry.to_user.pb_for(timing, run.category)
-                    = link_to run_path(run, compare: rival_run), class: 'run-link stealth-link' do
-                      = pretty_difference(run.duration(run.default_timing), rival_run.duration(run.default_timing))
-                      '  against
-                      = user_badge(rivalry.to_user)
-            - if cols.include?(:uploaded)
-              td.align-right.nowrap
-                = render partial: 'shared/relative_time', locals: {time: run.created_at, ago: true}
-            - if cols.include?(:owner_controls)
-              td.nowrap: .dropleft.text-center
-                .kill-run-button id="dropdown_#{run.id36}" data={toggle: :dropdown}
-                  = icon('fas', 'ellipsis-v')
-                .dropdown-menu role=:menu aria={labelledby: "dropdown_#{run.id36}"}
-                  button.dropdown-item.text-danger.run-disown-button data={run: {id: run.id36}}
-                    = icon('fas', 'eraser', 'Disown')
-                  button.dropdown-item.text-danger.run-delete-button data={run: {id: run.id36}}
-                    = icon('fas', 'trash', 'Delete')
+                    = pretty_difference(run.duration(run.default_timing), rival_run.duration(run.default_timing))
+                    '  against rival
   .mx-auto
     = paginate(runs, theme: 'twitter-bootstrap-4', pagination_class: 'mt-3')

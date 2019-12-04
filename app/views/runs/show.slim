@@ -26,35 +26,35 @@
     = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
     - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
-      .card-deck.mx-1
+      .card-deck.mx-0
         - [@run, *@compare_runs].each do |run|
           - if run.video&.supports_embedding?
-            .card.my-3.mx-2 style='padding-bottom: 28.125%'
+            .card.m-1.video-card
               .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
           - else
-            .card.my-3.mx-2
+            .card.m-1
               i.text-center.my-auto No video attached to this run
         - if @compare_runs.none?
-          .card.my-3.mx-2
+          .card.m-1.mx-2
             i.text-center.my-auto Select a comparison to see another run's video here
             .card-footer: .float-right
               = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-    .row.mx-1
-      .col-md-6
+    .row.row-cols-1.row-cols-md-2.mx-0
+      .col.p-1
         = render partial: 'runs/split_table', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-      .col-md-6
+      .col.p-0
         - if @run.completed?(timing) && @run.histories.any?
           #chart-spinner.text-secondary.text-center.my-5
             = render partial: 'shared/spinner', locals: {messages: [ \
               'Generating charts', 'Still generating', 'Arranging chart data', \
             ]}
-          #chart-alert.alert.alert-danger.my-3 hidden=true
+          #chart-alert.alert.alert-danger.m-1 hidden=true
           #chart-holder hidden=true
-            #run-duration-chart.card.my-3
+            #run-duration-chart.card.m-1
             - if current_user&.has_advanced_analytics?
-              #box-plot.card.my-3
-              #segment-chart.card.my-3
-              #reset-chart-container.card.my-3
+              #box-plot.card.m-1
+              #segment-chart.card.m-1
+              #reset-chart-container.card.m-1
                 .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
                   label.btn.btn-sm.btn-outline-secondary.text-white.active.disabled
                     input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
@@ -62,10 +62,10 @@
                   label.btn.btn-sm.btn-outline-secondary.text-white
                     input#run-progress-chart-button type="radio" name="reset-chart-buttons"
                     ' Run Progress
-                #reset-chart.my-3
-                #run-progress-chart.my-3.d-none
+                #reset-chart.m-1
+                #run-progress-chart.m-1.d-none
               - if @run.histories.any?
-                #playtime-chart.card.my-3
+                #playtime-chart.card.m-1
             - else
               .card style='background: linear-gradient(var(--darkish), transparent); border: none'
                 .card-body: center.m-4

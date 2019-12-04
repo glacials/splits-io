@@ -8,21 +8,20 @@
 - else
   - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST, created_at DESC')
 
-article
-  .card.shadow
-    .card-header.d-flex.justify-content-between
-      ul.nav.nav-bordered
-        - historic = params[:historic] == '1'
-        li.nav-item
-          = link_to('Active', races_path, class: "nav-link #{historic ? '' : 'active'}")
-        li.nav-item
-          = link_to('Historic', races_path(historic: '1'), class: "nav-link #{historic ? 'active' : ''}")
-      - if current_user.present?
-        #vue-race
-          = render partial: 'races/create'
-    = render partial: 'shared/race_table', locals: {races: races}
-    - if params[:historic] != '1'
-      .card-footer
-        small
-          ' Showing races active in the last hour and races with more than one entrant. Races longer than 48 hours are
-          ' automatically closed.
+.row.mx-0: .col.p-1: .card.mx-auto
+  .card-header.d-flex.justify-content-between
+    ul.nav.nav-bordered
+      - historic = params[:historic] == '1'
+      li.nav-item
+        = link_to('Active', races_path, class: "nav-link #{historic ? '' : 'active'}")
+      li.nav-item
+        = link_to('Historic', races_path(historic: '1'), class: "nav-link #{historic ? 'active' : ''}")
+    - if current_user.present?
+      #vue-race
+        = render partial: 'races/create'
+  = render partial: 'shared/race_table', locals: {races: races}
+  - if params[:historic] != '1'
+    .card-footer
+      small
+        ' Showing races active in the last hour and races with more than one entrant. Races longer than 48 hours are
+        ' automatically closed.

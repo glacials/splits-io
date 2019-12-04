@@ -5,16 +5,15 @@
     li.breadcrumb-item = link_to('Settings', settings_path)
   h2 Settings
 - if current_user.nil?
-  article You need to be signed in to view this page.
+  p You need to be signed in to view this page.
 - else
-  article
-    = render partial: 'username'
-    = render partial: 'account_links'
-    .row
-      - if current_user.subscriptions.active.any?
-        .col-md-6 = render partial: 'subscription'
-      - if current_user.patron?
-        .col-md-6 = render partial: 'patreon_benefits'
-    = render partial: 'authorized_applications'
-    = render partial: 'my_applications'
-    = render partial: 'delete'
+  .p-1 = render partial: 'username'
+  .row.row-cols-1.row-cols-md-2.mx-0
+    .col.p-1 = render partial: 'account_links'
+    - if current_user.subscriptions.active.any?
+      .col.p-1 = render partial: 'subscription'
+    - if current_user.patron?
+      .col.p-1 = render partial: 'patreon_benefits'
+  .p-1 = render partial: 'authorized_applications'
+  .p-1 = render partial: 'my_applications'
+  .p-1 = render partial: 'delete'

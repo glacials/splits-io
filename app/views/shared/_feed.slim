@@ -1,17 +1,17 @@
 - if current_user.twitch_follows.any?
-  h4 Recent PBs By People You Follow
-  .card.col-md-6.p-0.bg-transparent
+  .card
+    h5.card-header Feed
     .list-group.bg-transparent
-      - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_follows).where.not(games: {name: [nil, '']}).order('runs.created_at DESC').limit(10)
+      - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_follows).where.not(games: {name: [nil, '']}).order('runs.created_at DESC').limit(6)
       - my_runs = current_user.pbs.where(category_id: followed_runs.map(&:category_id))
       - followed_runs.each do |run|
-        = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start bg-darkish text-light')
+        = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start bg-transparent text-light')
           .media
             = image_tag(run.user.avatar, skip_pipeline: true, size: '70x70', class: 'mr-3')
             .media-body
               .d-flex.w-100.justify-content-between
                 h5.mb-1 = run.user
-                = pretty_timestamp(run.created_at)
+                div = render partial: 'shared/relative_time', locals: {time: run.created_at, ago: true}
               h6.mb-1
                 = "#{run.game} #{run.category}"
               div

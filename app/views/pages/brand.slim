@@ -4,15 +4,21 @@
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('Brand Guidelines', brand_path)
   h2 Brand Guidelines
-.container: .card-columns style='column-count: 2'
-  .card
+.row.mx-2
+  .card.mb-3.col-md-6
+    h5.card-header Name
     .card-body
-      h5.card-title Logo
+      p Splits.io is pronounced "splits aye oh". Splits.io is spelled "Splits.io".
+      p Splits.io's name was historically "Splits I/O", but this usage has been discontinued. Even with this old name,
+        Splits.io was always pronounced "splits aye oh".
+  .card.mb-3.col-md-6
+    h5.card-header Logo
+    .card-body
       p
-        ' The Splits I/O logo (created by
+        ' The Splits.io logo (created by
         a href='https://twitter.com/Nosfydesign' Nosfy
         ') is an "S" shape created by three charted segments at "/" angles. Feel free to remix it for personal use, but
-        ' the standard image is the only official Splits I/O logo.
+        ' the standard image is the only official Splits.io logo.
       p Add about 7.5% breathing room on the top and bottom if the logo will have things above or below it, or if it
         will be used in a circle crop. For example, a 2000px high logo should be placed in a 2300px high canvas.
       p The logo looks best on dark backgrounds.
@@ -32,10 +38,10 @@
         a.btn.btn-outline-light.tip href=asset_path('logo-darkbg-breathingroom.png') download=true title='Dark background, 2000x2000px logo on 2300x2300px canvas'
           => icon('fas', 'download')
           ' Dark PNG w/ Breathing Room
-  .card
+  .card.mb-3.col-md-6
+    h5.card-header Colors
     .card-body
-      h5.card-title Colors
-      p The official Splits I/O colors are in the logo:
+      p The official Splits.io colors are in the logo:
       ol
         li
           span style='color: #f5b946' => icon('fas', 'square')
@@ -59,11 +65,11 @@
           | Mirage (
           code #1a1c21
           | )
-  .card
+  .card.mb-3.col-md-6
+    h5.card-header Buttons
     .card-body
-      h5.card-title Buttons
       p.mb-3
-        ' Here are some examples of using the Splits I/O logo to create account-linking buttons:
+        ' Here are some examples of using the Splits.io logo to create account-linking buttons:
       center
         button.btn.btn-dark.m-3
           img.mr-2 src=asset_path('logo-imageonly.svg') style='height: 1.2em; vertical-align: middle'
