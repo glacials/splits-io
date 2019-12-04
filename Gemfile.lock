@@ -135,7 +135,7 @@ GEM
     builder (3.2.3)
     byebug (11.0.1)
     cancancan (3.0.1)
-    chartkick (3.2.1)
+    chartkick (3.3.0)
     choice (0.2.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
