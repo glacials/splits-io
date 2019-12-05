@@ -1,0 +1,72 @@
+#srdc-submit.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'srdc-submit-label', hidden: true}
+  .modal-dialog role='document'
+    .modal-content
+      = form_with url: srdc_submit_path(run), id: 'srdc-submit-form' do |f|
+        .modal-header.bg-dark
+          h5.text-light Submit to Speedrun.com
+        .modal-body.bg-dark
+          .row.text-light.m-2
+            p Splits.io can submit your run to Speedrun.com!
+            p Please verify all information is correct below.
+          .row
+            .col-md-6: .form-group
+              = f.label(:srdc_category, 'Speedrun.com Category')
+              = f.text_field(:srdc_category, value: run.category.srdc.name, required: true, disabled: true, class: 'form-control')
+
+            .col-md-6: .form-group
+              label for='srdc-player' Speedrun.com Player
+              input.form-control type='text' id='srdc-player' value=run.user.srdc.name required=true disabled=true
+
+            - if run.game.srdc.accepts_realtime?
+              .col-md-6: .form-group
+                label for='srdc-realtime' Real Time
+                input.form-control type='text' id='srdc-realtime' value=run.duration(Run::REAL).format(precise: run.game.srdc.show_ms?) required=true disabled=true
+            - if run.game.srdc.accepts_gametime?
+              .col-md-6: .form-group
+                label for='srdc-gametime' Game Time
+                input.form-control type='text' id='srdc-gametime' value=run.duration(Run::GAME).format(precise: run.game.srdc.show_ms?) required=true disabled=true
+
+            - run.game.srdc.variables.where(speedrun_dot_com_category: run.category.srdc).each do |variable|
+              .col-md-6: .form-group
+                label for="srdc-#{variable.name}" = variable.name
+                select.form-control required=variable.mandatory?
+                  - variable.variable_values.each do |variable_value|
+                    - run_value = run.variables.find_by(speedrun_dot_com_game_variable_value: variable_value)
+                    option selected=(run_value == variable_value) name=variable_value.label = variable_value.label
+
+            - if run.game.srdc.emulators_allowed?
+              .col-md-6: .form-group
+                label for='srdc-emulator' Emulator?
+                input.form-control id='srdc-emulator' type='checkbox' checked=run.uses_emulator?
+
+            .col-md-6: .form-group
+              label for='srdc-date' Date
+              / TODO: Test the populated date from attempt history
+              input.form-control(
+                id='srdc-date'
+                type='date'
+                value=( \
+                  run.histories.where.not(started_at: nil).where.not(ended_at: nil).find_by( \
+                    realtime_duration_ms: run.duration(Run::REAL).to_ms, \
+                    gametime_duration_ms: run.duration(Run::GAME).to_ms \
+                  )&.started_at \
+                )
+                required=true
+              )
+
+            .col-md-6: .form-group
+              label for='srdc-video' Video Link
+              / TODO: If present, add to Splits.io run as well
+              / TODO: Show Auto-highlight button if blank maybe? If it's not difficult
+              input.form-control id='srdc-video' type='text' value=run.video&.url required=run.game.srdc.video_required?
+
+            .col-md-6: .form-group
+              label for='srdc-splitsio' Splits.io Link
+              input.form-control id='srdc-splitsio' type='text' value=run_path(run) required=true disabled=true
+
+            .col-md-6: .form-group
+              label for='srdc-desc' Description
+              input.form-control id='srdc-desc' type='textarea' placeholder='Optional'
+
+          .row.mx-0.mt-4
+            a.btn.btn-primary href='#' Submit to Speedrun.com
