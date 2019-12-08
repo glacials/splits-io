@@ -1,6 +1,8 @@
 class SpeedrunDotComCategory < ApplicationRecord
   belongs_to :category
 
+  has_many :variables, class_name: 'SpeedrunDotComGameVariable', dependent: :destroy
+
   def self.from_category!(category)
     return category.srdc if category.srdc.present?
 
