@@ -9,64 +9,60 @@
             p Splits.io can submit your run to Speedrun.com!
             p Please verify all information is correct below.
           .row
-            .col-md-6: .form-group
+            .col-12: .form-group
               = f.label(:srdc_category, 'Speedrun.com Category')
               = f.text_field(:srdc_category, value: run.category.srdc.name, required: true, disabled: true, class: 'form-control')
 
-            .col-md-6: .form-group
-              label for='srdc-player' Speedrun.com Player
-              input.form-control type='text' id='srdc-player' value=run.user.srdc.name required=true disabled=true
+            .col-12: .form-group
+              = f.label(:srdc_player, 'Speedrun.com Player')
+              = f.text_field(:srdc_player, value: run.user.srdc.name, required: true, disabled: true, class: 'form-control')
 
             - if run.game.srdc.accepts_realtime?
-              .col-md-6: .form-group
-                label for='srdc-realtime' Real Time
-                input.form-control type='text' id='srdc-realtime' value=run.duration(Run::REAL).format(precise: run.game.srdc.show_ms?) required=true disabled=true
+              .col-12: .form-group
+                = f.label(:srdc_realtime, 'Real Time')
+                = f.text_field(:srdc_realtime, value: run.duration(Run::REAL).format(precise: run.game.srdc.show_ms?), required: true, disabled: true, class: 'form-control')
             - if run.game.srdc.accepts_gametime?
-              .col-md-6: .form-group
-                label for='srdc-gametime' Game Time
-                input.form-control type='text' id='srdc-gametime' value=run.duration(Run::GAME).format(precise: run.game.srdc.show_ms?) required=true disabled=true
+              .col-12: .form-group
+                = f.label(:srdc_gametime, 'Game Time')
+                = f.text_field(:srdc_gametime, value: run.duration(Run::GAME).format(precise: run.game.srdc.show_ms?), required: true, disabled: true, class: 'form-control')
 
             - run.game.srdc.variables.where(speedrun_dot_com_category: run.category.srdc).each do |variable|
-              .col-md-6: .form-group
+              .col-12: .form-group
                 label for="srdc-#{variable.name}" = variable.name
                 select.form-control required=variable.mandatory?
                   - variable.variable_values.each do |variable_value|
                     - run_value = run.variables.find_by(speedrun_dot_com_game_variable_value: variable_value)
                     option selected=(run_value == variable_value) name=variable_value.label = variable_value.label
 
+            .col-12: .form-group
+              = f.label(:srdc_region, 'Region')
+              = f.select(:srdc_region, run.game.srdc.regions.collect { |r| [r.name, r.srdc_id] }, {include_blank: true, selected: run.region&.srdc_id}, {class: 'form-control'})
+
+            .col-12: .form-group
+              = f.label(:srdc_plaform, 'Platform')
+              = f.select(:srdc_plaform, run.game.srdc.platforms.collect { |plat| [plat.name, plat.srdc_id] }, {include_blank: true, selected: run.platform&.srdc_id}, {class: 'form-control'})
+
             - if run.game.srdc.emulators_allowed?
-              .col-md-6: .form-group
-                label for='srdc-emulator' Emulator?
-                input.form-control id='srdc-emulator' type='checkbox' checked=run.uses_emulator?
+              .col-12: .form-group.form-check
+                = f.check_box(:srdc_emulator, checked: run.uses_emulator?, class: 'form-check-input')
+                = f.label(:srdc_emulator, 'Uses Emulator', class: 'form-check-label')
 
-            .col-md-6: .form-group
-              label for='srdc-date' Date
-              / TODO: Test the populated date from attempt history
-              input.form-control(
-                id='srdc-date'
-                type='date'
-                value=( \
-                  run.histories.where.not(started_at: nil).where.not(ended_at: nil).find_by( \
-                    realtime_duration_ms: run.duration(Run::REAL).to_ms, \
-                    gametime_duration_ms: run.duration(Run::GAME).to_ms \
-                  )&.started_at \
-                )
-                required=true
-              )
+            .col-12: .form-group
+              = f.label(:srdc_date, 'PB Date')
+              = f.date_field(:srdc_date, value: run.pb_date.strftime('%Y-%m-%d'), required: true, class: 'form-control')
 
-            .col-md-6: .form-group
-              label for='srdc-video' Video Link
-              / TODO: If present, add to Splits.io run as well
+            .col-12: .form-group
+              = f.label(:srdc_video, 'Video Link')
               / TODO: Show Auto-highlight button if blank maybe? If it's not difficult
-              input.form-control id='srdc-video' type='text' value=run.video&.url required=run.game.srdc.video_required?
+              = f.text_field(:srdc_video, value: run.video&.url, required: run.game.srdc.video_required?, class: 'form-control')
 
-            .col-md-6: .form-group
-              label for='srdc-splitsio' Splits.io Link
-              input.form-control id='srdc-splitsio' type='text' value=run_path(run) required=true disabled=true
+            .col-12: .form-group
+              = f.label(:srdc_splitsio, 'Splits.io Link')
+              = f.text_field(:srdc_splitsio, value: run_path(run), required: true, disabled: true, class: 'form-control')
 
-            .col-md-6: .form-group
-              label for='srdc-desc' Description
-              input.form-control id='srdc-desc' type='textarea' placeholder='Optional'
+            .col-12: .form-group
+              = f.label(:srdc_desc, 'Description')
+              = f.text_area(:srdc_desc, rows: 3, placeholder: 'Optional', class: 'form-control')
 
           .row.mx-0.mt-4
-            a.btn.btn-primary href='#' Submit to Speedrun.com
+            = f.submit('Submit to Speedrun.com', class: 'btn btn-primary')

@@ -29,7 +29,9 @@ class Run < ApplicationRecord
   has_one  :entry,                dependent: :nullify
   has_one  :video,                dependent: :destroy
 
-  has_many :variables, class_name: 'SpeedrunDotComRunVariable', dependent: :destroy
+  has_many :variables,  class_name: 'SpeedrunDotComRunVariable', dependent: :destroy
+  belongs_to :platform, class_name: 'SpeedrunDotComPlatform', foreign_key: 'speedrun_dot_com_platform_id', optional: true
+  belongs_to :region,   class_name: 'SpeedrunDotComRegion',   foreign_key: 'speedrun_dot_com_region_id',   optional: true
 
   has_secure_token :claim_token
 
@@ -173,6 +175,13 @@ class Run < ApplicationRecord
         category: category
       ).where('gametime_duration_ms > ?', duration_ms(timing)).order(gametime_duration_ms: :asc).first
     end
+  end
+
+  def pb_date
+    histories.where.not(started_at: nil).where.not(ended_at: nil).find_by(
+      realtime_duration_ms: duration(Run::REAL).to_ms,
+      gametime_duration_ms: duration(Run::GAME).to_ms
+    )&.ended_at
   end
 
   def segment_groups

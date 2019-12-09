@@ -65,7 +65,7 @@ h5
       )
         => icon('fab', 'twitch')
         span Auto-highlight
-    - if run.belongs_to?(current_user) && run.srdc_id.nil? && run.category.srdc.present?
+    - if run.belongs_to?(current_user) && current_user.srdc.present? && run.srdc_id.nil? && run.category.srdc.present?
       - if run.user.srdc.present?
         a.btn.btn-srdc.tip-top(
           href='#'
@@ -82,7 +82,7 @@ h5
         )
           => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
           span Auto-submit
-  - if run.belongs_to?(current_user) && run.category.srdc
+  - if run.belongs_to?(current_user) && run.category.srdc && current_user.srdc
     = render partial: 'srdc_submit_modal', locals: {run: run}
     = render partial: 'shared/srdc_link_modal'
 

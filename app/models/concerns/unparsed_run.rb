@@ -59,10 +59,13 @@ module UnparsedRun
 
           total_playtime_ms:       run_data[:total_playtime_ms],
           default_timing:          run_data[:default_timing],
-          filesize_bytes:          run_data[:size]
+          filesize_bytes:          run_data[:size],
+
+          platform:                SpeedrunDotComPlatform.find_by(name: run_data[:metadata][:platform_name]),
+          region:                  SpeedrunDotComRegion.find_by(name: run_data[:metadata][:region_name])
         )
 
-        HighlightSuggestion.from_run(self)
+        # HighlightSuggestion.from_run(self)
       end
     rescue UnparsableRun
       destroy
@@ -140,43 +143,20 @@ module UnparsedRun
 
     def write_run_variables(run_data)
       srdc_game = SpeedrunDotComGame.find_by!(name: run_data[:game])
-      if run_data[:metadata][:platform_name]
-        srdc_variable = SpeedrunDotComGameVariable.find_by!(
-          speedrun_dot_com_game: srdc_game,
-          type:                  'platforms',
-          name:                  'Platform'
-        )
-        srdc_variable_value = srdc_variable.speedrun_dot_com_game_variable_values.find_by!(
-          speedrun_dot_com_game_variable: srdc_variable,
-          label:                          run_data[:metadata][:platform_name]
-        )
-        SpeedrunDotComRunVariable.create!(run: self, speedrun_dot_com_game_variable_value: srdc_variable_value)
-      end
-
-      if run_data[:metadata][:region_name]
-        srdc_variable = SpeedrunDotComGameVariable.find_by!(
-          speedrun_dot_com_game: srdc_game,
-          type:                  'regions',
-          name:                  'Region'
-        )
-        srdc_variable_value = srdc_variable.speedrun_dot_com_game_variable_values.find_by!(
-          speedrun_dot_com_game_variable: srdc_variable,
-          label:                          run_data[:metadata][:platform_name]
-        )
-        SpeedrunDotComRunVariable.create!(run: self, speedrun_dot_com_game_variable_value: srdc_variable_value)
-      end
 
       run_data[:metadata][:variables].each do |key, value|
-        srdc_variable = SpeedrunDotComRunVariable.find_by!(
+        srdc_variable = SpeedrunDotComGameVariable.find_by!(
           speedrun_dot_com_game: srdc_game,
-          type:                  'variables',
           name:                  key
         )
-        srdc_variable_value = srdc_variable.speedrun_dot_com_game_variable_values.find_by!(
+        srdc_variable_value = srdc_variable.variable_values.find_by!(
           speedrun_dot_com_game_variable: srdc_variable,
           label:                          value
         )
-        SpeedrunDotComRunVariable.create!(run: self, speedrun_dot_com_game_variable_value: srdc_variable_value)
+        SpeedrunDotComRunVariable.find_or_create_by!(
+          run:                                  self,
+          speedrun_dot_com_game_variable_value: srdc_variable_value
+        )
       end
     end
 

@@ -1,0 +1,2 @@
+class SpeedrunDotComPlatform < ApplicationRecord
+end

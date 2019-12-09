@@ -2,11 +2,55 @@
 
 require 'httparty'
 
-SRDC_URL = 'https://www.speedrun.com/api/v1/games?embed=categories,variables,regions,platforms&max=200'.freeze
+SRDC_REGIONS_URL   = 'https://www.speedrun.com/api/v1/regions?max=200'.freeze
+SRDC_PLATFORMS_URL = 'https://www.speedrun.com/api/v1/platforms?max=200'.freeze
+SRDC_GAMES_URL     = 'https://www.speedrun.com/api/v1/games?embed=categories,variables,regions,platforms&max=200'.freeze
 
 desc 'Sync all games, categories, and variable data from srdc'
 task srdc_sync: [:environment] do
-  url = SRDC_URL
+  url = SRDC_PLATFORMS_URL
+  loop do
+    puts url
+    platforms = HTTParty.get(url, headers: {'User-Agent' => 'Splits.io-Sync/1.0'})
+    platforms['data'].each do |region|
+      SpeedrunDotComPlatform.find_or_create_by!(
+        srdc_id: region['id'],
+        name:    region['name']
+      )
+    end
+
+    old_url = url
+    platforms['pagination']['links'].each do |l|
+      next unless l['rel'] == 'next'
+
+      url = l['uri']
+      break
+    end
+    break if old_url == url
+  end
+
+  url = SRDC_REGIONS_URL
+  loop do
+    puts url
+    regions = HTTParty.get(url, headers: {'User-Agent' => 'Splits.io-Sync/1.0'})
+    regions['data'].each do |region|
+      SpeedrunDotComRegion.find_or_create_by!(
+        srdc_id: region['id'],
+        name:    region['name']
+      )
+    end
+
+    old_url = url
+    regions['pagination']['links'].each do |l|
+      next unless l['rel'] == 'next'
+
+      url = l['uri']
+      break
+    end
+    break if old_url == url
+  end
+
+  url = SRDC_GAMES_URL
   # Disable SQL logging (might only need for prod)
   # ActiveRecord::Base.logger.level = :info
 
@@ -74,27 +118,24 @@ task srdc_sync: [:environment] do
         srdc_category.save!
       end
 
-      %w[platforms regions].each do |variable|
-        srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(
-          speedrun_dot_com_game: srdc_game,
-          variable_type:         variable
+      game['platforms']['data'].each do |platform|
+        SpeedrunDotComGamePlatform.find_or_create_by!(
+          speedrun_dot_com_game:     srdc_game,
+          speedrun_dot_com_platform: SpeedrunDotComPlatform.find_by!(srdc_id: platform['id'])
         )
-        srdc_variable.name = variable[0...-1].capitalize
-        srdc_variable.save!
+      end
 
-        game[variable]['data'].each do |data|
-          srdc_variable_value = SpeedrunDotComGameVariableValue.find_or_initialize_by(srdc_id: data['id'])
-          srdc_variable_value.speedrun_dot_com_game_variable = srdc_variable
-          srdc_variable_value.label                          = data['name']
-          srdc_variable_value.save!
-        end
+      game['regions']['data'].each do |region|
+        SpeedrunDotComGameRegion.find_or_create_by!(
+          speedrun_dot_com_game:   srdc_game,
+          speedrun_dot_com_region: SpeedrunDotComRegion.find_by!(srdc_id: region['id'])
+        )
       end
 
       game['variables']['data'].each do |variable|
-        srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(
-          variable_type: 'variables',
-          srdc_id:       variable['id']
-        )
+        next if variable['scope']['type'] != 'full-game'
+
+        srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(srdc_id: variable['id'])
         srdc_variable.name                      = variable['name']
         srdc_variable.speedrun_dot_com_game     = srdc_game
         srdc_variable.speedrun_dot_com_category = SpeedrunDotComCategory.find_by(srdc_id: variable['category'])

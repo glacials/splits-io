@@ -1,0 +1,2 @@
+class SpeedrunDotComRegion < ApplicationRecord
+end
