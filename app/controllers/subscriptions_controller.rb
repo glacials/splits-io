@@ -1,10 +1,17 @@
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[update destroy]
 
+
   def index
   end
 
   def show
+    if params[:coupon]
+      Stripe::Subscription.update(
+        Subscription.find_by(stripe_session_id: params[:session_id]).stripe_subscription_id,
+        {coupon: params[:coupon]}
+      )
+    end
   end
 
   def update

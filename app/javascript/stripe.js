@@ -6,10 +6,12 @@ document.addEventListener('click', async function(event) {
 
   event.preventDefault()
 
+  const coupon = new URL(document.URL).searchParams.get('coupon')
+
   const stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY)
   const result = await stripe.redirectToCheckout({
     items: [{plan: subscribeButton.dataset.planId, quantity: 1}],
-    successUrl: `${location.origin}/subscriptions/success?session_id={CHECKOUT_SESSION_ID}`,
+    successUrl: `${location.origin}/subscriptions/success?session_id={CHECKOUT_SESSION_ID}&coupon=${coupon}`,
     cancelUrl: `${location.origin}/subscriptions/cancel`,
     clientReferenceId: gon.user.id,
     customerEmail: gon.user.email,

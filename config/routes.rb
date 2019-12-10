@@ -114,6 +114,13 @@ Rails.application.routes.draw do
   delete '/settings/applications/:application',      to: 'applications#destroy'
   delete '/settings/authorizations/:application',    to: 'authorized_applications#destroy',                      as: :authorization
 
+  # partners is a map of partner special URLs to Stripe coupon IDs
+  {
+    test: 'H6Mbd83I',
+  }.each do |partner, stripe_coupon_id|
+    get "/#{partner}", to: redirect("/subscriptions?coupon=#{stripe_coupon_id}")
+  end
+
   get   '/subscriptions',         to: 'subscriptions#index',   as: :subscriptions
   get   '/subscriptions/success', to: 'subscriptions#show',    as: :subscription
   patch '/subscriptions',         to: 'subscriptions#update'
