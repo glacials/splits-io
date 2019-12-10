@@ -2,7 +2,7 @@
   .modal-dialog role='document'
     .modal-content
       = form_for SpeedrunDotComUser.new do |f|
-        .modal-header.bg-primary
+        .modal-header.bg-dark
           h5.text-light Auto-Submit
         .modal-body.bg-dark
           .row.text-light.m-2
@@ -20,6 +20,6 @@
             p Paste the API key here:
             = f.text_field(:api_key, id: 'api-key', class: 'form-control', placeholder: 'Paste the API key here', spellcheck: false)
         - if controller_name == 'runs'
-          .modal-footer.bg-dark: .float-right: .btn-group = f.submit('Next', class: 'btn btn-success')
+          .modal-footer.bg-dark: .float-right: .btn-group = f.submit('Next', class: 'btn btn-primary')
         - else
-          .modal-footer.bg-dark: .float-right: .btn-group = f.submit('Save', class: 'btn btn-success')
+          .modal-footer.bg-dark: .float-right: .btn-group = f.submit('Save', class: 'btn btn-primary')

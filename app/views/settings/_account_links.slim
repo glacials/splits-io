@@ -1,83 +1,65 @@
-.card-columns.mb-2 style='column-count: 2'
-  - if current_user.twitch.nil?
-    .card.border-twitch
-      .card-body.text-light
-        span> ✗ Not linked with Twitch
-      .card-footer.clearfix
-        .float-right
-          a.btn.btn-twitch href='/auth/twitch' Link with Twitch
-  - else
-    .card.bg-twitch
-      .card-body.text-light
-        span ✓ Linked with Twitch as
+.list-group
+  .list-group-item
+    - if current_user.twitch.nil?
+      a.btn.btn-twitch href='/auth/twitch'
+        => icon('fab', 'twitch')
+        ' Connect Twitch account
+    - else
+      - if current_user.google.present?
+        a.btn.btn-outline-light href='/auth/twitch/unlink'
+          => icon('fab', 'twitch')
+          ' Disconnect
+      - else
+        i.btn.btn-outline-light.disabled.tip-top(
+          style='cursor: not-allowed'
+          title='You need either Google or Twitch connection to sign in. Link Google to disconnect Twitch.'
+        )
+          => icon('fab', 'twitch')
+          ' Not disconnectable
+      .text-muted.mt-2.float-right
+        ' Linked as
         b< = current_user.twitch.display_name
-      .card-footer.clearfix
-        .float-right
-          - if current_user.google.present?
-            a.btn.btn-outline-light href='/auth/twitch/unlink' Unlink
-          - else
-            i.btn.btn-outline-light.disabled.tip-top(
-              style='cursor: not-allowed'
-              title='You need either Google or Twitch linked to be able to sign in! Link Google to unlink Twitch.'
-            ) Not unlinkable
-  - if current_user.google.nil?
-    .card.border-google
-      .card-body
-        span> ✗ Not linked with Google
-      .card-footer.clearfix
-        .float-right
-          a.btn.btn-google href='/auth/google'
-            => icon('fab', 'google')
-            | Link with Google
-  - else
-    .card.bg-google
-      .card-body.text-light
-        span ✓ Linked with Google as
+  .list-group-item
+    - if current_user.google.nil?
+      a.btn.btn-google href='/auth/google'
+        => icon('fab', 'google')
+        | Connect Google
+    - else
+      .m-3
+      - if current_user.twitch.present?
+        a.btn.btn-outline-light href='/auth/google/unlink'
+          => icon('fab', 'google')
+          ' Disconnect
+      - else
+        i.btn.btn-outline-light.disabled.tip-top(
+          style='cursor: not-allowed'
+          title='You need either Google or Twitch connection to sign in. Link Twitch to disconnect Google.'
+        ) Not disconnectable
+      .text-muted.mt-2.float-right
+        ' Linked as
         b< = current_user.google.name
-      .card-footer.clearfix
-        .float-right
-          - if current_user.twitch.present?
-            a.btn.btn-outline-light href='/auth/google/unlink' Unlink
-          - else
-            i.btn.btn-outline-light.disabled.tip-top(
-              style='cursor: not-allowed'
-              title='You need either Google or Twitch linked to be able to sign in! Link Twitch to unlink Google.'
-            ) Not unlinkable
-  - if current_user.patreon.nil?
-    .card.border-patreon
-      .card-body
-        span> ✗ Not linked with Patreon
-      .card-footer.clearfix
-        .float-right
-          a.btn.btn-patreon.mr-2 href='/auth/patreon'
-            => icon('fab', 'patreon')
-            | Link with Patreon
-          a.btn.btn-light> href=patreon_url Visit
-  - else
-    .card.bg-patreon
-      .card-body.text-light
-        span ✓ Linked with Patreon as
+  .list-group-item
+    - if current_user.patreon.nil?
+      a.btn.btn-patreon.mr-2 href='/auth/patreon'
+        => icon('fab', 'patreon')
+        | Connect Patreon
+    - else
+      a.btn.btn-outline-light.mr-2 href='/auth/patreon/unlink'
+        => icon('fab', 'patreon')
+        ' Disconnect
+      .text-muted.mt-2.float-right
+        ' Linked as
         b< = current_user.patreon.full_name
-      .card-footer.clearfix
-        .float-right
-          a.btn.btn-outline-light.mr-2 href='/auth/patreon/unlink' Unlink
-          a.btn.btn-light href=patreon_url Visit
-  - if current_user.srdc.nil?
-    .card.border-srdc
-      .card-body
-        span> ✗ Not linked with Speedrun.com
-      .card-footer.clearfix
-        .float-right
-          a.btn.btn-srdc.mr-2 href='#' data={toggle: :modal, target: '#srdc-link'}
-            => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-            ' Link with Speedrun.com
-    = render partial: 'shared/srdc_link_modal'
-  - else
-    .card.bg-srdc
-      .card-body.text-light
-        span ✓ Linked with Speedrun.com as
+  .list-group-item
+    - if current_user.srdc.nil?
+      a.btn.btn-srdc.mr-2 href='#' data={toggle: :modal, target: '#srdc-link'}
+        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+        ' Connect Speedrun.com
+      = render partial: 'shared/srdc_link_modal'
+    - else
+      = button_to(speedrun_dot_com_user_path, method: :delete, class: 'btn btn-outline-light mr-2', form_class: 'd-inline')
+        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+        ' Disconnect
+      .text-muted.mt-2.float-right
+        ' Linked as
         b< = current_user.srdc.name
-      .card-footer.clearfix
-        .float-right
-          = button_to speedrun_dot_com_user_path, method: :delete, class: 'btn btn-outline-light mr-2'
-            ' Unlink

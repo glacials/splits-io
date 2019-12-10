@@ -3,18 +3,19 @@
   - content_for(:header) do
     ol.breadcrumb.shadow
       li.breadcrumb-item = link_to(site_title, root_path)
-- if current_user.present?
-  - if current_user.runs.any?
-    .row.mx-2
-      .col-md-6.mb-3: .card
-        = render partial: 'shared/race_table', locals: { \
+.row.row-cols-1.row-cols-md-2.mx-0
+  - if current_user.present?
+    - if current_user.runs.any?
+      .col.p-1
+        .card.mb-2 = render partial: 'shared/race_table', locals: { \
           races: current_user.races.with_ends.finished.order(ended_at: :desc), \
           user: current_user, \
           active_races: current_user.races.unfinished, \
           description: 'My Races' \
         }
+        = render partial: 'shared/feed'
 
-      .col-md-6.mb-3: .card
+      .col.p-1: .card.border-0.p-0
         = render partial: 'shared/run_table', locals: { \
           runs: current_user.pbs, \
           cols: %i[time name video uploaded owner_controls rival], \
@@ -22,9 +23,8 @@
           description: 'My Personal Bests', \
           user: current_user \
         }.merge(sorting_info)
-  - else
-    article
-      .card.mb-4
+    - else
+      .col.p-1: .card.border-0.p-0
         .card-body.text-center
           h4.card-title Upload
           p
@@ -33,31 +33,29 @@
           form#upload method='post' enctype='multipart/form-data'
             input#file.d-none type='file' name='file' onchange="document.getElementById('file-label').classList.add('disabled')"
             label#file-label.btn.btn-primary.m-0 for='file' Upload your splits
-      .card.col-md-12
+      .col.p-1: .card.border-0.p-0
         .card-body
           h4.card-title Other ways to upload
-      .card-group.col-md-12.p-0
-        .card
-          .card-body
-            h4.card-title LiveSplit
-            p.card-text
-              ' If you use LiveSplit, right-click on the LiveSplit window and select
-              i Share
-              ' , then choose Splits.io from the menu.
-        .card
-          .card-body
-            h4.card-title Drag and Drop
-            p.card-text.text-light
-              ' You can drag and drop your run files from your computer's file browser, one at a time or all at once.
-        .card
-          .card-body
-            h4.card-title Choose Manually
-            p.card-text
-              ' Navigate to the
-              a> href=new_run_path Upload page
-              ' to choose a run using a file selector.
-- else
-  = render partial: 'landing'
-- if current_user.present?
-  article
-    = render partial: 'shared/follows'
+          .card-group.col-md-12.p-0
+            .card
+              .card-body
+                h4.card-title LiveSplit
+                p.card-text
+                  ' If you use LiveSplit, right-click on the LiveSplit window and select
+                  i Share
+                  ' , then choose Splits.io from the menu.
+            .card
+              .card-body
+                h4.card-title Drag and Drop
+                p.card-text.text-light
+                  ' You can drag and drop your run files from your computer's file browser, one at a time or all at once.
+            .card
+              .card-body
+                h4.card-title Choose Manually
+                p.card-text
+                  ' Navigate to the
+                  a> href=new_run_path Upload page
+                  ' to choose a run using a file selector.
+      = render partial: 'shared/feed'
+  - else
+    = render partial: 'landing'

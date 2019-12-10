@@ -7,6 +7,14 @@ h5
       => icon('fas', 'check')
       span Personal Best
   span.mr-2 = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
+  - old_runs = run.user.non_pbs([run.category_id]).group_by(&:category_id)[run.category_id]&.sort_by(:created_at)&.reverse if run.user
+  - if old_runs.present?
+    span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
+      small = icon('fas', 'history')
+    span.dropdown-menu aria-labelledby="#{run.id36}-history-dropdown"
+      h6.dropdown-header Past Times
+      - old_runs.each do |old_run|
+        a.dropdown-item href=run_path(old_run) = old_run.duration.format
   - if run.srdc_id.present?
     a.badge.badge-dark.tip.mr-2 title='See on Speedrun.com' href=run.srdc_url
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')

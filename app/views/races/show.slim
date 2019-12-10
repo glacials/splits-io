@@ -16,49 +16,50 @@
           .col-md-6 = render partial: 'races/title', locals: {race: @race}
           #stats-box.col-md-6 = render partial: 'races/stats', locals: {race: @race}
 
-      .card-deck.m-2
+      .p-1
         #entries-table.card.shadow
           = render partial: 'races/entries_table', locals: {race: @race}
-      .card-deck.m-2
-        .card
-          .list-group.list-group-flush style='max-height: 500px; overflow-y: scroll'
-            - unless @race.locked?
-              race-chat inline-template=true v-if='race' :race='race'
-                .list-group-item#input-list-item.p-0
-                  = form_for(:chat, html: {onsubmit: 'event.preventDefault()'}) do |f|
-                    .input-group
-                      input.form-control#input-chat-text(
-                        autocomplete='off'
-                        autofocus=true
-                        disabled=current_user.nil?
-                        name='body'
-                        placeholder='Chat...'
-                        type='text'
-                        v-model='body'
-                      )
-                      .input-group-append
-                        button.btn.btn-dark#chat-submit(
+      .row.row-cols-1.row-cols-md-2.mx-0
+        .col.p-1
+          .card
+            .list-group.list-group-flush style='max-height: 500px; overflow-y: scroll'
+              - unless @race.locked?
+                race-chat inline-template=true v-if='race' :race='race'
+                  .list-group-item#input-list-item.p-0
+                    = form_for(:chat, html: {onsubmit: 'event.preventDefault()'}) do |f|
+                      .input-group
+                        input.form-control#input-chat-text(
+                          autocomplete='off'
+                          autofocus=true
                           disabled=current_user.nil?
-                          type='submit'
-                          @click='chat'
-                          :disabled='body === ""'
-                          :title='error'
-                          v-tippy=true
+                          name='body'
+                          placeholder='Chat...'
+                          type='text'
+                          v-model='body'
                         )
-                          template v-if='loading' = render partial: 'shared/spinner'
-                          span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
-                          template v-else=true => icon('fas', 'comment')
-            - @race.chat_messages.includes(user: [:twitch, :google]).order(created_at: :desc).each do |msg|
-              = render partial: 'chat_messages/show', locals: {chat_message: msg}
-            .list-group-item.p-0
-              .media
-                img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
-                .media-body
-                  span.mr-2: .badge.badge-success Splits.io
-                  i Race created
-                  .float-right.pr-2
-                    = render partial: 'shared/relative_time', locals: {time: @race.created_at}
-        race-disclaimer.card inline-template=true
+                        .input-group-append
+                          button.btn.btn-dark#chat-submit(
+                            disabled=current_user.nil?
+                            type='submit'
+                            @click='chat'
+                            :disabled='body === ""'
+                            :title='error'
+                            v-tippy=true
+                          )
+                            template v-if='loading' = render partial: 'shared/spinner'
+                            span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
+                            template v-else=true => icon('fas', 'comment')
+              - @race.chat_messages.includes(user: [:twitch, :google]).order(created_at: :desc).each do |msg|
+                = render partial: 'chat_messages/show', locals: {chat_message: msg}
+              .list-group-item.p-0
+                .media
+                  img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
+                  .media-body
+                    span.mr-2: .badge.badge-success Splits.io
+                    i Race created
+                    .float-right.pr-2
+                      = render partial: 'shared/relative_time', locals: {time: @race.created_at}
+        .col.p-1: race-disclaimer.card inline-template=true
           div
             .bg-dark.p-4 v-if='!accepted' style='height: 100%'
               p
@@ -81,7 +82,7 @@
                     = f.file_field(:attachments, multiple: true, direct_upload: true, class: 'form-control-file')
                     = f.submit('Attach', class: 'btn btn-outline-light')
 
-      .card-deck.m-2
+      .p-1
         race-streams inline-template=true  v-if='race' :race='race' v-cloak=true
           .card v-if='!finished'
             .card-header: .row.d-flex.align-items-center

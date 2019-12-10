@@ -20,8 +20,8 @@
         - comparable_runs.each do |comparable_run|
           a.dropdown-item href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
             = comparable_run.duration(timing).format
-            - if comparable_run.video&.twitch?
-              span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
+            - if comparable_run.video
+              span.tip title='Video attached' =< icon('fab', 'video')
         - recommended_comparison = run.recommended_comparison(timing)
         .dropdown-header Recommended
         - if recommended_comparison.nil?

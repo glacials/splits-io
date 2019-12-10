@@ -9,35 +9,33 @@
       li.breadcrumb-item = link_to @category, game_category_path(@game, @category)
 
 / Specify the full partial path because this view is used by different controllers
-.row.mx-2: .col-md-12 = render partial: 'games/categories/title', locals: {timing: timing, category: @category}
+.row.mx-2 = render partial: 'games/categories/title', locals: {timing: timing, category: @category}
 
-.row.mx-2: .col-md-12
-  .card
+.row.mx-2
+  .card.w-100
     h5.card-header
       = render partial: 'shared/category_tabs', locals: {game: @game, current_category: @category, link_type: :normal}
-    .card-body
-      .card-columns style='column-count: 2'
-        .card
-          = render partial: 'shared/race_table', locals: { \
-            active_races: @game.races.active.not_secret_visibility.order(created_at: :desc), \
-            description: 'Indexed races', \
-            races: @game.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
-          }
+    .card.mb-3
+      = render partial: 'shared/race_table', locals: { \
+        active_races: @game.races.active.not_secret_visibility.order(created_at: :desc), \
+        description: 'Indexed races', \
+        races: @game.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
+      }
 
-        .card
-          h5.card-header Sum-of-best leaderboard
-          - if current_user&.has_sum_of_best_leaderboards?
-            = render partial: 'games/categories/sum_of_best_leaderboard', locals: {timing: timing, category: @category}
-          - else
-            .card-body: center.m-4
-              h1 = icon('fas', 'lock')
-              i Subscribe to Splits.io to see the sum-of-best leaderboard for #{@category.game} #{@category}.
-            .card-footer.clearfix: .float-right
-                a.btn.btn-primary href=subscriptions_path Subscribe
+    .card.mb-3
+      h5.card-header Sum-of-best leaderboard
+      - if current_user&.has_sum_of_best_leaderboards?
+        = render partial: 'games/categories/sum_of_best_leaderboard', locals: {timing: timing, category: @category}
+      - else
+        .card-body: center.m-4
+          h1 = icon('fas', 'lock')
+          i Subscribe to Splits.io to see the sum-of-best leaderboard for #{@category.game} #{@category}.
+        .card-footer.clearfix: .float-right
+            a.btn.btn-primary href=subscriptions_path Subscribe
 
-        .card
-          = render partial: 'shared/run_table', locals: { \
-            cols: %i[runner time name video uploaded], \
-            description: 'Indexed splits', \
-            runs: @category.runs.nonempty.unarchived, \
-          }.merge(sorting_info)
+    .card.mb-3.bg-transparent
+      = render partial: 'shared/run_table', locals: { \
+        cols: %i[runner time name video uploaded], \
+        description: 'Indexed splits', \
+        runs: @category.runs.nonempty.unarchived, \
+      }.merge(sorting_info)
