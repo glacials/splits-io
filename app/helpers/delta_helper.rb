@@ -11,7 +11,7 @@ module DeltaHelper
   #
   # Pass a subject string to fill in the tooltip with "Compared to #{subject}".
   def delta(base, compare, subject:, better: :lower)
-    return tag.small('', class: 'text-muted') if [base, compare].any?(&:nil?)
+    return tag.span('', class: 'text-muted') if [base, compare].any?(&:nil?)
 
     classes = %w[delta-indicator tip-top mx-2 cursor-default]
 
@@ -34,6 +34,6 @@ module DeltaHelper
       classes << 'text-danger'
     end
 
-    tag.small(text, class: classes, title: "Compared to #{subject}")
+    tag.span(text, class: classes, title: "Compared to #{subject}")
   end
 end

@@ -5,40 +5,42 @@
   - subject = compare_run.try(:user).try(:name) || '???'
 .row
   .statcard.p-3
-    h3.statcard-number
+    h3.statcard-number.d-inline
       = run.duration(timing).format(precise: run.short?(timing))
-      - if compare_run.present?
-        = delta(run.duration(timing), compare_run.try(:duration, timing), subject: subject)
-    span.statcard-desc Time
+    - if compare_run.present?
+      = delta(run.duration(timing), compare_run.try(:duration, timing), subject: subject)
+    .statcard-desc Time
   .statcard.p-3
-    h3.statcard-number
+    h3.statcard-number.d-inline
       = run.sum_of_best(timing).format(precise: run.short?(timing))
-      - if compare_run.present?
-        = delta(run.sum_of_best(timing), compare_run.try(:sum_of_best, timing), subject: subject)
-    span.statcard-desc Sum of best
+    - if compare_run.present?
+      = delta(run.sum_of_best(timing), compare_run.try(:sum_of_best, timing), subject: subject)
+    .statcard-desc Sum of best
   .statcard.p-3
-    h3.statcard-number
+    h3.statcard-number.d-inline
       = (run.duration(timing) - run.sum_of_best(timing)).format_casual
-      - if compare_run.present?
-        = delta(run.possible_timesave(timing), compare_run.try(:possible_timesave, timing), subject: subject, better: :different)
-    span.statcard-desc Possible timesave
+    - if compare_run.present?
+      = delta(run.possible_timesave(timing), compare_run.try(:possible_timesave, timing), subject: subject, better: :different)
+    .statcard-desc Possible timesave
   .statcard.p-3
-    h3.statcard-number = Run.program(run.timer)
-    span.statcard-desc = link_to('Timer', timer_path(Run.program(run.timer).to_sym), class: 'text-muted')
+    h3.statcard-number.d-inline
+      = Run.program(run.timer)
+    div.statcard-desc = link_to('Timer', timer_path(Run.program(run.timer).to_sym), class: 'text-muted')
   - if run.attempts.present?
     .statcard.p-3
-      h3.statcard-number
+      h3.statcard-number.d-inline
         = run.attempts
-        - if compare_run.present?
-          = delta(run.attempts, compare_run.try(:attempts), subject: subject, better: :different)
-      span.statcard-desc = 'Attempt'.pluralize(run.attempts)
+      - if compare_run.present?
+        = delta(run.attempts, compare_run.try(:attempts), subject: subject, better: :different)
+      .statcard-desc = 'Attempt'.pluralize(run.attempts)
   - if run.total_playtime > 0
     .statcard.p-3
-      h3.statcard-number
+      h3.statcard-number.d-inline
         = run.total_playtime.format
-        - if compare_run.present?
-          = delta(run.total_playtime, compare_run.total_playtime, subject: subject, better: :different)
-      span.statcard-desc Life playtime
+      - if compare_run.present?
+        = delta(run.total_playtime, compare_run.total_playtime, subject: subject, better: :different)
+      .statcard-desc Life playtime
   .statcard.p-3
-    h3.statcard-number = render partial: 'shared/relative_time', locals: {time: run.created_at}
-    span.statcard-desc Time since upload
+    h3.statcard-number.d-inline
+      = render partial: 'shared/relative_time', locals: {time: run.created_at}
+    .statcard-desc Time since upload
