@@ -7,7 +7,7 @@ h5
       => icon('fas', 'check')
       span Personal Best
   span.mr-2 = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
-  - old_runs = run.user.non_pbs([run.category_id]).group_by(&:category_id)[run.category_id]&.sort_by(:created_at)&.reverse if run.user
+  - old_runs = run.user.non_pbs([run.category_id]).group_by(&:category_id)[run.category_id]&.sort_by(&:created_at)&.reverse if run.user
   - if old_runs.present?
     span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
       small = icon('fas', 'history')
