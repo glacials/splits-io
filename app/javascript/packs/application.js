@@ -7,11 +7,6 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-import 'turbolinks-animate'
-document.addEventListener('turbolinks:load', function() {
-  TurbolinksAnimate.init({element: document.querySelector('body.turbolinks-animate'), animation: 'fadeinup'})
-})
-
 import "jquery"
 require("@rails/activestorage").start()
 require("@rails/ujs").start()
