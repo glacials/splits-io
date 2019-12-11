@@ -4,29 +4,27 @@
     .row
       .col-md-6
         .mb-3: input.form-control type='text' name='user[name]' value=current_user.name
-        .card
-          .card-body
+        .card: .card-body
             p
               ' Letters, numbers, underscores. (For nerds:
               code = User::NAME_REGEX.inspect
               | .)
             p Capitalization matters for display, but URLs will always be lowercase.
-      .col-md-6: .alert.alert-warning
+      .col-md-6: .card: .card-body
         - sample_run = current_user.runs.where.not(category: nil).last || Run.random
-        b Changing your username breaks these links:
+        ' Changing your username breaks these links:
         ul
           li: code: a href=user_path(current_user) = request.host_with_port + user_path(current_user)
           li: code: a href=short_user_path(current_user) = request.host_with_port + short_user_path(current_user)
           li
-            | permalink redirectors (patrons only)
+            | All permalink redirectors
             - if current_user.runs.any?
               ' , e.g.
               code: a href=user_pb_path(sample_run.user, sample_run.game, sample_run.category)
                 = request.host_with_port + user_pb_path(sample_run.user, sample_run.game, sample_run.category)
-        b These links are safe:
+        ' These links are safe:
         ul: li
           | All standard permalinks, e.g.
           code: a href=run_path(sample_run) = request.host_with_port + run_path(sample_run)
-        b> Changing only capitalization is safe
-        | and has none of the above effects.
+        ' Changing only capitalization is safe and has none of the above effects.
   .card-footer.clearfix: .float-right: input.btn.btn-outline-primary type='submit' value='Save'
