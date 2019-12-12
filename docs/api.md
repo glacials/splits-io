@@ -864,7 +864,7 @@ order to send a Chat Message to it.
 | Field          | Type             | Null? | Description                                                                                                                  |
 |:---------------|:-----------------|:------|:-----------------------------------------------------------------------------------------------------------------------------|
 | `body`         | string           | never | The contents of the message.                                                                                                 |
-| `from_entrant` | boolean          | never | Boolean indicating wether the sender was in the race when the message was sent.                                              |
+| `from_entrant` | boolean          | never | Boolean indicating whether the sender was in the race when the message was sent.                                              |
 | `created_at`   | string           | never | The time and date at which this message was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at`   | string           | never | The time and date at which this message was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `user`         | [Runner][runner] | never | The Runner that sent the message.                                                                                            |
