@@ -311,7 +311,7 @@ History objects have the following format.
 
 | Field                  | Type   | Null?          | Description                                                                                |
 |:-----------------------|:-------|:---------------|:-------------------------------------------------------------------------------------------|
-| `attempt_number`       | number | never          | The correpsonding attempt number this attempt was.                                         |
+| `attempt_number`       | number | never          | The corresponding attempt number this attempt was.                                         |
 | `realtime_duration_ms` | number | never          | The realtime duration this attempt took in milliseconds.                                   |
 | `gametime_duration_ms` | number | never          | The gametime duration this attempt took in milliseconds.                                   |
 | `started_at`           | string | when not known | The date and time of when the attempt started. This field conforms to [ISO 8601][iso8601]. |
