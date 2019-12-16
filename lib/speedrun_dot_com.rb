@@ -39,9 +39,8 @@ module SpeedrunDotCom
           'X-API-Key' => api_key
         )
       )
-    # TODO: this doesn't seem to catch 400's
     rescue RestClient::ExceptionWithResponse => e
-      JSON.parse(e)
+      JSON.parse(e.response.body)
     end
 
     class << self

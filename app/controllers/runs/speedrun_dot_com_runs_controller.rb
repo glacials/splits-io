@@ -9,13 +9,14 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
         category: @run.category.srdc.srdc_id,
         date:     params[:srdc_date],
         times:    {},
-        # Convert '0' and '1' from the checkbox to boolean values
-        emulated: !params[:srdc_emulator].to_i.zero?,
-        comment:  params[:srdc_desc],
         splitsio: @run.id36
       }
     }
 
+    # Convert '0' and '1' from the checkbox to boolean values
+    run_json[:run][:emulated] = !params[:srdc_emulator].to_i.zero? if params[:srdc_emulator]
+
+    run_json[:run][:comment] =  params[:srdc_desc] if params[:srdc_desc]
     run_json[:run][:region]   = params[:srdc_region]   if params[:srdc_region]
     run_json[:run][:platform] = params[:srdc_platform] if params[:srdc_platform]
 
@@ -38,7 +39,6 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
       end
     end
 
-    # TODO: Save video if YT/Twtich and not present on Splits.io
     response = SpeedrunDotCom::Run.create(run_json, @run.user.srdc.api_key)
     if response['errors'].present?
       flash[:alert] = response['errors'].join('\n')
@@ -46,6 +46,7 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
       return
     end
 
+    # TODO: Save video if YT/Twtich and not present on Splits.io
     @run.update!(srdc_id: response['data']['id'])
     flash[:notice] = "Run created on Speedrun.com! View it at #{SpeedrunDotCom::Run.url_from_id(response['data']['id'])}"
     redirect_to run_path(@run)
