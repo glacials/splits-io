@@ -68,7 +68,7 @@ Rails.application.routes.draw do
   post   '/auth/srdc', to: 'speedrun_dot_com_users#create',  as: :speedrun_dot_com_users
   delete '/auth/srdc', to: 'speedrun_dot_com_users#destroy', as: :speedrun_dot_com_user
 
-  post '/:run_id/srdc', to: 'runs/speedrun_dot_com_runs#create', as: :srdc_submit # TODO: temporary route, just want the path helper
+  post '/:run/srdc', to: 'runs/speedrun_dot_com_runs#create', as: :srdc_submit # TODO: temporary route, just want the path helper
 
   get '/auth/failure', to: 'sessions#failure'
 

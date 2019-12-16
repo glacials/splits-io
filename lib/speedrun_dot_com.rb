@@ -30,6 +30,20 @@ module SpeedrunDotCom
       "https://www.speedrun.com/run/#{CGI.escape(id)}"
     end
 
+    def self.create(data, api_key)
+      JSON.parse(
+        SpeedrunDotCom.route['/runs'].post(
+          data.to_json,
+          content_type:  :json,
+          accept:        :json,
+          'X-API-Key' => api_key
+        )
+      )
+    # TODO: this doesn't seem to catch 400's
+    rescue RestClient::ExceptionWithResponse => e
+      JSON.parse(e)
+    end
+
     class << self
       private
 
