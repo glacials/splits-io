@@ -142,7 +142,7 @@ module UnparsedRun
     end
 
     def write_run_variables(run_data)
-      srdc_game = SpeedrunDotComGame.find_by!(name: run_data[:game])
+      srdc_game = SpeedrunDotComGame.find_by(name: run_data[:game])
 
       run_data[:metadata][:variables].each do |key, value|
         srdc_variable = SpeedrunDotComGameVariable.find_by!(
@@ -157,6 +157,8 @@ module UnparsedRun
           run:                                  self,
           speedrun_dot_com_game_variable_value: srdc_variable_value
         )
+      rescue ActiveRecord::RecordNotFound
+        next
       end
     end
 
