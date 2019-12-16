@@ -83,7 +83,7 @@ export default {
 
           case 'race_start_scheduled:html':
             document.getElementById('stats-box').innerHTML = data.data.stats_html
-            if (!starting && new Date(this.race.started_at) > new Date()) {
+            if (!this.starting && new Date(this.race.started_at) > new Date()) {
               this.starting = true
               setTimeout(() => this.starting = false, new Date(this.race.started_at) - new Date())
             }

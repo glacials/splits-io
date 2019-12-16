@@ -31,7 +31,7 @@ race-title(
             ' created by
             = user_badge(race.owner)
           - if race.belongs_to?(current_user)
-            .btn-group.ml-2
+            .btn-group.mx-2
               button.btn.btn-outline-light.btn-sm.clipboard-btn(
                 data-clipboard-text=race_url(race, join_token: race.join_token)
                 title='Copy invite link'

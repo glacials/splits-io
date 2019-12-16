@@ -38,7 +38,7 @@ h6.card-header Entries
               b class=entry_color(entry) = entry.duration.format(precise: true)
             - elsif race.started?
               i In progress
-          td.nowrap.p-0 style='filter: grayscale(.5)'
+          td.nowrap.p-0 style='filter: grayscale(.5); max-width: 200px'
             - if entry.run
               small
                 - segments = Segment.joins(run: :entry).where(run: {entries: {id: race.entries}})

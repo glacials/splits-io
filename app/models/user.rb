@@ -100,10 +100,6 @@ class User < ApplicationRecord
     name || 'somebody'
   end
 
-  def should_see_ads?
-    !patron?(tier: 1) && subscriptions.active.none? && !admin? && ENV['ENABLE_ADS'] == '1'
-  end
-
   def has_predictions?
     patron?(tier: 2) || subscriptions.tier1.active.any? || admin?
   end
