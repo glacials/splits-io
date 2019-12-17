@@ -20,8 +20,9 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
     run_json[:run][:region]   = params[:srdc_region]   if params[:srdc_region]
     run_json[:run][:platform] = params[:srdc_platform] if params[:srdc_platform]
 
-    video = params[:srdc_video].presence || @run.video&.url
-    run_json[:run][:video] = video if video.present?
+    # Save video first, so we don't make the user keep pasting it back in if the submit attempt fails
+    video = @run.create_video(url: params[:srdc_video]) if @run.video.nil? && params[:srdc_video].present?
+    run_json[:run][:video] = video.url if video
 
     if @run.game.srdc.accepts_realtime? && @run.realtime_duration_ms.positive?
       run_json[:run][:times][:realtime] = @run.realtime_duration_ms / 1000
@@ -46,7 +47,6 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
       return
     end
 
-    # TODO: Save video if YT/Twtich and not present on Splits.io
     @run.update!(srdc_id: response['data']['id'])
     flash[:notice] = "Run created on Speedrun.com! View it at #{SpeedrunDotCom::Run.url_from_id(response['data']['id'])}"
     redirect_to run_path(@run)
