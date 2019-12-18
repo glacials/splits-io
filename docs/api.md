@@ -434,6 +434,7 @@ not include the `endedAt` field for unreached segments.
 
 <details>
 <summary>Splitting</summary>
+
 ```sh
 # Non-race runs
 curl -X POST https://splits.io/api/v4/runs/:run/splits \
