@@ -45,9 +45,9 @@ multiple scopes by separating them with spaces in the auth token request.
 | `manage_race` | Participate in races and chat on behalf of the user | See [Race][race]                                                                                                    |
 
 <details>
-<summary>Example 1: My application is a local program that runs on the user's computer</summary>
+<summary>Example 1: My application is an app that runs on the user's device</summary>
 
-If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
+If your application runs locally as an app or program on the user's device, you should use OAuth's **authorization code grant
 flow**. This means your application will open the Splits.io authorization page in the user's default browser, and if the
 user accepts the authorization, Splits.io will give your application a `code` which you should immediately exchange for
 an OAuth token using a secure API request.
