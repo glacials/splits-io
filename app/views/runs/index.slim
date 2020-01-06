@@ -3,8 +3,8 @@
   - content_for(:header) do
     ol.breadcrumb.shadow
       li.breadcrumb-item = link_to(site_title, root_path)
-.row.row-cols-1.row-cols-md-2.mx-0
-  - if current_user.present?
+- if current_user.present?
+  .row.row-cols-1.row-cols-md-2.mx-0
     - if current_user.runs.any?
       .col.p-1
         .card.mb-2 = render partial: 'shared/race_table', locals: { \
@@ -57,5 +57,5 @@
                   a> href=new_run_path Upload page
                   ' to choose a run using a file selector.
       = render partial: 'shared/feed'
-  - else
-    = render partial: 'landing'
+- else
+  = render partial: 'landing'
