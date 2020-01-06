@@ -18,6 +18,7 @@ ENV BUNDLE_BIN $BUNDLE_PATH/bin
 ENV PATH /app/bin:$BUNDLE_BIN:$PATH
 
 RUN gem update --system
+RUN gem install bundler
 
 RUN mkdir -p /app
 WORKDIR /app
