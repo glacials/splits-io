@@ -21,7 +21,7 @@ ENV RAILS_ENV=production
 ENV NODE_ENV=production
 
 RUN gem update --system
-RUN gem install bundler
+RUN gem install bundler -v 2.1.0
 
 RUN mkdir -p /app
 WORKDIR /app
