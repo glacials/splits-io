@@ -23,8 +23,8 @@
               .col-lg-8
                 = f.text_field(:redirect_uri, class: 'form-control', placeholder: 'Redirect URI (include http:// or https://)')
               .col-lg-4
-                span If you haven't created a page for Splits.io to redirect users back to yet, put
-                code<> debug
-                span here and change it later.
+                ' Users will be sent here with a
+                code code
+                ' parameter after authorizing your app.
             p: .row: .col-lg-8: .input-group-btn
               = f.submit 'Create application', class: 'btn btn-primary'

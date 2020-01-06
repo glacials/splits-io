@@ -1,5 +1,5 @@
 {
-  "master_picture": "public/logo-imageonly.svg",
+  "master_picture": "app/assets/images/logo-imageonly.svg",
   "favicon_design": {
     "ios": {
       "picture_aspect": "background_and_margin",
@@ -11,7 +11,7 @@
         "precomposed_icons": true,
         "declare_only_default_icon": true
       },
-      "app_name": "Splits I\/O"
+      "app_name": "Splits.io"
     },
     "desktop_browser": [
 
@@ -29,13 +29,13 @@
           "rectangle": false
         }
       },
-      "app_name": "Splits I\/O"
+      "app_name": "Splits.io"
     },
     "android_chrome": {
       "picture_aspect": "shadow",
       "theme_color": "#292b30",
       "manifest": {
-        "name": "Splits I\/O",
+        "name": "Splits.io",
         "display": "standalone",
         "orientation": "not_set",
         "on_conflict": "override",
