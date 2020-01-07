@@ -41,7 +41,7 @@ RUN DATABASE_URL=nulldb://host/db SECRET_KEY_BASE="$(bundle exec rails secret)" 
     SPLITSIO_CLIENT_ID=$SPLITSIO_CLIENT_ID STRIPE_PUBLISHABLE_KEY=$STRIPE_PUBLISHABLE_KEY \
     bin/rails assets:precompile
 
-RUN rm -rf node_modules/ tmp/cache app/assets vendor/assets spec
+RUN rm -rf node_modules/ tmp/cache vendor/assets spec
 
 #############
 
