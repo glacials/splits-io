@@ -85,6 +85,10 @@ module ApplicationHelper
     'https://www.patreon.com/glacials'
   end
 
+  def discord_url
+    'https://discord.gg/yGaxX39'
+  end
+
   private
 
   def by(param)

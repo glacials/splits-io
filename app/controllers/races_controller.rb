@@ -9,10 +9,20 @@ class RacesController < ApplicationController
   end
 
   def show
+    if params[:browsersource] == '1'
+      render :browsersource_show
+      return
+    end
+
     return unless @race.abandoned? && !@race.secret_visibility?
 
     flash.now.alert = 'This race is abandoned and will not show up in listings! Interacting with it will list it again.'
   end
+
+  def race_params
+    params.permit(:join_token, :attachment, :browsersource)
+  end
+  helper_method :race_params
 
   private
 
@@ -37,10 +47,6 @@ class RacesController < ApplicationController
     }
   end
 
-  def race_params
-    params.permit(:join_token, :attachment)
-  end
-
   def set_race
     @race = Race.friendly_find!(params[:id])
   rescue ActiveRecord::RecordNotFound
@@ -51,7 +57,7 @@ class RacesController < ApplicationController
   # (public race or the user already joined).
   def shorten_url
     if @race.visibility == :public || @race.entries.find_for(current_user).present?
-      desired_fullpath = race_path(@race)
+      desired_fullpath = race_path(@race, race_params)
       redirect_to desired_fullpath if desired_fullpath != request.fullpath
       return
     end

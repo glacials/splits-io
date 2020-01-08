@@ -1,0 +1,76 @@
+- content_for(:title, @race)
+
+- content_for(:header) do
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Races', races_path)
+    li.breadcrumb-item.active = link_to(@race.to_param, race_path(@race))
+    li.breadcrumb-item.active = link_to('Browser source layout', race_path(@race, stream: 1))
+
+.col-md-8.mx-auto: .alert.alert-info
+  ' Welcome to the beta browser source layout for races!
+  ul
+    li You can resize each window from the bottom-right corner.
+    li The red borders are safe zones; no content will ever leave them.
+    li
+      ' You can edit or remove any text -- just select it and start typing -- but server changes will
+      ' overwrite your edits.
+  ' Please send any feedback to our
+  a> href=discord_url Discord server
+  ' or to
+  a href='mailto:hi@splits.io' hi@splits.io
+  = '. Thanks!'
+
+#vue-race.bg-black contenteditable=true
+  .text-center v-if="false" = render partial: 'shared/spinner'
+  race inline-template=true race-id=@race.id v-cloak=true
+    div
+      .text-center v-if="loading" = render partial: 'shared/spinner', locals: {message: 'Loading realtime race'}
+      div v-show="!loading"
+        .row.mx-2
+          #stats-box.col-md-6.browsersource = render partial: 'races/stats', locals: {race: @race}
+
+      .p-1
+        #entries-table.card.border.border-danger.browsersource
+          / Can't copy+paste this partial into this file because it would get replaced by Action Cable
+          = render partial: 'races/entries_table', locals: {race: @race}
+      .row.row-cols-1.row-cols-md-2.mx-0
+        .col.p-1
+          .card.browsersource
+            .list-group.list-group-flush
+              - unless @race.locked?
+                race-chat inline-template=true v-if='race' :race='race'
+                  .list-group-item#input-list-item.p-0.d-none
+                    = form_for(:chat, html: {onsubmit: 'event.preventDefault()'}) do |f|
+                      .input-group
+                        input.form-control#input-chat-text(
+                          autocomplete='off'
+                          autofocus=true
+                          disabled=current_user.nil?
+                          name='body'
+                          placeholder='Chat...'
+                          type='text'
+                          v-model='body'
+                        )
+                        .input-group-append
+                          button.btn.btn-dark#chat-submit(
+                            disabled=current_user.nil?
+                            type='submit'
+                            @click='chat'
+                            :disabled='body === ""'
+                            :title='error'
+                            v-tippy=true
+                          )
+                            template v-if='loading' = render partial: 'shared/spinner'
+                            span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
+                            template v-else=true => icon('fas', 'comment')
+              - @race.chat_messages.includes(user: [:twitch, :google]).order(created_at: :desc).each do |msg|
+                = render partial: 'chat_messages/show', locals: {chat_message: msg}
+              .list-group-item.p-0
+                .media
+                  img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
+                  .media-body
+                    span.mr-2: .badge.badge-success Splits.io
+                    i Race created
+                    .float-right.pr-2
+                      = render partial: 'shared/relative_time', locals: {time: @race.created_at}
