@@ -56,35 +56,29 @@ h5
     .btn-group.m-2: .btn.btn-outline-secondary.tip.disabled title=tooltip(run)
       ' 🎉
       = run.likes.count
-  .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-    - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
-      a.btn.btn-twitch.tip-top(
-        href='#'
-        data={toggle: :modal, target: '#highlight'}
-        title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
-      )
-        => icon('fab', 'twitch')
-        span Auto-highlight
-    - if run.belongs_to?(current_user) && current_user&.srdc && run.srdc_id.blank? && run.category&.srdc
-      - if run.user.srdc.present?
+  - if run.belongs_to?(current_user)
+    .btn-group.m-2 role='group' aria={label: 'Calls to action'}
+      - if run.video.nil? && run.highlight_suggestion
+        a.btn.btn-twitch.tip-top(
+          href='#'
+          data={toggle: :modal, target: '#highlight'}
+          title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
+        )
+          => icon('fab', 'twitch')
+          span Auto-highlight
+      - if run.category&.srdc && run.srdc_id.blank?
         a.btn.btn-srdc.tip-top(
           href='#'
-          data={toggle: :modal, target: '#srdc-submit'}
+          data={toggle: :modal, target: current_user.srdc ? '#srdc-submit' : '#srdc-link'}
           title="Automatically submit to Speedrun.com. You'll get a chance to review the details first."
         )
           => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
           span Auto-submit
+    - if run.category&.srdc && run.srdc_id.blank?
+      - if current_user.srdc
+        = render partial: 'srdc_submit_modal', locals: {run: run}
       - else
-        a.btn.btn-srdc.tip-top(
-          href='#'
-          data={toggle: :modal, target: '#srdc-link'}
-          title='Automatically submit to Speedrun.com'
-        )
-          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-          span Auto-submit
-  - if run.belongs_to?(current_user) && run.category&.srdc && current_user&.srdc && run.srdc_id.blank?
-    = render partial: 'srdc_submit_modal', locals: {run: run}
-    = render partial: 'shared/srdc_link_modal'
+        = render partial: 'shared/srdc_link_modal'
 
 - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
   #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
