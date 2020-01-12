@@ -17,83 +17,67 @@
       'Parsing', 'Gathering', 'Analyzing', 'Sorting', 'Logging', 'Unscrambling', 'Clipping', 'Spinjumping', 'Manipulating RNG',
     ]}
 - else
-  .row.mx-2
-    .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-    .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+  - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?)) || (@run.user && @compare_runs[0].user == @run.user)
+    .row.mx-2
+      .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+      .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
-  = render partial: 'runs/claim', locals: {run: @run}
-  = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+    = render partial: 'runs/claim', locals: {run: @run}
+    = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
-  - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?))
     - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
-      .card-deck.mx-1
+      .card-deck.mx-0
         - [@run, *@compare_runs].each do |run|
           - if run.video&.supports_embedding?
-            .card.my-3.mx-2 style='padding-bottom: 28.125%'
+            .card.m-1.video-card
               .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
           - else
-            .card.my-3.mx-2
+            .card.m-1
               i.text-center.my-auto No video attached to this run
         - if @compare_runs.none?
-          .card.my-3.mx-2
+          .card.m-1.mx-2
             i.text-center.my-auto Select a comparison to see another run's video here
             .card-footer: .float-right
               = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-    .row.mx-1
-      .col-md-6
+    .row.row-cols-1.row-cols-md-2.mx-0
+      .col.p-1
         = render partial: 'runs/split_table', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-      .col-md-6
+      .col.p-0
         - if @run.completed?(timing) && @run.histories.any?
           #chart-spinner.text-secondary.text-center.my-5
             = render partial: 'shared/spinner', locals: {messages: [ \
               'Generating charts', 'Still generating', 'Arranging chart data', \
             ]}
-          #chart-alert.alert.alert-danger.my-3 hidden=true
+          #chart-alert.alert.alert-danger.m-1 hidden=true
           #chart-holder hidden=true
-            #run-duration-chart.card.my-3
-            #box-plot.card.my-3
-            #segment-chart.card.my-3
-            #reset-chart-container.card.my-3
-              .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
-                label.btn.btn-sm.btn-outline-secondary.text-white.active.disabled
-                  input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
-                  ' Resets Per Split
-                label.btn.btn-sm.btn-outline-secondary.text-white
-                  input#run-progress-chart-button type="radio" name="reset-chart-buttons"
-                  ' Run Progress
-              #reset-chart.my-3
-              #run-progress-chart.my-3.d-none
-            - if @run.histories.any?
-              - if current_user.try(:has_predictions?)
-                .my-3
-                  span => icon('fas', 'lock-open')
-                  span Thanks for supporting Splits.io! The below chart is unlocked.
-                #playtime-chart.card.my-3
-              - else
-                .card.my-3
-                  #paywall-container
-                    /! Congrats! You found out how to pay for this feature in guilt instead of money. Delete the element below.
-                    #paywall.bg-dark
-                      .mt-4.mx-4
-                        .my-3.d-flex
-                          span.mr-2
-                            ' Support Splits.io to predict practice-to-PB. LiveSplit only.
-                        .my-3
-                          a.btn.btn-primary.mr-2 href=subscriptions_path
-                            => icon('fas', 'credit-card')
-                            ' Subscribe
-                          a.btn.btn-patreon href=patreon_url
-                            => icon('fab', 'patreon')
-                            ' Subscribe through Patreon
-                    #playtime-chart
+            #run-duration-chart.card.m-1
+            - if current_user&.has_advanced_analytics?
+              #box-plot.card.m-1
+              #segment-chart.card.m-1
+              #reset-chart-container.card.m-1
+                .btn-group.btn-group-toggle.justify-content-end data={toggle: :buttons}
+                  label.btn.btn-sm.btn-outline-secondary.text-white.active.disabled
+                    input#resets-chart-button type="radio" name="reset-chart-buttons" checked=true
+                    ' Resets Per Split
+                  label.btn.btn-sm.btn-outline-secondary.text-white
+                    input#run-progress-chart-button type="radio" name="reset-chart-buttons"
+                    ' Run Progress
+                #reset-chart.m-1
+                #run-progress-chart.m-1.d-none
+              - if @run.histories.any?
+                #playtime-chart.card.m-1
+            - else
+              .card style='background: linear-gradient(var(--darkish), transparent); border: none'
+                .card-body: center.m-4
+                  h1 = icon('fas', 'lock')
+                  p: i Subscribe to Splits.io to view advanced charts.
+                  p: a.btn.btn-primary.mr-2 href=subscriptions_path Subscribe
   - else
     .container: .col-md-6.offset-md-3: .card
-      .card-body Support Splits.io to compare videos, charts, and splits.
-      .card-footer
+      .card-body
+        p Subscribe to Splits.io to compare to other users.
+        p
+          ' (Comparing to yourself is free.)
+      .card-footer.clearfix
         .float-right
-          a.btn.btn-primary.mr-2 href=subscriptions_path
-            => icon('fas', 'credit-card')
-            ' Subscribe
-          a.btn.btn-patreon href=patreon_url
-            => icon('fab', 'patreon')
-            | Subscribe through Patreon
+          a.btn.btn-primary.mr-2 href=subscriptions_path Subscribe

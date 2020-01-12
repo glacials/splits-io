@@ -5,18 +5,30 @@
     li.breadcrumb-item = link_to('Games', games_path)
     li.breadcrumb-item = link_to(@game, game_path(@game))
     li.breadcrumb-item = link_to('Edit', edit_game_path(@game))
-article
-  = form_for GameAlias.new, url: game_aliases_path(@game) do |f|
-    h3 Merge games
-    p Enter a game that should be merged into #{@game}.
-    .input-group.col-lg-6
-      = f.text_field(:name, class: 'form-control', placeholder: 'Exact game name to be merged')
-      span.input-group-append
-        = f.submit 'Merge', class: 'btn btn-primary'
-    p
-      ul
-        li All runs for the entered game will be converted to #{@game} runs.
-        li All categories for the entered game will become #{@game} categories.
-        li If a category has an identical name to a #{@game} category, the two will be merged into one #{@game}
-           category.
-        li You must have moderation priveleges for both games to merge.
+.row.row-cols-1.row-cols-md-2.mx-1
+  .col.p-1
+    = form_for(GameAlias.new, url: game_aliases_path(@game), html: {class: 'card h-100'}) do |f|
+      h5.card-header Merge games
+      .card-body
+        p Enter a game that should be merged into #{@game}.
+        .input-group.col-lg-6
+          = f.text_field(:name, class: 'form-control', placeholder: 'Exact game name to be merged')
+          span.input-group-append
+            = f.submit 'Merge', class: 'btn btn-primary'
+        p
+          ul
+            li All runs for the entered game will be converted to #{@game} runs.
+            li All categories for the entered game will become #{@game} categories.
+            li If a category has an identical name to a #{@game} category, the two will be merged into one #{@game}
+               category.
+            li You must have moderation priveleges for both games to merge.
+  .col.p-1
+    .card.h-100
+      .card-header Resync
+      .card-body
+        = button_to game_path(@game), method: :patch, params: {'sync_srdc' => 1}, class: 'btn btn-srdc m-2'
+          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+          ' Sync with Speedrun.com
+        = button_to game_path(@game), method: :patch, params: {'sync_srl' => 1}, class: 'btn btn-light m-2'
+          => image_tag(asset_path('srl.png'), style: 'height: 0.8em')
+          ' Sync with SpeedRunsLive

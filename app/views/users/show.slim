@@ -15,22 +15,20 @@
       a.btn.btn-srdc.tip title='Visit on Speedrun.com' href=@user.srdc.url
         => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
 
-.row.mx-2
-  .col-md-6.mb-3
-    .card.shadow
-      = render partial: 'shared/race_table', locals: { \
-        races: @user.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
-        user: @user, \
-        active_races: @user.races.active.not_secret_visibility, \
-        description: "#{@user}'s Races" \
-      }
+.row.row-cols-1.row-cols-md-2.mx-0
+  .col.p-1: .card
+    = render partial: 'shared/race_table', locals: { \
+      races: @user.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
+      user: @user, \
+      active_races: @user.races.active.not_secret_visibility, \
+      description: "#{@user}'s Races" \
+    }
 
-  .col-md-6.mb-3
-    .card.shadow
-      = render partial: 'shared/run_table', locals: { \
-        runs: @user.pbs, \
-        cols: %i[time video name uploaded], \
-        col_options: {time: [:archived]}, \
-        description: 'Personal Bests', \
-        user: @user \
-      }.merge(sorting_info)
+  .col.p-1: .card
+    = render partial: 'shared/run_table', locals: { \
+      runs: @user.pbs, \
+      cols: %i[time video name uploaded], \
+      col_options: {time: [:archived]}, \
+      description: 'Personal Bests', \
+      user: @user \
+    }.merge(sorting_info)

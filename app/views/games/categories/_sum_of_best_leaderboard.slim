@@ -1,0 +1,27 @@
+- runners = category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc')
+- if runners.empty?
+  center.m-4
+    i Not enough data in this category to display a sum-of-best leaderboard.
+- else
+  .table-responsive
+    table.card-body.table.table-striped.mb-0
+      thead
+        tr
+          th
+          th.align-left Runner
+          th.align-left Sum of best
+          th.align-left PB
+          th.align-left
+            | Potential save
+            span.tip< title='<code>(PB - sum of best)</code>'
+              = icon('fas', 'question-circle')
+      tbody
+        - i = 0
+        - runners.each do |runner|
+          - pb = runner.pb_for(timing, category)
+          tr id=[:run, pb.id]
+            td.align-right = i += 1
+            td.align-left = user_badge(runner)
+            td.align-left = pb.sum_of_best(Run::REAL).format
+            td.align-left = link_to(pb.duration(Run::REAL).format, pb)
+            td.align-left = (pb.duration(Run::REAL) - pb.sum_of_best(Run::REAL)).format

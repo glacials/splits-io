@@ -1,9 +1,9 @@
 - content_for(:title, 'Games')
-article
+.row: .col-md-12
   input#search.form-control.mb-4 type='text' placeholder='Search games...'
-  .card-columns
+  .card-columns.w-100
     - @games.each do |label, srdc_games|
-      .card.game-section
+      .card.game-section.w-100
         .card-header = label
         .list-group.list-group-flush
           - srdc_games.each do |srdc_game|

@@ -19,7 +19,10 @@ module ApplicationHelper
   # - Gold if $4+ patron
   # - Silver if $2+ patron
   # - Standard
-  def user_badge(user, override: nil)
+  #
+  # If link is false, the badge won't be linkified. You can use this to avoid HTML structure issues where the badge
+  # would be within a larger (e.g. block-level) <a> tag, which is not allowed and so messes up page structure.
+  def user_badge(user, override: nil, link: true)
     raise "Invalid badge override" if ![nil, :standard, :silver, :gold].include?(override)
     return '???' if user.nil?
 
@@ -38,6 +41,8 @@ module ApplicationHelper
         badge = 'badge-secondary'
         title = "#{user} is a Splits.io patron!"
       end
+
+      return "<span class='#{['badge', badge, ('tip-top' if title.present?)].join(' ')}' title='title' v-tippy=true>#{user}</span>" if !link
 
       return link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title, 'v-tippy' => true, ':title' => "'#{title}'")
     end

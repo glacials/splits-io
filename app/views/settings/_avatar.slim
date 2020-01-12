@@ -1,0 +1,10 @@
+.card.h-100
+  .card-header: h4.my-0.font-weight-normal Avatar
+  .card-body
+    ' Your avatar is linked to your
+    - if current_user.twitch
+      ' Twitch
+    - else
+      ' Google
+    ' account and can be updated there. After any changes, you may need to log out of Splits.io and then back in to
+    ' refresh it.

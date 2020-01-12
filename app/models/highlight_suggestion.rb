@@ -36,7 +36,7 @@ class HighlightSuggestion < ApplicationRecord
 
         highlight_suggestion = create(
           run: run,
-          url: URI.parse("https://www.twitch.tv/#{run.user.twitch.name}/manager/highlighter/#{video['id']}").tap do |uri|
+          url: URI.parse("https://dashboard.twitch.tv/u/#{run.user.twitch.name}/content/video-producer/highlighter/#{video['id']}").tap do |uri|
             uri.query = {
               start: [0, (video_time_at_pb_start - 10.seconds).to_i].max,
               end:   [video_duration.to_i, (video_time_at_pb_end + 10.seconds).to_i].min,

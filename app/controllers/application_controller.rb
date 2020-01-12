@@ -7,19 +7,18 @@ class ApplicationController < ActionController::Base
   before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
   before_action :authorize_rmp
 
-  rescue_from Authie::Session::ValidityError, with: :auth_session_error
+  rescue_from Authie::Session::ValidityError,   with: :auth_session_error
   rescue_from Authie::Session::InactiveSession, with: :auth_session_error
-  rescue_from Authie::Session::ExpiredSession, with: :auth_session_error
+  rescue_from Authie::Session::ExpiredSession,  with: :auth_session_error
   rescue_from Authie::Session::BrowserMismatch, with: :auth_session_error
-  rescue_from Authie::Session::HostMismatch, with: :auth_session_error
+  rescue_from Authie::Session::HostMismatch,    with: :auth_session_error
 
   def read_only_mode
     write_actions = %w[create edit destroy]
     write_methods = %w[POST PUT DELETE PATCH]
-    if write_actions.include?(action_name) || write_methods.include?(request.method)
-      render template: 'pages/read_only_mode'
-      return false
-    end
+    return unless write_actions.include?(action_name) || write_methods.include?(request.method)
+
+    render template: 'pages/read_only_mode'
   end
 
   def remove_www
@@ -51,23 +50,19 @@ class ApplicationController < ActionController::Base
                  nil
                else
                  {
-                   id: current_user.id.to_s,
-                   name: current_user.name,
-                   email: current_user.email,
-                   avatar: current_user.avatar,
+                   id:         current_user.id.to_s,
+                   name:       current_user.name,
+                   email:      current_user.email,
+                   avatar:     current_user.avatar,
                    created_at: current_user.created_at,
-                   plan: current_user.subscriptions&.first&.stripe_plan_id || current_user.patreon&.pledge_cents,
-                   num_runs: current_user.runs.count,
+                   plan:       current_user.subscriptions&.first&.stripe_plan_id || current_user.patreon&.pledge_cents,
+                   num_runs:   current_user.runs.count,
                  }
                end
   end
 
   def sanitize_pagination_params
-    if params[:page].blank?
-      params[:page] = 1
-      return
-    end
-
+    params[:page] ||= 1
     params[:page] = params[:page].to_i
     bad_request if params[:page] < 1
   end

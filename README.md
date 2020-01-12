@@ -203,7 +203,7 @@ docker-compose run web rails generate favicon
 Config for this generation is at [`config/favicon.json`][favicon-config].
 
 [favicon-generator]: https://realfavicongenerator.net/
-[logo]: public/logo-imageonly.svg
+[logo]: app/assets/images/logo-imageonly.svg
 [favicon-config]: config/favicon.json
 
 ### Theme

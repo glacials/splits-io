@@ -45,9 +45,9 @@ multiple scopes by separating them with spaces in the auth token request.
 | `manage_race` | Participate in races and chat on behalf of the user | See [Race][race]                                                                                                    |
 
 <details>
-<summary>Example 1: My application is a local program that runs on the user's computer</summary>
+<summary>Example 1: My application is an app that runs on the user's device</summary>
 
-If your application runs locally as a program on a user's computer, you should use OAuth's **authorization code grant
+If your application runs locally as an app or program on the user's device, you should use OAuth's **authorization code grant
 flow**. This means your application will open the Splits.io authorization page in the user's default browser, and if the
 user accepts the authorization, Splits.io will give your application a `code` which you should immediately exchange for
 an OAuth token using a secure API request.
@@ -247,7 +247,7 @@ which you should substitite any time you see `:run` in these docs.
 | Field                     | Type                         | Null?                                                 | Description                                                                                                                                                                                                                                  |
 |:--------------------------|:-----------------------------|:------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `id`                      | string                       | never                                                 | Unique ID for identifying the run on Splits.io. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
-| `srdc_id`                 | string                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
+| `srdc_id`                 | string                       | when no associated Speedrun.com run                   | Unique ID for identifying the run on Speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
 | `realtime_duration_ms`    | number                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                |
 | `realtime_sum_of_best_ms` | number                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                             |
 | `gametime_duration_ms`    | number                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                |
@@ -288,14 +288,14 @@ Segment objects have the following format:
 | `realtime_start_ms`             | number  | never          | The total elapsed time of the run at the moment when this segment was started in realtime. Provided in milliseconds.                                                                                                                                               |
 | `realtime_duration_ms`          | number  | never          | Realtime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
 | `realtime_end_ms`               | number  | never          | The total elapsed time of the run at the moment when this segment was finished in realtime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
-| `realtime_shortest_duration_ms` | number  | when not known | The shortest duration the runner has ever gotten on this segment in realtime.  Provided in milliseconds                                                                                                                                                            |
+| `realtime_shortest_duration_ms` | number  | when not known | The shortest duration the runner has ever gotten on this segment in realtime.  Provided in milliseconds.                                                                                                                                                            |
 | `realtime_gold`                 | boolean | never          | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in realtime. This field is shorthand for `realtime_duration_ms == realtime_shortest_duration_ms`.                                                                 |
 | `realtime_skipped`              | boolean | never          | Whether or not this split was skipped in realtime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
 | `realtime_reduced`              | boolean | never          | Whether or not this segment was "reduced" in realtime; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
 | `gametime_start_ms`             | number  | never          | The total elapsed time of the run at the moment when this segment was started in gametime. Provided in milliseconds.                                                                                                                                               |
 | `gametime_duration_ms`          | number  | never          | Gametime duration in milliseconds of the segment.                                                                                                                                                                                                                  |
 | `gametime_end_ms`               | number  | never          | The total elapsed time of the run at the moment when this segment was finished in gametime (such that the run's duration is equal to the final split's finish time). Provided in milliseconds.                                                                     |
-| `gametime_shortest_duration_ms` | number  | when not known | The shortest duration the runner has ever gotten on this segment in gametime.  Provided in milliseconds                                                                                                                                                            |
+| `gametime_shortest_duration_ms` | number  | when not known | The shortest duration the runner has ever gotten on this segment in gametime.  Provided in milliseconds.                                                                                                                                                            |
 | `gametime_gold`                 | boolean | never          | Whether or not this split *was* the shortest duration the runner has ever gotten on this segment in gametime. This field is shorthand for `duration == best`.                                                                                                      |
 | `gametime_skipped`              | boolean | never          | Whether or not this split was skipped in gametime -- some timers let the runner skip over a split in case they forgot to hit their split button on time. Beware that a skipped split's duration is considered `0`, and instead is rolled into the following split. |
 | `gametime_reduced`              | boolean | never          | Whether or not this segment was "reduced" in gametime; that is, had its duration affected by previous splits being skipped.                                                                                                                                        |
@@ -311,7 +311,7 @@ History objects have the following format.
 
 | Field                  | Type   | Null?          | Description                                                                                |
 |:-----------------------|:-------|:---------------|:-------------------------------------------------------------------------------------------|
-| `attempt_number`       | number | never          | The correpsonding attempt number this attempt was.                                         |
+| `attempt_number`       | number | never          | The corresponding attempt number this attempt was.                                         |
 | `realtime_duration_ms` | number | never          | The realtime duration this attempt took in milliseconds.                                   |
 | `gametime_duration_ms` | number | never          | The gametime duration this attempt took in milliseconds.                                   |
 | `started_at`           | string | when not known | The date and time of when the attempt started. This field conforms to [ISO 8601][iso8601]. |
@@ -430,6 +430,55 @@ run.
 
 **Note**: When uploading in-progress source files in the Splits.io Exchange Format include all splits as normal, but do
 not include the `endedAt` field for unreached segments.
+</details>
+
+<details>
+<summary>Splitting</summary>
+
+```sh
+# Non-race runs
+curl -X POST https://splits.io/api/v4/runs/:run/splits \
+  -H 'Content-Type: application/json' \
+  -d '{"split": {"realtime_end_ms": 123456, "gametime_end_ms:" 123456}}'
+
+# Race runs
+curl -X POST https://splits.io/api/v4/races/:race/entries/:entry/splits?more=1
+  -H 'Content-Type: application/json' \
+  -d '{"split": {"realtime_end_ms": 123456, "gametime_end_ms:" 123456}}'
+```
+
+If you want to split an in-progress run without re-uploading the entire thing (as in *Uploading runs* -> *Replacing
+source files* above), you can split using this endpoint.
+
+This is a relatively handsfree endpoint. It will find the first segment without a time recorded, and attach the given
+`realtime_end_ms` and/or `gametime_end_ms` to it; each representing the total number of elapsed milliseconds in the
+_entire run_ at the time the segment was completed. Other fields like golds, durations, and starts will be calculated
+automatically.
+
+If you want to skip a split, just submit `null` for both `realtime_duration_ms` and `gametime_duration_ms`.
+
+If you need more control over your segments than this endpoint provides, you should instead replace the run's source
+file entirely (see *Uploading runs* -> *Replacing source files* above).
+
+#### Race runs vs non-race runs
+At the top of this section there are two equivalent splitting endpoints listed; one for normal runs and one for race
+runs.
+
+A race run is just a [Run][run] which will be completed as part of a [Race][race]. To associate the two, upload the run
+as normal and link it with an [Entry][entry] using the [Entry update endpoint][entry].
+
+Do not use the "normal run" splitting endpoint for race runs, as this will cause the race to be unaware of updates as
+the user splits.
+
+#### Blind or semi-blind runs
+If the runner is doing a run or race where you don't know how many splits there are going to be, just pass `more=1` with
+each split. Splits.io will continuously create new segments as you split in a way that displays nicely on the run and
+race pages. You can even start splitting without associating a Run with the Entry; a new Run will be created and linked
+for you, and the first call to the split endpoint will create and immediately end the first segment.
+
+When splitting like this and you're ready to perform the final split, just split _without_ `more=1`. This will be the
+final split. On race runs, this will also mark the user's race Entry as finished. (Alternatively, you can use the
+[Entry][entry] API to set `finished_at`, and this will perform the final split in the linked Run.)
 </details>
 
 <details>
@@ -563,7 +612,7 @@ authorization][authentication] section.
 | `category`      | [Category][category]                   | when not provided by the creator | The category being raced.                                                                                                 |
 | `visibility`    | string                                 | never                            | The permission set for the Race. (`"public"`, `"invite_only"`, or `"secret"`)                                             |
 | `join_token`    | string                                 | always, except creation response | The token needed to join the race if it's invite-only or secret. Only provided to the owner as a response to creation.    |
-| `notes`         | string                                 | when not provided by creator     | Any notes associatied with the Race.                                                                                      |
+| `notes`         | string                                 | when not provided by creator     | Any notes associated with the Race.                                                                                      |
 | `owner`         | [Runner][runner]                       | never                            | The Runner who created the Race.                                                                                          |
 | `entries`       | array of [Entries][entry]              | never                            | All Entries currently in the Race.                                                                                        |
 | `chat_messages` | array of [Chat Messages][chat-message] | never                            | Chat messages for the Race. Only present when fetching the Race individually.                                             |
@@ -816,7 +865,7 @@ order to send a Chat Message to it.
 | Field          | Type             | Null? | Description                                                                                                                  |
 |:---------------|:-----------------|:------|:-----------------------------------------------------------------------------------------------------------------------------|
 | `body`         | string           | never | The contents of the message.                                                                                                 |
-| `from_entrant` | boolean          | never | Boolean indicating wether the sender was in the race when the message was sent.                                              |
+| `from_entrant` | boolean          | never | Boolean indicating whether the sender was in the race when the message was sent.                                              |
 | `created_at`   | string           | never | The time and date at which this message was created on Splits.io. This field conforms to [ISO 8601][iso8601].                |
 | `updated_at`   | string           | never | The time and date at which this message was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `user`         | [Runner][runner] | never | The Runner that sent the message.                                                                                            |
@@ -858,7 +907,7 @@ Send a Chat Message to a Race. All fields except `body` are inferred from your a
 </details>
 
 ### WebSockets
-Splits.io broadcasts updates to [Race][race] in realtime over WebSockets. We use WebSockets only to push
+Splits.io broadcasts updates to [Races][race] in realtime over WebSockets. We use WebSockets only to push
 changes from Splits.io to clients; to send data the other way, you must use the REST APIs above.
 
 <details>
@@ -880,9 +929,9 @@ between client and server open during multiple requests. (Yes, we support HTTP/2
 [1]: https://en.wikipedia.org/wiki/HTTP/2
 </details>
 
-We use a light layer on top of WebSockets called Action Cable, which is part of Ruby on Rails. This layer is so light
-that you can use vanilla WebSockets without noticing it's there; but if you happen to be using JavaScript, you might opt
-to use the [Action Cable JavaScript library][actioncable-npm] to simplify your code a bit.
+We use a light layer on top of WebSockets called Action Cable. This layer is so light that you can use vanilla
+WebSockets without noticing it's there; but if you happen to be using JavaScript, you might opt to use the [Action Cable
+JavaScript library][actioncable-npm] to simplify your code a bit.
 
 In all examples below, we'll provide instructions for consuming Splits.io WebSockets using vanilla JavaScript as well as
 the Action Cable library. The vanilla JS instructions can roughly translate to whatever language you're using.
@@ -1099,9 +1148,9 @@ not require extra deserialization.
 | `"race_state"`              | RaceChannel         | State of the Race (in response to `state=1`)                  | [`race`][race]                 |
 | `"race_not_found"`          | RaceChannel         | No Race found for the given ID                                | *none*                         |
 | `"race_invalid_join_token"` | RaceChannel         | The join token is not valid for the Race                      | *none*                         |
-| `"race_start_scheduled"`    | both                | The/a Race is starting in a few seconds                       | [`race`]                       |
-| `"race_ended"`              | both                | The/a Race has finished                                       | [`race`]                       |
-| `"race_entries_updated" `   | both                | An entry was created, changed, or deleted                     | [`race`]                       |
+| `"race_start_scheduled"`    | both                | The/a Race is starting in a few seconds                       | [`race`][race]                 |
+| `"race_ended"`              | both                | The/a Race has finished                                       | [`race`][race]                 |
+| `"race_entries_updated" `   | both                | An entry was created, changed, or deleted                     | [`race`][race]                 |
 | `"fatal_error"`             | both                | An error occured when processing the message                  | *none*                         |
 | `"connection_error"`        | both                | Received when connecting to cable with an invalid oauth token | *none*                         |
 </details>

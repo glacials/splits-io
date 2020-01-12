@@ -27,7 +27,7 @@
               }
           span#vue-race.mr-2 = render partial: 'races/create', locals: {game: @game, category: @category}
           - if can?(:edit, @category.game)
-            a.btn.btn-dark.mr-2 href=edit_game_path(@category.game)
+            a.btn.btn-outline-primary.mr-2 href=edit_game_path(@category.game)
               => icon('fas', 'edit')
               span Edit
         .row

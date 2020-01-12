@@ -108,7 +108,13 @@ document.addEventListener('mouseover', event => {
 
   // Go aheand and show the timeline inspector
   const query = `.segment-inspect[data-run_id='${run_id}'][data-segment_number='${segment_number}']`
-  document.querySelector(query).style.visibility = 'visible'
+  const segmentInspector = document.querySelector(query)
+
+  // If there's no timeline inspector on this page
+  if (segmentInspector === null) {
+    return
+  }
+  segmentInspector.style.visibility = 'visible'
 
 
   if (timelineMouseOutTimers[timerKey] !== undefined) {
@@ -136,7 +142,13 @@ document.addEventListener('mouseout', event => {
 
   // Go ahead and hide the timeline inspector
   const query = `.segment-inspect[data-run_id='${run_id}'][data-segment_number='${segment_number}']`
-  document.querySelector(query).style.visibility = 'hidden'
+  const segmentInspector = document.querySelector(query)
+
+  // If there's no timeline inspector on this page
+  if (segmentInspector === null) {
+    return
+  }
+  segmentInspector.style.visibility = 'hidden'
 
   const timerKey = `${run_id}-${segment_number}`
   if (timelineMouseOverTimers[timerKey] !== undefined) {

@@ -15,7 +15,6 @@ document.addEventListener('turbolinks:load', function() {
       width: '100%'
     })
 
-
     document.addEventListener('click', event => {
       const segment = event.target.closest('.split')
       if (segment === null) {

@@ -34,14 +34,28 @@ export default {
   },
   created: async function() {
     this.notes = this.race.notes
-    this.games = (await (fetch('/api/v4/games').then(response => response.json()))).games
+    fetch('/api/v4/games').then(response => response.json()).then(body => this.games = body.games)
 
     this.gameId = (this.race.game || {id: null}).id
     this.categoryId = (this.race.category || {id: null}).id
+
+    this.currentUser = gon.user
+    if (this.currentUser === null) {
+      return
+    }
+
+    this.entry = this.race.entries.find((entry) => {
+      if (!entry.runner || entry.ghost) {
+        return false
+      }
+
+      return entry.runner.id === this.currentUser.id
+    })
   },
   data: () => ({
     categoryId: null,
     editing: false,
+    entry: null,
     error: null,
     gameId: null,
     games: [],
@@ -82,6 +96,7 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
+        this.$emit('syncing')
       } catch(error) {
         this.error = error
       } finally {
@@ -91,7 +106,7 @@ export default {
     },
   },
   name: 'race-title',
-  props: ['race'],
+  props: ['race', 'starting', 'syncing'],
   watch: {
     gameId: function() {
       if (this.game.categories.find(category => category.id === this.categoryId) === undefined) {

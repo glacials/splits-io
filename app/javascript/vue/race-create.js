@@ -41,11 +41,9 @@ export default {
           throw (await response.json()).error || response.statusText
         }
 
-        Turbolinks.visit((await response.json()).race.path)
+        window.location = (await response.json()).race.path
       } catch(error) {
         this.error = `Error: ${error}`
-      } finally {
-        this.loading = false
       }
     },
   },

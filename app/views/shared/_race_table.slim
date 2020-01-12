@@ -5,12 +5,12 @@
 
 - if races.none? && active_races.none?
   - if description.present?
-    .card-header.text-white = description
-  .center.p-4
+    h5.card-header.text-white = description
+  .center.m-4
     i Nothing to show!
 - else
   - if description.present?
-    .card-header.text-white = description
+    h5.card-header.text-white = description
   .table-responsive
     table.card-body.table.table-striped.table-hover.mb-0
       thead

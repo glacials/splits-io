@@ -26,6 +26,7 @@ export default {
       join: false,
       leave: false,
       ready: false,
+      split: false,
       unfinish: false,
       unforfeit: false,
       unready: false,
@@ -88,6 +89,48 @@ export default {
         this.loading.ready = false
       }
     },
+    split: async function() {
+      this.errors.split = false
+      this.loading.split = true
+      try {
+        // Protect against disconnections ruining times -- save the request for later if we're offline
+        if (!navigator.onLine) {
+          await new Promise(function(resolve, reject) {
+            window.setInterval(() => {
+              if (navigator.onLine) {
+                resolve()
+              }
+            }, 1000)
+          })
+        }
+
+        const headers = new Headers()
+        headers.append('Content-Type', 'application/json')
+        const accessToken = getAccessToken()
+        if (accessToken) {
+          headers.append('Authorization', `Bearer ${accessToken}`)
+        }
+
+        const response = await fetch(`/api/v4/races/${this.race.id}/entries/${this.entry.id}/splits?more=1`, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({
+            split: {realtime_end_ms: new Date(ts.now()) - new Date(this.race.started_at)},
+            join_token: (new URLSearchParams(window.location.search)).get('join_token')
+          }),
+        })
+
+        if (!response.ok) {
+          throw (await response.json()).error || response.statusText
+        }
+
+        this.$emit('syncing')
+      } catch(error) {
+        this.errors.split = `Error: ${error}`
+      } finally {
+        this.loading.split = false
+      }
+    },
     unfinish: async function() {
       this.errors.unfinish = false
       this.loading.unfinish = true
@@ -121,7 +164,7 @@ export default {
         this.loading.unready = false
       }
     },
-    updateEntry: async function(params, method = 'PATCH') {
+    updateEntry: async function(params, method = 'PATCH', path = null) {
       // Protect against disconnections ruining times -- save the request for later if we're offline
       if (!navigator.onLine) {
         await new Promise(function(resolve, reject) {
@@ -133,11 +176,12 @@ export default {
         })
       }
 
-      let path
-      if (method === 'POST') {
-        path = `/api/v4/races/${this.race.id}/entries`
-      } else {
-        path = `/api/v4/races/${this.race.id}/entries/${this.entry.id}`
+      if (path === null) {
+        if (method === 'POST') {
+          path = `/api/v4/races/${this.race.id}/entries`
+        } else {
+          path = `/api/v4/races/${this.race.id}/entries/${this.entry.id}`
+        }
       }
 
       const headers = new Headers()
@@ -161,8 +205,9 @@ export default {
       }
 
       this.entry = (await response.json()).entry
+      this.$emit('syncing')
     },
   },
   name: 'race-nav',
-  props: ['race'],
+  props: ['race', 'starting'],
 }

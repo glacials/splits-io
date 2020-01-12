@@ -113,7 +113,7 @@ document.addEventListener('click', event => {
   }
 
   const segId = toggler.dataset.segment
-  const row = document.querySelector(`.segment-duration-chart[data-segment="${segId}"]`).closest('tr')
+  const row = document.querySelector(`tr[data-segment="${segId}"]`)
   row.hidden = !row.hidden
 
   if (row.hidden) {

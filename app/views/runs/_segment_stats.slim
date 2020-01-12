@@ -1,0 +1,106 @@
+.card.border-0.m-0.p-0
+  .card-group
+    - if danger
+      .card.bg-danger: .card-body
+        h6.card-title
+          ' Standard deviation
+          - if segment.run.belongs_to?(current_user)
+            small.tip-right(
+              title="A high standard deviation like this indicates inconsistency. You should practice
+              this segment!"
+            ) = icon('fas', 'exclamation-triangle')
+          - else
+            small.tip-right( title="A high standard deviation like this indicates inconsistency!")
+              = icon('fas', 'exclamation-triangle')
+        h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
+    - else
+      .card: .card-body
+        h6.card-title
+          ' Standard deviation
+          - if segment.run.belongs_to?(current_user)
+            small.tip-right(
+              title="By definition, 68% of your attempts are within one standard deviation of the mean,
+              95% within two, and 99% within three. Aim to lower this."
+            ) = icon('fas', 'question-circle')
+          - else
+            small.tip-right(
+              title="By definition, 68% of #{segment.run.user || 'the runner'}'s attempts are within one
+              standard deviation of the mean, 95% within two, and 99% within three."
+            ) = icon('fas', 'question-circle')
+        h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
+    .card: .card-body
+      h6.card-title Mean
+      h4.card-subtitle = format_ms(history_stats[:mean].to_f, precise: segment.run.short?(timing))
+    .card: .card-body
+      - if segment.run.belongs_to?(current_user)
+        .float-right.tip-left.text-light(
+          title="Stats based on your last 100 runs."
+        ) = icon('fas', 'info-circle')
+      - else
+        .float-right.tip-left.text-light(
+          title="Stats based on #{segment.run.user || 'the runner'}'s last 100 runs."
+        ) = icon('fas', 'info-circle')
+      h6.card-title Best
+      h4.card-subtitle = segment.shortest_duration(timing).format(precise: segment.run.short?(timing))
+  .card-group
+    .card: .card-body
+      h6.card-title
+        ' 10th percentile
+        - if segment.run.belongs_to?(current_user)
+          small.tip-top(
+            title="Only 10% of your attempts are faster than this time. Treat this number like a relaxed
+            best&mdash;aim to beat it."
+          ) = icon('fas', 'question-circle')
+        - else
+          small.tip-top(
+            title="10% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. This number
+            is basically a relaxed best."
+          ) = icon('fas', 'question-circle')
+      h4.card-subtitle = format_ms(history_stats[:percentiles][10].to_f, precise: segment.run.short?(timing))
+    .card: .card-body
+      h6.card-title
+        ' Median
+        - if segment.run.belongs_to?(current_user)
+          small.tip-top(
+            title="50% of your attempts are faster than this time. This is the time you'd expect to get
+            in a marathon or no-reset run."
+          ) = icon('fas', 'question-circle')
+        - else
+          small.tip-top(
+            title="50% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. This is the
+            time they'd expect to get in a marathon or no-reset run."
+          ) = icon('fas', 'question-circle')
+      h4.card-subtitle = format_ms(history_stats[:median].to_f, precise: segment.run.short?(timing))
+    .card: .card-body
+      h6.card-title
+        ' 90th percentile
+        - if segment.run.belongs_to?(current_user)
+          small.tip-top(
+            title="90% of your attempts are faster than this time. You can see this as your worst time
+            excluding fantastic blunders."
+          ) = icon('fas', 'question-circle')
+        - else
+          small.tip-top(
+            title="90% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. You can see
+            this as their worst time excluding fantastic blunders."
+          ) = icon('fas', 'question-circle')
+      h4.card-subtitle = format_ms(history_stats[:percentiles][90].to_f, precise: segment.run.short?(timing))
+    .card: .card-body
+      h6.card-title
+        ' 99th percentile
+        - if segment.run.belongs_to?(current_user)
+          small.tip-top(
+            title="99% of your attempts are faster than this time. All attempts but your absolute worst
+            fit under this umbrella."
+          ) = icon('fas', 'question-circle')
+        - else
+          small.tip-top(
+            title="99% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. All attempts
+            but their absolute worst fit under this umbrella."
+          ) = icon('fas', 'question-circle')
+      h4.card-subtitle = format_ms(history_stats[:percentiles][99], precise: segment.run.short?(timing))
+  .segment-duration-chart-alert.alert.alert-danger.my-3 hidden=true
+  .segment-spinner.text-success.text-center.my-5
+    span.mr-2 = render partial: 'shared/spinner'
+    h5.d-inline.text-success Loading charts
+  .segment-duration-chart id="segment-duration-chart-#{segment.id}" data-segment=segment.id

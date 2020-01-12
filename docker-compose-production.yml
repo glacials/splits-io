@@ -30,6 +30,7 @@ x-environment:
   - SPLITSIO_CLIENT_SECRET
   - STRIPE_PLAN_ID_TIER1=plan_FmTrtxmjMQtRZw
   - STRIPE_PLAN_ID_TIER2=plan_FmTrIECG2yldww
+  - STRIPE_PLAN_ID_TIER3=plan_GDqBjHfafzS1Hn
   - STRIPE_PUBLISHABLE_KEY
   - STRIPE_SECRET_KEY
   - STRIPE_WEBHOOK_SECRET
@@ -50,7 +51,7 @@ x-app: &app
     cache_from:
       - "${REPOSITORY_URI:-splitsio-production}:latest"
     args:
-      RUBY_VERSION: '2.6.5' # also update docker-compose.yml & Gemfile
+      RUBY_VERSION: '2.7.0' # also update docker-compose.yml & Gemfile
       SPLITSIO_CLIENT_ID: $SPLITSIO_CLIENT_ID
       STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY
   environment: *server-environment

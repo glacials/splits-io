@@ -3,6 +3,6 @@ FactoryBot.define do
     association :owner, factory: :user
 
     name         { SecureRandom.uuid }
-    redirect_uri { 'debug' }
+    redirect_uri { 'https://localhost:3000/' }
   end
 end
