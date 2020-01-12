@@ -57,26 +57,6 @@ module SpeedrunDotCom
     end
   end
 
-  class Game
-    def self.search(name)
-      JSON.parse(SpeedrunDotCom.route["/games?name=#{CGI.escape(name)}"].get.body)['data']
-    end
-
-    def self.from_id(id)
-      JSON.parse(SpeedrunDotCom.route["/games/#{CGI.escape(id)}"].get.body)['data']
-    end
-  end
-
-  class Category
-    def self.from_game(srdc_game_id)
-      JSON.parse(SpeedrunDotCom.route["/games/#{CGI.escape(srdc_game_id)}/categories"].get.body)['data']
-    end
-
-    def self.from_id(id)
-      JSON.parse(SpeedrunDotCom.route["/categories/#{CGI.escape(id)}"].get.body)['data']
-    end
-  end
-
   class User
     def self.from_api_key(api_key)
       JSON.parse(SpeedrunDotCom.route['/profile'].get('X-API-Key' => api_key).body)['data']

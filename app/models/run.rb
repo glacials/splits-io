@@ -146,8 +146,6 @@ class Run < ApplicationRecord
     self.category = game.categories.where('lower(name) = lower(?)', category_string).first_or_create(
       name: category_string
     )
-
-    RefreshGameJob.perform_later(game, category) if game.blank?
   end
 
   # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
@@ -342,7 +340,7 @@ class Run < ApplicationRecord
 
       return
     end
-    
+
     # Smart split, making new segments if none are left
 
     # If the run was empty
