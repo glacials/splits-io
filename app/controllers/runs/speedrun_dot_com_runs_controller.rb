@@ -22,7 +22,8 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
 
     # Save video first, so we don't make the user keep pasting it back in if the submit attempt fails
     video = @run.create_video(url: params[:srdc_video]) if @run.video.nil? && params[:srdc_video].present?
-    run_json[:run][:video] = video.url if video
+    video_url = video&.url || @run.video&.url || params[:srdc_video]
+    run_json[:run][:video] = video_url
 
     if @run.game.srdc.accepts_realtime? && @run.realtime_duration_ms.positive?
       run_json[:run][:times][:realtime] = @run.realtime_duration_ms / 1000
@@ -34,9 +35,9 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
     if params[:srdc_variables]
       run_json[:run][:variables] = {}
       params[:srdc_variables].each do |key, value|
-        run_json[:run][:srdc_variables][key]         = {}
-        run_json[:run][:srdc_variables][key][:type]  = 'pre-defined'
-        run_json[:run][:srdc_variables][key][:value] = value
+        run_json[:run][:variables][key]         = {}
+        run_json[:run][:variables][key][:type]  = 'pre-defined'
+        run_json[:run][:variables][key][:value] = value
       end
     end
 

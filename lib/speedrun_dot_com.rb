@@ -31,6 +31,7 @@ module SpeedrunDotCom
     end
 
     def self.create(data, api_key)
+      Rails.logger.info("Speedrun.com submit payload: #{data}")
       JSON.parse(
         SpeedrunDotCom.route['/runs'].post(
           data.to_json,

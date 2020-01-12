@@ -389,6 +389,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
     t.boolean "mandatory"
     t.boolean "obsoletes"
     t.boolean "user_defined"
+    t.string "game_scope", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "speedrun_dot_com_game_variable_values_id"

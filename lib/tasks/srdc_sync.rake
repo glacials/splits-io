@@ -133,7 +133,7 @@ task srdc_sync: [:environment] do
       end
 
       game['variables']['data'].each do |variable|
-        next if variable['scope']['type'] != 'full-game'
+        next unless ['full-game', 'global'].include?(variable['scope']['type'])
 
         srdc_variable = SpeedrunDotComGameVariable.find_or_initialize_by(srdc_id: variable['id'])
         srdc_variable.name                      = variable['name']
@@ -142,6 +142,7 @@ task srdc_sync: [:environment] do
         srdc_variable.mandatory                 = variable['mandatory']
         srdc_variable.obsoletes                 = variable['obsoletes']
         srdc_variable.user_defined              = variable['user-defined']
+        srdc_variable.game_scope                = variable['scope']['type']
         srdc_variable.save!
 
         variable['values']['values'].each do |key, value|

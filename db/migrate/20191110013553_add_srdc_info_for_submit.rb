@@ -15,6 +15,7 @@ class AddSrdcInfoForSubmit < ActiveRecord::Migration[6.0]
       t.boolean :mandatory
       t.boolean :obsoletes
       t.boolean :user_defined
+      t.string :game_scope, null: false
       t.timestamps
     end
 
