@@ -62,6 +62,11 @@ race-title(
                   template v-if='loading' = render partial: 'shared/spinner'
                   template v-else-if='error' = icon('fas', 'times')
                   template v-else=true = icon('fas', 'check')
+          a.btn.btn-outline-light.btn-sm(
+            href=race_path(race, controller.race_params.merge(browsersource: 1))
+            title='View in browser source friendly layout (beta)'
+            v-tippy=true
+          ) = icon('fas', 'broadcast-tower')
           small.text-muted.mx-2 v-if='syncing'
             => render partial: 'shared/spinner'
             ' Syncing
