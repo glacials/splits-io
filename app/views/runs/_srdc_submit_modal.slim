@@ -76,6 +76,15 @@
               = f.label(:srdc_desc, 'Description (optional)')
               = f.text_area(:srdc_desc, rows: 3, placeholder: 'Leave a public comment on your run', class: 'form-control')
 
-        .modal-footer.bg-dark: .float-right
-          .btn.btn-outline-light.mr-2 data-dismiss='modal' Cancel
-          = f.submit('Submit to Speedrun.com', class: 'btn btn-primary')
+            .mx-3: center.card: .card-body
+              p Splits.io Gold is required to enable automatic submission of runs to Speedrun.com.
+              a.btn.btn-primary href=subscriptions_path Subscribe to Splits.io Gold
+
+        - if current_user.has_srdc_submit?
+          .modal-footer.bg-dark: .float-right
+            .btn.btn-outline-light.mr-2 data-dismiss='modal' Cancel
+            = f.submit( \
+              'Submit to Speedrun.com', \
+              class: 'btn btn-primary', \
+              disabled: !current_user.has_srdc_submit?, \
+            )

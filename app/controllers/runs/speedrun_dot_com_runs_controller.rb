@@ -1,7 +1,8 @@
 class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
-  before_action :set_run,          only: [:create]
-  before_action :verify_ownership, only: [:create]
-  before_action :verify_srdc_key,  only: [:create]
+  before_action :set_run,           only: [:create]
+  before_action :verify_ownership,  only: [:create]
+  before_action :verify_srdc_key,   only: [:create]
+  before_action :verify_subscribed, only: [:create]
 
   def create
     run_json = {
@@ -49,7 +50,7 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
     end
 
     @run.update!(srdc_id: response['data']['id'])
-    flash[:notice] = "Run created on Speedrun.com! View it at #{SpeedrunDotCom::Run.url_from_id(response['data']['id'])}"
+    flash[:notice] = "Run submitted to Speedrun.com! View it at #{SpeedrunDotCom::Run.url_from_id(response['data']['id'])}"
     redirect_to run_path(@run)
   end
 
@@ -67,5 +68,12 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
 
     flash[:alert] = 'You do no have a Speedrun.com API Key attached to your account!'
     redirect_to run_path(@run)
+  end
+
+  def verify_subscribed
+    return if current_user.has_srdc_submit?
+
+    flash[:alert] = 'You must be have Splits.io Gold to automatically submit to Speedrun.com.'
+    redirect_to subscriptions_path(@run)
   end
 end
