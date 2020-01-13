@@ -56,7 +56,7 @@ class RacesController < ApplicationController
   # shorten_url cuts the race ID down to its shortest unique form, and strips the join token param if it's not needed
   # (public race or the user already joined).
   def shorten_url
-    if @race.visibility == :public || @race.entries.find_for(current_user).present?
+    if @race.public_visibility? || @race.entries.find_for(current_user).present?
       desired_fullpath = race_path(@race, race_params)
       redirect_to desired_fullpath if desired_fullpath != request.fullpath
       return
