@@ -73,7 +73,7 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
   def verify_subscribed
     return if current_user.has_srdc_submit?
 
-    flash[:alert] = 'You must be have Splits.io Gold to automatically submit to Speedrun.com.'
+    flash[:alert] = 'You must be subscribed to Splits.io Gold to automatically submit to Speedrun.com.'
     redirect_to subscriptions_path(@run)
   end
 end
