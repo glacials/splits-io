@@ -10,9 +10,11 @@ class User < ApplicationRecord
 
   has_many :run_likes, dependent: :destroy
 
-  has_many :entries, foreign_key: 'runner_id'
+  has_many :entries, foreign_key: 'runner_id', dependent: :nullify
   has_many :created_entries, foreign_key: 'creator_id'
   has_many :races, -> { joins(:entries).where(entries: {ghost: false}) }, through: :entries
+  has_many :created_races, class_name: 'Race', dependent: :nullify
+  has_many :chat_messages, dependent: :nullify
 
   has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
   has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',

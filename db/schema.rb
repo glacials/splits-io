@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_06_212943) do
+ActiveRecord::Schema.define(version: 2020_01_14_184419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
 
   create_table "chat_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "race_id"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.boolean "from_entrant", null: false
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -219,7 +219,7 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
 
   create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "category_id"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
@@ -287,6 +287,9 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.string "default_timing", default: "real", null: false
     t.bigint "total_playtime_ms"
     t.bigint "filesize_bytes", default: 0, null: false
+    t.boolean "uses_emulator", default: false
+    t.uuid "speedrun_dot_com_platform_id"
+    t.uuid "speedrun_dot_com_region_id"
     t.index ["category_id"], name: "index_runs_on_category_id"
     t.index ["s3_filename"], name: "index_runs_on_s3_filename"
     t.index ["user_id"], name: "index_runs_on_user_id"
@@ -353,6 +356,48 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.index ["category_id"], name: "index_speedrun_dot_com_categories_on_category_id", unique: true
   end
 
+  create_table "speedrun_dot_com_game_platforms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "speedrun_dot_com_game_id"
+    t.uuid "speedrun_dot_com_platform_id"
+    t.index ["speedrun_dot_com_game_id"], name: "index_srdc_game_platforms_on_srdc_games_id"
+    t.index ["speedrun_dot_com_platform_id"], name: "index_srdc_game_platforms_on_srdc_platforms_id"
+  end
+
+  create_table "speedrun_dot_com_game_regions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "speedrun_dot_com_game_id"
+    t.uuid "speedrun_dot_com_region_id"
+    t.index ["speedrun_dot_com_game_id"], name: "index_srdc_game_regions_on_srdc_games_id"
+    t.index ["speedrun_dot_com_region_id"], name: "index_srdc_game_regions_on_srdc_regions_id"
+  end
+
+  create_table "speedrun_dot_com_game_variable_values", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "speedrun_dot_com_game_variable_id", null: false
+    t.string "srdc_id", null: false
+    t.string "label", null: false
+    t.string "rules"
+    t.boolean "miscellaneous"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["speedrun_dot_com_game_variable_id"], name: "index_srdc_game_variable_values_on_srdc_game_variables_id"
+  end
+
+  create_table "speedrun_dot_com_game_variables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "srdc_id"
+    t.string "name", null: false
+    t.uuid "speedrun_dot_com_game_id", null: false
+    t.uuid "speedrun_dot_com_category_id"
+    t.boolean "mandatory"
+    t.boolean "obsoletes"
+    t.boolean "user_defined"
+    t.string "game_scope", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "speedrun_dot_com_game_variable_values_id"
+    t.index ["speedrun_dot_com_category_id"], name: "index_srdc_game_variables_on_srdc_category_id"
+    t.index ["speedrun_dot_com_game_id"], name: "index_srdc_game_variables_on_srdc_game_id"
+    t.index ["speedrun_dot_com_game_variable_values_id"], name: "index_srdc_game_variables_on_srdc_game_variable_values_id"
+  end
+
   create_table "speedrun_dot_com_games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "game_id"
     t.string "srdc_id", null: false
@@ -366,9 +411,32 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "twitch_name"
+    t.boolean "video_required"
+    t.boolean "accepts_realtime"
+    t.boolean "accepts_gametime"
+    t.boolean "emulators_allowed"
     t.index ["game_id"], name: "index_speedrun_dot_com_games_on_game_id", unique: true
     t.index ["shortname"], name: "index_speedrun_dot_com_games_on_shortname", unique: true
     t.index ["srdc_id"], name: "index_speedrun_dot_com_games_on_srdc_id", unique: true
+  end
+
+  create_table "speedrun_dot_com_platforms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "srdc_id", null: false
+    t.string "name", null: false
+  end
+
+  create_table "speedrun_dot_com_regions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "srdc_id", null: false
+    t.string "name", null: false
+  end
+
+  create_table "speedrun_dot_com_run_variables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "speedrun_dot_com_game_variable_value_id"
+    t.bigint "run_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["run_id"], name: "index_speedrun_dot_com_run_variables_on_run_id"
+    t.index ["speedrun_dot_com_game_variable_value_id"], name: "index_srdc_run_variables_on_srdc_game_variable_value_id"
   end
 
   create_table "speedrun_dot_com_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -467,11 +535,22 @@ ActiveRecord::Schema.define(version: 2019_10_06_212943) do
   add_foreign_key "run_histories", "runs", on_delete: :cascade
   add_foreign_key "run_likes", "runs"
   add_foreign_key "run_likes", "users"
+  add_foreign_key "runs", "speedrun_dot_com_platforms"
+  add_foreign_key "runs", "speedrun_dot_com_regions"
   add_foreign_key "segment_histories", "segments", on_delete: :cascade
   add_foreign_key "segments", "runs", on_delete: :cascade
   add_foreign_key "speed_runs_live_games", "games"
   add_foreign_key "speedrun_dot_com_categories", "categories"
+  add_foreign_key "speedrun_dot_com_game_platforms", "speedrun_dot_com_games"
+  add_foreign_key "speedrun_dot_com_game_platforms", "speedrun_dot_com_platforms"
+  add_foreign_key "speedrun_dot_com_game_regions", "speedrun_dot_com_games"
+  add_foreign_key "speedrun_dot_com_game_regions", "speedrun_dot_com_regions"
+  add_foreign_key "speedrun_dot_com_game_variable_values", "speedrun_dot_com_game_variables"
+  add_foreign_key "speedrun_dot_com_game_variables", "speedrun_dot_com_categories"
+  add_foreign_key "speedrun_dot_com_game_variables", "speedrun_dot_com_games"
   add_foreign_key "speedrun_dot_com_games", "games"
+  add_foreign_key "speedrun_dot_com_run_variables", "runs"
+  add_foreign_key "speedrun_dot_com_run_variables", "speedrun_dot_com_game_variable_values"
   add_foreign_key "speedrun_dot_com_users", "users"
   add_foreign_key "splits", "runs"
   add_foreign_key "twitch_users", "users"

@@ -23,7 +23,7 @@
   .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.entries.count
     span.statcard-desc Entries
-  - if race.entries.any?
+  - if race.runners.any?
     .col-sm-6.col-xl-4: .statcard.p-3
       h2.statcard-number
         = (Entry.where(runner: race.runners).where.not(forfeited_at: nil).count / Entry.where(runner: race.runners).count * race.entries.count).floor

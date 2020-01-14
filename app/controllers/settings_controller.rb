@@ -14,8 +14,11 @@ class SettingsController < ApplicationController
 
   def destroy
     current_user.runs.destroy_all if params[:destroy_runs] == '1'
-    current_user.destroy
+    if !current_user.destroy
+      redirect_back(fallback_location: settings_path, alert: "Error: #{current_user.errors.full_messages.to_sentence}")
+    end
+
     auth_session.invalidate!
-    redirect_to root_path, alert: 'Your account has been deleted. Go have fun outside :)'
+    redirect_to(root_path, alert: 'Your account has been deleted. Go have fun outside :)')
   end
 end
