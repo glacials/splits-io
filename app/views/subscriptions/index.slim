@@ -89,7 +89,13 @@
           li
             ' Upgrade permalinks to redirectors
             .info.tip title='Links that always redirect to your PB, even when it improves.'
-          li Auto-highlight runs on Twitch
+          li
+            => icon('fab', 'twitch')
+            ' Auto-highlight runs on Twitch
+          li
+            => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+            ' Auto-submit runs to speedrun.com
+            .badge.badge-pill.badge-primary New
           li Hide runs without disowning them
           li See sum-of-best leaderboards
           li: i And more as we keep building!
