@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_02_011412) do
+ActiveRecord::Schema.define(version: 2020_01_14_184419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
 
   create_table "chat_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "race_id"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.boolean "from_entrant", null: false
     t.text "body", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -219,7 +219,7 @@ ActiveRecord::Schema.define(version: 2019_12_02_011412) do
 
   create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "category_id"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.integer "visibility", default: 0, null: false
     t.string "join_token", null: false
     t.string "notes"
