@@ -30,7 +30,7 @@ h5
     a.badge.tip.p-0.mr-2 title='In progress'
       .text-danger = icon('fas', 'satellite-dish')
 
-.btn-toolbar role='toolbar' aria={label: 'Run navigation'}
+.btn-toolbar.mb-2 role='toolbar' aria={label: 'Run navigation'}
   .btn-group.m-2 role='group' aria={label: 'Run navigation'}
     .btn-group role='group'
       - if can?(:edit, run)
@@ -65,3 +65,57 @@ h5
       ' 🎉
       = run.likes.count
   = render partial: 'highlight_button', locals: {run: run}
+  - if run.belongs_to?(current_user)
+    .btn-group.m-2 role='group' aria={label: 'Calls to action'}
+      - if run.video.nil? && run.highlight_suggestion
+        a.btn.btn-twitch.tip-top(
+          href='#'
+          data={toggle: :modal, target: '#highlight'}
+          title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
+        )
+          span Auto-highlight
+      - if run.category&.srdc && run.srdc_id.blank?
+        a.btn.btn-srdc.tip-top(
+          href='#'
+          data={toggle: :modal, target: current_user.srdc ? '#srdc-submit' : '#srdc-link'}
+          title="Automatically submit to Speedrun.com. You'll get a chance to review the details first."
+        )
+          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+          span Auto-submit
+    - if run.category&.srdc && run.srdc_id.blank?
+      - if current_user.srdc
+        = render partial: 'srdc_submit_modal', locals: {run: run}
+      - else
+        = render partial: 'shared/srdc_link_modal'
+
+- if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
+  #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
+    .modal-dialog role='document'
+      .modal-content
+        = form_for(run.build_video, url: run_video_path(run), method: :put) do |f|
+          .modal-header.bg-dark
+            h5.text-light Auto-Highlight
+          .modal-body.bg-dark
+            .row.text-light.m-2
+              p Splits.io found the stream you PBed in! Click below to highlight it with 10s on either end of the
+                run.
+              p You will have a chance to edit before publishing.
+            .row: .btn-group.mx-auto
+              a.btn.btn-twitch.mx-auto.twitch(
+                target='_blank'
+                rel='noopener'
+                href=run.highlight_suggestion.url
+              )
+                => icon('fab', 'twitch')
+                ' Highlight at Twitch
+              .btn.btn-outline-twitch.tip-top(
+                title='Not taking you to the right page? Your video archive may have expired.'
+                style='cursor: default'
+              ) = icon('fas', 'question-circle')
+            .row.text-light.m-2
+              p Paste the link you get here:
+              = f.text_field(:url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here', spellcheck: false)
+          .modal-footer.bg-dark
+            .float-right
+              .btn-group
+                = f.submit('Save', class: 'btn btn-primary')

@@ -56,9 +56,10 @@ class RunsController < ApplicationController
 
     if params[@run.id36][:srdc_url]
       srdc_id = SpeedrunDotCom::Run.id_from_url(params[@run.id36][:srdc_url])
-      if !srdc_id
+
+      if params[@run.id36][:srdc_url].present? && !srdc_id
         redirect_params = {
-          alert: 'Your Speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.'
+          alert: 'Your Speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.',
         }
       elsif !@run.update(srdc_id: srdc_id)
         redirect_params = {alert: 'There was an error updating your Speedrun.com link. Please try again.'}
@@ -127,7 +128,7 @@ class RunsController < ApplicationController
       splits:         @run.collapsed_segments(timing),
       timer:          @run.timer,
       video_url:      @run.video&.url,
-      default_timing: @run.default_timing
+      default_timing: @run.default_timing,
     }
 
     @compare_runs = Run.where(id: (params[:compare] || '').split(',').map { |r| r.to_i(36) })

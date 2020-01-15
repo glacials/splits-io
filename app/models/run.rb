@@ -29,6 +29,10 @@ class Run < ApplicationRecord
   has_one  :entry,                dependent: :nullify
   has_one  :video,                dependent: :destroy
 
+  has_many :variables,  class_name: 'SpeedrunDotComRunVariable', dependent: :destroy
+  belongs_to :platform, class_name: 'SpeedrunDotComPlatform', foreign_key: 'speedrun_dot_com_platform_id', optional: true
+  belongs_to :region,   class_name: 'SpeedrunDotComRegion',   foreign_key: 'speedrun_dot_com_region_id',   optional: true
+
   has_secure_token :claim_token
 
   after_create :discover_runner
@@ -142,8 +146,6 @@ class Run < ApplicationRecord
     self.category = game.categories.where('lower(name) = lower(?)', category_string).first_or_create(
       name: category_string
     )
-
-    RefreshGameJob.perform_later(game, category) if game.blank?
   end
 
   # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
@@ -171,6 +173,13 @@ class Run < ApplicationRecord
         category: category
       ).where('gametime_duration_ms > ?', duration_ms(timing)).order(gametime_duration_ms: :asc).first
     end
+  end
+
+  def pb_date
+    histories.where.not(started_at: nil).where.not(ended_at: nil).find_by(
+      realtime_duration_ms: duration(Run::REAL).to_ms,
+      gametime_duration_ms: duration(Run::GAME).to_ms
+    )&.ended_at
   end
 
   def segment_groups
@@ -331,7 +340,7 @@ class Run < ApplicationRecord
 
       return
     end
-    
+
     # Smart split, making new segments if none are left
 
     # If the run was empty

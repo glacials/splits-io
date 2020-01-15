@@ -11,7 +11,7 @@
 # GameAlias#name.
 class GameAlias < ApplicationRecord
   include PgSearch::Model
-  belongs_to :game, dependent: :destroy
+  belongs_to :game
 
   validates :name, uniqueness: true
   validates :name, presence: true

@@ -50,6 +50,9 @@ derailed:
 update_lsc:
 	$(docker-compose) run --rm web bundle exec rake update_lsc
 
+srdc_sync:
+	$(docker-compose) run --rm web bundle exec rake srdc_sync
+
 attach:
 	@echo Do not use ctrl + c to exit this session, use ctrl + p then ctrl + q
 	$(docker) attach $(shell $(docker) ps | grep splits-io_$(container)_ | awk '{print $$1}')

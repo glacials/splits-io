@@ -6,17 +6,16 @@
           h5.text-light Auto-Submit
         .modal-body.bg-dark
           .row.text-light.m-2
-            p
-              ' In the future, Splits I/O will be able to submit runs to Speedrun.com for you automatically. To get
-              ' ahead of the curve, you can choose to link up your Speedrun.com account now.
-            p Splits I/O will never take action on your Speedrun.com account without your permission.
-          .row: .btn-group.mx-auto
-            a.btn.btn-outline-light.mx-auto target='_blank' rel='noopener' href='https://www.speedrun.com/api/auth' onclick='document.getElementById("api-key").focus()'
-              => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-              ' Copy Speedrun.com API Key
+            p.lead
+              ' Connect your Speedrun.com account to Splits.io to enable auto-submit.
+          .row.m-2
+            .btn-group.mx-auto.mb-4
+              a.btn.btn-srdc.mx-auto target='_blank' rel='noopener' href='https://www.speedrun.com/api/auth' onclick='document.getElementById("api-key").focus()'
+                => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+                ' Copy Speedrun.com API key
+            p: small
+              ' Splits.io will never take action on your Speedrun.com account without your permission.
           .row.text-light.m-2
-            p
-              ' (you can also access it from Speedrun.com &rarr; Settings &rarr; API Key)
             p Paste the API key here:
             = f.text_field(:api_key, id: 'api-key', class: 'form-control', placeholder: 'Paste the API key here', spellcheck: false)
         - if controller_name == 'runs'

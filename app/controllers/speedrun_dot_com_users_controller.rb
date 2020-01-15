@@ -5,20 +5,22 @@ class SpeedrunDotComUsersController < ApplicationController
       return
     end
 
-    if SpeedrunDotComUser.from_api_key!(params[:speedrun_dot_com_user][:api_key].strip, user: current_user)
+    srdc_user = SpeedrunDotComUser.from_api_key!(params[:speedrun_dot_com_user][:api_key].strip, user: current_user)
+
+    if srdc_user
       redirect
       return
     end
 
     redirect_back(
       fallback_location: settings_path,
-      alert:             "Couldn't link to Speedrun.com. Did you enter your API key correctly?"
+      alert:             "Error: Couldn't link to Speedrun.com. Make sure your API key is correct.",
     )
   end
 
   def destroy
     current_user.srdc.try(:destroy)
-    redirect_back fallback_location: settings_path, notice: 'Speedrun.com account unlinked! 🚫🏆'
+    redirect_back(fallback_location: settings_path, notice: 'Speedrun.com account unlinked! 🚫🏆')
   end
 
   private

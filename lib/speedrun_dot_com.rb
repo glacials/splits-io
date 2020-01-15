@@ -30,6 +30,20 @@ module SpeedrunDotCom
       "https://www.speedrun.com/run/#{CGI.escape(id)}"
     end
 
+    def self.create(data, api_key)
+      Rails.logger.info("Speedrun.com submit payload: #{data}")
+      JSON.parse(
+        SpeedrunDotCom.route['/runs'].post(
+          data.to_json,
+          content_type:  :json,
+          accept:        :json,
+          'X-API-Key' => api_key,
+        ),
+      )
+    rescue RestClient::ExceptionWithResponse => e
+      JSON.parse(e.response.body)
+    end
+
     class << self
       private
 
@@ -40,26 +54,6 @@ module SpeedrunDotCom
       def route(id)
         SpeedrunDotCom.route["/runs/#{CGI.escape(id)}"]
       end
-    end
-  end
-
-  class Game
-    def self.search(name)
-      JSON.parse(SpeedrunDotCom.route["/games?name=#{CGI.escape(name)}"].get.body)['data']
-    end
-
-    def self.from_id(id)
-      JSON.parse(SpeedrunDotCom.route["/games/#{CGI.escape(id)}"].get.body)['data']
-    end
-  end
-
-  class Category
-    def self.from_game(srdc_game_id)
-      JSON.parse(SpeedrunDotCom.route["/games/#{CGI.escape(srdc_game_id)}/categories"].get.body)['data']
-    end
-
-    def self.from_id(id)
-      JSON.parse(SpeedrunDotCom.route["/categories/#{CGI.escape(id)}"].get.body)['data']
     end
   end
 

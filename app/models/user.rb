@@ -134,6 +134,10 @@ class User < ApplicationRecord
     patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || subscriptions.tier1.active.any? || admin?
   end
 
+  def has_srdc_submit?
+    subscriptions.tier3.active.any? || admin?
+  end
+
   # patron? returns something truthy if the user has been a patron at or above the given tier since the given `before`
   # time. Not passing a `before` is the same as not caring how long the user has been a patron.
   def patron?(tier: 0, before: Time.now.utc)

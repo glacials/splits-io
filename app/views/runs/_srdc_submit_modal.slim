@@ -1,0 +1,91 @@
+#srdc-submit.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'srdc-submit-label', hidden: true}
+  .modal-dialog role='document'
+    .modal-content
+      = form_with url: srdc_submit_path(run), local: true, id: 'srdc-submit-form' do |f|
+        .modal-header.bg-dark
+          h5.text-light Submit to Speedrun.com
+        .modal-body.bg-dark
+          .row.text-light.m-0.mb-3
+            .card.w-100.mb-2: .card-body
+              p Splits.io can submit your run to Speedrun.com!
+              ' Please verify all information is correct below.
+          .row.form-group
+            .col-md-6.mb-3
+              = f.label(:srdc_game, 'Game')
+              = f.text_field(:srdc_game, value: run.game.srdc.name, required: true, disabled: true, class: 'form-control')
+            .col-md-6.mb-3
+              = f.label(:srdc_game, 'Category')
+              = f.text_field(:srdc_category, value: run.category.srdc.name, required: true, disabled: true, class: 'form-control')
+
+            .col-md-6.mb-3
+              = f.label(:srdc_player, 'Player')
+              = f.text_field(:srdc_player, value: run.user.srdc.name, required: true, disabled: true, class: 'form-control')
+
+            .col-md-6.mb-3
+              = f.label(:srdc_date, 'Date achieved')
+              = f.date_field(:srdc_date, value: run.pb_date&.strftime('%Y-%m-%d'), required: true, readonly: run.pb_date, class: 'form-control')
+
+            - if run.game.srdc.accepts_realtime?
+              .col-12.mb-3: .form-group
+                = f.label(:srdc_realtime, 'Real Time')
+                = f.text_field(:srdc_realtime, value: run.duration(Run::REAL).format(precise: run.game.srdc.show_ms?), required: true, disabled: true, class: 'form-control')
+            - if run.game.srdc.accepts_gametime?
+              .col-12.mb-3: .form-group
+                = f.label(:srdc_gametime, 'Game Time')
+                = f.text_field(:srdc_gametime, value: run.duration(Run::GAME).format(precise: run.game.srdc.show_ms?), required: true, disabled: true, class: 'form-control')
+
+            - run.game.srdc.variables.where(speedrun_dot_com_category: run.category.srdc).or(run.game.srdc.variables.where(game_scope: 'global')).each do |variable|
+              .col-12.mb-3: .form-group
+                - run_value = run.variables.find_by(speedrun_dot_com_game_variable_value: variable.variable_values)
+                = f.label("srdc_variables[#{variable.srdc_id}]", variable.name)
+                = f.select("srdc_variables[#{variable.srdc_id}]", variable.variable_values.collect { |value| [value.label, value.srdc_id] }, {include_blank: true, selected: run_value&.speedrun_dot_com_game_variable_value&.srdc_id}, {required: true, class: 'form-control'})
+
+            - if run.game.srdc.regions.any?
+              .col-12.mb-3: .form-group
+                = f.label(:srdc_region, 'Region')
+                = f.select(:srdc_region, run.game.srdc.regions.collect { |r| [r.name, r.srdc_id] }, {include_blank: true, selected: run.region&.srdc_id}, {required: true, class: 'form-control'})
+
+            - if run.game.srdc.platforms.any?
+              .col-12.mb-3: .form-group
+                = f.label(:srdc_platform, 'Platform')
+                = f.select(:srdc_platform, run.game.srdc.platforms.collect { |plat| [plat.name, plat.srdc_id] }, {include_blank: true, selected: run.platform&.srdc_id}, {required: true, class: 'form-control'})
+
+            - if run.game.srdc.emulators_allowed?
+              .col-12.mb-3: .form-group.form-check
+                = f.check_box(:srdc_emulator, checked: run.uses_emulator?, class: 'form-check-input')
+                = f.label(:srdc_emulator, 'Uses Emulator', class: 'form-check-label')
+
+            .col-md-12.mb-3
+              = f.label(:srdc_video, 'Video link')
+              .input-group
+                = f.text_field(:srdc_video, value: run.video&.url, required: run.game.srdc.video_required?, placeholder: 'https://', readonly: run.video, class: 'form-control')
+                - if run.video.nil? && run.highlight_suggestion
+                  .input-group-append: a.btn.btn-twitch.tip-top(
+                    href='#'
+                    data={toggle: :modal, target: '#highlight', dismiss: 'modal'}
+                    title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
+                  )
+                    => icon('fab', 'twitch')
+                    span Auto-highlight
+
+            .col-12.mb-3
+              = f.label(:srdc_splitsio, 'Splits.io link')
+              = f.text_field(:srdc_splitsio, value: run_url(run), required: true, disabled: true, class: 'form-control')
+
+            .col-12.mb-3: .form-group
+              = f.label(:srdc_desc, 'Description (optional)')
+              = f.text_area(:srdc_desc, rows: 3, placeholder: 'Leave a public comment on your run', class: 'form-control')
+
+            - unless current_user.has_srdc_submit?
+              .mx-3: center.card: .card-body
+                p Splits.io Gold is required to enable automatic submission of runs to Speedrun.com.
+                a.btn.btn-primary href=subscriptions_path Subscribe to Splits.io Gold
+
+        - if current_user.has_srdc_submit?
+          .modal-footer.bg-dark: .float-right
+            .btn.btn-outline-light.mr-2 data-dismiss='modal' Cancel
+            = f.submit( \
+              'Submit to Speedrun.com', \
+              class: 'btn btn-primary', \
+              disabled: !current_user.has_srdc_submit?, \
+            )

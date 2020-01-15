@@ -49,6 +49,7 @@ module UnparsedRun
           program:                 run_data[:program].to_s,
           attempts:                run_data[:attempts],
           srdc_id:                 srdc_id || run_data[:metadata][:srdc_id],
+          uses_emulator:           run_data[:metadata][:uses_emulator],
 
           realtime_duration_ms:    zero_to_nil(run_data[:realtime_duration_ms]),
           realtime_sum_of_best_ms: zero_to_nil(run_data[:realtime_sum_of_best_ms]),
@@ -58,7 +59,10 @@ module UnparsedRun
 
           total_playtime_ms:       run_data[:total_playtime_ms],
           default_timing:          run_data[:default_timing],
-          filesize_bytes:          run_data[:size]
+          filesize_bytes:          run_data[:size],
+
+          platform:                SpeedrunDotComPlatform.find_by(name: run_data[:metadata][:platform_name]),
+          region:                  SpeedrunDotComRegion.find_by(name: run_data[:metadata][:region_name])
         )
 
         HighlightSuggestion.from_run(self)
@@ -133,7 +137,29 @@ module UnparsedRun
         run_data[:default_timing] = Run::GAME
       end
 
+      write_run_variables(run_data)
       run_data
+    end
+
+    def write_run_variables(run_data)
+      srdc_game = SpeedrunDotComGame.find_by(name: run_data[:game])
+
+      run_data[:metadata][:variables].each do |key, value|
+        srdc_variable = SpeedrunDotComGameVariable.find_by!(
+          speedrun_dot_com_game: srdc_game,
+          name:                  key
+        )
+        srdc_variable_value = srdc_variable.variable_values.find_by!(
+          speedrun_dot_com_game_variable: srdc_variable,
+          label:                          value
+        )
+        SpeedrunDotComRunVariable.find_or_create_by!(
+          run:                                  self,
+          speedrun_dot_com_game_variable_value: srdc_variable_value
+        )
+      rescue ActiveRecord::RecordNotFound
+        next
+      end
     end
 
     def process_run_history(run)
