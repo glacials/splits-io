@@ -37,8 +37,8 @@ module SpeedrunDotCom
           data.to_json,
           content_type:  :json,
           accept:        :json,
-          'X-API-Key' => api_key
-        )
+          'X-API-Key' => api_key,
+        ),
       )
     rescue RestClient::ExceptionWithResponse => e
       JSON.parse(e.response.body)
