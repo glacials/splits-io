@@ -34,7 +34,7 @@
                 = f.label(:srdc_gametime, 'Game Time')
                 = f.text_field(:srdc_gametime, value: run.duration(Run::GAME).format(precise: run.game.srdc.show_ms?), required: true, disabled: true, class: 'form-control')
 
-            - run.game.srdc.variables.where(speedrun_dot_com_category: run.category.srdc).or(run.game.srdc.variables.where(game_scope: 'global')).each do |variable|
+            - run.game.srdc.variables.where(speedrun_dot_com_category: run.category.srdc).or(run.game.srdc.variables.where(game_scope: 'global', speedrun_dot_com_category_id: nil)).each do |variable|
               .col-12.mb-3: .form-group
                 - run_value = run.variables.find_by(speedrun_dot_com_game_variable_value: variable.variable_values)
                 = f.label("srdc_variables[#{variable.srdc_id}]", variable.name)
