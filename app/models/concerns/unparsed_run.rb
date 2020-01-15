@@ -65,7 +65,7 @@ module UnparsedRun
           region:                  SpeedrunDotComRegion.find_by(name: run_data[:metadata][:region_name])
         )
 
-        # HighlightSuggestion.from_run(self)
+        HighlightSuggestion.from_run(self)
       end
     rescue UnparsableRun
       destroy
