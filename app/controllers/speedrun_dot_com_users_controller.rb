@@ -7,14 +7,14 @@ class SpeedrunDotComUsersController < ApplicationController
 
     srdc_user = SpeedrunDotComUser.from_api_key!(params[:speedrun_dot_com_user][:api_key].strip, user: current_user)
 
-    if srdc_user.persisted?
+    if srdc_user
       redirect
       return
     end
 
     redirect_back(
       fallback_location: settings_path,
-      alert:             "Couldn't link to Speedrun.com: #{srdc_user.errors.full_messages.to_sentence}",
+      alert:             "Error: Couldn't link to Speedrun.com. Make sure your API key is correct.",
     )
   end
 
