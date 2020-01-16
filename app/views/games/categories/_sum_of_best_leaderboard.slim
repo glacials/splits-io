@@ -1,4 +1,4 @@
-- runners = category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc')
+- runners = category.runners.joins(:runs).includes(:runs).where('runs.realtime_sum_of_best_ms > 0').order('runs.realtime_sum_of_best_ms asc').limit(10)
 - if runners.empty?
   center.m-4
     i Not enough data in this category to display a sum-of-best leaderboard.
