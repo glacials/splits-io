@@ -1,13 +1,15 @@
 import raceNav from './race-nav.js'
 import { getAccessToken } from '../token'
 import { loadGameSelector } from '../game_select.js'
-import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import GameSelector from './GameSelector.vue'
+import CategorySelector from './CategorySelector.vue'
 const _ = require('underscore')
 
 export default {
   components: {
     raceNav,
-    VueBootstrapTypeahead,
+    GameSelector,
+    CategorySelector,
   },
   computed: {
     categories: function() {
@@ -19,9 +21,6 @@ export default {
         {id: null, name: '<N/A / Race-specific category>'},
         ...this.game.categories.filter(category => category.srdc_id)
       ]
-    },
-    category: function() {
-      return this.categories.find(category => category.id === this.categoryId)
     },
     title: function() {
       if (this.race === null) {
@@ -35,38 +34,33 @@ export default {
   },
   created: async function() {
     this.notes = this.race.notes
+    this.category = this.race.category
 
-    this.gameId = (this.race.game || {id: null}).id
-    this.categoryId = (this.race.category || {id: null}).id
-
-    this.currentUser = gon.user
-    if (this.currentUser === null) {
+    const currentUser = gon.user
+    if (!currentUser) {
       return
     }
 
-    this.entry = this.race.entries.find((entry) => {
+    this.entry = this.race.entries.find(entry => {
       if (!entry.runner || entry.ghost) {
         return false
       }
 
-      return entry.runner.id === this.currentUser.id
+      return entry.runner.id === currentUser.id
     })
 
-    this.game = await fetch(`/api/v4/games?search=${this.race.game.id}`).then(response => response.json()).then(body => {
-      return body.games[0]
-    })
-
-    this.gameQuery = this.race.game.name
+    if (this.race.game) {
+      this.game = await fetch(`/api/v4/games?search=${this.race.game.id}`).then(response => response.json()).then(body => {
+        return body.games[0]
+      })
+    }
   },
   data: () => ({
-    categoryId: null,
+    category: null,
     editing: false,
     entry: null,
     error: null,
     game: null,
-    gameId: null,
-    gameQuery: null,
-    gameResults: [],
     loading: false,
     notes: '',
   }),
@@ -94,7 +88,7 @@ export default {
           method: 'PATCH',
           headers: headers,
           body: JSON.stringify({
-            category_id: this.categoryId,
+            category_id: (this.category && this.category.id) || null,
             game_id: (this.game || {}).id,
             notes: this.notes,
           })
@@ -117,16 +111,4 @@ export default {
   },
   name: 'race-title',
   props: ['race', 'starting', 'syncing'],
-  watch: {
-    gameId: function() {
-      if (!this.game || this.game.categories.find(category => category.id === this.categoryId) === undefined) {
-        this.categoryId = null
-      }
-    },
-    gameQuery: _.debounce(function(newGame) {
-      fetch(`/api/v4/games?search=${newGame}`).then(response => response.json()).then(body => {
-        this.gameResults = body.games
-      })
-    }, 500)
-  },
 }

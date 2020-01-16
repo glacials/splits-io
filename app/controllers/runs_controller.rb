@@ -38,13 +38,14 @@ class RunsController < ApplicationController
       return
     end
 
-    unless params[@run.id36].respond_to?(:[])
-      redirect_to edit_run_path(@run), alert: 'There was an error saving that data. Please try again.'
+    if params[:run][:category]
+      @run.update(category: Category.find(params[:run][:category]))
+      redirect_to edit_run_path(@run), notice: 'Game/category updated.'
+      return
     end
 
-    if params[@run.id36][:category]
-      @run.update(category: Category.find(params[@run.id36][:category]))
-      redirect_to edit_run_path(@run), notice: 'Game/category updated.'
+    unless params[@run.id36].respond_to?(:[])
+      redirect_to edit_run_path(@run), alert: 'There was an error saving that data. Please try again.'
       return
     end
 
@@ -115,8 +116,8 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.includes(segments: {icon_attachment: :blob}).find_by(id: params[:run].to_i(36)) ||
-           Run.includes(segments: {icon_attachment: :blob}).find_by!(nick: params[:run])
+    @run = Run.includes(segments: {icon_attachment: :blob}).find_by(id: params[:id].to_i(36)) ||
+           Run.includes(segments: {icon_attachment: :blob}).find_by!(nick: params[:id])
     timing = params[:timing] || @run.default_timing
     unless [Run::REAL, Run::GAME].include?(timing)
       redirect_to(request.path, alert: 'Timing can only be real or game.')

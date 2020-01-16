@@ -24,18 +24,20 @@ import VueTippy from 'vue-tippy'
 
 import race from '../vue/race.js'
 import raceCreate from '../vue/race-create.js'
+import EditRunGameAndCategory from '../vue/EditRunGameAndCategory.vue'
+import Search from '../vue/Search.vue'
 
 Vue.use(TurbolinksAdapter)
 Vue.use(VueTippy)
 
 document.addEventListener('turbolinks:load', () => {
-  if (document.getElementById('vue-race') === null) {
+  if (!document.getElementById('vue')) {
     return
   }
 
   const app = new Vue({
-    el: '#vue-race',
-    components: { race, raceCreate },
+    el: '#vue',
+    components: { race, raceCreate, EditRunGameAndCategory, Search },
   })
 })
 

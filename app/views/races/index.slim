@@ -17,8 +17,7 @@
       li.nav-item
         = link_to('Historic', races_path(historic: '1'), class: "nav-link #{historic ? 'active' : ''}")
     - if current_user.present?
-      #vue-race
-        = render partial: 'races/create'
+      = render partial: 'races/create'
   = render partial: 'shared/race_table', locals: {races: races}
   - if params[:historic] != '1'
     .card-footer

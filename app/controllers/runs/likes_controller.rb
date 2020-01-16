@@ -25,12 +25,12 @@ class Runs::LikesController < Runs::ApplicationController
   private
 
   def set_run
-    @run = Run.find_by(id: params[:run].to_i(36))
+    @run = Run.find_by(id: params[:run_id].to_i(36))
     head :not_found if @run.nil?
   end
 
   def set_run_like
-    @run_like = RunLike.find_by(user: current_user, run: Run.find_by(id: params[:run].to_i(36)))
+    @run_like = RunLike.find_by(user: current_user, run: Run.find_by(id: params[:run_id].to_i(36)))
     head :not_found if @run_like.nil?
   end
 end
