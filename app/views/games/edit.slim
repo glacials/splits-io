@@ -2,7 +2,6 @@
 - content_for(:header) do
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
-    li.breadcrumb-item = link_to('Games', games_path)
     li.breadcrumb-item = link_to(@game, game_path(@game))
     li.breadcrumb-item = link_to('Edit', edit_game_path(@game))
 .row.row-cols-1.row-cols-md-2.mx-1
