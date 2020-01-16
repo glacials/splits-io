@@ -23,7 +23,7 @@
 
             .col-md-6.mb-3
               = f.label(:srdc_date, 'Date achieved')
-              = f.date_field(:srdc_date, value: run.pb_date&.strftime('%Y-%m-%d'), required: true, readonly: run.pb_date, class: 'form-control')
+              = f.date_field(:srdc_date, value: run.pb_date&.strftime('%Y-%m-%d'), required: true, disabled: run.pb_date, class: 'form-control')
 
             - if run.game.srdc.accepts_realtime?
               .col-12.mb-3: .form-group
@@ -58,7 +58,7 @@
             .col-md-12.mb-3
               = f.label(:srdc_video, 'Video link')
               .input-group
-                = f.text_field(:srdc_video, value: run.video&.url, required: run.game.srdc.video_required?, placeholder: 'https://', readonly: run.video, class: 'form-control')
+                = f.text_field(:srdc_video, value: run.video&.url, required: run.game.srdc.video_required?, placeholder: 'https://', disabled: run.video, class: 'form-control')
                 - if run.video.nil? && run.highlight_suggestion
                   .input-group-append: a.btn.btn-twitch.tip-top(
                     href='#'

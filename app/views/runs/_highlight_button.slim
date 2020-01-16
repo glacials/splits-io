@@ -1,16 +1,15 @@
 - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion && current_user.has_autohighlight?
-  .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-    a.btn.btn-twitch.tip-top(
-      href='#'
-      data={toggle: :modal, target: '#highlight'}
-      title='We automatically found the stream you PBed in.'
-    )
-      => icon('fab', 'twitch')
-      ' Auto-highlight
+  a.btn.btn-twitch.tip-top(
+    href='#'
+    data={toggle: :modal, target: '#highlight'}
+    title='We automatically found the stream you PBed in.'
+  )
+    => icon('fab', 'twitch')
+    ' Auto-highlight
   #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
     .modal-dialog role='document'
       .modal-content
-        = form_for(run.build_video, url: run_video_path(run), method: :put) do |f|
+        = form_for(Video.new, url: run_video_path(run), method: :put) do |f|
           .modal-header.bg-dark
             h5.text-light Auto-highlight ✨
           .modal-body.bg-dark
@@ -36,7 +35,7 @@
           .modal-footer.bg-dark
             .float-right
               .btn-group
-                = f.submit('Save', class: 'btn btn-outline-primary')
+                = f.submit('Attach highlight', class: 'btn btn-primary')
 - elsif run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
     a.btn.btn-twitch.tip.disabled(

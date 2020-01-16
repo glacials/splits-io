@@ -64,16 +64,9 @@ h5
     .btn-group.m-2: .btn.btn-outline-secondary.tip.disabled title=tooltip(run)
       ' 🎉
       = run.likes.count
-  = render partial: 'highlight_button', locals: {run: run}
   - if run.belongs_to?(current_user)
     .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-      - if run.video.nil? && run.highlight_suggestion
-        a.btn.btn-twitch.tip-top(
-          href='#'
-          data={toggle: :modal, target: '#highlight'}
-          title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
-        )
-          span Auto-highlight
+      = render partial: 'highlight_button', locals: {run: run}
       - if run.category&.srdc && run.srdc_id.blank?
         a.btn.btn-srdc.tip-top(
           href='#'
