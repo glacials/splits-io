@@ -84,8 +84,6 @@ Rails.application.routes.draw do
   post   '/rivalries', to: 'rivalries#create', as: :rivalries
   delete '/rivalries', to: 'rivalries#destroy'
 
-  get   '/games',            to: 'games#index'
-  get   '/games(?q=:q)',     to: redirect('/search?q=%{q}')
   get   '/games/:game',      to: 'games#show',  as: :game
   get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
   patch '/games/:game',      to: 'games#update'

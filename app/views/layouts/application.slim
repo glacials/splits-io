@@ -49,10 +49,6 @@ html
               a.nav-link.px-3 href=new_run_path
                 => icon('fas', 'cloud-upload-alt', class: 'd-none d-md-inline d-xl-none')
                 span.d-md-none.d-xl-inline Upload
-            li.nav-item class=('active' if request.path == games_path)
-              a.nav-link.px-3 href=games_path
-                => icon('fas', 'gamepad', class: 'd-none d-md-inline d-xl-none')
-                span.d-md-none.d-xl-inline Games
             li.nav-item class=('active' if request.path == races_path)
               a.nav-link.px-3 href=races_path
                 => icon('fas', 'flag-checkered', class: 'd-none d-md-inline d-xl-none')
