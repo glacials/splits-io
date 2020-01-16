@@ -22,13 +22,3 @@
             li If a category has an identical name to a #{@game} category, the two will be merged into one #{@game}
                category.
             li You must have moderation priveleges for both games to merge.
-  .col.p-1
-    .card.h-100
-      .card-header Resync
-      .card-body
-        = button_to game_path(@game), method: :patch, params: {'sync_srdc' => 1}, class: 'btn btn-srdc m-2'
-          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
-          ' Sync with Speedrun.com
-        = button_to game_path(@game), method: :patch, params: {'sync_srl' => 1}, class: 'btn btn-light m-2'
-          => image_tag(asset_path('srl.png'), style: 'height: 0.8em')
-          ' Sync with SpeedRunsLive

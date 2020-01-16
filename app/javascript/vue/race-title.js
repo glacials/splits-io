@@ -1,9 +1,13 @@
 import raceNav from './race-nav.js'
 import { getAccessToken } from '../token'
+import { loadGameSelector } from '../game_select.js'
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+const _ = require('underscore')
 
 export default {
   components: {
     raceNav,
+    VueBootstrapTypeahead,
   },
   computed: {
     categories: function() {
@@ -19,9 +23,6 @@ export default {
     category: function() {
       return this.categories.find(category => category.id === this.categoryId)
     },
-    game: function() {
-      return this.games.find(game => game.id === this.gameId)
-    },
     title: function() {
       if (this.race === null) {
         return ''
@@ -34,7 +35,6 @@ export default {
   },
   created: async function() {
     this.notes = this.race.notes
-    fetch('/api/v4/games').then(response => response.json()).then(body => this.games = body.games)
 
     this.gameId = (this.race.game || {id: null}).id
     this.categoryId = (this.race.category || {id: null}).id
@@ -51,14 +51,22 @@ export default {
 
       return entry.runner.id === this.currentUser.id
     })
+
+    this.game = await fetch(`/api/v4/games?search=${this.race.game.id}`).then(response => response.json()).then(body => {
+      return body.games[0]
+    })
+
+    this.gameQuery = this.race.game.name
   },
   data: () => ({
     categoryId: null,
     editing: false,
     entry: null,
     error: null,
+    game: null,
     gameId: null,
-    games: [],
+    gameQuery: null,
+    gameResults: [],
     loading: false,
     notes: '',
   }),
@@ -105,13 +113,20 @@ export default {
       }
     },
   },
+  mounted: function() {
+  },
   name: 'race-title',
   props: ['race', 'starting', 'syncing'],
   watch: {
     gameId: function() {
-      if (this.game.categories.find(category => category.id === this.categoryId) === undefined) {
+      if (!this.game || this.game.categories.find(category => category.id === this.categoryId) === undefined) {
         this.categoryId = null
       }
     },
+    gameQuery: _.debounce(function(newGame) {
+      fetch(`/api/v4/games?search=${newGame}`).then(response => response.json()).then(body => {
+        this.gameResults = body.games
+      })
+    }, 500)
   },
 }

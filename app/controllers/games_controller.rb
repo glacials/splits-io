@@ -19,18 +19,6 @@ class GamesController < ApplicationController
   def edit
   end
 
-  def update
-    if params[:sync_srdc]
-      @game.sync_with_srdc
-    end
-
-    if params[:sync_srl]
-      @game.sync_with_srdc
-    end
-
-    redirect_to edit_game_path(@game), notice: 'Done!'
-  end
-
   private
 
   def authorize
@@ -48,7 +36,7 @@ class GamesController < ApplicationController
 
   def set_games
     @games = Hash.new { |h, k| h[k] = [] }
-    SpeedrunDotComGame.order('ASCII(name) ASC, UPPER(name) ASC').each do |game|
+    Game.joins(:runs, :srdc).order('ASCII(games.name) ASC, UPPER(games.name) ASC').each do |game|
       @games[game.name[0].downcase] << game
     end
   end

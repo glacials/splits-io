@@ -11,9 +11,6 @@
       .form-group
         .input-group
           = f.text_field(:q, name: :q, autofocus: @query.blank?, value: @query, class: 'form-control search bg-dark')
-          .input-group-append
-            = button_tag(type: 'submit', class: 'btn btn-primary', name: nil) do
-              = icon('fas', 'search')
 
   #search-results.card.mb-3.w-100
     - @results.each do |search_type, results|

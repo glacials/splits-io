@@ -11,12 +11,19 @@ race-title(
       h1 v-if='!editing' = '{{title}}'
       = form_for race, url: race_path(race), html: {'v-if' => 'editing'} do |f|
         .form-row
-          .col-md-6.my-1
-            label.sr-only for='game-selector'
-            select.form-control v-model='gameId'
-              option v-for='game in games' :value='game.id' {{game.name}}
-          .col-md-6.my-1
-            label.sr-only for='category-selector'
+          = f.hidden_field(:game, id: 'selected-game-id', value: race.game&.id)
+          .my-3.col-md-12
+            label for='game-selector' Game
+            vue-bootstrap-typeahead.mb-1(
+              background-variant='dark'
+              placeholder='Change game by typing...'
+              text-variant='light'
+              :data='gameResults'
+              @hit='game = $event'
+              :serializer='game => game.name'
+              v-model='gameQuery'
+            )
+            label for='category-selector' Category
             select.form-control v-model='categoryId'
               option v-for='category in categories' :value='category.id' {{category.name}}
     .row

@@ -22,20 +22,10 @@
     h5.card-header Edit Game/Category
     .card-body
       .form-row
+        = f.hidden_field(:game, id: 'selected-game-id', value: @run.game&.id)
         .col-md-6.my-1
           label.sr-only for='game-selector'
-          = f.collection_select( \
-            :game, \
-            SpeedrunDotComGame.order(:name), \
-            :shortname, \
-            :name, \
-            { \
-              selected: @run.game.try(:srdc).try(:shortname), \
-              include_blank: true \
-            }, \
-            id: 'game-selector', \
-            class: 'form-control' \
-          )
+          = f.text_field(:q, name: :q, class: 'form-control game-select text-dark', value: @run.game&.name, placeholder: 'Game...')
         .col-md-6.my-1
           label.sr-only for='category-selector'
           = f.collection_select( \
@@ -44,7 +34,7 @@
             :id, \
             :name, \
             { \
-              selected: @run.category.try(:id) \
+              selected: @run.category&.id, \
             }, \
             id: 'category-selector', \
             class: 'form-control' \

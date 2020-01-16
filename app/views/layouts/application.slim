@@ -73,9 +73,6 @@ html
             = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
               .input-group
                 = f.text_field(:q, name: :q, class: 'form-control search text-dark', value: @query, placeholder: 'Search...')
-                .input-group-append
-                  = button_tag(type: 'submit', class: 'btn btn-secondary', name: nil) do
-                    = icon('fas', 'search')
           ul.nav.navbar-nav
             - if current_user.present?
               li.nav-item class=('active' if on_a_profile_page?)
