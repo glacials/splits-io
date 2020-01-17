@@ -8,6 +8,7 @@ h6.card-header Entries
   .table-responsive: table.card-body.table.mb-0
     thead: tr
       th.nowrap Name
+      th.nowrap PB
       th.nowrap.text-center
         - if race.started?
           ' Position
@@ -25,6 +26,15 @@ h6.card-header Entries
               big.mr-2 v-tippy=true title="Ghost of #{entry.runner ? entry.runner.to_s + "'s" : 'a'} past run 😱"
                 = icon('fas', 'ghost')
             span.mr-2 = user_badge(entry.runner)
+          td.nowrap
+            - pb = entry.runner.pb_for(Run::REAL, race.category)
+            - if pb
+              small
+                .text-monospace = pb.duration(Run::REAL).format
+                => pb.attempts
+                ' attempts
+            - else
+              ' -
           td.nowrap.text-center
             - if race.started?
               - if entry.done?
