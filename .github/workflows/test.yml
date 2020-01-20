@@ -10,9 +10,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Test Rails
+
+    - name: Cache node modules
+      uses: actions/cache@v1
+      with:
+        path: node_modules/
+        key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Cache ruby gems
+      uses: actions/cache@v1
+      with:
+        path: bundle/
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Build environment
       run: |
         docker-compose build
         docker-compose run web bundle install
         docker-compose run web yarn install
-        docker-compose run -e RAILS_ENV=test web bash -c "bundle exec rake db:migrate && bundle exec rspec"
+        docker-compose run -e RAILS_ENV=test web bundle exec rails db:migrate
+
+    - name: Test Rails
+      run: docker-compose run -e RAILS_ENV=test web bundle exec rspec
