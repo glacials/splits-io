@@ -1,6 +1,5 @@
 import raceNav from './race-nav.js'
 import { getAccessToken } from '../token'
-import { loadGameSelector } from '../game_select.js'
 import GameSelector from './GameSelector.vue'
 import CategorySelector from './CategorySelector.vue'
 const _ = require('underscore')
