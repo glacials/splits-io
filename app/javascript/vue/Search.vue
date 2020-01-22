@@ -46,9 +46,14 @@ export default {
   },
   methods: {
     debouncedFetch: _.debounce(async function(newQuery) {
-      this.gameResults = (await fetch(`/api/v4/games?search=${newQuery}`).then(response => response.json())).games
-      this.userResults = (await fetch(`/api/v4/runners?search=${newQuery}`).then(response => response.json())).runners
-      this.loading = false
+      Promise.all([
+        fetch(`/api/v4/games?search=${newQuery}`).then(response => response.json()).then(body => {
+          this.gameResults = body.games
+        }),
+        fetch(`/api/v4/runners?search=${newQuery}`).then(response => response.json()).then(body => {
+          this.userResults = body.runners
+        }),
+      ]).then(() => this.loading = false)
     }, 500),
   },
   watch: {

@@ -18,8 +18,8 @@ html
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'
     = content_for(:head)
-    = Gon::Base.render_data
   body data-controller=controller_name data-action=action_name
+    = Gon::Base.render_data
     #dropzone
       #vue
         #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true

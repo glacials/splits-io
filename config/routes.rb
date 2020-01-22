@@ -84,7 +84,7 @@ Rails.application.routes.draw do
   post   '/rivalries', to: 'rivalries#create', as: :rivalries
   delete '/rivalries', to: 'rivalries#destroy'
 
-  get   '/games/:game',      to: 'games#show',  as: :game, format: false # disable format so requests like /ads.txt don't render a run
+  get   '/games/:game',      to: 'games#show',  as: :game, format: false # disable format for games like "tron2.0"
   get   '/games/:game/edit', to: 'games#edit',  as: :edit_game, format: false
   patch '/games/:game',      to: 'games#update', format: false
 
