@@ -1,28 +1,7 @@
+/ TODO: messages isn't used rn
 - if local_assigns[:message].nil?
   - message = ''
 - if local_assigns[:messages].nil?
   - messages = [message]
-span.spinner-border.spinner-border-sm.mx-1 role='status'
+span.spinner-border.spinner-border-sm.mx-1 role='status' data-messages=messages.join(',')
   span.sr-only Loading...
-- if messages.count == 1
-  = message
-- else
-  - messages.each.with_index do |message, i|
-    - id = SecureRandom.uuid
-    - changeEveryMS = 5000
-    span id=id hidden=true = message
-    javascript:
-      window.setTimeout(() => {
-        const el = document.getElementById('#{id}')
-        if (el) {
-          el.hidden = false
-        }
-      }, #{changeEveryMS * i})
-    - if messages[i + 1].present?
-      javascript:
-        window.setTimeout(() => {
-          const el = document.getElementById('#{id}')
-          if (el) {
-            el.hidden = true
-          }
-        }, #{changeEveryMS * (i+1)})

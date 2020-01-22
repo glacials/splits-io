@@ -84,9 +84,9 @@ Rails.application.routes.draw do
   post   '/rivalries', to: 'rivalries#create', as: :rivalries
   delete '/rivalries', to: 'rivalries#destroy'
 
-  get   '/games/:game',      to: 'games#show',  as: :game
-  get   '/games/:game/edit', to: 'games#edit',  as: :edit_game
-  patch '/games/:game',      to: 'games#update'
+  get   '/games/:game',      to: 'games#show',  as: :game, format: false # disable format for games like "tron2.0"
+  get   '/games/:game/edit', to: 'games#edit',  as: :edit_game, format: false
+  patch '/games/:game',      to: 'games#update', format: false
 
   post '/games/:game/aliases', to: 'games/aliases#create', as: :game_aliases
 
@@ -119,14 +119,14 @@ Rails.application.routes.draw do
   patch '/subscriptions',         to: 'subscriptions#update'
   delete '/subscriptions',        to: 'subscriptions#destroy'
 
-  get    '/:run/edit',  to: 'runs#edit', as: :edit_run
-  get    '/:run',       to: 'runs#show', as: :run, format: false # disable format so requests like /ads.txt don't render a run
-  get    '/:run/stats', to: redirect('/%{run}') # to support old links floating around the internet; RIP stats page
-  patch  '/:run',       to: 'runs#update'
-  delete '/:run',       to: 'runs#destroy'
+  get    '/:id/edit',  to: 'runs#edit', as: :edit_run
+  get    '/:id',       to: 'runs#show', as: :run, format: false # disable format so requests like /ads.txt don't render a run
+  get    '/:id/stats', to: redirect('/%{run}') # to support old links floating around the internet; RIP stats page
+  patch  '/:id',       to: 'runs#update'
+  delete '/:id',       to: 'runs#destroy'
 
-  put    '/:run/like', to: 'runs/likes#create',  as: :create_run_like
-  delete '/:run/like', to: 'runs/likes#destroy', as: :destroy_run_like
+  put    '/:run_id/like', to: 'runs/likes#create',  as: :create_run_like
+  delete '/:run_id/like', to: 'runs/likes#destroy', as: :destroy_run_like
 
   put '/:run/video', to: 'runs/videos#update', as: :run_video
 

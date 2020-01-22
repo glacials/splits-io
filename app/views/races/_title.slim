@@ -14,18 +14,9 @@ race-title(
           = f.hidden_field(:game, id: 'selected-game-id', value: race.game&.id)
           .my-3.col-md-12
             label for='game-selector' Game
-            vue-bootstrap-typeahead.mb-1(
-              background-variant='dark'
-              placeholder='Change game by typing...'
-              text-variant='light'
-              :data='gameResults'
-              @hit='game = $event'
-              :serializer='game => game.name'
-              v-model='gameQuery'
-            )
+            game-selector v-model='game'
             label for='category-selector' Category
-            select.form-control v-model='categoryId'
-              option v-for='category in categories' :value='category.id' {{category.name}}
+            category-selector :game='game' v-model='category' null-category='N/A or race-specific category'
     .row
       .col-md-12
         - if race.has_attribute?(:card_url)
@@ -86,4 +77,4 @@ race-title(
           ' {{(race.notes || '').split('\n').splice(1).filter(s => s !== '').join('\n')}}
         template v-if='editing'
           small.form-text.text-muted.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2 Use the first line as a title supplement.
-          textarea.bg-dark.text-light style='font-family: monospace; width: 100%' rows=10 v-model='notes'
+          textarea.text-dark style='font-family: monospace; width: 100%' rows=10 v-model='notes'

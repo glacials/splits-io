@@ -25,7 +25,7 @@
               = render partial: 'runs/export_button', locals: { \
                 run: @category.route, button_text: "#{@category} splits", force_route_only: true \
               }
-          span#vue-race.mr-2 = render partial: 'races/create', locals: {game: @game, category: @category}
+          span.mr-2 = render partial: 'races/create', locals: {game: @game, category: @category}
           - if can?(:edit, @category.game)
             a.btn.btn-outline-primary.mr-2 href=edit_game_path(@category.game)
               => icon('fas', 'edit')

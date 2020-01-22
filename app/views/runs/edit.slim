@@ -20,24 +20,7 @@
   .col.p-1: .card.h-100 = form_for @run, as: @run.id36, url: run_path(@run) do |f|
     h5.card-header Edit Game/Category
     .card-body
-      .form-row
-        = f.hidden_field(:game, id: 'selected-game-id', value: @run.game&.id)
-        .col-md-6.my-1
-          label.sr-only for='game-selector'
-          = f.text_field(:q, name: :q, class: 'form-control game-select text-dark', value: @run.game&.name, placeholder: 'Game...')
-        .col-md-6.my-1
-          label.sr-only for='category-selector'
-          = f.collection_select( \
-            :category, \
-            @run.game.present? ? @run.game.categories.group('categories.id').joins(:runs).order(Arel.sql('count(runs.id) desc')) : [], \
-            :id, \
-            :name, \
-            { \
-              selected: @run.category&.id, \
-            }, \
-            id: 'category-selector', \
-            class: 'form-control' \
-          )
+      edit-run-game-and-category run-id=@run.id36
     .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-outline-primary'
 
   .col.p-1

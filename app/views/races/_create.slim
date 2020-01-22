@@ -1,7 +1,6 @@
 - game = local_assigns.fetch(:game, Game.new)
 - category = local_assigns.fetch(:category, Category.new)
 
-// Make sure to have #vue-race be defined before calling this partial
 race-create inline-template=true game-id=game.id category-id=category.id
   .btn-group v-cloak=true
     button.btn.btn-outline-primary(

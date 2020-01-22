@@ -21,144 +21,143 @@ html
   body data-controller=controller_name data-action=action_name
     = Gon::Base.render_data
     #dropzone
-      #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
-        #droplabel-container.text-primary
-          #upload-spinner.d-inline = render partial: 'shared/spinner', locals: {message: ''}
-          #droplabel.d-inline.text-primary Waiting for drop
-          code#matrix.d-block.text-left.my-5 style='opacity: 0.5'
-        #multiupload
-          .text-primary
-            #upload-spinner = render partial: 'shared/spinner', locals: {message: ''}
-            h5.d-inline.text-primary
-              span#successful-uploads> 0
-              | uploaded and processing
-          div
-            h6.d-inline
-              span#failed-uploads> 0
-              | failed to upload
-          p.text-light.mt-5 This page will update automatically.
-      nav.navbar.navbar-expand-md
-        a.navbar-brand.text-nowrap href=root_path
-          img.logo.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
-          img.logo.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
-        button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
-          = icon('fas', 'bars')
-        .collapse.navbar-collapse#global-nav
-          ul.navbar-nav.mr-auto
-            li.nav-item class=('active' if request.path == new_run_path)
-              a.nav-link.px-3 href=new_run_path
-                => icon('fas', 'cloud-upload-alt', class: 'd-none d-md-inline d-xl-none')
-                span.d-md-none.d-xl-inline Upload
-            li.nav-item class=('active' if request.path == races_path)
-              a.nav-link.px-3 href=races_path
-                => icon('fas', 'flag-checkered', class: 'd-none d-md-inline d-xl-none')
-                span.d-md-none.d-xl-inline Races
-            - if ENV['READ_ONLY_MODE'] == '1'
-              li.nav-item
-                a.nav-link.px-3 href=read_only_mode_path
-                  span.text-warning Read-Only Mode Active
-            - if !current_user || current_user.subscriptions.active.none?
-              li.nav-item class=('active' if request.path == subscriptions_path)
-                a.nav-link.px-3 href=subscriptions_path
-                  => icon('fas', 'fan', class: 'd-none d-md-inline d-xl-none')
-                  span.d-md-none.d-xl-inline Pricing
-            li.nav-item class=('active' if request.path == faq_path)
-              a.nav-link.px-3 href=faq_path
-                => icon('fas', 'info-circle', class: 'd-none d-md-inline d-xl-none')
-                span.d-md-none.d-xl-inline FAQ
-            = form_for(:search, method: :get, url: search_path, html: {class: 'form-inline ml-2 flex-grow-1', role: 'search'}) do |f|
-              .input-group
-                = f.text_field(:q, name: :q, class: 'form-control search text-dark', value: @query, placeholder: 'Search...')
-          ul.nav.navbar-nav
-            - if current_user.present?
-              li.nav-item class=('active' if on_a_profile_page?)
-                .dropdown
-                  a.nav-link.dropdown-toggle.px-3#profileDropdownLink href='#' data-toggle='dropdown' role='button' aria-expanded='false' aria-haspopup='true'
-                    - if current_user.avatar.present?
-                      img.mr-2 src=current_user.avatar width=20 height=20
-                    - else
-                      => icon('fas', 'user')
-                    span = current_user
-                    span.caret
-                  ul.dropdown-menu.mt-0.border-top-0 role='menu' aria-labelledby='profileDropdownLink'
-                    li.nav-item
-                      a.dropdown-item href=user_path(current_user)
-                        => icon('fas', 'user-circle')
-                        ' Profile
-                      a.dropdown-item href=settings_path
-                        => icon('fas', 'sliders-h')
-                        ' Settings
-                      a.dropdown-item href=tools_path
-                        => icon('fas', 'toolbox')
-                        ' Tools
-                      a.dropdown-item href=session_path(auth_session) rel='nofollow' data-method='delete'
-                        => icon('fas', 'sign-out-alt')
-                        ' Sign Out
-            - else
-              li.nav-item: a.nav-link.px-3 href='#' data={toggle: :modal, target: '#signin'} Sign In
-              #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
-                .modal-dialog role='document'
-                  .modal-content
-                    .modal-header.bg-dark
-                      h5 Sign in
-                    .modal-body.bg-dark
-                      .row
-                        a.btn.btn-twitch.mx-auto href='/auth/twitch'
-                          => icon('fab', 'twitch')
-                          ' Sign in with Twitch
-                        a.btn.btn-google.mx-auto href='/auth/google'
-                          => icon('fab', 'google')
-                          ' Sign in with Google
-                      .row.text-light.m-2
-                        p Splits.io accounts are based strictly on linked accounts. This makes the platform simpler to
-                          maintain, especially with regards to security.
-                        p
-                          ' We are
-                          a> href='https://github.com/glacials/splits-io/issues/396' working
-                          ' on adding linkless accounts.
-      article.pt-0#survey-container style='display: none'
-        div.text-right
-          small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
-        a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
-          ' Help us out by taking the Splits.io survey!
-      - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
-      - if entry.present? && request.path != race_path(entry.race)
-        .p-1
-          a.btn.btn-primary.btn-block.mb-0.text-center.glow href=race_path(entry.race)
-            => icon('fas', 'flag-checkered')
-            | Return to race
-      header#header.m-1.p-0 = yield(:header)
-      .row.mx-2: #alerts.w-100 data-turbolinks-temporary=true
-        = render partial: 'shared/alerts'
-      = yield
-      - unless on_landing_page?
-        footer#footer
-          = yield(:footer)
-          .row
-            .col-md-6
-              - patrons = User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200')
-              - unless patrons.blank?
-                a> href=patreon_url
-                  span Thanks to our patrons!
-                p
-                  - patrons.each do |user|
-                    span.mr-1 = user_badge(user)
-            .col-md-6
-              .float-right style='text-align: right;'
-                a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' API
-                span<> &bull;
-                a href='https://github.com/glacials/splits-io' Source
-                span<> &bull;
-                a href=brand_path Brand
-                br
-                a href='https://discord.gg/yGaxX39' Discord
-                span<> &bull;
-                a href='https://twitter.com/splitsio' Twitter
-                span<> &bull;
-                a href='mailto:help@splits.io' Contact
-                br
-                a href=survey_url Survey
-                span<> &bull;
-                a href=privacy_policy_path Privacy Policy
-                br
-                ' Copyright &copy; 2013 - #{Time.now.utc.year} Splits.io LLC
+      #vue
+        #dropzone-overlay.header style='border: none' data-turbolinks-permanent=true
+          #droplabel-container.text-primary
+            #upload-spinner.d-inline = render partial: 'shared/spinner', locals: {message: ''}
+            #droplabel.d-inline.text-primary Waiting for drop
+            code#matrix.d-block.text-left.my-5 style='opacity: 0.5'
+          #multiupload
+            .text-primary
+              #upload-spinner = render partial: 'shared/spinner', locals: {message: ''}
+              h5.d-inline.text-primary
+                span#successful-uploads> 0
+                | uploaded and processing
+            div
+              h6.d-inline
+                span#failed-uploads> 0
+                | failed to upload
+            p.text-light.mt-5 This page will update automatically.
+        nav.navbar.navbar-expand-md
+          a.navbar-brand.text-nowrap href=root_path
+            img.logo.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
+            img.logo.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
+          button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
+            = icon('fas', 'bars')
+          .collapse.navbar-collapse#global-nav
+            ul.navbar-nav.mr-auto
+              li.nav-item class=('active' if request.path == new_run_path)
+                a.nav-link.px-3 href=new_run_path
+                  => icon('fas', 'cloud-upload-alt', class: 'd-none d-md-inline d-xl-none')
+                  span.d-md-none.d-xl-inline Upload
+              li.nav-item class=('active' if request.path == races_path)
+                a.nav-link.px-3 href=races_path
+                  => icon('fas', 'flag-checkered', class: 'd-none d-md-inline d-xl-none')
+                  span.d-md-none.d-xl-inline Races
+              - if ENV['READ_ONLY_MODE'] == '1'
+                li.nav-item
+                  a.nav-link.px-3 href=read_only_mode_path
+                    span.text-warning Read-Only Mode Active
+              - if !current_user || current_user.subscriptions.active.none?
+                li.nav-item class=('active' if request.path == subscriptions_path)
+                  a.nav-link.px-3 href=subscriptions_path
+                    => icon('fas', 'fan', class: 'd-none d-md-inline d-xl-none')
+                    span.d-md-none.d-xl-inline Pricing
+              li.nav-item class=('active' if request.path == faq_path)
+                a.nav-link.px-3 href=faq_path
+                  => icon('fas', 'info-circle', class: 'd-none d-md-inline d-xl-none')
+                  span.d-md-none.d-xl-inline FAQ
+              search
+            ul.nav.navbar-nav
+              - if current_user.present?
+                li.nav-item class=('active' if on_a_profile_page?)
+                  .dropdown
+                    a.nav-link.dropdown-toggle.px-3#profileDropdownLink href='#' data-toggle='dropdown' role='button' aria-expanded='false' aria-haspopup='true'
+                      - if current_user.avatar.present?
+                        img.mr-2 src=current_user.avatar width=20 height=20
+                      - else
+                        => icon('fas', 'user')
+                      span = current_user
+                      span.caret
+                    ul.dropdown-menu.mt-0.border-top-0 role='menu' aria-labelledby='profileDropdownLink'
+                      li.nav-item
+                        a.dropdown-item href=user_path(current_user)
+                          => icon('fas', 'user-circle')
+                          ' Profile
+                        a.dropdown-item href=settings_path
+                          => icon('fas', 'sliders-h')
+                          ' Settings
+                        a.dropdown-item href=tools_path
+                          => icon('fas', 'toolbox')
+                          ' Tools
+                        a.dropdown-item href=session_path(auth_session) rel='nofollow' data-method='delete'
+                          => icon('fas', 'sign-out-alt')
+                          ' Sign Out
+              - else
+                li.nav-item: a.nav-link.px-3 href='#' data={toggle: :modal, target: '#signin'} Sign In
+                #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
+                  .modal-dialog role='document'
+                    .modal-content
+                      .modal-header.bg-dark
+                        h5 Sign in
+                      .modal-body.bg-dark
+                        .row
+                          a.btn.btn-twitch.mx-auto href='/auth/twitch'
+                            => icon('fab', 'twitch')
+                            ' Sign in with Twitch
+                          a.btn.btn-google.mx-auto href='/auth/google'
+                            => icon('fab', 'google')
+                            ' Sign in with Google
+                        .row.text-light.m-2
+                          p Splits.io accounts are based strictly on linked accounts. This makes the platform simpler to
+                            maintain, especially with regards to security.
+                          p
+                            ' We are
+                            a> href='https://github.com/glacials/splits-io/issues/396' working
+                            ' on adding linkless accounts.
+        article.pt-0#survey-container style='display: none'
+          div.text-right
+            small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
+          a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
+            ' Help us out by taking the Splits.io survey!
+        - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
+        - if entry.present? && request.path != race_path(entry.race)
+          .p-1
+            a.btn.btn-primary.btn-block.mb-0.text-center.glow href=race_path(entry.race)
+              => icon('fas', 'flag-checkered')
+              | Return to race
+        header#header.m-1.p-0 = yield(:header)
+        .row.mx-2: #alerts.w-100 data-turbolinks-temporary=true
+          = render partial: 'shared/alerts'
+        = yield
+        - unless on_landing_page?
+          footer#footer
+            = yield(:footer)
+            .row
+              .col-md-6
+                - patrons = User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200')
+                - unless patrons.blank?
+                  a> href=patreon_url
+                    span Thanks to our patrons!
+                  p
+                    - patrons.each do |user|
+                      span.mr-1 = user_badge(user)
+              .col-md-6
+                .float-right style='text-align: right;'
+                  a href='https://github.com/glacials/splits-io/blob/master/docs/api.md' API
+                  span<> &bull;
+                  a href='https://github.com/glacials/splits-io' Source
+                  span<> &bull;
+                  a href=brand_path Brand
+                  br
+                  a href='https://discord.gg/yGaxX39' Discord
+                  span<> &bull;
+                  a href='https://twitter.com/splitsio' Twitter
+                  span<> &bull;
+                  a href='mailto:help@splits.io' Contact
+                  br
+                  a href=survey_url Survey
+                  span<> &bull;
+                  a href=privacy_policy_path Privacy Policy
+                  br
+                  ' Copyright &copy; 2013 - #{Time.now.utc.year} Splits.io LLC
