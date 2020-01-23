@@ -8,15 +8,18 @@ class GameDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    id: Field::Number,
-    categories: Field::HasMany,
-    runs: Field::HasMany,
-    aliases: Field::HasMany.with_options(class_name: 'GameAlias'),
-    srdc: Field::HasOne.with_options(class_name: 'SpeedrunDotComGame'),
-    srl: Field::HasOne.with_options(class_name: 'SpeedRunsLiveGame'),
-    name: Field::String,
+    id:         Field::Number,
+    name:       Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+
+    aliases:    Field::HasMany.with_options(class_name: 'GameAlias'),
+    categories: Field::HasMany,
+    runs:       Field::HasMany,
+    races:      Field::HasMany,
+
+    speedrun_dot_com_game: Field::HasOne,
+    speed_runs_live_game:  Field::HasOne,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -29,6 +32,8 @@ class GameDashboard < Administrate::BaseDashboard
     name
     categories
     runs
+    races
+    aliases
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -38,8 +43,8 @@ class GameDashboard < Administrate::BaseDashboard
     name
     aliases
     categories
-    srdc
-    srl
+    speedrun_dot_com_game
+    speed_runs_live_game
     created_at
     updated_at
   ].freeze

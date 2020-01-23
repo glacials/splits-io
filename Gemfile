@@ -46,7 +46,7 @@ group :production do
 end
 
 # administration
-gem 'administrate', '~> 0.12'
+gem 'administrate'
 gem 'chartkick'
 gem 'groupdate'
 

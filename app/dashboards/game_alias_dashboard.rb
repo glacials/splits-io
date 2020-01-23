@@ -8,9 +8,10 @@ class GameAliasDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    game: Field::BelongsTo,
-    id: Field::Number,
-    name: Field::String.with_options(searchable: false)
+    id:      Field::Number,
+    game:    Field::BelongsTo,
+    game_id: Field::Number,
+    name:    Field::String.with_options(searchable: false)
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -37,6 +38,7 @@ class GameAliasDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
     name
+    game_id
   ].freeze
 
   # Overwrite this method to customize how game aliases are displayed

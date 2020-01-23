@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :game_aliases
     resources :categories
     resources :speedrun_dot_com_games
+    resources :speedrun_dot_com_categories
     resources :speed_runs_live_games
 
     resources :runs
@@ -118,7 +119,7 @@ Rails.application.routes.draw do
 
   get    '/:id/edit',  to: 'runs#edit', as: :edit_run
   get    '/:id',       to: 'runs#show', as: :run, format: false # disable format so requests like /ads.txt don't render a run
-  get    '/:id/stats', to: redirect('/%{run}') # to support old links floating around the internet; RIP stats page
+  get    '/:id/stats', to: redirect('/%{id}') # to support old links floating around the internet; RIP stats page
   patch  '/:id',       to: 'runs#update'
   delete '/:id',       to: 'runs#destroy'
 

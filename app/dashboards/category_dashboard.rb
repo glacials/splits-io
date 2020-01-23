@@ -8,14 +8,19 @@ class CategoryDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    game: Field::BelongsTo,
-    runs: Field::HasMany,
-    rivalries: Field::HasMany,
-    id: Field::Number,
-    name: Field::String,
+    id:         Field::Number,
+    game:       Field::BelongsTo,
+    game_id:    Field::Number,
+    name:       Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    shortname: Field::String
+    shortname:  Field::String,
+
+    runs:      Field::HasMany,
+    rivalries: Field::HasMany,
+    races:     Field::HasMany,
+
+    speedrun_dot_com_category: Field::HasOne,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -27,7 +32,10 @@ class CategoryDashboard < Administrate::BaseDashboard
     id
     game
     name
+    shortname
+
     runs
+    rivalries
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -39,20 +47,27 @@ class CategoryDashboard < Administrate::BaseDashboard
     name
     created_at
     updated_at
+
+    speedrun_dot_com_category
+
+    runs
+    rivalries
+    races
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    shortname
+    game_id
     name
+    shortname
   ].freeze
 
   # Overwrite this method to customize how categories are displayed
   # across all pages of the admin dashboard.
   #
   def display_resource(category)
-    category
+    "#{category.game} #{category}"
   end
 end

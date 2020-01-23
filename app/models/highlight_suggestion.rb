@@ -16,7 +16,7 @@ class HighlightSuggestion < ApplicationRecord
         realtime_duration_ms: run.duration(Run::REAL).to_ms,
         gametime_duration_ms: run.duration(Run::GAME).to_ms
       )
-      return if pb.nil?
+      return if pb.nil? || pb.duration(Run::REAL).nil?
 
       run.user.twitch.videos.each do |video|
         match = /^((\d+)h)?((\d+)m)?((\d+)s)?$/.match(video['duration'])

@@ -8,28 +8,29 @@ class RunDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    user: Field::BelongsTo,
-    category: Field::BelongsTo,
-    game: Field::HasOne,
-    segments: Field::HasMany,
-    id: Field::Number,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
-    parsed_at: Field::DateTime,
-    nick: Field::String,
-    image_url: Field::String,
-    program: Field::String,
-    claim_token: Field::Password,
-    archived: Field::Boolean,
-    video: Field::HasOne,
-    srdc_id: Field::String,
-    attempts: Field::Number,
-    s3_filename: Field::String,
-    realtime_duration_ms: Field::Number,
+    user:                    Field::BelongsTo,
+    category:                Field::BelongsTo,
+    category_id:             Field::Number,
+    game:                    Field::HasOne,
+    segments:                Field::HasMany,
+    id:                      Field::Number,
+    created_at:              Field::DateTime,
+    updated_at:              Field::DateTime,
+    parsed_at:               Field::DateTime,
+    nick:                    Field::String,
+    image_url:               Field::String,
+    program:                 Field::String,
+    claim_token:             Field::Password,
+    archived:                Field::Boolean,
+    video:                   Field::HasOne,
+    srdc_id:                 Field::String,
+    attempts:                Field::Number,
+    s3_filename:             Field::String,
+    realtime_duration_ms:    Field::Number,
     realtime_sum_of_best_ms: Field::Number,
-    gametime_duration_ms: Field::Number,
+    gametime_duration_ms:    Field::Number,
     gametime_sum_of_best_ms: Field::Number,
-    default_timing: Field::String
+    default_timing:          Field::String
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -75,7 +76,7 @@ class RunDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
     user
-    category
+    category_id
     nick
     image_url
     archived

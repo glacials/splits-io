@@ -54,6 +54,6 @@ class SpeedRunsLiveGameDashboard < Administrate::BaseDashboard
   ].freeze
 
   def display_resource(srl)
-    "#{srl.game}'s SRL link"
+    "#{srl.game}'s SpeedRunsLive link"
   end
 end

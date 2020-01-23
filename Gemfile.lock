@@ -467,7 +467,7 @@ DEPENDENCIES
   active_record_union
   activerecord-import
   activerecord-nulldb-adapter
-  administrate (~> 0.12)
+  administrate
   api-pagination
   authie
   aws-sdk-rails

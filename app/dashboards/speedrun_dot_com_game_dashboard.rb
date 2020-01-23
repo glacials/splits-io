@@ -8,19 +8,19 @@ class SpeedrunDotComGameDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    id: Field::String.with_options(searchable: false),
-    game: Field::BelongsTo,
-    srdc_id: Field::String,
-    name: Field::String,
-    shortname: Field::String,
-    url: Field::String,
-    favicon_url: Field::String,
-    cover_url: Field::String,
+    id:             Field::String.with_options(searchable: false),
+    game:           Field::BelongsTo,
+    srdc_id:        Field::String,
+    name:           Field::String,
+    shortname:      Field::String,
+    url:            Field::String,
+    favicon_url:    Field::String,
+    cover_url:      Field::String,
     default_timing: Field::Select.with_options(collection: ['real', 'game']),
-    show_ms: Field::Boolean,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
-    twitch_name: Field::String,
+    show_ms:        Field::Boolean,
+    created_at:     Field::DateTime,
+    updated_at:     Field::DateTime,
+    twitch_name:    Field::String,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -56,7 +56,6 @@ class SpeedrunDotComGameDashboard < Administrate::BaseDashboard
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
-    game
     srdc_id
     name
     shortname
@@ -72,6 +71,6 @@ class SpeedrunDotComGameDashboard < Administrate::BaseDashboard
   # across all pages of the admin dashboard.
   #
   def display_resource(speedrun_dot_com_game)
-    "#{speedrun_dot_com_game.game}'s Speedrun.com link"
+    "#{speedrun_dot_com_game.game}'s speedrun.com link"
   end
 end
