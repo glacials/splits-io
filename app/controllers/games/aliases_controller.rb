@@ -31,7 +31,7 @@ class Games::AliasesController < ApplicationController
   def set_game
     @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) || Game.find_by(id: params[:game])
 
-    redirect_to games_path(q: params[:game]) if @game.nil?
+    redirect_back fallback_location: root_path, alert: 'Game not found.' if @game.nil?
   end
 
   def set_game_to_merge

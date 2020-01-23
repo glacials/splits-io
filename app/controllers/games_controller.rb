@@ -27,7 +27,7 @@ class GamesController < ApplicationController
 
     redirect_to game_path(@game) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
   rescue ActiveRecord::RecordNotFound
-    redirect_to games_path(q: params[:game]) if @game.nil?
+    redirect_back(fallback_location: root_path, alert: 'Game not found.')
   end
 
   def set_games

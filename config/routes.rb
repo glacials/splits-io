@@ -48,9 +48,6 @@ Rails.application.routes.draw do
   get  '/random',     to: 'runs#random',     as: :random_run
   get  '/convert',    to: redirect('/upload')
 
-  get '/search',    to: 'search#index'
-  get '/search/:q', to: redirect('/search?q=%{q}')
-
   get '/:run/compare/:comparison_run', to: 'runs#compare',  as: :compare
 
   get '/auth/splitsio/callback', to: 'sessions#in'
