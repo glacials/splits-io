@@ -5,36 +5,41 @@
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
     - if @run.game.present? && @run.category.present?
-      li.breadcrumb-item = link_to(@run.game, game_path(@run.game))
+      li.breadcrumb-item = link_to(@run.game, @run.game)
       li.breadcrumb-item = link_to(@run.category, game_category_path(@run.game, @run.category))
-    li.breadcrumb-item = link_to(@run.id36, run_path(@run))
-    li.breadcrumb-item.active = link_to('Edit', edit_run_path(@run))
+    li.breadcrumb-item = link_to(@run.id36, @run)
+    li.breadcrumb-item.active = link_to('Edit run', edit_run_path(@run))
 
 .row.mx-2
-  .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-  .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+  .col-md-4 = render 'title', timing: timing, run: @run, compare_runs: @compare_runs
+  .col-md-8 = render 'stats', timing: timing, run: @run, compare_runs: @compare_runs
 
-= render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+= render 'full_timeline', timing: timing, run: @run, compare_runs: @compare_runs
 
 .row.row-cols-1.row-cols-md-2.mx-1
-  .col.p-1: .card.h-100 = form_for @run, as: @run.id36, url: run_path(@run) do |f|
-    h5.card-header Edit Game/Category
-    .card-body
-      edit-run-game-and-category run-id=@run.id36
-    .card-footer.clearfix: .float-right = f.submit 'Save', id: 'game-category-submit', class: 'btn btn-outline-primary'
+  .col.p-1
+    = form_for @run, namespace: 'category', html: {class: 'card h-100'} do |f|
+      h5.card-header Edit game/category
+      .card-body
+        edit-run-game-and-category run-id=@run.id36
+      .card-footer.clearfix: .float-right
+        = f.submit 'Save game/category', id: 'game-category-submit', class: 'btn btn-outline-primary'
 
   .col.p-1
-    = form_for(@run.video || @run.build_video, url: run_video_path(@run), method: :put, html: {class: 'card h-100'}) do |f|
-      h5.card-header Edit Video
+    = form_for @run.video || @run.build_video, url: run_video_path(@run), method: :put, html: {class: 'card h-100'} do |f|
+      h5.card-header Edit video
       .card-body
-        = f.text_field(:url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD')
+        = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD'
       .card-footer.clearfix: .float-right: .btn-group
-        = f.submit('Save', class: 'btn btn-outline-primary')
+        = f.submit 'Save video', class: 'btn btn-outline-primary'
 
-  .col.p-1: .card.h-100 = form_for @run, as: @run.id36, url: run_path(@run) do |f|
-    h5.card-header Edit Speedrun.com Link
-    .card-body = f.text_field(:srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com')
-    .card-footer.clearfix: .float-right = f.submit 'Save', class: 'btn btn-outline-primary'
+  .col.p-1
+    = form_for @run, namespace: 'srdc', html: {class: 'card h-100'} do |f|
+      h5.card-header Edit speedrun.com link
+      .card-body
+        = f.text_field :srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com'
+      .card-footer.clearfix: .float-right: .btn-group
+        = f.submit 'Save speedrun.com link', class: 'btn btn-outline-primary'
 
   .col.p-1: .card.h-100
     h5.card-header Reparse
@@ -44,12 +49,13 @@
         cloud-based splits.
       p This is not reversible.
     .card-footer
-      / This needs data-turbolinks="false" or the reparse page will refresh itself infinitely
-      .float-right: a.btn.btn-outline-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse
+      .float-right
+        / This needs data-turbolinks="false" or the reparse page will refresh itself infinitely
+        a.btn.btn-outline-warning data-turbolinks="false" href=edit_run_path(@run, reparse: '1') Reparse run
 
   .col.p-1
     - if current_user&.has_hiding?
-      = render partial: 'hide', locals: {run: @run}
+      = render 'hide', run: @run
     - else
       .card.h-100
         h5.card-header Hide
@@ -60,22 +66,21 @@
             a.btn.btn-primary href=subscriptions_path Subscribe
 
   - if @run.completed?(Run::REAL) && @run.completed?(Run::GAME)
-    .col.p-1: .card.h-100
-      h5.card-header Default timing
-      .card-body
-        p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
-          However, you can set the default behavior for this run here.
-        p This is reversible.
-      .card-footer
-        .float-right
-          - if @run.default_timing == 'game'
-            = form_for(@run, as: @run.id36, url: run_path(@run)) do |f|
+    .col.p-1
+      = form_for @run, namespace: 'timing', html: {class: 'card h-100'} do |f|
+        h5.card-header Default timing
+        .card-body
+          p For runs with times logged in both realtime and gametime, viewers can always toggle which is displayed.
+            However, you can set the default behavior for this run here.
+          p This is reversible.
+        .card-footer
+          .float-right
+            - if @run.default_timing == 'game'
               = f.hidden_field(:default_timing, value: 'real')
               => icon('fas', 'gamepad')
               i.text-secondary.mr-2 Currently gametime
               = f.submit 'Set to realtime', class: 'btn btn-outline-primary'
-          - else
-            = form_for(@run, as: @run.id36, url: run_path(@run)) do |f|
+            - else
               = f.hidden_field(:default_timing, value: 'game')
               => icon('fas', 'globe-americas')
               i.text-secondary.mr-2 Currently realtime
@@ -100,8 +105,12 @@
                 p This is not reversible.
               .card-footer
                 .float-right
-                  = button_to run_path(@run), method: :delete, data: {confirm: "Really delete your #{@run} run?"}, class: 'btn btn-outline-danger'
-                    | Delete
+                  = button_to(run_path(@run), \
+                    class: 'btn btn-outline-danger', \
+                    data: {confirm: "Really delete your #{@run} run?"}, \
+                    method: :delete, \
+                  )
+                    ' Delete
             .card.mb-2
               h5.card-header Disown
               .card-body
@@ -112,5 +121,11 @@
                 p This is not reversible.
               .card-footer
                 .float-right
-                  = button_to run_path(@run), method: :patch, data: {confirm: "Really disown your #{@run} run?"}, params: {@run.id36 => {disown: true}}, class: 'btn btn-outline-warning'
-                    | Disown
+                  = button_to( \
+                    run_path(@run), \
+                    class: 'btn btn-outline-warning', \
+                    data: {confirm: "Really disown your #{@run} run?"}, \
+                    method: :patch, \
+                    params: {run: {disown: true}}, \
+                  )
+                    ' Disown

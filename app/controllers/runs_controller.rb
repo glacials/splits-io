@@ -27,7 +27,7 @@ class RunsController < ApplicationController
     if params['reparse'] == '1'
       @run.update(parsed_at: nil) if @run.parsed?
       ParseRunJob.perform_later(@run)
-      redirect_to(run_path(@run), notice: 'Your reparse is in progress. You will be taken to it automatically.')
+      redirect_to @run, notice: 'Your parse is in progress. This page will refresh automatically.'
       return
     end
   end
@@ -38,27 +38,22 @@ class RunsController < ApplicationController
       return
     end
 
-    if params[:run][:category]
-      @run.update(category: Category.find(params[:run][:category]))
+    if run_params[:category]
+      @run.update(category: Category.find(run_params[:category]))
       redirect_to edit_run_path(@run), notice: 'Game/category updated.'
       return
     end
 
-    unless params[@run.id36].respond_to?(:[])
-      redirect_to edit_run_path(@run), alert: 'There was an error saving that data. Please try again.'
-      return
-    end
-
-    if params[@run.id36][:disown]
+    if run_params[:disown]
       @run.update(user: nil)
-      redirect_to run_path(@run), notice: 'Run disowned.'
+      redirect_to @run, notice: 'Run disowned.'
       return
     end
 
-    if params[@run.id36][:srdc_url]
-      srdc_id = SpeedrunDotCom::Run.id_from_url(params[@run.id36][:srdc_url])
+    if run_params[:srdc_url]
+      srdc_id = SpeedrunDotCom::Run.id_from_url(run_params[:srdc_url])
 
-      if params[@run.id36][:srdc_url].present? && !srdc_id
+      if run_params[:srdc_url].present? && !srdc_id
         redirect_params = {
           alert: 'Your Speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.',
         }
@@ -71,9 +66,9 @@ class RunsController < ApplicationController
       return
     end
 
-    if params[@run.id36][:archived]
-      if @run.update(archived: params[@run.id36][:archived])
-        if params[@run.id36][:archived] == 'true'
+    if run_params[:archived]
+      if @run.update(archived: run_params[:archived])
+        if run_params[:archived] == 'true'
           redirect_to edit_run_path(@run), notice: 'Run unlisted.'
         else
           redirect_to edit_run_path(@run), notice: 'Run listed.'
@@ -83,9 +78,9 @@ class RunsController < ApplicationController
       end
     end
 
-    if params[@run.id36][:default_timing]
-      if @run.update(default_timing: params[@run.id36][:default_timing])
-        if params[@run.id36][:default_timing] == 'real'
+    if run_params[:default_timing]
+      if @run.update(default_timing: run_params[:default_timing])
+        if run_params[:default_timing] == 'real'
           redirect_to edit_run_path(@run), notice: 'Default timing changed to realtime.'
         else
           redirect_to edit_run_path(@run), notice: 'Default timing changed to gametime.'
@@ -109,7 +104,7 @@ class RunsController < ApplicationController
     if @run.destroy
       redirect_to root_path, notice: 'Run deleted.'
     else
-      redirect_to root_path, alert: 'There was an error deleting your run. Please try again.'
+      redirect_back fallback_location: root_path, alert: 'There was an error deleting your run. Please try again.'
     end
   end
 
@@ -120,7 +115,7 @@ class RunsController < ApplicationController
            Run.includes(segments: {icon_attachment: :blob}).find_by!(nick: params[:id])
     timing = params[:timing] || @run.default_timing
     unless [Run::REAL, Run::GAME].include?(timing)
-      redirect_to(request.path, alert: 'Timing can only be real or game.')
+      redirect_to request.path, alert: 'Timing can only be real or game.'
       return
     end
 
@@ -148,7 +143,7 @@ class RunsController < ApplicationController
 
   def warn_about_deprecated_url
     redirect_to(
-      run_path(@run),
+      @run,
       alert: "This run's permalink has changed. You have been redirected to the newer one. \
               <a href='#{why_permalinks_path}'>More info</a>.".html_safe
     )
@@ -157,19 +152,19 @@ class RunsController < ApplicationController
   def attempt_to_claim
     # Owned run
     if @run.user.present?
-      redirect_to run_path(@run)
+      redirect_to @run
       return
     end
 
     # Unowned but unclaimable run
     if @run.claim_token.nil?
-      redirect_to run_path(@run), alert: 'This run is not claimable, as it has been previously claimed then disowned.'
+      redirect_to @run, alert: 'This run is not claimable, as it has been previously claimed then disowned.'
       return
     end
 
     # Unowned and claimable run, but bad claim token
     if @run.claim_token != params[:claim_token]
-      redirect_to run_path(@run), alert: 'Could not claim this run with that token. Do you have your URLs mixed up?'
+      redirect_to @run, alert: 'Could not claim this run with that token. Do you have your URLs mixed up?'
       return
     end
 
@@ -188,5 +183,9 @@ class RunsController < ApplicationController
 
     SyncUserFollowsJob.perform_later(current_user, current_user.twitch)
     current_user.twitch.update(follows_synced_at: Time.now.utc)
+  end
+
+  def run_params
+    params.require(:run).permit(:reparse, :category, :disown, :srdc_url, :archived, :default_timing)
   end
 end

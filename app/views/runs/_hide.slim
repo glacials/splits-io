@@ -5,15 +5,16 @@
     p This is reversible.
   .card-footer
     .float-right
-      - if run.archived?
-        = form_for run, as: run.id36, url: run_path(run) do |f|
-          = f.hidden_field(:archived, value: false)
+      = form_for run, namespace: 'hide' do |f|
+        - if run.archived?
+          = f.hidden_field :archived, value: false
+          => icon('fas', 'eye-slash')
           i.text-secondary.mr-2 Currently hidden
           .btn-group
             = f.submit 'Unhide run', class: 'btn btn-outline-primary'
-      - else
-        = form_for run, as: run.id36, url: run_path(run) do |f|
-          = f.hidden_field(:archived, value: true)
+        - else
+          = f.hidden_field :archived, value: true
+          => icon('fas', 'eye')
           i.text-secondary.mr-2 Currently shown
           .btn-group
             = f.submit 'Hide run', class: 'btn btn-outline-primary'

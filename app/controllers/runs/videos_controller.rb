@@ -2,7 +2,7 @@ class Runs::VideosController < Runs::ApplicationController
   before_action :set_run, only: [:create, :update]
 
   def update
-    if cannot?(:update, Run)
+    if cannot?(:update, @run)
       redirect_to run_path(@run), alert: 'You do not have permission to edit this run.'
       return
     end

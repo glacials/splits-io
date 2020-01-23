@@ -32,10 +32,10 @@
               .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
           - else
             .card.m-1
-              i.text-center.my-auto No video attached to this run
+              i.text-center.my-5 No video attached to this run
         - if @compare_runs.none?
           .card.m-1.mx-2
-            i.text-center.my-auto Select a comparison to see another run's video here
+            i.text-center.my-5 Select a comparison to see another run's video here
             .card-footer: .float-right
               = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
     .row.row-cols-1.row-cols-md-2.mx-0

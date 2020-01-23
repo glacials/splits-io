@@ -1,4 +1,4 @@
-h1 = run.to_s
+h1 = run
 h5
   span> by
   span = user_badge(run.user)
@@ -6,7 +6,7 @@ h5
     .badge
       => icon('fas', 'check')
       span Personal Best
-  span.mr-2 = render partial: 'runs/timing_badge', locals: {run: run, timing: timing}
+  span.mr-2 = render 'runs/timing_badge', run: run, timing: timing
   - old_runs = run.user.non_pbs([run.category_id]).group_by(&:category_id)[run.category_id]&.sort_by(&:created_at)&.reverse if run.user
   - if old_runs.present?
     span.dropdown-toggle.mr-2.cursor-pointer id="#{run.id36}-history-dropdown" data-toggle='dropdown'
@@ -42,8 +42,8 @@ h5
           a.btn.btn-outline-primary href=edit_run_path(run) style='white-space: nowrap'
             => icon('fas', 'edit')
             ' Edit
-      = render partial: 'export_button', locals: {run: run}
-      = render partial: 'compare_button', locals: {timing: timing, run: run, compare_runs: compare_runs}
+      = render 'export_button', run: run
+      = render 'compare_button', timing: timing, run: run, compare_runs: compare_runs
     - if run.user.nil?
       #claim-nav-link-container.btn-group hidden=true
         - if current_user.present?
@@ -66,7 +66,7 @@ h5
       = run.likes.count
   - if run.belongs_to?(current_user)
     .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-      = render partial: 'highlight_button', locals: {run: run}
+      = render 'highlight_button', run: run
       - if run.category&.srdc && run.srdc_id.blank?
         a.btn.btn-srdc.tip-top(
           href='#'
@@ -77,38 +77,7 @@ h5
           span Auto-submit
     - if run.category&.srdc && run.srdc_id.blank?
       - if current_user.srdc
-        = render partial: 'srdc_submit_modal', locals: {run: run}
+        = render 'srdc_submit_modal', run: run
       - else
-        = render partial: 'shared/srdc_link_modal'
-
-- if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
-  #highlight.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'highlight-label', hidden: true}
-    .modal-dialog role='document'
-      .modal-content
-        = form_for(run.build_video, url: run_video_path(run), method: :put) do |f|
-          .modal-header.bg-dark
-            h5.text-light Auto-Highlight
-          .modal-body.bg-dark
-            .row.text-light.m-2
-              p Splits.io found the stream you PBed in! Click below to highlight it with 10s on either end of the
-                run.
-              p You will have a chance to edit before publishing.
-            .row: .btn-group.mx-auto
-              a.btn.btn-twitch.mx-auto.twitch(
-                target='_blank'
-                rel='noopener'
-                href=run.highlight_suggestion.url
-              )
-                => icon('fab', 'twitch')
-                ' Highlight at Twitch
-              .btn.btn-outline-twitch.tip-top(
-                title='Not taking you to the right page? Your video archive may have expired.'
-                style='cursor: default'
-              ) = icon('fas', 'question-circle')
-            .row.text-light.m-2
-              p Paste the link you get here:
-              = f.text_field(:url, class: 'form-control', placeholder: 'Paste the URL Twitch gives you here', spellcheck: false)
-          .modal-footer.bg-dark
-            .float-right
-              .btn-group
-                = f.submit('Save', class: 'btn btn-primary')
+        = render 'shared/srdc_link_modal'
+= render 'highlight_modal', run: run
