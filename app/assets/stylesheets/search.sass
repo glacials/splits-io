@@ -4,3 +4,12 @@
 .search, .tt-hint, .tt-input
     display: block !important
 
+// Workaround for Vue scoped styles not applying in production env
+// TODO: Figure out why Vue scoped styles don't work
+// Similar issue as this: https://forum.vuejs.org/t/styles-ignored-in-production/29298/4
+.vbt-autcomplete-list
+  max-height: 350px
+  overflow-y: auto
+  padding-top: 5px
+  position: absolute
+  z-index: 999
