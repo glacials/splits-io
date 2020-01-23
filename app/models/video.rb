@@ -25,7 +25,7 @@ class Video < ApplicationRecord
   end
 
   def supports_embedding?
-    twitch? || youtube?
+    [TWITCH, YOUTUBE].include?(provider)
   end
 
   def video_id

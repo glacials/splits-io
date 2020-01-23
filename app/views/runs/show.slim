@@ -12,9 +12,9 @@
 
 - if !@run.parsed?
   #await-runs.text-center.text-primary data-runs=([@run.id36, *@compare_runs.map(&:id36)].join(','))
-    = render partial: 'shared/spinner', locals: {messages: [ \
+    = render 'shared/spinner', messages: [ \
       'Parsing', 'Gathering', 'Analyzing', 'Sorting', 'Logging', 'Unscrambling', 'Clipping', 'Spinjumping', 'Manipulating RNG',
-    ]}
+    ]
 - else
   - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?)) || (@run.user && @compare_runs[0].user == @run.user)
     .row.mx-2
@@ -24,18 +24,18 @@
     = render partial: 'runs/claim', locals: {run: @run}
     = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
 
-    - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).where.not(url: nil).exists?
+    - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).any?
       .card-deck.mx-0
         - [@run, *@compare_runs].each do |run|
           - if run.video&.supports_embedding?
-            .card.m-1.video-card
+            .card.mx-1.video-card
               .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
           - else
-            .card.m-1
+            .card.mx-1
               i.text-center.my-5 No video attached to this run
         - if @compare_runs.none?
-          .card.m-1.mx-2
-            i.text-center.my-5 Select a comparison to see another run's video here
+          .card.mx-1
+            i.text-center.my-auto.py-5 Select a comparison to see another run's video here
             .card-footer: .float-right
               = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
     .row.row-cols-1.row-cols-md-2.mx-0
