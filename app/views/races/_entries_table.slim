@@ -60,20 +60,14 @@ h6.card-header Entries
                 }
           td.nowrap.text-center
             - if entry.runner.present?
-              - entries = entry.runner.entries
-              - places = entries.map(&:place)
               span.badge.badge-dark.mr-2
                 => icon('fas', 'medal')
-                span.text-gold = places.count(1)
-                span.text-secondary = '/'
-                span.text-silver = places.count(2)
-                span.text-secondary = '/'
-                span.text-bronze = places.count(3)
+                span.text-gold = entry.runner.entries.first_place.count
               span.badge.badge-dark
                 => icon('fas', 'flag-checkered')
-                b.text-success = entries.count(:finished_at)
+                b.text-success = entry.runner.entries.where.not(finished_at: nil).count
                 span.text-secondary = '/'
-                span.text-danger = entries.count(:forfeited_at)
+                span.text-danger = entry.runner.entries.where.not(forfeited_at: nil).count
           td.nowrap.text-center
             - if entry.runner.try(:twitch).try(:present?)
               a.text-light.tip.mr-2 href=entry.runner.twitch.url title='Watch on Twitch'

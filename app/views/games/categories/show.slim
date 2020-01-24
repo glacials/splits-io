@@ -8,7 +8,7 @@
       li.breadcrumb-item = link_to @category, game_category_path(@game, @category)
 
 / Specify the full partial path because this view is used by different controllers
-.row.mx-2 = render partial: 'games/categories/title', locals: {timing: timing, category: @category}
+.row.mx-2 = render 'games/categories/title', timing: timing, category: @category
 
 .row.mx-2
   .card.w-100
