@@ -102,7 +102,7 @@ class User < ApplicationRecord
     name || 'somebody'
   end
 
-  # Predictions used to be a lower-tier paid Patreon feature, so they're available to:
+  # Predictions used to be a tier 2 Patreon feature, so they're available to:
   # 1. Gold users (the standard way of obtaining)
   # 2. Continued patrons who used to have them at the lower price point (grandfathered)
   # 3. Anyone paying at least the price of Gold via Patreon
@@ -110,7 +110,7 @@ class User < ApplicationRecord
     patron?(tier: 2, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin?
   end
 
-  # Redirectors used to be a lower-tier paid Patreon feature, so they're available to:
+  # Redirectors used to be a tier 3 Patreon feature, so they're available to:
   # 1. Gold users (the standard way of obtaining)
   # 2. Continued patrons who used to have them at the lower price point (grandfathered)
   # 3. Anyone paying at least the price of Gold via Patreon
@@ -118,7 +118,7 @@ class User < ApplicationRecord
     patron?(tier: 3, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier2.active.any? || admin?
   end
 
-  # Advanced comparisons used to be free, so they're available to:
+  # Advanced comparisons used to be a tier 3 Patreon feature, so they're available to:
   # 1. Gold users (the standard way of obtaining)
   # 2. Early patrons (grandfathered as a thank-you)
   # 3. Anyone paying at least the price of Gold via Patreon
