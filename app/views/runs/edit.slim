@@ -29,7 +29,7 @@
     = form_for @run.video || @run.build_video, url: run_video_path(@run), method: :put, html: {class: 'card h-100'} do |f|
       h5.card-header Edit video
       .card-body
-        = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD'
+        = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD', 'aria-label' => 'Video URL'
       .card-footer.clearfix: .float-right: .btn-group
         = f.submit 'Save video', class: 'btn btn-outline-primary'
 
@@ -37,7 +37,7 @@
     = form_for @run, namespace: 'srdc', html: {class: 'card h-100'} do |f|
       h5.card-header Edit speedrun.com link
       .card-body
-        = f.text_field :srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com'
+        = f.text_field :srdc_url, class: 'form-control', placeholder: 'URL for your run on speedrun.com', 'aria-label' => 'Speedrun.com URL'
       .card-footer.clearfix: .float-right: .btn-group
         = f.submit 'Save speedrun.com link', class: 'btn btn-outline-primary'
 
@@ -90,7 +90,7 @@
     .card
       #delete-header.card-header
         h5.mb-0
-          button.btn.btn-link type='button' data={toggle: 'collapse', target: '#delete-body'} aria={expanded: true, controls: 'delete-body'}
+          button.btn.btn-link type='button' data={toggle: 'collapse', target: '#delete-body'} aria={expanded: false, controls: 'delete-body'}
             ' Delete or disown
       #delete-body.collapse aria={labelledby: 'delete-header'} data={parent: '#delete'}
         .card-body

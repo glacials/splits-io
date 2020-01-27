@@ -1,5 +1,5 @@
 <template>
-  <select class='form-control' v-model='selectedCategoryId' v-if='game' name='run[category]'>
+  <select class='form-control' id='category-selector' v-model='selectedCategoryId' v-if='game' name='run[category]'>
     <option v-if='nullCategory' :value='null'>
       {{nullCategory}}
     </option>

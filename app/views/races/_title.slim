@@ -34,6 +34,7 @@ race-title(
                 data-clipboard-text=race_url(race, join_token: race.join_token)
                 title='Copy invite link'
                 v-tippy=true
+                aria-label='Copy race URL'
               )
                 span#copy = icon('fas', 'share-alt')
                 span#copied style='display: none;' = icon('fas', 'check')
@@ -44,6 +45,7 @@ race-title(
                   @click='edit'
                   v-if='!editing && !race.started_at'
                   v-tippy=true
+                  aria-label='Edit race information'
                 )
                   template v-if='loading' = render partial: 'shared/spinner'
                   template v-else-if='error' = icon('fas', 'times')
@@ -63,6 +65,7 @@ race-title(
           a.btn.btn-outline-light.btn-sm.ml-2(
             href=race_path(race, controller.race_params.merge(browsersource: 1))
             title='View in browser source friendly layout (beta)'
+            aria-label='View in browser source friendly layout (beta)'
             v-tippy=true
           ) = icon('fas', 'broadcast-tower')
           small.text-muted.ml-2 v-if='syncing'
