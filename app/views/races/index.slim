@@ -9,11 +9,12 @@
 - else
   - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST, created_at DESC')
 
-.row
-  = render 'shared/statcard', stat: current_user.entries.where.not(finished_at: nil).count, description: 'Races finished'
-  = render 'shared/statcard', stat: current_user.entries.where.not(forfeited_at: nil).count, description: 'Races forfeited'
-  = render 'shared/statcard', stat: current_user.created_races.count, description: 'Races created'
-  = render 'shared/statcard', stat: current_user.entries.first_place.count, description: 'Races won'
+- if current_user
+  .row
+    = render 'shared/statcard', stat: current_user.entries.where.not(finished_at: nil).count, description: 'Races finished'
+    = render 'shared/statcard', stat: current_user.entries.where.not(forfeited_at: nil).count, description: 'Races forfeited'
+    = render 'shared/statcard', stat: current_user.created_races.count, description: 'Races created'
+    = render 'shared/statcard', stat: current_user.entries.first_place.count, description: 'Races won'
 
 .row.mx-0: .col.p-1: .card.mx-auto
   .card-header.d-flex.justify-content-between
