@@ -96,6 +96,7 @@ Rails.application.routes.draw do
       as: :game_category_sum_of_bests
 
   get '/races',     to: 'races#index',  as: :races
+  get '/vs', to: redirect('/races')
   get '/races/:id', to: 'races#show',   as: :race
 
   get '/tools', to: 'tools#index'
@@ -193,6 +194,8 @@ Rails.application.routes.draw do
       post '/races/:race_id/chat', to: 'races/chat_messages#create'
 
       post '/races/:race_id/ghosts', to: 'races/ghosts#create'
+
+      get '/speedrunslive_races', to: 'speedrunslive_races#index'
 
       post '/timesync', to: 'time#create'
     end

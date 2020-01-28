@@ -48,11 +48,11 @@ race-title(
                   template v-if='loading' = render partial: 'shared/spinner'
                   template v-else-if='error' = icon('fas', 'times')
                   template v-else=true = icon('fas', 'edit')
-                button.btn.btn-outline-light @click='cancel' v-if='editing'
+                button.btn.btn-outline-light @click='cancel' v-if='editing' v-tippy=true title='Discard changes'
                   = icon('fas', 'times')
-                button.btn.btn-outline-light(
+                button.btn.btn-success(
                   :disabled='loading'
-                  :title='error'
+                  :title='error || "Save changes"'
                   @click='save'
                   v-if='editing && !race.started_at'
                   v-tippy=true
@@ -76,5 +76,6 @@ race-title(
         pre.text-light v-show='!editing'
           ' {{(race.notes || '').split('\n').splice(1).filter(s => s !== '').join('\n')}}
         template v-if='editing'
-          small.form-text.text-muted.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2 Use the first line as a title supplement.
-          textarea.text-dark style='font-family: monospace; width: 100%' rows=10 v-model='notes'
+          textarea.text-dark.p-2 style='font-family: monospace; width: 100%' rows=10 v-model='notes' placeholder='First line: Race title supplement
+
+          The rest: Notes, rules, and links'

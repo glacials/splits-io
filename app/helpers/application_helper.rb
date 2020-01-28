@@ -89,6 +89,10 @@ module ApplicationHelper
     'https://discord.gg/yGaxX39'
   end
 
+  def github_url
+    'https://github.com/glacials/splits-io'
+  end
+
   private
 
   def by(param)

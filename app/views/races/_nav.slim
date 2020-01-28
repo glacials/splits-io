@@ -9,7 +9,7 @@ race-nav(
   div
     template v-if='race.entries && (race.entries.length === 0 || race.entries.some(entry => entry.finished_at === null && entry.forfeited_at === null))'
       .btn-group.mr-2 v-if='entry && (!race.started_at || entry.finished_at || entry.forfeited_at)'
-        button.btn.btn-outline-primary(
+        button.btn.btn-outline-success(
           :disabled='loading.leave'
           :title='errors.leave'
           @click='leave'
@@ -19,7 +19,7 @@ race-nav(
           template v-if="loading.leave" = render partial: 'shared/spinner'
           span.text-danger v-else-if='errors.leave' => icon('fas', 'exclamation-triangle')
           ' Leave race
-        button.btn.btn-outline-primary(
+        button.btn.btn-outline-success(
           :disabled='loading.unready'
           :title='errors.unready'
           @click='unready'
@@ -51,7 +51,7 @@ race-nav(
           ' Undo forfeit
 
       .btn-group.mr-2 v-if='!entry && !race.started_at'
-        button.btn.btn-outline-primary v-tippy=true :title='errors.join' :disabled='loading.join || !currentUser' @click='join'
+        button.btn.btn-outline-success v-tippy=true :title='errors.join' :disabled='loading.join || !currentUser' @click='join'
           template v-if="loading.join" = render partial: 'shared/spinner'
           span.text-danger v-else-if='errors.join' => icon('fas', 'exclamation-triangle')
           template v-if='currentUser' Join race
@@ -62,7 +62,7 @@ race-nav(
           button.btn.btn-outline-secondary disabled=true Joined
 
       .btn-group.mr-2 v-if='entry && !race.started_at && !entry.readied_at'
-        button.btn.btn-outline-primary.glow v-tippy=true :title='errors.ready' :disabled='loading.ready' @click='ready'
+        button.btn.btn-outline-success.glow v-tippy=true :title='errors.ready' :disabled='loading.ready' @click='ready'
           template v-if='loading.ready' = render partial: 'shared/spinner'
           span.text-danger v-else-if='errors.ready' => icon('fas', 'exclamation-triangle')
           ' Set ready
@@ -73,7 +73,7 @@ race-nav(
 
       template v-if="entry && race.started_at && !entry.finished_at && !entry.forfeited_at"
         .btn-group.mr-2
-          button.btn.btn-outline-primary(
+          button.btn.btn-outline-success(
             :disabled="loading.forfeit || loading.finish || loading.split || starting"
             :title="errors.forfeit"
             @click="forfeit"
@@ -84,7 +84,7 @@ race-nav(
             template v-else=true => icon('fas', 'heart-broken')
             ' Set forfeited
         .btn-group.mr-2
-          button.btn.btn-outline-primary(
+          button.btn.btn-outline-success(
             :disabled="loading.forfeit || loading.finish || loading.split || starting"
             :title="errors.finish"
             @click="finish"
@@ -98,25 +98,23 @@ race-nav(
           button.btn.btn-outline-light(
             @click="split"
             :disabled="loading.forfeit || loading.finish || loading.split || starting"
-            :title="errors.split || 'Split, or create a split if there are none left. You can use this for blind runs. You cannot use this to finish. This is in open beta and may change significantly.'"
+            :title="errors.split || 'Split, or create a split if there are none left. You can use this for blind runs. You cannot use this to finish.'"
             v-tippy=true
           )
             template v-if="loading.split" = icon('fas', 'check')
             span.text-danger v-else-if='errors.split' => icon('fas', 'exclamation-triangle')
             template v-else=true => icon('fas', 'stopwatch')
-            ' Split
-            .badge.badge-warning
-              ' Beta
+            ' Split run
 
       .btn-group.mr-2 v-if="entry && race.started_at && entry.finished_at"
-        button.btn.btn-outline-primary disabled=true Finished
+        button.btn.btn-outline-success disabled=true Finished
 
       .btn-group.mr-2 v-if="entry && race.started_at && entry.forfeited_at"
-        button.btn.btn-outline-primary disabled=true Forfeited
-    .btn-group.mr-2: a.btn.btn-primary(
+        button.btn.btn-outline-success disabled=true Forfeited
+    .btn-group.mr-2: a.btn.btn-success(
       :href='`/${entry.run.id}`'
       v-if="entry && (entry.finished_at || entry.forfeited_at) && entry.run"
-    ) Analyze
+    ) Analyze run
     template v-if="!race.started_at"
       br
       small.text-secondary v-if="!race.started_at"

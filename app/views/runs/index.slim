@@ -7,16 +7,16 @@
   .row.row-cols-1.row-cols-md-2.mx-0
     - if current_user.runs.any?
       .col.p-1
-        .card.mb-2 = render partial: 'shared/race_table', locals: { \
-          races: current_user.races.with_ends.finished.order(ended_at: :desc), \
-          user: current_user, \
-          active_races: current_user.races.unfinished, \
-          description: 'My Races' \
-        }
-        = render partial: 'shared/feed'
+        .card.mb-2
+          = render 'shared/race_table',
+            races: current_user.races.with_ends.finished.order(ended_at: :desc),
+            user: current_user,
+            active_races: current_user.races.unfinished,
+            description: 'My races'
+        = render 'shared/feed'
 
       .col.p-1: .card.border-0.p-0
-        = render partial: 'shared/run_table', locals: { \
+        = render 'shared/run_table', { \
           runs: current_user.pbs, \
           cols: %i[time name video uploaded owner_controls rival], \
           col_options: {time: [:archived]},
@@ -56,6 +56,6 @@
                   ' Navigate to the
                   a> href=new_run_path Upload page
                   ' to choose a run using a file selector.
-      = render partial: 'shared/feed'
+      = render 'shared/feed'
 - else
-  = render partial: 'landing'
+  = render 'landing'

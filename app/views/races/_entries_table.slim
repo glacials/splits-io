@@ -77,16 +77,8 @@ h6.card-header Entries
                 = icon('fas', 'scroll')
 - if !race.started? && add_ghost
   .card-footer.clearfix: .float-right
-    .dropdown.mr-2
-      button.btn.btn-outline-primary.dropdown-toggle#ghost-btn(
-        type='button'
-        data={toggle: 'dropdown'}
-        aria={haspopup: true, expanded: false}
-        onclick='window.setTimeout(() => document.getElementById("ghost-input").focus(), 100)'
-      )
-        ' Add ghost
-      .dropdown-menu.p-4 aria={labelledby: 'ghost-btn'} style='width: 18rem'
-        = form_for(:entry, remote: true, url: api_v4_race_entries_path(race.id), html: {class: 'auth-me'}) do |f|
-          .form-group
-            = f.text_field(:run_id, class: 'form-control', placeholder: 'Run ID; e.g. g23b', id: 'ghost-input')
-          = f.submit('Add ghost', class: 'btn btn-outline-primary')
+    = form_for(:entry, remote: true, url: api_v4_race_entries_path(race.id), html: {class: 'auth-me'}) do |f|
+      .input-group
+        = f.text_field(:run_id, class: 'form-control', placeholder: 'Run ID; e.g. g23b', id: 'ghost-input')
+        .input-group-append
+          = f.submit('Add ghost', class: 'btn btn-secondary', data: {disable_with: 'Adding'})

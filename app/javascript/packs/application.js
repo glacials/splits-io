@@ -26,6 +26,7 @@ import race from '../vue/race.js'
 import raceCreate from '../vue/race-create.js'
 import EditRunGameAndCategory from '../vue/EditRunGameAndCategory.vue'
 import Search from '../vue/Search.vue'
+import SpeedRunsLiveRaceList from '../vue/SpeedRunsLiveRaceList.vue'
 
 Vue.use(TurbolinksAdapter)
 Vue.use(VueTippy)
@@ -37,7 +38,7 @@ document.addEventListener('turbolinks:load', () => {
 
   const app = new Vue({
     el: '#vue',
-    components: { race, raceCreate, EditRunGameAndCategory, Search },
+    components: { race, raceCreate, EditRunGameAndCategory, Search, SpeedRunsLiveRaceList },
   })
 })
 

@@ -18,14 +18,14 @@
 ---
 
 <p align="center">
-  A speedrun data store and analysis engine.
+  A speedrun data store, analysis engine, and racing platform.
 </p>
 
 ## About
-Splits.io is how speedrunners improve through data. It gives split-by-split analysis of individual runs, viewed through a
-lens of all runs. On Splits.io, speedrunners share more than their time -- they share their entire history of attempts, successful
-or not, and get feedback on how to improve long-term through statistics and comparisons with themselves and other runners in their
-weight class.
+Splits.io is how speedrunners improve through data. It gives split-by-split analysis of individual runs, viewed through
+a lens of all runs. On Splits.io, speedrunners share more than their time—they share their entire history of attempts,
+successful or not, and get feedback on how to improve long-term through statistics and comparisons with themselves and
+other runners in their weight class, both live (via races) and after-the-fact using historical data.
 
 Splits.io works with LiveSplit and more than 15 other speedrunning timers. An auto-generated list
 can be viewed in the [FAQ][faq]; new timers can self-integrate using the [Splits.io Exchange Format][exchange].
@@ -207,23 +207,17 @@ Config for this generation is at [`config/favicon.json`][favicon-config].
 [favicon-config]: config/favicon.json
 
 ### Theme
-Splits.io runs [Bootstrap 4][bootstrap] on a paid theme called [Dashboard][dashboard]. Its license does not allow its
-unminified source to be included in this repository; for posterity there are three modifications we make to the source
-before producing the included final build. This is within the terms of the license.
-
-- In `/v4/scss/variables.scss`:
-	- Change `$theme-colors[primary]` to `#489BE7`
-	- Change `$theme-colors[success]` to `#6EE588`
-	- Change `$theme-colors[warning]` to `#F5BA46`
-
-These new colors match those in the Splits.io logo.
+Splits.io runs vanilla [Bootstrap 4][bootstrap]. Historically we used one of a few themes to give it some additional
+distinction and a professionally tailored dark mode, but we decided to switch to vanilla with out own dark mode after
+several bad experiences with those themes slowly falling more and more out of date from mainline Bootstrap.
 
 [bootstrap]: https://getbootstrap.com/
 [dashboard]: https://themes.getbootstrap.com/product/dashboard/
 
 ## Responsible Disclosure
-If you find a security vulnerability in Splits.io, please email it to security@splits.io, as posting the vulnerability
-in public may allow malicious people to use it before it's able to be fixed.
+If you find a security vulnerability in Splits.io, please email it privately to security@splits.io, as posting the
+vulnerability in public may allow malicious people to use it before it can be fixed. We take security matters very
+seriously and respond quickly to disclosures.
 
 ## Library Information
 ### LiveSplit Core
