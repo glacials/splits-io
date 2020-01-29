@@ -6,14 +6,28 @@
 - if races.none? && active_races.none?
   - if description.present?
     h5.card-header
-      img.d-inline> src=asset_path('versus/logo-vsonly.svg') height='25' style='margin-top: .1em' v-tippy=true title='Splits.io Versus is the racing pillar of Splits.io.'
+      img.d-inline>(
+        alt='Splits.io Versus logo'
+        height=25
+        src=asset_path('versus/logo-vsonly.svg')
+        style='margin-top: .1em'
+        title='Splits.io Versus is the racing pillar of Splits.io.'
+        v-tippy=true
+      )
       = description
   .center.m-4
     i Nothing to show!
 - else
   - if description.present?
     h5.card-header
-      img.d-inline> src=asset_path('versus/logo-vsonly.svg') height='25' style='margin-top: .1em' v-tippy=true title='Splits.io Versus is the racing pillar of Splits.io.'
+      img.d-inline>(
+        alt='Splits.io Versus logo'
+        height=25
+        src=asset_path('versus/logo-vsonly.svg')
+        style='margin-top: .1em'
+        title='Splits.io Versus is the racing pillar of Splits.io.'
+        v-tippy=true
+      )
       = description
   .table-responsive
     table.card-body.table.table-striped.table-hover.mb-0

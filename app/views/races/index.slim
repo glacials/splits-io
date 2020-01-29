@@ -35,7 +35,14 @@
 - if current_user
   .row.mx-0: .col-xl-12.p-1: .card: .card-body
     h5.card-title
-      img.d-inline> src=asset_path('versus/logo-vsonly.svg') height='25' style='margin-top: .1em' v-tippy=true title='Splits.io Versus is the racing pillar of Splits.io.'
+      img.d-inline>(
+        alt='Splits.io Versus logo'
+        height=25
+        src=asset_path('versus/logo-vsonly.svg')
+        style='margin-top: .1em'
+        title='Splits.io Versus is the racing pillar of Splits.io.'
+        v-tippy=true
+      )
       ' My stats
     .row
       = render 'shared/statcard', stat: current_user.entries.where.not(finished_at: nil).count, description: 'Races finished'
@@ -49,7 +56,14 @@
       .card-header.d-flex.justify-content-between
         ul.nav.nav-bordered
           li.nav-item: .nav-link.ml-0.pl-0
-            img.d-inline> src=asset_path('versus/logo-vsonly.svg') height='25' style='margin-top: .1em' v-tippy=true title='Splits.io Versus is the racing pillar of Splits.io.'
+            img.d-inline>(
+              alt='Splits.io Versus logo'
+              height=25
+              src=asset_path('versus/logo-vsonly.svg')
+              style='margin-top: .1em'
+              title='Splits.io Versus is the racing pillar of Splits.io.'
+              v-tippy=true
+            )
             ' Races
           - historic = params[:historic] == '1'
           li.nav-item

@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header justify-content-between d-flex">
       <span>
-        <img src="http://cdn.speedrunslive.com/images/srl_305.png" style="height: 1em" />
+        <img src="http://cdn.speedrunslive.com/images/srl_305.png" style="height: 1em" alt="SpeedRunsLive logo" />
         <small
           class="fas fa-info-circle"
           v-tippy
@@ -15,7 +15,7 @@
       <span class="spinner-border spinner-border-sm mx-auto m-5" role="status" v-if="loading">
         <span class="sr-only">Loading...</span>
       </span>
-      <speed-runs-live-race v-for="(race, i) in races" v-model="races[i]" />
+      <speed-runs-live-race v-for="(race, i) in races" v-model="races[i]" v-bind:key="race.id" />
     </div>
   </div>
 </template>
