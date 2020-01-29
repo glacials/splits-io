@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.7.0'
+ruby '2.7.0' # also update docker-compose.yml & docker-compose-production.yml
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
