@@ -1,6 +1,6 @@
 - content_for(:title, 'Versus')
 - content_for(:header) do
-  ol.breadcrumb.shadow
+  ol.breadcrumb
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('Versus', races_path, class: 'text-success')
 
@@ -10,28 +10,6 @@
   - races = Race.active.not_secret_visibility.order('started_at ASC NULLS FIRST, created_at DESC')
 
 .row.mx-0
-  .col-xl-6.p-1.mx-auto
-    .mb-2.alert.alert-success.p-0
-      .card-body
-        h3.card-title.text-center Why use Splits.io Versus for racing?
-        p
-          ' Splits.io Versus is an
-          b> open source
-          ' option for speedrun racing.
-        p
-          ' This means if we here at Splits.io become evil, complacent, unresponsive, dead, incapacitated, or otherwise
-          ' off-the-grid,
-          b> the community can take over
-          ' against our will, undo any bad decisions, and continue where we left off. You can fork Splits.io
-          i> right now
-          ' and stand up an identical version of it to compete with us. We don't want to be in charge, we only want the
-          ' community to be able to build on our work.
-        p
-          ' If that isn't enough, we promise
-          b> Splits.io Versus will always be 100% free.
-          ' And because we're open source, you don't have to trust us—you can actually hold us to it.
-      .card-footer.clearfix: .float-right
-        a.btn.btn-outline-dark href=github_url See for yourself
 - if current_user
   .row.mx-0: .col-xl-12.p-1: .card: .card-body
     h5.card-title
@@ -52,7 +30,7 @@
 
 .row.mx-0
   .col-xl-6.p-1
-    .card.mx-auto
+    .card.mx-auto.mb-2
       .card-header.d-flex.justify-content-between
         ul.nav.nav-bordered
           li.nav-item: .nav-link.ml-0.pl-0
@@ -78,6 +56,27 @@
           small
             ' Showing races active in the last hour and races with more than one entrant. Races longer than 48 hours are
             ' automatically closed.
+    .my-2.card
+      .card-body
+        h3.card-title.text-center Why use Splits.io Versus for racing?
+        p
+          ' Splits.io Versus is an
+          b> open source
+          ' option for speedrun racing.
+        p
+          ' This means if we here at Splits.io become evil, complacent, unresponsive, dead, incapacitated, or otherwise
+          ' off-the-grid,
+          b> the community can take over
+          ' against our will, undo any bad decisions, and continue where we left off. You can fork Splits.io
+          i> right now
+          ' and stand up an identical version of it to compete with us. We don't want to be in charge, we only want the
+          ' community to be able to build on our work.
+        p
+          ' If that isn't enough, we promise
+          b> Splits.io Versus will always be 100% free.
+          ' And because we're open source, you don't have to trust us—you can actually hold us to it.
+      .card-footer.clearfix: .float-right
+        a.btn.btn-outline-success href=github_url See for yourself
 
   .col-xl-6.p-1.mx-0
     speed-runs-live-race-list

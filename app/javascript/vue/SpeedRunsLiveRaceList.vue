@@ -9,7 +9,10 @@
           title="For your convenience of not needing to check two platforms, this is a list of open races on SpeedRunsLive. Splits.io is not affiliated with SpeedRunsLive."
         ></small>
       </span>
-      <span class="text-danger text-uppercase" v-tippy title='This list updates live; refreshing is not required.'>Live</span>
+      <span class="text-danger text-uppercase" v-tippy title='This list updates live; refreshing is not required.'>
+        <small class="fas fa-circle" />
+        Live
+      </span>
     </div>
     <div class="list-group bg-transparent" v-cloak>
       <span class="spinner-border spinner-border-sm mx-auto m-5" role="status" v-if="loading">
