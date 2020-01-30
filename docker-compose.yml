@@ -12,7 +12,7 @@ x-server-environment:
   - PATREON_CLIENT_SECRET
   - QUEUES=discover_runner,highlight_cleanup,race_cleanup,sync_user_follows,v4_races,parse_run,cleanup_runs,active_storage_purge,active_storage_analysis # also update docker-compose-production.yml
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
-  - RAILS_ENV
+  - RAILS_ENV=development
   - RAILS_ROOT="/app"
   - READ_ONLY_MODE=0
   - REDIS_URL="redis/0"
@@ -41,7 +41,6 @@ x-logging:
 x-app: &app
   build:
     context: .
-    dockerfile: Dockerfile
     cache_from:
       - "${REPOSITORY_URI:-splitsio-dev}:latest"
     args:
