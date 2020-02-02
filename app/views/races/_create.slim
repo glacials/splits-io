@@ -3,18 +3,18 @@
 
 race-create inline-template=true game-id=game.id category-id=category.id
   .btn-group v-cloak=true
-    button.btn.btn-outline-primary(
+    button.btn.btn-success(
       type='button'
       @click='createPublic'
       :disabled='loading'
       :title='error'
       v-tippy=true
     )
-      template v-if="loading" = render partial: 'shared/spinner'
-      span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
-      template v-else=true => icon('fas', 'flag-checkered')
+      span v-cloak=true v-if='loading' = render partial: 'shared/spinner'
+      span.text-danger v-cloak=true v-else-if='error' => icon('fas', 'exclamation-triangle')
+      span v-else=true => icon('fas', 'flag-checkered')
       ' Create race
-    button.btn.btn-outline-primary.dropdown-toggle.dropdown-toggle-split(
+    button.btn.btn-success.dropdown-toggle.dropdown-toggle-split(
       type='button'
       data={toggle: 'dropdown'}
       aria={haspopup: true, expanded: false}

@@ -5,12 +5,30 @@
 
 - if races.none? && active_races.none?
   - if description.present?
-    h5.card-header.text-white = description
+    h5.card-header
+      img.d-inline>(
+        alt='Splits.io Versus logo'
+        height=25
+        src=asset_path('versus/logo-vsonly.svg')
+        style='margin-top: .1em'
+        title='Splits.io Versus is the racing pillar of Splits.io.'
+        v-tippy=true
+      )
+      = description
   .center.m-4
     i Nothing to show!
 - else
   - if description.present?
-    h5.card-header.text-white = description
+    h5.card-header
+      img.d-inline>(
+        alt='Splits.io Versus logo'
+        height=25
+        src=asset_path('versus/logo-vsonly.svg')
+        style='margin-top: .1em'
+        title='Splits.io Versus is the racing pillar of Splits.io.'
+        v-tippy=true
+      )
+      = description
   .table-responsive
     table.card-body.table.table-striped.table-hover.mb-0
       thead
@@ -46,7 +64,7 @@
             - if cols.include?(:entries)
               td.align-right.nowrap = race.entries.count
             - if cols.include?(:name)
-              td width='100%' = link_to(race, race_path(race), class: 'run-link')
+              td width='100%' = link_to(race, race_path(race), class: 'text-success')
             - if cols.include?(:status)
               td.align-right.nowrap
                 - if race.finished?
@@ -70,7 +88,7 @@
                 - else
                   = '-'
             - if cols.include?(:results)
-              td.align-right.text-primary.cursor-pointer data={toggle: 'collapse', target: "#accordion-#{race.id}"}
+              td.align-right.text-success.cursor-pointer data={toggle: 'collapse', target: "#accordion-#{race.id}"}
                 = icon('fas', 'list-ol')
           - if cols.include?(:results)
             tr

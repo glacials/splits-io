@@ -25,44 +25,32 @@ race-title(
           h5#seed-name = "Seed: #{race.seed || 'None'}"
 
         h5
-          span
+          span v-show='!editing'
             ' created by
             = user_badge(race.owner)
-          - if race.belongs_to?(current_user)
-            .btn-group.ml-2
-              button.btn.btn-outline-light.btn-sm.clipboard-btn(
-                data-clipboard-text=race_url(race, join_token: race.join_token)
-                title='Copy invite link'
+          .btn-group.ml-2 v-if='!editing'
+            button.btn.btn-outline-light.btn-sm.clipboard-btn(
+              data-clipboard-text=race_url(race, join_token: race.join_token)
+              title='Copy invite link'
+              v-tippy=true
+            )
+              span#copy = icon('fas', 'share-alt')
+              span#copied style='display: none;' = icon('fas', 'check')
+            - if race.belongs_to?(current_user)
+              button.btn.btn-outline-light.btn-sm(
+                :disabled='loading'
+                :title='error || "Edit"'
+                @click='edit'
+                v-if='!race.started_at'
                 v-tippy=true
               )
-                span#copy = icon('fas', 'share-alt')
-                span#copied style='display: none;' = icon('fas', 'check')
-              - if !race.started?
-                button.btn.btn-outline-light.btn-sm(
-                  :disabled='loading'
-                  :title='error || "Edit"'
-                  @click='edit'
-                  v-if='!editing && !race.started_at'
-                  v-tippy=true
-                )
-                  template v-if='loading' = render partial: 'shared/spinner'
-                  template v-else-if='error' = icon('fas', 'times')
-                  template v-else=true = icon('fas', 'edit')
-                button.btn.btn-outline-light @click='cancel' v-if='editing'
-                  = icon('fas', 'times')
-                button.btn.btn-outline-light(
-                  :disabled='loading'
-                  :title='error'
-                  @click='save'
-                  v-if='editing && !race.started_at'
-                  v-tippy=true
-                )
-                  template v-if='loading' = render partial: 'shared/spinner'
-                  template v-else-if='error' = icon('fas', 'times')
-                  template v-else=true = icon('fas', 'check')
+                template v-if='loading' = render partial: 'shared/spinner'
+                template v-else-if='error' = icon('fas', 'times')
+                template v-else=true = icon('fas', 'edit')
           a.btn.btn-outline-light.btn-sm.ml-2(
             href=race_path(race, controller.race_params.merge(browsersource: 1))
             title='View in browser source friendly layout (beta)'
+            v-if='!editing'
             v-tippy=true
           ) = icon('fas', 'broadcast-tower')
           small.text-muted.ml-2 v-if='syncing'
@@ -71,10 +59,22 @@ race-title(
 
       .col-md-12
         div v-if="false" = render partial: 'shared/spinner'
-        = render partial: 'races/nav'
+        template v-if='!editing' = render partial: 'races/nav'
       .col-md-12.mt-2
         pre.text-light v-show='!editing'
           ' {{(race.notes || '').split('\n').splice(1).filter(s => s !== '').join('\n')}}
         template v-if='editing'
-          small.form-text.text-muted.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2.mb-2 Use the first line as a title supplement.
-          textarea.text-dark style='font-family: monospace; width: 100%' rows=10 v-model='notes'
+          textarea.text-dark.p-2 style='font-family: monospace; width: 100%' rows=10 v-model='notes' placeholder='First line: Race title supplement
+
+          The rest: Notes, rules, and links'
+        .btn-group.mb-4 v-if='editing'
+          button.btn.btn-outline-light @click='cancel' v-tippy=true Cancel changes
+          button.btn.btn-success(
+            :disabled='loading'
+            :title='error || "Save changes"'
+            @click='save'
+            v-tippy=true
+          )
+            template v-if='loading' = render partial: 'shared/spinner'
+            template v-else-if='error' = icon('fas', 'exclamation-triangle')
+            template v-else=true Update race

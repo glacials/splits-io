@@ -39,9 +39,16 @@ html
                 | failed to upload
             p.text-light.mt-5 This page will update automatically.
         nav.navbar.navbar-expand-md
-          a.navbar-brand.text-nowrap href=root_path
-            img.logo.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
-            img.logo.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
+          a.navbar-brand.text-nowrap.mr-2 href=root_path
+            img.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
+            img.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
+            - if controller_name == 'races'
+              img.d-sm-inline.d-md-none.d-xl-inline(
+                alt='Splits.io Versus logo'
+                height='25'
+                src=asset_path('versus/logo-vsonly.svg')
+                style='margin-top: .1em'
+              )
           button.navbar-toggler type='button' data-toggle='collapse' data-target='#global-nav'
             = icon('fas', 'bars')
           .collapse.navbar-collapse#global-nav
@@ -51,7 +58,7 @@ html
                   => icon('fas', 'cloud-upload-alt', class: 'd-none d-md-inline d-xl-none')
                   span.d-md-none.d-xl-inline Upload
               li.nav-item class=('active' if request.path == races_path)
-                a.nav-link.px-3 href=races_path
+                a.nav-link.px-3.text-success href=races_path
                   => icon('fas', 'flag-checkered', class: 'd-none d-md-inline d-xl-none')
                   span.d-md-none.d-xl-inline Races
               - if ENV['READ_ONLY_MODE'] == '1'
@@ -122,8 +129,8 @@ html
             ' Help us out by taking the Splits.io survey!
         - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
         - if entry.present? && request.path != race_path(entry.race)
-          .p-1
-            a.btn.btn-primary.btn-block.mb-0.text-center.glow href=race_path(entry.race)
+          .p-1.col-md-6.mx-auto
+            a.btn.btn-success.btn-block.mb-0.text-center.glow href=race_path(entry.race)
               => icon('fas', 'flag-checkered')
               | Return to race
         header#header.m-1.p-0 = yield(:header)
