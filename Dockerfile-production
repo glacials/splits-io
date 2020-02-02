@@ -59,7 +59,7 @@ ENV PATH=/app/bin:$BUNDLE_BIN:$PATH
 
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk update \
-    && apk add -u --no-cache vips-dev tzdata gcompat postgresql-dev bash nodejs-current less \
+    && apk add -u --no-cache vips-dev tzdata gcompat=0.4.0-r0 postgresql-dev bash nodejs-current less \
     && rm -rf /var/cache/apk/*
 
 COPY --from=prod-builder /app /app
