@@ -51,7 +51,8 @@ dependencies. The one downside is that you must first install Docker!
 
 ### First Run
 The first time you run Splits.io with Docker is the best, because you'll have time to get a coffee! Yum! After the
-first run, it will be much quicker.
+first run, it will be much quicker. While you wait, you can also take a look at our [short Codeflow tutorial][codeflow]
+to get up to speed with a few key pieces of the code.
 ```sh
 make
 ```
@@ -59,6 +60,7 @@ Once the output looks settled (you should see `* Listening on tcp://0.0.0.0:3000
 [localhost:3000][localhost] in your browser. The first page load after a new build may also take a minute.
 
 [localhost]: http://localhost:3000/
+[codeflow]: https://usecodeflow.com/tutorials/view/glacials/splits-io/tree/a89ff1/ck68vlj2g00060vmmcnlstz53
 
 #### Optional Features
 Some features are built on top of links with other platforms, like Twitch sign-in. If you want these features to work,
