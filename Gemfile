@@ -97,7 +97,6 @@ gem 'moving_average'
 gem 'flamegraph'
 gem 'memory_profiler'
 gem 'rack-mini-profiler'
-gem 'stackprof'
 
 # server/environment
 gem 'puma'
