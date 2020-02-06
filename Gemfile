@@ -94,7 +94,6 @@ gem 'descriptive_statistics', require: 'descriptive_statistics/safe'
 gem 'moving_average'
 
 # profiling
-gem 'flamegraph'
 gem 'memory_profiler'
 gem 'rack-mini-profiler'
 
