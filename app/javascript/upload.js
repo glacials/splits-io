@@ -3,7 +3,7 @@ import { getAccessToken } from './token'
 import waitForRunsToParse from './run_parse.js'
 
 const upload = async function(file, options) {
-  if(file === undefined) {
+  if (file === undefined) {
     document.getElementById('droplabel').textContent = 'That file looks empty 😕'
     window.isUploading = false
     document.getElementById('upload-spinner').hidden = true
@@ -125,28 +125,26 @@ document.addEventListener('turbolinks:load', function() {
 
   // If we left dropzone-overlay open to show an error, dismiss it when clicked on
   document.getElementById('dropzone').addEventListener('click', function(event) {
-    if(!window.isUploading) {
+    if (!window.isUploading) {
       document.getElementById('dropzone-overlay').style.visibility = 'hidden'
     }
   })
 
   // If we left dropzone-overlay open to show an error, dismiss it when ESC is pressed
   document.addEventListener('keyup', function(event) {
-    if(event.keyCode === 27 && !window.isUploading) {
+    if (event.keyCode === 27 && !window.isUploading) {
       document.getElementById('dropzone-overlay').style.visibility = 'hidden'
     }
   })
 })
 
-document.addEventListener('turbolinks:load', function() {
-  const form = document.getElementById('upload')
-  if(form === null) {
+document.addEventListener('change', function(event) {
+  const form = event.target.closest('#upload')
+  if (!form) {
     return
   }
 
-  form.addEventListener('change', function() {
-    document.getElementById('upload-spinner').hidden = false
-    window.isUploading = true
-    upload(document.getElementById('file').files[0])
-  })
+  document.getElementById('upload-spinner').hidden = false
+  window.isUploading = true
+  upload(document.getElementById('file').files[0])
 })

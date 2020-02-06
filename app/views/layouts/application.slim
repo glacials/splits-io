@@ -54,9 +54,11 @@ html
           .collapse.navbar-collapse#global-nav
             ul.navbar-nav.mr-auto
               li.nav-item class=('active' if request.path == new_run_path)
-                a.nav-link.px-3 href=new_run_path
-                  => icon('fas', 'cloud-upload-alt', class: 'd-none d-md-inline d-xl-none')
-                  span.d-md-none.d-xl-inline Upload
+                form#upload method='post' enctype='multipart/form-data'
+                  label.nav-link.px-3.fake-link for='file' style='cursor: pointer'
+                    input#file.d-none type='file' name='file'
+                    => icon('fas', 'cloud-upload-alt', class: 'd-none d-md-inline d-xl-none fake-link')
+                    span.d-md-none.d-xl-inline Upload
               li.nav-item class=('active' if request.path == races_path)
                 a.nav-link.px-3.text-success href=races_path
                   => icon('fas', 'flag-checkered', class: 'd-none d-md-inline d-xl-none')
