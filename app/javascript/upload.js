@@ -144,6 +144,8 @@ document.addEventListener('change', function(event) {
     return
   }
 
+  document.getElementById('dropzone-overlay').style.visibility = 'visible'
+  document.getElementById('droplabel').textContent = 'Uploading'
   document.getElementById('upload-spinner').hidden = false
   window.isUploading = true
   upload(document.getElementById('file').files[0])

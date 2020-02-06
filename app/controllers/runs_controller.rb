@@ -15,9 +15,6 @@ class RunsController < ApplicationController
   def index
   end
 
-  def new
-  end
-
   def edit
     if cannot?(:edit, @run)
       render :forbidden, status: :forbidden

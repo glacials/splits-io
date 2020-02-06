@@ -44,7 +44,7 @@ Rails.application.routes.draw do
 
   get '/health', to: 'health#index'
 
-  get  '/upload',     to: 'runs#new',        as: :new_run
+  get  '/upload',     to: redirect('/')
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random_run
   get  '/convert',    to: redirect('/upload')

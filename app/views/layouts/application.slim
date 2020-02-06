@@ -53,7 +53,7 @@ html
             = icon('fas', 'bars')
           .collapse.navbar-collapse#global-nav
             ul.navbar-nav.mr-auto
-              li.nav-item class=('active' if request.path == new_run_path)
+              li.nav-item
                 form#upload method='post' enctype='multipart/form-data'
                   label.nav-link.px-3.fake-link for='file' style='cursor: pointer'
                     input#file.d-none type='file' name='file'
