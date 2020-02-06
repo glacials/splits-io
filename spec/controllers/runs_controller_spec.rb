@@ -11,14 +11,6 @@ describe RunsController do
     end
   end
 
-  describe '#new' do
-    let(:response) { get(:new) }
-
-    it 'returns a 200' do
-      expect(response).to have_http_status(200)
-    end
-  end
-
   describe '#create' do
   end
 
