@@ -10,7 +10,7 @@ document.addEventListener('click', async function(event) {
   const result = await stripe.redirectToCheckout({
     items: [{plan: subscribeButton.dataset.planId, quantity: 1}],
     successUrl: `${location.origin}/subscriptions/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancelUrl: `${location.origin}/subscriptions/cancel`,
+    cancelUrl: `${location.origin}/subscriptions`,
     clientReferenceId: gon.user.id,
     customerEmail: gon.user.email,
   })
