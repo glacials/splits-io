@@ -128,7 +128,7 @@
             )
         - else
           / TODO: disable_with doesn't work in button_tag for some reason
-          = button_tag(current_user ? 'Subscribe' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
+          = button_tag(current_user ? 'Try free for 14 days' : 'Sign in to subscribe', disabled: current_user.nil?, data: { \
               disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
               plan_id: ENV['STRIPE_PLAN_ID_TIER3'] \
             }, \

@@ -7,8 +7,8 @@
       <h5 v-else>{{value.statetext}}</h5>
     </div>
     <div class="d-flex w-100 justify-content-between">
-      {{value.goal}}
-      {{value.numentrants}} entrants
+      <span>{{value.goal}}</span>
+      <span class="text-nowrap">{{value.numentrants}} entrants</span>
     </div>
   </a>
 </template>
