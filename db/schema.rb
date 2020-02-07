@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_14_184419) do
+ActiveRecord::Schema.define(version: 2020_02_07_203633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(version: 2020_01_14_184419) do
     t.boolean "uses_emulator", default: false
     t.uuid "speedrun_dot_com_platform_id"
     t.uuid "speedrun_dot_com_region_id"
+    t.boolean "uses_autosplitter"
     t.index ["category_id"], name: "index_runs_on_category_id"
     t.index ["s3_filename"], name: "index_runs_on_s3_filename"
     t.index ["user_id"], name: "index_runs_on_user_id"
