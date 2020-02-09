@@ -3,7 +3,7 @@
     a.badge.badge-dark(
       href=run_path(run, params.permit(:compare).merge(timing: 'game'))
       v-tippy=true
-      :title='"Recorded in realtime & gametime—click to switch"'
+      title='Recorded in realtime & gametime—click to switch'
     )
       span.text-success => icon('fas', 'globe-americas')
       = icon('fas', 'gamepad')
@@ -11,7 +11,7 @@
     a.badge.badge-dark(
       href=run_path(run, params.permit(:compare).merge(timing: 'real'))
       v-tippy=true
-      :title='"Recorded in realtime & gametime—click to switch"'
+      title='Recorded in realtime & gametime—click to switch'
     )
       => icon('fas', 'globe-americas')
       span.text-success = icon('fas', 'gamepad')
@@ -20,5 +20,5 @@
     .badge v-tippy=true title='"Recorded in realtime"'
       = icon('fas', 'globe-americas')
   - if run.completed?(Run::GAME)
-    .badge v-tippy=true :title='"Recorded in gametime"'
+    .badge v-tippy=true title='Recorded in gametime'
       = icon('fas', 'gamepad')

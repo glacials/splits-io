@@ -16,23 +16,23 @@ h5
       - old_runs.each do |old_run|
         a.dropdown-item href=run_path(old_run) = old_run.duration.format
   - if run.srdc_id.present?
-    a.badge.badge-dark.mr-2 href=run.srdc_url v-tippy=true :title='"See on Speedrun.com"'
+    a.badge.badge-dark.mr-2 href=run.srdc_url v-tippy=true title='See on Speedrun.com'
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
   - if run.entry.present? && !run.entry.ghost?
-    a.badge.badge-dark.mr-2 v-tippy=true href=race_path(run.entry.race) :title='"Recorded as part of a race"'
+    a.badge.badge-dark.mr-2 v-tippy=true href=race_path(run.entry.race) title='Recorded as part of a race'
       = icon('fas', 'flag-checkered')
   - if run.video&.supports_embedding?
     - if run.video.youtube?
-      a.badge.badge-dark.mr-2 href=run.video.url v-tippy=true :title="'Watch on YouTube"'
+      a.badge.badge-dark.mr-2 href=run.video.url v-tippy=true title='Watch on YouTube'
         => icon('fab', 'youtube')
     - elsif !run.video.twitch?
-      a.badge.badge-dark.mr-2 href=run.video.url v-tippy=true :title='"Watch video"'
+      a.badge.badge-dark.mr-2 href=run.video.url v-tippy=true title='Watch video'
         => icon('fas', 'video')
   - if run.in_progress?(timing)
-    a.badge.p-0.mr-2 v-tippy=true :title='"In progress"'
+    a.badge.p-0.mr-2 v-tippy=true title='In progress'
       .text-danger = icon('fas', 'satellite-dish')
   - if run.uses_autosplitter?
-    .badge.mr-2 v-tippy=true :title='"Used an autosplitter"' = icon('fas', 'magic')
+    .badge.mr-2 v-tippy=true title='Used an autosplitter' = icon('fas', 'magic')
 
 .btn-toolbar.mb-2 role='toolbar' aria={label: 'Run navigation'}
   .btn-group.m-2 role='group' aria={label: 'Run navigation'}
@@ -55,19 +55,19 @@ h5
             => icon('fas', 'user-check')
             ' Claim
         - else
-          button.btn.btn-outline-secondary.disabled v-tippy=true style='cursor: default' :title='"Sign in to claim"'
+          button.btn.btn-outline-secondary.disabled v-tippy=true style='cursor: default' title='Sign in to claim'
             ' Claim
   - if can?(:create, RunLike)
     .btn-group.m-2: button#like-button.btn(
       data={liked: current_user.likes?(run) ? '1' : '0'}
       class=(current_user.likes?(run) ? 'btn-dark' : 'btn-outline-light')
       v-tippy=true
-      :title="'#{tooltip(run)}'"
+      title=tooltip(run)
     )
       ' 🎉
       span#likes-count data={value: run.likes.count} = run.likes.count
   - else
-    .btn-group.m-2: .btn.btn-outline-secondary.disabled v-tippy=true :title="'#{tooltip(run)}'"
+    .btn-group.m-2: .btn.btn-outline-secondary.disabled v-tippy=true title=tooltip(run)
       ' 🎉
       = run.likes.count
   - if run.belongs_to?(current_user)
@@ -78,7 +78,7 @@ h5
           href='#'
           data={toggle: :modal, target: current_user.srdc ? '#srdc-submit' : '#srdc-link'}
           v-tippy=true
-          :title='"Automatically submit to Speedrun.com. You will get a chance to review the details first."'
+          title='Automatically submit to Speedrun.com. You will get a chance to review the details first.'
         )
           => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
           span Auto-submit
