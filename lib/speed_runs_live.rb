@@ -14,4 +14,12 @@ class SpeedRunsLive
       nil
     end
   end
+
+  class Race
+    def self.all
+      HTTParty.get(URI.parse('http://api.speedrunslive.com/races'))
+    rescue Errno::ETIMEDOUT
+      nil
+    end
+  end
 end

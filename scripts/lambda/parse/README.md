@@ -1,4 +1,4 @@
-# Splits I/O Lambda Job
+# Splits.io Lambda Job
 This is an AWS Lambda job which is triggered automatically by S3 when a new file is uploaded. It then hits an endpoint
 in Rails that tells it to parse the newly-uploaded run.
 

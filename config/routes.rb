@@ -44,7 +44,7 @@ Rails.application.routes.draw do
 
   get '/health', to: 'health#index'
 
-  get  '/upload',     to: 'runs#new',        as: :new_run
+  get  '/upload',     to: redirect('/')
   get  '/cant-parse', to: 'runs#cant_parse', as: :cant_parse
   get  '/random',     to: 'runs#random',     as: :random_run
   get  '/convert',    to: redirect('/upload')
@@ -96,6 +96,7 @@ Rails.application.routes.draw do
       as: :game_category_sum_of_bests
 
   get '/races',     to: 'races#index',  as: :races
+  get '/vs', to: redirect('/races')
   get '/races/:id', to: 'races#show',   as: :race
 
   get '/tools', to: 'tools#index'
@@ -193,6 +194,8 @@ Rails.application.routes.draw do
       post '/races/:race_id/chat', to: 'races/chat_messages#create'
 
       post '/races/:race_id/ghosts', to: 'races/ghosts#create'
+
+      get '/speedrunslive_races', to: 'speedrunslive_races#index'
 
       post '/timesync', to: 'time#create'
     end

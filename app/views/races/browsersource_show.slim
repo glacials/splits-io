@@ -3,7 +3,7 @@
 - content_for(:header) do
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
-    li.breadcrumb-item = link_to('Races', races_path)
+    li.breadcrumb-item = link_to('Versus', races_path, class: 'text-success')
     li.breadcrumb-item.active = link_to(@race.to_param, race_path(@race))
     li.breadcrumb-item.active = link_to('Browser source layout', race_path(@race, stream: 1))
 
