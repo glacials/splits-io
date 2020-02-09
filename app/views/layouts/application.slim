@@ -3,7 +3,7 @@ html lang='en'
   head
     title = content_for?(:title) ? yield(:title) + " - #{site_title}" : site_title
     // TODO: all pages should set a unique meta tag
-    - description = content_for?(:description) ? yield(:description) : "The worlds most advanced speedruning analytics and racing platform!"
+    - description = content_for?(:description) ? yield(:description) : "The world's most advanced speedruning analytics and racing platform!"
     meta name='description' content=description
     link href='//fonts.googleapis.com/css?family=Open+Sans|Anonymous+Pro' rel='stylesheet' type='text/css'
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
@@ -42,8 +42,8 @@ html lang='en'
             p.text-light.mt-5 This page will update automatically.
         nav.navbar.navbar-expand-md
           a.navbar-brand.text-nowrap.mr-2 href=root_path
-            img.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
-            img.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
+            img.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0' alt='Splits.io image only logo'
+            img.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em' alt='Splits.io text only logo'
             - if controller_name == 'races'
               img.d-sm-inline.d-md-none.d-xl-inline(
                 alt='Splits.io Versus logo'

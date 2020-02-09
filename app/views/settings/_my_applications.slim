@@ -38,12 +38,12 @@
                     code = application.redirect_uri
                   td
                     .input-group
-                      input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1 aria-label='Client id'
+                      input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1 aria-label='Client ID'
                       .input-group-append
                         .btn.btn-outline-primary.clipboard-btn.tip(
                           data-clipboard-target="#client-id-#{application.uid}"
                           title='Copy to clipboard'
-                          aria-label='Copy client id to clipboard'
+                          aria-label='Copy client ID to clipboard'
                         )
                           span#copy = icon('fas', 'copy')
                           span#copied style='display: none;' = icon('fas', 'check')
