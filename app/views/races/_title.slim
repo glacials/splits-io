@@ -29,27 +29,31 @@ race-title(
             ' created by
             = user_badge(race.owner)
           .btn-group.ml-2 v-if='!editing'
-            button.btn.btn-outline-light.btn-sm.clipboard-btn(
-              data-clipboard-text=race_url(race, join_token: race.join_token)
-              title='Copy invite link'
-              v-tippy=true
-            )
-              span#copy = icon('fas', 'share-alt')
-              span#copied style='display: none;' = icon('fas', 'check')
             - if race.belongs_to?(current_user)
-              button.btn.btn-outline-light.btn-sm(
-                :disabled='loading'
-                :title='error || "Edit"'
-                @click='edit'
-                v-if='!race.started_at'
+              button.btn.btn-outline-light.btn-sm.clipboard-btn(
+                data-clipboard-text=race_url(race, join_token: race.join_token)
+                title='Copy invite link'
                 v-tippy=true
+                aria-label='Copy race URL'
               )
-                template v-if='loading' = render partial: 'shared/spinner'
-                template v-else-if='error' = icon('fas', 'times')
-                template v-else=true = icon('fas', 'edit')
+                span#copy = icon('fas', 'share-alt')
+                span#copied style='display: none;' = icon('fas', 'check')
+              - if !race.started?
+                button.btn.btn-outline-light.btn-sm(
+                  :disabled='loading'
+                  :title='error || "Edit"'
+                  @click='edit'
+                  v-if='!editing && !race.started_at'
+                  v-tippy=true
+                  aria-label='Edit race information'
+                )
+                  template v-if='loading' = render partial: 'shared/spinner'
+                  template v-else-if='error' = icon('fas', 'times')
+                  template v-else=true = icon('fas', 'edit')
           a.btn.btn-outline-light.btn-sm.ml-2(
             href=race_path(race, controller.race_params.merge(browsersource: 1))
             title='View in browser source friendly layout (beta)'
+            aria-label='View in browser source friendly layout (beta)'
             v-if='!editing'
             v-tippy=true
           ) = icon('fas', 'broadcast-tower')

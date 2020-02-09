@@ -5,15 +5,15 @@
     li.breadcrumb-item = link_to(@user, user_path(@user))
   h2
     span style='margin-right: .5em;'
-      img src=@user.avatar width=50 height=50
+      img src=@user.avatar width=50 height=50 alt="#{@user}'s profile picture"
     span = user_badge(@user)
   .mb-2
     - if @user.twitch.present?
-      a.btn.btn-twitch.mr-2.tip title='Watch on Twitch' href=@user.twitch.url
+      a.btn.btn-twitch.mr-2.tip title='Watch on Twitch' href=@user.twitch.url aria-label="Watch #{@user} on Twitch"
         => icon('fab', 'twitch')
     - if @user.srdc.present?
-      a.btn.btn-srdc.tip title='Visit on Speedrun.com' href=@user.srdc.url
-        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+      a.btn.btn-srdc.tip title='Visit on speedrun.com' href=@user.srdc.url aria-label="View #{@user} on speedrun.com"
+        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
 
 .row.row-cols-1.row-cols-md-2.mx-0
   .col.p-1: .card

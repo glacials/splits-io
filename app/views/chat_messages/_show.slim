@@ -1,6 +1,6 @@
 .list-group-item.p-0 style=('filter: grayscale(1)' unless chat_message.from_entrant?)
   .media
-    img.mr-3 src=chat_message.user&.avatar width=25 height=25
+    img.mr-3 src=chat_message.user&.avatar width=25 height=25 alt="#{chat_message.user}'s profile picture"
     .media-body
       span.mr-2 = user_badge(chat_message.user)
       = chat_message.body

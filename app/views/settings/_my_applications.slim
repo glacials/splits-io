@@ -4,7 +4,7 @@
     a.btn.btn-outline-primary.mr-2 href='/settings/applications/new'
       => icon('fas', 'plus')
       span Create Application
-    a.btn.btn-outline-secondary target='_blank' href='https://github.com/glacials/splits-io/blob/master/docs/api.md#user-authentication-and-authorization'
+    a.btn.btn-outline-secondary target='_blank' rel='noopener noreferrer' href='https://github.com/glacials/splits-io/blob/master/docs/api.md#user-authentication-and-authorization'
       => icon('fas', 'file')
       span View Documentation
     - if current_user.applications.empty?
@@ -38,11 +38,12 @@
                     code = application.redirect_uri
                   td
                     .input-group
-                      input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1
+                      input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1 aria-label='Client ID'
                       .input-group-append
                         .btn.btn-outline-primary.clipboard-btn.tip(
                           data-clipboard-target="#client-id-#{application.uid}"
                           title='Copy to clipboard'
+                          aria-label='Copy client ID to clipboard'
                         )
                           span#copy = icon('fas', 'copy')
                           span#copied style='display: none;' = icon('fas', 'check')
@@ -51,11 +52,12 @@
                       button.btn.btn-outline-secondary.btn-block disabled=true Hidden forever
                     - else
                       .input-group
-                        input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1
+                        input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1 aria-label='Client secret'
                         .input-group-append
                           .btn.btn-outline-primary.clipboard-btn.tip(
                             data-clipboard-target="#client-secret-#{application.uid}"
                             title='Copy to clipboard'
+                            aria-label='Copy client secret to clipboard'
                           )
                             span#copy = icon('fas', 'copy')
                             span#copied style='display: none;' = icon('fas', 'check')
@@ -64,9 +66,10 @@
                       a.btn.btn-outline-secondary.tip(
                         href=edit_application_path(application)
                         title="Edit #{application.name}"
+                        aria-label='Edit application'
                       )
                         span = icon('fas', 'edit')
-                      = link_to(application_path(application), class: 'btn btn-outline-secondary tip', method: :delete, \
+                      = link_to(application_path(application), class: 'btn btn-outline-secondary tip', method: :delete, 'aria-label' => 'Delete application',\
                         data: { \
                           confirm: "Really delete #{application.name}? This will also revoke all \
                                     #{application.access_tokens.count} authorizations and invalidate the associated \

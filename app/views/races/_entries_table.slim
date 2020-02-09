@@ -70,10 +70,10 @@ h6.card-header Entries
                 span.text-danger = entry.runner.entries.where.not(forfeited_at: nil).count
           td.nowrap.text-center
             - if entry.runner.try(:twitch).try(:present?)
-              a.text-light.tip.mr-2 href=entry.runner.twitch.url title='Watch on Twitch'
+              a.text-light.tip.mr-2 href=entry.runner.twitch.url title='Watch on Twitch' aria-label='Watch on Twitch'
                 = icon('fab', 'twitch')
             - if entry.run.present?
-              a.text-light.tip.mr-2 href=run_path(entry.run) title='See associated run'
+              a.text-light.tip.mr-2 href=run_path(entry.run) title='See associated run' aria-label='See associated run'
                 = icon('fas', 'scroll')
 - if !race.started? && add_ghost
   .card-footer.clearfix: .float-right

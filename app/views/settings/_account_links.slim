@@ -53,12 +53,12 @@
   .list-group-item
     - if current_user.srdc.nil?
       a.btn.btn-srdc.mr-2 href='#' data={toggle: :modal, target: '#srdc-link'}
-        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
         ' Connect Speedrun.com
       = render partial: 'shared/srdc_link_modal'
     - else
       = button_to(speedrun_dot_com_user_path, method: :delete, class: 'btn btn-outline-light mr-2', form_class: 'd-inline')
-        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
         ' Disconnect
       .text-muted.mt-2.float-right
         ' Linked as

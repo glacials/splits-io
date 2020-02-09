@@ -17,7 +17,7 @@ h5
         a.dropdown-item href=run_path(old_run) = old_run.duration.format
   - if run.srdc_id.present?
     a.badge.badge-dark.tip.mr-2 title='See on Speedrun.com' href=run.srdc_url
-      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
   - if run.entry.present? && !run.entry.ghost?
     a.badge.badge-dark.tip.mr-2 title='Recorded as part of a race' href=race_path(run.entry.race)
       = icon('fas', 'flag-checkered')
@@ -73,7 +73,7 @@ h5
           data={toggle: :modal, target: current_user.srdc ? '#srdc-submit' : '#srdc-link'}
           title="Automatically submit to Speedrun.com. You'll get a chance to review the details first."
         )
-          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
           span Auto-submit
     - if run.category&.srdc && run.srdc_id.blank?
       - if current_user.srdc
