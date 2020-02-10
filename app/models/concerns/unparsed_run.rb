@@ -50,6 +50,7 @@ module UnparsedRun
           attempts:                run_data[:attempts],
           srdc_id:                 srdc_id || run_data[:metadata][:srdc_id],
           uses_emulator:           run_data[:metadata][:uses_emulator],
+          uses_autosplitter:       run_data[:autosplitter_settings].present?,
 
           realtime_duration_ms:    zero_to_nil(run_data[:realtime_duration_ms]),
           realtime_sum_of_best_ms: zero_to_nil(run_data[:realtime_sum_of_best_ms]),
@@ -95,6 +96,8 @@ module UnparsedRun
       run_data[:game_icon] = run.game_icon.presence
       run_data[:category]  = run.category_name
       run_data[:name]      = run.extended_name(false)
+
+      run_data[:autosplitter_settings] = run.auto_splitter_settings
 
       run_data[:metadata]                 = {}
       run_data[:metadata][:srdc_id]       = run.metadata.run_id.presence

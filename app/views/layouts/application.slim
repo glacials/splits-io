@@ -146,7 +146,7 @@ html lang='en'
           footer#footer
             = yield(:footer)
             .row
-              .col-md-6
+              .col-md-6.d-none.d-xl-block
                 - patrons = User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200')
                 - unless patrons.blank?
                   a> href=patreon_url
