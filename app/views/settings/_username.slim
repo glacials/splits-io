@@ -24,7 +24,7 @@
                 = request.host_with_port + user_pb_path(sample_run.user, sample_run.game, sample_run.category)
         ' These links are safe:
         ul: li
-          | All standard permalinks, e.g.
+          ' All standard permalinks, e.g.
           code: a href=run_path(sample_run) = request.host_with_port + run_path(sample_run)
         ' Changing only capitalization is safe and has none of the above effects.
   .card-footer.clearfix: .float-right: input.btn.btn-outline-primary type='submit' value='Save'
