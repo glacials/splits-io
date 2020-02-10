@@ -1,5 +1,5 @@
 <template>
-  <div style='margin: auto'>
+  <div style='margin: auto; margin-top: 0.3rem;'>
     <vue-bootstrap-typeahead
       background-variant='dark'
       class="m-auto search"

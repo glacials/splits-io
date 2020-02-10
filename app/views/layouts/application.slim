@@ -1,7 +1,10 @@
 doctype html
-html
+html lang='en'
   head
     title = content_for?(:title) ? yield(:title) + " - #{site_title}" : site_title
+    // TODO: all pages should set a unique meta tag
+    - description = content_for?(:description) ? yield(:description) : "The world's most advanced speedruning analytics and racing platform!"
+    meta name='description' content=description
     link href='//fonts.googleapis.com/css?family=Open+Sans|Anonymous+Pro' rel='stylesheet' type='text/css'
     link type='text/plain' rel='author' href='https://splits.io/humans.txt'
     meta name='viewport' content='width=device-width, initial-scale=1'
@@ -29,7 +32,6 @@ html
             code#matrix.d-block.text-left.my-5 style='opacity: 0.5'
           #multiupload
             .text-primary
-              #upload-spinner = render partial: 'shared/spinner', locals: {message: ''}
               h5.d-inline.text-primary
                 span#successful-uploads> 0
                 | uploaded and processing
@@ -40,8 +42,8 @@ html
             p.text-light.mt-5 This page will update automatically.
         nav.navbar.navbar-expand-md
           a.navbar-brand.text-nowrap.mr-2 href=root_path
-            img.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0'
-            img.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em'
+            img.d-inline src=asset_path('logo-imageonly.svg') height='25' style='margin-right: 0' alt='Splits.io image only logo'
+            img.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='25' style='margin-top: .1em' alt='Splits.io text only logo'
             - if controller_name == 'races'
               img.d-sm-inline.d-md-none.d-xl-inline(
                 alt='Splits.io Versus logo'
@@ -76,14 +78,15 @@ html
                 a.nav-link.px-3 href=faq_path
                   => icon('fas', 'info-circle', class: 'd-none d-md-inline d-xl-none')
                   span.d-md-none.d-xl-inline FAQ
-              search
+              li.nav-item
+                search
             ul.nav.navbar-nav
               - if current_user.present?
                 li.nav-item class=('active' if on_a_profile_page?)
                   .dropdown
                     a.nav-link.dropdown-toggle.px-3#profileDropdownLink href='#' data-toggle='dropdown' role='button' aria-expanded='false' aria-haspopup='true'
                       - if current_user.avatar.present?
-                        img.mr-2 src=current_user.avatar width=20 height=20
+                        img.mr-2 src=current_user.avatar width=20 height=20 alt="#{current_user}'s profile picture"
                       - else
                         => icon('fas', 'user')
                       span = current_user

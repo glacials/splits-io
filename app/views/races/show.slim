@@ -35,6 +35,7 @@ race inline-template=true race-id=@race.id v-cloak=true
                         placeholder='Chat...'
                         type='text'
                         v-model='body'
+                        aria-label='Input message'
                       )
                       .input-group-append
                         button.btn.btn-dark#chat-submit(
@@ -44,6 +45,7 @@ race inline-template=true race-id=@race.id v-cloak=true
                           :disabled='body === ""'
                           :title='error'
                           v-tippy=true
+                          aria-label='Submit message'
                         )
                           template v-if='loading' = render partial: 'shared/spinner'
                           span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
@@ -52,7 +54,7 @@ race inline-template=true race-id=@race.id v-cloak=true
               = render partial: 'chat_messages/show', locals: {chat_message: msg}
             .list-group-item.p-0
               .media
-                img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25
+                img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25 alt='Splits.io image only logo'
                 .media-body
                   span.mr-2: .badge.badge-success Splits.io
                   i Race created

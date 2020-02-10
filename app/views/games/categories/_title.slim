@@ -2,24 +2,24 @@
   .row.no-gutters
     - if @game.srdc&.cover_url
       .col-md-4 style='max-width: 200px'
-        img.card-img src=@game.srdc.cover_url
+        img.card-img src=@game.srdc.cover_url alt="#{@game.srdc.name}'s cover"
     .col-md-8
       .card-body
         h1.card-title = @category.game
         h6
           .btn-group.mr-2
             - if @on_game_page && @category.game.srdc.try(:url).present?
-              a.btn.btn-dark.tip href=@category.game.srdc.url title='See on Speedrun.com'
-                = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+              a.btn.btn-dark.tip href=@category.game.srdc.url title='View on speedrun.com' aria-label='View on speedrun.com'
+                = image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
             - elsif !@on_game_page && @category.srdc.try(:url).present?
-              a.btn.btn-dark.tip href=@category.srdc.url title='See on Speedrun.com'
+              a.btn.btn-dark.tip href=@category.srdc.url title='View on speedrun.com' aria-label='View on speedrun.com'
                 = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
             - if @category.game.srdc&.twitch_name
-              a.btn.btn-dark.tip title='See on Twitch' href="https://www.twitch.tv/directory/game/#{@category.game.srdc.twitch_name}"
+              a.btn.btn-dark.tip title='See on Twitch' href="https://www.twitch.tv/directory/game/#{@category.game.srdc.twitch_name}" aria-label='View on Twitch'
                 .text-light = icon('fab', 'twitch')
             - if @category.game.srl.present?
-              a.btn.btn-dark.tip href=@category.game.srl.url title='See on SpeedRunsLive'
-                = image_tag(asset_path('srl.png'))
+              a.btn.btn-dark.tip href=@category.game.srl.url title='View on SpeedRunsLive' aria-label='View on SpeedRunsLive'
+                = image_tag(asset_path('srl.png'), alt: 'SpeedRunsLive logo')
           - if @category.route
             span.mr-2
               = render partial: 'runs/export_button', locals: { \

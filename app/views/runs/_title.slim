@@ -17,7 +17,7 @@ h5
         a.dropdown-item href=run_path(old_run) = old_run.duration.format
   - if run.srdc_id.present?
     a.badge.badge-dark.mr-2 href=run.srdc_url v-tippy=true title='See on Speedrun.com'
-      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+      = image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com logo')
   - if run.entry.present? && !run.entry.ghost?
     a.badge.badge-dark.mr-2 v-tippy=true href=race_path(run.entry.race) title='Recorded as part of a race'
       = icon('fas', 'flag-checkered')
@@ -80,7 +80,7 @@ h5
           v-tippy=true
           title='Automatically submit to Speedrun.com. You will get a chance to review the details first.'
         )
-          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+          => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
           span Auto-submit
     - if run.category&.srdc && run.srdc_id.blank?
       - if current_user.srdc
