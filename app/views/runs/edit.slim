@@ -85,47 +85,39 @@
               => icon('fas', 'globe-americas')
               i.text-secondary.mr-2 Currently realtime
               = f.submit 'Set to gametime', class: 'btn btn-outline-primary'
-.row.mx-1
   #delete.col.p-1
     .card
-      #delete-header.card-header
-        h5.mb-0
-          button.btn.btn-link type='button' data={toggle: 'collapse', target: '#delete-body'} aria={expanded: false, controls: 'delete-body'}
-            ' Delete or disown
-      #delete-body.collapse aria={labelledby: 'delete-header'} data={parent: '#delete'}
-        .card-body
-          .card-deck
-            .card.mb-2
-              h5.card-header Delete
-              .card-body
-                p
-                  | Existing permalinks will be broken and your run, its information, and the original file will all be destroyed. The URL
-                  code<> #{run_url(@run).split('//')[1]}
-                  |  will not be reclaimed; it will 404 forever.
-                p This is not reversible.
-              .card-footer
-                .float-right
-                  = button_to(run_path(@run), \
-                    class: 'btn btn-outline-danger', \
-                    data: {confirm: "Really delete your #{@run} run?"}, \
-                    method: :delete, \
-                  )
-                    ' Delete
-            .card.mb-2
-              h5.card-header Disown
-              .card-body
-                p Your run will continue to exist and be accessible, but it will no longer be attributed to you. It
-                  will appear as anonymously uploaded.
-                p If you disown a run you will never be able to reclaim it, and consequently you will not be able to
-                  delete it at a later time.
-                p This is not reversible.
-              .card-footer
-                .float-right
-                  = button_to( \
-                    run_path(@run), \
-                    class: 'btn btn-outline-warning', \
-                    data: {confirm: "Really disown your #{@run} run?"}, \
-                    method: :patch, \
-                    params: {run: {disown: true}}, \
-                  )
-                    ' Disown
+      h5.card-header Delete or disown
+      .card-body
+        p
+          b> Deleting
+          ' a run is permanent. The original file will be destroyed. The URL
+          code<> #{run_url(@run).split('//')[1]}
+          ' will not be reclaimed and will error forever.
+        p
+          b> Disowning
+          ' a run will leave it in place but anonymize it. Your name will not appear on it, and you will lose the
+          ' ability to edit or delete it forever.
+        p
+          ' You can choose to
+          b> hide
+          ' your run instead, found elsewhere on this page.
+        p These are not reversible.
+      .card-footer
+        .float-right
+          = button_to( \
+            run_path(@run), \
+            class: 'btn btn-outline-danger mr-2', \
+            data: {confirm: "Really disown your #{@run} run?"}, \
+            form_class: 'd-inline', \
+            method: :patch, \
+            params: {run: {disown: true}}, \
+          )
+            ' Disown
+          = button_to(run_path(@run), \
+            class: 'btn btn-outline-danger mr-2', \
+            data: {confirm: "Really delete your #{@run} run?"}, \
+            form_class: 'd-inline', \
+            method: :delete, \
+          )
+            ' Delete
