@@ -10,9 +10,10 @@
           => icon('fab', 'twitch')
           ' Disconnect
       - else
-        i.btn.btn-outline-light.disabled.tip-top(
+        i.btn.btn-outline-light.disabled(
+          content='You need either a Google or Twitch connection to sign in. Link Google to disconnect Twitch.'
           style='cursor: not-allowed'
-          title='You need either Google or Twitch connection to sign in. Link Google to disconnect Twitch.'
+          v-tippy=true
         )
           => icon('fab', 'twitch')
           ' Not disconnectable
@@ -31,9 +32,10 @@
           => icon('fab', 'google')
           ' Disconnect
       - else
-        i.btn.btn-outline-light.disabled.tip-top(
+        i.btn.btn-outline-light.disabled(
+          content='You need either a Google or Twitch connection to sign in. Link Twitch to disconnect Google.'
           style='cursor: not-allowed'
-          title='You need either Google or Twitch connection to sign in. Link Twitch to disconnect Google.'
+          v-tippy=true
         ) Not disconnectable
       .text-muted.mt-2.float-right
         ' Linked as

@@ -70,11 +70,18 @@ h6.card-header Entries
                 span.text-danger = entry.runner.entries.where.not(forfeited_at: nil).count
           td.nowrap.text-center
             - if entry.runner.try(:twitch).try(:present?)
-              a.text-light.tip.mr-2 href=entry.runner.twitch.url title='Watch on Twitch' aria-label='Watch on Twitch'
-                = icon('fab', 'twitch')
+              a.text-light.mr-2(
+                aria-label='Watch on Twitch'
+                content='Watch on Twitch'
+                href=entry.runner.twitch.url
+                v-tippy=true
+              ) = icon('fab', 'twitch')
             - if entry.run.present?
-              a.text-light.tip.mr-2 href=run_path(entry.run) title='See associated run' aria-label='See associated run'
-                = icon('fas', 'scroll')
+              a.text-light.mr-2(
+                aria-label='See associated run'
+                content='See associated run'
+                href=run_path(entry.run) v-tippy=true
+              ) = icon('fas', 'scroll')
 - if !race.started? && add_ghost
   .card-footer.clearfix: .float-right
     = form_for(:entry, remote: true, url: api_v4_race_entries_path(race.id), html: {class: 'auth-me'}) do |f|

@@ -8,11 +8,13 @@
 - if current_user.nil?
   article You need to be signed in to view this page.
 - else
-  article
+  .col-md-8.offset-md-2
     .card
-      .card-header.text-white Hook into Splits I/O
+      .card-header.text-white Hook into Splits.io
       .card-body
-        p Create a new developer application here. This will let users authorize you to upload runs on their behalf.
+        p
+          ' Create a new developer application here. This will let users authorize you to upload runs or perform other
+          ' actions on their behalf.
         br
         = form_for(Doorkeeper::Application.new, url: applications_path) do |f|
           .form-group
@@ -24,7 +26,7 @@
                 = f.text_field(:redirect_uri, class: 'form-control', placeholder: 'Redirect URI (include http:// or https://)')
               .col-lg-4
                 ' Users will be sent here with a
-                code code
+                code> code
                 ' parameter after authorizing your app.
-            p: .row: .col-lg-8: .input-group-btn
+            .card-footer: .float-right
               = f.submit 'Create application', class: 'btn btn-primary'

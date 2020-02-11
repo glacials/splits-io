@@ -18,9 +18,10 @@
               )
                 => icon('fab', 'twitch')
                 ' Highlight at Twitch
-              .btn.btn-outline-twitch.tip-top(
-                title='Not taking you to the right page? Your video archive may have expired.'
+              .btn.btn-outline-twitch(
+                content='Not taking you to the right page? Your video archive may have expired.'
                 style='cursor: default'
+                v-tippy=true
               ) = icon('fas', 'question-circle')
             .row.text-light.m-2
               p Paste the link you get here:

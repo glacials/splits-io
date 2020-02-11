@@ -5,10 +5,10 @@
   race-create inline-template=true game-id=game.id category-id=category.id
     .btn-group v-cloak=true
       button.btn.btn-success(
-        type='button'
         @click='createPublic'
+        :content='error'
         :disabled='loading'
-        :title='error'
+        type='button'
         v-tippy=true
       )
         span v-cloak=true v-if='loading' = render partial: 'shared/spinner'

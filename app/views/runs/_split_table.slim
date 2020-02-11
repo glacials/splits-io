@@ -27,7 +27,7 @@
               - if compare_segment.present?
                 = delta(segment.duration(timing), compare_segment.duration(timing), subject: compare_segment.run.user || '???')
               - if segment.gold?(timing)
-                .gold-badge.align-middle.tip-top title='Gold'
+                .gold-badge.align-middle content='Gold' v-tippy=true
               = segment.duration(timing).format(precise: run.short?(timing))
           - if segment.skipped?(timing)
             td.align-right.time.align-middle -
@@ -41,9 +41,10 @@
             - if history_stats.present?
               - danger = history_stats[:standard_deviation].to_f > history_stats[:mean].to_f / 2
               - if danger
-                .segment-duration-chart-toggler.text-danger.cursor-pointer.tip(
+                .segment-duration-chart-toggler.text-danger.cursor-pointer(
+                  content='This segment needs work!'
                   data-segment=segment.id
-                  title='This segment needs work!'
+                  v-tippy=true
                 ) = icon('fas', 'chart-pie')
               - else
                 .segment-duration-chart-toggler.text-secondary.cursor-pointer data-segment=segment.id
@@ -52,12 +53,11 @@
           tr hidden=true data-segment=segment.id
               td colspan='999' style='margin: 0; padding: 0;'
                 - if current_user&.has_advanced_analytics?
-                  = render partial: 'segment_stats', locals: { \
-                    timing: timing, \
-                    segment: segment, \
-                    danger: danger, \
-                    history_stats: history_stats, \
-                  }
+                  = render 'segment_stats',
+                    timing: timing,
+                    segment: segment,
+                    danger: danger,
+                    history_stats: history_stats
                 - else
                   .card
                     .card-body: center.m-4

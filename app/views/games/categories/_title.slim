@@ -9,17 +9,34 @@
         h6
           .btn-group.mr-2
             - if @on_game_page && @category.game.srdc.try(:url).present?
-              a.btn.btn-dark.tip href=@category.game.srdc.url title='View on speedrun.com' aria-label='View on speedrun.com'
-                = image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
+              a.btn.btn-dark(
+                aria-label='View on speedrun.com'
+                content='View on speedrun.com'
+                href=@category.game.srdc.url
+                v-tippy=true
+              ) = image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
             - elsif !@on_game_page && @category.srdc.try(:url).present?
-              a.btn.btn-dark.tip href=@category.srdc.url title='View on speedrun.com' aria-label='View on speedrun.com'
-                = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
+              a.btn.btn-dark(
+                aria-label='View on speedrun.com'
+                content='View on speedrun.com'
+                href=@category.srdc.url
+                v-tippy=true
+              ) = image_tag(asset_path('srdc.png'), style: 'height: 0.8em')
             - if @category.game.srdc&.twitch_name
-              a.btn.btn-dark.tip title='See on Twitch' href="https://www.twitch.tv/directory/game/#{@category.game.srdc.twitch_name}" aria-label='View on Twitch'
+              a.btn.btn-dark(
+                aria-label='View on Twitch'
+                content='View on Twitch'
+                href="https://www.twitch.tv/directory/game/#{@category.game.srdc.twitch_name}"
+                v-tippy=true
+              )
                 .text-light = icon('fab', 'twitch')
             - if @category.game.srl.present?
-              a.btn.btn-dark.tip href=@category.game.srl.url title='View on SpeedRunsLive' aria-label='View on SpeedRunsLive'
-                = image_tag(asset_path('srl.png'), alt: 'SpeedRunsLive logo')
+              a.btn.btn-dark(
+                aria-label='View on SpeedRunsLive'
+                content='View on SpeedRunsLive'
+                href=@category.game.srl.url
+                v-tippy=true
+              ) = image_tag(asset_path('srl.png'), alt: 'SpeedRunsLive logo')
           - if @category.route
             span.mr-2
               = render partial: 'runs/export_button', locals: { \
@@ -55,30 +72,34 @@
                 h3.statcard-number = @category.median_duration(timing).format
                 span.statcard-desc
                   ' Median run length
-                  span.tip.text-secondary(
-                    title='Half of all runs are slower, and half are faster, than this time.'
+                  span.text-secondary(
+                    content='Half of all runs are slower, and half are faster, than this time.'
+                    v-tippy=true
                   ) = icon('fas', 'info-circle')
             .col-sm-3.mb-3
               .statcard.p-3
                 h3.statcard-number = @category.median_duration(timing, attempt_number: 1).format
                 span.statcard-desc
                   ' Median blind run
-                  span.tip.text-secondary(
-                    title='Half of all first attempts are slower, and half are faster, than this time.'
+                  span.text-secondary(
+                    content='Half of all first attempts are slower, and half are faster, than this time.'
+                    v-tippy=true
                   ) = icon('fas', 'info-circle')
             .col-sm-3.mb-3
               .statcard.p-3
                 h3.statcard-number = @category.median_duration(timing, attempt_number: 10).format
                 span.statcard-desc
                   ' Median 10th attempt
-                  span.tip.text-secondary(
-                    title='Half of all 10th attempts are slower, and half are faster, than this time.'
+                  span.text-secondary(
+                    content='Half of all 10th attempts are slower, and half are faster, than this time.'
+                    v-tippy=true
                   ) = icon('fas', 'info-circle')
             .col-sm-3.mb-3
               .statcard.p-3
                 h3.statcard-number = @category.median_duration(timing, attempt_number: 100).format
                 span.statcard-desc
                   ' Median 100th attempt
-                  span.tip.text-secondary(
-                    title='Half of all 100th attempts are slower, and half are faster, than this time.'
+                  span.text-secondary(
+                    content='Half of all 100th attempts are slower, and half are faster, than this time.'
+                    v-tippy=true
                   ) = icon('fas', 'info-circle')

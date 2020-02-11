@@ -60,10 +60,11 @@
               .input-group
                 = f.text_field(:srdc_video, value: run.video&.url, required: run.game.srdc.video_required?, placeholder: 'https://', readonly: run.video, class: 'form-control')
                 - if run.video.nil? && run.highlight_suggestion
-                  .input-group-append: a.btn.btn-twitch.tip-top(
-                    href='#'
+                  .input-group-append: a.btn.btn-twitch(
+                    content='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
                     data={toggle: :modal, target: '#highlight', dismiss: 'modal'}
-                    title='Using the timestamps in your splits, we automatically found the stream you PBed in. Click to learn more.'
+                    href='#'
+                    v-tippy=true
                   )
                     => icon('fab', 'twitch')
                     span Auto-highlight

@@ -1,24 +1,24 @@
 - if run.completed?(Run::REAL) && run.completed?(Run::GAME)
   - if timing == Run::REAL
     a.badge.badge-dark(
+      content='Recorded in realtime & gametime—click to switch'
       href=run_path(run, params.permit(:compare).merge(timing: 'game'))
       v-tippy=true
-      title='Recorded in realtime & gametime—click to switch'
     )
       span.text-success => icon('fas', 'globe-americas')
       = icon('fas', 'gamepad')
   - if timing == Run::GAME
     a.badge.badge-dark(
+      content='Recorded in realtime & gametime—click to switch'
       href=run_path(run, params.permit(:compare).merge(timing: 'real'))
       v-tippy=true
-      title='Recorded in realtime & gametime—click to switch'
     )
       => icon('fas', 'globe-americas')
       span.text-success = icon('fas', 'gamepad')
 - else
   - if run.completed?(Run::REAL)
-    .badge v-tippy=true title='"Recorded in realtime"'
+    .badge v-tippy=true content='Recorded in realtime'
       = icon('fas', 'globe-americas')
   - if run.completed?(Run::GAME)
-    .badge v-tippy=true title='Recorded in gametime'
+    .badge v-tippy=true content='Recorded in gametime'
       = icon('fas', 'gamepad')

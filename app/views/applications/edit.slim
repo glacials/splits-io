@@ -9,7 +9,7 @@
 - if current_user.nil?
   article You need to be signed in to view this page.
 - else
-  article data-turbolinks-temporary=true
+  .col-md-10.offset-md-1
     .card
       .card-header.text-white Edit #{@application.name}
       .card-body
@@ -32,7 +32,7 @@
                   .input-group-append
                     = link_to( \
                       application_path(@application, reset_secret: '1'), \
-                      class: 'btn btn-warning', \
+                      class: 'btn btn-outline-danger', \
                       method: :patch, \
                       data: { \
                         confirm: "Really reset the client secret for #{@application.name}? This will invalidate \
@@ -64,15 +64,9 @@
                   p
                     b Redirect URI
                   p
-                    span Include
-                    code<> http://
-                    span or
+                    span Include a protocol, like
                     code< https://
-                    span . If you haven't created a page for Splits I/O to redirect users back to yet, put
-                    code<> debug
-                    span here and change it later.
-            p
-              .row
-                .col-lg-8
-                  .input-group-btn
-                    = f.submit('Save', class: 'btn btn-success')
+                    span . You can also use a custom protocol if users should be redirected to your app.
+            .card-footer
+              .float-right
+                = f.submit('Save application', class: 'btn btn-primary')

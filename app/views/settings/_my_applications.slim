@@ -40,13 +40,14 @@
                     .input-group
                       input.form-control id="client-id-#{application.uid}" type='text' value=application.uid readonly=1 aria-label='Client ID'
                       .input-group-append
-                        .btn.btn-outline-primary.clipboard-btn.tip(
-                          data-clipboard-target="#client-id-#{application.uid}"
-                          title='Copy to clipboard'
+                        .btn.btn-outline-primary.clipboard-btn(
                           aria-label='Copy client ID to clipboard'
+                          content='Copy to clipboard'
+                          data-clipboard-target="#client-id-#{application.uid}"
+                          v-tippy=true
                         )
-                          span#copy = icon('fas', 'copy')
-                          span#copied style='display: none;' = icon('fas', 'check')
+                          span = icon('fas', 'copy')
+                          span style='display: none' = icon('fas', 'check')
                   td
                     - if (Time.now.utc - 24.hours) > application.secret_generated_at
                       button.btn.btn-outline-secondary.btn-block disabled=true Hidden forever
@@ -54,25 +55,35 @@
                       .input-group
                         input.form-control id="client-secret-#{application.uid}" type='text' value=application.secret readonly=1 aria-label='Client secret'
                         .input-group-append
-                          .btn.btn-outline-primary.clipboard-btn.tip(
-                            data-clipboard-target="#client-secret-#{application.uid}"
-                            title='Copy to clipboard'
+                          .btn.btn-outline-primary.clipboard-btn(
                             aria-label='Copy client secret to clipboard'
+                            content='Copy to clipboard'
+                            data-clipboard-target="#client-secret-#{application.uid}"
+                            v-tippy=true
                           )
-                            span#copy = icon('fas', 'copy')
-                            span#copied style='display: none;' = icon('fas', 'check')
+                            span = icon('fas', 'copy')
+                            span style='display: none' = icon('fas', 'check')
                   td
                     .btn-group
-                      a.btn.btn-outline-secondary.tip(
-                        href=edit_application_path(application)
-                        title="Edit #{application.name}"
+                      .mr-2: a.btn.btn-outline-secondary(
                         aria-label='Edit application'
+                        content="Edit #{application.name}"
+                        href=edit_application_path(application)
+                        v-tippy=true
                       )
                         span = icon('fas', 'edit')
-                      = link_to(application_path(application), class: 'btn btn-outline-secondary tip', method: :delete, 'aria-label' => 'Delete application',\
-                        data: { \
-                          confirm: "Really delete #{application.name}? This will also revoke all \
-                                    #{application.access_tokens.count} authorizations and invalidate the associated \
-                                    tokens." \
-                        }, title: "Delete #{application.name}")
-                        span = icon('fas', 'times')
+                      / Surrounding div to prevent tooltips double-showing
+                      div: tippy content="Delete #{application.name}"
+                        template v-slot='trigger'
+                          = link_to( \
+                            application_path(application), \
+                            class: 'btn btn-outline-secondary', \
+                            method: :delete, \
+                            'aria-label' => 'Delete application', \
+                            data: { \
+                              confirm: "Really delete #{application.name}? This will also revoke all \
+                                        #{application.access_tokens.count} authorizations and invalidate the associated \
+                                        tokens." \
+                            } \
+                          )
+                            span = icon('fas', 'times')

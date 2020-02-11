@@ -20,7 +20,7 @@ momentDurationFormatSetup(moment)
 import Vue from 'vue/dist/vue.esm'
 
 import TurbolinksAdapter from 'vue-turbolinks'
-import VueTippy from 'vue-tippy'
+import VueTippy, { TippyComponent } from 'vue-tippy'
 
 import race from '../vue/race.js'
 import raceCreate from '../vue/race-create.js'
@@ -30,6 +30,7 @@ import SpeedRunsLiveRaceList from '../vue/SpeedRunsLiveRaceList.vue'
 
 Vue.use(TurbolinksAdapter)
 Vue.use(VueTippy)
+Vue.component("tippy", TippyComponent);
 
 document.addEventListener('turbolinks:load', () => {
   if (!document.getElementById('vue')) {
@@ -53,6 +54,7 @@ import "../analytics.js"
 import "../collapse.js"
 import "../count.js"
 import "../crisp.js"
+import "../dropdown.js"
 import "../highchart_theme.js"
 import "../chart_builder.js"
 import "../landing.js"

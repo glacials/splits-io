@@ -18,11 +18,11 @@
 - else
   - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?)) || (@run.user && @compare_runs[0].user == @run.user)
     .row.mx-2
-      .col-md-4 = render partial: 'runs/title', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
-      .col-md-8 = render partial: 'runs/stats', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+      .col-md-4 = render 'title', timing: timing, run: @run, compare_runs: @compare_runs
+      .col-md-8 = render 'stats', timing: timing, run: @run, compare_runs: @compare_runs
 
-    = render partial: 'runs/claim', locals: {run: @run}
-    = render partial: 'runs/full_timeline', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+    = render 'claim', run: @run
+    = render 'full_timeline', timing: timing, run: @run, compare_runs: @compare_runs
 
     - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).any?
       .card-deck.mx-0
@@ -37,16 +37,14 @@
           .card.mx-1
             i.text-center.my-auto.py-5 Select a comparison to see another run's video here
             .card-footer: .float-right
-              = render partial: 'compare_button', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+              = render 'compare_button', timing: timing, run: @run, compare_runs: @compare_runs
     .row.row-cols-1.row-cols-md-2.mx-0
       .col.p-1
-        = render partial: 'runs/split_table', locals: {timing: timing, run: @run, compare_runs: @compare_runs}
+        = render 'split_table', timing: timing, run: @run, compare_runs: @compare_runs
       .col.p-0
         - if @run.completed?(timing) && @run.histories.any?
           #chart-spinner.text-secondary.text-center.my-5
-            = render partial: 'shared/spinner', locals: {messages: [ \
-              'Generating charts', 'Still generating', 'Arranging chart data', \
-            ]}
+            = render 'shared/spinner'
           #chart-alert.alert.alert-danger.m-1 hidden=true
           #chart-holder hidden=true
             #run-duration-chart.card.m-1

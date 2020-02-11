@@ -38,7 +38,7 @@
     "vue-loader": "^15.7.0",
     "vue-multiselect": "^2.1.6",
     "vue-template-compiler": "^2.6.10",
-    "vue-tippy": "^2.1.2",
+    "vue-tippy": "4.4.0",
     "vue-turbolinks": "^2.0.4",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.3.9",

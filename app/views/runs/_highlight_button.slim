@@ -1,17 +1,19 @@
 - if run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion && current_user.has_autohighlight?
-  a.btn.btn-twitch.tip-top(
-    href='#'
+  a.btn.btn-twitch(
+    content='We automatically found the stream you PBed in.'
     data={toggle: :modal, target: '#highlight'}
-    title='We automatically found the stream you PBed in.'
+    href='#'
+    v-tippy=true
   )
     => icon('fab', 'twitch')
     ' Auto-highlight
 - elsif run.belongs_to?(current_user) && run.video.nil? && run.highlight_suggestion
   .btn-group.m-2 role='group' aria={label: 'Calls to action'}
-    a.btn.btn-twitch.tip.disabled(
-      title='Splits.io can auto-highlight this run on Twitch. Subscribe to activate.'
+    a.btn.btn-twitch.disabled(
+      content='Splits.io can auto-highlight this run on Twitch. Subscribe to activate.'
       href=subscriptions_path
       style='pointer-events: all'
+      v-tippy=true
     )
       => icon('fab', 'twitch')
       ' Auto-highlight

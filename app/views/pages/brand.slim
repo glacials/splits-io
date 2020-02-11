@@ -5,77 +5,139 @@
     li.breadcrumb-item = link_to('Brand Guidelines', brand_path)
   h2 Brand Guidelines
 .row.mx-2
-  .card.mb-3.col-md-6
-    h5.card-header Name
-    .card-body
-      p Splits.io is pronounced "splits aye oh". Splits.io is spelled "Splits.io".
-      p Splits.io's name was historically "Splits I/O", but this usage has been discontinued. Even with this old name,
-        Splits.io was always pronounced "splits aye oh".
-  .card.mb-3.col-md-6
-    h5.card-header Logo
-    .card-body
-      p
-        ' The Splits.io logo (created by
-        a href='https://twitter.com/Nosfydesign' Nosfy
-        ') is an "S" shape created by three charted segments at "/" angles. Feel free to remix it for personal use, but
-        ' the standard image is the only official Splits.io logo.
-      p Add about 7.5% breathing room on the top and bottom if the logo will have things above or below it, or if it
-        will be used in a circle crop. For example, a 2000px high logo should be placed in a 2300px high canvas.
-      p The logo looks best on dark backgrounds.
-    center: img.mb-4 src=asset_path('logo-imageonly.svg') width=200
-    .card-footer.clearfix
-      center: .btn-group.mb-2
-        a.btn.btn-outline-light href=asset_path('logo-imageonly.svg') download=true
-          => icon('fas', 'download')
-          ' SVG
-        a.btn.btn-outline-light.tip href=asset_path('logo.png') download=true title='Transparent background, 2000x2000px logo'
-          => icon('fas', 'download')
-          ' Transparent PNG
-      center: .btn-group
-        a.btn.btn-outline-light.tip href=asset_path('logo-darkbg.png') download=true title='Dark background, 2000x2000px logo'
-          => icon('fas', 'download')
-          ' Dark PNG
-        a.btn.btn-outline-light.tip href=asset_path('logo-darkbg-breathingroom.png') download=true title='Dark background, 2000x2000px logo on 2300x2300px canvas'
-          => icon('fas', 'download')
-          ' Dark PNG w/ Breathing Room
-  .card.mb-3.col-md-6
-    h5.card-header Colors
-    .card-body
-      p The official Splits.io colors are in the logo:
-      ol
-        li
-          span style='color: #f5b946' => icon('fas', 'square')
-          | Pastel Orange (
-          code #f5b946
-          | )
-        li
-          span style='color: #469ce6' => icon('fas', 'square')
-          | Picton Blue (
-          code #469ce6
-          | )
-        li
-          span style='color: #6de588' => icon('fas', 'square')
-          | Pastel Green (
-          code #6de588
-          | )
-      p Additionally, Mirage is a great contrast for backgrounds:
-      ol
-        li
-          span style='color: #1a1c21' => icon('fas', 'square')
-          | Mirage (
-          code #1a1c21
-          | )
-  .card.mb-3.col-md-6
-    h5.card-header Buttons
-    .card-body
-      p.mb-3
-        ' Here are some examples of using the Splits.io logo to create account-linking buttons:
-      center
-        button.btn.btn-dark.m-3
-          img.mr-2 src=asset_path('logo-imageonly.svg') style='height: 1.2em; vertical-align: middle'
-          ' Sign In with Splits.io
-        button.btn.btn-dark.m-3
-          img.mr-2 src=asset_path('logo-imageonly.svg') style='height: 1.2em; vertical-align: middle'
-          ' Link with Splits.io
-    .card-footer.clearfix: .float-right
-      a.btn.btn-outline-light href='https://github.com/glacials/splits-io/blob/master/docs/api.md#advanced-option' Account Linking Documentation
+  .card-columns
+    .card.mb-3
+      h5.card-header Name
+      .card-body
+        h5 Pronunciation
+        p
+          ' There is only one way to pronounce Splits.io.
+          ul
+            li
+              span.text-success> = icon('fas', 'check')
+              ' "splits aye oh"
+            li
+              span.text-danger> = icon('fas', 'times')
+              ' "splits dot aye oh"
+            li
+              span.text-danger> = icon('fas', 'times')
+              ' "splits ee oh"
+            li
+              span.text-danger> = icon('fas', 'times')
+              ' "splits"
+        h5 Spelling
+        p
+          ' Splits.io is spelled "Splits.io", with a capital "S" and including ".io". It used to be spelled
+          ' "Splits I/O", but this usage has been discontinued.
+        h5 Referencing in code
+        p
+          ' To reference Splits.io in code, where capitalization style and special character usage might limit you from
+          ' referring to it as Splits.io, we recommend these options for their respective contexts:
+          ul
+            li
+              ' camelCased:
+              code splitsio
+            li
+              ' snake_cased:
+              code splitsio
+            li
+              ' kebab-cased:
+              code splitsio
+            li
+              ' PascalCase:
+              code> SplitsIO
+              ' or
+              code SplitsIo
+              ' , based on your language's convention
+            li
+              ' UPPER:
+              code SPLITSIO
+          ' These are only recommendations and you should feel free to break them if it suits your own style better.
+    .card.mb-3
+      h5.card-header Logo
+      .card-body
+        p
+          ' The Splits.io logo (created by
+          a href='https://twitter.com/Nosfydesign' Nosfy
+          ') is an "S" shape created by three charted segments at "/" angles. Feel free to remix it for personal use, but
+          ' the standard image is the only official Splits.io logo.
+        p Add about 7.5% breathing room on the top and bottom if the logo will have things above or below it, or if it
+          will be used in a circle crop. For example, a 2000px high logo should be placed in a 2300px high canvas.
+        p The logo looks best on dark backgrounds.
+      center: img.mb-4 src=asset_path('logo-imageonly.svg') width=200
+        p
+          ' The official text version of the Splits.io logo uses the font Bukhari Script. Bukhari Script Alternate can
+          ' be used for the capital "S" to give it an extra curliness.
+        img.mb-4 alt='Splits.io logo with text' src=asset_path('logo-with-text.png') width=200
+        a download=true href=asset_path('logo-with-text.png') = icon('fas', 'download')
+      .card-footer.clearfix
+        center: .btn-group.mb-2
+          a.btn.btn-outline-light href=asset_path('logo-imageonly.svg') download=true
+            => icon('fas', 'download')
+            ' SVG
+          a.btn.btn-outline-light(
+            content='Transparent background, 2000x2000px logo'
+            download=true
+            href=asset_path('logo.png')
+            v-tippy=true
+          )
+            => icon('fas', 'download')
+            ' Transparent PNG
+        center: .btn-group
+          a.btn.btn-outline-light(
+            content='Dark background, 2000x2000px logo'
+            download=true
+            href=asset_path('logo-darkbg.png')
+            v-tippy=true
+          )
+            => icon('fas', 'download')
+            ' Dark PNG
+          a.btn.btn-outline-light(
+            content='Dark background, 2000x2000px logo on 2300x2300px canvas'
+            download=true
+            href=asset_path('logo-darkbg-breathingroom.png')
+            v-tippy=true
+          )
+            => icon('fas', 'download')
+            ' Dark PNG w/ Breathing Room
+    .card.mb-3
+      h5.card-header Colors
+      .card-body
+        p The official Splits.io colors are in the logo:
+        ol
+          li
+            span style='color: #f5b946' => icon('fas', 'square')
+            | Pastel Orange (
+            code #f5b946
+            | )
+          li
+            span style='color: #469ce6' => icon('fas', 'square')
+            | Picton Blue (
+            code #469ce6
+            | )
+          li
+            span style='color: #6de588' => icon('fas', 'square')
+            | Pastel Green (
+            code #6de588
+            | )
+        p Additionally, Mirage is a great contrast for backgrounds:
+        ol
+          li
+            span style='color: #1a1c21' => icon('fas', 'square')
+            | Mirage (
+            code #1a1c21
+            | )
+    .card.mb-3
+      h5.card-header Buttons
+      .card-body
+        p.mb-3
+          ' Here are some examples of using the Splits.io logo to create account-linking buttons:
+        center
+          button.btn.btn-dark.m-3
+            img.mr-2 src=asset_path('logo-imageonly.svg') style='height: 1.2em; vertical-align: middle'
+            ' Sign In with Splits.io
+          button.btn.btn-dark.m-3
+            img.mr-2 src=asset_path('logo-imageonly.svg') style='height: 1.2em; vertical-align: middle'
+            ' Link with Splits.io
+      .card-footer.clearfix: .float-right
+        a.btn.btn-outline-light href='https://github.com/glacials/splits-io/blob/master/docs/api.md#advanced-option' Account Linking Documentation

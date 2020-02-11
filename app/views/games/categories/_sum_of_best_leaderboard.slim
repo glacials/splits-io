@@ -13,7 +13,7 @@
           th.align-left PB
           th.align-left
             | Potential save
-            span.tip< title='<code>(PB - sum of best)</code>'
+            span< content='Potential save is the difference between PB and sum of best.' v-tippy=true
               = icon('fas', 'question-circle')
       tbody
         - i = 0

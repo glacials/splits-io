@@ -9,23 +9,30 @@
     span = user_badge(@user)
   .mb-2
     - if @user.twitch.present?
-      a.btn.btn-twitch.mr-2.tip title='Watch on Twitch' href=@user.twitch.url aria-label="Watch #{@user} on Twitch"
-        => icon('fab', 'twitch')
+      a.btn.btn-twitch.mr-2(
+        aria-label="Watch #{@user} on Twitch"
+        content='Watch on Twitch'
+        href=@user.twitch.url
+        v-tippy=true
+      ) => icon('fab', 'twitch')
     - if @user.srdc.present?
-      a.btn.btn-srdc.tip title='Visit on speedrun.com' href=@user.srdc.url aria-label="View #{@user} on speedrun.com"
-        => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
+      a.btn.btn-srdc(
+        aria-label="View #{@user} on speedrun.com"
+        content='Visit on speedrun.com'
+        href=@user.srdc.url
+        v-tippy=true
+      ) => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com logo')
 
 .row.row-cols-1.row-cols-md-2.mx-0
   .col.p-1: .card
-    = render partial: 'shared/race_table', locals: { \
+    = render 'shared/race_table', \
       races: @user.races.with_ends.finished.not_secret_visibility.order(ended_at: :desc), \
       user: @user, \
       active_races: @user.races.active.not_secret_visibility, \
-      description: "#{@user}'s Races" \
-    }
+      description: "#{@user}'s Races"
 
   .col.p-1: .card
-    = render partial: 'shared/run_table', locals: { \
+    = render 'shared/run_table', { \
       runs: @user.pbs, \
       cols: %i[time video name uploaded], \
       col_options: {time: [:archived]}, \

@@ -104,20 +104,23 @@
           ' your run instead, found elsewhere on this page.
         p These are not reversible.
       .card-footer
-        .float-right
-          = button_to( \
-            run_path(@run), \
-            class: 'btn btn-outline-danger mr-2', \
-            data: {confirm: "Really disown your #{@run} run?"}, \
-            form_class: 'd-inline', \
-            method: :patch, \
-            params: {run: {disown: true}}, \
-          )
-            ' Disown
-          = button_to(run_path(@run), \
-            class: 'btn btn-outline-danger mr-2', \
-            data: {confirm: "Really delete your #{@run} run?"}, \
-            form_class: 'd-inline', \
-            method: :delete, \
-          )
-            ' Delete
+        .float-right: .btn-group
+          / Not sure why, but leaving off these wrapping divs makes the first tooltip appear for both buttons
+          div: tippy content='Leave the run here, but unbind it from your account.'
+            template v-slot='trigger'
+              = button_to( \
+                run_path(@run), \
+                class: 'btn btn-outline-danger mr-2', \
+                data: {confirm: "Really disown your #{@run} run? This is not reversible."}, \
+                method: :patch, \
+                params: {run: {disown: true}}, \
+              )
+                ' Disown
+          div: tippy content='Permanently delete the run and its source file.'
+            template v-slot='trigger'
+              = button_to(run_path(@run), \
+                class: 'btn btn-outline-danger', \
+                data: {confirm: "Really delete your #{@run} run? This is not reversible."}, \
+                method: :delete, \
+              )
+                ' Delete

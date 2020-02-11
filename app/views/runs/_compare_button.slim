@@ -21,7 +21,7 @@
           a.dropdown-item href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
             = comparable_run.duration(timing).format
             - if comparable_run.video
-              span.tip title='Video attached' =< icon('fas', 'video')
+              span content='Video attached' v-tippy=true =< icon('fas', 'video')
         - recommended_comparison = run.recommended_comparison(timing)
         .dropdown-header Recommended
         - if recommended_comparison.nil?
@@ -31,43 +31,53 @@
             b> #{recommended_comparison.user.name}'s
             ' #{recommended_comparison.duration(timing).format}
             - if recommended_comparison.video&.twitch?
-              span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
+              span content='Twitch highlight attached' v-tippy=true =< icon('fab', 'twitch')
         - run.category.runners.where.not(id: run.user.try(:id)).limit(100).each do |comparable_runner|
           .dropdown-header = comparable_runner
           - comparable_runner.comparable_runs(timing, run).where.not(id: run.id).each do |comparable_run|
             a.dropdown-item href=run_path(run, params.permit(:timing).merge(compare: comparable_run))
               = comparable_run.duration(timing).format
               - if comparable_run.video&.twitch?
-                span.tip title='Twitch highlight attached' =< icon('fab', 'twitch')
+                span content='Twitch highlight attached' v-tippy=true =< icon('fab', 'twitch')
     - if compare_runs.any?
       .btn-group.ml-1
-        a.btn.tip.px-1 title='Swap comparison' href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
-          = icon('fas', 'exchange-alt')
-        a.btn.tip.px-1 title='Remove comparison' href=run_path(run, params.permit(:timing).delete(:compare))
-          = icon('fas', 'times')
+        a.btn.px-1(
+          content='Swap comparison'
+          href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
+          v-tippy=true
+        ) = icon('fas', 'exchange-alt')
+        a.btn.px-1(
+          content='Remove comparison'
+          href=run_path(run, params.permit(:timing).delete(:compare))
+          v-tippy=true
+        ) = icon('fas', 'times')
         - rivalry = current_user&.rivalries&.find_by(category_id: run.category_id)
         - if rivalry.present?
           - if rivalry.to_user_id == compare_runs.first.user_id
-            = link_to( \
-              rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
-              method: :delete, \
-              class: 'btn tip px-1', \
-              title: "Remove #{rivalry.to_user} as a rival" \
-            )
-              = icon('fas', 'user-minus')
+            / Surrounding divs are required to not double-trigger tooltips, and I don't know why
+            div: tippy content="Remove #{rivalry.to_user} as a rival"
+              template v-slot='trigger'
+                = link_to( \
+                  rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
+                  class: 'btn px-1', \
+                  method: :delete, \
+                )
+                  = icon('fas', 'user-minus')
           - else
-            = link_to( \
-              rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
-              method: :post, \
-              class: 'btn tip px-1', \
-              title: "Replace #{rivalry.to_user} as a rival" \
-            )
-              = icon('fas', 'user-edit')
+            div: tippy content="Replace #{rivalry.to_user} as a rival"
+              template v-slot='trigger'
+                = link_to( \
+                  rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
+                  class: 'btn px-1', \
+                  method: :post, \
+                )
+                  = icon('fas', 'user-edit')
         - else
-          = link_to( \
-            rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
-            method: :post, \
-            class: 'btn tip px-1', \
-            title: "Add #{compare_runs.first.user} as a rival" \
-          )
-            = icon('fas', 'user-plus')
+            div: tippy content="Add #{compare_runs.first.user} as a rival"
+              template v-slot='trigger'
+                = link_to( \
+                  rivalries_path(rivalry: {to_user_id: compare_runs.first.user_id, category_id: run.category_id}), \
+                  class: 'btn px-1', \
+                  method: :post, \
+                )
+                  = icon('fas', 'user-plus')

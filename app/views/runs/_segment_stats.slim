@@ -5,12 +5,12 @@
         h6.card-title
           ' Standard deviation
           - if segment.run.belongs_to?(current_user)
-            small.tip-right(
-              title="A high standard deviation like this indicates inconsistency. You should practice
-              this segment!"
+            small(
+              content="A high standard deviation like this indicates inconsistency. You should practice this segment!"
+              v-tippy=true
             ) = icon('fas', 'exclamation-triangle')
           - else
-            small.tip-right( title="A high standard deviation like this indicates inconsistency!")
+            small content="A high standard deviation like this indicates inconsistency!" v-tippy=true
               = icon('fas', 'exclamation-triangle')
         h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
     - else
@@ -18,14 +18,16 @@
         h6.card-title
           ' Standard deviation
           - if segment.run.belongs_to?(current_user)
-            small.tip-right(
-              title="By definition, 68% of your attempts are within one standard deviation of the mean,
-              95% within two, and 99% within three. Aim to lower this."
+            small(
+              content="By definition, 68% of your attempts are within one standard deviation of the mean, 95% within
+              two, and 99% within three. Aim to lower this."
+              v-tippy=true
             ) = icon('fas', 'question-circle')
           - else
-            small.tip-right(
-              title="By definition, 68% of #{segment.run.user || 'the runner'}'s attempts are within one
-              standard deviation of the mean, 95% within two, and 99% within three."
+            small(
+              content="By definition, 68% of #{segment.run.user || 'the runner'}'s attempts are within one standard
+              deviation of the mean, 95% within two, and 99% within three."
+              v-tippy=true
             ) = icon('fas', 'question-circle')
         h4.card-subtitle = format_ms_casual(history_stats[:standard_deviation].to_i, 1)
     .card: .card-body
@@ -33,12 +35,14 @@
       h4.card-subtitle = format_ms(history_stats[:mean].to_f, precise: segment.run.short?(timing))
     .card: .card-body
       - if segment.run.belongs_to?(current_user)
-        .float-right.tip-left.text-light(
-          title="Stats based on your last 100 runs."
+        .float-right.text-light(
+          content="Stats based on your last 100 runs."
+          v-tippy=true
         ) = icon('fas', 'info-circle')
       - else
-        .float-right.tip-left.text-light(
-          title="Stats based on #{segment.run.user || 'the runner'}'s last 100 runs."
+        .float-right.text-light(
+          content="Stats based on #{segment.run.user || 'the runner'}'s last 100 runs."
+          v-tippy=true
         ) = icon('fas', 'info-circle')
       h6.card-title Best
       h4.card-subtitle = segment.shortest_duration(timing).format(precise: segment.run.short?(timing))
@@ -47,56 +51,64 @@
       h6.card-title
         ' 10th percentile
         - if segment.run.belongs_to?(current_user)
-          small.tip-top(
-            title="Only 10% of your attempts are faster than this time. Treat this number like a relaxed
+          small(
+            content="Only 10% of your attempts are faster than this time. Treat this number like a relaxed
             best&mdash;aim to beat it."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
         - else
-          small.tip-top(
-            title="10% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. This number
-            is basically a relaxed best."
+          small(
+            content="10% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. This number is
+            basically a relaxed best."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
       h4.card-subtitle = format_ms(history_stats[:percentiles][10].to_f, precise: segment.run.short?(timing))
     .card: .card-body
       h6.card-title
         ' Median
         - if segment.run.belongs_to?(current_user)
-          small.tip-top(
-            title="50% of your attempts are faster than this time. This is the time you'd expect to get
-            in a marathon or no-reset run."
+          small(
+            content="50% of your attempts are faster than this time. This is the time you'd expect to get in a marathon
+            or no-reset run."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
         - else
-          small.tip-top(
-            title="50% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. This is the
-            time they'd expect to get in a marathon or no-reset run."
+          small(
+            content="50% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. This is the time
+            they'd expect to get in a marathon or no-reset run."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
       h4.card-subtitle = format_ms(history_stats[:median].to_f, precise: segment.run.short?(timing))
     .card: .card-body
       h6.card-title
         ' 90th percentile
         - if segment.run.belongs_to?(current_user)
-          small.tip-top(
-            title="90% of your attempts are faster than this time. You can see this as your worst time
-            excluding fantastic blunders."
+          small(
+            content="90% of your attempts are faster than this time. You can see this as your worst time excluding
+            fantastic blunders."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
         - else
-          small.tip-top(
-            title="90% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. You can see
-            this as their worst time excluding fantastic blunders."
+          small(
+            content="90% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. You can see this
+            as their worst time excluding fantastic blunders."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
       h4.card-subtitle = format_ms(history_stats[:percentiles][90].to_f, precise: segment.run.short?(timing))
     .card: .card-body
       h6.card-title
         ' 99th percentile
         - if segment.run.belongs_to?(current_user)
-          small.tip-top(
-            title="99% of your attempts are faster than this time. All attempts but your absolute worst
-            fit under this umbrella."
+          small(
+            content="99% of your attempts are faster than this time. All attempts but your absolute worst fit under this
+            umbrella."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
         - else
-          small.tip-top(
-            title="99% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. All attempts
-            but their absolute worst fit under this umbrella."
+          small(
+            content="99% of #{segment.run.user || 'the runner'}'s attempts are faster than this time. All attempts but
+            their absolute worst fit under this umbrella."
+            v-tippy=true
           ) = icon('fas', 'question-circle')
       h4.card-subtitle = format_ms(history_stats[:percentiles][99], precise: segment.run.short?(timing))
   .segment-duration-chart-alert.alert.alert-danger.my-3 hidden=true
