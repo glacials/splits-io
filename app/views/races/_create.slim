@@ -1,26 +1,29 @@
 - game = local_assigns.fetch(:game, Game.new)
 - category = local_assigns.fetch(:category, Category.new)
 
-race-create inline-template=true game-id=game.id category-id=category.id
-  .btn-group v-cloak=true
-    button.btn.btn-success(
-      type='button'
-      @click='createPublic'
-      :disabled='loading'
-      :title='error'
-      v-tippy=true
-    )
-      span v-cloak=true v-if='loading' = render partial: 'shared/spinner'
-      span.text-danger v-cloak=true v-else-if='error' => icon('fas', 'exclamation-triangle')
-      span v-else=true => icon('fas', 'flag-checkered')
-      ' Create race
-    button.btn.btn-success.dropdown-toggle.dropdown-toggle-split(
-      type='button'
-      data={toggle: 'dropdown'}
-      aria={haspopup: true, expanded: false}
-    )
-      span.sr-only Toggle dropdown
-    .dropdown-menu
-      button.dropdown-item @click='createPublic' Create public race
-      button.dropdown-item @click='createInviteOnly' Create invite-only race
-      button.dropdown-item @click='createSecret' Create secret race
+- if current_user.present?
+  race-create inline-template=true game-id=game.id category-id=category.id
+    .btn-group v-cloak=true
+      button.btn.btn-success(
+        type='button'
+        @click='createPublic'
+        :disabled='loading'
+        :title='error'
+        v-tippy=true
+      )
+        span v-cloak=true v-if='loading' = render partial: 'shared/spinner'
+        span.text-danger v-cloak=true v-else-if='error' => icon('fas', 'exclamation-triangle')
+        span v-else=true => icon('fas', 'flag-checkered')
+        ' Create race
+      button.btn.btn-success.dropdown-toggle.dropdown-toggle-split(
+        type='button'
+        data={toggle: 'dropdown'}
+        aria={haspopup: true, expanded: false}
+      )
+        span.sr-only Toggle dropdown
+      .dropdown-menu
+        button.dropdown-item @click='createPublic' Create public race
+        button.dropdown-item @click='createInviteOnly' Create invite-only race
+        button.dropdown-item @click='createSecret' Create secret race
+- else
+  button.btn.btn-success href='#' data={toggle: :modal, target: '#signin'} Sign in to create a race

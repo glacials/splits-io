@@ -48,8 +48,7 @@
             = link_to('Active', races_path, class: "nav-link #{historic ? '' : 'active'} text-success")
           li.nav-item
             = link_to('Historic', races_path(historic: '1'), class: "nav-link #{historic ? 'active' : ''} text-success")
-        - if current_user.present?
-          = render 'create'
+        = render 'create'
       = render partial: 'shared/race_table', locals: {races: races}
       - if params[:historic] != '1'
         .card-footer
