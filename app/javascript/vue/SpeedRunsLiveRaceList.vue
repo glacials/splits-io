@@ -5,11 +5,11 @@
         <img src="http://cdn.speedrunslive.com/images/srl_305.png" style="height: 1em" alt="SpeedRunsLive logo" />
         <small
           class="fas fa-info-circle"
+          content="For your convenience of not needing to check two platforms, this is a list of open races on SpeedRunsLive. Splits.io is not affiliated with SpeedRunsLive."
           v-tippy
-          title="For your convenience of not needing to check two platforms, this is a list of open races on SpeedRunsLive. Splits.io is not affiliated with SpeedRunsLive."
         ></small>
       </span>
-      <span class="text-danger text-uppercase" v-tippy title='This list updates live; refreshing is not required.'>
+      <span class="text-danger text-uppercase" content='This list updates live; refreshing is not required.' v-tippy>
         <small class="fas fa-circle" />
         Live
       </span>

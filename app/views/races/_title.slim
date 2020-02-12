@@ -51,9 +51,9 @@ race-title(
                   template v-else-if='error' = icon('fas', 'times')
                   template v-else=true = icon('fas', 'edit')
           a.btn.btn-outline-light.btn-sm.ml-2(
-            href=race_path(race, controller.race_params.merge(browsersource: 1))
-            title='View in browser source friendly layout (beta)'
             aria-label='View in browser source friendly layout (beta)'
+            content='View in browser source friendly layout (beta)'
+            href=race_path(race, controller.race_params.merge(browsersource: 1))
             v-if='!editing'
             v-tippy=true
           ) = icon('fas', 'broadcast-tower')
