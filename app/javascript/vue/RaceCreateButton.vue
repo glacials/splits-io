@@ -1,6 +1,31 @@
+<template>
+  <div class="btn-group" v-cloak>
+    <button class="btn btn-success" :content="error" :disabled="loading" @click="createPublic" type="button" v-tippy>
+      <span v-cloak v-if="loading"><Spinner /></span>
+      <span class="text-danger" v-cloak v-else-if="error"><i class="fas fa-exclamation-triangle" /></span>
+      <span v-else><i class="fas fa-flag-checkered" /></span>
+      Create race
+    </button>
+    <button class="btn btn-success dropdown-toggle dropdown-toggle-split" type="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-if="!loading">
+      <span class="sr-only">Toggle dropdown</span>
+      <div class="dropdown-menu">
+        <button class="dropdown-item" @click="createPublic">Create public race (default)</button>
+        <button class="dropdown-item" @click="createInviteOnly">Create invite-only race</button>
+        <button class="dropdown-item" @click="createSecret">Create secret race</button>
+      </div>
+    </button>
+  </div>
+</template>
+
+<script>
 import { getAccessToken } from '../token'
+import Spinner from './Spinner.vue'
 
 export default {
+  components: {
+    Spinner,
+  },
   data: () => ({
     error: null,
     loading: false,
@@ -48,6 +73,7 @@ export default {
       }
     },
   },
-  name: 'race-create',
+  name: 'RaceCreateButton',
   props: ['game-id', 'category-id'],
 }
+</script>
