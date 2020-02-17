@@ -56,7 +56,7 @@ module RunsHelper
   end
 
   def pretty_timestamp(timestamp)
-    "<span title=\"#{timestamp}\">#{time_ago_in_words(timestamp)} ago</span>".html_safe
+    "<span content=\"#{timestamp}\" v-tippy>#{time_ago_in_words(timestamp)} ago</span>".html_safe
   end
 
   def pretty_duration(seconds)

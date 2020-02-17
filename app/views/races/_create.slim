@@ -5,9 +5,9 @@
   race-create inline-template=true game-id=game.id category-id=category.id
     .btn-group v-cloak=true
       button.btn.btn-success(
-        @click='createPublic'
         :content='error'
         :disabled='loading'
+        @click='createPublic'
         type='button'
         v-tippy=true
       )

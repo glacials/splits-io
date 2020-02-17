@@ -13,7 +13,7 @@ module DeltaHelper
   def delta(base, compare, subject:, better: :lower)
     return tag.span('', class: 'text-muted') if [base, compare].any?(&:nil?)
 
-    classes = %w[delta-indicator tip-top mx-2 cursor-default]
+    classes = %w[delta-indicator mx-2 cursor-default]
 
     if base == compare
       classes << 'text-muted'
@@ -34,6 +34,6 @@ module DeltaHelper
       classes << 'text-danger'
     end
 
-    tag.span(text, class: classes, title: "Compared to #{subject}")
+    tag.span(text, class: classes, content: "Compared to #{subject}", 'v-tippy' => true)
   end
 end

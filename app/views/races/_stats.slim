@@ -15,7 +15,7 @@
         span.statcard-desc class=statcard_class(race) In progress
       - if race.finished?
         h2.statcard-number class=statcard_class(race) Finished
-        span.statcard-desc class=statcard_class(race) title=race.finished_at
+        span.statcard-desc class=statcard_class(race) content=race.finished_at v-tippy=true
           = render partial: 'shared/relative_time', locals: {time: race.finished_at, ago: true}
   .col-sm-6.col-xl-4: .statcard.p-3
     h2.statcard-number = race.visibility.humanize

@@ -43,6 +43,7 @@ export default {
 
         window.location = (await response.json()).race.path
       } catch(error) {
+        this.loading = false
         this.error = `Error: ${error}`
       }
     },

@@ -28,6 +28,7 @@ race inline-template=true race-id=@race.id v-cloak=true
                   = form_for(:chat, html: {onsubmit: 'event.preventDefault()'}) do |f|
                     .input-group
                       input.form-control#input-chat-text(
+                        aria-label='Input message'
                         autocomplete='off'
                         autofocus=true
                         disabled=current_user.nil?
@@ -35,17 +36,15 @@ race inline-template=true race-id=@race.id v-cloak=true
                         placeholder='Chat...'
                         type='text'
                         v-model='body'
-                        aria-label='Input message'
                       )
                       .input-group-append
                         button.btn.btn-dark#chat-submit(
-                          disabled=current_user.nil?
-                          type='submit'
-                          @click='chat'
+                          :content='error'
                           :disabled='body === ""'
-                          :title='error'
-                          v-tippy=true
+                          @click='chat'
                           aria-label='Submit message'
+                          type='submit'
+                          v-tippy=true
                         )
                           template v-if='loading' = render partial: 'shared/spinner'
                           span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')

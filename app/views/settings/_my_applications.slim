@@ -75,15 +75,14 @@
                       / Surrounding div to prevent tooltips double-showing
                       div: tippy content="Delete #{application.name}"
                         template v-slot='trigger'
-                          = link_to( \
-                            application_path(application), \
-                            class: 'btn btn-outline-secondary', \
-                            method: :delete, \
+                          = link_to(application_path(application), \
                             'aria-label' => 'Delete application', \
+                            class: 'btn btn-outline-secondary', \
                             data: { \
                               confirm: "Really delete #{application.name}? This will also revoke all \
-                                        #{application.access_tokens.count} authorizations and invalidate the associated \
-                                        tokens." \
-                            } \
+                                       #{application.access_tokens.count} authorizations and invalidate the \
+                                       associated tokens." \
+                            }, \
+                            method: :delete, \
                           )
                             span = icon('fas', 'times')

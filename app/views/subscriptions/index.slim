@@ -50,18 +50,18 @@
           .float-right
             .btn-group
               button.btn.btn-lg.btn-outline-light.disabled.mr-2(
-                content="You're grandfathered into this plan. You can keep it forever, but if you cancel or upgrade it will \
-                not be available to you anymore. Active since #{plan.created_at.to_date}."
+                content="You're grandfathered into this plan. You can keep it forever, but if you cancel or upgrade it \
+                will not be available to you anymore. Active since #{plan.created_at.to_date}."
                 style='cursor: default'
                 v-tippy=true
               ) Grandfathered
               = form_for(:subscription, method: :delete) do |f|
-                tippy content='Cancel your subscription. You will keep your benefits until we would have next billed you.'
+                tippy content='Cancel your subscription. You will keep your benefits for the rest of this cycle.'
                   template v-slot='trigger'
                     = f.button( \
-                      icon('fas', 'times'), \
                       class: 'btn btn-lg btn-outline-danger', \
                       data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
+                      icon('fas', 'times'), \
                     )
     - else
       .card
@@ -129,7 +129,7 @@
                 v-tippy=true
               ) Active
               = form_for(:subscription, method: :delete) do |f|
-                tippy content='Cancel your subscription. You will keep your benefits until we would have next billed you.'
+                tippy content='Cancel your subscription. You will keep your benefits for the rest of this cycle.'
                   template v-slot='trigger'
                     = f.button(icon('fas', 'times'),
                       class: 'btn btn-lg btn-outline-danger', \
@@ -138,7 +138,10 @@
         - elsif plan
           = form_for(:subscription, method: :patch) do |f|
             = f.hidden_field(:stripe_plan_id, value: ENV['STRIPE_PLAN_ID_TIER3'])
-            tippy content='Upgrade your legacy subscription to Gold. The prorated difference will be added to your next bill.'
+            tippy(
+              content='Upgrade your legacy subscription to Gold. The prorated difference will be added to your \
+              next bill.'
+            )
               template v-slot='trigger'
                 = f.button('Upgrade to Gold', \
                   class: 'btn btn-lg btn-block btn-outline-primary', \

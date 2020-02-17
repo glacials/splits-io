@@ -1,6 +1,6 @@
 - if local_assigns[:prefix].present?
   => prefix
-span data={reltime: time.rfc3339} title=time
+span data={reltime: time.rfc3339} content=time v-tippy=true
   = time_ago_in_words(time).sub('about ', '')
 - if local_assigns[:ago]
   =< 'ago'

@@ -23,7 +23,7 @@ h6.card-header Entries
         tr style=('filter: grayscale(100%)' if entry.ghost?)
           td.nowrap
             - if entry.ghost?
-              big.mr-2 v-tippy=true title="Ghost of #{entry.runner ? entry.runner.to_s + "'s" : 'a'} past run 😱"
+              big.mr-2 content="Ghost of #{entry.runner ? entry.runner.to_s + "'s" : 'a'} past run 😱" v-tippy=true
                 = icon('fas', 'ghost')
             span.mr-2 = user_badge(entry.runner)
           td.nowrap
@@ -80,7 +80,8 @@ h6.card-header Entries
               a.text-light.mr-2(
                 aria-label='See associated run'
                 content='See associated run'
-                href=run_path(entry.run) v-tippy=true
+                href=run_path(entry.run)
+                v-tippy=true
               ) = icon('fas', 'scroll')
 - if !race.started? && add_ghost
   .card-footer.clearfix: .float-right

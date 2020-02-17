@@ -31,21 +31,21 @@ race-title(
           .btn-group.ml-2 v-if='!editing'
             - if race.belongs_to?(current_user)
               button.btn.btn-outline-light.btn-sm.clipboard-btn(
-                data-clipboard-text=race_url(race, join_token: race.join_token)
-                title='Copy invite link'
-                v-tippy=true
                 aria-label='Copy race URL'
+                content='Copy invite link'
+                data-clipboard-text=race_url(race, join_token: race.join_token)
+                v-tippy=true
               )
                 span#copy = icon('fas', 'share-alt')
                 span#copied style='display: none;' = icon('fas', 'check')
               - if !race.started?
                 button.btn.btn-outline-light.btn-sm(
+                  :content='error || "Edit"'
                   :disabled='loading'
-                  :title='error || "Edit"'
                   @click='edit'
+                  aria-label='Edit race information'
                   v-if='!editing && !race.started_at'
                   v-tippy=true
-                  aria-label='Edit race information'
                 )
                   template v-if='loading' = render partial: 'shared/spinner'
                   template v-else-if='error' = icon('fas', 'times')
@@ -74,8 +74,8 @@ race-title(
         .btn-group.mb-4 v-if='editing'
           button.btn.btn-outline-light @click='cancel' v-tippy=true Cancel changes
           button.btn.btn-success(
+            :content='error'
             :disabled='loading'
-            :title='error || "Save changes"'
             @click='save'
             v-tippy=true
           )

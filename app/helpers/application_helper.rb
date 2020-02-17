@@ -42,9 +42,9 @@ module ApplicationHelper
         title = "#{user} is a Splits.io patron!"
       end
 
-      return "<span class='#{['badge', badge, ('tip-top' if title.present?)].join(' ')}' title='title' v-tippy=true>#{user}</span>" if !link
+      return "<span class='badge #{badge}' content='#{title}' v-tippy>#{user}</span>" if !link
 
-      return link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title, 'v-tippy' => true, ':title' => "'#{title}'")
+      return link_to(user, user_path(user), class: ['badge', badge], content: title, 'v-tippy' => true)
     end
 
     if user.patron?
@@ -62,13 +62,7 @@ module ApplicationHelper
       title = "#{user} is a Splits.io staff member!"
     end
 
-    link_to(user, user_path(user), class: ['badge', badge, ('tip-top' if title.present?)], title: title, 'v-tippy' => true, ':title' => "'#{title}'")
-  end
-
-  def game_badge(game)
-    return '???' if game.nil?
-
-    link_to(game.srdc.try(:shortname), game_path(game), class: 'badge badge-primary', title: game.name)
+    link_to(user, user_path(user), class: "badge #{badge}", content: title, 'v-tippy' => true)
   end
 
   # patreon_url returns the URL for the Splits.io Patreon page. If checkout is true, it returns the URL for the

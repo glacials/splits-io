@@ -24,7 +24,7 @@
                     - auth.scopes.all.each do |scope|
                       li = scope_to_sentence(scope)
                 td
-                  div title=auth.created_at #{time_ago_in_words(auth.created_at)} ago
+                  div content=auth.created_at v-tippy=true #{time_ago_in_words(auth.created_at)} ago
                 td
                   = button_to authorization_path(application.id), class: 'btn btn-outline-light', method: :delete, 'aria-label' => 'Revoke application permission', data: {\
                     confirm: "Really revoke permissions from #{application.name}?"\

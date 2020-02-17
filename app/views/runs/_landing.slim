@@ -5,7 +5,10 @@
       p.lead The tools you need to get higher on the leaderboards&mdash;all in one place
       a.btn.btn-primary.btn-lg href='/auth/twitch'
         ' Try Splits.io today
-      small.text-muted.d-block content='Upload from LiveSplit or 15 other speedrunning timers' v-tippy='{placement: "bottom"}'
+      small.text-muted.d-block(
+        content='Upload from LiveSplit or 15 other speedrunning timers'
+        v-tippy='{placement: "bottom"}'
+      )
         => icon('fas', 'upload')
         ' Or drag-and-drop splits at any time
   .row.mx-2.mb-4
