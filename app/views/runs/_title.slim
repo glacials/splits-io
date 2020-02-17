@@ -1,7 +1,7 @@
 h1 = run
 h5
   span> by
-  span = user_badge(run.user)
+  span> = user_badge(run.user)
   - if run.pb?(timing)
     .badge
       => icon('fas', 'check')
@@ -56,12 +56,16 @@ h5
     - if run.user.nil?
       #claim-nav-link-container.btn-group hidden=true
         - if current_user.present?
-          a#claim-nav-link.btn.btn-outline-success href='#' data-confirm="Claim this run as #{current_user}?"
+          a#claim-nav-link.btn.btn-primary(
+            content='You uploaded this run anonymously. Click here to bind it to your account.'
+            href='#'
+            v-tippy=true
+          )
             => icon('fas', 'user-check')
             ' Claim run
         - else
-          button.btn.btn-outline-secondary.disabled content='Sign in to claim' style='cursor: default' v-tippy=true
-            ' Claim run
+          button.btn.btn-primary data={toggle: :modal, target: '#signin'}
+            ' Sign in to claim
   - if can?(:create, RunLike)
     .btn-group.m-2: button#like-button.btn(
       data={liked: current_user.likes?(run) ? '1' : '0'}

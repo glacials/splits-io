@@ -21,7 +21,6 @@
       .col-md-4 = render 'title', timing: timing, run: @run, compare_runs: @compare_runs
       .col-md-8 = render 'stats', timing: timing, run: @run, compare_runs: @compare_runs
 
-    = render 'claim', run: @run
     = render 'full_timeline', timing: timing, run: @run, compare_runs: @compare_runs
 
     - if Video.where(run_id: [@run, *@compare_runs].pluck(:id)).any?
@@ -67,12 +66,12 @@
               .card.m-1 style='background: linear-gradient(var(--darkish), transparent); border: none'
                 .card-body: center.m-4
                   h1 = icon('fas', 'lock')
-                  p: i Subscribe to Splits.io to view advanced charts.
+                  p: i Subscribe to Splits.io Gold to view advanced charts.
                   p: a.btn.btn-primary.mr-2 href=subscriptions_path Subscribe to Splits.io Gold
   - else
     .container: .col-md-6.offset-md-3: .card
       .card-body
-        p Subscribe to Splits.io to compare to other users.
+        p Subscribe to Splits.io Gold to compare to other users.
         p
           ' (Comparing to yourself is free.)
       .card-footer.clearfix
