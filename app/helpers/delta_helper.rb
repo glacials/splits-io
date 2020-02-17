@@ -34,6 +34,6 @@ module DeltaHelper
       classes << 'text-danger'
     end
 
-    tag.span(text, class: classes, content: "Compared to #{subject}", 'v-tippy' => true)
+    tag.span(text, class: classes, content: "Compared to #{subject}", 'v-tippy' => '') # Must be '', not true
   end
 end

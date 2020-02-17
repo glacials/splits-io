@@ -30,7 +30,11 @@ import SpeedRunsLiveRaceList from '../vue/SpeedRunsLiveRaceList.vue'
 
 Vue.use(TurbolinksAdapter)
 Vue.use(VueTippy, {
-  onShow: instance => !!instance.props.content, // Makes null `content` hide the tooltip, not show a blank one
+  onShow: instance => {
+    if (!instance.props.content) {
+      return false
+    } // Makes null `content` hide the tooltip, not show a blank one
+  },
 })
 Vue.component("tippy", TippyComponent);
 

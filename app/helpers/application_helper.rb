@@ -62,7 +62,7 @@ module ApplicationHelper
       title = "#{user} is a Splits.io staff member!"
     end
 
-    link_to(user, user_path(user), class: "badge #{badge}", content: title, 'v-tippy' => true)
+    link_to(user, user_path(user), class: "badge #{badge}", content: title, 'v-tippy' => '') # Must be '', not true
   end
 
   # patreon_url returns the URL for the Splits.io Patreon page. If checkout is true, it returns the URL for the

@@ -50,7 +50,7 @@ race inline-template=true race-id=@race.id v-cloak=true
                           span.text-danger v-else-if='error' => icon('fas', 'exclamation-triangle')
                           template v-else=true => icon('fas', 'comment')
             - @race.chat_messages.includes(user: [:twitch, :google]).order(created_at: :desc).each do |msg|
-              = render partial: 'chat_messages/show', locals: {chat_message: msg}
+              = render 'chat_messages/show', chat_message: msg
             .list-group-item.p-0
               .media
                 img.mr-3 src=asset_path('logo-darkbg-breathingroom.png') width=25 height=25 alt='Splits.io image only logo'
