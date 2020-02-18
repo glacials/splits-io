@@ -5,6 +5,7 @@ class Duration
   def initialize(milliseconds)
     if milliseconds.nil?
       @duration = nil
+      return
     end
 
     @duration = ActiveSupport::Duration.build(milliseconds / 1000.0)
