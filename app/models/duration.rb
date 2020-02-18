@@ -133,7 +133,7 @@ class Duration
   end
 
   def to_ms
-    @duration.in_milliseconds
+    @duration&.in_milliseconds
   end
 
   def to_sec
