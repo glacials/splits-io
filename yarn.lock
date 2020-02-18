@@ -7370,7 +7370,7 @@ vue-bootstrap-typeahead@^0.2.6:
     resize-observer-polyfill "^1.5.0"
     vue "^2.5.17"
 
-vue-hot-reload-api@^2.3.0, vue-hot-reload-api@^2.3.4:
+vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==

@@ -1,8 +1,13 @@
+# Duration is a wrapper around ActiveSupport::Duration with a focus on formatting and dealing with milliseconds.
 class Duration
   include Comparable
 
   def initialize(milliseconds)
-    @ms = milliseconds
+    if milliseconds.nil?
+      @duration = nil
+    end
+
+    @duration = ActiveSupport::Duration.build(milliseconds / 1000.0)
   end
 
   # format accepts a number of milliseconds and returns a time like "HH:MM:SS". If precise is true, it returns a time
@@ -12,7 +17,7 @@ class Duration
   # returned value never has a sign in front of it. When sign is :negatives, only negative values have a sign
   # (default).
   def format(precise: false, sign: :negatives)
-    return '-' if @ms.nil?
+    return '-' if @duration.nil?
 
     format = ['%02d', ':%02d', ':%02d']
     components = [hours, minutes, seconds]
@@ -123,15 +128,15 @@ class Duration
   end
 
   def nil?
-    @ms.nil? || @ms.zero?
+    @duration.nil? || @duration.zero?
   end
 
   def to_ms
-    @ms
+    @duration.in_milliseconds
   end
 
   def to_sec
-    @ms / 1000
+    @duration.to_i
   end
 
   def abs
@@ -149,18 +154,18 @@ class Duration
   private
 
   def hours
-    @ms.abs / 1000 / 60 / 60
+    @duration.parts[:hours]
   end
 
   def minutes
-    @ms.abs / 1000 / 60 % 60
+    @duration.parts[:minutes]
   end
 
   def seconds
-    @ms.abs / 1000 % 60
+    @duration.parts[:seconds].floor
   end
 
   def milliseconds
-    @ms.abs % 1000
+    (@duration.parts[:seconds] % 1 * 1000).floor
   end
 end
