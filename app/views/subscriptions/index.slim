@@ -58,7 +58,7 @@
               = form_for(:subscription, method: :delete) do |f|
                 tippy content='Cancel your subscription. You will keep your benefits for the rest of this cycle.'
                   template v-slot='trigger'
-                    = f.button(icon('fas', 'times'), \
+                    = f.button(con('fas', 'times'), \
                       class: 'btn btn-lg btn-outline-danger', \
                       data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
                     )
