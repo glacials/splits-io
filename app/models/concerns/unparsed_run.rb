@@ -131,9 +131,9 @@ module UnparsedRun
       analysis.compact.each(&:dispose)
 
       # Set run duration
-      last_seg = run.segment(run.len - 1)
-      run_data[:realtime_duration_ms] = last_seg.personal_best_split_time.real_time&.total_seconds&.*(1000) || 0
-      run_data[:gametime_duration_ms] = last_seg.personal_best_split_time.game_time&.total_seconds&.*(1000) || 0
+      last_seg = run.segment(run.len - 1) if run.len != 0
+      run_data[:realtime_duration_ms] = last_seg&.personal_best_split_time&.real_time&.total_seconds&.*(1000) || 0
+      run_data[:gametime_duration_ms] = last_seg&.personal_best_split_time&.game_time&.total_seconds&.*(1000) || 0
 
       run_data[:default_timing] = Run::REAL
       if run_data[:realtime_duration_ms].zero? && run_data[:gametime_duration_ms].positive?
