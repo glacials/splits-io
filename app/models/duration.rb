@@ -155,7 +155,13 @@ class Duration
   private
 
   def hours
-    @duration.parts[:hours]
+    # Hours is our biggest unit, but ActiveSupport::Duration supports years, months, weeks, and days, so we need to roll
+    # those into hours. Otherwise a duration of 25 hours (1 day, 1 hour) will look like a duration of 1 hour.
+    ((@duration.parts[:years]  * ActiveSupport::Duration::SECONDS_PER_YEAR)  / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    ((@duration.parts[:months] * ActiveSupport::Duration::SECONDS_PER_MONTH) / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    ((@duration.parts[:weeks]  * ActiveSupport::Duration::SECONDS_PER_WEEK)  / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    ((@duration.parts[:days]   * ActiveSupport::Duration::SECONDS_PER_DAY)   / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    (@duration.parts[:hours])
   end
 
   def minutes
