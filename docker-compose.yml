@@ -16,6 +16,7 @@ x-server-environment:
   - RAILS_ROOT="/app"
   - READ_ONLY_MODE=0
   - REDIS_URL="redis/0"
+  - RUST_BACKTRACE=1
   - S3_BUCKET=splits-io
   - SITE_TITLE=Splits.io (Local)
   - SPLITSIO_CLIENT_SECRET
