@@ -12,7 +12,7 @@ module Programs::LiveSplit
   end
 
   def self.website
-    'http://livesplit.org/'
+    'https://livesplit.org/'
   end
 
   def self.content_type
