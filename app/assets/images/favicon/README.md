@@ -18,8 +18,8 @@ Insert the following code in the `head` section of your pages:
     <link rel="manifest" href="/Dfv87ZbNh2/site.webmanifest">
     <link rel="mask-icon" href="/Dfv87ZbNh2/safari-pinned-tab.svg" color="#292b30">
     <link rel="shortcut icon" href="/Dfv87ZbNh2/favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="Splits I/O">
-    <meta name="application-name" content="Splits I/O">
+    <meta name="apple-mobile-web-app-title" content="Splits.io">
+    <meta name="application-name" content="Splits.io">
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="msapplication-config" content="/Dfv87ZbNh2/browserconfig.xml">
     <meta name="theme-color" content="#292b30">

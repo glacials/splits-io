@@ -21,7 +21,7 @@ describe Runs::ExportsController do
     let(:run) { FactoryBot.create(:run, :parsed) }
     let(:response) { get(:timer, params: {run: run.id36, timer: timer}) }
 
-    context 'as the Splits I/O Exchange Format' do
+    context 'as the Splits.io Exchange Format' do
       let(:timer) { 'exchange' }
 
       it 'returns a 200' do

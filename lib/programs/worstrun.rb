@@ -23,7 +23,7 @@ module Programs::Worstrun
     false
   end
 
-  # exchangeable? is true if the timer supports the Splits I/O Exchange Format for importing and exporting, false
+  # exchangeable? is true if the timer supports the Splits.io Exchange Format for importing and exporting, false
   # otherwise. See: https://github.com/glacials/splits-io/tree/master/public/schema
   def self.exchangeable?
     false
