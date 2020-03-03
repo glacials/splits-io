@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'runs/exports/exchange' do
-  it 'renders the Splits I/O Exchange Format template' do
+  it 'renders the Splits.io Exchange Format template' do
     assign(:run, FactoryBot.create(:run, :parsed))
     render
 

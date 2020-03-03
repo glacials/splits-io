@@ -2,8 +2,8 @@
   "$id": "https://splits.io/schema/run_v1.0.0.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
-  "title": "Splits I/O JSON Schema",
-  "description": "Splits I/O JSON Schema is a specification for the transmission of runs between services and programs.",
+  "title": "Splits.io JSON Schema",
+  "description": "Splits.io JSON Schema is a specification for the transmission of runs between services and programs.",
   "required": ["_schemaVersion", "timer"],
   "additionalProperties": false,
   "definitions": {
@@ -59,8 +59,8 @@
   "properties": {
     "_schemaVersion": {
       "type": "string",
-      "title": "Splits I/O JSON Schema Version",
-      "description": "Schema Version specifies which version of the Splits I/O JSON Schema is being used. This schema specifies only v1.0.0.",
+      "title": "Splits.io JSON Schema Version",
+      "description": "Schema Version specifies which version of the Splits.io JSON Schema is being used. This schema specifies only v1.0.0.",
       "examples": "v1.0.0",
       "const": "v1.0.0"
     },
@@ -78,8 +78,8 @@
         },
         "splitsioID": {
           "type": "string",
-          "title": "Splits I/O ID",
-          "description": "Splits I/O ID is the run's ID on Splits I/O. This can be used to communicate with the Splits I/O API.",
+          "title": "Splits.io ID",
+          "description": "Splits.io ID is the run's ID on Splits.io. This can be used to communicate with the Splits.io API.",
           "examples": ["oqt"]
         }
       }
@@ -239,8 +239,8 @@
           "properties": {
             "splitsioID": {
               "type": "string",
-              "title": "Splits I/O ID",
-              "description": "Splits I/O ID specifies the game's Splits I/O ID.",
+              "title": "Splits.io ID",
+              "description": "Splits.io ID specifies the game's Splits.io ID.",
               "examples": ["234"]
             },
             "speedruncomID": {
@@ -281,8 +281,8 @@
           "properties": {
             "splitsioID": {
               "type": "string",
-              "title": "Splits I/O ID",
-              "description": "Splits I/O ID specifies the category's Splits I/O ID.",
+              "title": "Splits.io ID",
+              "description": "Splits.io ID specifies the category's Splits.io ID.",
               "examples": ["234"]
             },
             "speedruncomID": {
@@ -334,8 +334,8 @@
               },
               "splitsioID": {
                 "type": "string",
-                "title": "Splits I/O ID",
-                "description": "Splits I/O ID specifies the runner's Splits I/O ID.",
+                "title": "Splits.io ID",
+                "description": "Splits.io ID specifies the runner's Splits.io ID.",
                 "examples": ["234"]
               },
               "speedruncomID": {

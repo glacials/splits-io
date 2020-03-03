@@ -1,7 +1,7 @@
 {
   "name": "splitsio-lambda",
   "repository": "glacials/splits-io",
-  "description": "An AWS Lambda job for Splits I/O",
+  "description": "An AWS Lambda job for Splits.io",
   "license": "MIT",
   "main": "index.js",
   "scripts": {

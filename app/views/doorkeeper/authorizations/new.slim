@@ -14,7 +14,7 @@
             p: h4.text-primary = @pre_auth.client.name
             p: span is requesting these abilities:
             p: ol
-                li See who you are on Splits I/O
+                li See who you are on Splits.io
                 - @pre_auth.scope.split(' ').each do |scope|
                   li = scope_to_sentence(scope)
             p You can always revoke these permissions later.

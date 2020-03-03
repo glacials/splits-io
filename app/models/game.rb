@@ -75,7 +75,7 @@ class Game < ApplicationRecord
   end
 
   # merge_into! moves all categories, aliases, and runs over to the given game, then destroys this game. Use this when
-  # there are two Splits I/O games representing the same game, like "Tron Evolution" and "Tron: Evolution".
+  # there are two Splits.io games representing the same game, like "Tron Evolution" and "Tron: Evolution".
   def merge_into!(game)
     ApplicationRecord.transaction do
       aliases.update_all(game_id: game.id)

@@ -16,14 +16,14 @@ this file proves authorship, not property.
 
   CryZe107 and wooferzfg
   for not using a proprietary format when making LiveSplit; also for open sourcing it when i complained enough
-  Twitter: @cryze107, @wooferzfg1
+  Twitter: @cryze107, @wooferzfg
 
   batedurgonnadie
   for being the first major consumer of the api, and for being a far more effective error reporter than rollbar
   Twitter: @batedurgonnadie
 
   my senior project teacher from school
-  for understanding my dislike for my senior project (splitsdb) and letting me rebuild it for web class (into Splits I/O)
+  for understanding my dislike for my senior project (splitsdb) and letting me rebuild it for web class (into Splits.io)
 
   a lot of people
   for seeing an error saying to email me then actually emailing me :)

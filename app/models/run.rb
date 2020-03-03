@@ -149,7 +149,7 @@ class Run < ApplicationRecord
   end
 
   # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
-  # speedrun.com. For this to work that user must have their Twitch account tied to both Splits I/O and speedrun.com.
+  # speedrun.com. For this to work that user must have their Twitch account tied to both Splits.io and speedrun.com.
   def discover_runner
     return if user.present?
 
