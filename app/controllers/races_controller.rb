@@ -57,12 +57,12 @@ class RacesController < ApplicationController
   # (public race or the user already joined).
   def shorten_url
     if @race.public_visibility? || @race.entries.find_for(current_user).present?
-      desired_fullpath = race_path(@race, race_params)
+      desired_fullpath = race_path(@race, race_params.except(:join_token))
       redirect_to desired_fullpath if desired_fullpath != request.fullpath
       return
     end
 
-    desired_fullpath = race_path(@race, race_params.to_hash.slice('join_token'))
+    desired_fullpath = race_path(@race, race_params)
     redirect_to desired_fullpath if desired_fullpath != request.fullpath
   end
 end
