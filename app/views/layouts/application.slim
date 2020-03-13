@@ -141,6 +141,20 @@ html lang='en'
         header#header.m-1.p-0 = yield(:header)
         .row.mx-2: #alerts.w-100 data-turbolinks-temporary=true
           = render partial: 'shared/alerts'
+        - if User.stay_insideathon? && !(current_user&.subscriptions&.active&.any?)
+          .row.mx-2.mb-3: .col-md-7.mx-auto: .card.border.border-primary
+            .card-body
+              h4.text-success
+                => icon('fas', 'home')
+                b> Stay-inside-a-thon!
+              ' To help you deal with COVID-19 all advanced analytics, comparisons, and other Gold features on Splits.io
+              ' are available for free until further notice. Stay home and grind attempts with the help of our best
+              ' tools, and avoid being a risk to yourself or others.
+              - if current_user.nil?
+                ' (Due to technical constraints, you must be signed in.)
+            .card-footer.clearfix: .float-right
+              a.btn.btn-outline-primary.mr-2 href='https://www.google.com/search?q=covid-19' COVID-19 info
+              a.btn.btn-outline-primary.mr-2 href=subscriptions_path What are Gold features?
         = yield
         - unless on_landing_page?
           footer#footer

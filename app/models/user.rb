@@ -60,6 +60,12 @@ class User < ApplicationRecord
     search_for_name(term)
   end
 
+  # stay_insideathon is meant to help people deal with COVID-19, conditions where they might find themselves staying
+  # indoors a lot. If stay_insideathon returns true, all paid features become available to non-subscribers.
+  def self.stay_insideathon?
+    true
+  end
+
   def avatar
     [twitch, google].compact.map(&:avatar).first
   end
@@ -107,7 +113,7 @@ class User < ApplicationRecord
   # 2. Continued patrons who used to have them at the lower price point (grandfathered)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_predictions?
-    patron?(tier: 2, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin?
+    patron?(tier: 2, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Redirectors used to be a tier 3 Patreon feature, so they're available to:
@@ -115,7 +121,7 @@ class User < ApplicationRecord
   # 2. Continued patrons who used to have them at the lower price point (grandfathered)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_redirectors?
-    patron?(tier: 3, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier2.active.any? || admin?
+    patron?(tier: 3, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier2.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Advanced comparisons used to be a tier 3 Patreon feature, so they're available to:
@@ -123,7 +129,7 @@ class User < ApplicationRecord
   # 2. Early patrons (grandfathered as a thank-you)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_advanced_comparisons?
-    patron?(tier: 3, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier2.active.any? || admin?
+    patron?(tier: 3, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier2.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Sum-of-best leaderboards used to be free, so they're available to:
@@ -131,7 +137,7 @@ class User < ApplicationRecord
   # 2. Early patrons (grandfathered as a thank-you)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_sum_of_best_leaderboards?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Hiding used to be free, so it's available to:
@@ -139,7 +145,7 @@ class User < ApplicationRecord
   # 2. Early patrons (grandfathered as a thank-you)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_hiding?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Advanced video used to be free, so it's available to:
@@ -147,7 +153,7 @@ class User < ApplicationRecord
   # 2. Early patrons (grandfathered as a thank-you)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_advanced_video?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Auto-highlight used to be free, so it's available to:
@@ -155,7 +161,7 @@ class User < ApplicationRecord
   # 2. Early patrons (grandfathered as a thank-you)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_autohighlight?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Advanced analytics used to be lower-tier paid Patreon features, so they're available to:
@@ -163,13 +169,13 @@ class User < ApplicationRecord
   # 2. Continued patrons who used to have them at the lower price point (grandfathered)
   # 3. Anyone paying at least the price of Gold via Patreon
   def has_advanced_analytics?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin?
+    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # Speedrun.com auto-submit is the first post-paywall-move paid feature, so is only available to Gold users and
   # those who are paying at least the equivalent at Patreon.
   def has_srdc_submit?
-    patron?(tier: 4) || subscriptions.tier3.active.any? || admin?
+    patron?(tier: 4) || subscriptions.tier3.active.any? || admin? || self.class.stay_insideathon?
   end
 
   # patron? returns something truthy if the user has been a patron at or above the given tier since the given `before`
