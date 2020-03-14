@@ -230,6 +230,17 @@ a secure API request.
 [race]: #race
 </details>
 
+## Pagination
+Some responses are paginated. You can tell by inspecting the `Link` header in the response, which will look something
+like this for paginated responses:
+
+```http
+link: <https://splits.io/api/v4/games/oot/runs?page=1>; rel="first", <https://splits.io/api/v4/games/oot/runs?page=1>; rel="prev", <https://splits.io/api/v4/games/oot/runs?page=91>; rel="last", <https://splits.io/api/v4/games/oot/runs?page=3>; rel="next"
+```
+
+`first` refers to the first page, `last` to the last page, `prev` to the page before the one being returned, and `next` to the page after the one being returned. None of these are guaranteed to be present, for example when returning the first
+page you shouldn't expect a `prev` or `first` link to be present.
+
 ## Resource types
 ### Run
 ```sh
