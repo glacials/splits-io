@@ -34,9 +34,12 @@ can be viewed in the [FAQ][faq]; new timers can self-integrate using the [Splits
 [faq]: https://splits.io/faq#programs
 
 ## API
-For full API documentation, see the [API readme][api-docs].
+A Python client library for the Splits.io API written by jeremander exists at [jeremander/splitsio][python-client].
+
+For full API documentation and when using other languages, see the [API readme][api-docs].
 
 [api-docs]: /docs/api.md
+[python-client]: https://github.com/jeremander/splitsio
 
 ## Local Development
 Splits.io runs on Docker, which makes it easy and consistent to set up and run on any machine despite any unusual
