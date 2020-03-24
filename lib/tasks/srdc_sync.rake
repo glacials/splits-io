@@ -116,7 +116,11 @@ task srdc_sync: [:environment] do
           game: srdc_game.game,
           name: srdc_category.name
         )
-        srdc_category.save!
+        begin
+          srdc_category.save!
+        rescue ActiveRecord::RecordNotUnique
+          Rollbar.error("Could not sync speedrun.com category #{category['id']} with Splits.io category #{srdc_category.category.id}")
+        end
       end
 
       game['platforms']['data'].each do |platform|
