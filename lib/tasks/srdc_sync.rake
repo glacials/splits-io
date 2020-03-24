@@ -97,7 +97,11 @@ task srdc_sync: [:environment] do
         emulators_allowed: game['ruleset']['emulators-allowed']
       )
       srdc_game.game = Game.find_or_create_by!(name: srdc_game.name) if srdc_game.game.nil?
-      srdc_game.save!
+      begin
+        srdc_game.save!
+      rescue ActiveRecord::RecordNotUnique
+        Rollbar.error("Could not sync speedrun.com game #{game['id']} with Splits.io game #{srdc_game.game.id}")
+      end
 
       game['categories']['data'].each do |category|
         next if category['type'] == 'per-level'
