@@ -103,6 +103,7 @@ task srdc_sync: [:environment] do
         next if category['type'] == 'per-level'
 
         srdc_category = SpeedrunDotComCategory.find_or_initialize_by(srdc_id: category['id'])
+        srdc_category ||= srdc_game.game.categories.find_by(game: srdc_game.game, name: category['name'])&.srdc
         srdc_category.assign_attributes(
           name:        category['name'],
           url:         category['weblink'],
