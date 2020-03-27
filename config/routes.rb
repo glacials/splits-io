@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get '/read-only', to: 'pages#read_only_mode', as: :read_only_mode
   get '/privacy',   to: 'pages#privacy_policy', as: :privacy_policy
   get '/partners',  to: 'pages#partners',       as: :partners
+  get '/hot',       to: 'pages#hotsauce',       as: :hotsauce
 
   get '/timers/:timer_id', to: 'timers#show', as: :timer
 
