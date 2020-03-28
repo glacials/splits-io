@@ -28,8 +28,11 @@ div.bg-dark style="width: 100%; height: 100%"
       p class="lead font-weight-normal"
         ' The Splits.io hot sauce.
       p class="lead font-weight-normal"
-        ' Starting at just $15 with free shipping.
-      button.btn.btn-primary.hotsauce-buy data={sku: ENV['STRIPE_HOTSAUCE_SKU']} Buy now
+        ' Starting at just $15.
+      - if current_user
+        button.btn.btn-primary.hotsauce-buy data={sku: ENV['STRIPE_HOTSAUCE_SKU']} Buy now
+      - else
+        button.btn.btn-primary data={toggle: :modal, target: '#signin'} Sign in to buy
 
     .text-secondary.m-5 style='font-size: 3em' = icon('fas', 'arrow-circle-down')
     br
@@ -111,7 +114,10 @@ div.bg-dark style="width: 100%; height: 100%"
   .card.text-center.my-5
     img.border.p-2.mx-auto src=asset_path('hotsauce/cloth.jpg') width=400
     .card-body
-      button.btn.btn-primary.hotsauce-buy data={sku: ENV['STRIPE_HOTSAUCE_SKU']} Buy now
+      - if current_user
+        button.btn.btn-primary.hotsauce-buy data={sku: ENV['STRIPE_HOTSAUCE_SKU']} Buy now
+      - else
+        button.btn.btn-primary data={toggle: :modal, target: '#signin'} Sign in to buy
       br
       a.btn.btn-link href=asset_path('hotsauce/nutrition.jpg') Nutritional facts
       br
