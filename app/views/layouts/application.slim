@@ -81,7 +81,7 @@ html lang='en'
               li.nav-item
                 search
               - now = Time.now.utc
-              - if (now.month == 3 && now.day == 31) || (now.month == 4 && now.day <= 7)
+              - if (now.month == 4)
                 li.nav-item.px-3
                   a.btn.btn-danger href=hotsauce_path(anchor: 'sauce') Splits.io hot sauce!
             ul.nav.navbar-nav
