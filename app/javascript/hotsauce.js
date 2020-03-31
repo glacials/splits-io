@@ -5,7 +5,7 @@ document.addEventListener('turbolinks:load', function() {
   }
 
   const now = new Date()
-  if ((now.getMonth() === 2 && now.getDay() === 31) || (now.getMonth() === 3 && now.getDay() <= 7)) {
+  if (now.getMonth() === 3 && now.getDate() === 1) {
     localStorage.setItem(hotsauceKey, '1')
     window.location = '/hot#sauce'
   }
