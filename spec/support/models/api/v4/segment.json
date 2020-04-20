@@ -48,8 +48,10 @@
       "minimum": 0
     },
     "realtime_shortest_duration_ms": {
-      "type": "number",
-      "minimum": 0
+      "type": [
+        "number",
+        "null"
+      ]
     },
     "realtime_gold": {
       "type": "boolean"
