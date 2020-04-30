@@ -21,7 +21,7 @@
     "handlebars": "^4.2.0",
     "highcharts": "^8.0.0",
     "highcharts-regression": "streamlinesocial/highcharts-regression",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "js-cookie": "^2.2.0",
     "moment": "^2.20.1",
     "moment-duration-format": "^2.2.2",
