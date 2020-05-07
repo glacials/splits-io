@@ -59,7 +59,7 @@ import 'bootstrap'
 import "../analytics.js"
 import "../collapse.js"
 import "../count.js"
-import "../crisp.js"
+// import "../crisp.js"
 import "../dropdown.js"
 import "../highchart_theme.js"
 import "../hotsauce.js"
