@@ -45,10 +45,10 @@ x-app: &app
     context: .
     dockerfile: Dockerfile
     cache_from:
-      - "${REPOSITORY_URI:-splitsio-dev}:latest"
+      - "${REPOSITORY_URI:-splitsio}:latest"
     args:
-      RUBY_VERSION: '2.7.0' # also update docker-compose-production.yml & Gemfile
-  image: splitsio-dev
+      RUBY_VERSION: '2.7.1' # also update docker-compose-production.yml & Gemfile
+  image: splitsio
   tmpfs:
     - /tmp
 x-backend: &backend
@@ -70,7 +70,7 @@ x-backend: &backend
 
 services:
   db:
-    image: postgres:11.5-alpine
+    image: postgres:11.5
     logging: *default-logging
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
@@ -107,7 +107,7 @@ services:
     environment: *server-environment
     logging: *default-logging
   redis:
-    image: redis:5.0.5-alpine
+    image: redis:5.0.5
     logging: *default-logging
     volumes:
       - redis:/data
