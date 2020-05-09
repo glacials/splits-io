@@ -1,13 +1,10 @@
 ARG RUBY_VERSION
-FROM ruby:$RUBY_VERSION-alpine
+FROM ruby:$RUBY_VERSION
 
-# Build base for gem's native extensions
-# tzdata for ruby timezone data
-# gcompat for ffi to load LSC
-RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-    && apk update \
-    && apk add -u --no-cache build-base vips-dev tzdata gcompat=0.4.0-r0 git postgresql-dev bash yarn less \
-    && rm -rf /var/cache/apk/*
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+    && apt-get update -qq && apt-get install -y build-essential libpq-dev nodejs yarn libvips-dev
 
 ENV LANG C.UTF-8
 ENV GEM_HOME /bundle
@@ -21,6 +18,3 @@ RUN gem update --system
 
 RUN mkdir -p /app
 WORKDIR /app
-
-COPY package.json yarn.lock ./
-RUN yarn install

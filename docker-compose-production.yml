@@ -10,10 +10,12 @@ x-environment:
   - GOOGLE_CLIENT_ID
   - GOOGLE_CLIENT_SECRET
   - NEW_RELIC_LICENSE_KEY
+  - NODE_ENV=production
   - PATREON_CLIENT_ID
   - PATREON_CLIENT_SECRET
   - PATREON_WEBHOOK_SECRET
   - QUEUES=discover_runner,highlight_cleanup,race_cleanup,sync_user_follows,v4_races,parse_run,cleanup_runs,active_storage_purge,active_storage_analysis # keep this in sync with every job in app/jobs
+  - RAILS_ENV=production
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
   - RAILS_SERVE_STATIC_FILES=1
   - RAILS_SKIP_ASSET_COMPILATION=false
@@ -47,22 +49,23 @@ x-logging:
 x-app: &app
   build:
     context: .
-    dockerfile: Dockerfile-production
-    target: "${DOCKER_BUILD_TARGET:-prod-runtime}"
+    dockerfile: Dockerfile
     cache_from:
-      - "${REPOSITORY_URI:-splitsio-production}:latest"
+      - "${REPOSITORY_URI:-splitsio}:latest"
     args:
-      RUBY_VERSION: '2.7.0' # also update docker-compose.yml & Gemfile
-      SPLITSIO_CLIENT_ID: $SPLITSIO_CLIENT_ID
-      STRIPE_PUBLISHABLE_KEY: $STRIPE_PUBLISHABLE_KEY
+      RUBY_VERSION: '2.7.1' # also update docker-compose.yml & Gemfile
   environment: *server-environment
-  image: splitsio-production
+  image: splitsio
   logging: *default-logging
+  volumes:
+    - .:/app
+    - ./bundle:/bundle
+    - ./node_modules:/app/node_modules
 
 services:
   web:
     <<: *app
-    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec rails s -p 3000 -b '0.0.0.0'"
     ports:
       - 3000:3000
   worker:
