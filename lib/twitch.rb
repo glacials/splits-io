@@ -101,7 +101,10 @@ class Twitch
     # See: https://dev.twitch.tv/docs/api/guide/#rate-limits
     def headers(token: nil)
       if token.present?
-        {'Authorization' => "Bearer #{token}"}
+        {
+          'Authorization' => "Bearer #{token}",
+          'Client-ID' => ENV['TWITCH_CLIENT_ID']
+        }
       else
         {'Client-ID' => ENV['TWITCH_CLIENT_ID']}
       end

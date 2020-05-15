@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/WebTheoryLLC/omniauth-twitch.git
+  revision: 146cd8d0d0d3a720f1a80f83e5e5792de939a001
+  specs:
+    omniauth-twitch (1.1.0)
+      omniauth-oauth2 (~> 1.6)
+
+GIT
   remote: https://github.com/faye/websocket-driver-ruby.git
   revision: ee39af83d03ae3059c775583e4c4b291641257b8
   ref: ee39af83d03ae3059c775583e4c4b291641257b8
@@ -279,8 +286,6 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
-    omniauth-twitch (1.0.0)
-      omniauth-oauth2 (~> 1.1)
     order_as_specified (1.6)
       activerecord (>= 5.0.0)
     parallel (1.19.1)
@@ -501,7 +506,7 @@ DEPENDENCIES
   omniauth
   omniauth-google-oauth2
   omniauth-oauth2
-  omniauth-twitch
+  omniauth-twitch!
   order_as_specified
   patreon (< 0.3.0)
   pg
