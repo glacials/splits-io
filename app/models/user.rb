@@ -63,7 +63,7 @@ class User < ApplicationRecord
   # stay_insideathon is meant to help people deal with COVID-19, conditions where they might find themselves staying
   # indoors a lot. If stay_insideathon returns true, all paid features become available to non-subscribers.
   def self.stay_insideathon?
-    true
+    false
   end
 
   def avatar
