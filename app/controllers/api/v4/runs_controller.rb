@@ -129,16 +129,33 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   end
 
   def render_run_to_string(timer)
-    if timer == Run.program(@run.timer)
-      @run.file
-    else
-      ApplicationController.render(
+    return @run.file if timer == Run.program(@run.timer)
+
+    if Run.program(@run.timer).exportable?
+      return ApplicationController.render(
         "runs/exports/#{timer.to_sym}.html.erb",
         assigns: {run: @run},
         layout:  false
       )
     end
-  end
+
+    if Run.program.exchangeable?
+      return ApplicationController.render(
+        "runs/exports/exchange.html.erb",
+        assigns: {run: @run},
+        layout:  false,
+      )
+    end
+
+    # Timer exists in our system, but is not exportable or exchangeable, and
+    # the run requested is not in the format already. We officially do not know
+    # how to respond to a request for this format.
+    render status: :not_acceptable, json: {
+      status: 406,
+      error:  "Accept mime type #{@accept_header} is known about, but cannot be exported and does not support the Splits.io Exchange Format, so we can't render anything.",
+      layout: false,
+    }
+    end
 
   def run_params
     permitted_params = params.permit(:srdc_id, :image_url)

@@ -333,18 +333,18 @@ History objects have the following format.
 <summary>Getting runs in specific formats</summary>
 Splits.io can render many different formats other than JSON. To get one, pass an Accept header with the format you want.
 
-| `Accept` Headers Supported       | Return Format             | Return `Content-Type`                 |
-|:---------------------------------|:--------------------------|:--------------------------------------|
-| None                             | JSON                      | `application/json`                    |
-| `application/json`               | JSON                      | `application/json`                    |
-| `application/splitsio`           | Splits.io Exchange Format | `application/splitsio`                |
-| `application/wsplit`             | WSplit                    | `application/wsplit`                  |
-| `application/time-split-tracker` | Time Split Tracker        | `application/time-split-tracker`      |
-| `application/splitterz`          | SplitterZ                 | `application/splitterz`               |
-| `application/livesplit`          | LiveSplit                 | `application/livesplit`               |
-| `application/urn`                | Urn                       | `application/urn`                     |
-| `application/llanfair-gered`     | Llanfair-Gered            | `application/llanfair-gered`          |
-| `application/original-timer`     | Original Run File         | One of the following `Content-Type`'s |
+| `Accept` Header Passed           | Return Format             | Return `Content-Type`                |
+|:---------------------------------|:--------------------------|:-------------------------------------|
+| None                             | JSON                      | `application/json`                   |
+| `application/json`               | JSON                      | `application/json`                   |
+| `application/splitsio`           | Splits.io Exchange Format | `application/splitsio`               |
+| `application/wsplit`             | WSplit                    | `application/wsplit`                 |
+| `application/time-split-tracker` | Time Split Tracker        | `application/time-split-tracker`     |
+| `application/splitterz`          | SplitterZ                 | `application/splitterz`              |
+| `application/livesplit`          | LiveSplit                 | `application/livesplit`              |
+| `application/urn`                | Urn                       | `application/urn`                    |
+| `application/llanfair-gered`     | Llanfair-Gered            | `application/llanfair-gered`         |
+| `application/original-timer`     | Original Run File         | One of the following `Content-Type`s |
 
 If the Accept header is `application/original-timer`, the source file for the run will be returned as-is, in whatever
 type it was in at the time of upload. This may even be a format not listed above, as Splits.io can recognize and parse
