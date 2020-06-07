@@ -131,7 +131,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
   def render_run_to_string(timer)
     return @run.file if timer == Run.program(@run.timer)
 
-    if Run.program(@run.timer).exportable?
+    if timer.exportable?
       return ApplicationController.render(
         "runs/exports/#{timer.to_sym}.html.erb",
         assigns: {run: @run},
@@ -139,7 +139,7 @@ class Api::V4::RunsController < Api::V4::ApplicationController
       )
     end
 
-    if Run.program.exchangeable?
+    if timer.exchangeable?
       return ApplicationController.render(
         "runs/exports/exchange.html.erb",
         assigns: {run: @run},
