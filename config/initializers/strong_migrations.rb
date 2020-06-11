@@ -1,1 +1,1 @@
-StrongMigrations.start_after = 20190122052742
+StrongMigrations.start_after = 20200207203633
