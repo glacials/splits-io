@@ -13,6 +13,13 @@ describe Api::V4::Categories::RunnersController do
       it 'renders a runner schema' do
         expect(subject.body).to match_json_schema(:category_runners)
       end
+
+      it "doesn't render a runner more than once" do
+        create(:run, :owned, category: category, user: Run.last.user)
+        body = JSON.parse(subject.body)
+        runner_ids = body["runners"].map { |runner| runner["id"] }
+        expect(runner_ids.length).to eq runner_ids.uniq.length
+      end
     end
 
     context 'for a nonexisting category' do
