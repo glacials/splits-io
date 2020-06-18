@@ -83,9 +83,9 @@ Rails.application.routes.draw do
   post   '/rivalries', to: 'rivalries#create', as: :rivalries
   delete '/rivalries', to: 'rivalries#destroy'
 
-  get   '/games/:game',      to: 'games#show',  as: :game, format: false # disable format for games like "tron2.0"
-  get   '/games/:game/edit', to: 'games#edit',  as: :edit_game, format: false
-  patch '/games/:game',      to: 'games#update', format: false
+  get   '/games/:game',      to: 'games#show',  as: :game, format: false, game: /[^\/]+/ # disable format for games like "tron2.0"
+  get   '/games/:game/edit', to: 'games#edit',  as: :edit_game, format: false, game: /[^\/]+/
+  patch '/games/:game',      to: 'games#update', format: false, game: /[^\/]+/
 
   post '/games/:game/aliases', to: 'games/aliases#create', as: :game_aliases
 
