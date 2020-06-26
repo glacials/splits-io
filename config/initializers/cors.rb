@@ -3,7 +3,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     origins '*'
     resource '/api/*',
       methods: :any,
-      headers: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      headers: :any,
       expose: 'X-Filename',
       if: Proc.new { |env|
         req = Rack::Request.new(env)
