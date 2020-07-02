@@ -1,0 +1,21 @@
+- if run.belongs_to?(current_user) && run.video&.youtube?
+  #youtube-timestamps.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'timestamps-label', hidden: true}
+    .modal-dialog role='document'
+      .modal-content
+        = form_tag
+          .modal-header.bg-dark
+            h5.text-light Copy Youtube Timestamps
+          .modal-body.bg-dark
+            .row.text-light.m-0.mb-3
+              .card.w-100.mb-2: .card-body
+                p Simply enter the offset to the start of your run and let us calculate your timestamps
+            .row.form-group
+              .col-md-6.mb-3
+                = label_tag(:youtube_start_offset, 'Offset in seconds')
+                = text_field_tag(:youtube_start_offset, 0, class: 'form-control', type: :number)
+              .col-md-6.mb-3
+            .row.form-group
+              .col-md-12
+                = text_area_tag(:youtube_timestamps, "", rows: 12, cols: 80, class: 'form-control', data: { segments: run.collapsed_segments(timing).map { |segment| { name: CGI.escapeHTML(segment.display_name), start_ms: segment.start(timing).to_ms } }})
+          .modal-footer.bg-dark: .float-right
+            .btn.btn-outline-light.mr-2 data-dismiss='modal' Close

@@ -30,6 +30,17 @@
       h5.card-header Edit video
       .card-body
         = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD', 'aria-label' => 'Video URL'
+        - if @run.belongs_to?(current_user) && @run.video&.youtube?
+          = render 'youtube_timestamps_modal', run: @run, timing: timing
+          a.btn.btn-youtube.mt-2(
+            content='We calculated timestamps for pasting into your Youtube description'
+            data={toggle: :modal, target: '#youtube-timestamps'}
+            href='#'
+            v-tippy=true
+            onclick="window.displayYoutubeTimestamps(0, 'youtube_timestamps');"
+          )
+            => icon('fab', 'youtube')
+            ' Copy Youtube Timestamps
       .card-footer.clearfix: .float-right: .btn-group
         = f.submit 'Save video', class: 'btn btn-outline-primary'
 
