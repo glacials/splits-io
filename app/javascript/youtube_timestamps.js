@@ -1,16 +1,3 @@
-// document.addEventListener('turbolinks:load', function() {
-//   console.log("In TL:Load");
-//   const youtubeOffset = document.getElementById('youtube_start_offset');
-//   if (youtubeOffset === undefined || youtubeOffset === null) {
-//     console.log("Offset not found")
-//     return
-//   }
-
-//   const textarea = document.getElementById('youtube_timestamps');
-//   youtubeOffset.addEventListener('input', event => {
-//     textarea.value = event.target.value;
-//   });
-// })
 document.addEventListener('input', event => {
   if (event.target.id !== 'youtube_start_offset') {
     return
