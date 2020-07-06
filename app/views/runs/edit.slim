@@ -29,7 +29,12 @@
     = form_for @run.video || @run.build_video, url: run_video_path(@run), method: :put, html: {class: 'card h-100'} do |f|
       h5.card-header Edit video
       .card-body
-        = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD', 'aria-label' => 'Video URL'
+        = f.label :url
+        div
+          = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD', 'aria-label' => 'Video URL'
+        = f.label :start_offset, "Start Offset (in seconds)"
+        div
+          = f.number_field :start_offset, class: 'form-control', 'aria-label' => 'Video Start Offset'
         - if @run.belongs_to?(current_user) && @run.video&.youtube?
           = render 'youtube_timestamps_modal', run: @run, timing: timing
           a.btn.btn-youtube.mt-2(
