@@ -35,17 +35,16 @@
         = f.label :start_offset, "Start Offset (in seconds)"
         div
           = f.number_field :start_offset, class: 'form-control', 'aria-label' => 'Video Start Offset'
-        - if @run.belongs_to?(current_user) && @run.video&.youtube?
-          = render 'youtube_timestamps_modal', run: @run, timing: timing
-          a.btn.btn-youtube.mt-2(
-            content='We calculated timestamps for pasting into your Youtube description'
-            data={toggle: :modal, target: '#youtube-timestamps'}
-            href='#'
-            v-tippy=true
-            onclick="window.displayYoutubeTimestamps(0, 'youtube_timestamps');"
-          )
-            => icon('fab', 'youtube')
-            ' Copy Youtube Timestamps
+        a.btn.btn-youtube.mt-2#youtube-timestamps-button(
+          content='Click here to copy timestamps of your splits for pasting into your Youtube description'
+          href='#'
+          v-tippy=true
+          style="visibility: #{@run.belongs_to?(current_user) && @run.video&.youtube? ? 'visible' : 'hidden'};"
+          onclick="event.preventDefault(); window.copyYoutubeTimestamps(); return false;"
+        )
+          => icon('fab', 'youtube')
+          ' Copy Youtube Timestamps
+        = text_area_tag(:youtube_timestamps, "", rows: 0, cols: 0, style: "height: 0px; opacity: 0; width: 0px;", data: { segments: @run.collapsed_segments(timing).map { |segment| { name: CGI.escapeHTML(segment.display_name), start_ms: segment.start(timing).to_ms } }})
       .card-footer.clearfix: .float-right: .btn-group
         = f.submit 'Save video', class: 'btn btn-outline-primary'
 

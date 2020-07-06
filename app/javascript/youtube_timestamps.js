@@ -1,17 +1,18 @@
 document.addEventListener('input', event => {
-  if (event.target.id !== 'youtube_start_offset') {
+  if (event.target.id !== 'video_url') {
     return
   }
 
-  const offsetMilliseconds = (event.target.value || 0) * 1000;
-  displayYoutubeTimestamps(offsetMilliseconds, 'youtube_timestamps');
+  const visibility = RegExp(/^(?:https?:\/\/)?(?:www\.)?youtu(?:be\.com|\.be)\/.+/i).test(event.target.value) ? 'visible' : 'hidden'
+  document.getElementById('youtube-timestamps').style.visibility = visibility
 })
 
-window.displayYoutubeTimestamps = (offsetInMilliseconds, textareaId) => {
+window.copyYoutubeTimestamps = () => {
   const moment = require('moment')
   require('moment-duration-format')(moment)
 
-  const textarea = document.getElementById(textareaId);
+  const offsetInMilliseconds = (document.getElementById('video_start_offset').value || 0) * 1000
+  const textarea = document.getElementById('youtube_timestamps');
   const segments = JSON.parse(textarea.dataset.segments);
   const offsets = segments.map((segment) => {
     const duration = segment.start_ms + offsetInMilliseconds
@@ -23,6 +24,8 @@ window.displayYoutubeTimestamps = (offsetInMilliseconds, textareaId) => {
     offsets.unshift("0:00 Start of Video");
   }
   textarea.value = offsets.join("\n")
+  textarea.select();
+  document.execCommand("copy");
 }
 
 function htmlDecode(string) {
