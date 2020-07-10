@@ -11,7 +11,7 @@ window.copyYoutubeTimestamps = () => {
   const moment = require('moment')
   require('moment-duration-format')(moment)
 
-  const offsetInMilliseconds = (document.getElementById('video_start_offset').value || 0) * 1000
+  const offsetInMilliseconds = (document.getElementById('video_start_offset_seconds').value || 0) * 1000
   const textarea = document.getElementById('youtube_timestamps');
   const segments = JSON.parse(textarea.dataset.segments);
   const offsets = segments.map((segment) => {

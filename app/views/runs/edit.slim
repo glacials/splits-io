@@ -32,9 +32,9 @@
         = f.label :url
         div
           = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD', 'aria-label' => 'Video URL'
-        = f.label :start_offset, "Start Offset (in seconds)"
+        = f.label :start_offset_seconds, "Start Offset (in seconds)"
         div
-          = f.number_field :start_offset, class: 'form-control', 'aria-label' => 'Video Start Offset'
+          = f.number_field :start_offset_seconds, class: 'form-control', 'aria-label' => 'Video Start Offset'
         a.btn.btn-youtube.mt-2#youtube-timestamps-button(
           content='Click here to copy timestamps of your splits for pasting into your Youtube description'
           href='#'
