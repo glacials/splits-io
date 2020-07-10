@@ -60,6 +60,10 @@ class SumOfBestRun
     end
   end
 
+  def video
+    nil
+  end
+
   def self.where(params)
     Run.where(params).map { |run| SumOfBestRun.new(run) }
   end
