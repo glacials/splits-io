@@ -15,6 +15,9 @@
     .dropdown-menu aria={labelledby: 'compare'} style='height: auto; max-height: 400px; overflow-x: hidden'
         .dropdown-header Mine
         - comparable_runs = current_user.present? ? current_user.comparable_runs(timing, run).where.not(id: run.id) : []
+        - sum_of_best_run = SumOfBestRun.where(id: run.id).first
+        a.dropdown-item href=run_path(run, params.permit(:timing).merge(sum_of_best: run.id))
+          = "#{sum_of_best_run.duration(timing).format} - Your Sum of Best"
         - if comparable_runs.none?
           .dropdown-item.disabled: i No comparable runs by me
         - comparable_runs.each do |comparable_run|
