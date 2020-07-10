@@ -18,11 +18,11 @@ class SumOfBestRun
   end
 
   def gametime_duration_ms
-    @gametime_duration_ms ||= segments.sum(&:gametime_duration_ms)
+    @gametime_duration_ms ||= segments.reject { |segment| segment.gametime_duration_ms.nil? }.sum(&:gametime_duration_ms)
   end
 
   def realtime_duration_ms
-    @realtime_duration_ms ||= segments.sum(&:realtime_duration_ms)
+    @realtime_duration_ms ||= segments.reject { |segment| segment.realtime_duration_ms.nil? }.sum(&:realtime_duration_ms)
   end
 
   def segments_with_groups
