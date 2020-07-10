@@ -14,7 +14,8 @@ class SumOfBestRun
       segment.gametime_duration_ms = segment.gametime_shortest_duration_ms
       segment.realtime_duration_ms = segment.realtime_shortest_duration_ms
     end
-
+    self.run.gametime_duration_ms = gametime_duration_ms
+    self.run.realtime_duration_ms = realtime_duration_ms
   end
 
   def gametime_duration_ms
