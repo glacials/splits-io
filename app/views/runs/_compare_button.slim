@@ -44,11 +44,12 @@
                 span content='Twitch highlight attached' v-tippy=true =< icon('fab', 'twitch')
     - if compare_runs.any?
       .btn-group.ml-1
-        a.btn.px-1(
-          content='Swap comparison'
-          href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
-          v-tippy=true
-        ) = icon('fas', 'exchange-alt')
+        - if compare_runs.all? { |run| !run.is_a?(SumOfBestRun) }
+          a.btn.px-1(
+            content='Swap comparison'
+            href=run_path(compare_runs.first, params.permit(:timing).merge(compare: run))
+            v-tippy=true
+          ) = icon('fas', 'exchange-alt')
         a.btn.px-1(
           content='Remove comparison'
           href=run_path(run, params.permit(:timing).delete(:compare))
