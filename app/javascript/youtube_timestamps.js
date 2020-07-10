@@ -4,7 +4,7 @@ document.addEventListener('input', event => {
   }
 
   const visibility = RegExp(/^(?:https?:\/\/)?(?:www\.)?youtu(?:be\.com|\.be)\/.+/i).test(event.target.value) ? 'visible' : 'hidden'
-  document.getElementById('youtube-timestamps').style.visibility = visibility
+  document.getElementById('youtube-timestamps-button').style.visibility = visibility
 })
 
 window.copyYoutubeTimestamps = () => {
