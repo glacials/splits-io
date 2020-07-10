@@ -7,7 +7,11 @@ document.addEventListener('input', event => {
   document.getElementById('youtube-timestamps-button').style.visibility = visibility
 })
 
-window.copyYoutubeTimestamps = () => {
+document.addEventListener('click', event => {
+  if (event.target.id !== 'youtube-timestamps-button') {
+    return
+  }
+  event.preventDefault()
   const moment = require('moment')
   require('moment-duration-format')(moment)
 
@@ -26,7 +30,8 @@ window.copyYoutubeTimestamps = () => {
   textarea.value = offsets.join("\n")
   textarea.select();
   document.execCommand("copy");
-}
+  return false
+})
 
 function htmlDecode(string) {
   const parser = new DOMParser().parseFromString(string, "text/html");
