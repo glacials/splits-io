@@ -516,7 +516,7 @@ ActiveRecord::Schema.define(version: 2020_07_05_172000) do
     t.string "url", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "start_offset", default: 10
+    t.integer "start_offset_ms", default: 10000, null: false
     t.index ["run_id"], name: "index_videos_on_run_id"
   end
 
