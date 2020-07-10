@@ -9,7 +9,6 @@ class SumOfBestRun
     self.id = original_run.id
     self.id36 = "#{original_run.id36}-sum-of-best"
     self.run = original_run
-    # self.run.segments = segments_from(original_run)
     self.run.segments.each do |segment|
       segment.gametime_duration_ms = segment.gametime_shortest_duration_ms
       segment.realtime_duration_ms = segment.realtime_shortest_duration_ms
@@ -25,16 +24,6 @@ class SumOfBestRun
   def realtime_duration_ms
     @realtime_duration_ms ||= segments.sum(&:realtime_duration_ms)
   end
-
-  # def segments_from(original_run)
-  #   return @segments if @segments
-  #   @segments = original_run.segments.dup
-  #   @segments.to_a.map! do |segment|
-  #     segment.gametime_duration_ms = segment.gametime_shortest_duration_ms
-  #     segment.realtime_duration_ms = segment.realtime_shortest_duration_ms
-  #     segment
-  #   end
-  # end
 
   def segments_with_groups
     return @segments_with_groups if @segments_with_groups
