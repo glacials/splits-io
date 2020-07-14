@@ -36,14 +36,13 @@
         div
           = f.number_field :start_offset_seconds, class: 'form-control', 'aria-label' => 'Video Start Offset'
         a.btn.btn-youtube.mt-2#youtube-timestamps-button(
-          content='Click here to copy timestamps of your splits for pasting into your Youtube description'
+          content='Click here to copy timestamps of your splits for pasting into your YouTube description'
           href='#'
           v-tippy=true
           style="visibility: #{@run.belongs_to?(current_user) && @run.video&.youtube? ? 'visible' : 'hidden'};"
-          onclick="event.preventDefault(); window.copyYoutubeTimestamps(); return false;"
         )
           => icon('fab', 'youtube')
-          ' Copy Youtube Timestamps
+          ' Copy YouTube Timestamps
         = text_area_tag(:youtube_timestamps, "", rows: 0, cols: 0, style: "height: 0px; opacity: 0; width: 0px;", data: { segments: @run.collapsed_segments(timing).map { |segment| { name: CGI.escapeHTML(segment.display_name), start_ms: segment.start(timing).to_ms } }})
       .card-footer.clearfix: .float-right: .btn-group
         = f.submit 'Save video', class: 'btn btn-outline-primary'
