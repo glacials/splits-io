@@ -8,7 +8,7 @@ document.addEventListener('input', event => {
 })
 
 document.addEventListener('click', event => {
-  if (event.target.id !== 'youtube-timestamps-button') {
+  if (event.target.closest('#youtube-timestamps-button') !== null) {
     return
   }
   event.preventDefault()
