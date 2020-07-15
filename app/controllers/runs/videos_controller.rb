@@ -30,7 +30,7 @@ class Runs::VideosController < Runs::ApplicationController
   private
 
   def video_params
-    params.require(:video).permit(:url)
+    params.require(:video).permit(:start_offset_seconds, :start_offset_ms, :url)
   end
 
   def set_run
