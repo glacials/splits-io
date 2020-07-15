@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_07_203633) do
+ActiveRecord::Schema.define(version: 2020_07_05_172000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 2020_02_07_203633) do
     t.string "url", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "start_offset_ms", default: 10000, null: false
     t.index ["run_id"], name: "index_videos_on_run_id"
   end
 

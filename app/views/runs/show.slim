@@ -28,7 +28,7 @@
         - [@run, *@compare_runs].each do |run|
           - if run.video&.supports_embedding?
             .card.mx-1.video-card
-              .video-player id="video-player-#{run.id36}" data={run_id: run.id36, video_id: run.video.video_id, run.video.provider => true}
+              .video-player id="video-player-#{run.id36}" data={run_id: run.id36, start_offset: run.video.start_offset_seconds, video_id: run.video.video_id, run.video.provider => true}
           - else
             .card.mx-1
               i.text-center.my-5 No video attached to this run

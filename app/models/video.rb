@@ -46,4 +46,12 @@ class Video < ApplicationRecord
       clip_id ? clip_id[1] : nil
     end
   end
+
+  def start_offset_seconds
+    ((start_offset_ms || 0) / 1_000.0).to_i
+  end
+
+  def start_offset_seconds=(value)
+    self.start_offset_ms = (Float(value || 0) * 1_000).round
+  end
 end
