@@ -19,7 +19,7 @@ window.onYouTubeIframeAPIReady = () => {
   return true
 }
 
-onYoutubePlayerReady = (event) => {
+const onYoutubePlayerReady = (event) => {
   const player = event.target
   const el = player.getIframe()
 
@@ -43,7 +43,7 @@ onYoutubePlayerReady = (event) => {
   })
 }
 
-loadYouTubeJSIfNeeded = () => {
+const loadYouTubeJSIfNeeded = () => {
   if (document.querySelectorAll('[data-youtube]').length === 0) {
     return
   }
