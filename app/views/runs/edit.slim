@@ -29,23 +29,28 @@
     = form_for @run.video || @run.build_video, url: run_video_path(@run), method: :put, html: {class: 'card h-100'} do |f|
       h5.card-header Edit video
       .card-body
-        = f.label :url
-        div
-          = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD', 'aria-label' => 'Video URL'
-        = f.label :start_offset_seconds, "Start Offset (in seconds)"
-        div
-          = f.number_field :start_offset_seconds, class: 'form-control', 'aria-label' => 'Video Start Offset'
-        a.btn.btn-youtube.mt-2#youtube-timestamps-button(
-          content='Click here to copy timestamps of your splits for pasting into your YouTube description'
+        .form-group
+          = f.label :url, 'Video URL'
+          div
+            = f.text_field :url, class: 'form-control', placeholder: 'URL for a Twitch or YouTube VOD', 'aria-label' => 'Video URL'
+        .form-group.row
+          .col-md-6
+            = f.label :start_offset_seconds, "Start offset (in seconds)", class: 'tip', title: 'test'
+            small< content='The timestamp on the video when the run started. This helps us coordinate your splits with your video. Only enter seconds, do not enter anything like XX:YY.' v-tippy=true
+              = icon('fas', 'question-circle')
+            div
+              = f.number_field :start_offset_seconds, class: 'form-control', 'aria-label' => 'Video Start Offset', placeholder: 'Number of seconds, e.g. 12'
+      .card-footer.clearfix: .float-right
+        a.btn.btn-youtube#youtube-timestamps-button(
+          content='<div class="text-left"><p>Saves your video and copies video timestamps to your clipboard for use in YouTube descriptions; e.g.</p><code>0:02 Tron City<br />0:55 Start Abraxas fight<br />3:47 Finish Abraxas fight</code><p>... etc.</p><p class="mb-0">Set your offset before clicking this, or they will not be accurate!</p></div>'
           href='#'
           v-tippy=true
           style="visibility: #{@run.belongs_to?(current_user) && @run.video&.youtube? ? 'visible' : 'hidden'};"
         )
           => icon('fab', 'youtube')
-          ' Copy YouTube Timestamps
+          ' Copy YouTube timestamps
         = text_area_tag(:youtube_timestamps, "", rows: 0, cols: 0, style: "height: 0px; opacity: 0; width: 0px;", data: { segments: @run.collapsed_segments(timing).map { |segment| { name: CGI.escapeHTML(segment.display_name), start_ms: segment.start(timing).to_ms, end_ms: segment.end(timing).to_ms } }})
-      .card-footer.clearfix: .float-right: .btn-group
-        = f.submit 'Save video', class: 'btn btn-outline-primary'
+        = f.submit 'Save video', class: 'btn btn-outline-primary', id: 'save-video'
 
   .col.p-1
     = form_for @run, namespace: 'srdc', html: {class: 'card h-100'} do |f|

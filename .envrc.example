@@ -1,7 +1,13 @@
 # This file is just an example.
-# cp it to .envrc then use `source` to apply its contents.
-# .envrc is gitignored, so you won't accidentally commit your creds. :)
-# Once copied, check out direnv (https://github.com/direnv/direnv) to automatically source it
+#
+# cp it to .envrc then use `source .envrc` to apply its contents.
+# To source it automatically in the future, use direnv: https://github.com/direnv/direnv
+#
+# When filling out this file, know that most of it is optional. The bare
+# minimum is having a way to sign in (Twitch or Google).
+#
+# (Although a Splits.io client is required, you shouldn't need to do any work
+# beyond `make seed` to set that up.)
 
 # Google
 # - Required for Google sign-in & linking

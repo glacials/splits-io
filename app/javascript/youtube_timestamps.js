@@ -8,9 +8,11 @@ document.addEventListener('input', event => {
 })
 
 document.addEventListener('click', event => {
-  if (event.target.closest('#youtube-timestamps-button') === null) {
+  const btn = event.target.closest('#youtube-timestamps-button')
+  if (btn === null) {
     return
   }
+
   event.preventDefault()
   const moment = require('moment')
   require('moment-duration-format')(moment)
@@ -27,12 +29,16 @@ document.addEventListener('click', event => {
     const segmentStart = moment.duration(duration).format(format, {trim: false})
     return `${segmentStart} ${htmlDecode(segment.name)}`
   })
-  if (offsetInMilliseconds > 0) {
-    offsets.unshift("0:00 Prep")
-  }
+
   textarea.value = offsets.join("\n")
   textarea.select()
   document.execCommand("copy")
+
+  btn.innerHTML = 'Copied!'
+  btn.classList.add('disabled')
+
+  document.getElementById('save-video').click()
+
   return false
 })
 
