@@ -1,11 +1,6 @@
 const async = require('async')
 
 window.onYouTubeIframeAPIReady = () => {
-  setupYouTubeVideos()
-  return true
-}
-
-function setupYouTubeVideos() {
   Array.from(document.querySelectorAll('[data-youtube]')).forEach(el => {
     if (el.dataset.loaded === '1') {
       return
@@ -19,8 +14,9 @@ function setupYouTubeVideos() {
       events: {
         'onReady': onYoutubePlayerReady
       }
-    });
+    })
   })
+  return true
 }
 
 onYoutubePlayerReady = (event) => {
