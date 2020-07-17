@@ -30,6 +30,10 @@ document.addEventListener('click', event => {
     return `${segmentStart} ${htmlDecode(segment.name)}`
   })
 
+  if (offsetInMilliseconds > 0) {
+    offsets.unshift("0:00 Prep")
+  }
+
   textarea.value = offsets.join("\n")
   textarea.select()
   document.execCommand("copy")
