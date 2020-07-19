@@ -61,7 +61,7 @@ class Subscription < ActiveRecord::Base
   def self.cancel_all!
     Stripe.api_key = ENV['STRIPE_SECRET_KEY']
 
-    where(canceled_at: nil).find_each do |subscription|
+    active.find_each do |subscription|
       Stripe::Subscription.update(
         subscription.stripe_subscription_id,
         cancel_at_period_end: true,
