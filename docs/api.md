@@ -68,7 +68,7 @@ an OAuth token using a secure API request.
     http://localhost:8000/auth/splitsio?code=YOUR_CODE
     ```
     which the web server you set up in step 1 should respond to. Give the user a nice-looking HTML page saying to switch
-    back to the application and strip the `code` URL parameter for the next step.
+    back to the application. Have your application strip the `code` URL parameter for the next step.
 4. Use your `code` to make this request:
     ```http
     POST https://splits.io/oauth/token
@@ -175,7 +175,7 @@ a secure API request.
     ```http
     https://YOUR_WEBSITE/auth/splitsio?code=YOUR_CODE
     ```
-    Strip the `code` URL parameter for the next step.
+    Have your application strip the `code` URL parameter for the next step.
 4. Use your `code` to make this request:
     ```http
     POST https://splits.io/oauth/token
