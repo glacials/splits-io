@@ -58,7 +58,6 @@ an OAuth token using a secure API request.
     ```http
     http://localhost:8000/auth/splitsio
     ```
-    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
 3. When a user wants to grant authorization to your application for their Splits.io account, send them to a URL like
     this:
     ```http
@@ -131,7 +130,6 @@ should use OAuth's **implicit grant flow**.
     ```http
     https://YOUR_WEBSITE/auth/splitsio
     ```
-    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
 2. When a user wants to grant authorization to your application for their Splits.io account, send them to a URL like
     this:
     ```http
@@ -168,7 +166,6 @@ a secure API request.
     ```http
     https://YOUR_WEBSITE/auth/splitsio
     ```
-    *Hint: Set this to "debug" for now if you don't yet have a page to redirect yourself to.*
 2. When a user wants to grant authorization to your application for their Splits.io account, send them to a URL like
     this:
     ```http
