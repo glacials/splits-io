@@ -73,12 +73,6 @@ class Game < ApplicationRecord
               .having('count(runs.id) < ' + (Run.where(category: categories).count * 0.05).to_s)
               .order(Arel.sql('count(runs.id) desc'))
   end
-  
-  def nonempty_categories
-    categories.joins(:runs).group('categories.id')
-              .having('count(runs.id) > 0')
-              .order(Arel.sql('count(runs.id) desc'))
-  end
 
   # merge_into! moves all categories, aliases, and runs over to the given game, then destroys this game. Use this when
   # there are two Splits.io games representing the same game, like "Tron Evolution" and "Tron: Evolution".
