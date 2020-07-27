@@ -15,7 +15,7 @@ class Category < ApplicationRecord
 
   validates :name, presence: true
 
-  scope :nonempty, -> {joins(:game).group('categories.id').joins(:runs)}
+  scope :nonempty, -> {joins(:runs).distinct}
 
   def self.global_aliases
     {
