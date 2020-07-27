@@ -540,6 +540,7 @@ Users with zero runs are not discoverable using the API.
 curl https://splits.io/api/v4/games?search=:game
 curl https://splits.io/api/v4/games/:game
 curl https://splits.io/api/v4/games/:game/categories
+curl https://splits.io/api/v4/games/:game/categories?nonempty=true #Only return categories with at least one run
 curl https://splits.io/api/v4/games/:game/runs
 curl https://splits.io/api/v4/games/:game/runners
 ```

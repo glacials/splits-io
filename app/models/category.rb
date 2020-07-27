@@ -15,6 +15,8 @@ class Category < ApplicationRecord
 
   validates :name, presence: true
 
+  scope :nonempty, -> {joins(:runs)}
+
   def self.global_aliases
     {
       'Any% (NG+)'        => 'Any% NG+',
