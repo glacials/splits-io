@@ -116,7 +116,7 @@ class Category < ApplicationRecord
   def median_duration(timing, attempt_number: nil)
     relation = run_histories.joins(:run).where(
       runs: {archived: false}
-    ).where.not(runs: {user: nil}).where.not(Run.duration_type(timing) => nil).where.not(Run.duration_type(timing) => 0).where('created_at > ?', 3.months.ago)
+    ).where.not(runs: {user: nil}).where.not(Run.duration_type(timing) => nil).where.not(Run.duration_type(timing) => 0).where('runs.created_at > ?', 3.months.ago)
 
     return Duration.new(relation.median("run_histories.#{Run.duration_type(timing)}")) if attempt_number.nil?
 
