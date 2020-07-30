@@ -11,7 +11,7 @@ ul.nav.nav-bordered
       a.nav-link.dropdown-toggle data-toggle='dropdown' href='#' aria-expanded='false' role='button'
         span More categories
       .dropdown-menu
-        - (game.unpopular_categories.order(:name) - [current_category]).each do |category|
+        - (game.unpopular_categories.limit(10).order(:name) - [current_category]).each do |category|
           - if link_type == :sum_of_best
             = link_to category, game_category_sum_of_bests_path(game, category), class: 'dropdown-item'
           - else
