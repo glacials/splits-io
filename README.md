@@ -136,7 +136,7 @@ Splits.io utilizes a few libraries for profiling our code.
 
 [Rack Mini Profiler](https://github.com/MiniProfiler/rack-mini-profiler) is used to find major slowdowns in the code
 through the use of the badge in the top left corner of the browser window. There is also a slew of different URL
-paremeters that you can use to get more detailed information about various aspects of the request. Details of these are
+parameters that you can use to get more detailed information about various aspects of the request. Details of these are
 explained in the readme for RMP.
 To get more detailed information about how code will perform in a production like environment, run
 ```sh
