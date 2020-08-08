@@ -10,6 +10,6 @@ class Api::V4::Runners::GamesController < Api::V4::ApplicationController
   private
 
   def set_games
-    @games = @runner.games.includes(:categories)
+    @games = @runner.games.includes(:srdc, categories: [:srdc])
   end
 end
