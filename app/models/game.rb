@@ -46,12 +46,6 @@ class Game < ApplicationRecord
     srdc.try(:shortname) || id.to_s || name.downcase.delete('/')
   end
 
-  def sync_with_srdc
-    return SpeedrunDotComGame.from_game!(self) if srdc.nil?
-
-    srdc.sync!
-  end
-
   def sync_with_srl
     return SpeedRunsLiveGame.from_game!(self) if srl.nil?
 

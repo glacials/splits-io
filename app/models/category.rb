@@ -61,12 +61,6 @@ class Category < ApplicationRecord
     id.to_s
   end
 
-  def sync_with_srdc
-    return SpeedrunDotComCategory.from_category!(self) if srdc.nil?
-
-    srdc.sync!
-  end
-
   def autodetect_shortname
     {
       'any%' => 'anypct',
