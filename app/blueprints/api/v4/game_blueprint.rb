@@ -13,5 +13,9 @@ class Api::V4::GameBlueprint < Blueprinter::Base
     game.srdc&.srdc_id
   end
 
+  field :cover_url do |game, _|
+    game.srdc&.cover_url
+  end
+
   association :categories, blueprint: Api::V4::CategoryBlueprint, if: ->(_, _, options) { options[:toplevel] == :game }
 end

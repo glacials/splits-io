@@ -255,7 +255,7 @@ which you should substitite any time you see `:run` in these docs.
 | Field                     | Type                         | Null?                                                 | Description                                                                                                                                                                                                                                  |
 |:--------------------------|:-----------------------------|:------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `id`                      | string                       | never                                                 | Unique ID for identifying the run on Splits.io. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
-| `srdc_id`                 | string                       | when no associated Speedrun.com run                   | Unique ID for identifying the run on Speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
+| `srdc_id`                 | string                       | when no associated speedrun.com run                   | Unique ID for identifying the run on Speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
 | `realtime_duration_ms`    | number                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                |
 | `realtime_sum_of_best_ms` | number                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                             |
 | `gametime_duration_ms`    | number                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                |
@@ -567,6 +567,8 @@ the search response array.
 | `created_at` | string                          | never          | The time and date at which this game was created on Splits.io. This field conforms to [ISO 8601][iso8601].                           |
 | `updated_at` | string                          | never          | The time and date at which this game was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601].            |
 | `categories` | array of [Categories][category] | never          | The known speedrun categories for this game.                                                                                         |
+| `srdc_id`    | string                          | when not known | The ID this game holds on speedrun.com, if present and known.                                                                        |
+| `cover_url`  | string                          | when not known | The URL for this game's box art, if known.                                                                                           |
 </details>
 
 ### Category
@@ -638,7 +640,7 @@ Attachments have the following structure:
 | `id`         | string | never           | The unique ID of the attachment.                                                                                 |
 | `created_at` | string | never           | The time and date at which this attachment was created on Splits.io. This field conforms to [ISO 8601][iso8601]. |
 | `filename`   | string | never           | The filename of the attachment.                                                                                  |
-| `url`        | string | never           | The URL in which to download the attachment.                                                                     |
+| `url`        | string | never           | The URL from which the attachment can be downloaded.                                                             |
 </details>
 
 <details>
