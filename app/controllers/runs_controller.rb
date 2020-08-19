@@ -133,7 +133,7 @@ class RunsController < ApplicationController
                         {id: @run.user.id, name: @run.user.name}
                       end
 
-    gon.scale_to = [@run.duration(timing).to_ms, *@compare_runs.map { |run| run.duration(timing).to_ms }].max
+    gon.scale_to = [@run.duration(timing).to_ms, *@compare_runs.map { |run| run.duration(timing).to_ms }].compact.max
   rescue ActionController::UnknownFormat, ActiveRecord::RecordNotFound
     render :not_found, status: :not_found
   end

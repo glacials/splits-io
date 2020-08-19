@@ -52,6 +52,6 @@ class Video < ApplicationRecord
   end
 
   def start_offset_seconds=(value)
-    self.start_offset_ms = (Float(value || 0) * 1_000).round
+    self.start_offset_ms = (Float(value.presence || 0) * 1_000).round
   end
 end

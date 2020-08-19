@@ -12,7 +12,7 @@ module Admin
 
     # Define a custom finder by overriding the `find_resource` method:
     def find_resource(param)
-      Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: param}) || Game.find_by!(id: param)
+      Game.joins(:srdc).find_by(srdc: {shortname: param}) || Game.find_by!(id: param)
     end
 
     # See https://administrate-prototype.herokuapp.com/customizing_controller_actions
