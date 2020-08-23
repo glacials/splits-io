@@ -223,7 +223,7 @@ Config for this generation is at [`config/favicon.json`][favicon-config].
 
 ### Theme
 Splits.io runs vanilla [Bootstrap 4][bootstrap]. Historically we used one of a few themes to give it some additional
-distinction and a professionally tailored dark mode, but we decided to switch to vanilla with out own dark mode after
+distinction and a professionally tailored dark mode, but we decided to switch to vanilla with our own dark mode after
 several bad experiences with those themes slowly falling more and more out of date from mainline Bootstrap.
 
 [bootstrap]: https://getbootstrap.com/
