@@ -8,6 +8,9 @@ class GoogleUsersController < ApplicationController
       redirect_to redirect_path, alert: "Couldn't link with Google: #{google_user.errors.full_messages.to_sentence} :("
       return
     end
+    
+    request.env['return_to'] = cookies['return_to']
+    cookies.delete('return_to')
 
     if request.env['omniauth.origin'] == settings_url
       redirect_to settings_path, notice: 'Google account linked!'
@@ -31,6 +34,10 @@ class GoogleUsersController < ApplicationController
   end
 
   def redirect_path
-    request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
+    if request.env['omniauth.origin'] == login_url
+      request.env['return_to']
+    else
+      request.env['omniauth.origin'] || root_path
+    end
   end
 end

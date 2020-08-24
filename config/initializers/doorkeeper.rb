@@ -6,7 +6,7 @@ Doorkeeper.configure do
   resource_owner_authenticator do
     if current_user.nil?
       cookies['return_to'] = request.fullpath
-      redirect_to('/auth/twitch')
+      redirect_to('/loginpage')
     end
     current_user
   end
