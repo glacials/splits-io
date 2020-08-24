@@ -79,12 +79,8 @@ html lang='en'
                   span.d-md-none.d-xl-inline FAQ
               li.nav-item
                 search
-              - now = Time.now.utc
-              - if (now.month == 4)
-                li.nav-item.px-3
-                  a.btn.btn-danger href=hotsauce_path(anchor: 'sauce') Splits.io hot sauce!
             ul.nav.navbar-nav
-              - if current_user.present?
+              - if current_user
                 li.nav-item class=('active' if on_a_profile_page?)
                   .dropdown
                     a.nav-link.dropdown-toggle.px-3#profileDropdownLink href='#' data-toggle='dropdown' role='button' aria-expanded='false' aria-haspopup='true'
@@ -110,26 +106,28 @@ html lang='en'
                           ' Sign out
               - else
                 li.nav-item: a.nav-link.px-3 href='#' data={toggle: :modal, target: '#signin'} Sign in
-                #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
-                  .modal-dialog role='document'
-                    .modal-content
-                      .modal-header.bg-dark
-                        h5 Sign in
-                      .modal-body.bg-dark
-                        .row
-                          a.btn.btn-twitch.mx-auto href='/auth/twitch'
-                            => icon('fab', 'twitch')
-                            ' Sign in with Twitch
-                          a.btn.btn-google.mx-auto href='/auth/google'
-                            => icon('fab', 'google')
-                            ' Sign in with Google
-                        .row.text-light.m-2
-                          p Splits.io accounts are based strictly on linked accounts. This makes the platform simpler to
-                            maintain, especially with regards to security.
-                          p
-                            ' We are
-                            a> href='https://github.com/glacials/splits-io/issues/396' working
-                            ' on adding linkless accounts.
+          / Sign in modal needs to be outside nav bar so
+          / it still appears even if navbar is collapsed on mobile
+          #signin.modal.fade tabindex='-1' role='dialog' aria={labelledby: 'signin-label', hidden: true}
+            .modal-dialog role='document'
+              .modal-content
+                .modal-header.bg-dark
+                  h5 Sign in
+                .modal-body.bg-dark
+                  .row
+                    a.btn.btn-twitch.mx-auto href='/auth/twitch'
+                      => icon('fab', 'twitch')
+                      ' Sign in with Twitch
+                    a.btn.btn-google.mx-auto href='/auth/google'
+                      => icon('fab', 'google')
+                      ' Sign in with Google
+                  .row.text-light.m-2
+                    p Splits.io accounts are based strictly on linked accounts. This makes the platform simpler to
+                      maintain, especially with regards to security.
+                    p
+                      ' We are
+                      a> href='https://github.com/glacials/splits-io/issues/396' working
+                      ' on adding linkless accounts.
         article.pt-0#survey-container style='display: none'
           div.text-right
             small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
