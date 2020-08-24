@@ -6,10 +6,10 @@
 	- content_for(:header)
 	  ol.breadcrumb.shadow
 	    li.breadcrumb-item = link_to(site_title, root_path)
-	    li.breadcrumb-item = link_to('Sign in', login_path)    
+	    li.breadcrumb-item = link_to('Sign in', signin_path)    
 	.mx-auto style="width: 75%; height: 100%"
 	 .card.mb-4 
 	 	h5.card-header
 	 		| Sign in 
 	 	.card-body
-			= render partial: "shared/login"
+			= render partial: "shared/signin"

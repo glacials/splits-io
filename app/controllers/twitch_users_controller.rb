@@ -33,7 +33,7 @@ class TwitchUsersController < ApplicationController
   end
 
   def redirect_path
-    if request.env['omniauth.origin'] == login_url
+    if request.env['omniauth.origin'] == signin_url
       request.env['return_to']
     else
       request.env['omniauth.origin'] || root_path
