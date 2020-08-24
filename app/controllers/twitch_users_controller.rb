@@ -7,9 +7,6 @@ class TwitchUsersController < ApplicationController
       redirect_to redirect_path, alert: "Couldn't sign in: #{twitch_user.errors.full_messages.to_sentence} :("
       return
     end
-    
-    request.env['return_to'] = cookies['return_to']
-    cookies.delete('return_to')
 
     if request.env['omniauth.origin'] == settings_url
       redirect_to settings_path, notice: 'Twitch account linked!'
@@ -33,10 +30,12 @@ class TwitchUsersController < ApplicationController
   end
 
   def redirect_path
-    if request.env['omniauth.origin'] == signin_url
-      request.env['return_to']
-    else
-      request.env['omniauth.origin'] || root_path
+    @originURI = URI.parse(request.env['omniauth.origin'])
+    if @originURI.path == signin_path && @originURI.query
+      @originURI.path = oauth_authorization_path
+      return @originURI.to_s
     end
+
+    request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
   end
 end
