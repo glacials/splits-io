@@ -1,4 +1,8 @@
 class SessionsController < ApplicationController
+  def new
+    redirect_to(redirect_path) if current_user.present?
+  end
+
   def in
     head :ok
   end

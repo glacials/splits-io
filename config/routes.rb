@@ -36,7 +36,6 @@ Rails.application.routes.draw do
   get '/privacy',   to: 'pages#privacy_policy', as: :privacy_policy
   get '/partners',  to: 'pages#partners',       as: :partners
   get '/hot',       to: 'pages#hotsauce',       as: :hotsauce
-  get '/signin',    to: 'pages#signin',         as: :signin
 
   get '/timers/:timer_id', to: 'timers#show', as: :timer
 
@@ -72,6 +71,7 @@ Rails.application.routes.draw do
 
   get '/auth/failure', to: 'sessions#failure'
 
+  get    '/signin',            to: 'sessions#new',     as: :new_session
   delete '/sessions/:session', to: 'sessions#destroy', as: :session
 
   get '/users/:user', to: 'users#show',               as: :user

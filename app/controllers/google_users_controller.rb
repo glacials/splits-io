@@ -33,7 +33,7 @@ class GoogleUsersController < ApplicationController
   def redirect_path
     if request.env['omniauth.origin']
       @originURI = URI.parse(request.env['omniauth.origin'])
-      if @originURI.path == signin_path && @originURI.query
+      if @originURI.path == new_session_path && @originURI.query
         @originURI.path = oauth_authorization_path
         return @originURI.to_s
       end
