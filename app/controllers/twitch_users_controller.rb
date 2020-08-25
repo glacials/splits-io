@@ -30,6 +30,14 @@ class TwitchUsersController < ApplicationController
   end
 
   def redirect_path
+    if request.env['omniauth.origin']
+      @originURI = URI.parse(request.env['omniauth.origin'])
+      if @originURI.path == signin_path && @originURI.query
+        @originURI.path = oauth_authorization_path
+        return @originURI.to_s
+      end
+    end
+
     request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
   end
 end

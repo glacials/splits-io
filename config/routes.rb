@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   get '/privacy',   to: 'pages#privacy_policy', as: :privacy_policy
   get '/partners',  to: 'pages#partners',       as: :partners
   get '/hot',       to: 'pages#hotsauce',       as: :hotsauce
+  get '/signin',    to: 'pages#signin',         as: :signin
 
   get '/timers/:timer_id', to: 'timers#show', as: :timer
 

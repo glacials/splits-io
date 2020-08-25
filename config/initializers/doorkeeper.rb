@@ -5,8 +5,7 @@ Doorkeeper.configure do
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     if current_user.nil?
-      cookies['return_to'] = request.fullpath
-      redirect_to('/auth/twitch')
+      redirect_to(signin_url(request.query_parameters))
     end
     current_user
   end

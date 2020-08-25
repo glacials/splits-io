@@ -114,20 +114,7 @@ html lang='en'
                 .modal-header.bg-dark
                   h5 Sign in
                 .modal-body.bg-dark
-                  .row
-                    a.btn.btn-twitch.mx-auto href='/auth/twitch'
-                      => icon('fab', 'twitch')
-                      ' Sign in with Twitch
-                    a.btn.btn-google.mx-auto href='/auth/google'
-                      => icon('fab', 'google')
-                      ' Sign in with Google
-                  .row.text-light.m-2
-                    p Splits.io accounts are based strictly on linked accounts. This makes the platform simpler to
-                      maintain, especially with regards to security.
-                    p
-                      ' We are
-                      a> href='https://github.com/glacials/splits-io/issues/396' working
-                      ' on adding linkless accounts.
+                  = render partial: 'shared/signin'
         article.pt-0#survey-container style='display: none'
           div.text-right
             small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
