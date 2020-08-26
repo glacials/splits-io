@@ -47,10 +47,19 @@ dependencies. The one downside is that you must first install Docker!
 
 ### Requirements
 * [Docker][docker-download]
-* [Docker Compose][docker-compose-download] (Mac and Windows include this in the Docker install)
+* [Docker Compose][docker-compose-download] (on macOS and Windows, this is included in the Docker install)
 
 [docker-download]: https://store.docker.com/search?type=edition&offering=community
 [docker-compose-download]: https://docs.docker.com/compose/install/
+
+#### Special note for Windows
+Because of how Splits.io uses Docker, Windows requires WSL2 to be installed to run Splits.io. If you haven't done
+so already, follow these instructions when running Splits.io on Windows:
+
+1. [Install Windows Subsystem for Linux (WSL) on Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+2. [Docker Desktop WSL 2 backend](https://docs.docker.com/docker-for-windows/wsl/)
+
+These steps are not required for Linux or macOS.
 
 ### First Run
 The first time you run Splits.io with Docker is the best, because you'll have
