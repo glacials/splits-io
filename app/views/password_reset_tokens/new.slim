@@ -1,0 +1,17 @@
+- content_for(:title, 'Reset password')
+- content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Reset password', new_password_reset_token_path)
+  .row.mx-2: h2 Reset password
+.row: .col-lg-4.offset-lg-4
+  .card
+    = form_for(PasswordResetToken.new) do |f|
+      .card-header Reset password
+      .card-body
+        p To reset your password, enter your email below.
+        p We will send an email to it with a magic link that will let you reset your password.
+        = f.text_field(:email, class: 'form-control', placeholder: 'Email address', autofocus: true)
+        p.my-3: small If we have no user account on record with the email you give, we will tell you here.
+      .card-footer.clearfix: .float-right
+        = f.submit('Send email', class: 'btn btn-primary')

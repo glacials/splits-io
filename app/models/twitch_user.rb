@@ -11,7 +11,7 @@ class TwitchUser < ApplicationRecord
       current_user,
       twitch_user.user,
       User.joins(:google).find_by(google_users: {email: auth.info.email}),
-      User.new(name: auth.info.name)
+      User.new(name: auth.info.name, email: auth.info.email)
     ].compact.first
 
     unless twitch_user.user.save

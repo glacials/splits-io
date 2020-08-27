@@ -8,11 +8,18 @@ else
   detectedOS := $(shell sh -c 'uname -s 2>/dev/null || echo not')
 endif
 
+ifeq ($(detectedOS),Linux)
+  ifeq ($(shell sh -c 'cat /proc/version | grep --ignore-case --count microsoft'),1)
+    detectedOS = WSL
+  endif
+endif
+
 docker-compose := docker-compose
 docker := docker
+
 ifeq ($(detectedOS),Linux)
-  docker-compose := sudo -E docker-compose
-  docker := sudo -E docker
+  docker-compose := sudo --preserve-env docker-compose
+  docker := sudo --preserve-env docker
 endif
 
 container ?= web

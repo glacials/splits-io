@@ -52,12 +52,12 @@ class RunsController < ApplicationController
 
       if run_params[:srdc_url].present? && !srdc_id
         redirect_params = {
-          alert: 'Your Speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.',
+          alert: 'Your speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.',
         }
       elsif !@run.update(srdc_id: srdc_id)
-        redirect_params = {alert: 'There was an error updating your Speedrun.com link. Please try again.'}
+        redirect_params = {alert: 'There was an error updating your speedrun.com link. Please try again.'}
       else
-        redirect_params = {notice: 'Link with Speedrun.com updated.'}
+        redirect_params = {notice: 'Link with speedrun.com updated.'}
       end
       redirect_to edit_run_path(@run), redirect_params
       return

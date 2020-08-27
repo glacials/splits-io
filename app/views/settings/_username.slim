@@ -1,9 +1,9 @@
-.card: form action=settings_path method='POST'
+.card = form_for(current_user, url: settings_path) do |f|
   .card-header.text-white Username
   .card-body
     .row
       .col-md-6
-        .mb-3: input.form-control type='text' name='user[name]' value=current_user.name aria-label='Change username'
+        .mb-3 = f.text_field(:name, class: 'form-control')
         .card: .card-body
             p
               ' Letters, numbers, underscores. (For nerds:

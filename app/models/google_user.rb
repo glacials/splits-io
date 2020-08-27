@@ -9,7 +9,7 @@ class GoogleUser < ApplicationRecord
       current_user,
       google_user.user,
       User.joins(:twitch).find_by(twitch_users: {email: auth.info.email}),
-      User.new(name: auth.info.email.split('@')[0].remove('.'))
+      User.new(name: auth.info.email.split('@')[0].remove('.'), email: auth.info.email)
     ].compact.first
 
     unless google_user.user.save

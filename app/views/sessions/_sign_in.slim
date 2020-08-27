@@ -6,10 +6,37 @@
     .m-3: a.btn.btn-google.mx-auto href='/auth/google'
       => icon('fab', 'google')
       ' Sign in with Google
-.row.text-light.m-2
-  p Splits.io accounts are based strictly on linked accounts. This makes the platform simpler to
-    maintain, especially with regards to security.
-  p
-    ' We are
-    a> href='https://github.com/glacials/splits-io/issues/396' working
-    ' on adding linkless accounts.
+    .row.m-3
+      .col: hr.bg-light
+      .col-auto.text-uppercase: b: small Or
+      .col: hr.bg-light
+    .card.bg-transparent.border-0.col-md-6.offset-md-3
+      ul#signin-tabs.nav.nav-fill.mb-3 role='tablist'
+        li.nav-item role='presentation'
+          a#signin-tab.nav-link.active data-toggle='tab' href='#signin-tab-content' role='tab' aria-controls='signin' aria-selected='true'
+            ' Sign in
+        li.nav-item role='presentation'
+          a#signup-tab.nav-link data-toggle='tab' href='#signup-tab-content' role='tab' aria-controls='signup' aria-selected='false'
+            ' Sign up
+      #signin-tabs-content.tab-content
+        #signin-tab-content.tab-pane.show.active role='tabpanel' aria-labelledby='signin-tab'
+          = form_with(model: Authie::Session.new, scope: :session, url: sessions_path, local: true) do |f|
+            .form-group.mx-auto
+              = f.text_field(:email, placeholder: 'Email', class: 'form-control')
+            .form-group.mx-auto
+              = f.password_field(:password, placeholder: 'Password', class: 'form-control')
+            .card-footer.clearfix.bg-transparent.border-0.p-0: .float-right
+              = f.submit('Sign in', class: 'btn btn-primary')
+        #signup-tab-content.tab-pane role='tabpanel' aria-labelledby='signup-tab'
+          = form_for(User.new) do |f|
+            .form-group.mx-auto
+              = f.text_field(:email, placeholder: 'Email', class: 'form-control')
+            .form-group.mx-auto
+              = f.password_field(:password, placeholder: 'Password', class: 'form-control')
+            .form-group.mx-auto
+              = f.password_field(:password_confirmation, placeholder: 'Confirm password', class: 'form-control')
+            .form-group.mx-auto
+              = f.text_field(:name, placeholder: 'Username (changeable)', class: 'form-control')
+            .card-footer.clearfix.bg-transparent.border-0.p-0: .float-right
+              = f.submit('Sign up', class: 'btn btn-primary')
+        .my-3: small: a href=new_password_reset_token_path I forgot my password

@@ -14,20 +14,20 @@ class SpeedrunDotComUsersController < ApplicationController
 
     redirect_back(
       fallback_location: settings_path,
-      alert:             "Error: Couldn't link to Speedrun.com. Make sure your API key is correct.",
+      alert:             "Error: Couldn't link to speedrun.com. Make sure your API key is correct.",
     )
   end
 
   def destroy
     current_user.srdc.try(:destroy)
-    redirect_back(fallback_location: settings_path, notice: 'Speedrun.com account unlinked! 🚫🏆')
+    redirect_back(fallback_location: settings_path, notice: 'speedrun.com account unlinked! 🚫🏆')
   end
 
   private
 
   def redirect
     if URI(request.referer).path == settings_path
-      redirect_back(fallback_location: settings_path, notice: 'Speedrun.com account linked! 🏆')
+      redirect_back(fallback_location: settings_path, notice: 'speedrun.com account linked! 🏆')
       return
     end
 

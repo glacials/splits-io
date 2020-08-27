@@ -1,0 +1,23 @@
+- content_for(:title, 'Reset password')
+- content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Reset password', new_password_reset_token_path)
+    li.breadcrumb-item = link_to(@password_reset_token.user, user_path(@password_reset_token.user))
+.row: .col-md-6.offset-md-3
+  .card
+    = form_with(model: @password_reset_token.user, local: true) do |f|
+      .card-header Reset password for #{@password_reset_token.user}
+      .card-body
+        p To reset your password, type it twice below.
+        = f.fields_for(:password_reset_token, PasswordResetToken.new) do |token_form|
+          = token_form.hidden_field(:id, value: params[:id])
+          = token_form.hidden_field(:token, value: params[:token])
+        .form-group.mx-auto
+          = f.password_field(:password, placeholder: 'Password', class: 'form-control')
+        .form-group.mx-auto
+          = f.password_field(:password_confirmation, placeholder: 'Confirm password', class: 'form-control')
+        p
+          a href=why_password_manager_path We recommend using a password manager.
+      .card-footer.clearfix: .float-right
+        = f.submit('Reset password', class: 'btn btn-primary')

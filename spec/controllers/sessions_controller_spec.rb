@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe SessionsController do
   describe '#destroy' do
-    subject(:response) { delete :destroy, params: {session: 'bloop'} }
+    subject(:response) { delete :destroy, params: {id: Authie::Session.create} }
 
     context 'when logged in' do
       before { allow(controller).to receive(:auth_session) { double(invalidate!: true) } }

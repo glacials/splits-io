@@ -41,9 +41,23 @@ class User < ApplicationRecord
 
   has_many :sessions, class_name: 'Authie::Session', as: :user, dependent: :destroy
 
-  NAME_REGEX = /\A[A-Za-z0-9_]+\z/.freeze
+  NAME_REGEX     = /\A[A-Za-z0-9_]+\z/.freeze
+  PASSWORD_REGEX = /\A.{8,}+\z/.freeze
+
+  # Turn off default password validations because they include a presence
+  # validation, which we don't require as some accounts can be link-only. But
+  # turn on the other validations manually -- validating that `password` and
+  # `password_confirmation` match when both supplied, and max length.
+  #
+  # Although it's theoretically bad to have max lengths on passwords, BCrypt
+  # truncates at 72 bytes, so we should enforce that here rather than let users
+  # pass in 73 bytes and be surprised that we only use the first 72.
+  has_secure_password(validations: false)
+  validates_confirmation_of :password, allow_blank: true
+  validates_length_of       :password, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
 
   validates :name, presence: true, uniqueness: true, format: {with: NAME_REGEX}
+  validates :email, presence: true, uniqueness: true # TODO: Add a not-null to database
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
@@ -68,10 +82,6 @@ class User < ApplicationRecord
 
   def avatar
     [twitch, google].compact.map(&:avatar).first
-  end
-
-  def email
-    [google, twitch].compact.map(&:email).first
   end
 
   def to_param
