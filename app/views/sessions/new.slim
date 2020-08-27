@@ -1,0 +1,12 @@
+- content_for(:title, 'Sign in')
+- content_for(:header)
+  ol.breadcrumb.shadow
+    li.breadcrumb-item = link_to(site_title, root_path)
+    li.breadcrumb-item = link_to('Sign in',  new_session_path)
+.col-md-6.offset-md-3
+ .card.mb-4
+ 	h5.card-header
+ 		| Sign in
+ 	.card-body
+ 		- if current_user.nil?
+			= render partial: 'sign_in'
