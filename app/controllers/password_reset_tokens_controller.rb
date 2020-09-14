@@ -46,5 +46,13 @@ class PasswordResetTokensController < ApplicationController
         alert: 'No user exists with that email.',
       )
     end
+  rescue ActionController::ParameterMissing
+    redirect_back(
+      alert: <<~ALERT,
+        No email was given. This sounds like a bug! Please let us know about
+        it.
+      ALERT
+      fallback_location: new_password_reset_token_path,
+    )
   end
 end
