@@ -59,6 +59,7 @@ gem 'rack-cors', require: 'rack/cors'
 
 # authentication
 gem 'authie'
+gem 'bcrypt'
 gem 'omniauth'
 gem 'omniauth-oauth2'
 gem 'omniauth-google-oauth2'

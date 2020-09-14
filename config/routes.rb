@@ -39,9 +39,10 @@ Rails.application.routes.draw do
 
   get '/timers/:timer_id', to: 'timers#show', as: :timer
 
-  get '/why/permalinks', to: 'why#permalinks', as: :why_permalinks
-  get '/why/darkmode',   to: 'why#darkmode',   as: :why_darkmode
-  get '/why/readonly',   to: 'why#readonly',   as: :why_readonly
+  get '/why/permalinks',       to: 'why#permalinks',       as: :why_permalinks
+  get '/why/darkmode',         to: 'why#darkmode',         as: :why_darkmode
+  get '/why/readonly',         to: 'why#readonly',         as: :why_readonly
+  get '/why/password_manager', to: 'why#password_manager', as: :why_password_manager
 
   get '/health', to: 'health#index'
 
@@ -71,10 +72,12 @@ Rails.application.routes.draw do
 
   get '/auth/failure', to: 'sessions#failure'
 
-  get    '/signin',            to: 'sessions#new',     as: :new_session
-  delete '/sessions/:session', to: 'sessions#destroy', as: :session
+  resources :sessions, only: [:create, :destroy]
+  get '/signin', to: 'sessions#new', as: :new_session
 
-  get '/users/:user', to: 'users#show',               as: :user
+  resources :users, only: [:create, :show, :update]
+  resources :password_reset_tokens, only: [:new, :create, :show]
+
   get '/u/:user',     to: redirect('/users/%{user}'), as: :short_user
 
   get '/users/:user/pbs/export/panels', to: 'users/pbs/export/panels#index', as: :user_panels
@@ -103,8 +106,9 @@ Rails.application.routes.draw do
 
   get '/tools', to: 'tools#index'
 
-  get  '/settings',   to: 'settings#index', as: :settings
-  post '/settings',   to: 'settings#update'
+  get    '/settings', to: 'settings#index', as: :settings
+  post   '/settings', to: 'settings#update'
+  patch  '/settings', to: 'settings#update'
   delete '/settings', to: 'settings#destroy'
 
   post   '/settings/applications',                   to: 'applications#create',                                  as: :applications

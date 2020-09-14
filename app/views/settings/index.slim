@@ -9,6 +9,8 @@
 - else
   .col.p-1 = render partial: 'username'
   .row.row-cols-1.row-cols-md-2.mx-0
+    .col.p-1 = render partial: 'email'
+    .col.p-1 = render partial: 'password'
     .col.p-1 = render partial: 'account_links'
     .col.p-1 = render partial: 'avatar'
     - if current_user.subscriptions.active.any?

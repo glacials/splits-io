@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :user, aliases: %i[runner creator] do
     name { SecureRandom.uuid.split('-')[0] }
+    email { "#{SecureRandom.uuid.split('-')[0]}@#{SecureRandom.uuid.split('-')[0]}.#{SecureRandom.uuid.split('-')[0]}"}
     created_at { Time.now }
     updated_at { Time.now }
 

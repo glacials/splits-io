@@ -1,0 +1,5 @@
+.card = form_for(current_user, url: settings_path) do |f|
+  .card-header.text-white Email address
+  .card-body
+    .mb-3 = f.text_field(:email, placeholder: 'Email address', class: 'form-control')
+  .card-footer.clearfix: .float-right: input.btn.btn-outline-primary type='submit' value='Save'

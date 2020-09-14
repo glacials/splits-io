@@ -19,7 +19,7 @@ class TwitchUsersController < ApplicationController
 
   def unlink
     current_user.twitch.try(:destroy)
-    redirect_to settings_path, notice: 'Twitch account unlinked! 🙅🔗'
+    redirect_back(fallback_location: settings_path, notice: 'Twitch account unlinked! 🙅🔗')
   end
 
   private

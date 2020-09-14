@@ -1,0 +1,12 @@
+Someone has requested to reset your password on Splits.io.
+
+If this was you, click this link to do so:
+<%=
+  password_reset_token_url(
+    @password_reset_token,
+    host: @base_url,
+    token: @password_reset_token.token,
+  )
+%>
+
+If this was not you, you may safely ignore this email.

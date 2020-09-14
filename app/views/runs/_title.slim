@@ -21,7 +21,7 @@ h5
       - old_runs.each do |old_run|
         a.dropdown-item href=run_path(old_run) = old_run.duration.format
   - if run.srdc_id.present?
-    a.badge.badge-dark.mr-2 href=run.srdc_url content='See on Speedrun.com' v-tippy=true
+    a.badge.badge-dark.mr-2 href=run.srdc_url content='See on speedrun.com' v-tippy=true
       = image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com logo')
   - if run.entry.present? && !run.entry.ghost?
     a.badge.badge-dark.mr-2 content='Recorded as part of a race' href=race_path(run.entry.race) v-tippy=true
