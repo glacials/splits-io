@@ -15,6 +15,7 @@ class UserDashboard < Administrate::BaseDashboard
     rivalries:          Field::HasMany,
     incoming_rivalries: Field::HasMany.with_options(class_name: 'Rivalry'),
     name:               Field::String,
+    email:              Field::String,
     created_at:         Field::DateTime,
     updated_at:         Field::DateTime
   }.freeze
@@ -26,6 +27,7 @@ class UserDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     name
+    email
     runs
   ].freeze
 
@@ -34,6 +36,7 @@ class UserDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = %i[
     id
     name
+    email
     runs
     rivalries
     incoming_rivalries
@@ -46,6 +49,7 @@ class UserDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
     name
+    email
     rivalries
   ].freeze
 
