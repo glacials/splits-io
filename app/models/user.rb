@@ -57,7 +57,7 @@ class User < ApplicationRecord
   validates_length_of       :password, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
 
   validates :name, presence: true, uniqueness: true, format: {with: NAME_REGEX}
-  validates :email, presence: true, uniqueness: true # TODO: Add a not-null to database
+  validates :email, uniqueness: {allow_nil: true} # Cannot validate non-null as some old users do not have emails
 
   scope :with_runs, -> { joins(:runs).distinct }
   scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
