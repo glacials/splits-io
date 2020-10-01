@@ -27,7 +27,7 @@ const buildSegmentChart = function(runs, options) {
     if (time < 0) {
       time = 0
     }
-    pbData.push([segment.display_name, time])
+    pbData.push([segment.display_name || segment.name, time])
 
     // Start mean info collection
     time = 0

@@ -37,7 +37,6 @@ document.addEventListener('turbolinks:load', function() {
 
     document.getElementById('chart-holder').hidden = false
     if (runs[0].histories.length !== 0) {
-      const skipped = `${timing}time_skipped`
       const duration = `${timing}time_duration_ms`
       runs = runs.map((run) => (
         {
@@ -91,8 +90,8 @@ document.addEventListener('turbolinks:load', function() {
         )
       })
 
-    Array.from(document.getElementsByClassName('segment-spinner')).forEach(spinner => spinner.hidden = true)
-    document.getElementById('chart-spinner').hidden = true
+      Array.from(document.getElementsByClassName('segment-spinner')).forEach(spinner => spinner.hidden = true)
+      document.getElementById('chart-spinner').hidden = true
     }
   }).catch(function(error) {
     for (const segChartAlert of document.getElementsByClassName('segment-chart-alert')) {
@@ -179,4 +178,3 @@ window.addEventListener('resize', () => {
     })
   }, 1000)()
 })
-
