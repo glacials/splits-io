@@ -13,6 +13,13 @@ class RunsController < ApplicationController
   end
 
   def index
+    return if current_user.present?
+
+    # Below code pretends we're viewing an example run, for the landing page.
+    # gcb is a great example run in production, but fall back to anything.
+    params[:id] = (Run.find_by(id: 'gcb'.to_i(36)) || Run.first)&.id36
+    redirect_to(faq_path, alert: 'Cannot render frontpage due to an internal error.') if params[:id].nil?
+    set_run
   end
 
   def edit

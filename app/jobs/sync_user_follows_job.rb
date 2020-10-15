@@ -4,6 +4,7 @@ class SyncUserFollowsJob < ApplicationJob
   queue_as :sync_user_follows
 
   def perform(user, twitch_user)
+    return # TODO: Twitch returning 429 Too Many Requests
     ActiveRecord::Base.transaction do
       current_followed_users = User.joins(:twitch).where(
         twitch_users: {twitch_id: twitch_user.followed_ids}

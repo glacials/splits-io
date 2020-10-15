@@ -1,12 +1,12 @@
-const Highcharts = require('highcharts')
-require('highcharts/modules/exporting')(Highcharts)
-require('highcharts/highcharts-more')(Highcharts)
-
 const defaults = require('deep-defaults')
 const moment = require('moment')
 
-import {logoColors} from '../colors.js'
-import {quantile} from '../stats.js'
+import Highcharts from 'highcharts'
+require('highcharts/modules/exporting')(Highcharts)
+require('highcharts/highcharts-more')(Highcharts)
+
+import { logoColors } from '../colors.js'
+import { quantile } from '../stats.js'
 
 const buildBoxPlot = (runs, options = {}) => {
   if (document.getElementById('box-plot') === null) {
@@ -21,7 +21,7 @@ const buildBoxPlot = (runs, options = {}) => {
       chartOptions: {
         plotOptions: {
           series: {
-            dataLabels: {enabled: false}
+            dataLabels: { enabled: false }
           },
           line: {
             dataLabels: {
@@ -33,11 +33,11 @@ const buildBoxPlot = (runs, options = {}) => {
     },
     chart: {
       type: 'boxplot',
-      scrollablePlotArea: {minWidth: 75 * runs[0].segments.length},
+      scrollablePlotArea: { minWidth: 75 * runs[0].segments.length },
       zoomType: 'xy'
     },
     colors: logoColors,
-    subtitle: {text: 'Excludes Outliers'},
+    subtitle: { text: 'Excludes Outliers' },
     plotOptions: {
       boxplot: {
         lineWidth: 2,
@@ -49,19 +49,19 @@ const buildBoxPlot = (runs, options = {}) => {
         const q1 = quantile(histories, .25)
         const q3 = quantile(histories, .75)
         const iqr = q3 - q1 // interquartile range, used for finding outliers (below)
-        const historiesSansOutliers = histories.filter(duration => duration >= (q1 - 1.5*iqr) && duration <= (q3 + 1.5*iqr))
+        const historiesSansOutliers = histories.filter(duration => duration >= (q1 - 1.5 * iqr) && duration <= (q3 + 1.5 * iqr))
 
         return {
-          low:    Math.min(...historiesSansOutliers),
-          q1:     q1,
+          low: Math.min(...historiesSansOutliers),
+          q1: q1,
           median: quantile(historiesSansOutliers, .5),
-          q3:     q3,
-          high:   Math.max(...historiesSansOutliers)
+          q3: q3,
+          high: Math.max(...historiesSansOutliers)
         }
       }),
-      name: (run.runners[0] || {name: '???'}).name,
+      name: (run.runners[0] || { name: '???' }).name,
       tooltip: {
-        pointFormatter: function() {
+        pointFormatter: function () {
           return `Worst: ${moment.duration(this.high).format('H:mm:ss')}<br/>
             Upper quartile: ${moment.duration(this.q3).format('H:mm:ss')}<br/>
             Median: ${moment.duration(this.median).format('H:mm:ss')}<br/>
@@ -70,18 +70,18 @@ const buildBoxPlot = (runs, options = {}) => {
         }
       }
     })),
-    title: {text: 'Segment Box Plot'},
+    title: { text: 'Segment Box Plot' },
     xAxis: {
-      title: {text: 'Segment'},
+      title: { text: 'Segment' },
       categories: runs[0].segments.map(segment => segment.display_name)
     },
     yAxis: {
       gridLineColor: 'rgba(255, 255, 255, 0.2)',
-      labels: {formatter: function() { return moment.duration(this.value).format('H:mm:ss') }},
+      labels: { formatter: function () { return moment.duration(this.value).format('H:mm:ss') } },
       tickColor: 'rgba(255, 255, 255, 0.2)',
-      title: {text: 'Segment Durations'}
+      title: { text: 'Segment Durations' }
     }
   }))
 }
 
-export {buildBoxPlot}
+export { buildBoxPlot }
