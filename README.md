@@ -22,13 +22,16 @@
 </p>
 
 ## About
-Splits.io is how speedrunners improve through data. It gives split-by-split analysis of individual runs, viewed through
-a lens of all runs. On Splits.io, speedrunners share more than their time—they share their entire history of attempts,
-successful or not, and get feedback on how to improve long-term through statistics and comparisons with themselves and
-other runners in their weight class, both live (via races) and after-the-fact using historical data.
+Splits.io is how speedrunners improve through data. It gives split-by-split
+analysis of individual runs, viewed through a lens of all runs. On Splits.io,
+speedrunners share more than their time—they share their entire history of
+attempts, successful or not, and get feedback on how to improve long-term
+through statistics and comparisons with themselves and other runners in their
+weight class, both live (via races) and after-the-fact using historical data.
 
-Splits.io works with LiveSplit and more than 15 other speedrunning timers. An auto-generated list
-can be viewed in the [FAQ][faq]; new timers can self-integrate using the [Splits.io Exchange Format][exchange].
+Splits.io works with LiveSplit and more than 15 other speedrunning timers. An
+auto-generated list can be viewed in the [FAQ][faq]; new timers can
+self-integrate using the [Splits.io Exchange Format][exchange].
 
 [exchange]: /public/schema
 [faq]: https://splits.io/faq#programs

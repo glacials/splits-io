@@ -1,10 +1,21 @@
 <template>
-  <select class='form-control' id='category-selector' v-model='selectedCategoryId' v-if='game' name='run[category]'>
-    <option v-if='nullCategory' :value='null'>
-      {{nullCategory}}
+  <select
+    class="form-control"
+    id="category-selector"
+    v-model="selectedCategoryId"
+    v-if="game"
+    name="run[category]"
+  >
+    <option v-if="nullCategory" :value="null">
+      {{ nullCategory }}
     </option>
-    <option v-for='category in game.categories' :value='category.id'>
-      {{category.name}}
+    <option
+      v-for="category in game.categories"
+      v-bind:key="category.id"
+      :value="category.id"
+    >
+      <span v-if="category.srdc_id">✓</span>
+      {{ category.name }}
     </option>
   </select>
 </template>
@@ -16,14 +27,34 @@ export default {
       selectedCategoryId: this.value && this.value.id,
     }
   },
-  props: ['game', 'value', 'null-category'],
+  props: ["game", "value", "null-category"],
   watch: {
     game: function (newGame) {
+      newGame.categories.sort((a, b) => {
+        if (a.srdc_id && !b.srdc_id) {
+          return -1
+        }
+
+        if (!a.srdc_id && b.srdc_id) {
+          return 1
+        }
+
+        if (Date.parse(a.updated_at) > Date.parse(b.updated_at)) {
+          return -1
+        }
+
+        return 1
+      })
+
       if (!this.selectedCategoryId) {
         return
       }
 
-      if (newGame.categories.find(category => category.id === this.selectedCategoryId)) {
+      if (
+        newGame.categories.find(
+          (category) => category.id === this.selectedCategoryId
+        )
+      ) {
         return
       }
 
@@ -32,14 +63,21 @@ export default {
         return
       }
 
-      this.selectedCategoryId = this.nullCategory ? null : newGame.categories[0].id
+      this.selectedCategoryId = this.nullCategory
+        ? null
+        : newGame.categories[0].id
     },
-    selectedCategoryId: function(newSelectedCategoryId) {
-      this.$emit('input', this.game.categories.find(category => category.id === newSelectedCategoryId) || null)
+    selectedCategoryId: function (newSelectedCategoryId) {
+      this.$emit(
+        "input",
+        this.game.categories.find(
+          (category) => category.id === newSelectedCategoryId
+        ) || null
+      )
     },
-    value: function(newCategory) {
+    value: function (newCategory) {
       this.selectedCategoryId = newCategory.id
-    }
+    },
   },
-}
+};
 </script>
