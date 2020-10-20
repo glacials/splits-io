@@ -1,23 +1,26 @@
 <template>
-  <select
-    class="form-control"
-    id="category-selector"
-    v-model="selectedCategoryId"
-    v-if="game"
-    name="run[category]"
-  >
-    <option v-if="nullCategory" :value="null">
-      {{ nullCategory }}
-    </option>
-    <option
-      v-for="category in game.categories"
-      v-bind:key="category.id"
-      :value="category.id"
+  <div>
+    <select
+      class="form-control"
+      id="category-selector"
+      v-model="selectedCategoryId"
+      v-if="game"
+      name="run[category]"
     >
-      <span v-if="category.srdc_id">✓</span>
-      {{ category.name }}
-    </option>
-  </select>
+      <option v-if="nullCategory" :value="null">
+        {{ nullCategory }}
+      </option>
+      <option
+        v-for="category in game.categories"
+        v-bind:key="category.id"
+        :value="category.id"
+      >
+        <span v-if="category.srdc_id">✓</span>
+        {{ category.name }}
+      </option>
+    </select>
+    <small>✓ = Synced with speedrun.com</small>
+  </div>
 </template>
 
 <script>
