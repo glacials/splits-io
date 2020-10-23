@@ -21,25 +21,32 @@ class Twitch
   end
 
   module Follows
-    def self.followed_ids(id, token: nil)
+    # self.from returns a lazy enumerator over the Follows "from" the user with
+    # the given Twitch ID, regardless of whether the followed users are
+    # associated with Splits.io accounts.
+    def self.from(id, token:)
       cursor = nil
-      ids = []
-      loop do
-        response = get(id, token: token, cursor: cursor)
-        break if response.code != 200
-        body = JSON.parse(response.body)
-        break if body['data'].empty?
+      seen_cursors = Set.new
+      Enumerator.new do |yielder|
+        loop do
+          response = Follows.get(id, token: token, cursor: cursor)
+          raise StopIteration if response.code != 200
+          body = JSON.parse(response.body)
+          raise StopIteration if body['data'].empty?
 
-        cursor = body['pagination']['cursor']
-        body['data'].each do |follow|
-          ids << follow['to_id']
+          cursor = body['pagination']['cursor']
+          # Avoid getting caught in an infinite cursor loop
+          raise StopIteration if seen_cursors.include?(cursor)
+          seen_cursors.add(cursor)
+          body['data'].each do |follow|
+            yielder << follow
+          end
         end
-      end
-      ids
+      end.lazy
     end
 
     class << self
-      def get(id, token: nil, cursor: nil)
+      def get(id, token:, cursor: nil)
         Follows.route(id, cursor: cursor).get(Twitch.headers(token: token))
       end
 
@@ -54,13 +61,13 @@ class Twitch
   end
 
   module Videos
-    # recent returns videos for the given Twitch user ID from most to least recent. type can be :all, :upload, :archive,
-    # or :highlight.
-    def self.recent(id, type: :all, token: nil)
-      # To the caller this feels as if we're returning an array of all Twitch videos, but it's just an enumerator that
-      # lazily fetches more videos only if the caller tries to look at them.
+    # self.recent returns a lazy enumerator over the Videos belonging to the
+    # Twitch user with the given ID, from most to least recent. By default all
+    # video types are included, but they can be filtered by specifying a type
+    # of :upload, :archive, or :highlight.
+    def self.recent(id, type: :all, token:)
       cursor = nil
-
+      seen_cursors = Set.new
       Enumerator.new do |yielder|
         loop do
           response = Videos.get(id, type, token: token, cursor: cursor)
@@ -69,6 +76,9 @@ class Twitch
           raise StopIteration if body['data'].empty?
 
           cursor = body['pagination']['cursor']
+          # Avoid getting caught in an infinite cursor loop
+          raise StopIteration if seen_cursors.include?(cursor)
+          seen_cursors.add(cursor)
           body['data'].each do |video|
             yielder << video
           end
@@ -110,13 +120,15 @@ class Twitch
       end
     end
 
-    # new_tokens! takes a user's current refresh token and returns a hash containing a fresh access token and refresh
-    # token e.g.
+    # new_tokens! takes a user's current refresh token and returns a hash
+    # containing a fresh access token and refresh token, e.g.
     #
     # {access_token: 'boop', refresh_token: 'beep'}
     #
-    # Upon calling this method you should assume the old access token and refresh token are invalidated by Twitch.
-    # See https://dev.twitch.tv/docs/authentication/#refreshing-access-tokens.
+    # Upon calling this method you should assume the old access token and
+    # refresh token are invalidated by Twitch. See
+    # https://dev.twitch.tv/docs/authentication/#refreshing-access-tokens for
+    # more info.
     def new_tokens!(refresh_token)
       body = JSON.parse(RestClient::Resource.new('https://id.twitch.tv/oauth2')["/token?#{{
         grant_type: 'refresh_token',

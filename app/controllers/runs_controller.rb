@@ -185,7 +185,7 @@ class RunsController < ApplicationController
     return if (current_user&.twitch).nil?
     return if current_user.twitch.follows_synced_at > Time.now.utc - 1.day
 
-    SyncUserFollowsJob.perform_later(current_user, current_user.twitch)
+    SyncTwitchUserFollowsJob.perform_later(current_user.twitch)
     current_user.twitch.update(follows_synced_at: Time.now.utc)
   end
 

@@ -3,6 +3,12 @@ require 'twitch'
 class TwitchUser < ApplicationRecord
   belongs_to :user
 
+  has_many :twitch_user_follows,   foreign_key: :from_twitch_user_id, dependent: :destroy, inverse_of: 'from_twitch_user', class_name: 'TwitchUserFollow'
+  has_many :twitch_user_followers, foreign_key: :to_twitch_user_id,   dependent: :destroy, inverse_of: 'to_twitch_user',   class_name: 'TwitchUserFollow'
+
+  has_many :follows,   through: :twitch_user_follows,   source: :to_twitch_user
+  has_many :followers, through: :twitch_user_followers, source: :from_twitch_user
+
   include AvatarSource
 
   def self.from_auth(auth, current_user)
@@ -47,9 +53,11 @@ class TwitchUser < ApplicationRecord
     retry if retries < 2
   end
 
-  def followed_ids
+  # followed_twitch_ids returns a lazy enumerator over the user IDs of the
+  # Twitch accounts (i.e. TwitchUser#twitch_id) this user follows.
+  def followed_twitch_ids
     retries ||= 0
-    Twitch::Follows.followed_ids(twitch_id, token: access_token)
+    Twitch::Follows.from(twitch_id, token: access_token).map { |f| f['to_id'] }
   rescue RestClient::Unauthorized => e
     refresh_tokens!
     retries += 1
@@ -57,17 +65,21 @@ class TwitchUser < ApplicationRecord
     raise e
   end
 
-  # refresh_tokens! updates the access token and refresh token for this user with a new one from the Twitch API.
+  # refresh_tokens! updates the access token and refresh token for this user
+  # with a new one from the Twitch API.
   def refresh_tokens!
     update(Twitch.new_tokens!(refresh_token))
   rescue RestClient::Unauthorized, RestClient::BadRequest
-    # If the refresh got 401 Unauthorized, we were probably de-authorized from using the user's Twitch account. If it
-    # got 400 Bad Request, we probably have a nil refresh token, perhaps because the authorization was created before we
-    # started saving refresh tokens to the database.
+    # If the refresh got 401 Unauthorized, we were probably de-authorized from
+    # using the user's Twitch account. If it got 400 Bad Request, we probably
+    # have a nil refresh token, perhaps because the authorization was created
+    # before we started saving refresh tokens to the database.
     #
-    # Ideally we'd destroy the TwitchUser here, but that may leave the user with no way to sign in. Instead, force a
-    # sign out so we can get some fresh tokens. Until that happens we technically have no way to verify this Twitch user
-    # and this Splits.io user are the same person, only that they once were in the past.
+    # Ideally we'd destroy the TwitchUser here, but that may leave the user
+    # with no way to sign in. Instead, force a sign out so we can get some
+    # fresh tokens. Until that happens we technically have no way to verify
+    # this Twitch user and this Splits.io user are the same person, only that
+    # they once were in the past.
     #
     # Once we have linkless accounts, change this to destroy the TwitchUser.
     user.sessions.destroy_all

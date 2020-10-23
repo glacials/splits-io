@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_29_163438) do
+ActiveRecord::Schema.define(version: 2020_10_23_184049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -494,7 +494,11 @@ ActiveRecord::Schema.define(version: 2020_08_29_163438) do
     t.bigint "to_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "from_twitch_user_id"
+    t.uuid "to_twitch_user_id"
+    t.index ["from_twitch_user_id"], name: "index_twitch_user_follows_on_from_twitch_user_id"
     t.index ["from_user_id"], name: "index_twitch_user_follows_on_from_user_id"
+    t.index ["to_twitch_user_id"], name: "index_twitch_user_follows_on_to_twitch_user_id"
     t.index ["to_user_id"], name: "index_twitch_user_follows_on_to_user_id"
   end
 
@@ -569,5 +573,7 @@ ActiveRecord::Schema.define(version: 2020_08_29_163438) do
   add_foreign_key "speedrun_dot_com_run_variables", "speedrun_dot_com_game_variable_values"
   add_foreign_key "speedrun_dot_com_users", "users"
   add_foreign_key "splits", "runs"
+  add_foreign_key "twitch_user_follows", "twitch_users", column: "from_twitch_user_id"
+  add_foreign_key "twitch_user_follows", "twitch_users", column: "to_twitch_user_id"
   add_foreign_key "twitch_users", "users"
 end

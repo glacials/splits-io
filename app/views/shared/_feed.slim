@@ -1,8 +1,8 @@
-- if current_user.twitch_follows.any?
+- if current_user.twitch.follows.any?
   .card
     h5.card-header Feed
     .list-group.bg-transparent
-      - followed_runs = Run.includes(:game, :category, :user).where(user: current_user.twitch_follows).where.not(games: {name: [nil, '']}).order('runs.created_at DESC').limit(6)
+      - followed_runs = Run.includes(:game, :category, :user).where(users: {twitch: current_user.twitch.follows}).where.not(games: {name: [nil, '']}).order('runs.created_at DESC').limit(6)
       - my_runs = current_user.pbs.where(category_id: followed_runs.map(&:category_id))
       - followed_runs.each do |run|
         = link_to(run, class: 'list-group-item list-group-item-action flex-column align-items-start bg-transparent text-light')

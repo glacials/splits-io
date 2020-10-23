@@ -260,7 +260,7 @@ GEM
     mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.1)
+    minitest (5.14.2)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
     moving_average (0.1.1)
@@ -455,7 +455,7 @@ GEM
       rails (>= 3)
       responders
       stripe (>= 1.36.2)
-    strong_migrations (0.6.8)
+    strong_migrations (0.7.1)
       activerecord (>= 5)
     temple (0.8.2)
     thor (1.0.1)

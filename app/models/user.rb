@@ -24,9 +24,6 @@ class User < ApplicationRecord
   has_many :twitch_user_followers, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
                                    class_name: 'TwitchUserFollow'
 
-  has_many :twitch_follows,   through: :twitch_user_follows,   source: :to_user
-  has_many :twitch_followers, through: :twitch_user_followers, source: :from_user
-
   has_one :patreon, dependent: :destroy, class_name: 'PatreonUser'
   has_one :twitch,  dependent: :destroy, class_name: 'TwitchUser'
   has_one :google,  dependent: :destroy, class_name: 'GoogleUser'
