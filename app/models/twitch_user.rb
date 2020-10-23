@@ -50,10 +50,11 @@ class TwitchUser < ApplicationRecord
   def followed_ids
     retries ||= 0
     Twitch::Follows.followed_ids(twitch_id, token: access_token)
-  rescue RestClient::Unauthorized
+  rescue RestClient::Unauthorized => e
     refresh_tokens!
     retries += 1
     retry if retries < 2
+    raise e
   end
 
   # refresh_tokens! updates the access token and refresh token for this user with a new one from the Twitch API.
