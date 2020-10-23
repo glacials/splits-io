@@ -5,8 +5,8 @@ FactoryBot.define do
     created_at { Time.now }
     updated_at { Time.now }
 
-    after(:create) do |user|
-      FactoryBot.create(:twitch_user, user: user)
+    after :build do |user|
+      user.twitch ||= FactoryBot.build(:twitch_user, user: user)
     end
 
     trait :with_runs do
