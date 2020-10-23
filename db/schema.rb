@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_23_184049) do
+ActiveRecord::Schema.define(version: 2020_10_23_195259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -490,16 +490,12 @@ ActiveRecord::Schema.define(version: 2020_10_23_184049) do
   end
 
   create_table "twitch_user_follows", force: :cascade do |t|
-    t.bigint "from_user_id"
-    t.bigint "to_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "from_twitch_user_id"
     t.uuid "to_twitch_user_id"
     t.index ["from_twitch_user_id"], name: "index_twitch_user_follows_on_from_twitch_user_id"
-    t.index ["from_user_id"], name: "index_twitch_user_follows_on_from_user_id"
     t.index ["to_twitch_user_id"], name: "index_twitch_user_follows_on_to_twitch_user_id"
-    t.index ["to_user_id"], name: "index_twitch_user_follows_on_to_user_id"
   end
 
   create_table "twitch_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
