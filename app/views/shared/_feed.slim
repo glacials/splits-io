@@ -1,4 +1,4 @@
-- if current_user.twitch.follows.any?
+- if current_user.twitch&.follows&.any?
   .card
     h5.card-header Feed
     .list-group.bg-transparent
