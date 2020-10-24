@@ -2,25 +2,29 @@ class RefactorTwitchUserFollowsToUseTwitchUsers < ActiveRecord::Migration[6.0]
   disable_ddl_transaction!
 
   def change
-    add_column :twitch_user_follows, :from_twitch_user_id, :uuid
-    add_column :twitch_user_follows, :to_twitch_user_id,   :uuid
+    unless ActiveRecord::Base.connection.column_exists?(:twitch_user_follows, :from_twitch_user_id)
+      add_column :twitch_user_follows, :from_twitch_user_id, :uuid
+      add_index :twitch_user_follows, :from_twitch_user_id, algorithm: :concurrently
+    end
 
-    add_index :twitch_user_follows, :from_twitch_user_id, algorithm: :concurrently
-    add_index :twitch_user_follows, :to_twitch_user_id,   algorithm: :concurrently
+    unless ActiveRecord::Base.connection.column_exists?(:twitch_user_follows, :to_twitch_user_id)
+      add_column :twitch_user_follows, :to_twitch_user_id, :uuid
+      add_index :twitch_user_follows, :to_twitch_user_id, algorithm: :concurrently
+    end
 
     TwitchUserFollow.where.not(from_user_id: nil, to_user_id: nil).find_each do |twitch_user_follow|
       from_twitch_user = TwitchUser.find_by(user_id: twitch_user_follow.from_user_id)
-      to_twitch_user   = TwitchUser.find_by(user_id: twitch_user_follow.to_user_id)
+      to_twitch_user = TwitchUser.find_by(user_id: twitch_user_follow.to_user_id)
       if [from_twitch_user, to_twitch_user].any?(&:nil?)
         twitch_user_follow.destroy
         next
       end
 
       twitch_user_follow.update(
-        from_user_id:        nil,
-        to_user_id:          nil,
+        from_user_id: nil,
+        to_user_id: nil,
         from_twitch_user_id: from_twitch_user.id,
-        to_twitch_user_id:   to_twitch_user.id,
+        to_twitch_user_id: to_twitch_user.id,
       )
     end
 
