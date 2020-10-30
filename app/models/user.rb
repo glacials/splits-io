@@ -207,9 +207,9 @@ class User < ApplicationRecord
 
   def admin?
     [
-      '29798286',  # Glacials
-      '18946907',  # Batedurgonnadie
-      '461527654', # tuna_can_ball
+      "29798286",  # Glacials
+      "18946907",  # Batedurgonnadie
+      "461527654", # tuna_can_ball
     ].include?(twitch.try(:twitch_id))
   end
 

@@ -3,42 +3,46 @@
   ol.breadcrumb.shadow
     li.breadcrumb-item = link_to(site_title, root_path)
     li.breadcrumb-item = link_to('FAQ', faq_path)
-.row.mx-2
-  a name='programs'
-  .card.mb-4
-    h5.card-header
-      | Which programs can I upload splits from?
-      .float-right: a.text-muted data={turbolinks: false} href='#programs' name='programs' ¶
-    .card-body
-      p Splits.io can read splits from any timer that supports the generic Splits.io Exchange Format. Splits.io
-        additionally has manual support for several timers that don't support the format.
-      .row
-        .col-md-6
-          h5 Timers Known to Support the Generic Format
-          .list-group.mb-4
-            - (Run.programs.select(&:exchangeable?) - [Programs::ExchangeFormat]).each do |program|
-              a.list-group-item.list-group-item-action.text-light href=program.website = program
-        .col-md-6
-          h5 Legacy Formats Supported
-          .list-group.mb-4
-            - Run.programs.reject(&:exchangeable?).each do |program|
-              a.list-group-item.list-group-item-action.text-light href=program.website = program
-      p In LiveSplit, you can upload from within the program with a right click -> Share.
-      .alert.alert-warning
-        b> Just so you know:
-        ' Some of Splits.io's statistics, charts, and other features that rely on historical data only work when the
-        ' timer actually records such data. LiveSplit is currently the only known timer to do this.
-      .alert.alert-info
-        b> Fun fact!
-        ' The parsing engine that powers Splits.io is actually shared code extracted from LiveSplit by its authors!
-        ' Hooray open source! 🙌
-    .card-footer
-      a.btn.btn-outline-primary.float-right href='https://github.com/glacials/splits-io/tree/master/public/schema'
-        => icon('fas', 'exchange-alt')
-        | Splits.io Exchange Format
+.container
+  .row
+    a name='programs'
+    .card.mb-4.w-100
+      h5.card-header
+        | What programs can I upload splits from?
+        .float-right: a.text-muted data={turbolinks: false} href='#programs' name='programs' ¶
+      .card-body
+        p
+          ' Splits.io can read splits from any timer that supports the generic Splits.io Exchange Format. Splits.io
+          ' additionally has manual support for several timers that don't support the format.
+        .row
+          .col-md-6
+            h5 Timers Known to Support the Generic Format
+            .list-group.mb-4
+              - (Run.programs.select(&:exchangeable?) - [Programs::ExchangeFormat]).each do |program|
+                .list-group-item
+                  = link_to(program, timer_path(program.to_sym))
+          .col-md-6
+            h5 Legacy Formats Supported
+            .list-group.mb-4
+              - Run.programs.reject(&:exchangeable?).each do |program|
+                .list-group-item
+                  = link_to(program, timer_path(program.to_sym))
+        p In LiveSplit, you can upload from within the program with a right click -> Share.
+        .alert.alert-warning
+          b> Just so you know:
+          ' Some of Splits.io's statistics, charts, and other features that rely on historical data only work when the
+          ' timer actually records such data. LiveSplit is currently the only known timer to do this.
+        .alert.alert-info
+          b> Fun fact!
+          ' The parsing engine that powers Splits.io is actually shared code extracted from LiveSplit by its authors!
+          ' Hooray open source! 🙌
+      .card-footer
+        a.btn.btn-outline-primary.float-right href='https://github.com/glacials/splits-io/tree/master/public/schema'
+          => icon('fas', 'exchange-alt')
+          | Splits.io Exchange Format
 
-  .card-deck
-    .card.mb-4
+  .row
+    .card.mb-4.w-100
       h5.card-header
         | Is Splits.io open source?
         .float-right: a.text-muted data={turbolinks: false} href='#source' name='source' ¶
@@ -49,7 +53,8 @@
           => icon('fab', 'github')
           | Splits.io on GitHub
 
-    .card.mb-4
+  .row
+    .card.mb-4.w-100
       h5.card-header
         | Does Splits.io have an API?
         .float-right: a.text-muted data={turbolinks: false} href='#api' name='api' ¶
@@ -60,226 +65,218 @@
           => icon('fas', 'book')
           | API Documentation
 
-  .card.mb-4
-    h5.card-header
-      | Why no &lt;other timer&gt;?
-      .float-right: a.text-muted data={turbolinks: false} href='#othertimers' name='othertimers' ¶
-    .card-body
-      p Depends. Maybe we don't know that it exists, or maybe we do but it's so niche that it's not super high priority.
-        You can check on the timers we're aware of on GitHub. If you don't see your timer there, we don't know about it.
-      p We use livesplit-core for parsing runs from various programs.
-    .card-footer
-      a.btn.btn-dark.text-light.float-right href='https://github.com/glacials/splits-io/labels/parsing'
-        => icon('fab', 'github')
-        | Parsing label on GitHub
-      a.btn.btn-dark.text-light.float-right.mx-2 href='https://github.com/LiveSplit/livesplit-core'
-        => icon('fab', 'github')
-        | livesplit-core on GitHub
-
-  .card.mb-4
-    h5.card-header
-      | How are game/category chosen for my run?
-      .float-right: a.text-muted data={turbolinks: false} href='#choosing' name='choosing' ¶
-    .card-body
-      p If you use LiveSplit, we try to associate your splits with an existing game and category from speedrun.com using the
-        corresponding LiveSplit fields. If we get it wrong or if you use another timer, you can manually edit your run's
-        game and category by pressing "edit" on your run's page, near the download link.
-
-  .card.mb-4
-    h5.card-header
-      | My speedgame doesn't have its own page with category tabs and all that, like other games do. What gives?
-      .float-right: a.text-muted data={turbolinks: false} href='#shortnames' name='shortnames' ¶
-    .card-body
-      p We give full game pages to any game that's on speedrun.com.
-      p This isn't because we think all other games are lame or anything; it just happens to make it much easier to do
-        bookkeeping. Once you get your game on speedrun.com this process should happen automatically next time a run is
-        uploaded.
-
-  .card.mb-4
-    h5.card-header
-      | I get "Error eating splits :(" when accessing or uploading my splits!
-      .float-right: a.text-muted data={turbolinks: false} href='#errors' name='errors' ¶
-    .card-body
-      p This error happens when the page request times out, which is typically a sign that your splits took too long to
-        load into memory and parse. This happens to LiveSplit files with a very large
-      code style='display: block; margin: 1em; white-space: nowrap'
-        | (# attempts) * (# splits in the run)
-      p because of the sheer amount of data LiveSplit stores in its splits (which enables cool things like stats!).
-      p It's my own fault that Splits.io's handling of this is not as optimized as it should be, and I'm actively working
-        to solve it, but it's not a one-stop bug fix. To see how it's going and what specifically is being planned, you
-        can check Splits.io's "speed" label on GitHub.
-      p As a temporary solution, you can manually strip history before uploading by making a copy of your splits, opening
-        the copy in LiveSplit, and resetting all of your best segments (drag-select the whole column and press Delete).
-        This will remove all split history; you should notice a sizeable decrease in file size, and consequently the file
-        should upload to Splits.io without a hitch.
-    .card-footer
-      a.btn.btn-dark.text-light.float-right href='https://github.com/glacials/splits-io/labels/speed'
-        => icon('fab', 'github')
-        | Speed label on GitHub
-
-  .card.mb-4
-    h5.card-header
-      | My sum of best and/or possible timesave is bonkers and makes no sense!
-      .float-right: a.text-muted data={turbolinks: false} href='#sum-of-best' name='sum-of-best' ¶
-    .card-body
-      p
-        ' This is a really interesting bug! If you don't care about why it happens, just scroll to the bottom.
-      p
-        ' When LiveSplit calculates your sum of best, it's actually not a literal sum of your best segments! Take this
-        ' run:
-      pre.text-light.p-3.m-3: code
-        | A ---> B ---> C
-      p
-        ' Let's say a new route is discovered that foregoes
-        code> B
-        ' , so you update your splits to accomodate.
-      pre.text-light.p-3.m-3: code
-        | A ---> D ---> E ---> C
-      p
-        ' Because it's a new route, you're not great at
-        code> D
-        ' and
-        code> E
-        ' yet! The route is strictly better, but your time actually suffers while you grind attempts. With the simple
-        ' way of calculating sum of best, your sum-of-best suffers as well! But LiveSplit realizes this and tries to
-        ' give you what you might actually be wanting from a sum-of-best: the answer to the question "What's my fastest
-        ' possible run?".
-      p
-        ' So instead of just adding up all your gold times, LiveSplit keeps track of your route changes. Internally,
-        ' LiveSplit remembers your splits more like this:
-      pre.text-light.p-3.m-3: code
-        | A -------> B ------> C
-        br
-        |  \                   ^
-        br
-        |   \---> D ---> E ---/
-      p
-        ' Because it remembers your gold time for
-        code> B
-        ' , your sum-of-best will actually not change when you update your route! As odd as it may sound,
-        b> your sum-of-best is defined as the shortest path
-        ' through this network of splits. If your gold time for
-        code> B
-        ' is faster than the sum of your
-        code> D
-        ' and
-        code> E
-        ' gold times, then
-        code> A -> B -> C
-        ' is still your fastest route, and so your sum-of-best is still the sum of their gold times, even after you've
-        ' switched routes.
-      p
-        ' Now, here's where the bug comes up! Let's say again you have a run that looks like this:
-      pre.text-light.p-3.m-3: code
-        | A ---> B ---> C
-      p
-        ' And let's say again that a new route is discovered and it's time to update your splits. Being a reasonable
-        ' person, you might just add a new split between
-        code> B
-        ' and
-        code> C
-        ' , then rename B.
-      pre.text-light.p-3.m-3: code
-        | A ---> D ---> E ---> C
-        br
-        |        |
-        br
-        |  was called B
-      p
-        ' Because you've only renamed B (rather than deleting it) and changed what it actually means to complete it
-        ' in-game, LiveSplit now holds a corrupted network of the possible paths through the game:
-      pre.text-light.p-3.m-3: code
-        | A ---> D ----------> C
-        br
-        |         \            ^
-        br
-        |          \---> E ---/
-      p
-        ' In this corrupted map of routes,
-        code> A -> D -> C
-        ' will always be faster than
-        code> A -> D -> E -> C
-        ' , so LiveSplit will build its sum-of-best based on the sum of those segments' gold times, even though that's
-        ' not a real route through the game.
-      p
-        ' There's one workaround to this, one fix, and one way to avoid it in the future.
-      p
-        ' To
-        b> work around
-        ' this issue without damaging your splits (but also without repairing them), go into LiveSplit's settings and
-        ' check
-        i
-          ' "simple sum of best"
-        ' . This will force LiveSplit to stop being clever and actually just sum your bests to get a sum-of-best time.
-        ' However, your splits will still be corrupted under the hood, which will show when you upload them to Splits.io
-        ' or otherwise perform analysis on them or share them with others.
-      p
-        ' To
-        b> fix
-        ' this problem if it's already happened to you, go into LiveSplit, go into the Splits Editor, and then click on
-        b Other... -> Clean Sum of Best
-        '. This will guide you through cleaning up your splits by removing any times that might be corrupted.
-      p
-        ' To
-        b> avoid
-        ' this problem in the future,
-        b never repurpose a split
-        ' . If how you play a split in the game changes, delete the split and recreate it. If you want to separate one
-        ' split into two, delete the split and create two new ones. If you do this LiveSplit will remember that the
-        ' splits existed and are
-        i> a
-        ' path through the game, but won't use them to build nonsensical paths and therefore nonsensical sum-of-bests.
-
-  .card
-    h5.card-header
-      | Help! Splits.io kidnapped my sister!!
-      .float-right: a.text-muted data={turbolinks: false} href='#ohno' name='ohno' ¶
-    .card-body
-      p You can always email help@splits.io with issues! Or if you'd prefer, you can post them at the GitHub issues
-        page! But maybe you should call the police first!
-    .card-footer
-      a.btn.btn-outline-primary.float-right href='mailto:help@splits.io'
-        => icon('fa', 'envelope')
-        | Email Splits.io
-
-.row.mx-2.mt-4
-  h3
-    ' Open Source Friends
-    a.text-muted data={turbolinks: false} href='#friends' name='friends' ¶
-
-  .card-deck.mb-4
-    .card
-      h4.card-header LiveSplit
+  .row
+    .card.mb-4.w-100
+      h5.card-header
+        | How are game/category chosen for my run?
+        .float-right: a.text-muted data={turbolinks: false} href='#choosing' name='choosing' ¶
       .card-body
-        p The most powerful and popular timer, LiveSplit is developed by two really cool people who decided to open
-          source the whole thing around 1.4.
-        p In a magical display of the power of open source, the parsing component of Splits.io is even powered by
-          LiveSplit code.
-      .card-footer
-        .btn-group.float-right
-          a.btn.btn-dark href='https://github.com/LiveSplit/LiveSplit'
-            => icon('fab', 'github')
-            | Source
-          a.btn.btn-outline-primary href='https://livesplit.org' Website
+        p If you use LiveSplit, we try to associate your splits with an existing game and category from speedrun.com using the
+          corresponding LiveSplit fields. If we get it wrong or if you use another timer, you can manually edit your run's
+          game and category by pressing "edit" on your run's page, near the download link.
 
-    .card
-      h4.card-header WSplit
+  .row
+    .card.mb-4.w-100
+      h5.card-header
+        | My speedgame doesn't have its own page with category tabs and all that, like other games do. What gives?
+        .float-right: a.text-muted data={turbolinks: false} href='#shortnames' name='shortnames' ¶
       .card-body
-        p An old god of speedrunning timers, WSplit is the simple and sturdy timer that's stood the test of time.
-          Nitrofski is WSplit's maintainer and open sourced the program in 2014.
-      .card-footer
-        a.btn.btn-dark.float-right href='https://github.com/nitrofski/wsplit'
+        p We give full game pages to any game that's on speedrun.com.
+        p This isn't because we think all other games are lame or anything; it just happens to make it much easier to do
+          bookkeeping. Once you get your game on speedrun.com this process should happen automatically next time a run is
+          uploaded.
+
+  .row
+    .card.mb-4.w-100
+      h5.card-header
+        | My sum of best and/or possible timesave is bonkers and makes no sense!
+        .float-right: a.text-muted data={turbolinks: false} href='#sum-of-best' name='sum-of-best' ¶
+      .card-body
+        p
+          ' This is a really interesting bug! If you don't care about why it happens, just scroll to the bottom.
+        p
+          ' When LiveSplit calculates your sum of best, it's actually not a literal sum of your best segments! Take this
+          ' run:
+        pre.text-light.p-3.m-3: code
+          | A ---> B ---> C
+        p
+          ' Let's say a new route is discovered that foregoes
+          code> B
+          ' , so you update your splits to accomodate.
+        pre.text-light.p-3.m-3: code
+          | A ---> D ---> E ---> C
+        p
+          ' Because it's a new route, you're not great at
+          code> D
+          ' and
+          code> E
+          ' yet! The route is strictly better, but your time actually suffers while you grind attempts. With the simple
+          ' way of calculating sum of best, your sum-of-best suffers as well! But LiveSplit realizes this and tries to
+          ' give you what you might actually be wanting from a sum-of-best: the answer to the question "What's my fastest
+          ' possible run?".
+        p
+          ' So instead of just adding up all your gold times, LiveSplit keeps track of your route changes. Internally,
+          ' LiveSplit remembers your splits more like this:
+        pre.text-light.p-3.m-3: code
+          | A -------> B ------> C
+          br
+          |  \                   ^
+          br
+          |   \---> D ---> E ---/
+        p
+          ' Because it remembers your gold time for
+          code> B
+          ' , your sum-of-best will actually not change when you update your route! As odd as it may sound,
+          b> your sum-of-best is defined as the shortest path
+          ' through this network of splits. If your gold time for
+          code> B
+          ' is faster than the sum of your
+          code> D
+          ' and
+          code> E
+          ' gold times, then
+          code> A -> B -> C
+          ' is still your fastest route, and so your sum-of-best is still the sum of their gold times, even after you've
+          ' switched routes.
+        p
+          ' Now, here's where the bug comes up! Let's say again you have a run that looks like this:
+        pre.text-light.p-3.m-3: code
+          | A ---> B ---> C
+        p
+          ' And let's say again that a new route is discovered and it's time to update your splits. Being a reasonable
+          ' person, you might just add a new split between
+          code> B
+          ' and
+          code> C
+          ' , then rename B.
+        pre.text-light.p-3.m-3: code
+          | A ---> D ---> E ---> C
+          br
+          |        |
+          br
+          |  was called B
+        p
+          ' Because you've only renamed B (rather than deleting it) and changed what it actually means to complete it
+          ' in-game, LiveSplit now holds a corrupted network of the possible paths through the game:
+        pre.text-light.p-3.m-3: code
+          | A ---> D ----------> C
+          br
+          |         \            ^
+          br
+          |          \---> E ---/
+        p
+          ' In this corrupted map of routes,
+          code> A -> D -> C
+          ' will always be faster than
+          code> A -> D -> E -> C
+          ' , so LiveSplit will build its sum-of-best based on the sum of those segments' gold times, even though that's
+          ' not a real route through the game.
+        p
+          ' There's one workaround to this, one fix, and one way to avoid it in the future.
+        p
+          ' To
+          b> work around
+          ' this issue without damaging your splits (but also without repairing them), go into LiveSplit's settings and
+          ' check
+          i
+            ' "simple sum of best"
+          ' . This will force LiveSplit to stop being clever and actually just sum your bests to get a sum-of-best time.
+          ' However, your splits will still be corrupted under the hood, which will show when you upload them to Splits.io
+          ' or otherwise perform analysis on them or share them with others.
+        p
+          ' To
+          b> fix
+          ' this problem if it's already happened to you, go into LiveSplit, go into the Splits Editor, and then click on
+          b Other... -> Clean Sum of Best
+          '. This will guide you through cleaning up your splits by removing any times that might be corrupted.
+        p
+          ' To
+          b> avoid
+          ' this problem in the future,
+          b never repurpose a split
+          ' . If how you play a split in the game changes, delete the split and recreate it. If you want to separate one
+          ' split into two, delete the split and create two new ones. If you do this LiveSplit will remember that the
+          ' splits existed and are
+          i> a
+          ' path through the game, but won't use them to build nonsensical paths and therefore nonsensical sum-of-bests.
+
+  .row
+    .card
+      h5.card-header
+        | Where can I go for further help?
+        .float-right: a.text-muted data={turbolinks: false} href='#ohno' name='ohno' ¶
+      .card-body
+        p
+          ' The best support channel is usually our
+          a> href=discord_url Discord server
+          ' as you can lean on the knowledgeable Splits.io community for assistance.
+        p
+          ' If you have a clear cut feature request or bug report with reproduction steps and you're comfortable using GitHub,
+          a> href=github_url our GitHub repository
+          ' is the best place to log it.
+        p
+          ' For general support if you're not comfortable using Discord, such as payment bugs, you can email us at
+          a> href='mailto:halp@splits.io'
+          ' and we'll get back to you when we can, though this is usually a slower way to get an answer than the above methods.
+        p
+          b
+            ' If you have a security bug to report, please immediately email
+          a> href='mailto:security@splits.io' security@splits.io
+          ' and we will respond as soon as we can with an assessment and fix if applicable. Please do not post security bugs in
+          ' public channels like Discord or GitHub, as this allows malicious users to take advantage of them before we have the
+          ' chance to fix them.
+      .card-footer.clearfix: .float-right
+        a.btn.btn-outline-primary.mr-2 href=discord_url
+          => icon('fab', 'discord')
+          | Discord
+        a.btn.btn-outline-primary.mr-2 href=github_url
           => icon('fab', 'github')
-          | Source
+          | GitHub
+        a.btn.btn-outline-primary.mr-2 href='mailto:halp@splits.io'
+          => icon('fa', 'envelope')
+          | General support
+        a.btn.btn-outline-primary.mr-2 href='mailto:security@splits.io'
+          => icon('fa', 'lock')
+          | Security bugs
 
-    .card
-      h4.card-header SaltyBot
-      .card-body
-        p Salty is a speedrunning-heavy chat bot that hooks into several services to expose race status, PB splits, and WR
-          info, among other things.
-      .card-footer
-        .btn-group.float-right
-          a.btn.btn-dark href='https://github.com/batedurgonnadie/salty_bot'
+  .row.mt-4
+    h3.mx-2
+      ' Open Source Friends
+      a.text-muted data={turbolinks: false} href='#friends' name='friends' ¶
+
+    .card-deck.mb-4
+      .card
+        h4.card-header LiveSplit
+        .card-body
+          p The most powerful and popular timer, LiveSplit is developed by two really cool people who decided to open
+            source the whole thing around 1.4.
+          p In a magical display of the power of open source, the parsing component of Splits.io is even powered by
+            LiveSplit code.
+        .card-footer
+          .btn-group.float-right
+            a.btn.btn-dark href='https://github.com/LiveSplit/LiveSplit'
+              => icon('fab', 'github')
+              | Source
+            a.btn.btn-outline-primary href='https://livesplit.org' Website
+
+      .card
+        h4.card-header WSplit
+        .card-body
+          p An old god of speedrunning timers, WSplit is the simple and sturdy timer that's stood the test of time.
+            Nitrofski is WSplit's maintainer and open sourced the program in 2014.
+        .card-footer
+          a.btn.btn-dark.float-right href='https://github.com/nitrofski/wsplit'
             => icon('fab', 'github')
             | Source
-          a.btn.btn-outline-primary href='http://leagueofnewbs.com/twitch/salty' Website
+
+      .card
+        h4.card-header SaltyBot
+        .card-body
+          p Salty is a speedrunning-heavy chat bot that hooks into several services to expose race status, PB splits, and WR
+            info, among other things.
+        .card-footer
+          .btn-group.float-right
+            a.btn.btn-dark href='https://github.com/batedurgonnadie/salty_bot'
+              => icon('fab', 'github')
+              | Source
+            a.btn.btn-outline-primary href='http://leagueofnewbs.com/twitch/salty' Website

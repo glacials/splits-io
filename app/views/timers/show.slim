@@ -13,19 +13,21 @@
     .card-header Uploading
     .card-body
       h2 #{@timer} → Splits.io
-      p
-        ' Splits.io can read #{@timer} files. These files have the extension
-        code .#{@timer.file_extension}
-        ' .
       - if @timer.exchangeable?
         p
           ' #{@timer} supports the generic
           a href=Programs::ExchangeFormat.website Splits.io Exchange Format
-          ' , so Splits.io can read files exported from LiveSplit in this format. These files have the extension
+          ' , so Splits.io can read files exported from #{@timer} in this format. These files have the extension
           code .#{Programs::ExchangeFormat.file_extension}
           ' .
+        - if @timer.exportable?
+          p
+            ' Splits.io also has limited support for reading #{@timer}'s
+            ' proprietary format. These files use the extension
+            code .#{@timer.file_extension}
+            ' .
       - else
-        p 
+        p
           ' #{@timer} does not support the generic
           a href=Programs::ExchangeFormat.website Splits.io Exchange Format
           ' , so it cannot output runs in the standard format.
@@ -42,32 +44,40 @@
         p
           ' #{@timer} supports the
           a href=Programs::ExchangeFormat.website Splits.io Exchange Format
-          ' , so it can read all runs. Look for "#{Programs::ExchangeFormat}" in the run export dropdown menu.
+          ' , so it can read any run on Splits.io. Look for
+          ' "#{Programs::ExchangeFormat}" when exporting a run from Splits.io.
         - if @timer.exportable?
           p
-            ' Splits.io can also try to export runs in #{@timer} format. Look for "#{@timer}" in the run export dropdown
-            ' menu.
+            ' Splits.io can also try to export runs in #{@timer} format. Look for "#{@timer}" when exporting a run from Splits.io.
       - else
         p
           ' #{@timer} doesn't support the
-          a href=Programs::ExchangeFormat.website Splits.io Exchange Format
-          ' , so it can't import any run.
+          a href=Programs::ExchangeFormat.website = Programs::ExchangeFormat
+          ' , so it can't read most runs from Splits.io.
         - if @timer.exportable?
           p
-            ' However, Splits.io can try to export runs in #{@timer} format. Look for "#{@timer}" in the run export
-            ' dropdown menu.
+            ' However, Splits.io can try to export runs in #{@timer} format. Look for "#{@timer}" option when exporting a run from Splits.io.
   .card.mb-2.col-md-6
     .card-header Developer information
     .card-body
-      - if @timer.exportable?
+      - if @timer.content_type == 'application/splitsio' # This timer is native to the Splits.io Exchange Format; there is no other format for it
+        p #{@timer}'s native format is the #{Programs::ExchangeFormat}. Requesting #{@timer} runs with either of these headers will have the same result:
         p
-          ' You can request runs from the API in #{@timer} format using this header:
-        p: code Accept: #{@timer.content_type}
-      - else
-        p
-          ' You cannot request arbitrary runs from the API in #{@timer} format. Runs originally uploaded in
-          ' #{@timer} format can be fetched in that same way using the header:
-          p: code Accept: application/original-timer
-      p
-        ' Runs returned in this format include the header:
+          code Accept: #{@timer.content_type}
+          br
+          code Accept: application/original-timer
+        p #{@timer} runs requested with either header will contain this header in the response:
         p: code Content-Type: #{@timer.content_type}
+      - else
+        - if @timer.exportable?
+          p
+            ' You can request runs from the API in #{@timer} format using this header:
+          p: code Accept: #{@timer.content_type}
+        - else
+          p
+            ' You cannot request arbitrary runs from the API in #{@timer} format. Runs originally uploaded in
+            ' #{@timer} format can be fetched in that same way using the header:
+            p: code Accept: application/original-timer
+        p
+          ' Runs returned in #{@timer} format include the header:
+          p: code Content-Type: #{@timer.content_type}
