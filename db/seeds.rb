@@ -72,3 +72,11 @@ Doorkeeper::Application.create(
   secret_generated_at: Time.now,
   confidential:        true,
 )
+
+Run.create(s3_filename: SecureRandom.uuid).tap do |run|
+  $s3_bucket_internal.put_object(
+    key: "splits/#{run.s3_filename}",
+    body: File.read("spec/factories/run_files/livesplit1.6_gametime.lss")
+  )
+  run.parse_into_db
+end
