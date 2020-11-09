@@ -24,10 +24,10 @@ class User < ApplicationRecord
   has_many :twitch_user_followers, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
                                    class_name: 'TwitchUserFollow'
 
-  has_one :patreon, dependent: :destroy, class_name: 'PatreonUser'
-  has_one :twitch,  dependent: :destroy, class_name: 'TwitchUser'
-  has_one :google,  dependent: :destroy, class_name: 'GoogleUser'
-  has_one :srdc,    dependent: :destroy, class_name: 'SpeedrunDotComUser'
+  has_one :patreon, dependent: :destroy, class_name: "PatreonUser"
+  has_one :twitch, dependent: :destroy, class_name: "TwitchUser"
+  has_one :google, dependent: :destroy, class_name: "GoogleUser"
+  has_one :srdc, dependent: :destroy, class_name: "SpeedrunDotComUser"
 
   has_many :subscriptions, dependent: :destroy
 
@@ -36,9 +36,11 @@ class User < ApplicationRecord
   has_many :access_grants, class_name: 'Doorkeeper::AccessGrant', dependent: :destroy, foreign_key: :resource_owner_id
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', dependent: :destroy, foreign_key: :resource_owner_id
 
-  has_many :sessions, class_name: 'Authie::Session', as: :user, dependent: :destroy
+  has_many :sessions, class_name: "Authie::Session", as: :user, dependent: :destroy
 
-  NAME_REGEX     = /\A[A-Za-z0-9_]+\z/.freeze
+  has_many :password_reset_tokens, dependent: :destroy
+
+  NAME_REGEX = /\A[A-Za-z0-9_]+\z/.freeze
   PASSWORD_REGEX = /\A.{8,}+\z/.freeze
 
   # Turn off default password validations because they include a presence
@@ -51,18 +53,18 @@ class User < ApplicationRecord
   # pass in 73 bytes and be surprised that we only use the first 72.
   has_secure_password(validations: false)
   validates_confirmation_of :password, allow_blank: true
-  validates_length_of       :password, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
+  validates_length_of :password, maximum: ActiveModel::SecurePassword::MAX_PASSWORD_LENGTH_ALLOWED
 
   validates :name, presence: true, uniqueness: true, format: {with: NAME_REGEX}
   validates :email, uniqueness: {allow_nil: true} # Cannot validate non-null as some old users do not have emails
 
   scope :with_runs, -> { joins(:runs).distinct }
-  scope :that_run, ->(category) { joins(:runs).where(runs: {category: category}).distinct }
+  scope :that_run, ->(category) { joins(:runs).where(runs: { category: category }).distinct }
   pg_search_scope :search_for_name, against: :name, using: :trigram
 
   # STRIPE_MIGRATION_DATE decides what the cutoff date for being grandfathered into features due to a Patreon
   # subscription is.
-  STRIPE_MIGRATION_DATE = Time.new('2019', '12', '01').utc
+  STRIPE_MIGRATION_DATE = Time.new("2019", "12", "01").utc
 
   def self.search(term)
     term = term.strip
@@ -95,7 +97,7 @@ class User < ApplicationRecord
   end
 
   def pbs
-    runs.where.not(category: nil).select('DISTINCT ON (category_id) *').order('category_id, realtime_duration_ms ASC')
+    runs.where.not(category: nil).select("DISTINCT ON (category_id) *").order("category_id, realtime_duration_ms ASC")
         .union_all(runs.by_category(nil))
   end
 
@@ -112,7 +114,7 @@ class User < ApplicationRecord
   end
 
   def to_s
-    name || 'somebody'
+    name || "somebody"
   end
 
   # Predictions used to be a tier 2 Patreon feature, so they're available to:

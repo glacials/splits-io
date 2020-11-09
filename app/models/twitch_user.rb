@@ -28,7 +28,7 @@ class TwitchUser < ApplicationRecord
     end
 
     twitch_user.assign_attributes(
-      access_token:  auth.credentials.token,
+      access_token: auth.credentials.token,
       refresh_token: auth.credentials.refresh_token,
       name:          auth.info.nickname,
       display_name:  auth.info.name,

@@ -6,7 +6,7 @@ html
             h1 Splits.io password reset
             p Someone has requested to reset your password on Splits.io.
             p If this was you, click this link to do so:
-            a href=password_reset_token_url(@password_reset_token, host: @base_url)
+            a href=password_reset_token_url(@password_reset_token, host: @base_url, token: @password_reset_token.token)
               = password_reset_token_url( \
                 @password_reset_token, \
                 host: @base_url, \

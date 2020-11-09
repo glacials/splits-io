@@ -41,7 +41,7 @@ class Race < ApplicationRecord
   # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
   # or have more than 2 entries. this includes races that have finished
   def self.unabandoned
-    where('races.updated_at > ?', ABANDON_TIME.ago)
+    where("races.updated_at > ?", ABANDON_TIME.ago)
   end
 
   # active returns all non-finished unabandoned races
@@ -52,16 +52,16 @@ class Race < ApplicationRecord
   # with_ends modifies the returned Races to have an ended_at field, which represents the timestamp at which the last
   # entry finished or forfeited, or null if at least one entry has neither finished nor forfeited.
   def self.with_ends
-    select('races.*,
+    select("races.*,
       case
         when bool_or(entries.finished_at is null and entries.forfeited_at is null) then null
         else greatest(max(entries.finished_at), max(entries.forfeited_at))
       end as ended_at
-    '.squish).left_outer_joins(:entries).group(:id)
+    ".squish).left_outer_joins(:entries).group(:id)
   end
 
   def to_s
-    "#{game} #{category} #{title}".presence || 'Untitled race'
+    "#{game} #{category} #{title}".presence || "Untitled race"
   end
 
   def abandoned?

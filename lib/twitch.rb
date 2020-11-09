@@ -1,4 +1,4 @@
-require 'net/http'
+require "net/http"
 
 class Twitch
   class Error < StandardError; end
@@ -11,7 +11,7 @@ class Twitch
 
     class << self
       def get(id, token: nil)
-        User.route(id).get(Twitch.headers(token: token))['data']
+        User.route(id).get(Twitch.headers(token: token))["data"]
       end
 
       def route(id)
