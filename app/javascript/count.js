@@ -2,6 +2,8 @@ import {setDriftlessInterval} from 'driftless'
 const moment = require('moment')
 require('moment-duration-format')(moment)
 
+import {ts} from 'time.js'
+
 // In this file, we attach to load instead of turbolinks:load because the functions re-find DOM elements every tick, so
 // we can re-use the same listener rather than attaching a new one every turbolinks:load. We choose to re-find DOM
 // elements every tick because ActionCable can replace our element with a new one rendered server-side at any moment.
@@ -11,7 +13,7 @@ require('moment-duration-format')(moment)
 window.addEventListener('load', () => {
   setDriftlessInterval(() => {
     Array.from(document.querySelectorAll('[data-abstime]')).forEach(el => {
-      const diffMS = moment().diff(moment(el.dataset.abstime))
+      const diffMS = moment(ts.now()).diff(moment(el.dataset.abstime))
       el.textContent = moment.duration(diffMS).format(el.dataset.abstimeFormat || 'HH:mm:ss.SS', {trim: false})
       if (diffMS < 0) {
         el.classList.add('bg-danger')
