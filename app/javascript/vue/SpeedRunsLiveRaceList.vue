@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header justify-content-between d-flex">
       <span>
-        <img src="http://cdn.speedrunslive.com/images/srl_305.png" style="height: 1em" alt="SpeedRunsLive logo" />
+        <img src="//cdn.speedrunslive.com/images/srl_305.png" style="height: 1em" alt="SpeedRunsLive logo" />
         <small
           class="fas fa-info-circle"
           content="For your convenience, these are the open races on SpeedRunsLive. Splits.io is not affiliated with SpeedRunsLive."
