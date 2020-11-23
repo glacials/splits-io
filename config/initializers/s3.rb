@@ -19,8 +19,8 @@ options = {
 if ENV['AWS_REGION'] == 'local'
   options.merge!(force_path_style: true)
 
-  options_internal = options.clone.merge!(endpoint: 'http://s3.localhost:4569')
-  options_external = options.clone.merge!(endpoint: 'http://localhost:4569')
+  options_internal = options.clone.merge!(endpoint: "http://#{ENV['S3_HOST']}:4569")
+  options_external = options.clone.merge!(endpoint: "http://localhost:4569")
 else
   options_internal = options
   options_external = options
@@ -32,4 +32,3 @@ $s3_client_external = Aws::S3::Client.new(options_external)
 
 $s3_bucket_internal = Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: $s3_client_internal)
 $s3_bucket_external = Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: $s3_client_external)
-

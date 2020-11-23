@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_23_195259) do
+ActiveRecord::Schema.define(version: 2020_11_23_024528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -475,6 +475,13 @@ ActiveRecord::Schema.define(version: 2020_10_23_195259) do
     t.index ["run_id"], name: "index_splits_on_run_id"
   end
 
+  create_table "subscription_trials", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_subscription_trials_on_user_id"
+  end
+
   create_table "subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "stripe_session_id"
@@ -569,6 +576,7 @@ ActiveRecord::Schema.define(version: 2020_10_23_195259) do
   add_foreign_key "speedrun_dot_com_run_variables", "speedrun_dot_com_game_variable_values"
   add_foreign_key "speedrun_dot_com_users", "users"
   add_foreign_key "splits", "runs"
+  add_foreign_key "subscription_trials", "users"
   add_foreign_key "twitch_user_follows", "twitch_users", column: "from_twitch_user_id"
   add_foreign_key "twitch_user_follows", "twitch_users", column: "to_twitch_user_id"
   add_foreign_key "twitch_users", "users"

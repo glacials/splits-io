@@ -3,9 +3,9 @@ class Subscription < ActiveRecord::Base
 
   scope :active,   -> { where(ended_at: nil) }
   scope :canceled, -> { where.not(canceled_at: nil) }
-  scope :is_tier1, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER1']) }
-  scope :is_tier2, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER2']) }
-  scope :is_tier3, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER3']) }
+  scope :is_tier1, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER1']) } # Deprecated
+  scope :is_tier2, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER2']) } # Deprecated
+  scope :is_tier3, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER3']) } # Only in-use tier
   scope :tier1,    -> { is_tier1.or(is_tier2).or(is_tier3) }
   scope :tier2,    -> { is_tier2.or(is_tier3) }
   scope :tier3,    -> { is_tier3 }
@@ -70,5 +70,41 @@ class Subscription < ActiveRecord::Base
 
     # Set canceled_at now; ended_at will be set by a Stripe webhook when the month runs out
     where(canceled_at: nil).update_all(canceled_at: Time.now.utc)
+  end
+
+  def self.has_predictions?
+    tier1.active.any?
+  end
+
+  def self.has_redirectors?
+    tier2.active.any?
+  end
+
+  def self.has_advanced_comparisons?
+    tier2.active.any?
+  end
+
+  def self.has_sum_of_best_leaderboards?
+    tier1.active.any?
+  end
+
+  def self.has_hiding?
+    tier1.active.any?
+  end
+
+  def self.has_advanced_video?
+    tier1.active.any?
+  end
+
+  def self.has_autohighlight?
+    tier1.active.any?
+  end
+
+  def self.has_advanced_analytics?
+    tier1.active.any?
+  end
+
+  def self.has_srdc_submit?
+    tier3.active.any?
   end
 end

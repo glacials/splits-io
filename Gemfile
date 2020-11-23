@@ -1,12 +1,12 @@
-source 'https://rubygems.org'
-ruby '2.7.1' # also update docker-compose.yml & docker-compose-production.yml
+source "https://rubygems.org"
+ruby "2.7.1" # also update docker-compose.yml & docker-compose-production.yml
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 group :test, :development do
-  gem 'pry-byebug'
-  gem 'pry-rails'
-  gem 'rspec-rails', '~> 4.0.0'
+  gem "pry-byebug"
+  gem "pry-rails"
+  gem "rspec-rails", "~> 4.0.0"
 end
 
 group :test do
@@ -29,7 +29,7 @@ group :development, :hot do
   gem 'rubocop-rails', require: false
 
   # profiling
-  gem 'derailed_benchmarks'
+  gem "derailed_benchmarks"
 
   # views
   gem 'rails_real_favicon'
@@ -83,47 +83,47 @@ gem "pg_search"
 gem "strong_migrations"
 
 # errors+logging
-gem 'newrelic_rpm'
-gem 'skylight', '~> 4.0.0'
+gem "newrelic_rpm"
+gem "skylight", "~> 4.0.0"
 
 # external communication
-gem 'httparty'
-gem 'rest-client'
-gem 'stripe-rails'
+gem "httparty"
+gem "rest-client"
+gem "stripe-rails"
 
 # parsing
-gem 'descriptive_statistics', require: 'descriptive_statistics/safe'
-gem 'moving_average'
+gem "descriptive_statistics", require: "descriptive_statistics/safe"
+gem "moving_average"
 
 # profiling
-gem 'memory_profiler'
-gem 'rack-mini-profiler'
+gem "memory_profiler"
+gem "rack-mini-profiler"
 
 # server/environment
-gem 'puma'
-gem 'rails', '~> 6.0'
+gem "puma"
+gem "rails", "~> 6.0"
 # see https://github.com/faye/websocket-driver-ruby/issues/58#issuecomment-394611125
-gem 'websocket-driver', github: 'faye/websocket-driver-ruby', ref: 'ee39af83d03ae3059c775583e4c4b291641257b8'
+gem "websocket-driver", github: "faye/websocket-driver-ruby", ref: "ee39af83d03ae3059c775583e4c4b291641257b8"
 
 # speediness
-gem 'bootsnap'
-gem 'dalli'
+gem "bootsnap"
+gem "dalli"
 
 # views
-gem 'bootstrap4-kaminari-views'
-gem 'font-awesome-sass', '~> 5.9'
-gem 'gon'
-gem 'image_processing'
-gem 'kaminari'
-gem 'purecss-rails', github: 'glacials/purecss-rails'
-gem 'sassc-rails'
-gem 'slim'
-gem 'webpacker', '>= 4.0.x'
+gem "bootstrap4-kaminari-views"
+gem "font-awesome-sass", "~> 5.9"
+gem "gon"
+gem "image_processing"
+gem "kaminari"
+gem "purecss-rails", github: "glacials/purecss-rails"
+gem "sassc-rails"
+gem "slim"
+gem "webpacker", ">= 4.0.x"
 
 # workers/jobs
-gem 'daemons'
-gem 'delayed_job_active_record'
-gem 'redis'
+gem "daemons"
+gem "delayed_job_active_record"
+gem "redis"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
