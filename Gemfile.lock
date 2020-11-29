@@ -178,6 +178,8 @@ GEM
       railties (>= 5)
     enumerable-statistics (2.0.1)
     erubi (1.9.0)
+    et-orbi (1.2.4)
+      tzinfo
     execjs (2.7.0)
     factory_bot (5.2.0)
       activesupport (>= 4.2.0)
@@ -189,6 +191,9 @@ GEM
     ffi (1.13.0)
     font-awesome-sass (5.13.0)
       sassc (>= 1.11)
+    fugit (1.4.1)
+      et-orbi (~> 1.1, >= 1.1.8)
+      raabro (~> 1.4)
     get_process_mem (0.2.5)
       ffi (~> 1.0)
     globalid (0.4.2)
@@ -310,6 +315,7 @@ GEM
     public_suffix (4.0.5)
     puma (4.3.5)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -420,6 +426,8 @@ GEM
     ruby-vips (2.0.17)
       ffi (~> 1.9)
     rubyzip (2.3.0)
+    rufus-scheduler (3.6.0)
+      fugit (~> 1.1, >= 1.1.6)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -541,6 +549,7 @@ DEPENDENCIES
   rspec-rails (~> 4.0.0)
   rubocop
   rubocop-rails
+  rufus-scheduler
   sassc-rails
   simplecov
   skylight (~> 4.0.0)
