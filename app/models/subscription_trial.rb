@@ -1,12 +1,12 @@
 class SubscriptionTrial < ApplicationRecord
-  SUBSCRIPTION_LENGTH = 14.days
+  TRIAL_DURATION = 14.days
 
   belongs_to :user
 
   validates :user_id, presence: true, uniqueness: true
 
   def ended_at
-    created_at + SUBSCRIPTION_LENGTH
+    created_at + TRIAL_DURATION
   end
 
   def expired?

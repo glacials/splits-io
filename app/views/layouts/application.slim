@@ -128,11 +128,10 @@ html lang='en'
               | Return to race
         header#header.m-1.p-0 = yield(:header)
         - if current_user && current_user.email.nil?
-          .alert.alert-danger
+          .alert.alert-warning
             ' You don't have an email attached to your Splits.io account. If
-            ' you become locked out your account will be irrecoverable. You
-            ' will also experience bugs around the site. Please add an email
-            ' address from the
+            ' you become locked out your account will be irrecoverable.
+            ' Please add an email address from the
             a href=settings_path settings page
             ' .
         .row.mx-2: #alerts.w-100 data-turbolinks-temporary=true

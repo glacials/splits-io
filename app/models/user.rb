@@ -160,10 +160,6 @@ class User < ApplicationRecord
     feature_grantors.any?(__method__)
   end
 
-  def patron?(tier: 0, before: Time.now.utc)
-    patreon&.patron?(tier: tier, before: before)
-  end
-
   def admin?
     [
       "29798286",  # Glacials
