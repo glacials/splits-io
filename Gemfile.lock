@@ -127,7 +127,7 @@ GEM
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.4)
       aws-eventstream (~> 1.0, >= 1.0.2)
-    bcrypt (3.1.15)
+    bcrypt (3.1.16)
     benchmark-ips (2.8.2)
     better_errors (2.7.1)
       coderay (>= 1.0.0)
@@ -179,6 +179,8 @@ GEM
       railties (>= 5)
     enumerable-statistics (2.0.1)
     erubi (1.9.0)
+    et-orbi (1.2.4)
+      tzinfo
     execjs (2.7.0)
     factory_bot (5.2.0)
       activesupport (>= 4.2.0)
@@ -190,7 +192,10 @@ GEM
     ffi (1.13.0)
     font-awesome-sass (5.13.0)
       sassc (>= 1.11)
-    friendly_uuid (0.2.2)
+    friendly_uuid (0.3.0)
+    fugit (1.4.1)
+      et-orbi (~> 1.1, >= 1.1.8)
+      raabro (~> 1.4)
     get_process_mem (0.2.5)
       ffi (~> 1.0)
     globalid (0.4.2)
@@ -261,7 +266,7 @@ GEM
     mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.2)
+    minitest (5.14.1)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
     moving_average (0.1.1)
@@ -312,6 +317,7 @@ GEM
     public_suffix (4.0.5)
     puma (4.3.5)
       nio4r (~> 2.0)
+    raabro (1.4.0)
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
@@ -422,6 +428,8 @@ GEM
     ruby-vips (2.0.17)
       ffi (~> 1.9)
     rubyzip (2.3.0)
+    rufus-scheduler (3.6.0)
+      fugit (~> 1.1, >= 1.1.6)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -456,7 +464,7 @@ GEM
       rails (>= 3)
       responders
       stripe (>= 1.36.2)
-    strong_migrations (0.7.1)
+    strong_migrations (0.6.8)
       activerecord (>= 5)
     temple (0.8.2)
     thor (1.0.1)
@@ -545,6 +553,7 @@ DEPENDENCIES
   rspec-rails (~> 4.0.0)
   rubocop
   rubocop-rails
+  rufus-scheduler
   sassc-rails
   simplecov
   skylight (~> 4.0.0)

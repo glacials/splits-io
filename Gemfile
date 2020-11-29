@@ -11,64 +11,64 @@ end
 
 group :test do
   # tests
-  gem 'factory_bot_rails', require: false
-  gem 'json-schema'
-  gem 'json-schema-rspec'
-  gem 'rails-controller-testing'
-  gem 'simplecov', require: false
+  gem "factory_bot_rails", require: false
+  gem "json-schema"
+  gem "json-schema-rspec"
+  gem "rails-controller-testing"
+  gem "simplecov", require: false
 end
 
 group :development, :hot do
   # errors+logging
-  gem 'better_errors'
-  gem 'binding_of_caller'
+  gem "better_errors"
+  gem "binding_of_caller"
 
   # pretty things
-  gem 'rails-erd', require: false
-  gem 'rubocop', require: false
-  gem 'rubocop-rails', require: false
+  gem "rails-erd", require: false
+  gem "rubocop", require: false
+  gem "rubocop-rails", require: false
 
   # profiling
   gem "derailed_benchmarks"
 
   # views
-  gem 'rails_real_favicon'
+  gem "rails_real_favicon"
 
-  gem 'listen'
+  gem "listen"
 end
 
 group :production do
   # errors+logging
-  gem 'rollbar'
+  gem "rollbar"
 
   # null db for asset precompile in docker
-  gem 'activerecord-nulldb-adapter'
+  gem "activerecord-nulldb-adapter"
 end
 
 # administration
-gem 'administrate'
-gem 'chartkick'
-gem 'groupdate'
+gem "administrate"
+gem "chartkick"
+gem "groupdate"
 
 # api
-gem 'api-pagination'
-gem 'blueprinter'
-gem 'jbuilder'
-gem 'oj'
-gem 'rack-cors', require: 'rack/cors'
+gem "api-pagination"
+gem "blueprinter"
+gem "jbuilder"
+gem "oj"
+gem "rack-cors", require: "rack/cors"
 
 # authentication
-gem 'authie'
-gem 'bcrypt'
-gem 'omniauth'
-gem 'omniauth-oauth2'
-gem 'omniauth-google-oauth2'
-gem 'omniauth-twitch', github: 'WebTheoryLLC/omniauth-twitch'
-gem 'patreon', '< 0.3.0'
+gem "authie"
+gem "bcrypt"
+gem "omniauth"
+gem "omniauth-oauth2"
+gem "omniauth-google-oauth2"
+gem "omniauth-twitch", github: "WebTheoryLLC/omniauth-twitch"
+gem "patreon", "< 0.3.0"
 
 # authorization
-gem 'cancancan'
-gem 'doorkeeper'
+gem "cancancan"
+gem "doorkeeper"
 
 # db
 gem "active_median"
@@ -124,6 +124,7 @@ gem "webpacker", ">= 4.0.x"
 gem "daemons"
 gem "delayed_job_active_record"
 gem "redis"
+gem "rufus-scheduler"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
