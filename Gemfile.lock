@@ -127,6 +127,7 @@ GEM
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.4)
       aws-eventstream (~> 1.0, >= 1.0.2)
+    bcrypt (3.1.16)
     benchmark-ips (2.8.2)
     better_errors (2.7.1)
       coderay (>= 1.0.0)
@@ -191,6 +192,7 @@ GEM
     ffi (1.13.0)
     font-awesome-sass (5.13.0)
       sassc (>= 1.11)
+    friendly_uuid (0.3.0)
     fugit (1.4.1)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
@@ -497,6 +499,7 @@ DEPENDENCIES
   authie
   aws-sdk-rails
   aws-sdk-s3
+  bcrypt
   better_errors
   binding_of_caller
   blueprinter
@@ -512,6 +515,7 @@ DEPENDENCIES
   doorkeeper
   factory_bot_rails
   font-awesome-sass (~> 5.9)
+  friendly_uuid
   gon
   groupdate
   httparty

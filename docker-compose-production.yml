@@ -14,7 +14,7 @@ x-environment:
   - PATREON_CLIENT_ID
   - PATREON_CLIENT_SECRET
   - PATREON_WEBHOOK_SECRET
-  - QUEUES=discover_runner,highlight_cleanup,race_cleanup,sync_user_follows,v4_races,parse_run,cleanup_runs,active_storage_purge,active_storage_analysis # keep this in sync with every job in app/jobs
+  - QUEUES=discover_runner,highlight_cleanup,race_cleanup,sync_user_follows,v4_races,parse_run,cleanup_runs,active_storage_purge,active_storage_analysis,mailers # keep this in sync with every job in app/jobs, except "mailers" which is managed by Rails
   - RAILS_ENV=production
   - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
   - RAILS_SERVE_STATIC_FILES=1

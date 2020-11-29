@@ -73,7 +73,7 @@
         "speedruncomID": {
           "type": "string",
           "title": "Speedrun.com ID",
-          "description": "Speedrun.com ID is the run's ID on Speedrun.com. This can be used to communicate with the Speedrun.com API.",
+          "description": "Speedrun.com ID is the run's ID on speedrun.com. This can be used to communicate with the speedrun.com API.",
           "examples": ["8y8dronz"]
         },
         "splitsioID": {
@@ -246,7 +246,7 @@
             "speedruncomID": {
               "type": "string",
               "title": "Speedrun.com ID",
-              "description": "Speedrun.com ID specifies the game's Speedrun.com ID.",
+              "description": "Speedrun.com ID specifies the game's speedrun.com ID.",
               "examples": ["kjpdr4jq"]
             }
           }
@@ -288,7 +288,7 @@
             "speedruncomID": {
               "type": "string",
               "title": "Speedrun.com ID",
-              "description": "Speedrun.com ID specifies the category's Speedrun.com ID.",
+              "description": "Speedrun.com ID specifies the category's speedrun.com ID.",
               "examples": ["kjpdr4jq"]
             }
           }
@@ -341,7 +341,7 @@
               "speedruncomID": {
                 "type": "string",
                 "title": "Speedrun.com ID",
-                "description": "Speedrun.com ID specifies the runner's Speedrun.com ID.",
+                "description": "Speedrun.com ID specifies the runner's speedrun.com ID.",
                 "examples": ["kjpdr4jq"]
               },
               "twitterID": {

@@ -3,11 +3,11 @@
     .modal-content
       = form_with url: srdc_submit_path(run), local: true, id: 'srdc-submit-form' do |f|
         .modal-header.bg-dark
-          h5.text-light Submit to Speedrun.com
+          h5.text-light Submit to speedrun.com
         .modal-body.bg-dark
           .row.text-light.m-0.mb-3
             .card.w-100.mb-2: .card-body
-              p Splits.io can submit your run to Speedrun.com!
+              p Splits.io can submit your run to speedrun.com!
               ' Please verify all information is correct below.
           .row.form-group
             .col-md-6.mb-3
@@ -79,14 +79,14 @@
 
             - unless current_user.has_srdc_submit?
               .mx-3: center.card: .card-body
-                p Splits.io Gold is required to enable automatic submission of runs to Speedrun.com.
+                p Splits.io Gold is required to enable automatic submission of runs to speedrun.com.
                 a.btn.btn-primary href=subscriptions_path Subscribe to Splits.io Gold
 
         - if current_user.has_srdc_submit?
           .modal-footer.bg-dark: .float-right
             .btn.btn-outline-light.mr-2 data-dismiss='modal' Cancel
             = f.submit( \
-              'Submit to Speedrun.com', \
+              'Submit to speedrun.com', \
               class: 'btn btn-primary', \
               disabled: !current_user.has_srdc_submit?, \
             )

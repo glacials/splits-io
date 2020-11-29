@@ -1,11 +1,13 @@
 class Race < ApplicationRecord
+  include FriendlyUUID
+
   validates_with RaceValidator
 
   ABANDON_TIME = 1.hour.freeze
 
   belongs_to :user
 
-  belongs_to :game,     optional: true
+  belongs_to :game, optional: true
   belongs_to :category, optional: true
 
   enum visibility: {public: 0, invite_only: 1, secret: 2}, _suffix: true
@@ -39,7 +41,7 @@ class Race < ApplicationRecord
   # unabandoned returns races that have had activity (e.g. creation, new entry, etc.) in the last hour
   # or have more than 2 entries. this includes races that have finished
   def self.unabandoned
-    where('races.updated_at > ?', ABANDON_TIME.ago)
+    where("races.updated_at > ?", ABANDON_TIME.ago)
   end
 
   # active returns all non-finished unabandoned races
@@ -47,28 +49,19 @@ class Race < ApplicationRecord
     unabandoned.unfinished
   end
 
-  def self.friendly_find!(slug)
-    raise ActiveRecord::RecordNotFound if slug.nil?
-
-    race = where('LEFT(races.id::text, ?) = ?', slug.length, slug).order(created_at: :asc).first
-    raise ActiveRecord::RecordNotFound if race.nil?
-
-    race
-  end
-
   # with_ends modifies the returned Races to have an ended_at field, which represents the timestamp at which the last
   # entry finished or forfeited, or null if at least one entry has neither finished nor forfeited.
   def self.with_ends
-    select('races.*,
+    select("races.*,
       case
         when bool_or(entries.finished_at is null and entries.forfeited_at is null) then null
         else greatest(max(entries.finished_at), max(entries.forfeited_at))
       end as ended_at
-    '.squish).left_outer_joins(:entries).group(:id)
+    ".squish).left_outer_joins(:entries).group(:id)
   end
 
   def to_s
-    "#{game} #{category} #{title}".presence || 'Untitled race'
+    "#{game} #{category} #{title}".presence || "Untitled race"
   end
 
   def abandoned?
@@ -90,7 +83,7 @@ class Race < ApplicationRecord
   def finished_at
     [
       entries.where.not(finished_at: nil).maximum(:finished_at),
-      entries.where.not(forfeited_at: nil).maximum(:forfeited_at)
+      entries.where.not(forfeited_at: nil).maximum(:forfeited_at),
     ].compact.max
   end
 
@@ -119,7 +112,7 @@ class Race < ApplicationRecord
     end
 
     # Schedule cleanup job for a started race that was abandoned
-     RaceCleanupJob.set(wait_until: started_at + 48.hours).perform_later(self)
+    RaceCleanupJob.set(wait_until: started_at + 48.hours).perform_later(self)
 
     Api::V4::RaceBroadcastJob.perform_later(self, 'race_start_scheduled', 'The race is starting soon')
     Api::V4::GlobalRaceUpdateJob.perform_later(self, 'race_start_scheduled', 'A race is starting soon')
@@ -154,12 +147,6 @@ class Race < ApplicationRecord
     return nil if user.nil?
 
     owner == user
-  end
-
-  def to_param
-    (0..id.length).each do |length|
-      return id[0..length] if self.class.where('LEFT(id::text, ?) = ?', length + 1, id[0..length]).count == 1
-    end
   end
 
   def title

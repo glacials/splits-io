@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_09_154103) do
+ActiveRecord::Schema.define(version: 2020_10_23_195259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -204,6 +204,15 @@ ActiveRecord::Schema.define(version: 2020_08_09_154103) do
     t.boolean "confidential", default: true, null: false
     t.index ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  end
+
+  create_table "password_reset_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token"], name: "index_password_reset_tokens_on_token", unique: true
+    t.index ["user_id"], name: "index_password_reset_tokens_on_user_id"
   end
 
   create_table "patreon_users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -481,12 +490,12 @@ ActiveRecord::Schema.define(version: 2020_08_09_154103) do
   end
 
   create_table "twitch_user_follows", force: :cascade do |t|
-    t.bigint "from_user_id"
-    t.bigint "to_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["from_user_id"], name: "index_twitch_user_follows_on_from_user_id"
-    t.index ["to_user_id"], name: "index_twitch_user_follows_on_to_user_id"
+    t.uuid "from_twitch_user_id"
+    t.uuid "to_twitch_user_id"
+    t.index ["from_twitch_user_id"], name: "index_twitch_user_follows_on_from_twitch_user_id"
+    t.index ["to_twitch_user_id"], name: "index_twitch_user_follows_on_to_twitch_user_id"
   end
 
   create_table "twitch_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -510,6 +519,8 @@ ActiveRecord::Schema.define(version: 2020_08_09_154103) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.citext "name"
+    t.string "email"
+    t.string "password_digest"
     t.index ["name"], name: "index_users_on_name", unique: true
   end
 
@@ -532,6 +543,7 @@ ActiveRecord::Schema.define(version: 2020_08_09_154103) do
   add_foreign_key "highlight_suggestions", "runs"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
+  add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "patreon_users", "users"
   add_foreign_key "races", "categories"
   add_foreign_key "races", "games"
@@ -557,5 +569,7 @@ ActiveRecord::Schema.define(version: 2020_08_09_154103) do
   add_foreign_key "speedrun_dot_com_run_variables", "speedrun_dot_com_game_variable_values"
   add_foreign_key "speedrun_dot_com_users", "users"
   add_foreign_key "splits", "runs"
+  add_foreign_key "twitch_user_follows", "twitch_users", column: "from_twitch_user_id"
+  add_foreign_key "twitch_user_follows", "twitch_users", column: "to_twitch_user_id"
   add_foreign_key "twitch_users", "users"
 end

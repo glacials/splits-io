@@ -65,7 +65,7 @@ race-title(
         div v-if="false" = render partial: 'shared/spinner'
         template v-if='!editing' = render partial: 'races/nav'
       .col-md-12.mt-2
-        pre.text-light v-show='!editing'
+        pre.text-light.text-wrap v-show='!editing'
           ' {{(race.notes || '').split('\n').splice(1).filter(s => s !== '').join('\n')}}
         template v-if='editing'
           textarea.text-dark.p-2 style='font-family: monospace; width: 100%' rows=10 v-model='notes' placeholder='First line: Race title supplement

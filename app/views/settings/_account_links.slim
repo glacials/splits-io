@@ -5,13 +5,13 @@
         => icon('fab', 'twitch')
         ' Connect Twitch account
     - else
-      - if current_user.google.present?
+      - if current_user.google.present? || current_user.password_digest
         a.btn.btn-outline-light href='/auth/twitch/unlink'
           => icon('fab', 'twitch')
-          ' Disconnect
+          ' Disconnect Twitch
       - else
         i.btn.btn-outline-light.disabled(
-          content='You need either a Google or Twitch connection to sign in. Link Google to disconnect Twitch.'
+          content='You have not set a password yet, so this is your only method of signing in. Please set a password to disconnect this link.'
           style='cursor: not-allowed'
           v-tippy=true
         )
@@ -27,13 +27,13 @@
         | Connect Google
     - else
       .m-3
-      - if current_user.twitch.present?
+      - if current_user.twitch.present? || current_user.password_digest
         a.btn.btn-outline-light href='/auth/google/unlink'
           => icon('fab', 'google')
-          ' Disconnect
+          ' Disconnect Google
       - else
         i.btn.btn-outline-light.disabled(
-          content='You need either a Google or Twitch connection to sign in. Link Twitch to disconnect Google.'
+          content='You have not set a password yet, so this is your only method of signing in. Please set a password to disconnect this link.'
           style='cursor: not-allowed'
           v-tippy=true
         ) Not disconnectable
@@ -48,7 +48,7 @@
     - else
       a.btn.btn-outline-light.mr-2 href='/auth/patreon/unlink'
         => icon('fab', 'patreon')
-        ' Disconnect
+        ' Disconnect Patreon
       .text-muted.mt-2.float-right
         ' Linked as
         b< = current_user.patreon.full_name
@@ -56,12 +56,12 @@
     - if current_user.srdc.nil?
       a.btn.btn-srdc.mr-2 href='#' data={toggle: :modal, target: '#srdc-link'}
         => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
-        ' Connect Speedrun.com
+        ' Connect speedrun.com
       = render partial: 'shared/srdc_link_modal'
     - else
       = button_to(speedrun_dot_com_user_path, method: :delete, class: 'btn btn-outline-light mr-2', form_class: 'd-inline')
         => image_tag(asset_path('srdc.png'), style: 'height: 0.8em', alt: 'Speedrun.com first place trophy')
-        ' Disconnect
+        ' Disconnect speedrun.com
       .text-muted.mt-2.float-right
         ' Linked as
         b< = current_user.srdc.name

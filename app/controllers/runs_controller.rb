@@ -13,6 +13,13 @@ class RunsController < ApplicationController
   end
 
   def index
+    return if current_user.present?
+
+    # Below code pretends we're viewing an example run, for the landing page.
+    # gcb is a great example run in production, but fall back to anything.
+    params[:id] = (Run.find_by(id: 'gcb'.to_i(36)) || Run.first)&.id36
+    redirect_to(faq_path, alert: 'Cannot render frontpage due to an internal error.') if params[:id].nil?
+    set_run
   end
 
   def edit
@@ -52,12 +59,12 @@ class RunsController < ApplicationController
 
       if run_params[:srdc_url].present? && !srdc_id
         redirect_params = {
-          alert: 'Your Speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.',
+          alert: 'Your speedrun.com URL must have the format https://www.speedrun.com/tfoc/run/6yjoqgzd.',
         }
       elsif !@run.update(srdc_id: srdc_id)
-        redirect_params = {alert: 'There was an error updating your Speedrun.com link. Please try again.'}
+        redirect_params = {alert: 'There was an error updating your speedrun.com link. Please try again.'}
       else
-        redirect_params = {notice: 'Link with Speedrun.com updated.'}
+        redirect_params = {notice: 'Link with speedrun.com updated.'}
       end
       redirect_to edit_run_path(@run), redirect_params
       return
@@ -178,7 +185,7 @@ class RunsController < ApplicationController
     return if (current_user&.twitch).nil?
     return if current_user.twitch.follows_synced_at > Time.now.utc - 1.day
 
-    SyncUserFollowsJob.perform_later(current_user, current_user.twitch)
+    SyncTwitchUserFollowsJob.perform_later(current_user.twitch)
     current_user.twitch.update(follows_synced_at: Time.now.utc)
   end
 

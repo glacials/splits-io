@@ -59,6 +59,7 @@ gem 'rack-cors', require: 'rack/cors'
 
 # authentication
 gem 'authie'
+gem 'bcrypt'
 gem 'omniauth'
 gem 'omniauth-oauth2'
 gem 'omniauth-google-oauth2'
@@ -70,15 +71,16 @@ gem 'cancancan'
 gem 'doorkeeper'
 
 # db
-gem 'active_median'
-gem 'active_record_union'
-gem 'activerecord-import'
-gem 'aws-sdk-rails'
-gem 'aws-sdk-s3'
-gem 'order_as_specified'
-gem 'pg'
-gem 'pg_search'
-gem 'strong_migrations'
+gem "active_median"
+gem "active_record_union"
+gem "activerecord-import"
+gem "aws-sdk-rails"
+gem "aws-sdk-s3"
+gem "friendly_uuid"
+gem "order_as_specified"
+gem "pg"
+gem "pg_search"
+gem "strong_migrations"
 
 # errors+logging
 gem 'newrelic_rpm'

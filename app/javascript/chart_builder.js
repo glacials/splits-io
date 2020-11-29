@@ -1,15 +1,15 @@
-import {buildSegmentDurationChart} from "charts/segment_duration.js"
-import {buildRunDurationChart} from "charts/run_duration.js"
-import {buildSegmentChart} from "charts/segment.js"
-import {buildPlaytimeChart} from "charts/playtime.js"
-import {buildResetChart} from "charts/reset.js"
-import {buildBoxPlot} from "charts/box_plot.js"
-import {buildRunProgressChart} from "charts/run_progress.js"
-import {chartOptions} from "consts.js"
+import { buildSegmentDurationChart } from "charts/segment_duration.js"
+import { buildRunDurationChart } from "charts/run_duration.js"
+import { buildSegmentChart } from "charts/segment.js"
+import { buildPlaytimeChart } from "charts/playtime.js"
+import { buildResetChart } from "charts/reset.js"
+import { buildBoxPlot } from "charts/box_plot.js"
+import { buildRunProgressChart } from "charts/run_progress.js"
+import { chartOptions } from "consts.js"
 import Highcharts from 'highcharts'
 import _ from 'underscore'
 
-document.addEventListener('turbolinks:load', function() {
+document.addEventListener('turbolinks:load', function () {
   if (document.getElementById('chart-holder') === null) {
     return
   }
@@ -17,27 +17,26 @@ document.addEventListener('turbolinks:load', function() {
   const runs = []
 
   runs.push(fetch(`/api/v4/runs/${gon.run.id}?historic=1&segment_groups=1`, {
-    headers: {accept: 'application/json'}
+    headers: { accept: 'application/json' }
   }))
 
   if (gon.compare_runs !== undefined) {
     gon.compare_runs.forEach(run => runs.push(fetch(`/api/v4/runs/${run.id}?historic=1&segment_groups=1`, {
-      headers: {accept: 'application/json'}
+      headers: { accept: 'application/json' }
     })))
   }
 
-  Promise.all(runs).then(function(responses) {
+  Promise.all(runs).then(function (responses) {
     if (responses.every(response => response.ok)) {
       return Promise.all(responses.map(response => response.json()))
     }
     throw new Error('Request for run from API failed')
-  }).then(function(bodies) {
+  }).then(function (bodies) {
     let runs = bodies.map(body => body.run)
     const timing = new URLSearchParams(window.location.search).get('timing') || runs[0].default_timing
 
     document.getElementById('chart-holder').hidden = false
     if (runs[0].histories.length !== 0) {
-      const skipped = `${timing}time_skipped`
       const duration = `${timing}time_duration_ms`
       runs = runs.map((run) => (
         {
@@ -91,10 +90,10 @@ document.addEventListener('turbolinks:load', function() {
         )
       })
 
-    Array.from(document.getElementsByClassName('segment-spinner')).forEach(spinner => spinner.hidden = true)
-    document.getElementById('chart-spinner').hidden = true
+      Array.from(document.getElementsByClassName('segment-spinner')).forEach(spinner => spinner.hidden = true)
+      document.getElementById('chart-spinner').hidden = true
     }
-  }).catch(function(error) {
+  }).catch(function (error) {
     for (const segChartAlert of document.getElementsByClassName('segment-chart-alert')) {
       segChartAlert.textContent = `Error loading charts: ${error}`
       segChartAlert.hidden = false
@@ -179,4 +178,3 @@ window.addEventListener('resize', () => {
     })
   }, 1000)()
 })
-

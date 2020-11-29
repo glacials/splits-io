@@ -22,13 +22,16 @@
 </p>
 
 ## About
-Splits.io is how speedrunners improve through data. It gives split-by-split analysis of individual runs, viewed through
-a lens of all runs. On Splits.io, speedrunners share more than their time—they share their entire history of attempts,
-successful or not, and get feedback on how to improve long-term through statistics and comparisons with themselves and
-other runners in their weight class, both live (via races) and after-the-fact using historical data.
+Splits.io is how speedrunners improve through data. It gives split-by-split
+analysis of individual runs, viewed through a lens of all runs. On Splits.io,
+speedrunners share more than their time—they share their entire history of
+attempts, successful or not, and get feedback on how to improve long-term
+through statistics and comparisons with themselves and other runners in their
+weight class, both live (via races) and after-the-fact using historical data.
 
-Splits.io works with LiveSplit and more than 15 other speedrunning timers. An auto-generated list
-can be viewed in the [FAQ][faq]; new timers can self-integrate using the [Splits.io Exchange Format][exchange].
+Splits.io works with LiveSplit and more than 15 other speedrunning timers. An
+auto-generated list can be viewed in the [FAQ][faq]; new timers can
+self-integrate using the [Splits.io Exchange Format][exchange].
 
 [exchange]: /public/schema
 [faq]: https://splits.io/faq#programs
@@ -84,18 +87,40 @@ well as create some initial games in the database.
 [codeflow]: https://usecodeflow.com/tutorials/view/glacials/splits-io/tree/a89ff1/ck68vlj2g00060vmmcnlstz53
 
 #### Further Setup
+These steps are not required for normal operation, but you may want to
+perform them for specific categories of work.
+
+##### OAuth
 Some features are built on top of links with other platforms, like Twitch
 sign-in. If you want these features to work, you need to register developer
-applications with the appropriate services. See `.envrc.example` for details on
-which features require which platforms.
+applications with the appropriate services. Copy `.envrc.example` to `.envrc`
+and follow the comments inside for details and instructions for various
+platforms.
 
-After changing or creating `.envrc`, run
+After following the instructions, run
 ```sh
-source .envrc && make build run
+source .envrc
+make build run
 ```
-to rebuild the server with your new environment variables, or use [direnv][direnv] to automate this step!
+to rebuild the server with your new environment variables. We recommend using
+[direnv][direnv] to automate the first step whenever you change directories!
 
 [direnv]: https://github.com/direnv/direnv
+
+##### Emails
+Splits.io sends emails when users go through the "I forgot my password" flow.
+In development mode, these emails are not actually sent but are instead
+generated then saved to `tmp/mails`.
+
+If you want to preview a demo email in your browser, you can fiddle with the
+previewers in `spec/mailers/previews` then access a URL like
+```
+http://localhost:3000/rails/mailers/:mailer/:action
+```
+such as
+```
+http://localhost:3000/rails/mailers/password_reset_token_mailer/create_email.
+```
 
 ### Debugging
 #### Getting Up and Running
@@ -182,32 +207,45 @@ which will run `docker-compose down`, remove the bundler volume, and remove `nod
 ### Infrastructure
 Splits.io is built in Ruby on Rails, but has some help from other pieces of infrastructure.
 ```
-Production
+                             ┌──────────────────────────────────────────────────────────┐
+                             │AWS Application Load Balancer (splits.io)                 │
+                             │┌────────────────────────────────────────────────────────┐│
+                             ││AWS Auto Scaling Group                                  ││
+                             ││┌──────────────────────────────────────────────────────┐││
+                             │││AWS Target Group                                      │││
+    ┌────────────┐           │││┌────────────────┐┌────────────────┐┌────────────────┐│││ Lambda tells Rails
+    │AWS RDS     │           ││││AWS EC2 Instance││AWS EC2 Instance││                ││││ to parse the file
+    │┌──────────┐│           ││││┌──────────────┐││┌──────────────┐││                ││││  │
+    ││PostgreSQL││◀──────┐   │││││Docker        ││││Docker        │││                ││││  │  ┌──────────┐
+    │└──────────┘│       │   │││││┌────────────┐││││┌────────────┐│││                ││││◀────│AWS Lambda│
+    └────────────┘       ├───┼┼┼┼┤│Rails Web   ││││││Rails Web   ││││      ...       ││││     └──────────┘
+ ┌───────────────┐       │   │││││└────────────┘││││└────────────┘│││                ││││           ▲
+ │AWS Elasticache│       │   │││││┌────────────┐││││┌────────────┐│││                ││││           │
+ │┌─────────────┐│       ├───┼┼┼┼┤│Rails Worker││││││Rails Worker││││                ││││           │ New file
+ ││Redis        ││◀──────┤   │││││└────────────┘││││└────────────┘│││                ││││           │ trigger
+ │└─────────────┘│       │   ││││└──────────────┘││└──────────────┘││                ││││           │
+ └───────────────┘       │   │││└────────────────┘└────────────────┘└────────────────┘│││           │
+         ┌───────┐       │   ││└──────────────────────────────────────────────────────┘││       ┌──────┐
+         │AWS SES│◀──────┘   │└────────────────────────────────────────────────────────┘│       │AWS S3│
+         └───────┘           └──────────────────────────────────────────────────────────┘       └──────┘
+             │                                             ▲                                        ▲
+             │                                             │ HTTPS, WebSockets                      │
+             │                                             ▼                                        │
+             │                                          ┌────┐                                      │
+             └─────────────────────────────────────────▶│User│◀─────────────────────────────────────┘
+              Sends "I forgot my password" emails       └────┘  File uploads/downloads (runs, race
+                                                                attachments) via S3 presigned URLs
 
-+---------------------------------------------------------------------------------+
-| AWS Auto Scaling Group (usually at 1)                                           |
-+---------------------------------------------------------------------------------+   +----------------+
-| AWS Target Group                                                                |   | AWS RDS        |
-| +--------------------------------------+ +------------------------------------+ |   | +------------+ |
-| | AWS EC2 Instance                     | | AWS EC2 Instance                   | |-->| | PostgreSQL | |
-| | +----------------------------------+ | | +--------------------------------+ | |   | +------------+ |
-| | | Docker                           | | | | Docker                         | | |   +----------------+
-| | | +------------------+ +-------+   | | | | +------------------+ +-------+ | | |
-| | | | Rails (& worker) | | Redis |   | | | | | Rails (& worker) | | Redis | | | |-------------------------\
-| | | +------------------+ +-------+   | | | | +------------------+ +-------+ | | |                         |
-| | | | livesplit-core   |             | | | | | livesplit-core   |           | | |                         |
-| | | +------------------+             | | | | +------------------+           | | |                         |
-| | +----------------------------------+ | | +--------------------------------+ | |                         |
-| +--------------------------------------+ +------------------------------------+ |       New file trigger  V
-+---------------------------------------------------------------------------------+   +------------+ | +--------+
-| AWS Application Load Balancer                                                   |<--| AWS Lambda |<--| AWS S3 |
-+---------------------------------------------------------------------------------+ | +------------+   +--------+
-                                       ^  |                      Lambda tells Rails to parse               ^
-                                 HTTPS |  | WebSockets                                                     |
-                                       |  V                                                                |
-                                     +------+                                                              |
-                                     | User |--------------------------------------------------------------/
-                                     +------+        Upload run using presigned S3 POST from Rails
+Not pictured:
+
+ - beta.splits.io, an AWS Application Load Balancer with an identical hierarchy
+ except pegged at 1 instance, pointing to the same external infrastructure
+
+ - livesplit-core, a Rust library with Ruby bindings that gets deployed to
+ containers so Rails Web can call it to parse run files
+
+ - AWS CodePipeline, which calls out to AWS CodeBuild and AWS CodeDeploy to
+ build and deploy code on pushes to main
 ```
 Rails will synchronously parse any unparsed run before rendering it, but the asynchronous Lambda job is the preferred
 way for runs to be parsed because it still catches unvisited runs (e.g. in the case of a multi-file upload via

@@ -50,7 +50,7 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
     end
 
     @run.update!(srdc_id: response['data']['id'])
-    flash[:notice] = "Run submitted to Speedrun.com! View it at #{SpeedrunDotCom::Run.url_from_id(response['data']['id'])}"
+    flash[:notice] = "Run submitted to speedrun.com! View it at #{SpeedrunDotCom::Run.url_from_id(response['data']['id'])}"
     redirect_to run_path(@run)
   end
 
@@ -66,14 +66,14 @@ class Runs::SpeedrunDotComRunsController < Runs::ApplicationController
   def verify_srdc_key
     return if @run.user.srdc.api_key.present?
 
-    flash[:alert] = 'You do no have a Speedrun.com API Key attached to your account!'
+    flash[:alert] = 'You do no have a speedrun.com API Key attached to your account!'
     redirect_to run_path(@run)
   end
 
   def verify_subscribed
     return if current_user.has_srdc_submit?
 
-    flash[:alert] = 'You must be subscribed to Splits.io Gold to automatically submit to Speedrun.com.'
+    flash[:alert] = 'You must be subscribed to Splits.io Gold to automatically submit to speedrun.com.'
     redirect_to subscriptions_path(@run)
   end
 end

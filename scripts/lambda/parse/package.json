@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "ffi": "^2.2.0",
-    "node-fetch": "^2.1.2",
+    "node-fetch": "^2.6.1",
     "node-gyp": "^3.8.0",
     "pg": "^7.4.0"
   },

@@ -1,7 +1,7 @@
 meta name='twitter:card' content='summary_large_image'
 meta name='twitter:site' content='@splitsio'
 meta name='twitter:domain' content=request.host_with_port
-- if @run.present?
+- if @run.present? && !(controller_name == 'runs' && action_name == 'index') # runs#index (homepage) sets a @run when logged out for demo purposes
   - if @run.game.to_s.present?
     meta name='twitter:title' content=@run.game
   - else

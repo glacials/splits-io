@@ -1,27 +1,28 @@
 class RacesController < ApplicationController
-  before_action :set_races,        only: [:index]
-  before_action :set_race,         only: [:show, :update]
+  before_action :set_races, only: [:index]
+  before_action :set_race, only: [:show, :update]
   before_action :check_permission, only: [:show]
-  before_action :set_race_gon,     only: [:show]
-  before_action :shorten_url,      only: [:show]
+  before_action :set_race_gon, only: [:show]
+  before_action :shorten_url, only: [:show]
 
   def index
   end
 
   def show
-    if params[:browsersource] == '1'
+    if params[:browsersource] == "1"
       render :browsersource_show
       return
     end
 
     return unless @race.abandoned? && !@race.secret_visibility?
 
-    flash.now.alert = 'This race is abandoned and will not show up in listings! Interacting with it will list it again.'
+    flash.now.alert = "This race is abandoned and will not show up in listings! Interacting with it will list it again."
   end
 
   def race_params
     params.permit(:join_token, :attachment, :browsersource)
   end
+
   helper_method :race_params
 
   private
@@ -32,7 +33,7 @@ class RacesController < ApplicationController
 
   def check_permission
     return unless @race.secret_visibility?
-    return if     @race.joinable?(token: race_params[:join_token], user: current_user)
+    return if @race.joinable?(token: race_params[:join_token], user: current_user)
 
     render :unauthorized, status: :unauthorized
   end
@@ -42,15 +43,15 @@ class RacesController < ApplicationController
 
     token = @race.entries.find_for(current_user).present? ? @race.join_token : nil
     gon.race = {
-      id:         @race.id,
-      join_token: token || race_params[:join_token]
+      id: @race.id,
+      join_token: token || race_params[:join_token],
     }
   end
 
   def set_race
-    @race = Race.friendly_find!(params[:id])
+    @race = Race.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    render 'application/not_found'
+    render "application/not_found"
   end
 
   # shorten_url cuts the race ID down to its shortest unique form, and strips the join token param if it's not needed

@@ -255,7 +255,7 @@ which you should substitite any time you see `:run` in these docs.
 | Field                     | Type                         | Null?                                                 | Description                                                                                                                                                                                                                                  |
 |:--------------------------|:-----------------------------|:------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `id`                      | string                       | never                                                 | Unique ID for identifying the run on Splits.io. This can be used to construct a user-facing URL or an API-facing one.                                                                                                                        |
-| `srdc_id`                 | string                       | when no associated speedrun.com run                   | Unique ID for identifying the run on Speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
+| `srdc_id`                 | string                       | when no associated speedrun.com run                   | Unique ID for identifying the run on speedrun.com. This is typically supplied by the runner manually.                                                                                                                                        |
 | `realtime_duration_ms`    | number                       | never                                                 | Realtime duration in milliseconds of the run.                                                                                                                                                                                                |
 | `realtime_sum_of_best_ms` | number                       | never                                                 | Realtime sum of best in milliseconds of the run.                                                                                                                                                                                             |
 | `gametime_duration_ms`    | number                       | never                                                 | Gametime duration in milliseconds of the run.                                                                                                                                                                                                |
@@ -545,11 +545,11 @@ curl https://splits.io/api/v4/games/:game/runs
 curl https://splits.io/api/v4/games/:game/runners
 ```
 A Game is a collection of information about a game, and a container for Categories. Its canonical ID string is its
-Speedrun.com shortname, e.g. `"sms"`, `"sm64"`, `"portal"`, which you should substitite any time you see `:game` in
+speedrun.com shortname, e.g. `"sms"`, `"sm64"`, `"portal"`, which you should substitite any time you see `:game` in
 these docs.
 
 Games are created automatically when a run is uploaded with an unidentified game name. They try to associate themselves
-with a Speedrun.com game when created, but the association is not guaranteed.
+with a speedrun.com game when created, but the association is not guaranteed.
 
 When searching for games, it is possible to pass in a game ID. If a game with this ID exists, it will be prepended to
 the search response array.
@@ -563,7 +563,7 @@ the search response array.
 |:-------------|:--------------------------------|:---------------|:-------------------------------------------------------------------------------------------------------------------------------------|
 | `id`         | string                          | never          | The unique ID of the game.                                                                                                           |
 | `name`       | string                          | never          | The full title of the game, like "Super Mario Sunshine".                                                                             |
-| `shortname`  | string                          | when not known | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or Speedrun.com. |
+| `shortname`  | string                          | when not known | A shortened title of the game, like "sms". Where possible, this name tries to match with those on SpeedRunsLive and/or speedrun.com. |
 | `created_at` | string                          | never          | The time and date at which this game was created on Splits.io. This field conforms to [ISO 8601][iso8601].                           |
 | `updated_at` | string                          | never          | The time and date at which this game was most recently modified on Splits.io. This field conforms to [ISO 8601][iso8601].            |
 | `categories` | array of [Categories][category] | never          | The known speedrun categories for this game.                                                                                         |
