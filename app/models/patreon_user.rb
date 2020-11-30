@@ -1,4 +1,8 @@
 class PatreonUser < ApplicationRecord
+  # STRIPE_MIGRATION_DATE decides what the cutoff date for being grandfathered
+  # into features due to a Patreon subscription is.
+  STRIPE_MIGRATION_DATE = Time.new("2019", "12", "01").utc
+
   belongs_to :user
 
   # Predictions used to be a tier 2 Patreon feature, so they're available to:

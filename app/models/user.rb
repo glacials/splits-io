@@ -16,9 +16,9 @@ class User < ApplicationRecord
   has_many :created_races, class_name: 'Race', dependent: :nullify
   has_many :chat_messages, dependent: :nullify
 
-  has_many :rivalries,          foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
-  has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
-                                class_name: 'Rivalry'
+  has_many :rivalries, foreign_key: :from_user_id, dependent: :destroy, inverse_of: "from_user"
+  has_many :incoming_rivalries, foreign_key: :to_user_id, dependent: :destroy, inverse_of: "to_user",
+                                class_name: "Rivalry"
 
   has_many :twitch_user_follows, foreign_key: :from_user_id, dependent: :destroy, inverse_of: "from_user"
   has_many :twitch_user_followers, foreign_key: :to_user_id, dependent: :destroy, inverse_of: "to_user",
