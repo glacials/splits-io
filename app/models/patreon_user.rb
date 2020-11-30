@@ -78,15 +78,15 @@ class PatreonUser < ApplicationRecord
 
     case tier
     when 0
-      patreon.pledge_cents.positive?
+      pledge_cents.positive?
     when 1
-      patreon.pledge_cents >= 200
+      pledge_cents >= 200
     when 2
-      patreon.pledge_cents >= 400
+      pledge_cents >= 400
     when 3
-      patreon.pledge_cents >= 600
+      pledge_cents >= 600
     when 4
-      patreon.pledge_cents >= 900
+      pledge_cents >= 900
     end
   end
 end
