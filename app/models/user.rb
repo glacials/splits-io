@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   has_many :runs, dependent: :nullify
   has_many :categories, -> { distinct }, through: :runs
-  has_many :games,      -> { distinct }, through: :runs
+  has_many :games, -> { distinct }, through: :runs
 
   has_many :run_likes, dependent: :destroy
 
@@ -24,6 +24,7 @@ class User < ApplicationRecord
   has_many :twitch_user_followers, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
                                    class_name: 'TwitchUserFollow'
 
+  has_one :trial, dependent: :destroy, class_name: "SubscriptionTrial"
   has_one :patreon, dependent: :destroy, class_name: "PatreonUser"
   has_one :twitch, dependent: :destroy, class_name: "TwitchUser"
   has_one :google, dependent: :destroy, class_name: "GoogleUser"
@@ -73,12 +74,6 @@ class User < ApplicationRecord
     search_for_name(term)
   end
 
-  # stay_insideathon is meant to help people deal with COVID-19, conditions where they might find themselves staying
-  # indoors a lot. If stay_insideathon returns true, all paid features become available to non-subscribers.
-  def self.stay_insideathon?
-    false
-  end
-
   def avatar
     [twitch, google].compact.map(&:avatar).first
   end
@@ -117,94 +112,52 @@ class User < ApplicationRecord
     name || "somebody"
   end
 
-  # Predictions used to be a tier 2 Patreon feature, so they're available to:
-  # 1. Gold users (the standard way of obtaining)
-  # 2. Continued patrons who used to have them at the lower price point (grandfathered)
-  # 3. Anyone paying at least the price of Gold via Patreon
+  # feature_grantors returns an array of objects that can give the user
+  # features, like a subscription, a grandfathered patreon subscription, or a
+  # trial. Every feature grantor must implement all `has_FEATURE?`-type methods
+  # below.
+  #
+  # If the feature grantor resolves to nil, it is assumed that it grants no
+  # features.
+  def feature_grantors
+    # TODO: Convert subscriptions from has-many to has-one
+    [patreon, subscriptions, trial].compact
+  end
+
   def has_predictions?
-    patron?(tier: 2, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Redirectors used to be a tier 3 Patreon feature, so they're available to:
-  # 1. Gold users (the standard way of obtaining)
-  # 2. Continued patrons who used to have them at the lower price point (grandfathered)
-  # 3. Anyone paying at least the price of Gold via Patreon
   def has_redirectors?
-    patron?(tier: 3, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier2.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Advanced comparisons used to be a tier 3 Patreon feature, so they're available to:
-  # 1. Gold users (the standard way of obtaining)
-  # 2. Early patrons (grandfathered as a thank-you)
-  # 3. Anyone paying at least the price of Gold via Patreon
   def has_advanced_comparisons?
-    patron?(tier: 3, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier2.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Sum-of-best leaderboards used to be free, so they're available to:
-  # 1. Gold users (the standard way of obtaining)
-  # 2. Early patrons (grandfathered as a thank-you)
-  # 3. Anyone paying at least the price of Gold via Patreon
   def has_sum_of_best_leaderboards?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Hiding used to be free, so it's available to:
-  # 1. Gold users (the standard way of obtaining)
-  # 2. Early patrons (grandfathered as a thank-you)
-  # 3. Anyone paying at least the price of Gold via Patreon
   def has_hiding?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Advanced video used to be free, so it's available to:
-  # 1. Gold users (the standard way of obtaining)
-  # 2. Early patrons (grandfathered as a thank-you)
-  # 3. Anyone paying at least the price of Gold via Patreon
   def has_advanced_video?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Auto-highlight used to be free, so it's available to:
-  # 1. Gold users (the standard way of obtaining)
-  # 2. Early patrons (grandfathered as a thank-you)
-  # 3. Anyone paying at least the price of Gold via Patreon
   def has_autohighlight?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Advanced analytics used to be lower-tier paid Patreon features, so they're available to:
-  # 1. Gold users (now the standard way of obtaining)
-  # 2. Continued patrons who used to have them at the lower price point (grandfathered)
-  # 3. Anyone paying at least the price of Gold via Patreon
   def has_advanced_analytics?
-    patron?(tier: 1, before: STRIPE_MIGRATION_DATE) || patron?(tier: 4) || subscriptions.tier1.active.any? || admin? || self.class.stay_insideathon?
+    feature_grantors.any?(__method__)
   end
 
-  # Speedrun.com auto-submit is the first post-paywall-move paid feature, so is only available to Gold users and
-  # those who are paying at least the equivalent at Patreon.
   def has_srdc_submit?
-    patron?(tier: 4) || subscriptions.tier3.active.any? || admin? || self.class.stay_insideathon?
-  end
-
-  # patron? returns something truthy if the user has been a patron at or above the given tier since the given `before`
-  # time. Not passing a `before` is the same as not caring how long the user has been a patron. Tier 4 is an imaginary
-  # tier equal to the price of Gold.
-  def patron?(tier: 0, before: Time.now.utc)
-    return false if patreon&.pledge_created_at.nil? || patreon.pledge_created_at > before
-
-    case tier
-    when 0
-      patreon.pledge_cents.positive?
-    when 1
-      patreon.pledge_cents >= 200
-    when 2
-      patreon.pledge_cents >= 400
-    when 3
-      patreon.pledge_cents >= 600
-    when 4
-      patreon.pledge_cents >= 900
-    end
+    feature_grantors.any?(__method__)
   end
 
   def admin?
@@ -212,7 +165,7 @@ class User < ApplicationRecord
       "29798286",  # Glacials
       "18946907",  # Batedurgonnadie
       "461527654", # tuna_can_ball
-    ].include?(twitch.try(:twitch_id))
+    ].include?(twitch&.twitch_id)
   end
 
   def likes?(run)
@@ -228,17 +181,17 @@ class User < ApplicationRecord
     case timing
     when Run::REAL
       Run.where(
-        id: runs.select('realtime_duration_ms, MAX(id) AS id')
+        id: runs.select("realtime_duration_ms, MAX(id) AS id")
           .group(:realtime_duration_ms)
           .where(category: run.category)
-          .map(&:id)
+          .map(&:id),
       ).order(realtime_duration_ms: :asc)
     when Run::GAME
       Run.where(
-        id: runs.select('gametime_duration_ms, MAX(id) AS id')
+        id: runs.select("gametime_duration_ms, MAX(id) AS id")
           .group(:gametime_duration_ms)
           .where(category: run.category)
-          .map(&:id)
+          .map(&:id),
       ).order(gametime_duration_ms: :asc)
     end
   end

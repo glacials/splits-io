@@ -18,6 +18,7 @@ x-server-environment:
   - REDIS_URL="redis/0"
   - RUST_BACKTRACE=1
   - S3_BUCKET=splits-io
+  - S3_HOST=s3.localhost
   - SITE_TITLE=Splits.io (Local)
   - SPLITSIO_CLIENT_SECRET
   - SPLITSIO_CLIENT_ID

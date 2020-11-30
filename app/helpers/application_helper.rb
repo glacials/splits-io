@@ -47,18 +47,18 @@ module ApplicationHelper
       return link_to(user, user_path(user), class: ['badge', badge], content: title, 'v-tippy' => true)
     end
 
-    if user.patron?
-      badge = 'badge-secondary'
+    if user.patreon&.active?
+      badge = "badge-secondary"
       title = "#{user} is a Splits.io patron!"
     end
 
-    if user.patron?(tier: 2)
-      badge = 'badge-warning'
+    if user.patreon&.active?(tier: 2)
+      badge = "badge-warning"
       title = "#{user} is a Splits.io patron!"
     end
 
     if user.admin?
-      badge = 'badge-danger'
+      badge = "badge-danger"
       title = "#{user} is a Splits.io staff member!"
     end
 

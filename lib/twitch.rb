@@ -32,13 +32,13 @@ class Twitch
           response = Follows.get(id, token: token, cursor: cursor)
           raise StopIteration if response.code != 200
           body = JSON.parse(response.body)
-          raise StopIteration if body['data'].empty?
+          raise StopIteration if body["data"].empty?
 
-          cursor = body['pagination']['cursor']
+          cursor = body["pagination"]["cursor"]
           # Avoid getting caught in an infinite cursor loop
           raise StopIteration if seen_cursors.include?(cursor)
           seen_cursors.add(cursor)
-          body['data'].each do |follow|
+          body["data"].each do |follow|
             yielder << follow
           end
         end
@@ -73,7 +73,7 @@ class Twitch
           response = Videos.get(id, type, token: token, cursor: cursor)
           raise StopIteration if response.code != 200
           body = JSON.parse(response.body)
-          raise StopIteration if body['data'].empty?
+          raise StopIteration if body["data"].empty?
 
           cursor = body['pagination']['cursor']
           # Avoid getting caught in an infinite cursor loop

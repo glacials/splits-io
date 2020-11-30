@@ -10,28 +10,28 @@
         small.text-muted = '/ mo'
     ul.list-unstyled.mt-3.mb-4
       h5 Your benefits
-      - if current_user.patron?(tier: 1, before: User::STRIPE_MIGRATION_DATE) || current_user.patron?(tier: 4)
+      - if current_user.patreon&.active?(tier: 1, before: User::STRIPE_MIGRATION_DATE) || current_user.patreon&.active?(tier: 4)
         li: b.text-success Tier 1:
         li Sum-of-best leaderboards
         li Hide runs without disowning them
         li Advanced analytics
         br
-      - if current_user.patron?(tier: 2, before: User::STRIPE_MIGRATION_DATE) || current_user.patron?(tier: 4)
+      - if current_user.patreon&.active?(tier: 2, before: User::STRIPE_MIGRATION_DATE) || current_user.patreon&.active?(tier: 4)
         li: b.text-success Tier 2:
         li Predict when you'll PB
         br
-      - if current_user.patron?(tier: 3, before: User::STRIPE_MIGRATION_DATE) || current_user.patron?(tier: 4)
+      - if current_user.patreon&.active?(tier: 3, before: User::STRIPE_MIGRATION_DATE) || current_user.patreon&.active?(tier: 4)
         li: b.text-success Tier 3:
         li Upgrade permalinks to redirectors
         li Compare splits with other runners
         br
-      - if current_user.patron?(tier: 4)
+      - if current_user.patreon&.active?(tier: 4)
         li: b.text-success Contributing more than the price of Splits.io Gold:
         li All other Splits.io Gold benefits!
-    - if current_user.patron?(before: User::STRIPE_MIGRATION_DATE)
+    - if current_user.patreon&.active?(before: User::STRIPE_MIGRATION_DATE)
       .alert.alert-info
         p: b You are a Splits.io founding user! You contributed to us when we were small. Thank you!
-        - unless current_user.patron?(tier: 4)
+        - unless current_user.patreon&.active?(tier: 4)
           p
             ' As thanks, you are grandfathered into your old price for as long as your keep your Patreon subscription
             ' active.

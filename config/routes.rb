@@ -77,6 +77,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [:create, :show, :update]
   resources :password_reset_tokens, only: [:new, :create, :show]
+  resources :subscription_trials, only: [:create]
 
   get '/u/:user',     to: redirect('/users/%{user}'), as: :short_user
 

@@ -1,12 +1,12 @@
-require 'twitch'
+require "twitch"
 
 class TwitchUser < ApplicationRecord
   belongs_to :user
 
-  has_many :twitch_user_follows,   foreign_key: :from_twitch_user_id, dependent: :destroy, inverse_of: 'from_twitch_user', class_name: 'TwitchUserFollow'
-  has_many :twitch_user_followers, foreign_key: :to_twitch_user_id,   dependent: :destroy, inverse_of: 'to_twitch_user',   class_name: 'TwitchUserFollow'
+  has_many :twitch_user_follows, foreign_key: :from_twitch_user_id, dependent: :destroy, inverse_of: "from_twitch_user", class_name: "TwitchUserFollow"
+  has_many :twitch_user_followers, foreign_key: :to_twitch_user_id, dependent: :destroy, inverse_of: "to_twitch_user", class_name: "TwitchUserFollow"
 
-  has_many :follows,   through: :twitch_user_follows,   source: :to_twitch_user
+  has_many :follows, through: :twitch_user_follows, source: :to_twitch_user
   has_many :followers, through: :twitch_user_followers, source: :from_twitch_user
 
   include AvatarSource
@@ -16,8 +16,8 @@ class TwitchUser < ApplicationRecord
     twitch_user.user = [
       current_user,
       twitch_user.user,
-      User.joins(:google).find_by(google_users: {email: auth.info.email}),
-      User.new(name: auth.info.name, email: auth.info.email)
+      User.joins(:google).find_by(google_users: { email: auth.info.email }),
+      User.new(name: auth.info.name, email: auth.info.email),
     ].compact.first
 
     unless twitch_user.user.save
@@ -30,18 +30,18 @@ class TwitchUser < ApplicationRecord
     twitch_user.assign_attributes(
       access_token: auth.credentials.token,
       refresh_token: auth.credentials.refresh_token,
-      name:          auth.info.nickname,
-      display_name:  auth.info.name,
-      email:         auth.info.email,
-      avatar:        auth.info.image || TwitchUser.default_avatar,
-      url:           auth.info.urls.Twitch
+      name: auth.info.nickname,
+      display_name: auth.info.name,
+      email: auth.info.email,
+      avatar: auth.info.image || TwitchUser.default_avatar,
+      url: auth.info.urls.Twitch,
     )
     twitch_user.save
     twitch_user
   end
 
   def self.default_avatar
-    'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png'
+    "https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png"
   end
 
   def videos
@@ -51,13 +51,14 @@ class TwitchUser < ApplicationRecord
     refresh_tokens!
     retries += 1
     retry if retries < 2
+    raise e
   end
 
   # followed_twitch_ids returns a lazy enumerator over the user IDs of the
   # Twitch accounts (i.e. TwitchUser#twitch_id) this user follows.
   def followed_twitch_ids
     retries ||= 0
-    Twitch::Follows.from(twitch_id, token: access_token).map { |f| f['to_id'] }
+    Twitch::Follows.from(twitch_id, token: access_token).map { |f| f["to_id"] }
   rescue RestClient::Unauthorized => e
     refresh_tokens!
     retries += 1

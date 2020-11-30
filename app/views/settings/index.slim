@@ -15,7 +15,7 @@
     .col.p-1 = render partial: 'avatar'
     - if current_user.subscriptions.active.any?
       .col.p-1 = render partial: 'subscription'
-    - if current_user.patron?
+    - if current_user.patreon&.active?
       .col.p-1 = render partial: 'patreon_benefits'
   .p-1 = render partial: 'authorized_applications'
   .p-1 = render partial: 'my_applications'

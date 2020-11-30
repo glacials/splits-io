@@ -4,7 +4,7 @@ default: &default
   pool: 5
   timout: 5000
   username: postgres
-  host: db
+  host: <%= ENV.fetch('DATABASE_HOST', 'db') %>
   port: 5432
 
 development: &development
