@@ -20,9 +20,9 @@ class User < ApplicationRecord
   has_many :incoming_rivalries, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
                                 class_name: 'Rivalry'
 
-  has_many :twitch_user_follows,   foreign_key: :from_user_id, dependent: :destroy, inverse_of: 'from_user'
-  has_many :twitch_user_followers, foreign_key: :to_user_id,   dependent: :destroy, inverse_of: 'to_user',
-                                   class_name: 'TwitchUserFollow'
+  has_many :twitch_user_follows, foreign_key: :from_user_id, dependent: :destroy, inverse_of: "from_user"
+  has_many :twitch_user_followers, foreign_key: :to_user_id, dependent: :destroy, inverse_of: "to_user",
+                                   class_name: "TwitchUserFollow"
 
   has_one :trial, dependent: :destroy, class_name: "SubscriptionTrial"
   has_one :patreon, dependent: :destroy, class_name: "PatreonUser"
@@ -125,39 +125,39 @@ class User < ApplicationRecord
   end
 
   def has_predictions?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_redirectors?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_advanced_comparisons?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_sum_of_best_leaderboards?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_hiding?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_advanced_video?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_autohighlight?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_advanced_analytics?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def has_srdc_submit?
-    feature_grantors.any?(__method__)
+    feature_grantors.any?(&__method__)
   end
 
   def admin?
