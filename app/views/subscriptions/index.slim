@@ -160,13 +160,10 @@
               class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
             )
           - else
-            / TODO: disable_with doesn't work in button_tag for some reason
             small No credit card required
-            = button_tag('Try free for 14 days', data: { \
-                disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
-                plan_id: ENV['STRIPE_PLAN_ID_TIER3'] \
-              }, \
-              class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
+            = button_to('Try free for 14 days', subscription_trials_path, { \
+                class: 'btn btn-lg btn-block btn-primary', \
+              },
             )
   .card-deck.mb-3
     .card.text-center
