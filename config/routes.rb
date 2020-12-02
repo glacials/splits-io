@@ -146,6 +146,8 @@ Rails.application.routes.draw do
       post '/patreon', to: 'patreon#create'
       post '/parse',   to: 'parse#create'
       post '/stripe',  to: 'stripe#create'
+      post '/paypal',  to: 'paypal#create'
+      post '/paypal-unsub', to: 'paypal#paypal_unsub'
     end
 
     namespace :v4 do
