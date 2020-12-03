@@ -15,23 +15,30 @@ class Paypal
     end
     AUTH = { username: ENV["PAYPAL_CLIENT_ID"], password: ENV["PAYPAL_SECRET_KEY"] }
 
-    # create(data: hash, user: User)
-    # Finds all paypal subscriptions and cancels them
-    # Creates a subscription for the user based on data returned from paypal.
-    # This data is returned via the "Auto Return URL" specified within Account Settings >
-    # Website Payments > Website Preferences. This url should point to /api/webhooks/paypal.
-    def self.create(data, user)
-      cancel_all(user)
+    # validate_subscription(subscription_id: String)
+    # Calls PayPal API to ensure the subscription ID is valid.
+    # Returns true or false
+    def self.validate_subscription(subscription_id)
+      return false unless subscription_id.present?
+      response = HTTParty.get(URI.parse("#{UNSUB_BASE_URL}/#{subscription_id}"),
+        basic_auth: AUTH,
+        headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
+      )
+      response.ok?
+    end
 
-      order_id = data["orderID"]
-      billing_token = data["billingToken"]
-      subscription_id = data["subscriptionID"]
+    # create(data: Hash, user: User)
+    # Finds all paypal subscriptions and cancels them.
+    # Creates a subscription for the user based on data returned from paypal.
+    def self.create(data, user)
+      return false unless validate_subscription(data["subscriptionID"])
+      cancel_all(user)
 
       user.subscriptions.create!(
         stripe_plan_id: ENV["PAYPAL_PLAN_ID"],
-        stripe_subscription_id: subscription_id,
-        stripe_session_id: order_id,
-        stripe_payment_intent_id: billing_token
+        stripe_subscription_id: data["subscriptionID"],
+        stripe_session_id: data["orderID"],
+        stripe_payment_intent_id: data["billingToken"]
       )
     end
 
@@ -45,11 +52,12 @@ class Paypal
       return unless subscriptions.present?
 
       subscriptions.each do |sub|
-        next unless sub.stripe_subscription_id.present?
-        response = HTTParty.post(URI.parse("#{UNSUB_BASE_URL}/#{sub.stripe_subscription_id}/cancel"),
-          basic_auth: AUTH,
-          headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
-        )
+        if sub.stripe_subscription_id.present?
+          response = HTTParty.post(URI.parse("#{UNSUB_BASE_URL}/#{sub.stripe_subscription_id}/cancel"),
+            basic_auth: AUTH,
+            headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
+          )
+        end
         sub.update(canceled_at: Time.now.utc) if sub.canceled_at.nil?
       end
     end

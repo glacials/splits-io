@@ -10,6 +10,8 @@ class Subscription < ActiveRecord::Base
   scope :tier2,    -> { is_tier2.or(is_tier3) }
   scope :tier3,    -> { is_tier3 }
 
+  validates_uniqueness_of :stripe_subscription_id
+
   def tier?(tier)
     case tier
     when 1

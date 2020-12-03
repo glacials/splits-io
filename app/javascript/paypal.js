@@ -22,14 +22,19 @@ document.addEventListener("turbolinks:load", function() {
         });
       },
       onApprove: function(data) {
-        $.ajax({
-          url : "/api/webhooks/paypal",
-          method : "POST",
-          data : data,
-          dataType : "json",
-          success: function(response){
-            window.location = response.location;
-          }
+        fetch('/payments/paypal-create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          if (!response.ok) { throw new Error('Subscription failed'); }
+          return response.json();
+        })
+        .then(data => {
+          Turbolinks.visit(data.location);
         });
       }
     });
