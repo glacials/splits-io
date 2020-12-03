@@ -1,6 +1,11 @@
 import { loadScript } from '@paypal/paypal-js';
 
 document.addEventListener("turbolinks:load", function() {
+  // Keeps loadScript from only executing on /subscriptions
+  if ($('#paypal-button-container').length < 1) {
+    return false;
+  }
+
   loadScript({
     'client-id': process.env.PAYPAL_CLIENT_ID,
     'vault': 'true',
