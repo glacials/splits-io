@@ -31,15 +31,26 @@ class Paypal
     # Finds all paypal subscriptions and cancels them.
     # Creates a subscription for the user based on data returned from paypal.
     def self.create(data, user)
-      return false unless validate_subscription(data["subscriptionID"])
+      return {
+        error: "Failed to find valid subscription",
+        data: data,
+        user: user.inspect
+      } unless validate_subscription(data["subscriptionID"])
       cancel_all(user)
 
-      user.subscriptions.create!(
-        stripe_plan_id: ENV["PAYPAL_PLAN_ID"],
-        stripe_subscription_id: data["subscriptionID"],
-        stripe_session_id: data["orderID"],
-        stripe_payment_intent_id: data["billingToken"]
-      )
+      begin
+        user.subscriptions.create!(
+          stripe_plan_id: ENV["PAYPAL_PLAN_ID"],
+          stripe_subscription_id: data["subscriptionID"],
+          stripe_session_id: data["orderID"],
+          stripe_payment_intent_id: data["billingToken"]
+        )
+      rescue => e
+        {
+          error: e.inspect,
+          message: "Failed to create user subscription for #{user&.id}"
+        }
+      end
     end
 
     # cancel_all(user: User)
