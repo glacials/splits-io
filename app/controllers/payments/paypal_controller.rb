@@ -4,15 +4,15 @@ class Payments::PaypalController < ApplicationController
   def create
     response = Paypal::Subscribe.create(params, current_user)
 
-    # if subscription.present?
-    #   render json: { location: subscription_path }, status: :ok
-    # else
+    if response.is_a?(Subscription)
+      render json: { location: subscription_path }, status: :ok
+    else
       render json: {
         location: subscription_path,
         error: "Invalid subscription ID",
         response: response,
       }, status: :unprocessable_entity
-    # end
+    end
   end
 
   # Endpoint used within the internal "unsubscribe" functionality.
