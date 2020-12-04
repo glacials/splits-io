@@ -41,8 +41,7 @@ x-environment:
   - TWITCH_CLIENT_SECRET
   - PAYPAL_CLIENT_ID
   - PAYPAL_SECRET_KEY
-  # - PAYPAL_PLAN_ID=P-8X852520X76298909L7B74BY --> Production plan (TODO: Enable before shipping to prod)
-  - PAYPAL_PLAN_ID=P-86R46997GH219170TL7DOHCA # --> Staging plan (TODO: Remove before shipping to prod)
+  - PAYPAL_PLAN_ID=P-8X852520X76298909L7B74BY
 x-logging:
   &default-logging
   driver: json-file

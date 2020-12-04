@@ -8,8 +8,9 @@
 
 class Paypal
   class Subscribe
-    # UNSUB_BASE_URL = "https://api-m.paypal.com/v1/billing/subscriptions"
-    UNSUB_BASE_URL = "https://api-m.sandbox.paypal.com/v1/billing/subscriptions"
+    # Sandbox url
+    # UNSUB_BASE_URL = "https://api-m.sandbox.paypal.com/v1/billing/subscriptions"
+    UNSUB_BASE_URL = "https://api-m.paypal.com/v1/billing/subscriptions"
     AUTH = { username: ENV["PAYPAL_CLIENT_ID"], password: ENV["PAYPAL_SECRET_KEY"] }
 
     # check_subscription(subscription_id: String)
@@ -41,7 +42,7 @@ class Paypal
         rescue => e
           {
             error: e.inspect,
-            response: response,
+            response: response.inspect,
             message: "Failed to create user subscription for #{user&.id}"
           }
         end

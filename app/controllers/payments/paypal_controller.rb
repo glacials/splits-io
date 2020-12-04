@@ -8,8 +8,7 @@ class Payments::PaypalController < ApplicationController
       render json: { location: subscription_path }, status: :ok
     else
       render json: {
-        location: subscription_path,
-        error: "Invalid subscription ID",
+        error: "Failed to create paypal subscription",
         response: response,
       }, status: :unprocessable_entity
     end
