@@ -9,7 +9,8 @@ document.addEventListener("turbolinks:load", function() {
   loadScript({
     'client-id': process.env.PAYPAL_CLIENT_ID,
     'vault': 'true',
-    'intent': 'subscription'
+    'intent': 'subscription',
+    'disable-funding': 'credit'
   }).then(() => {
     const buttons = paypal.Buttons({
       style: {
