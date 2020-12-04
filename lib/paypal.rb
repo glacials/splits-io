@@ -8,11 +8,8 @@
 
 class Paypal
   class Subscribe
-    if Rails.env.production?
-      UNSUB_BASE_URL = "https://api-m.paypal.com/v1/billing/subscriptions"
-    else
-      UNSUB_BASE_URL = "https://api-m.sandbox.paypal.com/v1/billing/subscriptions"
-    end
+    # UNSUB_BASE_URL = "https://api-m.paypal.com/v1/billing/subscriptions"
+    UNSUB_BASE_URL = "https://api-m.sandbox.paypal.com/v1/billing/subscriptions"
     AUTH = { username: ENV["PAYPAL_CLIENT_ID"], password: ENV["PAYPAL_SECRET_KEY"] }
 
     # check_subscription(subscription_id: String)
