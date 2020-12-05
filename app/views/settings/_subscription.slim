@@ -7,7 +7,7 @@
         ' $4
       - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
         ' $6
-      - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3']
+      - elsif [ENV['STRIPE_PLAN_ID_TIER3'], ENV['PAYPAL_PLAN_ID']].include?(plan.stripe_plan_id)
         ' $9
       small.text-muted = '/ mo'
     ul.list-unstyled.mt-3.mb-4
@@ -15,7 +15,7 @@
         li You are grandfathered in to a legacy plan. Click Manage to see your benefits.
       - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
         li You are grandfathered in to a legacy plan. Click Manage to see your benefits.
-      - elsif plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3']
+      - elsif [ENV['STRIPE_PLAN_ID_TIER3'], ENV['PAYPAL_PLAN_ID']].include?(plan.stripe_plan_id)
           li
             ' Advanced analytics
             span content='Advanced charts, segment-specific analysis, and more.' v-tippy=true
