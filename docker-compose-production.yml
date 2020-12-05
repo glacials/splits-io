@@ -39,6 +39,9 @@ x-environment:
   - STRIPE_WEBHOOK_SECRET
   - TWITCH_CLIENT_ID
   - TWITCH_CLIENT_SECRET
+  - PAYPAL_CLIENT_ID
+  - PAYPAL_SECRET_KEY
+  - PAYPAL_PLAN_ID=P-8X852520X76298909L7B74BY
 x-logging:
   &default-logging
   driver: json-file

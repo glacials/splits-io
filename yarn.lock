@@ -804,6 +804,13 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@paypal/paypal-js@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@paypal/paypal-js/-/paypal-js-2.0.0.tgz#8c8a4bf7622a75c18c0f099db75f473826a1ea5c"
+  integrity sha512-HrjzSOADKxH1oKUtZc78//Dg2wZWrTXItbg2O7XMbri7Mw8pq1TRtB9FNGRVaDnxAVMFzQg0JirHxwnWJIwBow==
+  dependencies:
+    promise-polyfill "^8.2.0"
+
 "@rails/actioncable@^6.0.0":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-6.0.3.tgz#722b4b639936129307ddbab3a390f6bcacf3e7bc"
@@ -6081,6 +6088,11 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
+
+promise-polyfill@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.2.0.tgz#367394726da7561457aba2133c9ceefbd6267da0"
+  integrity sha512-k/TC0mIcPVF6yHhUvwAp7cvL6I2fFV7TzF1DuGPI8mBh4QQazf36xCKEHKTZKRysEoTQoQdKyP25J8MPJp7j5g==
 
 proxy-addr@~2.0.5:
   version "2.0.6"

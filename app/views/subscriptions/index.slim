@@ -113,7 +113,7 @@
           li See sum-of-best leaderboards
           li: i And more as we keep building!
       .card-footer
-        - if plan && plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3']
+        - if plan && Subscription.is_tier3?(plan)
           - if plan.canceled?
             button.btn.btn-lg.btn-block.btn-outline-light.disabled(
               content='Your subscription is canceled. It will last until the end of your billing period.'
@@ -127,13 +127,25 @@
                 style='cursor: default'
                 v-tippy=true
               ) Active
-              = form_for(:subscription, method: :delete) do |f|
+
+              - if plan.paypal?
                 tippy content='Cancel your subscription. You will keep your benefits for the rest of this cycle.'
                   template v-slot='trigger'
-                    = f.button(icon('fas', 'times'),
-                      class: 'btn btn-lg btn-outline-danger', \
+                    = link_to( \
+                      icon('fas', 'times'), \
+                      payments_paypal_unsubscribe_path, \
+                      class: "btn btn-lg btn-outline-danger", \
                       data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
+                      method: :post \
                     )
+              - else
+                = form_for(:subscription, method: :delete) do |f|
+                  tippy content='Cancel your subscription. You will keep your benefits for the rest of this cycle.'
+                    template v-slot='trigger'
+                      = f.button(icon('fas', 'times'),
+                        class: 'btn btn-lg btn-outline-danger', \
+                        data: {disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe}, \
+                      )
         - elsif plan
           = form_for(:subscription, method: :patch) do |f|
             = f.hidden_field(:stripe_plan_id, value: ENV['STRIPE_PLAN_ID_TIER3'])
@@ -151,14 +163,19 @@
         - else
           - if current_user.trial
             / TODO: disable_with doesn't work in button_tag for some reason
+            p.font-weight-normal
+              = current_user.trial.expired? ? 'Trial expired - Upgrade below' : 'Trial active - Upgrade permanently'
             = button_tag( \
-              current_user.trial.expired? ? 'Trial expired—click to upgrade' : 'Trial active—click to upgrade permanently', \
+              'Upgrade With Stripe', \
               data: { \
                 disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
                 plan_id: ENV['STRIPE_PLAN_ID_TIER3'] \
               }, \
               class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
             )
+            p.font-weight-normal.mt-2.mb-0
+              ' OR
+            div#paypal-button-container.mt-2
           - else
             small No credit card required
             = button_to('Try free for 14 days', subscription_trials_path, { \
@@ -182,3 +199,4 @@
   .card.mb-4.text-center
     .card-body
       a href=partners_path Are you a streamer? Check out our partnership program!
+

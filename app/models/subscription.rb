@@ -5,10 +5,12 @@ class Subscription < ActiveRecord::Base
   scope :canceled, -> { where.not(canceled_at: nil) }
   scope :is_tier1, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER1']) } # Deprecated
   scope :is_tier2, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER2']) } # Deprecated
-  scope :is_tier3, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER3']) } # Only in-use tier
+  scope :is_tier3, -> { where(stripe_plan_id: [ENV['STRIPE_PLAN_ID_TIER3'], ENV['PAYPAL_PLAN_ID']]) } # Only in-use tier
   scope :tier1,    -> { is_tier1.or(is_tier2).or(is_tier3) }
   scope :tier2,    -> { is_tier2.or(is_tier3) }
   scope :tier3,    -> { is_tier3 }
+
+  validates_uniqueness_of :stripe_subscription_id
 
   def tier?(tier)
     case tier
@@ -17,7 +19,7 @@ class Subscription < ActiveRecord::Base
     when 2
       stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
     when 3
-      stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3']
+      stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3'] || stripe_plan_id == ENV['PAYPAL_PLAN_ID']
     end
   end
 
@@ -27,6 +29,20 @@ class Subscription < ActiveRecord::Base
 
   def ended?
     ended_at.present?
+  end
+
+  def stripe?
+    [
+      ENV["STRIPE_PLAN_ID_TIER1"],
+      ENV["STRIPE_PLAN_ID_TIER2"],
+      ENV["STRIPE_PLAN_ID_TIER3"]
+    ].include?(stripe_plan_id)
+  end
+
+  def paypal?
+    [
+      ENV["PAYPAL_PLAN_ID"]
+    ].include?(stripe_plan_id)
   end
 
   def change_plan!(stripe_plan_id)
@@ -106,5 +122,9 @@ class Subscription < ActiveRecord::Base
 
   def self.has_srdc_submit?
     tier3.active.any?
+  end
+
+  def self.is_tier3?(plan)
+    plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3'] || plan.stripe_plan_id == ENV['PAYPAL_PLAN_ID']
   end
 end

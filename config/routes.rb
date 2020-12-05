@@ -141,11 +141,17 @@ Rails.application.routes.draw do
   get '/:run/export/:timer',              to: 'runs/exports#timer',               as: :download
   get '/:run/download/:timer',            to: 'runs/exports#timer' # deprecated
 
+  namespace :payments do
+    post '/paypal-create',  to: 'paypal#create'
+    post '/paypal-unsubscribe', to: 'paypal#unsubscribe'
+  end
+
   namespace :api do
     namespace :webhooks do
       post '/patreon', to: 'patreon#create'
       post '/parse',   to: 'parse#create'
       post '/stripe',  to: 'stripe#create'
+      post '/paypal', to: 'paypal#create'
     end
 
     namespace :v4 do
