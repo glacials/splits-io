@@ -160,28 +160,27 @@
                 )
         - elsif current_user.nil?
           a.btn.btn-lg.btn-block.btn-primary href='#' data={toggle: :modal, target: '#signin'} Sign in to subscribe
+        - elsif current_user.trial
+          / TODO: disable_with doesn't work in button_tag for some reason
+          p.font-weight-normal
+            = current_user.trial.expired? ? 'Trial expired; upgrade below' : 'Trial active; upgrade to keep benefits'
+          = button_tag( \
+            'Subscribe with credit card', \
+            data: { \
+              disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
+              plan_id: ENV['STRIPE_PLAN_ID_TIER3'] \
+            }, \
+            class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
+          )
+          p.font-weight-normal.mt-2.mb-0
+            ' OR
+          div#paypal-button-container.mt-2 style='margin-bottom: -1.6em'
         - else
-          - if current_user.trial
-            / TODO: disable_with doesn't work in button_tag for some reason
-            p.font-weight-normal
-              = current_user.trial.expired? ? 'Trial expired - Upgrade below' : 'Trial active - Upgrade permanently'
-            = button_tag( \
-              'Upgrade With Stripe', \
-              data: { \
-                disable_with: icon('fas', 'circle-notch', class: 'fa-spin').html_safe, \
-                plan_id: ENV['STRIPE_PLAN_ID_TIER3'] \
-              }, \
-              class: 'btn btn-lg btn-block btn-primary stripe-checkout', \
-            )
-            p.font-weight-normal.mt-2.mb-0
-              ' OR
-            div#paypal-button-container.mt-2
-          - else
-            small No credit card required
-            = button_to('Try free for 14 days', subscription_trials_path, { \
-                class: 'btn btn-lg btn-block btn-primary', \
-              },
-            )
+          small No credit card required
+          = button_to('Try free for 14 days', subscription_trials_path, { \
+              class: 'btn btn-lg btn-block btn-primary', \
+            },
+          )
   .card-deck.mb-3
     .card.text-center
       .card-header
@@ -199,4 +198,3 @@
   .card.mb-4.text-center
     .card-body
       a href=partners_path Are you a streamer? Check out our partnership program!
-
