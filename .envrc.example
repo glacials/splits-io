@@ -23,17 +23,26 @@ export GOOGLE_CLIENT_SECRET=changeme
 export PATREON_CLIENT_ID=changeme
 export PATREON_CLIENT_SECRET=changeme
 
+# PayPal
+# - Required for PayPal payments to work (even in test mode)
+# - Create one at https://developer.paypal.com/developer/applications/create
+# - Make a webhook for /api/webhooks/paypal subscribed to "Billing subscription cancelled"
+# - Create a Subscription Plan at https://www.paypal.com/billing/plans and set its plan ID as PAYPAL_PLAN_ID in docker-compose.yml
+export PAYPAL_CLIENT_ID=changeme
+export PAYPAL_CLIENT_SECRET=changeme
+
 # Splits.io
 # - Required for some JavaScript->Rails API calls to work, including WebSockets features like races
+# - This should not need changing if you have run `make seed`
 # - Create one at http://localhost:3000/settings/applications/new
 # - Set redirect URI to http://localhost:3000/auth/splitsio/callback
-export SPLITSIO_CLIENT_ID=changeme
-export SPLITSIO_CLIENT_SECRET=changeme
+export SPLITSIO_CLIENT_ID=beep
+export SPLITSIO_CLIENT_SECRET=boop
 
 # Stripe
 # - Required for Stripe payments to work (even in test mode)
 # - Create one at https://stripe.com/
-# - Create a Subscription with two Plans and set their plan IDs in docker-compose.yml
+# - Create a Subscription with one Plan and set its plan ID as STRIPE_PLAN_ID_TIER3 in docker-compose.yml
 # - Make a webhook for /api/webhooks/stripe subscribed to customer.subscription.deleted and checkout.session.completed
 export STRIPE_PUBLISHABLE_KEY=changeme
 export STRIPE_SECRET_KEY=changeme

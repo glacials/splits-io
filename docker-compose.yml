@@ -31,13 +31,10 @@ x-server-environment:
   - STRIPE_WEBHOOK_SECRET
   - TWITCH_CLIENT_ID
   - TWITCH_CLIENT_SECRET
+  - PAYPAL_API_HOST=api-m.sandbox.paypal.com
   - PAYPAL_CLIENT_ID
-  - PAYPAL_SECRET_KEY
+  - PAYPAL_CLIENT_SECRET
   - PAYPAL_PLAN_ID=P-86R46997GH219170TL7DOHCA
-x-client-environment:
-  &client-environment
-  - SPLITSIO_CLIENT_ID
-  - STRIPE_PUBLISHABLE_KEY=pk_test_8XH713ExTipOnBebjfsHHffm
 x-logging:
   &default-logging
   driver: json-file
@@ -89,7 +86,7 @@ services:
   webpacker:
     <<: *app
     command: bash -c "ruby bin/webpack-dev-server"
-    environment: *client-environment
+    environment: *server-environment
     logging: *default-logging
     ports:
       - 3035:3035
