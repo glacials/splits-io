@@ -77,6 +77,7 @@ class ApplicationController < ActionController::Base
   end
 
   def track
+    return if controller_name == "health"
     TrackJob.perform_later(
       category: controller_name,
       action: action_name,
