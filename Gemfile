@@ -89,6 +89,7 @@ gem "skylight", "~> 4.0.0"
 # external communication
 gem "httparty"
 gem "rest-client"
+gem "staccato"
 gem "stripe-rails"
 
 # parsing

@@ -459,6 +459,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    staccato (0.5.3)
     stripe (5.22.0)
     stripe-rails (1.10.1)
       rails (>= 3)
@@ -558,6 +559,7 @@ DEPENDENCIES
   simplecov
   skylight (~> 4.0.0)
   slim
+  staccato
   stripe-rails
   strong_migrations
   tzinfo-data

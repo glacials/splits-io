@@ -3,14 +3,15 @@ class Api::V4::ApplicationController < ActionController::Base
 
   skip_before_action :set_browser_id
   skip_before_action :touch_auth_session
-  before_action :read_only_mode, if: -> { ENV['READ_ONLY_MODE'] == '1' }
+  before_action :read_only_mode, if: -> { ENV["READ_ONLY_MODE"] == "1" }
+  before_action :track
 
   rescue_from ActionController::ParameterMissing do |e|
-    render status: :bad_request, json: {status:  400, message: e.message}
+    render status: :bad_request, json: { status: 400, message: e.message }
   end
 
   def options
-    headers['Allow'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers["Allow"] = "POST, PUT, DELETE, GET, OPTIONS"
   end
 
   def read_only_mode
@@ -18,7 +19,7 @@ class Api::V4::ApplicationController < ActionController::Base
     write_methods = %w[POST PUT DELETE PATCH].freeze
     return unless write_actions.include?(action_name) || write_methods.include?(request.method)
 
-    render template: 'pages/read_only_mode'
+    render template: "pages/read_only_mode"
   end
 
   private
@@ -29,16 +30,16 @@ class Api::V4::ApplicationController < ActionController::Base
   def build_link_headers(links)
     links.map do |link|
       "<#{link[:url]}>; rel=\"#{link[:rel]}\""
-    end.join(', ')
+    end.join(", ")
   end
 
   def not_found(collection, message: nil)
     {
       status: :not_found,
-      json:   {
+      json: {
         status: 404,
-        error:  message ||
-          "No #{collection} with ID #{params[collection] || params["#{collection}_id"] || params[:id]} found.",
+        error: message ||
+               "No #{collection} with ID #{params[collection] || params["#{collection}_id"] || params[:id]} found.",
       },
     }
   end
@@ -48,7 +49,7 @@ class Api::V4::ApplicationController < ActionController::Base
     {
       json: {
         status: 401,
-        error:  'Not authorized',
+        error: "Not authorized",
       },
     }
   end
@@ -60,7 +61,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_game
-    @game = Game.joins(:srdc).find_by!(speedrun_dot_com_games: {shortname: params[:game]})
+    @game = Game.joins(:srdc).find_by!(speedrun_dot_com_games: { shortname: params[:game] })
   rescue ActiveRecord::RecordNotFound
     render not_found(:game)
   end
@@ -72,11 +73,11 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_run
-    @run = if params[:historic] == '1'
-             Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
-           else
-             Run.includes(:game, :category, :user, :segments).find36(params[:run])
-           end
+    @run = if params[:historic] == "1"
+        Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
+      else
+        Run.includes(:game, :category, :user, :segments).find36(params[:run])
+      end
   rescue ActiveRecord::RecordNotFound
     render not_found(:run)
   end
@@ -90,14 +91,14 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_user
-    return unless request.headers['Authorization'].present? || params[:access_token].present?
+    return unless request.headers["Authorization"].present? || params[:access_token].present?
 
     doorkeeper_authorize!(:manage_race)
     self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   rescue ActiveRecord::RecordNotFound
     render status: :unauthorized, json: {
       status: 401,
-      error:  'No user found for this token',
+      error: "No user found for this token",
     }
   end
 
@@ -106,7 +107,7 @@ class Api::V4::ApplicationController < ActionController::Base
 
     render status: :unauthorized, json: {
       status: 401,
-      error:  'A user is required for this action',
+      error: "A user is required for this action",
     }
   end
 
@@ -116,9 +117,16 @@ class Api::V4::ApplicationController < ActionController::Base
 
     render status: :forbidden, json: {
       status: 403,
-      error:  'Must be invited to see this race',
+      error: "Must be invited to see this race",
     }
   rescue ActiveRecord::RecordNotFound
     render not_found(:race)
+  end
+
+  def track
+    TrackJob.perform_later(
+      category: controller_name,
+      action: action_name,
+    )
   end
 end
