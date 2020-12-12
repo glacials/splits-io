@@ -84,7 +84,7 @@ gem "strong_migrations"
 
 # errors+logging
 gem "newrelic_rpm"
-gem "skylight", "~> 4.0.0"
+gem "skylight", "~> 5.0.0.beta4"
 
 # external communication
 gem "httparty"
