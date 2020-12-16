@@ -52,8 +52,7 @@ flow**. This means your application will open the Splits.io authorization page i
 user accepts the authorization, Splits.io will give your application a `code` which you should immediately exchange for
 an OAuth token using a secure API request.
 
-1. Configure your program to run a small web server on a port of your choosing, and listen for `GET` requests to a path
-    of your choosing. In this example, let's say you're listening on port 8000 for requests to `/auth/splitsio`.
+1. Configure your program to receive `GET` requests at a path of your choosing. On a mobile app this usually means registering a custom scheme like `yourapp://`. On a desktop app this usually means running a small HTTP listener on a port of your choosing, with or without a custom scheme. In this example, let's say you're listening over HTTP on port 8000 for requests to `/auth/splitsio`.
 2. On your Splits.io [settings page][1], set your `redirect_uri` to something like
     ```http
     http://localhost:8000/auth/splitsio
