@@ -52,7 +52,7 @@ class SessionsController < ApplicationController
     if @user.authenticate(session_params[:password])
       sign_in(@user)
       redirect_back(
-        fallback_location: root_path,
+        fallback_location: redirect_path,
         notice: "'Hoy!! Signed in as #{@user.name}.",
       )
       return
