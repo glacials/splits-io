@@ -1,3 +1,5 @@
+MOBILE_APP_CLIENT_ID="qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg"
+
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
@@ -65,7 +67,7 @@ Doorkeeper.configure do
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
    skip_authorization do |resource_owner, client|
-     client.uid == ENV['SPLITSIO_CLIENT_ID']
+     [ENV['SPLITSIO_CLIENT_ID'], MOBILE_APP_CLIENT_ID].include?(client.uid)
    end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
