@@ -7,7 +7,7 @@ Doorkeeper.configure do
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     if current_user.nil?
-      redirect_to(new_session_url(request.query_parameters), redirect_to: request.fullpath)
+      redirect_to(new_session_url(request.query_parameters, redirect_to: request.fullpath))
     end
     current_user
   end
