@@ -1,4 +1,4 @@
-MOBILE_APP_CLIENT_ID="qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg"
+MOBILE_APP_CLIENT_ID = "qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg"
 
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
@@ -7,7 +7,7 @@ Doorkeeper.configure do
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     if current_user.nil?
-      redirect_to(new_session_url(request.query_parameters))
+      redirect_to(new_session_url(request.query_parameters), redirect_to: request.fullpath)
     end
     current_user
   end
@@ -43,7 +43,7 @@ Doorkeeper.configure do
   # Forces the usage of the HTTPS protocol in non-native redirect uris (enabled
   # by default in non-development environments). OAuth2 delegates security in
   # communication to the HTTPS protocol so it is wise to keep this enabled.
-  force_ssl_in_redirect_uri { |uri| !Rails.env.development? && uri.host != 'localhost' }
+  force_ssl_in_redirect_uri { |uri| !Rails.env.development? && uri.host != "localhost" }
 
   # Specify what grant flows are enabled in array of Strings. The valid
   # strings and the flows they enable are:
@@ -66,9 +66,9 @@ Doorkeeper.configure do
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
-   skip_authorization do |resource_owner, client|
-     [ENV['SPLITSIO_CLIENT_ID'], MOBILE_APP_CLIENT_ID].include?(client.uid)
-   end
+  skip_authorization do |resource_owner, client|
+    [ENV["SPLITSIO_CLIENT_ID"], MOBILE_APP_CLIENT_ID].include?(client.uid)
+  end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   # realm "Doorkeeper"

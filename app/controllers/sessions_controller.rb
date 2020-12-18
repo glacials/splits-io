@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     @user = User.find_by(email: session_params[:email])
     if @user.nil?
       redirect_back(
-        alert: 'No account exists with that email address.',
+        alert: "No account exists with that email address.",
         fallback_location: new_session_path,
       )
       return
@@ -59,7 +59,7 @@ class SessionsController < ApplicationController
     end
 
     redirect_back(
-      alert: 'Invalid email or password.',
+      alert: "Invalid email or password.",
       fallback_location: new_session_path,
     )
   end
@@ -70,7 +70,7 @@ class SessionsController < ApplicationController
 
   def destroy
     auth_session.invalidate!
-    redirect_back fallback_location: root_path, notice: 'Signed out. (>-.-)>'
+    redirect_back fallback_location: root_path, notice: "Signed out. (>-.-)>"
   end
 
   def failure
@@ -85,7 +85,7 @@ class SessionsController < ApplicationController
   end
 
   def redirect_path
-    request.env['omniauth.origin'] || cookies.delete('return_to') || root_path
+    params[:redirect_to] || request.env["omniauth.origin"] || cookies.delete("return_to") || root_path
   end
 
   def session_params
