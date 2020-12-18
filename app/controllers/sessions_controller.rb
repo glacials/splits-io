@@ -51,8 +51,8 @@ class SessionsController < ApplicationController
 
     if @user.authenticate(session_params[:password])
       sign_in(@user)
-      redirect_back(
-        fallback_location: redirect_path,
+      redirect_to(
+        redirect_path,
         notice: "'Hoy!! Signed in as #{@user.name}.",
       )
       return
@@ -85,7 +85,7 @@ class SessionsController < ApplicationController
   end
 
   def redirect_path
-    params[:redirect_to] || request.env["omniauth.origin"] || cookies.delete("return_to") || root_path
+    request.env["omniauth.origin"] || cookies.delete("return_to") || root_path
   end
 
   def session_params
