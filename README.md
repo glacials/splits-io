@@ -37,12 +37,15 @@ self-integrate using the [Splits.io Exchange Format][exchange].
 [faq]: https://splits.io/faq#programs
 
 ## API
-A Python client library for the Splits.io API written by jeremander exists at [jeremander/splitsio][python-client].
+Client libraries exist for the following languages. These are created and maintained by community members:
+- Python: [`jeremander/splitsio`][python-client]
+- Rust: [`livesplit/splits-io-api`][rust-client]
 
 For full API documentation and when using other languages, see the [API readme][api-docs].
 
 [api-docs]: /docs/api.md
 [python-client]: https://github.com/jeremander/splitsio
+[rust-client]: https://github.com/LiveSplit/splits-io-api
 
 ## Local Development
 Splits.io runs on Docker, which makes it easy and consistent to set up and run on any machine despite any unusual
