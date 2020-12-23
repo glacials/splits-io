@@ -108,7 +108,7 @@ race inline-template=true race-id=@race.id v-cloak=true
               .card v-for='stream in value' :key='stream.id'
                 .card-body.p-0.twitch-stream
                   iframe(
-                    :src='`https://player.twitch.tv/?channel=${stream.id}&muted=true`'
+                    :src='`https://player.twitch.tv/?channel=${stream.id}&muted=true&parent=splits.io`'
                     height='100%'
                     width='100%'
                     frameborder='0'
