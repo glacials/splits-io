@@ -16,7 +16,7 @@
             p: ol
                 li See who you are on Splits.io
                 - @pre_auth.scope.split(' ').each do |scope|
-                  li = scope_to_sentence(scope)
+                  li = I18n.t(scope, scope: %i[doorkeeper scopes])
             p You can always revoke these permissions later.
           .card-footer.clearfix
             = form_for oauth_authorization_path, method: :delete, html: {class: 'd-inline'} do |f|

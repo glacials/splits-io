@@ -22,7 +22,7 @@
                 td
                   ul
                     - auth.scopes.all.each do |scope|
-                      li = scope_to_sentence(scope)
+                      li = I18n.t(scope, scope: %i[doorkeeper scopes])
                 td
                   div content=auth.created_at v-tippy=true #{time_ago_in_words(auth.created_at)} ago
                 td

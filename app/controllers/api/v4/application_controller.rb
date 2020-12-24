@@ -93,6 +93,7 @@ class Api::V4::ApplicationController < ActionController::Base
   def set_user
     return unless request.headers["Authorization"].present? || params[:access_token].present?
 
+    # TODO: Is this incorrectly causing all authenticated requests to require the manage_race scope?
     doorkeeper_authorize!(:manage_race)
     self.current_user = User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   rescue ActiveRecord::RecordNotFound
