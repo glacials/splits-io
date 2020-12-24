@@ -1,0 +1,130 @@
+dependencies:
+  build:
+    - ruby:2.7.1 # Also update in Gemfile
+  runtime:
+    - ruby:2.7.1
+    - node:14.15.3
+
+build_targets:
+  - name: default
+    dependencies:
+      containers:
+        postgres:
+          label: postgres
+          image: postgres:11.5
+        redis:
+          label: redis
+          image: redis:latest
+        s3:
+          label: s3
+          image: lphoward/fake-s3
+    environment:
+      - AWS_ACCESS_KEY_ID=beep
+      - AWS_SECRET_KEY=boop
+      - AWS_REGION=local
+      - DATABASE_HOST={{.Containers.IP "postgres"}}
+      - NODE_ENV=development
+      - REDIS_URL={{.Containers.IP "redis"}}
+      - S3_BUCKET=splits-io
+      - S3_HOST={{.Containers.IP "s3"}}
+      - SITE_TITLE=Splits.io (Local)
+      - STRIPE_HOTSAUCE_SKU=sku_Gz2u7Mp3bWzYAk
+      - STRIPE_PLAN_ID_TIER1=plan_FmRDE979W782Zj
+      - STRIPE_PLAN_ID_TIER2=plan_FmRDa9Hhf1lwMQ
+      - STRIPE_PLAN_ID_TIER3=plan_GDlCHoXN5YCCUg
+      - STRIPE_PUBLISHABLE_KEY=pk_test_8XH713ExTipOnBebjfsHHffm
+    commands:
+      - bundle install
+      - bundle exec rails db:create
+      - bundle exec rspec
+  - name: seed
+    dependencies:
+      containers:
+        postgres:
+          label: postgres
+          image: postgres:11.5
+        redis:
+          label: redis
+          image: redis:latest
+        s3:
+          label: s3
+          image: lphoward/fake-s3
+    environment:
+      - AWS_ACCESS_KEY_ID=beep
+      - AWS_SECRET_KEY=boop
+      - AWS_REGION=local
+      - DATABASE_HOST={{.Containers.IP "postgres"}}
+      - RAILS_ENV=test
+      - REDIS_URL={{.Containers.IP "redis"}}
+      - S3_BUCKET=splits-io
+      - S3_HOST={{.Containers.IP "s3"}}
+    commands:
+      - bundle install
+      - bundle exec rails db:create
+      - bundle exec rails db:migrate
+      - bundle exec rails db:seed
+  - name: sync
+    commands:
+      - echo "Not yet implemented; run make srdc_sync"
+
+exec:
+  container:
+    ports:
+      - 3000:3000
+  dependencies:
+    containers:
+      postgres:
+        label: postgres
+        image: postgres:11.5
+      redis:
+        label: redis
+        image: redis:latest
+      s3:
+        label: s3
+        image: lphoward/fake-s3
+      webpacker:
+        command: cd /workspace && bundle install && ./bin/webpack-dev-server
+        image: ruby:latest
+        label: webpacker
+        mounts:
+          - /home/glacials/pj/splits-io:/workspace
+      worker:
+        command: cd /workspace && bundle install && bundle exec rake jobs:work
+        image: ruby:latest
+        label: worker
+        mounts:
+          - /home/glacials/pj/splits-io:/workspace
+  environment:
+    default:
+      - AWS_REGION=local
+      - AWS_ACCESS_KEY_ID=beep
+      - AWS_SECRET_KEY=boop
+      - DATABASE_HOST={{.Containers.IP "postgres"}}
+      - NODE_ENV=development
+      - QUEUES=discover_runner,highlight_cleanup,race_cleanup,sync_user_follows,v4_races,parse_run,cleanup_runs,active_storage_purge,active_storage_analysis,mailers,track # keep this in sync with every job in app/jobs, except "mailers" which is here but not in app/jobs as it is managed by Rails
+      - RAILS_LOG_TO_STDOUT=true # Log to stdout so docker/docker-compose can take over logs
+      - RAILS_ROOT="/app"
+      - READ_ONLY_MODE=0
+      - REDIS_URL={{.Containers.IP "redis"}}
+      - RUST_BACKTRACE=1
+      - S3_BUCKET=splits-io
+      - S3_HOST={{.Containers.IP "s3"}}
+      - SITE_TITLE=Splits.io (Local)
+      - STRIPE_HOTSAUCE_SKU=sku_Gz2u7Mp3bWzYAk
+      - STRIPE_PLAN_ID_TIER1=plan_FmRDE979W782Zj
+      - STRIPE_PLAN_ID_TIER2=plan_FmRDa9Hhf1lwMQ
+      - STRIPE_PLAN_ID_TIER3=plan_GDlCHoXN5YCCUg
+      - STRIPE_PUBLISHABLE_KEY=pk_test_8XH713ExTipOnBebjfsHHffm
+  commands:
+    - rm -rf /workspace/tmp/pids/server.pid
+    - bundle install
+    - bundle exec rails db:create db:migrate
+    - bundle exec rails db:seed
+    - bundle exec rails server -p 3000 -b '0.0.0.0'
+  ports:
+    - 3000
+
+ci:
+  builds:
+    - name: test
+      build_target: default
