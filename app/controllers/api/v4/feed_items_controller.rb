@@ -10,10 +10,10 @@ class Api::V4::FeedItemsController < Api::V4::ApplicationController
   private
 
   def set_feed_items
-    @feed_items = Run.includes(:game, :category, :user).where(
+    @feed_items = paginate(Run.includes(:game, :category, :user).where(
       users: { twitch: current_user.twitch.follows },
     ).where.not(
       games: { name: [nil, ""] },
-    ).order("runs.created_at DESC").limit(6).map { |run| { type: :run, run: run } }
+    ).order("runs.created_at DESC").map { |run| { type: :run, run: run } })
   end
 end
