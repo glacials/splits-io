@@ -56,7 +56,9 @@ class ApplicationController < ActionController::Base
           email: current_user.email,
           avatar: current_user.avatar,
           created_at: current_user.created_at,
-          plan: current_user.subscriptions&.first&.stripe_plan_id || current_user.patreon&.pledge_cents,
+          plan: current_user.stripe_subscriptions&.first&.stripe_plan_id ||
+                current_user.paypal_subscription&.provider_plan_id ||
+                current_user.patreon&.pledge_cents,
           num_runs: current_user.runs.count,
         }
       end

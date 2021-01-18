@@ -31,6 +31,7 @@ class User < ApplicationRecord
   has_one :srdc, dependent: :destroy, class_name: "SpeedrunDotComUser"
 
   has_many :subscriptions, dependent: :destroy
+  has_one :paypal_subscription, dependent: :destroy
 
   has_many :applications, class_name: "Doorkeeper::Application", dependent: :destroy, foreign_key: :owner_id,
                           inverse_of: "owner"
@@ -121,7 +122,7 @@ class User < ApplicationRecord
   # features.
   def feature_grantors
     # TODO: Convert subscriptions from has-many to has-one
-    [patreon, subscriptions, trial].compact
+    [patreon, subscriptions, paypal_subscription, trial].compact
   end
 
   def has_predictions?

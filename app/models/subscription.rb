@@ -1,25 +1,25 @@
 class Subscription < ActiveRecord::Base
   belongs_to :user
 
-  scope :active,   -> { where(ended_at: nil) }
+  scope :active, -> { where(ended_at: nil) }
   scope :canceled, -> { where.not(canceled_at: nil) }
-  scope :is_tier1, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER1']) } # Deprecated
-  scope :is_tier2, -> { where(stripe_plan_id: ENV['STRIPE_PLAN_ID_TIER2']) } # Deprecated
-  scope :is_tier3, -> { where(stripe_plan_id: [ENV['STRIPE_PLAN_ID_TIER3'], ENV['PAYPAL_PLAN_ID']]) } # Only in-use tier
-  scope :tier1,    -> { is_tier1.or(is_tier2).or(is_tier3) }
-  scope :tier2,    -> { is_tier2.or(is_tier3) }
-  scope :tier3,    -> { is_tier3 }
+  scope :is_tier1, -> { where(stripe_plan_id: ENV["STRIPE_PLAN_ID_TIER1"]) } # Deprecated
+  scope :is_tier2, -> { where(stripe_plan_id: ENV["STRIPE_PLAN_ID_TIER2"]) } # Deprecated
+  scope :is_tier3, -> { where(stripe_plan_id: ENV["STRIPE_PLAN_ID_TIER3"]) } # Only in-use tier
+  scope :tier1, -> { is_tier1.or(is_tier2).or(is_tier3) }
+  scope :tier2, -> { is_tier2.or(is_tier3) }
+  scope :tier3, -> { is_tier3 }
 
   validates_uniqueness_of :stripe_subscription_id
 
   def tier?(tier)
     case tier
     when 1
-      [ENV['STRIPE_PLAN_ID_TIER1'], ENV['STRIPE_PLAN_ID_TIER2']].include?(stripe_plan_id)
+      stripe_plan_id == ENV["STRIPE_PLAN_ID_TIER1"]
     when 2
-      stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER2']
+      stripe_plan_id == ENV["STRIPE_PLAN_ID_TIER2"]
     when 3
-      stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3'] || stripe_plan_id == ENV['PAYPAL_PLAN_ID']
+      stripe_plan_id == ENV["STRIPE_PLAN_ID_TIER3"]
     end
   end
 
@@ -31,22 +31,8 @@ class Subscription < ActiveRecord::Base
     ended_at.present?
   end
 
-  def stripe?
-    [
-      ENV["STRIPE_PLAN_ID_TIER1"],
-      ENV["STRIPE_PLAN_ID_TIER2"],
-      ENV["STRIPE_PLAN_ID_TIER3"]
-    ].include?(stripe_plan_id)
-  end
-
-  def paypal?
-    [
-      ENV["PAYPAL_PLAN_ID"]
-    ].include?(stripe_plan_id)
-  end
-
   def change_plan!(stripe_plan_id)
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+    Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
     # First we need the Subscription Item ID
     subscription = Stripe::Subscription.retrieve(stripe_subscription_id)
@@ -66,7 +52,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def cancel!
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+    Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
     Stripe::Subscription.update(
       stripe_subscription_id,
       cancel_at_period_end: true,
@@ -75,7 +61,7 @@ class Subscription < ActiveRecord::Base
   end
 
   def self.cancel_all!
-    Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+    Stripe.api_key = ENV["STRIPE_SECRET_KEY"]
 
     active.find_each do |subscription|
       Stripe::Subscription.update(
@@ -125,6 +111,6 @@ class Subscription < ActiveRecord::Base
   end
 
   def self.is_tier3?(plan)
-    plan.stripe_plan_id == ENV['STRIPE_PLAN_ID_TIER3'] || plan.stripe_plan_id == ENV['PAYPAL_PLAN_ID']
+    plan.stripe_plan_id == ENV["STRIPE_PLAN_ID_TIER3"]
   end
 end
