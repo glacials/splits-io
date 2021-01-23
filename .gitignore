@@ -39,3 +39,5 @@ yarn-debug.log*
 storage
 
 .byebug_history
+
+/config/master.key

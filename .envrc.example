@@ -26,10 +26,14 @@ export PATREON_CLIENT_SECRET=changeme
 # PayPal
 # - Required for PayPal payments to work (even in test mode)
 # - Create one at https://developer.paypal.com/developer/applications/create
-# - Make a webhook for /api/webhooks/paypal subscribed to "Billing subscription cancelled"
+# - Make two webhooks:
+#   - "Billing subscription cancelled" subscribed to /api/webhooks/paypal/billing_subscription_cancellations
+#   - "Billing subscription activated" subscribed to /api/webhooks/paypal/billing_subscription_activations
 # - Create a Subscription Plan at https://www.paypal.com/billing/plans and set its plan ID as PAYPAL_PLAN_ID in docker-compose.yml
 export PAYPAL_CLIENT_ID=changeme
 export PAYPAL_CLIENT_SECRET=changeme
+export PAYPAL_WEBHOOK_ID_BILLING_SUBSCRIPTION_ACTIVATED=changeme
+export PAYPAL_WEBHOOK_ID_BILLING_SUBSCRIPTION_CANCELLED=changeme
 
 # Splits.io
 # - Required for some JavaScript->Rails API calls to work, including WebSockets features like races

@@ -150,7 +150,10 @@ Rails.application.routes.draw do
     namespace :webhooks do
       post "/parse", to: "parse#create"
       post "/patreon", to: "patreon#create"
-      post "/paypal", to: "paypal#create"
+      namespace :paypal do
+        resource :billing_subscription_cancellation, only: [:create]
+        resource :billing_subscription_activation, only: [:create]
+      end
       post "/stripe", to: "stripe#create"
     end
 

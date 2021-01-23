@@ -15,7 +15,7 @@ class MigratePaypalSubscriptionsToTheirOwnTable < ActiveRecord::Migration[6.0]
         user: subscription.user,
         provider_subscription_id: subscription.stripe_subscription_id,
         provider_plan_id: subscription.stripe_plan_id,
-      ) && subscription.destroy
+      ) # TODO: Destroy migrated subscriptions in a later migration, once this code is live
     end
   end
 end

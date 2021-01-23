@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_23_024528) do
+ActiveRecord::Schema.define(version: 2021_01_18_223922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -226,6 +226,17 @@ ActiveRecord::Schema.define(version: 2020_11_23_024528) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_patreon_users_on_user_id"
+  end
+
+  create_table "paypal_subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "provider_subscription_id", null: false
+    t.string "provider_status", null: false
+    t.string "provider_plan_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["provider_subscription_id"], name: "index_paypal_subscriptions_on_provider_subscription_id", unique: true
+    t.index ["user_id"], name: "index_paypal_subscriptions_on_user_id", unique: true
   end
 
   create_table "races", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -552,6 +563,7 @@ ActiveRecord::Schema.define(version: 2020_11_23_024528) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "patreon_users", "users"
+  add_foreign_key "paypal_subscriptions", "users"
   add_foreign_key "races", "categories"
   add_foreign_key "races", "games"
   add_foreign_key "races", "users"
