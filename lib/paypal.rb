@@ -64,7 +64,7 @@ class Paypal
       subscriptions.each do |sub|
         if sub.stripe_subscription_id.present?
           response = HTTParty.post(
-            URI::HTTPS.build(host: ENV["PAYPAL_API_HOST"], path: "/v1/billing/subscriptions/#{data["subscriptionID"]}/cancel"),
+            URI::HTTPS.build(host: ENV["PAYPAL_API_HOST"], path: "/v1/billing/subscriptions/#{subscription.stripe_subscription_id}/cancel"),
             basic_auth: AUTH,
             headers: { "Content-Type" => "application/json", "Accept" => "application/json" },
           )
