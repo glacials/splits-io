@@ -61,15 +61,15 @@ class Paypal
       subscriptions = user.subscriptions.where(stripe_plan_id: ENV["PAYPAL_PLAN_ID"])
       return unless subscriptions.present?
 
-      subscriptions.each do |sub|
-        if sub.stripe_subscription_id.present?
+      subscriptions.each do |subscription|
+        if subscription.stripe_subscription_id.present?
           response = HTTParty.post(
             URI::HTTPS.build(host: ENV["PAYPAL_API_HOST"], path: "/v1/billing/subscriptions/#{subscription.stripe_subscription_id}/cancel"),
             basic_auth: AUTH,
             headers: { "Content-Type" => "application/json", "Accept" => "application/json" },
           )
         end
-        sub.update(canceled_at: Time.now.utc) if sub.canceled_at.nil?
+        subscription.update(canceled_at: Time.now.utc) if subscription.canceled_at.nil?
       end
     end
   end
