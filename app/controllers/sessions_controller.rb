@@ -20,6 +20,8 @@ class SessionsController < ApplicationController
             Your account exists, but you created it with a Twitch link and
             have not set a password. Please sign in with Twitch then set a
             password from the settings page to enable email/password login.
+            (If you do not have access to your Twitch account, use the "I
+            forgot my password" feature.)
           ALERT
           fallback_location: new_session_path,
         )
@@ -32,6 +34,8 @@ class SessionsController < ApplicationController
             Your account exists, but you created it with a Google link and
             have not set a password. Please sign in with Google then set a
             password from the settings page to enable email/password login.'
+            (If you do not have access to your Google account, use the "I
+            forgot my password" feature.)
           ALERT
           fallback_location: new_session_path,
         )
@@ -41,8 +45,8 @@ class SessionsController < ApplicationController
       redirect_back(
         alert: <<~ALERT,
           Your account exists but has no password set, so cannot be logged
-          into. This is a bug! Please contact help@splits.io to resolve the
-          issue.
+          into. Please use the "I forgot my password" feature to set a
+          password.
         ALERT
         fallback_location: new_session_path,
       )
