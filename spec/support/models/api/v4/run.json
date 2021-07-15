@@ -19,7 +19,7 @@
     "category",
     "runners",
     "segments",
-	"uses_autosplitter"
+    "uses_autosplitter"
   ],
   "additionalProperties": false,
   "properties": {
@@ -207,7 +207,7 @@
         }
       }
     },
-	"uses_autosplitter": {
+    "uses_autosplitter": {
       "type": "boolean"
     }
   }
