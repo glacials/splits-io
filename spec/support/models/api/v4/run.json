@@ -18,7 +18,8 @@
     "game",
     "category",
     "runners",
-    "segments"
+    "segments",
+    "uses_autosplitter"
   ],
   "additionalProperties": false,
   "properties": {
@@ -205,6 +206,12 @@
           }
         }
       }
+    },
+    "uses_autosplitter": {
+      "type": [
+        "boolean",
+        "null"
+      ]
     }
   }
 }
