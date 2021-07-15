@@ -208,7 +208,10 @@
       }
     },
     "uses_autosplitter": {
-      "type": "boolean"
+      "type": [
+        "boolean",
+        "null"
+      ]
     }
   }
 }
