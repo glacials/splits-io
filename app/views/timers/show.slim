@@ -44,11 +44,11 @@
         p
           ' #{@timer} supports the
           a href=Programs::ExchangeFormat.website Splits.io Exchange Format
-          ' , so it can read any run on Splits.io. Look for
-          ' "#{Programs::ExchangeFormat}" when exporting a run from Splits.io.
+          ' , so it can read any run on Splits.io. Look for the
+          ' "#{Programs::ExchangeFormat}" option when exporting a run from Splits.io.
         - if @timer.exportable?
           p
-            ' Splits.io can also try to export runs in #{@timer} format. Look for "#{@timer}" when exporting a run from Splits.io.
+            ' Splits.io can also try to export runs in #{@timer} format. Look for the "#{@timer}" option when exporting a run from Splits.io.
       - else
         p
           ' #{@timer} doesn't support the
@@ -56,7 +56,7 @@
           ' , so it can't read most runs from Splits.io.
         - if @timer.exportable?
           p
-            ' However, Splits.io can try to export runs in #{@timer} format. Look for "#{@timer}" option when exporting a run from Splits.io.
+            ' However, Splits.io can try to export runs in #{@timer} format. Look for the "#{@timer}" option when exporting a run from Splits.io.
   .card.mb-2.col-md-6
     .card-header Developer information
     .card-body
