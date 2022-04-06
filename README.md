@@ -73,9 +73,6 @@ time to get a coffee! Yum! After the first run, it will be much quicker.
 ```sh
 make
 ```
-While you wait, you can also take a look at our [short Codeflow
-tutorial][codeflow] to get up to speed with a few key pieces of the code.
-
 Once the output looks settled (you should see `* Listening on tcp://0.0.0.0:3000`), you're good to go! Access
 [localhost:3000][localhost] in your browser. The first page load after a new build may also take a minute.
 
