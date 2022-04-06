@@ -1,13 +1,17 @@
 # This file is just an example.
 #
-# cp it to .envrc then use `source .envrc` to apply its contents.
-# To source it automatically in the future, use direnv: https://github.com/direnv/direnv
+# Some Splits.io features are built on top of links with other platforms, like Twitch
+# sign-in. If you want these features to work, you need to register developer
+# applications with the appropriate services. This file will walk you through that.
 #
-# When filling out this file, know that most of it is optional. The bare
-# minimum is having a way to sign in (Twitch or Google).
+# First, run `cp .envrc.example .envrc` then re-open .envrc. Follow the instructions
+# below for the services you want to set up. Then, `source .envrc` to apply its
+# contents. You will need to reboot your local server afterwards.
+# 
+# To source .envrc automatically in the future, use direnv:
+# https://github.com/direnv/direnv
 #
-# (Although a Splits.io client is required, you shouldn't need to do any work
-# beyond `make seed` to set that up.)
+# Every service is optional.
 
 # Google
 # - Required for Google sign-in & linking
