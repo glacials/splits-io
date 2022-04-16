@@ -67,24 +67,42 @@ so already, follow these instructions when running Splits.io on Windows:
 
 These steps are not required for Linux or macOS.
 
-### First Run
-The first time you run Splits.io with Docker is the best, because you'll have
-time to get a coffee! Yum! After the first run, it will be much quicker.
+### Running
+
+#### First run
+The first time you run Splits.io will take a while to build, so you should go grab a coffee or something:
+
 ```sh
-make
+make  # shorthand for make build run
 ```
+
 Once the output looks settled (you should see `* Listening on tcp://0.0.0.0:3000`), you're good to go! Access
 [localhost:3000][localhost] in your browser. The first page load after a new build may also take a minute.
 
-Now that Splits.io is running, one last step you should perform in another terminal window is
+_Note: If the page has no styling information on first run, try rebooting the server._
+
+Now that Splits.io is running, one last step you should perform in another terminal window is:
 ```sh
 make seed
 ```
-This will make sure your local JavaScript can talk to your local backend, as
-well as create some initial games in the database.
+This is required, as it sets up a client ID/secret for your local JavaScript to communicate
+with your local backend. It will also prepopulate your local database with some initial data.
 
 [localhost]: http://localhost:3000/
-[codeflow]: https://usecodeflow.com/tutorials/view/glacials/splits-io/tree/a89ff1/ck68vlj2g00060vmmcnlstz53
+
+#### Subsequent runs
+If you have already run `make` or `make build` in the past, you usually won't need to rebuild everything again,
+so you can instead just run the faster version:
+
+```sh
+make run
+```
+
+If you do need to rebuild (e.g. when adding or upgrading a dependency) but don't necessarily want a server:
+
+```sh
+make build
+```
 
 #### Further Setup
 These steps are not required for normal operation, but you may want to
