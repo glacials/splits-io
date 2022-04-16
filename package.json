@@ -20,7 +20,7 @@
     "file-saver": "^2.0.2",
     "fuzzyset.js": "^0.0.8",
     "handlebars": "^4.7.7",
-    "highcharts": "^8.2.0",
+    "highcharts": "^9.0.0",
     "highcharts-regression": "streamlinesocial/highcharts-regression",
     "jquery": "^3.4.1",
     "js-cookie": "^2.2.0",

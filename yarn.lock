@@ -3503,10 +3503,10 @@ highcharts-regression@streamlinesocial/highcharts-regression:
   version "2.0.2"
   resolved "https://codeload.github.com/streamlinesocial/highcharts-regression/tar.gz/63165d0657c35b508c4cf32353139dcbd32b6781"
 
-highcharts@^8.2.0:
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-8.2.0.tgz#3d4893015caf1a7c9ed85284d983911e844649f3"
-  integrity sha512-s3R7UEaMWUDJNxFfdjuiOtI8rnSvhEZUNN4TA7LiDRc9Tw7DUKvTv5WXSTYzxojokLbybwwlf9t3jg/meAUTnQ==
+highcharts@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-9.0.0.tgz#2e5d382481f71c50ac7f086e7bdead394fab71d4"
+  integrity sha512-MJCtidFytGSQvsV3OEM+vFTLpjUcp7jmFpLn8h3oL4WKp0gxUOQg6Nw00sqMWGdiadst0gOZO4804zynTcYjZQ==
 
 hmac-drbg@^1.0.1:
   version "1.0.1"
