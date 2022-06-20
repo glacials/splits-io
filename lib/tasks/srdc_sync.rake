@@ -4,7 +4,7 @@ require "httparty"
 
 SRDC_REGIONS_URL = "https://www.speedrun.com/api/v1/regions?max=200".freeze
 SRDC_PLATFORMS_URL = "https://www.speedrun.com/api/v1/platforms?max=200".freeze
-SRDC_GAMES_URL = "https://www.speedrun.com/api/v1/games?embed=categories,variables,regions,platforms&max=200".freeze
+SRDC_GAMES_URL = "https://www.speedrun.com/api/v1/games?embed=categories,variables,regions,platforms&max=200&orderby=created&direction=desc".freeze
 
 desc "Sync all games, categories, and variable data from srdc"
 task srdc_sync: [:environment] do
