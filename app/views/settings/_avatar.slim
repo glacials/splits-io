@@ -1,15 +1,26 @@
 .card.h-100
   .card-header: h4.my-0.font-weight-normal Avatar
   .card-body
-    - if current_user.twitch
-      ' Your avatar is linked to your Twitch account and can be updated
-      ' there. After any changes, you may need to log out of Splits.io and then
-      ' back in to refresh it.
-    - elsif current_user.google
-      ' Your avatar is linked to your Google account and can be updated
-      ' there. After any changes, you may need to log out of Splits.io and then
-      ' back in to refresh it.
-    - else
-      / TODO: Add Gravatar support
-      ' Avatars are inherited from Twitch or Google account links. Please link
-      ' one of those platforms to add an avatar.
+    .d-flex
+      .flex-shrink-0
+        img src=current_user.avatar width=100 height=100
+      .flex-grow-1.ml-3
+        - if current_user.twitch
+          p
+            ' Your avatar is linked to your Twitch account and can be updated
+            ' there.
+          p
+            ' After any changes, you may need to log out of Splits.io and then
+            ' back in to refresh it.
+        - elsif current_user.google
+          p
+            ' Your avatar is linked to your Google account and can be updated
+            ' there.
+          p
+            ' After any changes, you may need to log out of Splits.io and then
+            ' back in to refresh it.
+        - else
+          / TODO: Add Gravatar support
+          p
+            ' Avatars are inherited from Twitch or Google account links. Please link
+            ' one of those platforms to add an avatar.
