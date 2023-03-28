@@ -131,8 +131,8 @@ class RunsController < ApplicationController
       default_timing: @run.default_timing,
     }
 
-    @compare_runs = Run.where(id: (params[:compare] || '').split(',').map { |r| r.to_i(36) })
-    gon.compare_runs = @compare_runs.map { |run| {id: run.id36} }
+    @compare_runs = Run.where(id: (params[:compare] || '').split(',').map { |r| r.to_i(36) }) + SumOfBestRun.where(id: (params[:sum_of_best] || '').split(',').map { |r| r.to_i(36) })
+    gon.compare_runs = @compare_runs.reject { |run| run.is_a?(SumOfBestRun) }.map { |run| {id: run.id36} }
 
     gon.run['user'] = if @run.user.nil?
                         nil

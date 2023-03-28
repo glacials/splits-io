@@ -1,4 +1,4 @@
-- if run.completed?(timing)
+- if run.completed?(timing) && !run.is_a?(SumOfBestRun)
   .gold.timeline.timeline-animation style="width: #{run.duration(timing) / scale_to * 100.0}%"
     - run.collapsed_segments(timing).each_with_index do |segment, index|
       div style="width: #{segment.proportion(timing) * 100.0}%"
