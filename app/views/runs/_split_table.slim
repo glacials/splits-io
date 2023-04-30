@@ -18,7 +18,10 @@
           - if run.segments.map(&:icon).any?(&:attached?)
             td.text-center.align-middle
               - if !segment.segment_group_parent? && segment.icon.attached?
-                = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
+                - if segment.icon.variable?
+                  = image_tag(segment.icon.variant(convert: 'png', resize_to_fit: [30, 30]))
+                - else
+                  = image_tag(segment.icon, width: 30, height: 30)
           td.align-left.align-middle = segment.display_name.presence || '-'
           td.align-right.align-middle
             - if segment.skipped?(timing) || segment.reduced?(timing)
