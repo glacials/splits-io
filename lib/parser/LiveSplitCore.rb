@@ -1,3 +1,5 @@
+require 'fileutils'
+FileUtils.mv('../liblivesplit_core.so', "../liblivesplit_core-#{RUBY_PLATFORM.split('-')[0]}.so")
 # coding: utf-8
 require 'ffi'
 
