@@ -24,7 +24,7 @@ module UnparsedRun
         file do |f|
           raise RunFileMissing if f.nil?
 
-          Parser::LiveSplitCore::Run.parse_file_handle(f.fileno, nil).with do |parse_result|
+          Parser::LiveSplitCore::Run.parse_file_handle(f.fileno, '', false).with do |parse_result|
             raise UnparsableRun, 'Run failed to parse in LSC' unless parse_result.parsed_successfully
 
             run_data = process_run_wrapper(parse_result, run_data)
