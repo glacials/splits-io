@@ -11,18 +11,21 @@ module LiveSplitCore
         attach_function :Analysis_calculate_total_playtime_for_timer, [:pointer], :pointer
         attach_function :AtomicDateTime_drop, [:pointer], :void
         attach_function :AtomicDateTime_is_synchronized, [:pointer], :bool
-        attach_function :AtomicDateTime_to_rfc2822, [:pointer], :string
         attach_function :AtomicDateTime_to_rfc3339, [:pointer], :string
         attach_function :Attempt_index, [:pointer], :int32
         attach_function :Attempt_time, [:pointer], :pointer
         attach_function :Attempt_pause_time, [:pointer], :pointer
         attach_function :Attempt_started, [:pointer], :pointer
         attach_function :Attempt_ended, [:pointer], :pointer
+        attach_function :AutoSplittingRuntime_new, [:pointer], :pointer
+        attach_function :AutoSplittingRuntime_drop, [:pointer], :void
+        attach_function :AutoSplittingRuntime_load_script, [:pointer, :string], :bool
+        attach_function :AutoSplittingRuntime_unload_script, [:pointer], :bool
         attach_function :BlankSpaceComponent_new, [], :pointer
         attach_function :BlankSpaceComponent_drop, [:pointer], :void
         attach_function :BlankSpaceComponent_into_generic, [:pointer], :pointer
-        attach_function :BlankSpaceComponent_state_as_json, [:pointer, :pointer], :string
-        attach_function :BlankSpaceComponent_state, [:pointer, :pointer], :pointer
+        attach_function :BlankSpaceComponent_state_as_json, [:pointer], :string
+        attach_function :BlankSpaceComponent_state, [:pointer], :pointer
         attach_function :BlankSpaceComponentState_drop, [:pointer], :void
         attach_function :BlankSpaceComponentState_size, [:pointer], :uint32
         attach_function :Component_drop, [:pointer], :void
@@ -31,26 +34,16 @@ module LiveSplitCore
         attach_function :CurrentComparisonComponent_into_generic, [:pointer], :pointer
         attach_function :CurrentComparisonComponent_state_as_json, [:pointer, :pointer], :string
         attach_function :CurrentComparisonComponent_state, [:pointer, :pointer], :pointer
-        attach_function :CurrentComparisonComponentState_drop, [:pointer], :void
-        attach_function :CurrentComparisonComponentState_text, [:pointer], :string
-        attach_function :CurrentComparisonComponentState_comparison, [:pointer], :string
         attach_function :CurrentPaceComponent_new, [], :pointer
         attach_function :CurrentPaceComponent_drop, [:pointer], :void
         attach_function :CurrentPaceComponent_into_generic, [:pointer], :pointer
         attach_function :CurrentPaceComponent_state_as_json, [:pointer, :pointer], :string
         attach_function :CurrentPaceComponent_state, [:pointer, :pointer], :pointer
-        attach_function :CurrentPaceComponentState_drop, [:pointer], :void
-        attach_function :CurrentPaceComponentState_text, [:pointer], :string
-        attach_function :CurrentPaceComponentState_time, [:pointer], :string
         attach_function :DeltaComponent_new, [], :pointer
         attach_function :DeltaComponent_drop, [:pointer], :void
         attach_function :DeltaComponent_into_generic, [:pointer], :pointer
         attach_function :DeltaComponent_state_as_json, [:pointer, :pointer, :pointer], :string
         attach_function :DeltaComponent_state, [:pointer, :pointer, :pointer], :pointer
-        attach_function :DeltaComponentState_drop, [:pointer], :void
-        attach_function :DeltaComponentState_text, [:pointer], :string
-        attach_function :DeltaComponentState_time, [:pointer], :string
-        attach_function :DeltaComponentState_semantic_color, [:pointer], :string
         attach_function :DetailedTimerComponent_new, [], :pointer
         attach_function :DetailedTimerComponent_drop, [:pointer], :void
         attach_function :DetailedTimerComponent_into_generic, [:pointer], :pointer
@@ -68,7 +61,8 @@ module LiveSplitCore
         attach_function :DetailedTimerComponentState_comparison2_visible, [:pointer], :bool
         attach_function :DetailedTimerComponentState_comparison2_name, [:pointer], :string
         attach_function :DetailedTimerComponentState_comparison2_time, [:pointer], :string
-        attach_function :DetailedTimerComponentState_icon_change, [:pointer], :string
+        attach_function :DetailedTimerComponentState_icon_change_ptr, [:pointer], :pointer
+        attach_function :DetailedTimerComponentState_icon_change_len, [:pointer], :size_t
         attach_function :DetailedTimerComponentState_segment_name, [:pointer], :string
         attach_function :FuzzyList_new, [], :pointer
         attach_function :FuzzyList_drop, [:pointer], :void
@@ -93,7 +87,9 @@ module LiveSplitCore
         attach_function :GraphComponentState_middle, [:pointer], :float
         attach_function :GraphComponentState_is_live_delta_active, [:pointer], :bool
         attach_function :GraphComponentState_is_flipped, [:pointer], :bool
+        attach_function :HotkeyConfig_new, [], :pointer
         attach_function :HotkeyConfig_parse_json, [:string], :pointer
+        attach_function :HotkeyConfig_parse_file_handle, [:int64], :pointer
         attach_function :HotkeyConfig_drop, [:pointer], :void
         attach_function :HotkeyConfig_settings_description_as_json, [:pointer], :string
         attach_function :HotkeyConfig_as_json, [:pointer], :string
@@ -101,17 +97,26 @@ module LiveSplitCore
         attach_function :HotkeySystem_new, [:pointer], :pointer
         attach_function :HotkeySystem_with_config, [:pointer, :pointer], :pointer
         attach_function :HotkeySystem_drop, [:pointer], :void
-        attach_function :HotkeySystem_deactivate, [:pointer], :void
-        attach_function :HotkeySystem_activate, [:pointer], :void
         attach_function :HotkeySystem_config, [:pointer], :pointer
+        attach_function :HotkeySystem_resolve, [:pointer, :string], :string
+        attach_function :HotkeySystem_deactivate, [:pointer], :bool
+        attach_function :HotkeySystem_activate, [:pointer], :bool
         attach_function :HotkeySystem_set_config, [:pointer, :pointer], :bool
+        attach_function :KeyValueComponentState_drop, [:pointer], :void
+        attach_function :KeyValueComponentState_key, [:pointer], :string
+        attach_function :KeyValueComponentState_value, [:pointer], :string
+        attach_function :KeyValueComponentState_semantic_color, [:pointer], :string
         attach_function :Layout_new, [], :pointer
         attach_function :Layout_default_layout, [], :pointer
         attach_function :Layout_parse_json, [:string], :pointer
+        attach_function :Layout_parse_file_handle, [:int64], :pointer
         attach_function :Layout_parse_original_livesplit, [:pointer, :size_t], :pointer
         attach_function :Layout_drop, [:pointer], :void
         attach_function :Layout_clone, [:pointer], :pointer
         attach_function :Layout_settings_as_json, [:pointer], :string
+        attach_function :Layout_state, [:pointer, :pointer], :pointer
+        attach_function :Layout_update_state, [:pointer, :pointer, :pointer], :void
+        attach_function :Layout_update_state_as_json, [:pointer, :pointer, :pointer], :string
         attach_function :Layout_state_as_json, [:pointer, :pointer], :string
         attach_function :Layout_push, [:pointer, :pointer], :void
         attach_function :Layout_scroll_up, [:pointer], :void
@@ -120,7 +125,10 @@ module LiveSplitCore
         attach_function :LayoutEditor_new, [:pointer], :pointer
         attach_function :LayoutEditor_close, [:pointer], :pointer
         attach_function :LayoutEditor_state_as_json, [:pointer], :string
+        attach_function :LayoutEditor_state, [:pointer], :pointer
         attach_function :LayoutEditor_layout_state_as_json, [:pointer, :pointer], :string
+        attach_function :LayoutEditor_update_layout_state, [:pointer, :pointer, :pointer], :void
+        attach_function :LayoutEditor_update_layout_state_as_json, [:pointer, :pointer, :pointer], :string
         attach_function :LayoutEditor_select, [:pointer, :size_t], :void
         attach_function :LayoutEditor_add_component, [:pointer, :pointer], :void
         attach_function :LayoutEditor_remove_component, [:pointer], :void
@@ -130,19 +138,43 @@ module LiveSplitCore
         attach_function :LayoutEditor_duplicate_component, [:pointer], :void
         attach_function :LayoutEditor_set_component_settings_value, [:pointer, :size_t, :pointer], :void
         attach_function :LayoutEditor_set_general_settings_value, [:pointer, :size_t, :pointer], :void
+        attach_function :LayoutEditorState_drop, [:pointer], :void
+        attach_function :LayoutEditorState_component_len, [:pointer], :size_t
+        attach_function :LayoutEditorState_component_text, [:pointer, :size_t], :string
+        attach_function :LayoutEditorState_buttons, [:pointer], :uint8
+        attach_function :LayoutEditorState_selected_component, [:pointer], :uint32
+        attach_function :LayoutEditorState_field_len, [:pointer, :bool], :size_t
+        attach_function :LayoutEditorState_field_text, [:pointer, :bool, :size_t], :string
+        attach_function :LayoutEditorState_field_value, [:pointer, :bool, :size_t], :pointer
+        attach_function :LayoutState_new, [], :pointer
+        attach_function :LayoutState_drop, [:pointer], :void
+        attach_function :LayoutState_as_json, [:pointer], :string
+        attach_function :LayoutState_len, [:pointer], :size_t
+        attach_function :LayoutState_component_type, [:pointer, :size_t], :string
+        attach_function :LayoutState_component_as_blank_space, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_detailed_timer, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_graph, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_key_value, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_separator, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_splits, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_text, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_timer, [:pointer, :size_t], :pointer
+        attach_function :LayoutState_component_as_title, [:pointer, :size_t], :pointer
         attach_function :ParseRunResult_drop, [:pointer], :void
         attach_function :ParseRunResult_unwrap, [:pointer], :pointer
         attach_function :ParseRunResult_parsed_successfully, [:pointer], :bool
         attach_function :ParseRunResult_timer_kind, [:pointer], :string
         attach_function :ParseRunResult_is_generic_timer, [:pointer], :bool
+        attach_function :PbChanceComponent_new, [], :pointer
+        attach_function :PbChanceComponent_drop, [:pointer], :void
+        attach_function :PbChanceComponent_into_generic, [:pointer], :pointer
+        attach_function :PbChanceComponent_state_as_json, [:pointer, :pointer], :string
+        attach_function :PbChanceComponent_state, [:pointer, :pointer], :pointer
         attach_function :PossibleTimeSaveComponent_new, [], :pointer
         attach_function :PossibleTimeSaveComponent_drop, [:pointer], :void
         attach_function :PossibleTimeSaveComponent_into_generic, [:pointer], :pointer
         attach_function :PossibleTimeSaveComponent_state_as_json, [:pointer, :pointer], :string
         attach_function :PossibleTimeSaveComponent_state, [:pointer, :pointer], :pointer
-        attach_function :PossibleTimeSaveComponentState_drop, [:pointer], :void
-        attach_function :PossibleTimeSaveComponentState_text, [:pointer], :string
-        attach_function :PossibleTimeSaveComponentState_time, [:pointer], :string
         attach_function :PotentialCleanUp_drop, [:pointer], :void
         attach_function :PotentialCleanUp_message, [:pointer], :string
         attach_function :PreviousSegmentComponent_new, [], :pointer
@@ -150,17 +182,14 @@ module LiveSplitCore
         attach_function :PreviousSegmentComponent_into_generic, [:pointer], :pointer
         attach_function :PreviousSegmentComponent_state_as_json, [:pointer, :pointer, :pointer], :string
         attach_function :PreviousSegmentComponent_state, [:pointer, :pointer, :pointer], :pointer
-        attach_function :PreviousSegmentComponentState_drop, [:pointer], :void
-        attach_function :PreviousSegmentComponentState_text, [:pointer], :string
-        attach_function :PreviousSegmentComponentState_time, [:pointer], :string
-        attach_function :PreviousSegmentComponentState_semantic_color, [:pointer], :string
         attach_function :Run_new, [], :pointer
-        attach_function :Run_parse, [:pointer, :size_t, :string, :bool], :pointer
-        attach_function :Run_parse_file_handle, [:int64, :string, :bool], :pointer
+        attach_function :Run_parse, [:pointer, :size_t, :string], :pointer
+        attach_function :Run_parse_file_handle, [:int64, :string], :pointer
         attach_function :Run_drop, [:pointer], :void
         attach_function :Run_clone, [:pointer], :pointer
         attach_function :Run_game_name, [:pointer], :string
-        attach_function :Run_game_icon, [:pointer], :string
+        attach_function :Run_game_icon_ptr, [:pointer], :pointer
+        attach_function :Run_game_icon_len, [:pointer], :size_t
         attach_function :Run_category_name, [:pointer], :string
         attach_function :Run_extended_file_name, [:pointer, :bool], :string
         attach_function :Run_extended_name, [:pointer, :bool], :string
@@ -198,8 +227,11 @@ module LiveSplitCore
         attach_function :RunEditor_set_region_name, [:pointer, :string], :void
         attach_function :RunEditor_set_platform_name, [:pointer, :string], :void
         attach_function :RunEditor_set_emulator_usage, [:pointer, :bool], :void
-        attach_function :RunEditor_set_variable, [:pointer, :string, :string], :void
-        attach_function :RunEditor_remove_variable, [:pointer, :string], :void
+        attach_function :RunEditor_set_speedrun_com_variable, [:pointer, :string, :string], :void
+        attach_function :RunEditor_remove_speedrun_com_variable, [:pointer, :string], :void
+        attach_function :RunEditor_add_custom_variable, [:pointer, :string], :void
+        attach_function :RunEditor_set_custom_variable, [:pointer, :string, :string], :void
+        attach_function :RunEditor_remove_custom_variable, [:pointer, :string], :void
         attach_function :RunEditor_clear_metadata, [:pointer], :void
         attach_function :RunEditor_insert_segment_above, [:pointer], :void
         attach_function :RunEditor_insert_segment_below, [:pointer], :void
@@ -218,6 +250,7 @@ module LiveSplitCore
         attach_function :RunEditor_remove_comparison, [:pointer, :string], :void
         attach_function :RunEditor_rename_comparison, [:pointer, :string, :string], :bool
         attach_function :RunEditor_move_comparison, [:pointer, :size_t, :size_t], :bool
+        attach_function :RunEditor_parse_and_generate_goal_comparison, [:pointer, :string], :bool
         attach_function :RunEditor_clear_history, [:pointer], :void
         attach_function :RunEditor_clear_times, [:pointer], :void
         attach_function :RunEditor_clean_sum_of_best, [:pointer], :pointer
@@ -225,16 +258,24 @@ module LiveSplitCore
         attach_function :RunMetadata_platform_name, [:pointer], :string
         attach_function :RunMetadata_uses_emulator, [:pointer], :bool
         attach_function :RunMetadata_region_name, [:pointer], :string
-        attach_function :RunMetadata_variables, [:pointer], :pointer
-        attach_function :RunMetadataVariable_drop, [:pointer], :void
-        attach_function :RunMetadataVariable_name, [:pointer], :string
-        attach_function :RunMetadataVariable_value, [:pointer], :string
-        attach_function :RunMetadataVariablesIter_drop, [:pointer], :void
-        attach_function :RunMetadataVariablesIter_next, [:pointer], :pointer
+        attach_function :RunMetadata_speedrun_com_variables, [:pointer], :pointer
+        attach_function :RunMetadata_custom_variables, [:pointer], :pointer
+        attach_function :RunMetadataCustomVariable_drop, [:pointer], :void
+        attach_function :RunMetadataCustomVariable_name, [:pointer], :string
+        attach_function :RunMetadataCustomVariable_value, [:pointer], :string
+        attach_function :RunMetadataCustomVariable_is_permanent, [:pointer], :bool
+        attach_function :RunMetadataCustomVariablesIter_drop, [:pointer], :void
+        attach_function :RunMetadataCustomVariablesIter_next, [:pointer], :pointer
+        attach_function :RunMetadataSpeedrunComVariable_drop, [:pointer], :void
+        attach_function :RunMetadataSpeedrunComVariable_name, [:pointer], :string
+        attach_function :RunMetadataSpeedrunComVariable_value, [:pointer], :string
+        attach_function :RunMetadataSpeedrunComVariablesIter_drop, [:pointer], :void
+        attach_function :RunMetadataSpeedrunComVariablesIter_next, [:pointer], :pointer
         attach_function :Segment_new, [:string], :pointer
         attach_function :Segment_drop, [:pointer], :void
         attach_function :Segment_name, [:pointer], :string
-        attach_function :Segment_icon, [:pointer], :string
+        attach_function :Segment_icon_ptr, [:pointer], :pointer
+        attach_function :Segment_icon_len, [:pointer], :size_t
         attach_function :Segment_comparison, [:pointer, :string], :pointer
         attach_function :Segment_personal_best_split_time, [:pointer], :pointer
         attach_function :Segment_best_segment_time, [:pointer], :pointer
@@ -244,16 +285,22 @@ module LiveSplitCore
         attach_function :SegmentHistoryElement_time, [:pointer], :pointer
         attach_function :SegmentHistoryIter_drop, [:pointer], :void
         attach_function :SegmentHistoryIter_next, [:pointer], :pointer
+        attach_function :SegmentTimeComponent_new, [], :pointer
+        attach_function :SegmentTimeComponent_drop, [:pointer], :void
+        attach_function :SegmentTimeComponent_into_generic, [:pointer], :pointer
+        attach_function :SegmentTimeComponent_state_as_json, [:pointer, :pointer], :string
+        attach_function :SegmentTimeComponent_state, [:pointer, :pointer], :pointer
         attach_function :SeparatorComponent_new, [], :pointer
         attach_function :SeparatorComponent_drop, [:pointer], :void
         attach_function :SeparatorComponent_into_generic, [:pointer], :pointer
+        attach_function :SeparatorComponent_state, [:pointer], :pointer
+        attach_function :SeparatorComponentState_drop, [:pointer], :void
         attach_function :SettingValue_from_bool, [:bool], :pointer
         attach_function :SettingValue_from_uint, [:uint32], :pointer
         attach_function :SettingValue_from_int, [:int32], :pointer
         attach_function :SettingValue_from_string, [:string], :pointer
         attach_function :SettingValue_from_optional_string, [:string], :pointer
         attach_function :SettingValue_from_optional_empty_string, [], :pointer
-        attach_function :SettingValue_from_float, [:double], :pointer
         attach_function :SettingValue_from_accuracy, [:string], :pointer
         attach_function :SettingValue_from_digits_format, [:string], :pointer
         attach_function :SettingValue_from_optional_timing_method, [:string], :pointer
@@ -266,16 +313,24 @@ module LiveSplitCore
         attach_function :SettingValue_from_horizontal_gradient, [:float, :float, :float, :float, :float, :float, :float, :float], :pointer
         attach_function :SettingValue_from_alternating_gradient, [:float, :float, :float, :float, :float, :float, :float, :float], :pointer
         attach_function :SettingValue_from_alignment, [:string], :pointer
+        attach_function :SettingValue_from_column_kind, [:string], :pointer
         attach_function :SettingValue_from_column_start_with, [:string], :pointer
         attach_function :SettingValue_from_column_update_with, [:string], :pointer
         attach_function :SettingValue_from_column_update_trigger, [:string], :pointer
+        attach_function :SettingValue_from_layout_direction, [:string], :pointer
+        attach_function :SettingValue_from_font, [:string, :string, :string, :string], :pointer
+        attach_function :SettingValue_from_empty_font, [], :pointer
+        attach_function :SettingValue_from_delta_gradient, [:string], :pointer
         attach_function :SettingValue_drop, [:pointer], :void
+        attach_function :SettingValue_as_json, [:pointer], :string
         attach_function :SharedTimer_drop, [:pointer], :void
         attach_function :SharedTimer_share, [:pointer], :pointer
         attach_function :SharedTimer_read, [:pointer], :pointer
         attach_function :SharedTimer_write, [:pointer], :pointer
         attach_function :SharedTimer_replace_inner, [:pointer, :pointer], :void
-        attach_function :SplitComponentState_columns_len, [:pointer, :size_t], :size_t
+        attach_function :SoftwareRenderer_new, [], :pointer
+        attach_function :SoftwareRenderer_drop, [:pointer], :void
+        attach_function :SoftwareRenderer_render, [:pointer, :pointer, :pointer, :uint32, :uint32, :uint32, :bool], :void
         attach_function :SplitsComponent_new, [], :pointer
         attach_function :SplitsComponent_drop, [:pointer], :void
         attach_function :SplitsComponent_into_generic, [:pointer], :pointer
@@ -292,11 +347,15 @@ module LiveSplitCore
         attach_function :SplitsComponentState_len, [:pointer], :size_t
         attach_function :SplitsComponentState_icon_change_count, [:pointer], :size_t
         attach_function :SplitsComponentState_icon_change_segment_index, [:pointer, :size_t], :size_t
-        attach_function :SplitsComponentState_icon_change_icon, [:pointer, :size_t], :string
+        attach_function :SplitsComponentState_icon_change_icon_ptr, [:pointer, :size_t], :pointer
+        attach_function :SplitsComponentState_icon_change_icon_len, [:pointer, :size_t], :size_t
         attach_function :SplitsComponentState_name, [:pointer, :size_t], :string
+        attach_function :SplitsComponentState_columns_len, [:pointer, :size_t], :size_t
         attach_function :SplitsComponentState_column_value, [:pointer, :size_t, :size_t], :string
         attach_function :SplitsComponentState_column_semantic_color, [:pointer, :size_t, :size_t], :string
         attach_function :SplitsComponentState_is_current_split, [:pointer, :size_t], :bool
+        attach_function :SplitsComponentState_has_column_labels, [:pointer], :bool
+        attach_function :SplitsComponentState_column_label, [:pointer, :size_t], :string
         attach_function :SumOfBestCleaner_drop, [:pointer], :void
         attach_function :SumOfBestCleaner_next_potential_clean_up, [:pointer], :pointer
         attach_function :SumOfBestCleaner_apply, [:pointer, :pointer], :void
@@ -305,14 +364,11 @@ module LiveSplitCore
         attach_function :SumOfBestComponent_into_generic, [:pointer], :pointer
         attach_function :SumOfBestComponent_state_as_json, [:pointer, :pointer], :string
         attach_function :SumOfBestComponent_state, [:pointer, :pointer], :pointer
-        attach_function :SumOfBestComponentState_drop, [:pointer], :void
-        attach_function :SumOfBestComponentState_text, [:pointer], :string
-        attach_function :SumOfBestComponentState_time, [:pointer], :string
         attach_function :TextComponent_new, [], :pointer
         attach_function :TextComponent_drop, [:pointer], :void
         attach_function :TextComponent_into_generic, [:pointer], :pointer
-        attach_function :TextComponent_state_as_json, [:pointer], :string
-        attach_function :TextComponent_state, [:pointer], :pointer
+        attach_function :TextComponent_state_as_json, [:pointer, :pointer], :string
+        attach_function :TextComponent_state, [:pointer, :pointer], :pointer
         attach_function :TextComponent_set_center, [:pointer, :string], :void
         attach_function :TextComponent_set_left, [:pointer, :string], :void
         attach_function :TextComponent_set_right, [:pointer, :string], :void
@@ -335,6 +391,7 @@ module LiveSplitCore
         attach_function :Timer_into_shared, [:pointer], :pointer
         attach_function :Timer_into_run, [:pointer, :bool], :pointer
         attach_function :Timer_drop, [:pointer], :void
+        attach_function :Timer_current_split_index, [:pointer], :ssize_t
         attach_function :Timer_current_timing_method, [:pointer], :uint8
         attach_function :Timer_current_comparison, [:pointer], :string
         attach_function :Timer_is_game_time_initialized, [:pointer], :bool
@@ -388,7 +445,8 @@ module LiveSplitCore
         attach_function :TitleComponent_state_as_json, [:pointer, :pointer], :string
         attach_function :TitleComponent_state, [:pointer, :pointer], :pointer
         attach_function :TitleComponentState_drop, [:pointer], :void
-        attach_function :TitleComponentState_icon_change, [:pointer], :string
+        attach_function :TitleComponentState_icon_change_ptr, [:pointer], :pointer
+        attach_function :TitleComponentState_icon_change_len, [:pointer], :size_t
         attach_function :TitleComponentState_line1, [:pointer], :string
         attach_function :TitleComponentState_line2, [:pointer], :string
         attach_function :TitleComponentState_is_centered, [:pointer], :bool
@@ -401,9 +459,6 @@ module LiveSplitCore
         attach_function :TotalPlaytimeComponent_into_generic, [:pointer], :pointer
         attach_function :TotalPlaytimeComponent_state_as_json, [:pointer, :pointer], :string
         attach_function :TotalPlaytimeComponent_state, [:pointer, :pointer], :pointer
-        attach_function :TotalPlaytimeComponentState_drop, [:pointer], :void
-        attach_function :TotalPlaytimeComponentState_text, [:pointer], :string
-        attach_function :TotalPlaytimeComponentState_time, [:pointer], :string
     end
 
     class LSCHandle
@@ -513,15 +568,6 @@ module LiveSplitCore
                 raise "this is disposed"
             end
             result = Native.AtomicDateTime_is_synchronized(@handle.ptr)
-            result
-        end
-        # Converts this atomic date time into a RFC 2822 formatted date time.
-        # @return [String]
-        def to_rfc2822()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.AtomicDateTime_to_rfc2822(@handle.ptr)
             result
         end
         # Converts this atomic date time into a RFC 3339 formatted date time.
@@ -678,6 +724,79 @@ module LiveSplitCore
         end
     end
 
+    # With an Auto Splitting Runtime, the runner can use an Auto Splitter to
+    # automatically control the timer on systems that are supported.
+    class AutoSplittingRuntimeRef
+        attr_accessor :handle
+        # Attempts to load an auto splitter. Returns true if successful.
+        # @param [String] path
+        # @return [Boolean]
+        def load_script(path)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.AutoSplittingRuntime_load_script(@handle.ptr, path)
+            result
+        end
+        # Attempts to unload the auto splitter. Returns true if successful.
+        # @return [Boolean]
+        def unload_script()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.AutoSplittingRuntime_unload_script(@handle.ptr)
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # With an Auto Splitting Runtime, the runner can use an Auto Splitter to
+    # automatically control the timer on systems that are supported.
+    class AutoSplittingRuntimeRefMut < AutoSplittingRuntimeRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # With an Auto Splitting Runtime, the runner can use an Auto Splitter to
+    # automatically control the timer on systems that are supported.
+    class AutoSplittingRuntime < AutoSplittingRuntimeRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.AutoSplittingRuntime_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = AutoSplittingRuntime.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        # Creates a new Auto Splitting Runtime for a Timer.
+        # @param [SharedTimer] shared_timer
+        # @return [AutoSplittingRuntime]
+        def self.create(shared_timer)
+            if shared_timer.handle.ptr == nil
+                raise "shared_timer is disposed"
+            end
+            result = AutoSplittingRuntime.new(Native.AutoSplittingRuntime_new(shared_timer.handle.ptr))
+            shared_timer.handle.ptr = nil
+            result
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # The Blank Space Component is simply an empty component that doesn't show
     # anything other than a background. It mostly serves as padding between other
     # components.
@@ -693,29 +812,21 @@ module LiveSplitCore
     # components.
     class BlankSpaceComponentRefMut < BlankSpaceComponentRef
         # Encodes the component's state information as JSON.
-        # @param [TimerRef] timer
         # @return [String]
-        def state_as_json(timer)
+        def state_as_json()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            if timer.handle.ptr == nil
-                raise "timer is disposed"
-            end
-            result = Native.BlankSpaceComponent_state_as_json(@handle.ptr, timer.handle.ptr)
+            result = Native.BlankSpaceComponent_state_as_json(@handle.ptr)
             result
         end
-        # Calculates the component's state based on the timer provided.
-        # @param [TimerRef] timer
+        # Calculates the component's state.
         # @return [BlankSpaceComponentState]
-        def state(timer)
+        def state()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            if timer.handle.ptr == nil
-                raise "timer is disposed"
-            end
-            result = BlankSpaceComponentState.new(Native.BlankSpaceComponent_state(@handle.ptr, timer.handle.ptr))
+            result = BlankSpaceComponentState.new(Native.BlankSpaceComponent_state(@handle.ptr))
             result
         end
         def initialize(ptr)
@@ -886,7 +997,7 @@ module LiveSplitCore
         end
         # Calculates the component's state based on the timer provided.
         # @param [TimerRef] timer
-        # @return [CurrentComparisonComponentState]
+        # @return [KeyValueComponentState]
         def state(timer)
             if @handle.ptr == nil
                 raise "this is disposed"
@@ -894,7 +1005,7 @@ module LiveSplitCore
             if timer.handle.ptr == nil
                 raise "timer is disposed"
             end
-            result = CurrentComparisonComponentState.new(Native.CurrentComparisonComponent_state(@handle.ptr, timer.handle.ptr))
+            result = KeyValueComponentState.new(Native.CurrentComparisonComponent_state(@handle.ptr, timer.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -945,65 +1056,6 @@ module LiveSplitCore
         end
     end
 
-    # The state object describes the information to visualize for this component.
-    class CurrentComparisonComponentStateRef
-        attr_accessor :handle
-        # The label's text.
-        # @return [String]
-        def text()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.CurrentComparisonComponentState_text(@handle.ptr)
-            result
-        end
-        # The name of the comparison that is currently selected to be compared
-        # against.
-        # @return [String]
-        def comparison()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.CurrentComparisonComponentState_comparison(@handle.ptr)
-            result
-        end
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class CurrentComparisonComponentStateRefMut < CurrentComparisonComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class CurrentComparisonComponentState < CurrentComparisonComponentStateRefMut
-        def self.finalize(handle)
-            proc {
-                if handle.ptr != nil
-                    Native.CurrentComparisonComponentState_drop handle.ptr
-                    handle.ptr = nil
-                end
-            }
-        end
-        def dispose
-            finalizer = CurrentComparisonComponentState.finalize @handle
-            finalizer.call
-        end
-        def with
-            yield self
-            self.dispose
-        end
-        def initialize(ptr)
-            handle = LSCHandle.new ptr
-            @handle = handle
-            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
-        end
-    end
-
     # The Current Pace Component is a component that shows a prediction of the
     # current attempt's final time, if the current attempt's pace matches the
     # chosen comparison for the remainder of the run.
@@ -1033,7 +1085,7 @@ module LiveSplitCore
         end
         # Calculates the component's state based on the timer provided.
         # @param [TimerRef] timer
-        # @return [CurrentPaceComponentState]
+        # @return [KeyValueComponentState]
         def state(timer)
             if @handle.ptr == nil
                 raise "this is disposed"
@@ -1041,7 +1093,7 @@ module LiveSplitCore
             if timer.handle.ptr == nil
                 raise "timer is disposed"
             end
-            result = CurrentPaceComponentState.new(Native.CurrentPaceComponent_state(@handle.ptr, timer.handle.ptr))
+            result = KeyValueComponentState.new(Native.CurrentPaceComponent_state(@handle.ptr, timer.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -1093,64 +1145,6 @@ module LiveSplitCore
         end
     end
 
-    # The state object describes the information to visualize for this component.
-    class CurrentPaceComponentStateRef
-        attr_accessor :handle
-        # The label's text.
-        # @return [String]
-        def text()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.CurrentPaceComponentState_text(@handle.ptr)
-            result
-        end
-        # The current pace.
-        # @return [String]
-        def time()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.CurrentPaceComponentState_time(@handle.ptr)
-            result
-        end
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class CurrentPaceComponentStateRefMut < CurrentPaceComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class CurrentPaceComponentState < CurrentPaceComponentStateRefMut
-        def self.finalize(handle)
-            proc {
-                if handle.ptr != nil
-                    Native.CurrentPaceComponentState_drop handle.ptr
-                    handle.ptr = nil
-                end
-            }
-        end
-        def dispose
-            finalizer = CurrentPaceComponentState.finalize @handle
-            finalizer.call
-        end
-        def with
-            yield self
-            self.dispose
-        end
-        def initialize(ptr)
-            handle = LSCHandle.new ptr
-            @handle = handle
-            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
-        end
-    end
-
     # The Delta Component is a component that shows the how far ahead or behind
     # the current attempt is compared to the chosen comparison.
     class DeltaComponentRef
@@ -1184,7 +1178,7 @@ module LiveSplitCore
         # settings provided.
         # @param [TimerRef] timer
         # @param [GeneralLayoutSettingsRef] layout_settings
-        # @return [DeltaComponentState]
+        # @return [KeyValueComponentState]
         def state(timer, layout_settings)
             if @handle.ptr == nil
                 raise "this is disposed"
@@ -1195,7 +1189,7 @@ module LiveSplitCore
             if layout_settings.handle.ptr == nil
                 raise "layout_settings is disposed"
             end
-            result = DeltaComponentState.new(Native.DeltaComponent_state(@handle.ptr, timer.handle.ptr, layout_settings.handle.ptr))
+            result = KeyValueComponentState.new(Native.DeltaComponent_state(@handle.ptr, timer.handle.ptr, layout_settings.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -1238,73 +1232,6 @@ module LiveSplitCore
             result = Component.new(Native.DeltaComponent_into_generic(@handle.ptr))
             @handle.ptr = nil
             result
-        end
-        def initialize(ptr)
-            handle = LSCHandle.new ptr
-            @handle = handle
-            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class DeltaComponentStateRef
-        attr_accessor :handle
-        # The label's text.
-        # @return [String]
-        def text()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.DeltaComponentState_text(@handle.ptr)
-            result
-        end
-        # The delta.
-        # @return [String]
-        def time()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.DeltaComponentState_time(@handle.ptr)
-            result
-        end
-        # The semantic coloring information the delta time carries.
-        # @return [String]
-        def semantic_color()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.DeltaComponentState_semantic_color(@handle.ptr)
-            result
-        end
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class DeltaComponentStateRefMut < DeltaComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class DeltaComponentState < DeltaComponentStateRefMut
-        def self.finalize(handle)
-            proc {
-                if handle.ptr != nil
-                    Native.DeltaComponentState_drop handle.ptr
-                    handle.ptr = nil
-                end
-            }
-        end
-        def dispose
-            finalizer = DeltaComponentState.finalize @handle
-            finalizer.call
-        end
-        def with
-            yield self
-            self.dispose
         end
         def initialize(ptr)
             handle = LSCHandle.new ptr
@@ -1521,16 +1448,25 @@ module LiveSplitCore
             result = Native.DetailedTimerComponentState_comparison2_time(@handle.ptr)
             result
         end
-        # The segment's icon encoded as a Data URL. This value is only specified
-        # whenever the icon changes. If you explicitly want to query this value,
-        # remount the component. The String itself may be empty. This indicates
-        # that there is no icon.
-        # @return [String, nil]
-        def icon_change()
+        # The data of the segment's icon. This value is only specified whenever the
+        # icon changes. If you explicitly want to query this value, remount the
+        # component. The buffer itself may be empty. This indicates that there is no
+        # icon.
+        # @return [Integer]
+        def icon_change_ptr()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.DetailedTimerComponentState_icon_change(@handle.ptr)
+            result = Native.DetailedTimerComponentState_icon_change_ptr(@handle.ptr)
+            result
+        end
+        # The length of the data of the segment's icon.
+        # @return [Integer]
+        def icon_change_len()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.DetailedTimerComponentState_icon_change_len(@handle.ptr)
             result
         end
         # The name of the segment. This may be nil if it's not supposed to be
@@ -2037,12 +1973,30 @@ module LiveSplitCore
             yield self
             self.dispose
         end
+        # Creates a new Hotkey Configuration with default settings.
+        # @return [HotkeyConfig]
+        def self.create()
+            result = HotkeyConfig.new(Native.HotkeyConfig_new())
+            result
+        end
         # Parses a hotkey configuration from the given JSON description. nil is
         # returned if it couldn't be parsed.
         # @param [String] settings
         # @return [HotkeyConfig, nil]
         def self.parse_json(settings)
             result = HotkeyConfig.new(Native.HotkeyConfig_parse_json(settings))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Attempts to parse a hotkey configuration from a given file. nil is
+        # returned it couldn't be parsed. This will not close the file descriptor /
+        # handle.
+        # @param [Integer] handle
+        # @return [HotkeyConfig, nil]
+        def self.parse_file_handle(handle)
+            result = HotkeyConfig.new(Native.HotkeyConfig_parse_file_handle(handle))
             if result.handle.ptr == nil
                 return nil
             end
@@ -2062,22 +2016,6 @@ module LiveSplitCore
     # System temporarily. By default the Hotkey System is activated.
     class HotkeySystemRef
         attr_accessor :handle
-        # Deactivates the Hotkey System. No hotkeys will go through until it gets
-        # activated again. If it's already deactivated, nothing happens.
-        def deactivate()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            Native.HotkeySystem_deactivate(@handle.ptr)
-        end
-        # Activates a previously deactivated Hotkey System. If it's already
-        # active, nothing happens.
-        def activate()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            Native.HotkeySystem_activate(@handle.ptr)
-        end
         # Returns the hotkey configuration currently in use by the Hotkey System.
         # @return [HotkeyConfig]
         def config()
@@ -2085,6 +2023,16 @@ module LiveSplitCore
                 raise "this is disposed"
             end
             result = HotkeyConfig.new(Native.HotkeySystem_config(@handle.ptr))
+            result
+        end
+        # Resolves the key according to the current keyboard layout.
+        # @param [String] key_code
+        # @return [String]
+        def resolve(key_code)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.HotkeySystem_resolve(@handle.ptr, key_code)
             result
         end
         def initialize(ptr)
@@ -2098,6 +2046,26 @@ module LiveSplitCore
     # out on platforms that don't support hotkeys. You can turn off a Hotkey
     # System temporarily. By default the Hotkey System is activated.
     class HotkeySystemRefMut < HotkeySystemRef
+        # Deactivates the Hotkey System. No hotkeys will go through until it gets
+        # activated again. If it's already deactivated, nothing happens.
+        # @return [Boolean]
+        def deactivate()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.HotkeySystem_deactivate(@handle.ptr)
+            result
+        end
+        # Activates a previously deactivated Hotkey System. If it's already
+        # active, nothing happens.
+        # @return [Boolean]
+        def activate()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.HotkeySystem_activate(@handle.ptr)
+            result
+        end
         # Applies a new hotkey configuration to the Hotkey System. Each hotkey is
         # changed to the one specified in the configuration. This operation may fail
         # if you provide a hotkey configuration where a hotkey is used for multiple
@@ -2183,6 +2151,73 @@ module LiveSplitCore
         end
     end
 
+    # The state object describes the information to visualize for a key value based component.
+    class KeyValueComponentStateRef
+        attr_accessor :handle
+        # The key to visualize.
+        # @return [String]
+        def key()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.KeyValueComponentState_key(@handle.ptr)
+            result
+        end
+        # The value to visualize.
+        # @return [String]
+        def value()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.KeyValueComponentState_value(@handle.ptr)
+            result
+        end
+        # The semantic coloring information the value carries.
+        # @return [String]
+        def semantic_color()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.KeyValueComponentState_semantic_color(@handle.ptr)
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object describes the information to visualize for a key value based component.
+    class KeyValueComponentStateRefMut < KeyValueComponentStateRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object describes the information to visualize for a key value based component.
+    class KeyValueComponentState < KeyValueComponentStateRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.KeyValueComponentState_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = KeyValueComponentState.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # A Layout allows you to combine multiple components together to visualize a
     # variety of information the runner is interested in.
     class LayoutRef
@@ -2213,6 +2248,52 @@ module LiveSplitCore
     # A Layout allows you to combine multiple components together to visualize a
     # variety of information the runner is interested in.
     class LayoutRefMut < LayoutRef
+        # Calculates and returns the layout's state based on the timer provided.
+        # @param [TimerRef] timer
+        # @return [LayoutState]
+        def state(timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = LayoutState.new(Native.Layout_state(@handle.ptr, timer.handle.ptr))
+            result
+        end
+        # Updates the layout's state based on the timer provided.
+        # @param [LayoutStateRefMut] state
+        # @param [TimerRef] timer
+        def update_state(state, timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if state.handle.ptr == nil
+                raise "state is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            Native.Layout_update_state(@handle.ptr, state.handle.ptr, timer.handle.ptr)
+        end
+        # Updates the layout's state based on the timer provided and encodes it as
+        # JSON.
+        # @param [LayoutStateRefMut] state
+        # @param [TimerRef] timer
+        # @return [String]
+        def update_state_as_json(state, timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if state.handle.ptr == nil
+                raise "state is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = Native.Layout_update_state_as_json(@handle.ptr, state.handle.ptr, timer.handle.ptr)
+            result
+        end
         # Calculates the layout's state based on the timer provided and encodes it as
         # JSON. You can use this to visualize all of the components of a layout.
         # @param [TimerRef] timer
@@ -2313,6 +2394,17 @@ module LiveSplitCore
             end
             result
         end
+        # Attempts to parse a layout from a given file. nil is returned it couldn't
+        # be parsed. This will not close the file descriptor / handle.
+        # @param [Integer] handle
+        # @return [Layout, nil]
+        def self.parse_file_handle(handle)
+            result = Layout.new(Native.Layout_parse_file_handle(handle))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
         # Parses a layout saved by the original LiveSplit. This is lossy, as not
         # everything can be converted completely. nil is returned if it couldn't be
         # parsed at all.
@@ -2348,6 +2440,15 @@ module LiveSplitCore
             result = Native.LayoutEditor_state_as_json(@handle.ptr)
             result
         end
+        # Returns the state of the Layout Editor.
+        # @return [LayoutEditorState]
+        def state()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = LayoutEditorState.new(Native.LayoutEditor_state(@handle.ptr))
+            result
+        end
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
@@ -2371,6 +2472,39 @@ module LiveSplitCore
                 raise "timer is disposed"
             end
             result = Native.LayoutEditor_layout_state_as_json(@handle.ptr, timer.handle.ptr)
+            result
+        end
+        # Updates the layout's state based on the timer provided.
+        # @param [LayoutStateRefMut] state
+        # @param [TimerRef] timer
+        def update_layout_state(state, timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if state.handle.ptr == nil
+                raise "state is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            Native.LayoutEditor_update_layout_state(@handle.ptr, state.handle.ptr, timer.handle.ptr)
+        end
+        # Updates the layout's state based on the timer provided and encodes it as
+        # JSON.
+        # @param [LayoutStateRefMut] state
+        # @param [TimerRef] timer
+        # @return [String]
+        def update_layout_state_as_json(state, timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if state.handle.ptr == nil
+                raise "state is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = Native.LayoutEditor_update_layout_state_as_json(@handle.ptr, state.handle.ptr, timer.handle.ptr)
             result
         end
         # Selects the component with the given index in order to modify its
@@ -2534,6 +2668,312 @@ module LiveSplitCore
         end
     end
 
+    # Represents the current state of the Layout Editor in order to visualize it properly.
+    class LayoutEditorStateRef
+        attr_accessor :handle
+        # Returns the number of components in the layout.
+        # @return [Integer]
+        def component_len()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutEditorState_component_len(@handle.ptr)
+            result
+        end
+        # Returns the name of the component at the specified index.
+        # @param [Integer] index
+        # @return [String]
+        def component_text(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutEditorState_component_text(@handle.ptr, index)
+            result
+        end
+        # Returns a bitfield corresponding to which buttons are active.
+        # 
+        # The bits are as follows:
+        # 
+        # * `0x04` - Can remove the current component
+        # * `0x02` - Can move the current component up
+        # * `0x01` - Can move the current component down
+        # @return [Integer]
+        def buttons()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutEditorState_buttons(@handle.ptr)
+            result
+        end
+        # Returns the index of the currently selected component.
+        # @return [Integer]
+        def selected_component()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutEditorState_selected_component(@handle.ptr)
+            result
+        end
+        # Returns the number of fields in the layout's settings.
+        # 
+        # Set `component_settings` to true to use the selected component's settings instead.
+        # @param [Boolean] component_settings
+        # @return [Integer]
+        def field_len(component_settings)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutEditorState_field_len(@handle.ptr, component_settings)
+            result
+        end
+        # Returns the name of the layout's setting at the specified index.
+        # 
+        # Set `component_settings` to true to use the selected component's settings instead.
+        # @param [Boolean] component_settings
+        # @param [Integer] index
+        # @return [String]
+        def field_text(component_settings, index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutEditorState_field_text(@handle.ptr, component_settings, index)
+            result
+        end
+        # Returns the value of the layout's setting at the specified index.
+        # 
+        # Set `component_settings` to true to use the selected component's settings instead.
+        # @param [Boolean] component_settings
+        # @param [Integer] index
+        # @return [SettingValueRef]
+        def field_value(component_settings, index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = SettingValueRef.new(Native.LayoutEditorState_field_value(@handle.ptr, component_settings, index))
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # Represents the current state of the Layout Editor in order to visualize it properly.
+    class LayoutEditorStateRefMut < LayoutEditorStateRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # Represents the current state of the Layout Editor in order to visualize it properly.
+    class LayoutEditorState < LayoutEditorStateRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.LayoutEditorState_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = LayoutEditorState.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
+    # The state object describes the information to visualize for an entire
+    # layout. Use this with care, as invalid usage will result in a panic.
+    # 
+    # Specifically, you should avoid doing the following:
+    # 
+    # - Using out of bounds indices.
+    # - Using the wrong getter function on the wrong type of component.
+    class LayoutStateRef
+        attr_accessor :handle
+        # Encodes the layout state as JSON. You can use this to visualize all of the
+        # components of a layout.
+        # @return [String]
+        def as_json()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutState_as_json(@handle.ptr)
+            result
+        end
+        # Gets the number of Components in the Layout State.
+        # @return [Integer]
+        def len()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutState_len(@handle.ptr)
+            result
+        end
+        # Returns a string describing the type of the Component at the specified
+        # index.
+        # @param [Integer] index
+        # @return [String]
+        def component_type(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.LayoutState_component_type(@handle.ptr, index)
+            result
+        end
+        # Gets the Blank Space component state at the specified index.
+        # @param [Integer] index
+        # @return [BlankSpaceComponentStateRef]
+        def component_as_blank_space(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = BlankSpaceComponentStateRef.new(Native.LayoutState_component_as_blank_space(@handle.ptr, index))
+            result
+        end
+        # Gets the Detailed Timer component state at the specified index.
+        # @param [Integer] index
+        # @return [DetailedTimerComponentStateRef]
+        def component_as_detailed_timer(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = DetailedTimerComponentStateRef.new(Native.LayoutState_component_as_detailed_timer(@handle.ptr, index))
+            result
+        end
+        # Gets the Graph component state at the specified index.
+        # @param [Integer] index
+        # @return [GraphComponentStateRef]
+        def component_as_graph(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = GraphComponentStateRef.new(Native.LayoutState_component_as_graph(@handle.ptr, index))
+            result
+        end
+        # Gets the Key Value component state at the specified index.
+        # @param [Integer] index
+        # @return [KeyValueComponentStateRef]
+        def component_as_key_value(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = KeyValueComponentStateRef.new(Native.LayoutState_component_as_key_value(@handle.ptr, index))
+            result
+        end
+        # Gets the Separator component state at the specified index.
+        # @param [Integer] index
+        # @return [SeparatorComponentStateRef]
+        def component_as_separator(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = SeparatorComponentStateRef.new(Native.LayoutState_component_as_separator(@handle.ptr, index))
+            result
+        end
+        # Gets the Splits component state at the specified index.
+        # @param [Integer] index
+        # @return [SplitsComponentStateRef]
+        def component_as_splits(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = SplitsComponentStateRef.new(Native.LayoutState_component_as_splits(@handle.ptr, index))
+            result
+        end
+        # Gets the Text component state at the specified index.
+        # @param [Integer] index
+        # @return [TextComponentStateRef]
+        def component_as_text(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = TextComponentStateRef.new(Native.LayoutState_component_as_text(@handle.ptr, index))
+            result
+        end
+        # Gets the Timer component state at the specified index.
+        # @param [Integer] index
+        # @return [TimerComponentStateRef]
+        def component_as_timer(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = TimerComponentStateRef.new(Native.LayoutState_component_as_timer(@handle.ptr, index))
+            result
+        end
+        # Gets the Title component state at the specified index.
+        # @param [Integer] index
+        # @return [TitleComponentStateRef]
+        def component_as_title(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = TitleComponentStateRef.new(Native.LayoutState_component_as_title(@handle.ptr, index))
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object describes the information to visualize for an entire
+    # layout. Use this with care, as invalid usage will result in a panic.
+    # 
+    # Specifically, you should avoid doing the following:
+    # 
+    # - Using out of bounds indices.
+    # - Using the wrong getter function on the wrong type of component.
+    class LayoutStateRefMut < LayoutStateRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object describes the information to visualize for an entire
+    # layout. Use this with care, as invalid usage will result in a panic.
+    # 
+    # Specifically, you should avoid doing the following:
+    # 
+    # - Using out of bounds indices.
+    # - Using the wrong getter function on the wrong type of component.
+    class LayoutState < LayoutStateRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.LayoutState_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = LayoutState.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        # Creates a new empty Layout State. This is useful for creating an empty
+        # layout state that gets updated over time.
+        # @return [LayoutState]
+        def self.create()
+            result = LayoutState.new(Native.LayoutState_new())
+            result
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # A run parsed by the Composite Parser. This contains the Run itself and
     # information about which parser parsed it.
     class ParseRunResultRef
@@ -2619,6 +3059,98 @@ module LiveSplitCore
         end
     end
 
+    # The PB Chance Component is a component that shows how likely it is to beat
+    # the Personal Best. If there is no active attempt it shows the general chance
+    # of beating the Personal Best. During an attempt it actively changes based on
+    # how well the attempt is going.
+    class PbChanceComponentRef
+        attr_accessor :handle
+        # Encodes the component's state information as JSON.
+        # @param [TimerRef] timer
+        # @return [String]
+        def state_as_json(timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = Native.PbChanceComponent_state_as_json(@handle.ptr, timer.handle.ptr)
+            result
+        end
+        # Calculates the component's state based on the timer provided.
+        # @param [TimerRef] timer
+        # @return [KeyValueComponentState]
+        def state(timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = KeyValueComponentState.new(Native.PbChanceComponent_state(@handle.ptr, timer.handle.ptr))
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The PB Chance Component is a component that shows how likely it is to beat
+    # the Personal Best. If there is no active attempt it shows the general chance
+    # of beating the Personal Best. During an attempt it actively changes based on
+    # how well the attempt is going.
+    class PbChanceComponentRefMut < PbChanceComponentRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The PB Chance Component is a component that shows how likely it is to beat
+    # the Personal Best. If there is no active attempt it shows the general chance
+    # of beating the Personal Best. During an attempt it actively changes based on
+    # how well the attempt is going.
+    class PbChanceComponent < PbChanceComponentRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.PbChanceComponent_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = PbChanceComponent.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        # Creates a new PB Chance Component.
+        # @return [PbChanceComponent]
+        def self.create()
+            result = PbChanceComponent.new(Native.PbChanceComponent_new())
+            result
+        end
+        # Converts the component into a generic component suitable for using with a
+        # layout.
+        # @return [Component]
+        def into_generic()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Component.new(Native.PbChanceComponent_into_generic(@handle.ptr))
+            @handle.ptr = nil
+            result
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # The Possible Time Save Component is a component that shows how much time the
     # chosen comparison could've saved for the current segment, based on the Best
     # Segments. This component also allows showing the Total Possible Time Save
@@ -2640,7 +3172,7 @@ module LiveSplitCore
         end
         # Calculates the component's state based on the timer provided.
         # @param [TimerRef] timer
-        # @return [PossibleTimeSaveComponentState]
+        # @return [KeyValueComponentState]
         def state(timer)
             if @handle.ptr == nil
                 raise "this is disposed"
@@ -2648,7 +3180,7 @@ module LiveSplitCore
             if timer.handle.ptr == nil
                 raise "timer is disposed"
             end
-            result = PossibleTimeSaveComponentState.new(Native.PossibleTimeSaveComponent_state(@handle.ptr, timer.handle.ptr))
+            result = KeyValueComponentState.new(Native.PossibleTimeSaveComponent_state(@handle.ptr, timer.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -2703,64 +3235,6 @@ module LiveSplitCore
             result = Component.new(Native.PossibleTimeSaveComponent_into_generic(@handle.ptr))
             @handle.ptr = nil
             result
-        end
-        def initialize(ptr)
-            handle = LSCHandle.new ptr
-            @handle = handle
-            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class PossibleTimeSaveComponentStateRef
-        attr_accessor :handle
-        # The label's text.
-        # @return [String]
-        def text()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.PossibleTimeSaveComponentState_text(@handle.ptr)
-            result
-        end
-        # The current possible time save.
-        # @return [String]
-        def time()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.PossibleTimeSaveComponentState_time(@handle.ptr)
-            result
-        end
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class PossibleTimeSaveComponentStateRefMut < PossibleTimeSaveComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class PossibleTimeSaveComponentState < PossibleTimeSaveComponentStateRefMut
-        def self.finalize(handle)
-            proc {
-                if handle.ptr != nil
-                    Native.PossibleTimeSaveComponentState_drop handle.ptr
-                    handle.ptr = nil
-                end
-            }
-        end
-        def dispose
-            finalizer = PossibleTimeSaveComponentState.finalize @handle
-            finalizer.call
-        end
-        def with
-            yield self
-            self.dispose
         end
         def initialize(ptr)
             handle = LSCHandle.new ptr
@@ -2856,7 +3330,7 @@ module LiveSplitCore
         # settings provided.
         # @param [TimerRef] timer
         # @param [GeneralLayoutSettingsRef] layout_settings
-        # @return [PreviousSegmentComponentState]
+        # @return [KeyValueComponentState]
         def state(timer, layout_settings)
             if @handle.ptr == nil
                 raise "this is disposed"
@@ -2867,7 +3341,7 @@ module LiveSplitCore
             if layout_settings.handle.ptr == nil
                 raise "layout_settings is disposed"
             end
-            result = PreviousSegmentComponentState.new(Native.PreviousSegmentComponent_state(@handle.ptr, timer.handle.ptr, layout_settings.handle.ptr))
+            result = KeyValueComponentState.new(Native.PreviousSegmentComponent_state(@handle.ptr, timer.handle.ptr, layout_settings.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -2932,73 +3406,6 @@ module LiveSplitCore
         end
     end
 
-    # The state object describes the information to visualize for this component.
-    class PreviousSegmentComponentStateRef
-        attr_accessor :handle
-        # The label's text.
-        # @return [String]
-        def text()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.PreviousSegmentComponentState_text(@handle.ptr)
-            result
-        end
-        # The delta (and possibly the possible time save).
-        # @return [String]
-        def time()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.PreviousSegmentComponentState_time(@handle.ptr)
-            result
-        end
-        # The semantic coloring information the delta time carries.
-        # @return [String]
-        def semantic_color()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.PreviousSegmentComponentState_semantic_color(@handle.ptr)
-            result
-        end
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class PreviousSegmentComponentStateRefMut < PreviousSegmentComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class PreviousSegmentComponentState < PreviousSegmentComponentStateRefMut
-        def self.finalize(handle)
-            proc {
-                if handle.ptr != nil
-                    Native.PreviousSegmentComponentState_drop handle.ptr
-                    handle.ptr = nil
-                end
-            }
-        end
-        def dispose
-            finalizer = PreviousSegmentComponentState.finalize @handle
-            finalizer.call
-        end
-        def with
-            yield self
-            self.dispose
-        end
-        def initialize(ptr)
-            handle = LSCHandle.new ptr
-            @handle = handle
-            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
-        end
-    end
-
     # A Run stores the split times for a specific game and category of a runner.
     class RunRef
         attr_accessor :handle
@@ -3020,14 +3427,23 @@ module LiveSplitCore
             result = Native.Run_game_name(@handle.ptr)
             result
         end
-        # Accesses the Data URL storing the game icon's data. If there is no game
-        # icon, this returns an empty string instead of a URL.
-        # @return [String]
-        def game_icon()
+        # Accesses the game icon's data. If there is no game icon, this returns an
+        # empty buffer.
+        # @return [Integer]
+        def game_icon_ptr()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.Run_game_icon(@handle.ptr)
+            result = Native.Run_game_icon_ptr(@handle.ptr)
+            result
+        end
+        # Accesses the amount of bytes the game icon's data takes up.
+        # @return [Integer]
+        def game_icon_len()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.Run_game_icon_len(@handle.ptr)
             result
         end
         # Accesses the name of the category this Run is for.
@@ -3281,34 +3697,34 @@ module LiveSplitCore
             result
         end
         # Attempts to parse a splits file from an array by invoking the corresponding
-        # parser for the file format detected. A path to the splits file can be
-        # provided, which helps saving the splits file again later. Additionally you
-        # need to specify if additional files, like external images are allowed to be
-        # loaded. If you are using livesplit-core in a server-like environment, set
-        # this to false. Only client-side applications should set this to true.
+        # parser for the file format detected. Additionally you can provide the path
+        # of the splits file so additional files, like external images, can be loaded.
+        # If you are using livesplit-core in a server-like environment, set this to
+        # nil. Only client-side applications should provide a path here. Unlike the
+        # normal parsing function, it also fixes problems in the Run, such as
+        # decreasing times and missing information.
         # @param [Integer] data
         # @param [Integer] length
-        # @param [String] path
-        # @param [Boolean] load_files
+        # @param [String] load_files_path
         # @return [ParseRunResult]
-        def self.parse(data, length, path, load_files)
-            result = ParseRunResult.new(Native.Run_parse(data, length, path, load_files))
+        def self.parse(data, length, load_files_path)
+            result = ParseRunResult.new(Native.Run_parse(data, length, load_files_path))
             result
         end
         # Attempts to parse a splits file from a file by invoking the corresponding
-        # parser for the file format detected. A path to the splits file can be
-        # provided, which helps saving the splits file again later. Additionally you
-        # need to specify if additional files, like external images are allowed to be
-        # loaded. If you are using livesplit-core in a server-like environment, set
-        # this to false. Only client-side applications should set this to true. On
-        # Unix you pass a file descriptor to this function. On Windows you pass a file
-        # handle to this function. The file descriptor / handle does not get closed.
+        # parser for the file format detected. Additionally you can provide the path
+        # of the splits file so additional files, like external images, can be loaded.
+        # If you are using livesplit-core in a server-like environment, set this to
+        # nil. Only client-side applications should provide a path here. Unlike the
+        # normal parsing function, it also fixes problems in the Run, such as
+        # decreasing times and missing information. On Unix you pass a file descriptor
+        # to this function. On Windows you pass a file handle to this function. The
+        # file descriptor / handle does not get closed.
         # @param [Integer] handle
-        # @param [String] path
-        # @param [Boolean] load_files
+        # @param [String] load_files_path
         # @return [ParseRunResult]
-        def self.parse_file_handle(handle, path, load_files)
-            result = ParseRunResult.new(Native.Run_parse_file_handle(handle, path, load_files))
+        def self.parse_file_handle(handle, load_files_path)
+            result = ParseRunResult.new(Native.Run_parse_file_handle(handle, load_files_path))
             result
         end
         def initialize(ptr)
@@ -3480,26 +3896,55 @@ module LiveSplitCore
             end
             Native.RunEditor_set_emulator_usage(@handle.ptr, uses_emulator)
         end
-        # Sets the variable with the name specified to the value specified. A
+        # Sets the speedrun.com variable with the name specified to the value specified. A
         # variable is an arbitrary key value pair storing additional information
         # about the category. An example of this may be whether Amiibos are used
         # in this category. If the variable doesn't exist yet, it is being
         # inserted.
         # @param [String] name
         # @param [String] value
-        def set_variable(name, value)
+        def set_speedrun_com_variable(name, value)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            Native.RunEditor_set_variable(@handle.ptr, name, value)
+            Native.RunEditor_set_speedrun_com_variable(@handle.ptr, name, value)
         end
-        # Removes the variable with the name specified.
+        # Removes the speedrun.com variable with the name specified.
         # @param [String] name
-        def remove_variable(name)
+        def remove_speedrun_com_variable(name)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            Native.RunEditor_remove_variable(@handle.ptr, name)
+            Native.RunEditor_remove_speedrun_com_variable(@handle.ptr, name)
+        end
+        # Adds a new permanent custom variable. If there's a temporary variable with
+        # the same name, it gets turned into a permanent variable and its value stays.
+        # If a permanent variable with the name already exists, nothing happens.
+        # @param [String] name
+        def add_custom_variable(name)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_add_custom_variable(@handle.ptr, name)
+        end
+        # Sets the value of a custom variable with the name specified. If the custom
+        # variable does not exist, or is not a permanent variable, nothing happens.
+        # @param [String] name
+        # @param [String] value
+        def set_custom_variable(name, value)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_set_custom_variable(@handle.ptr, name, value)
+        end
+        # Removes the custom variable with the name specified. If the custom variable
+        # does not exist, or is not a permanent variable, nothing happens.
+        # @param [String] name
+        def remove_custom_variable(name)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            Native.RunEditor_remove_custom_variable(@handle.ptr, name)
         end
         # Resets all the Metadata Information.
         def clear_metadata()
@@ -3686,6 +4131,25 @@ module LiveSplitCore
             result = Native.RunEditor_move_comparison(@handle.ptr, src_index, dst_index)
             result
         end
+        # Parses a goal time and generates a custom goal comparison based on the
+        # parsed value. The comparison's times are automatically balanced based on the
+        # runner's history such that it roughly represents what split times for the
+        # goal time would roughly look like. Since it is populated by the runner's
+        # history, only goal times within the sum of the best segments and the sum of
+        # the worst segments are supported. Everything else is automatically capped by
+        # that range. The comparison is only populated for the selected timing method.
+        # The other timing method's comparison times are not modified by this, so you
+        # can call this again with the other timing method to generate the comparison
+        # times for both timing methods.
+        # @param [String] time
+        # @return [Boolean]
+        def parse_and_generate_goal_comparison(time)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.RunEditor_parse_and_generate_goal_comparison(@handle.ptr, time)
+            result
+        end
         # Clears out the Attempt History and the Segment Histories of all the
         # segments.
         def clear_history()
@@ -3825,14 +4289,24 @@ module LiveSplitCore
             result = Native.RunMetadata_region_name(@handle.ptr)
             result
         end
-        # Returns an iterator iterating over all the variables and their values
-        # that have been specified.
-        # @return [RunMetadataVariablesIter]
-        def variables()
+        # Returns an iterator iterating over all the speedrun.com variables and their
+        # values that have been specified.
+        # @return [RunMetadataSpeedrunComVariablesIter]
+        def speedrun_com_variables()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = RunMetadataVariablesIter.new(Native.RunMetadata_variables(@handle.ptr))
+            result = RunMetadataSpeedrunComVariablesIter.new(Native.RunMetadata_speedrun_com_variables(@handle.ptr))
+            result
+        end
+        # Returns an iterator iterating over all the custom variables and their
+        # values. This includes both temporary and permanent variables.
+        # @return [RunMetadataCustomVariablesIter]
+        def custom_variables()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = RunMetadataCustomVariablesIter.new(Native.RunMetadata_custom_variables(@handle.ptr))
             result
         end
         def initialize(ptr)
@@ -3873,27 +4347,41 @@ module LiveSplitCore
         end
     end
 
-    # A Run Metadata variable is an arbitrary key value pair storing additional
-    # information about the category. An example of this may be whether Amiibos
-    # are used in the category.
-    class RunMetadataVariableRef
+    # A custom variable is a key value pair storing additional information about a
+    # run. Unlike the speedrun.com variables, these can be fully custom and don't
+    # need to correspond to anything on speedrun.com. Permanent custom variables
+    # can be specified by the runner. Additionally auto splitters or other sources
+    # may provide temporary custom variables that are not stored in the splits
+    # files.
+    class RunMetadataCustomVariableRef
         attr_accessor :handle
-        # Accesses the name of this Run Metadata variable.
+        # Accesses the name of this custom variable.
         # @return [String]
         def name()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.RunMetadataVariable_name(@handle.ptr)
+            result = Native.RunMetadataCustomVariable_name(@handle.ptr)
             result
         end
-        # Accesses the value of this Run Metadata variable.
+        # Accesses the value of this custom variable.
         # @return [String]
         def value()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.RunMetadataVariable_value(@handle.ptr)
+            result = Native.RunMetadataCustomVariable_value(@handle.ptr)
+            result
+        end
+        # Returns true if the custom variable is permanent. Permanent variables get
+        # stored in the splits file and are visible in the run editor. Temporary
+        # variables are not.
+        # @return [Boolean]
+        def is_permanent()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.RunMetadataCustomVariable_is_permanent(@handle.ptr)
             result
         end
         def initialize(ptr)
@@ -3901,29 +4389,35 @@ module LiveSplitCore
         end
     end
 
-    # A Run Metadata variable is an arbitrary key value pair storing additional
-    # information about the category. An example of this may be whether Amiibos
-    # are used in the category.
-    class RunMetadataVariableRefMut < RunMetadataVariableRef
+    # A custom variable is a key value pair storing additional information about a
+    # run. Unlike the speedrun.com variables, these can be fully custom and don't
+    # need to correspond to anything on speedrun.com. Permanent custom variables
+    # can be specified by the runner. Additionally auto splitters or other sources
+    # may provide temporary custom variables that are not stored in the splits
+    # files.
+    class RunMetadataCustomVariableRefMut < RunMetadataCustomVariableRef
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
     end
 
-    # A Run Metadata variable is an arbitrary key value pair storing additional
-    # information about the category. An example of this may be whether Amiibos
-    # are used in the category.
-    class RunMetadataVariable < RunMetadataVariableRefMut
+    # A custom variable is a key value pair storing additional information about a
+    # run. Unlike the speedrun.com variables, these can be fully custom and don't
+    # need to correspond to anything on speedrun.com. Permanent custom variables
+    # can be specified by the runner. Additionally auto splitters or other sources
+    # may provide temporary custom variables that are not stored in the splits
+    # files.
+    class RunMetadataCustomVariable < RunMetadataCustomVariableRefMut
         def self.finalize(handle)
             proc {
                 if handle.ptr != nil
-                    Native.RunMetadataVariable_drop handle.ptr
+                    Native.RunMetadataCustomVariable_drop handle.ptr
                     handle.ptr = nil
                 end
             }
         end
         def dispose
-            finalizer = RunMetadataVariable.finalize @handle
+            finalizer = RunMetadataCustomVariable.finalize @handle
             finalizer.call
         end
         def with
@@ -3937,26 +4431,26 @@ module LiveSplitCore
         end
     end
 
-    # An iterator iterating over all the Run Metadata variables and their values
+    # An iterator iterating over all the custom variables and their values
     # that have been specified.
-    class RunMetadataVariablesIterRef
+    class RunMetadataCustomVariablesIterRef
         attr_accessor :handle
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
     end
 
-    # An iterator iterating over all the Run Metadata variables and their values
+    # An iterator iterating over all the custom variables and their values
     # that have been specified.
-    class RunMetadataVariablesIterRefMut < RunMetadataVariablesIterRef
-        # Accesses the next Run Metadata variable. Returns nil if there are no more
+    class RunMetadataCustomVariablesIterRefMut < RunMetadataCustomVariablesIterRef
+        # Accesses the next custom variable. Returns nil if there are no more
         # variables.
-        # @return [RunMetadataVariableRef, nil]
+        # @return [RunMetadataCustomVariableRef, nil]
         def next()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = RunMetadataVariableRef.new(Native.RunMetadataVariablesIter_next(@handle.ptr))
+            result = RunMetadataCustomVariableRef.new(Native.RunMetadataCustomVariablesIter_next(@handle.ptr))
             if result.handle.ptr == nil
                 return nil
             end
@@ -3967,19 +4461,139 @@ module LiveSplitCore
         end
     end
 
-    # An iterator iterating over all the Run Metadata variables and their values
+    # An iterator iterating over all the custom variables and their values
     # that have been specified.
-    class RunMetadataVariablesIter < RunMetadataVariablesIterRefMut
+    class RunMetadataCustomVariablesIter < RunMetadataCustomVariablesIterRefMut
         def self.finalize(handle)
             proc {
                 if handle.ptr != nil
-                    Native.RunMetadataVariablesIter_drop handle.ptr
+                    Native.RunMetadataCustomVariablesIter_drop handle.ptr
                     handle.ptr = nil
                 end
             }
         end
         def dispose
-            finalizer = RunMetadataVariablesIter.finalize @handle
+            finalizer = RunMetadataCustomVariablesIter.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
+    # A speedrun.com variable is an arbitrary key value pair storing additional
+    # information about the category. An example of this may be whether Amiibos
+    # are used in the category.
+    class RunMetadataSpeedrunComVariableRef
+        attr_accessor :handle
+        # Accesses the name of this speedrun.com variable.
+        # @return [String]
+        def name()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.RunMetadataSpeedrunComVariable_name(@handle.ptr)
+            result
+        end
+        # Accesses the value of this speedrun.com variable.
+        # @return [String]
+        def value()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.RunMetadataSpeedrunComVariable_value(@handle.ptr)
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # A speedrun.com variable is an arbitrary key value pair storing additional
+    # information about the category. An example of this may be whether Amiibos
+    # are used in the category.
+    class RunMetadataSpeedrunComVariableRefMut < RunMetadataSpeedrunComVariableRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # A speedrun.com variable is an arbitrary key value pair storing additional
+    # information about the category. An example of this may be whether Amiibos
+    # are used in the category.
+    class RunMetadataSpeedrunComVariable < RunMetadataSpeedrunComVariableRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.RunMetadataSpeedrunComVariable_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = RunMetadataSpeedrunComVariable.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
+    # An iterator iterating over all the speedrun.com variables and their values
+    # that have been specified.
+    class RunMetadataSpeedrunComVariablesIterRef
+        attr_accessor :handle
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # An iterator iterating over all the speedrun.com variables and their values
+    # that have been specified.
+    class RunMetadataSpeedrunComVariablesIterRefMut < RunMetadataSpeedrunComVariablesIterRef
+        # Accesses the next speedrun.com variable. Returns nil if there are no more
+        # variables.
+        # @return [RunMetadataSpeedrunComVariableRef, nil]
+        def next()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = RunMetadataSpeedrunComVariableRef.new(Native.RunMetadataSpeedrunComVariablesIter_next(@handle.ptr))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # An iterator iterating over all the speedrun.com variables and their values
+    # that have been specified.
+    class RunMetadataSpeedrunComVariablesIter < RunMetadataSpeedrunComVariablesIterRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.RunMetadataSpeedrunComVariablesIter_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = RunMetadataSpeedrunComVariablesIter.finalize @handle
             finalizer.call
         end
         def with
@@ -4007,15 +4621,23 @@ module LiveSplitCore
             result = Native.Segment_name(@handle.ptr)
             result
         end
-        # Accesses the icon of the segment encoded as a Data URL storing the image's
-        # data. If the image's data is empty, this returns an empty string instead of
-        # a URL.
-        # @return [String]
-        def icon()
+        # Accesses the segment icon's data. If there is no segment icon, this returns
+        # an empty buffer.
+        # @return [Integer]
+        def icon_ptr()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.Segment_icon(@handle.ptr)
+            result = Native.Segment_icon_ptr(@handle.ptr)
+            result
+        end
+        # Accesses the amount of bytes the segment icon's data takes up.
+        # @return [Integer]
+        def icon_len()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.Segment_icon_len(@handle.ptr)
             result
         end
         # Accesses the specified comparison's time. If there's none for this
@@ -4282,6 +4904,95 @@ module LiveSplitCore
         end
     end
 
+    # The Segment Time Component is a component that shows the time for the current
+    # segment in a comparison of your choosing. If no comparison is specified it
+    # uses the timer's current comparison.
+    class SegmentTimeComponentRef
+        attr_accessor :handle
+        # Encodes the component's state information as JSON.
+        # @param [TimerRef] timer
+        # @return [String]
+        def state_as_json(timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = Native.SegmentTimeComponent_state_as_json(@handle.ptr, timer.handle.ptr)
+            result
+        end
+        # Calculates the component's state based on the timer provided.
+        # @param [TimerRef] timer
+        # @return [KeyValueComponentState]
+        def state(timer)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = KeyValueComponentState.new(Native.SegmentTimeComponent_state(@handle.ptr, timer.handle.ptr))
+            result
+        end
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The Segment Time Component is a component that shows the time for the current
+    # segment in a comparison of your choosing. If no comparison is specified it
+    # uses the timer's current comparison.
+    class SegmentTimeComponentRefMut < SegmentTimeComponentRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The Segment Time Component is a component that shows the time for the current
+    # segment in a comparison of your choosing. If no comparison is specified it
+    # uses the timer's current comparison.
+    class SegmentTimeComponent < SegmentTimeComponentRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.SegmentTimeComponent_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = SegmentTimeComponent.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        # Creates a new Segment Time Component.
+        # @return [SegmentTimeComponent]
+        def self.create()
+            result = SegmentTimeComponent.new(Native.SegmentTimeComponent_new())
+            result
+        end
+        # Converts the component into a generic component suitable for using with a
+        # layout.
+        # @return [Component]
+        def into_generic()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Component.new(Native.SegmentTimeComponent_into_generic(@handle.ptr))
+            @handle.ptr = nil
+            result
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # The Separator Component is a simple component that only serves to render
     # separators between components.
     class SeparatorComponentRef
@@ -4294,6 +5005,15 @@ module LiveSplitCore
     # The Separator Component is a simple component that only serves to render
     # separators between components.
     class SeparatorComponentRefMut < SeparatorComponentRef
+        # Calculates the component's state.
+        # @return [SeparatorComponentState]
+        def state()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = SeparatorComponentState.new(Native.SeparatorComponent_state(@handle.ptr))
+            result
+        end
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
@@ -4342,10 +5062,59 @@ module LiveSplitCore
         end
     end
 
+    # The state object describes the information to visualize for this component.
+    class SeparatorComponentStateRef
+        attr_accessor :handle
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object describes the information to visualize for this component.
+    class SeparatorComponentStateRefMut < SeparatorComponentStateRef
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The state object describes the information to visualize for this component.
+    class SeparatorComponentState < SeparatorComponentStateRefMut
+        def self.finalize(handle)
+            proc {
+                if handle.ptr != nil
+                    Native.SeparatorComponentState_drop handle.ptr
+                    handle.ptr = nil
+                end
+            }
+        end
+        def dispose
+            finalizer = SeparatorComponentState.finalize @handle
+            finalizer.call
+        end
+        def with
+            yield self
+            self.dispose
+        end
+        def initialize(ptr)
+            handle = LSCHandle.new ptr
+            @handle = handle
+            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
+        end
+    end
+
     # Describes a setting's value. Such a value can be of a variety of different
     # types.
     class SettingValueRef
         attr_accessor :handle
+        # Encodes this Setting Value's state as JSON.
+        # @return [String]
+        def as_json()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.SettingValue_as_json(@handle.ptr)
+            result
+        end
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
@@ -4417,13 +5186,6 @@ module LiveSplitCore
         # @return [SettingValue]
         def self.from_optional_empty_string()
             result = SettingValue.new(Native.SettingValue_from_optional_empty_string())
-            result
-        end
-        # Creates a new setting value from a floating point number.
-        # @param [Float] value
-        # @return [SettingValue]
-        def self.from_float(value)
-            result = SettingValue.new(Native.SettingValue_from_float(value))
             result
         end
         # Creates a new setting value from an accuracy name. If it doesn't match a
@@ -4552,8 +5314,19 @@ module LiveSplitCore
             end
             result
         end
-        # Creates a new setting value from the column start with name provided. If it
-        # doesn't match a known column start with, nil is returned.
+        # Creates a new setting value from the column kind with the name provided. If
+        # it doesn't match a known column kind, nil is returned.
+        # @param [String] value
+        # @return [SettingValue, nil]
+        def self.from_column_kind(value)
+            result = SettingValue.new(Native.SettingValue_from_column_kind(value))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new setting value from the column start with the name provided. If
+        # it doesn't match a known column start with, nil is returned.
         # @param [String] value
         # @return [SettingValue, nil]
         def self.from_column_start_with(value)
@@ -4563,8 +5336,8 @@ module LiveSplitCore
             end
             result
         end
-        # Creates a new setting value from the column update with name provided. If it
-        # doesn't match a known column update with, nil is returned.
+        # Creates a new setting value from the column update with the name provided.
+        # If it doesn't match a known column update with, nil is returned.
         # @param [String] value
         # @return [SettingValue, nil]
         def self.from_column_update_with(value)
@@ -4580,6 +5353,47 @@ module LiveSplitCore
         # @return [SettingValue, nil]
         def self.from_column_update_trigger(value)
             result = SettingValue.new(Native.SettingValue_from_column_update_trigger(value))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new setting value from the layout direction. If it doesn't
+        # match a known layout direction, nil is returned.
+        # @param [String] value
+        # @return [SettingValue, nil]
+        def self.from_layout_direction(value)
+            result = SettingValue.new(Native.SettingValue_from_layout_direction(value))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new setting value with the type `font`.
+        # @param [String] family
+        # @param [String] style
+        # @param [String] weight
+        # @param [String] stretch
+        # @return [SettingValue, nil]
+        def self.from_font(family, style, weight, stretch)
+            result = SettingValue.new(Native.SettingValue_from_font(family, style, weight, stretch))
+            if result.handle.ptr == nil
+                return nil
+            end
+            result
+        end
+        # Creates a new empty setting value with the type `font`.
+        # @return [SettingValue]
+        def self.from_empty_font()
+            result = SettingValue.new(Native.SettingValue_from_empty_font())
+            result
+        end
+        # Creates a new setting value from the delta gradient with the name provided.
+        # If it doesn't match a known delta gradient, nil is returned.
+        # @param [String] value
+        # @return [SettingValue, nil]
+        def self.from_delta_gradient(value)
+            result = SettingValue.new(Native.SettingValue_from_delta_gradient(value))
             if result.handle.ptr == nil
                 return nil
             end
@@ -4692,50 +5506,71 @@ module LiveSplitCore
         end
     end
 
-    # The state object that describes a single segment's information to visualize.
-    class SplitComponentStateRef
+    # The software renderer allows rendering layouts entirely on the CPU. This is
+    # surprisingly fast and can be considered the default renderer.
+    class SoftwareRendererRef
         attr_accessor :handle
-        # The amount of columns to visualize for the segment with the specified index.
-        # The columns are specified from right to left. You may not provide an out of
-        # bounds index. The amount of columns to visualize may differ from segment to
-        # segment.
-        # @param [Integer] index
-        # @return [Integer]
-        def columns_len(index)
+        def initialize(ptr)
+            @handle = LSCHandle.new ptr
+        end
+    end
+
+    # The software renderer allows rendering layouts entirely on the CPU. This is
+    # surprisingly fast and can be considered the default renderer.
+    class SoftwareRendererRefMut < SoftwareRendererRef
+        # Renders the layout state provided into the image buffer provided. The image
+        # has to be an array of RGBA8 encoded pixels (red, green, blue, alpha with
+        # each channel being an u8). Some frameworks may over allocate an image's
+        # dimensions. So an image with dimensions 100x50 may be over allocated as
+        # 128x64. In that case you provide the real dimensions of 100x50 as the width
+        # and height, but a stride of 128 pixels as that correlates with the real
+        # width of the underlying buffer. By default the renderer will try not to
+        # redraw parts of the image that haven't changed. You can force a redraw in
+        # case the image provided or its contents have changed.
+        # @param [LayoutStateRef] layout_state
+        # @param [Integer] data
+        # @param [Integer] width
+        # @param [Integer] height
+        # @param [Integer] stride
+        # @param [Boolean] force_redraw
+        def render(layout_state, data, width, height, stride, force_redraw)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.SplitComponentState_columns_len(@handle.ptr, index)
-            result
+            if layout_state.handle.ptr == nil
+                raise "layout_state is disposed"
+            end
+            Native.SoftwareRenderer_render(@handle.ptr, layout_state.handle.ptr, data, width, height, stride, force_redraw)
         end
         def initialize(ptr)
             @handle = LSCHandle.new ptr
         end
     end
 
-    # The state object that describes a single segment's information to visualize.
-    class SplitComponentStateRefMut < SplitComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object that describes a single segment's information to visualize.
-    class SplitComponentState < SplitComponentStateRefMut
+    # The software renderer allows rendering layouts entirely on the CPU. This is
+    # surprisingly fast and can be considered the default renderer.
+    class SoftwareRenderer < SoftwareRendererRefMut
         def self.finalize(handle)
             proc {
                 if handle.ptr != nil
+                    Native.SoftwareRenderer_drop handle.ptr
                     handle.ptr = nil
                 end
             }
         end
         def dispose
-            finalizer = SplitComponentState.finalize @handle
+            finalizer = SoftwareRenderer.finalize @handle
             finalizer.call
         end
         def with
             yield self
             self.dispose
+        end
+        # Creates a new software renderer.
+        # @return [SoftwareRenderer]
+        def self.create()
+            result = SoftwareRenderer.new(Native.SoftwareRenderer_new())
+            result
         end
         def initialize(ptr)
             handle = LSCHandle.new ptr
@@ -4953,16 +5788,27 @@ module LiveSplitCore
             result = Native.SplitsComponentState_icon_change_segment_index(@handle.ptr, icon_change_index)
             result
         end
-        # The segment's icon encoded as a Data URL of the icon change with the
-        # specified index. The String itself may be empty. This indicates that there
-        # is no icon. You may not provide an out of bounds index.
+        # The icon data of the segment of the icon change with the specified index.
+        # The buffer may be empty. This indicates that there is no icon. You may not
+        # provide an out of bounds index.
         # @param [Integer] icon_change_index
-        # @return [String]
-        def icon_change_icon(icon_change_index)
+        # @return [Integer]
+        def icon_change_icon_ptr(icon_change_index)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.SplitsComponentState_icon_change_icon(@handle.ptr, icon_change_index)
+            result = Native.SplitsComponentState_icon_change_icon_ptr(@handle.ptr, icon_change_index)
+            result
+        end
+        # The length of the icon data of the segment of the icon change with the
+        # specified index.
+        # @param [Integer] icon_change_index
+        # @return [Integer]
+        def icon_change_icon_len(icon_change_index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.SplitsComponentState_icon_change_icon_len(@handle.ptr, icon_change_index)
             result
         end
         # The name of the segment with the specified index. You may not provide an out
@@ -4974,6 +5820,19 @@ module LiveSplitCore
                 raise "this is disposed"
             end
             result = Native.SplitsComponentState_name(@handle.ptr, index)
+            result
+        end
+        # The amount of columns to visualize for the segment with the specified index.
+        # The columns are specified from right to left. You may not provide an out of
+        # bounds index. The amount of columns to visualize may differ from segment to
+        # segment.
+        # @param [Integer] index
+        # @return [Integer]
+        def columns_len(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.SplitsComponentState_columns_len(@handle.ptr, index)
             result
         end
         # The column's value to show for the split and column with the specified
@@ -5011,6 +5870,27 @@ module LiveSplitCore
                 raise "this is disposed"
             end
             result = Native.SplitsComponentState_is_current_split(@handle.ptr, index)
+            result
+        end
+        # Describes if the columns have labels that are meant to be shown. If this is
+        # `false`, no labels are supposed to be visualized.
+        # @return [Boolean]
+        def has_column_labels()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.SplitsComponentState_has_column_labels(@handle.ptr)
+            result
+        end
+        # Returns the label of the column specified. The list is specified from right
+        # to left. You may not provide an out of bounds index.
+        # @param [Integer] index
+        # @return [String]
+        def column_label(index)
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.SplitsComponentState_column_label(@handle.ptr, index)
             result
         end
         def initialize(ptr)
@@ -5154,7 +6034,7 @@ module LiveSplitCore
         end
         # Calculates the component's state based on the timer provided.
         # @param [TimerRef] timer
-        # @return [SumOfBestComponentState]
+        # @return [KeyValueComponentState]
         def state(timer)
             if @handle.ptr == nil
                 raise "this is disposed"
@@ -5162,7 +6042,7 @@ module LiveSplitCore
             if timer.handle.ptr == nil
                 raise "timer is disposed"
             end
-            result = SumOfBestComponentState.new(Native.SumOfBestComponent_state(@handle.ptr, timer.handle.ptr))
+            result = KeyValueComponentState.new(Native.SumOfBestComponent_state(@handle.ptr, timer.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -5231,85 +6111,35 @@ module LiveSplitCore
         end
     end
 
-    # The state object describes the information to visualize for this component.
-    class SumOfBestComponentStateRef
-        attr_accessor :handle
-        # The label's text.
-        # @return [String]
-        def text()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.SumOfBestComponentState_text(@handle.ptr)
-            result
-        end
-        # The sum of best segments.
-        # @return [String]
-        def time()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.SumOfBestComponentState_time(@handle.ptr)
-            result
-        end
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class SumOfBestComponentStateRefMut < SumOfBestComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class SumOfBestComponentState < SumOfBestComponentStateRefMut
-        def self.finalize(handle)
-            proc {
-                if handle.ptr != nil
-                    Native.SumOfBestComponentState_drop handle.ptr
-                    handle.ptr = nil
-                end
-            }
-        end
-        def dispose
-            finalizer = SumOfBestComponentState.finalize @handle
-            finalizer.call
-        end
-        def with
-            yield self
-            self.dispose
-        end
-        def initialize(ptr)
-            handle = LSCHandle.new ptr
-            @handle = handle
-            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
-        end
-    end
-
     # The Text Component simply visualizes any given text. This can either be a
     # single centered text, or split up into a left and right text, which is
     # suitable for a situation where you have a label and a value.
     class TextComponentRef
         attr_accessor :handle
         # Encodes the component's state information as JSON.
+        # @param [TimerRef] timer
         # @return [String]
-        def state_as_json()
+        def state_as_json(timer)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.TextComponent_state_as_json(@handle.ptr)
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = Native.TextComponent_state_as_json(@handle.ptr, timer.handle.ptr)
             result
         end
         # Calculates the component's state.
+        # @param [TimerRef] timer
         # @return [TextComponentState]
-        def state()
+        def state(timer)
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = TextComponentState.new(Native.TextComponent_state(@handle.ptr))
+            if timer.handle.ptr == nil
+                raise "timer is disposed"
+            end
+            result = TextComponentState.new(Native.TextComponent_state(@handle.ptr, timer.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -5645,6 +6475,19 @@ module LiveSplitCore
     # A Timer provides all the capabilities necessary for doing speedrun attempts.
     class TimerRef
         attr_accessor :handle
+        # Accesses the index of the split the attempt is currently on. If there's
+        # no attempt in progress, `-1` is returned instead. This returns an
+        # index that is equal to the amount of segments when the attempt is
+        # finished, but has not been reset. So you need to be careful when using
+        # this value for indexing.
+        # @return [Integer]
+        def current_split_index()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.Timer_current_split_index(@handle.ptr)
+            result
+        end
         # Returns the currently selected Timing Method.
         # @return [Integer]
         def current_timing_method()
@@ -6412,16 +7255,25 @@ module LiveSplitCore
     # The state object describes the information to visualize for this component.
     class TitleComponentStateRef
         attr_accessor :handle
-        # The game's icon encoded as a Data URL. This value is only specified whenever
-        # the icon changes. If you explicitly want to query this value, remount the
-        # component. The String itself may be empty. This indicates that there is no
-        # icon. If no change occurred, nil is returned instead.
-        # @return [String, nil]
-        def icon_change()
+        # The data of the game's icon. This value is only specified whenever the icon
+        # changes. If you explicitly want to query this value, remount the component.
+        # The buffer may be empty. This indicates that there is no icon. If no change
+        # occurred, nil is returned instead.
+        # @return [Integer]
+        def icon_change_ptr()
             if @handle.ptr == nil
                 raise "this is disposed"
             end
-            result = Native.TitleComponentState_icon_change(@handle.ptr)
+            result = Native.TitleComponentState_icon_change_ptr(@handle.ptr)
+            result
+        end
+        # The length of the game's icon data.
+        # @return [Integer]
+        def icon_change_len()
+            if @handle.ptr == nil
+                raise "this is disposed"
+            end
+            result = Native.TitleComponentState_icon_change_len(@handle.ptr)
             result
         end
         # The first title line to show. This is either the game's name, or a
@@ -6556,7 +7408,7 @@ module LiveSplitCore
         end
         # Calculates the component's state based on the timer provided.
         # @param [TimerRef] timer
-        # @return [TotalPlaytimeComponentState]
+        # @return [KeyValueComponentState]
         def state(timer)
             if @handle.ptr == nil
                 raise "this is disposed"
@@ -6564,7 +7416,7 @@ module LiveSplitCore
             if timer.handle.ptr == nil
                 raise "timer is disposed"
             end
-            result = TotalPlaytimeComponentState.new(Native.TotalPlaytimeComponent_state(@handle.ptr, timer.handle.ptr))
+            result = KeyValueComponentState.new(Native.TotalPlaytimeComponent_state(@handle.ptr, timer.handle.ptr))
             result
         end
         def initialize(ptr)
@@ -6607,64 +7459,6 @@ module LiveSplitCore
             result = Component.new(Native.TotalPlaytimeComponent_into_generic(@handle.ptr))
             @handle.ptr = nil
             result
-        end
-        def initialize(ptr)
-            handle = LSCHandle.new ptr
-            @handle = handle
-            ObjectSpace.define_finalizer(self, self.class.finalize(handle))
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class TotalPlaytimeComponentStateRef
-        attr_accessor :handle
-        # The label's text.
-        # @return [String]
-        def text()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.TotalPlaytimeComponentState_text(@handle.ptr)
-            result
-        end
-        # The total playtime.
-        # @return [String]
-        def time()
-            if @handle.ptr == nil
-                raise "this is disposed"
-            end
-            result = Native.TotalPlaytimeComponentState_time(@handle.ptr)
-            result
-        end
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class TotalPlaytimeComponentStateRefMut < TotalPlaytimeComponentStateRef
-        def initialize(ptr)
-            @handle = LSCHandle.new ptr
-        end
-    end
-
-    # The state object describes the information to visualize for this component.
-    class TotalPlaytimeComponentState < TotalPlaytimeComponentStateRefMut
-        def self.finalize(handle)
-            proc {
-                if handle.ptr != nil
-                    Native.TotalPlaytimeComponentState_drop handle.ptr
-                    handle.ptr = nil
-                end
-            }
-        end
-        def dispose
-            finalizer = TotalPlaytimeComponentState.finalize @handle
-            finalizer.call
-        end
-        def with
-            yield self
-            self.dispose
         end
         def initialize(ptr)
             handle = LSCHandle.new ptr

@@ -7,7 +7,7 @@ LIVESPLIT_CORE_URL = 'https://api.github.com/repos/LiveSplit/livesplit-core/rele
 PARSER_FOLDER = "#{Rake.application.original_dir}/lib/parser".freeze
 DEST_FOLDER = "#{Rake.application.original_dir}/lib/parser/livesplit-core".freeze
 CURRENT_LSC_VERSION = File.open("#{PARSER_FOLDER}/livesplit_core_version", 'r', &:read).strip!
-LIVESPLIT_CORE_TARGET = 'livesplit-core-%s-x86_64-unknown-linux-gnu.tar.gz'.freeze
+LIVESPLIT_CORE_TARGET = 'livesplit-core-%s-%s-unknown-linux-gnu.tar.gz'.freeze
 
 desc 'Download and update livesplit-core'
 task :update_lsc do
@@ -19,8 +19,10 @@ task :update_lsc do
   end
 
   download_url = nil
+  filename = format(LIVESPLIT_CORE_TARGET, latest_release['tag_name'], RUBY_PLATFORM.split('-')[0])
+  puts "Want #{filename}"
   latest_release['assets'].each do |asset|
-    next unless asset['name'] == format(LIVESPLIT_CORE_TARGET, latest_release['tag_name'])
+    next unless asset['name'] == filename
 
     download_url = asset['browser_download_url']
     break
@@ -29,7 +31,8 @@ task :update_lsc do
     puts 'No livesplit-core version suitable!'
     next
   end
-  io = StringIO.new(HTTParty.get(download_url))
+  resp = HTTParty.get(download_url)
+  io = StringIO.new(resp.to_s)
   z = Zlib::GzipReader.new(io)
   io = StringIO.new(z.read)
   z.close
