@@ -1,4 +1,5 @@
 require 'active_support/concern'
+require 'fiddle'
 
 module UnparsedRun
   extend ActiveSupport::Concern
@@ -24,7 +25,7 @@ module UnparsedRun
         file do |f|
           raise RunFileMissing if f.nil?
 
-          Parser::LiveSplitCore::Run.parse_file_handle(f.fileno, '', false).with do |parse_result|
+          Parser::LiveSplitCore::Run.parse_file_handle(f.fileno, nil).with do |parse_result|
             raise UnparsableRun, 'Run failed to parse in LSC' unless parse_result.parsed_successfully
 
             run_data = process_run_wrapper(parse_result, run_data)
@@ -93,7 +94,7 @@ module UnparsedRun
 
     def process_run_metadata(run, run_data)
       run_data[:game]      = run.game_name
-      run_data[:game_icon] = run.game_icon.presence
+      run_data[:game_icon] = run.game_icon_ptr.presence
       run_data[:category]  = run.category_name
       run_data[:name]      = run.extended_name(false)
 
@@ -111,7 +112,7 @@ module UnparsedRun
 
       # Grab all run metadata
       # .with will clean up the iterator when we are done
-      run.metadata.variables.with do |iter|
+      run.metadata.speedrun_com_variables.with do |iter|
         until (variable = iter.next).nil?
           run_data[:metadata][:variables][variable.name] = variable.value
         end
@@ -214,11 +215,10 @@ module UnparsedRun
             segment_number: i,
             name:           lsc_segment.name.presence
           )
-          icon = lsc_segment.icon
-          if icon.present?
+          icon_ptr = Fiddle::Pointer.new(lsc_segment.icon_ptr)
+          if icon_ptr.present?
             segment.icon.attach(
-              # TODO: in the next LSC release, this will no longer by Data URL
-              io:       StringIO.new(Base64.decode64(icon.split('base64,')[1])),
+              io:       StringIO.new(icon_ptr[0, lsc_segment.icon_len]),
               filename: "#{id}_#{i}"
             )
           end
