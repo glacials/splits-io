@@ -28,6 +28,7 @@ class Ability
 
   def grant_admin_perms
     can(%i[create read update destroy],       User)
+    can(%i[create read update destroy],       Run)
     can(%i[create read update destroy merge], Game)
     can(%i[create read update destroy merge], Category)
     can(%i[create read update destroy],       Rivalry)
