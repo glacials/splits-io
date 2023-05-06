@@ -159,6 +159,11 @@ GEM
     delayed_job_active_record (4.1.4)
       activerecord (>= 3.0, < 6.1)
       delayed_job (>= 3.0, < 5)
+    delayed_job_web (1.4.4)
+      activerecord (> 3.0.0)
+      delayed_job (> 2.0.3)
+      rack-protection (>= 1.5.5)
+      sinatra (>= 1.4.4)
     derailed_benchmarks (1.7.0)
       benchmark-ips (~> 2)
       get_process_mem (~> 0)
@@ -276,6 +281,8 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    mustermann (3.0.0)
+      ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
     newrelic_rpm (6.11.0.365)
     nio4r (2.5.8)
@@ -327,6 +334,8 @@ GEM
       rack (>= 2.0.0)
     rack-mini-profiler (2.0.2)
       rack (>= 1.2.0)
+    rack-protection (3.0.6)
+      rack
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -431,6 +440,7 @@ GEM
     ruby-statistics (2.1.2)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
+    ruby2_keywords (0.0.5)
     rubyzip (2.3.0)
     rufus-scheduler (3.6.0)
       fugit (~> 1.1, >= 1.1.6)
@@ -449,6 +459,11 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.2)
+    sinatra (3.0.6)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.6)
+      tilt (~> 2.0)
     skylight (5.0.0.beta4)
       activesupport (>= 5.2.0)
     slim (4.1.0)
@@ -513,6 +528,7 @@ DEPENDENCIES
   daemons
   dalli
   delayed_job_active_record
+  delayed_job_web
   derailed_benchmarks
   descriptive_statistics
   doorkeeper

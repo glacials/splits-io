@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     resources :patreon_users
 
     resources :jobs
+    match "/delayed_job" => DelayedJobWeb, :anchor => false, :via => [:get, :post]
 
     root to: "runs#index"
   end

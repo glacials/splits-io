@@ -48,6 +48,7 @@ end
 # administration
 gem "administrate"
 gem "chartkick"
+gem "delayed_job_web"
 gem "groupdate"
 
 # api
