@@ -68,6 +68,7 @@ module UnparsedRun
         )
 
         HighlightSuggestion.from_run(self)
+        discover_runner
       end
     rescue UnparsableRun
       destroy

@@ -35,8 +35,6 @@ class Run < ApplicationRecord
 
   has_secure_token :claim_token
 
-  after_create :discover_runner
-
   validates_with RunValidator
 
   scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
@@ -148,8 +146,10 @@ class Run < ApplicationRecord
     )
   end
 
-  # If we don't have a user assigned but we do have a speedrun.com run assigned, try to fetch the user from
-  # speedrun.com. For this to work that user must have their Twitch account tied to both Splits.io and speedrun.com.
+  # If we don't have a user assigned but we do have a speedrun.com run assigned, try to
+  # fetch the user from speedrun.com. For this to work the run must be finished parsing
+  # and that user must have their Twitch account tied to both Splits.io and
+  # speedrun.com.
   def discover_runner
     return if user.present?
 
