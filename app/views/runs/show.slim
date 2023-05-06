@@ -12,9 +12,8 @@
 
 - if !@run.parsed?
   #await-runs.text-center.text-primary data-runs=([@run.id36, *@compare_runs.map(&:id36)].join(','))
-    = render 'shared/spinner', messages: [ \
-      'Parsing', 'Gathering', 'Analyzing', 'Sorting', 'Logging', 'Unscrambling', 'Clipping', 'Spinjumping', 'Manipulating RNG',
-    ]
+    = render 'shared/spinner'
+    p Run uploaded and parsing. You can close this page and come back later.
 - else
   - if @compare_runs.none? || (@compare_runs.any? && current_user.try(:has_advanced_comparisons?)) || (@run.user && @compare_runs[0].user == @run.user)
     .row.mx-2
