@@ -34,77 +34,80 @@ en:
     # This section is used by administrate for field names
     label:
       category:
-        speedrun_dot_com_category: 'speedrun.com'
+        speedrun_dot_com_category: "speedrun.com"
       game:
-        speedrun_dot_com_game: 'speedrun.com'
-        speed_runs_live_game: 'SpeedRunsLive'
+        speedrun_dot_com_game: "speedrun.com"
+        speed_runs_live_game: "SpeedRunsLive"
       run:
-        gametime_duration_ms: 'gametime duration (MS)'
-        gametime_sum_of_best_ms: 'gametime sum-of-best (MS)'
-        nick: 'nick (deprecated)'
-        realtime_duration_ms: 'realtime duration (MS)'
-        realtime_sum_of_best_ms: 'realtime sum-of-best (MS)'
-        srdc_id: 'speedrun.com ID'
+        gametime_duration_ms: "gametime duration (MS)"
+        gametime_sum_of_best_ms: "gametime sum-of-best (MS)"
+        nick: "nick (deprecated)"
+        realtime_duration_ms: "realtime duration (MS)"
+        realtime_sum_of_best_ms: "realtime sum-of-best (MS)"
+        srdc_id: "speedrun.com ID"
       speedrun_dot_com_category:
-        srdc_id: 'speedrun.com ID'
-        url: 'URL'
+        srdc_id: "speedrun.com ID"
+        url: "URL"
       speedrun_dot_com_game:
-        cover_url: 'cover URL'
-        favicon_url: 'favicon URL'
-        show_ms: 'Show milliseconds?'
-        srdc_id: 'speedrun.com ID'
-        url: 'URL'
+        cover_url: "cover URL"
+        favicon_url: "favicon URL"
+        show_ms: "Show milliseconds?"
+        srdc_id: "speedrun.com ID"
+        url: "URL"
   # This section is used by administrate for nav, but is also considered the standard way to do l10n for models
   activerecord:
     models:
       category:
-        one: 'category'
-        other: 'categories'
+        one: "category"
+        other: "categories"
       game:
-        one: 'game'
-        other: 'games'
+        one: "game"
+        other: "games"
       game_alias:
-        one: 'game alias'
-        other: 'game aliases'
+        one: "game alias"
+        other: "game aliases"
       google_user:
-        one: 'Google user'
-        other: 'Google users'
+        one: "Google user"
+        other: "Google users"
       highlight_suggestion:
-        one: 'highlight suggestion'
-        other: 'highlight suggestions'
+        one: "highlight suggestion"
+        other: "highlight suggestions"
+      job:
+        one: "jobs"
+        other: "jobs"
       patreon_user:
-        one: 'Patreon user'
-        other: 'Patreon users'
+        one: "Patreon user"
+        other: "Patreon users"
       rivalry:
-        one: 'rivalry'
-        other: 'rivalries'
+        one: "rivalry"
+        other: "rivalries"
       run:
-        one: 'run'
-        other: 'runs'
+        one: "run"
+        other: "runs"
       run_history:
-        one: 'run history'
-        other: 'run histories'
+        one: "run history"
+        other: "run histories"
       segment:
-        one: 'segment'
-        other: 'segments'
+        one: "segment"
+        other: "segments"
       segment_history:
-        one: 'segment history'
-        other: 'segment histories'
+        one: "segment history"
+        other: "segment histories"
       speedrun_dot_com_category:
-        one: 'speedrun.com category'
-        other: 'speedrun.com categories'
+        one: "speedrun.com category"
+        other: "speedrun.com categories"
       speedrun_dot_com_game:
-        one: 'speedrun.com game'
-        other: 'speedrun.com games'
+        one: "speedrun.com game"
+        other: "speedrun.com games"
       speed_runs_live_game:
-        one: 'SpeedRunsLive game'
-        other: 'SpeedRunsLive games'
+        one: "SpeedRunsLive game"
+        other: "SpeedRunsLive games"
       twitch_user:
-        one: 'Twitch user'
-        other: 'Twitch users'
+        one: "Twitch user"
+        other: "Twitch users"
       twitch_user_follow:
-        one: 'Twitch follow'
-        other: 'Twitch follows'
+        one: "Twitch follow"
+        other: "Twitch follows"
       user:
-        one: 'user'
-        other: 'users'
+        one: "user"
+        other: "users"

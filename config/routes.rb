@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     resources :google_users
     resources :patreon_users
 
+    resources :jobs
+
     root to: "runs#index"
   end
 
