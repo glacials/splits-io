@@ -14,7 +14,7 @@ ifeq ($(detectedOS),Linux)
   endif
 endif
 
-docker-compose := docker-compose
+docker-compose := docker compose
 docker := docker
 
 ifeq ($(detectedOS),Linux)
