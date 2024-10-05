@@ -134,9 +134,9 @@ html lang='en'
             ' Please add an email address from the
             a href=settings_path settings page
             ' .
-        .alert.alert-warning
-          ' Splits.io will shut down permanently on December 1, 2024.
-          a href='https://twos.dev/splitsio.html' More info
+        .alert.alert-danger.m-3
+          ' Splits.io will shut down permanently on December 31, 2024.
+          a.alert-link href='https://twos.dev/splitsio.html' More info
         .row.mx-2: #alerts.w-100 data-turbolinks-temporary=true
           = render partial: 'shared/alerts'
         = yield
