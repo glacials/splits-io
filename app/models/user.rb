@@ -121,39 +121,39 @@ class User < ApplicationRecord
   end
 
   def has_predictions?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_redirectors?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_advanced_comparisons?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_sum_of_best_leaderboards?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_hiding?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_advanced_video?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_autohighlight?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_advanced_analytics?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def has_srdc_submit?
-    feature_grantors.any?(&__method__)
+    feature_grantors.any?(&__method__) || true # Adding `|| true` to make things free pre-shutdown.
   end
 
   def admin?
