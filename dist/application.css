@@ -11535,7 +11535,8 @@ article.danger hr {
 }
 
 body {
-  background: #383c48;
+  background-color: #383c48;
+  background-image: url("http://localhost:3000/bg.png");
 }
 
 .text-twitch {
