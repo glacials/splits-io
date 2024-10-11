@@ -18,18 +18,18 @@ class Duration
   # returned value never has a sign in front of it. When sign is :negatives, only negative values have a sign
   # (default).
   def format(precise: false, sign: :negatives)
-    return '-' if @duration.nil?
+    return "-" if @duration.nil?
 
-    format = ['%02d', ':%02d', ':%02d']
+    format = ["%02d", ":%02d", ":%02d"]
     components = [hours, minutes, seconds]
 
     if precise
-      format << '.%02d'
+      format << ".%02d"
       components << (milliseconds / 10)
     end
 
     if sign == :always || (sign == :negatives && negative?)
-      format[0] = '%0+2d'
+      format[0] = "%0+2d"
       return Kernel.format(format.join, *components)
     end
 
@@ -44,18 +44,18 @@ class Duration
   # returned value never has a sign in front of it. When sign is :negatives, only negative values have a sign
   # (default).
   def format_casual(num_units: 2, sign: :negatives)
-    return '-' if nil?
+    return "-" if nil?
 
     d = {
-      h:  hours,
-      m:  minutes,
-      s:  seconds,
-      ms: milliseconds
-    }.drop_while { |_, unit| unit.zero? }
+      h: hours,
+      m: minutes,
+      s: seconds,
+      ms: milliseconds,
+    }.drop_while { |_, unit| unit.nil? || unit.zero? }
 
-    d = {ms: 0} if d.empty?
+    d = { ms: 0 } if d.empty?
 
-    d = d.first(num_units).to_h.map { |k, v| "#{v.to_i}#{k}" }.join(' ')
+    d = d.first(num_units).to_h.map { |k, v| "#{v.to_i}#{k}" }.join(" ")
     return "+#{d}" if sign == :always && positive?
     return "-#{d}" if [:always, :negatives].include?(sign) && negative?
 
@@ -157,11 +157,11 @@ class Duration
   def hours
     # Hours is our biggest unit, but ActiveSupport::Duration supports years, months, weeks, and days, so we need to roll
     # those into hours. Otherwise a duration of 25 hours (1 day, 1 hour) will look like a duration of 1 hour.
-    ((@duration.parts[:years]  * ActiveSupport::Duration::SECONDS_PER_YEAR)  / ActiveSupport::Duration::SECONDS_PER_HOUR) +
-    ((@duration.parts[:months] * ActiveSupport::Duration::SECONDS_PER_MONTH) / ActiveSupport::Duration::SECONDS_PER_HOUR) +
-    ((@duration.parts[:weeks]  * ActiveSupport::Duration::SECONDS_PER_WEEK)  / ActiveSupport::Duration::SECONDS_PER_HOUR) +
-    ((@duration.parts[:days]   * ActiveSupport::Duration::SECONDS_PER_DAY)   / ActiveSupport::Duration::SECONDS_PER_HOUR) +
-    (@duration.parts[:hours])
+    (((@duration.parts[:years] || 0) * ActiveSupport::Duration::SECONDS_PER_YEAR) / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    (((@duration.parts[:months] || 0) * ActiveSupport::Duration::SECONDS_PER_MONTH) / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    (((@duration.parts[:weeks] || 0) * ActiveSupport::Duration::SECONDS_PER_WEEK) / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    (((@duration.parts[:days] || 0) * ActiveSupport::Duration::SECONDS_PER_DAY) / ActiveSupport::Duration::SECONDS_PER_HOUR) +
+    (@duration.parts[:hours] || 0)
   end
 
   def minutes

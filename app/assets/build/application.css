@@ -12140,3 +12140,7 @@ a:hover.twitch-signin img {
 .kill-run-button {
   cursor: pointer;
 }
+
+.table {
+  color: #fff;
+}

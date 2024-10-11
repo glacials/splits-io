@@ -56,7 +56,7 @@ x-app: &app
     cache_from:
       - "${REPOSITORY_URI:-splitsio}:latest"
     args:
-      RUBY_VERSION: "3.3.5" # also update docker-compose.yml & Gemfile
+      RUBY_VERSION: "3.3.5" # also update docker-compose.yml, Gemfile, & .rubocop.yml
   environment: *server-environment
   image: splitsio
   logging: *default-logging

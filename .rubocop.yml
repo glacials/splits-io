@@ -3,9 +3,9 @@ require: rubocop-rails
 Layout/LineLength:
   Max: 120
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.3.5 # also update docker-compose.yml, docker-compose-production.yml, & Gemfile
   Include:
-    - '**/*.rb'
+    - "**/*.rb"
     - Rakefile
     - config.ru
   Exclude:
@@ -33,7 +33,7 @@ Layout/SpaceInsideHashLiteralBraces:
 
 Layout/HashAlignment:
   EnforcedHashRocketStyle: table
-  EnforcedColonStyle:      table
+  EnforcedColonStyle: table
 
 Style/FrozenStringLiteralComment:
   Enabled: false

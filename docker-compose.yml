@@ -44,7 +44,7 @@ x-app: &app
     context: .
     dockerfile: Dockerfile
     args:
-      RUBY_VERSION: "3.3.5" # also update docker-compose-production.yml & Gemfile
+      RUBY_VERSION: "3.3.5" # also update docker-compose-production.yml, Gemfile, & .rubocop.yml
   image: splitsio
   tmpfs:
     - /tmp

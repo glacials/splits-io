@@ -1,4 +1,4 @@
-Dir['./lib/programs/*'].each { |file| require file }
+Dir["./lib/programs/*"].each { |file| require file }
 
 class Run < ApplicationRecord
   include CompletedRun
@@ -11,8 +11,8 @@ class Run < ApplicationRecord
   include ActionView::Helpers::DateHelper
 
   # Timing types
-  REAL = 'real'.freeze
-  GAME = 'game'.freeze
+  REAL = "real".freeze
+  GAME = "game".freeze
 
   ALLOWED_PROGRAM_METHODS = %i[to_s to_sym file_extension website content_type].freeze
 
@@ -23,27 +23,27 @@ class Run < ApplicationRecord
 
   # dependent: :delete_all requires there be no child records that need to be deleted
   # If RunHistory is changed to have child records, change this back to just :destroy
-  has_many :histories,            dependent: :delete_all, class_name: 'RunHistory'
-  has_one  :highlight_suggestion, dependent: :destroy
-  has_many :likes,                dependent: :destroy,    class_name: 'RunLike'
-  has_one  :entry,                dependent: :nullify
-  has_one  :video,                dependent: :destroy
+  has_many :histories, dependent: :delete_all, class_name: "RunHistory"
+  has_one :highlight_suggestion, dependent: :destroy
+  has_many :likes, dependent: :destroy, class_name: "RunLike"
+  has_one :entry, dependent: :nullify
+  has_one :video, dependent: :destroy
 
-  has_many :variables,  class_name: 'SpeedrunDotComRunVariable', dependent: :destroy
-  belongs_to :platform, class_name: 'SpeedrunDotComPlatform', foreign_key: 'speedrun_dot_com_platform_id', optional: true
-  belongs_to :region,   class_name: 'SpeedrunDotComRegion',   foreign_key: 'speedrun_dot_com_region_id',   optional: true
+  has_many :variables, class_name: "SpeedrunDotComRunVariable", dependent: :destroy
+  belongs_to :platform, class_name: "SpeedrunDotComPlatform", foreign_key: "speedrun_dot_com_platform_id", optional: true
+  belongs_to :region, class_name: "SpeedrunDotComRegion", foreign_key: "speedrun_dot_com_region_id", optional: true
 
   has_secure_token :claim_token
 
   validates_with RunValidator
 
-  scope :by_game, ->(game_or_games) { joins(:category).where(categories: {game_id: game_or_games}) }
+  scope :by_game, ->(game_or_games) { joins(:category).where(categories: { game_id: game_or_games }) }
   scope :by_category, ->(category) { where(category: category) }
   scope :nonempty, -> { where.not(realtime_duration_ms: 0) }
   scope :owned, -> { where.not(user: nil) }
   scope :unarchived, -> { where(archived: false).where.not(user: nil) }
   scope :categorized, lambda {
-    joins(:category).where.not(categories: {name: nil}).joins(:game).where.not(games: {name: nil})
+    joins(:category).where.not(categories: { name: nil }).joins(:game).where.not(games: { name: nil })
   }
 
   class << self
@@ -68,12 +68,13 @@ class Run < ApplicationRecord
     end
 
     def program_from_attribute(func_name, value)
-      raise 'not a valid attribute' unless ALLOWED_PROGRAM_METHODS.include?(func_name)
+      raise "not a valid attribute" unless ALLOWED_PROGRAM_METHODS.include?(func_name)
 
       Run.programs.find { |program| program.send(func_name) == value }
     end
 
     alias find10 find
+
     def find36(id36)
       find10(id36.to_i(36))
     end
@@ -99,6 +100,7 @@ class Run < ApplicationRecord
   end
 
   alias id10 id
+
   def id36
     return nil if id10.nil?
 
@@ -110,7 +112,7 @@ class Run < ApplicationRecord
   end
 
   def time_since_upload
-    time_ago_in_words(created_at).sub('about ', '')
+    time_ago_in_words(created_at).sub("about ", "")
   end
 
   def offset
@@ -126,9 +128,9 @@ class Run < ApplicationRecord
   end
 
   def to_s
-    return '(no title)' if game.blank?
+    return "(no title)" if game.blank?
 
-    game.name + (category.present? ? " #{category.name}" : '')
+    game.name + (category.present? ? " #{category.name}" : "")
   end
 
   def path
@@ -141,8 +143,8 @@ class Run < ApplicationRecord
     return if category.present? || game_string.blank? || category_string.blank?
 
     game = Game.from_name!(game_string)
-    self.category = game.categories.where('lower(name) = lower(?)', category_string).first_or_create(
-      name: category_string
+    self.category = game.categories.where("lower(name) = lower(?)", category_string).first_or_create(
+      name: category_string,
     )
   end
 
@@ -166,42 +168,42 @@ class Run < ApplicationRecord
     case timing
     when Run::REAL
       user.runs.where(
-        category: category
-      ).where('realtime_duration_ms > ?', duration_ms(timing)).order(realtime_duration_ms: :asc).first
+        category: category,
+      ).where("realtime_duration_ms > ?", duration_ms(timing)).order(realtime_duration_ms: :asc).first
     when Run::GAME
       user.runs.where(
-        category: category
-      ).where('gametime_duration_ms > ?', duration_ms(timing)).order(gametime_duration_ms: :asc).first
+        category: category,
+      ).where("gametime_duration_ms > ?", duration_ms(timing)).order(gametime_duration_ms: :asc).first
     end
   end
 
   def pb_date
     histories.where.not(started_at: nil).where.not(ended_at: nil).find_by(
       realtime_duration_ms: duration(Run::REAL).to_ms,
-      gametime_duration_ms: duration(Run::GAME).to_ms
+      gametime_duration_ms: duration(Run::GAME).to_ms,
     )&.ended_at
   end
 
   def segment_groups
     segments_with_groups.select(&:segment_group_parent?).map do |segment|
       {
-        id:             segment.id,
-        display_name:   segment.display_name,
-        name:           segment.display_name,
+        id: segment.id,
+        display_name: segment.display_name,
+        name: segment.display_name,
         segment_number: segment.segment_number,
-        histories:      segment.segment_group_durations
+        histories: segment.segment_group_durations,
       }
     end
   end
 
-  # Calculate the various statistical information about each segments history once in the database for the whole run
+  # Calculate the various statistical information about each segment's history once in the database for the whole run
   # instead of individually for each segment (N queries)
   def segment_history_stats(timing)
     stats = SegmentHistory.joins(segment: :run)
                           .without_statistically_invalid_histories_for_run(self, timing)
-                          .where(segment: {runs: {id: id}})
+                          .where(segment: { runs: { id: id } })
                           .where.not(Run.duration_type(timing) => [0, nil])
-                          .where('segments_segment_histories.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segments_segment_histories.segment_number - 1)')
+                          .where("segment.segment_number = 0 OR (other_histories.attempt_number = segment_histories.attempt_number AND other_histories.segment_number = segment.segment_number - 1)")
                           .group(:segment_id)
                           .select(stats_select_query(timing))
 
@@ -209,13 +211,13 @@ class Run < ApplicationRecord
     stats.each do |stat|
       h[stat.segment_id] = {
         standard_deviation: stat.standard_deviation,
-        mean:               stat.mean,
-        median:             stat.median,
-        percentiles:        {
+        mean: stat.mean,
+        median: stat.median,
+        percentiles: {
           10 => stat.percentile10,
           90 => stat.percentile90,
-          99 => stat.percentile99
-        }
+          99 => stat.percentile99,
+        },
       }
     end
 
@@ -227,10 +229,10 @@ class Run < ApplicationRecord
 
     case timing
     when Run::REAL
-      query = query.where('realtime_duration_ms < ?', duration(timing).to_ms)
+      query = query.where("realtime_duration_ms < ?", duration(timing).to_ms)
       duration_col = :realtime_duration_ms
     when Run::GAME
-      query = query.where('gametime_duration_ms < ?', duration(timing).to_ms)
+      query = query.where("gametime_duration_ms < ?", duration(timing).to_ms)
       duration_col = :gametime_duration_ms
     end
 
@@ -279,7 +281,7 @@ class Run < ApplicationRecord
     # Normal split
     if !more || next_segment
       if !prev_segment
-        errors.add(:segments, :full, message: 'are all completed; pass more=1 to add one and split')
+        errors.add(:segments, :full, message: "are all completed; pass more=1 to add one and split")
         return
       end
 
@@ -287,7 +289,7 @@ class Run < ApplicationRecord
         prev_segment.assign_attributes(
           realtime_end_ms: realtime_end_ms,
           realtime_duration_ms: realtime_end_ms - prev_segment.start(Run::REAL).to_ms,
-          realtime_gold: prev_segment.histories.where('realtime_duration_ms < ?', realtime_end_ms - prev_segment.start(Run::REAL).to_ms).none?,
+          realtime_gold: prev_segment.histories.where("realtime_duration_ms < ?", realtime_end_ms - prev_segment.start(Run::REAL).to_ms).none?,
         )
       end
 
@@ -295,7 +297,7 @@ class Run < ApplicationRecord
         prev_segment.assign_attributes(
           gametime_end_ms: gametime_end_ms,
           gametime_duration_ms: gametime_end_ms - prev_segment.start(Run::GAME).to_ms,
-          gametime_gold: prev_segment.histories.where('gametime_duration_ms < ?', gametime_end_ms - prev_segment.start(Run::GAME).to_ms).none?,
+          gametime_gold: prev_segment.histories.where("gametime_duration_ms < ?", gametime_end_ms - prev_segment.start(Run::GAME).to_ms).none?,
         )
       end
 
@@ -346,20 +348,20 @@ class Run < ApplicationRecord
     # If the run was empty
     if !prev_segment
       prev_segment = segments.create(
-        segment_number:       0,
-        name:                 'Segment 1',
-        realtime_start_ms:    0,
-        realtime_end_ms:      realtime_end_ms,
+        segment_number: 0,
+        name: "Segment 1",
+        realtime_start_ms: 0,
+        realtime_end_ms: realtime_end_ms,
         realtime_duration_ms: realtime_end_ms,
-        realtime_gold:        true,
-        gametime_start_ms:    0,
-        gametime_end_ms:      gametime_end_ms,
+        realtime_gold: true,
+        gametime_start_ms: 0,
+        gametime_end_ms: gametime_end_ms,
         gametime_duration_ms: gametime_end_ms,
-        gametime_gold:        true,
+        gametime_gold: true,
       )
 
       prev_segment.histories.create(
-        attempt_number:       1,
+        attempt_number: 1,
         realtime_duration_ms: realtime_end_ms,
         gametime_duration_ms: gametime_end_ms,
       )
@@ -369,7 +371,7 @@ class Run < ApplicationRecord
       prev_segment.assign_attributes(
         realtime_end_ms: realtime_end_ms,
         realtime_duration_ms: realtime_end_ms - prev_segment.start(Run::REAL).to_ms,
-        realtime_gold: prev_segment.histories.where('realtime_duration_ms < ?', realtime_end_ms - prev_segment.start(Run::REAL).to_ms).none?,
+        realtime_gold: prev_segment.histories.where("realtime_duration_ms < ?", realtime_end_ms - prev_segment.start(Run::REAL).to_ms).none?,
       )
     end
 
@@ -377,7 +379,7 @@ class Run < ApplicationRecord
       prev_segment.assign_attributes(
         gametime_end_ms: gametime_end_ms,
         gametime_duration_ms: gametime_end_ms - prev_segment.start(Run::GAME).to_ms,
-        gametime_gold: prev_segment.histories.where('gametime_duration_ms < ?', gametime_end_ms - prev_segment.start(Run::GAME).to_ms).none?,
+        gametime_gold: prev_segment.histories.where("gametime_duration_ms < ?", gametime_end_ms - prev_segment.start(Run::GAME).to_ms).none?,
       )
     end
 
@@ -411,9 +413,9 @@ class Run < ApplicationRecord
     $s3_bucket_internal.put_object(
       key: "splits/#{s3_filename}",
       body: ApplicationController.new.render_to_string(
-        template: 'runs/exports/exchange',
+        template: "runs/exports/exchange",
         layout: false,
-        locals: {:@run => self},
+        locals: { :@run => self },
       ),
     )
 
@@ -433,25 +435,25 @@ class Run < ApplicationRecord
   def stats_select_query(timing)
     case timing
     when Run::REAL
-      'segment_id,
+      "segment_id,
       STDDEV_POP(segment_histories.realtime_duration_ms) AS standard_deviation,
       AVG(segment_histories.realtime_duration_ms) AS mean,
       PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS median,
       PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile10,
       PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile90,
       PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.realtime_duration_ms) AS percentile99
-      '.squish
+      ".squish
     when Run::GAME
-      'segment_id,
+      "segment_id,
       STDDEV_POP(segment_histories.gametime_duration_ms) AS standard_deviation,
       AVG(segment_histories.gametime_duration_ms) AS mean,
       PERCENTILE_DISC(.5) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS median,
       PERCENTILE_CONT(.1) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile10,
       PERCENTILE_CONT(.9) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile90,
       PERCENTILE_CONT(.99) WITHIN GROUP (ORDER BY segment_histories.gametime_duration_ms) AS percentile99
-      '.squish
+      ".squish
     else
-      raise 'Unsupported timing'
+      raise "Unsupported timing"
     end
   end
 end

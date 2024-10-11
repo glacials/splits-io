@@ -9,7 +9,7 @@ class SegmentHistory < ApplicationRecord
   # This is multiple orders of magnitude more efficient than loading these into Rails and doing it there, for n attempts
   # and m segments.
   def self.with_ends
-    joins(:segment).select('
+    joins(:segment).select("
       segment_histories.*,
       CAST(
         sum(segment_histories.realtime_duration_ms) OVER(PARTITION BY attempt_number ORDER BY segments.segment_number)
@@ -19,7 +19,7 @@ class SegmentHistory < ApplicationRecord
         sum(segment_histories.gametime_duration_ms) OVER(PARTITION BY attempt_number ORDER BY segments.segment_number)
         AS BIGINT
       ) AS gametime_end_ms
-    '.squish)
+    ".squish)
   end
 
   def self.without_statistically_invalid_histories_for_run(run, timing)
@@ -37,7 +37,7 @@ class SegmentHistory < ApplicationRecord
               OR segment_histories.realtime_duration_ms IS NULL))
         ) AS other_histories ON
           other_histories.attempt_number = segment_histories.attempt_number
-          AND other_histories.segment_number = segments_segment_histories.segment_number - 1}.squish, run_id: run.id])
+          AND other_histories.segment_number = segment.segment_number - 1}.squish, run_id: run.id])
     when Run::GAME
       joins(SegmentHistory.sanitize_sql_array [%Q{
         LEFT JOIN (
@@ -51,9 +51,9 @@ class SegmentHistory < ApplicationRecord
               OR segment_histories.gametime_duration_ms IS NULL))
         ) AS other_histories ON
           other_histories.attempt_number = segment_histories.attempt_number
-          AND other_histories.segment_number = segments_segment_histories.segment_number - 1}.squish, run_id: run.id])
+          AND other_histories.segment_number = segment.segment_number - 1}.squish, run_id: run.id])
     else
-      raise 'Unsupported timing'
+      raise "Unsupported timing"
     end
   end
 
