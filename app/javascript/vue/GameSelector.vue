@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import VueBootstrapAutocomplete from "vue-bootstrap-autocomplete";
+import VueBootstrapAutocomplete from "@vue-bootstrap-components/vue-bootstrap-autocomplete";
 const _ = require("underscore");
 
 export default {
