@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.7.1" # also update docker-compose.yml & docker-compose-production.yml
+ruby "3.3.5" # also update docker-compose.yml & docker-compose-production.yml
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -27,6 +27,7 @@ group :development, :hot do
   gem "rails-erd", require: false
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
+  gem "rufo", require: false
 
   # profiling
   gem "derailed_benchmarks"
@@ -96,6 +97,7 @@ gem "stripe-rails"
 # parsing
 gem "descriptive_statistics", require: "descriptive_statistics/safe"
 gem "moving_average"
+gem "statistics"
 
 # profiling
 gem "memory_profiler"
@@ -116,11 +118,11 @@ gem "bootstrap4-kaminari-views"
 gem "font-awesome-sass", "~> 5.9"
 gem "gon"
 gem "image_processing"
+gem "jsbundling-rails"
 gem "kaminari"
 gem "purecss-rails", github: "glacials/purecss-rails"
 gem "sassc-rails"
 gem "slim"
-gem "webpacker", ">= 4.0.x"
 
 # workers/jobs
 gem "daemons"

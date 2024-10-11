@@ -35,7 +35,7 @@ seed:
 	@echo "# The presence of this file tells the splits-io Makefile to not re-seed data." > tmp/seed
 
 lint:
-	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run web rubocop --force-exclusion
+	git diff-tree -r --no-commit-id --name-only head origin/master | xargs $(docker-compose) run --rm web rubocop --force-exclusion
 
 test:
 	$(docker-compose) run --rm -e RAILS_ENV=test web bundle exec rspec $(path)

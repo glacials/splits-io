@@ -1,4 +1,3 @@
-version: '3.7'
 x-server-environment:
   &server-environment
   - AWS_REGION=local
@@ -45,7 +44,7 @@ x-app: &app
     context: .
     dockerfile: Dockerfile
     args:
-      RUBY_VERSION: "2.7.1" # also update docker-compose-production.yml & Gemfile
+      RUBY_VERSION: "3.3.5" # also update docker-compose-production.yml & Gemfile
   image: splitsio
   tmpfs:
     - /tmp
@@ -68,7 +67,9 @@ x-backend: &backend
 
 services:
   db:
-    image: postgres:11.5
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    image: postgres:17.0
     logging: *default-logging
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
@@ -80,9 +81,9 @@ services:
       - 4569:4569
     volumes:
       - s3:/fakes3_root
-  webpacker:
+  js:
     <<: *app
-    command: bash -c "ruby bin/webpack-dev-server"
+    command: bash -c "yarn build --watch"
     environment: *server-environment
     logging: *default-logging
     ports:

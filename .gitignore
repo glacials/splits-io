@@ -39,3 +39,6 @@ yarn-debug.log*
 storage
 
 .byebug_history
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
