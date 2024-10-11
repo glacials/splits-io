@@ -40,6 +40,9 @@ lint:
 test:
 	$(docker-compose) run --rm -e RAILS_ENV=test web bundle exec rspec $(path)
 
+exec:
+	$(docker-compose) run --rm web $(cmd)
+
 run: # Run docker-compose up, but work around Ctrl-C sometimes not stopping containers. See https://github.com/docker/compose/issues/3317#issuecomment-416552656
 	bash -c "trap '$(docker-compose) stop' EXIT; $(docker-compose) up"
 

@@ -65,6 +65,7 @@ x-backend: &backend
     - s3
     - redis
 
+name: splitsio
 services:
   css:
     <<: *app
@@ -101,6 +102,15 @@ services:
       - 4569:4569
     volumes:
       - s3:/fakes3_root
+  vue:
+    <<: *app
+    command: bash -c "bundle exec vite dev"
+    environment: *server-environment
+    logging: *default-logging
+    volumes:
+      - .:/app
+      - ./bundle:/bundle
+      - rails_cache:/app/tmp/cache
   web:
     <<: *backend
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"

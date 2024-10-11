@@ -121,6 +121,7 @@ gem "jsbundling-rails"
 gem "kaminari"
 gem "propshaft"
 gem "slim"
+gem "vite_rails"
 
 # workers/jobs
 gem "daemons"

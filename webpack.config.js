@@ -36,7 +36,7 @@ module.exports = {
   },
   resolve: {
     // Add additional file types
-    extensions: [".js", ".jsx", ".scss", ".css"],
+    extensions: [".js", ".jsx", ".scss", ".css", ".vue"],
   },
   plugins: [
     // Include plugins

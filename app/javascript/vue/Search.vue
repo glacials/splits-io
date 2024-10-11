@@ -1,19 +1,20 @@
 <template>
-  <div style='margin: auto; margin-top: 0.3rem;'>
-    <vue-bootstrap-typeahead
-      background-variant='dark'
+  <div style="margin: auto; margin-top: 0.3rem">
+    <vue-bootstrap-autocomplete
+      background-variant="dark"
       class="m-auto search"
-      :data='gameResults.concat(userResults)'
-      @hit='selectedItem = $event'
-      placeholder='Search...'
-      :serializer='item => item.name'
-      text-variant='light'
-      v-model='input'>
-      <template v-slot:append v-if='loading'>
-        <div class='input-group-append'>
-          <div class='input-group-text'>
-            <span class='spinner-border spinner-border-sm' role='status'>
-              <span class='sr-only'>Loading...</span>
+      :data="gameResults.concat(userResults)"
+      @hit="selectedItem = $event"
+      placeholder="Search..."
+      :serializer="(item) => item.name"
+      text-variant="light"
+      v-model="input"
+    >
+      <template v-slot:append v-if="loading">
+        <div class="input-group-append">
+          <div class="input-group-text">
+            <span class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
             </span>
           </div>
         </div>
@@ -21,55 +22,63 @@
       <template slot="suggestion" slot-scope="{ data, htmlText }">
         <span v-html="htmlText"></span>
         <br />
-        <small>{{ data.categories === undefined ? 'User' : `${data.categories.length} categories`}}</small>
+        <small>{{
+          data.categories === undefined
+            ? "User"
+            : `${data.categories.length} categories`
+        }}</small>
       </template>
-    </vue-bootstrap-typeahead>
+    </vue-bootstrap-autocomplete>
   </div>
 </template>
 
 <script>
-import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
-const _ = require('underscore')
+import VueBootstrapAutocomplete from "vue-bootstrap-autocomplete";
+const _ = require("underscore");
 
 export default {
   components: {
-    VueBootstrapTypeahead,
+    VueBootstrapAutocomplete,
   },
-  data: function() {
+  data: function () {
     return {
       gameResults: [],
-      input: '',
+      input: "",
       loading: false,
       selectedItem: null,
       userResults: [],
-    }
+    };
   },
   methods: {
-    debouncedFetch: _.debounce(async function(newQuery) {
+    debouncedFetch: _.debounce(async function (newQuery) {
       Promise.all([
-        fetch(`/api/v4/games?search=${newQuery}`).then(response => response.json()).then(body => {
-          this.gameResults = body.games
-        }),
-        fetch(`/api/v4/runners?search=${newQuery}`).then(response => response.json()).then(body => {
-          this.userResults = body.runners
-        }),
-      ]).then(() => this.loading = false)
+        fetch(`/api/v4/games?search=${newQuery}`)
+          .then((response) => response.json())
+          .then((body) => {
+            this.gameResults = body.games;
+          }),
+        fetch(`/api/v4/runners?search=${newQuery}`)
+          .then((response) => response.json())
+          .then((body) => {
+            this.userResults = body.runners;
+          }),
+      ]).then(() => (this.loading = false));
     }, 500),
   },
   watch: {
-    input: function(newInput) {
+    input: function (newInput) {
       if (newInput) {
-        this.loading = true
-        this.debouncedFetch(newInput)
+        this.loading = true;
+        this.debouncedFetch(newInput);
       }
     },
-    selectedItem: function(newSelectedItem) {
+    selectedItem: function (newSelectedItem) {
       if (newSelectedItem.categories !== undefined) {
-        Turbolinks.visit(`/games/${newSelectedItem.shortname}`)
+        Turbolinks.visit(`/games/${newSelectedItem.shortname}`);
       } else {
-        Turbolinks.visit(`/users/${newSelectedItem.name}`)
+        Turbolinks.visit(`/users/${newSelectedItem.name}`);
       }
     },
   },
-}
+};
 </script>

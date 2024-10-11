@@ -22,7 +22,6 @@ import Vue from "vue";
 import TurbolinksAdapter from "vue-turbolinks";
 import VueTippy, { TippyComponent } from "vue-tippy";
 
-import race from "./vue/race.js";
 import RaceCreateButton from "./vue/RaceCreateButton.vue";
 import EditRunGameAndCategory from "./vue/EditRunGameAndCategory.vue";
 import Search from "./vue/Search.vue";
@@ -38,11 +37,7 @@ Vue.use(VueTippy, {
 });
 Vue.component("tippy", TippyComponent);
 
-document.addEventListener("turbolinks:load", () => {
-  if (!document.getElementById("vue")) {
-    return;
-  }
-
+if (document.getElementById("vue")) {
   const app = new Vue({
     el: "#vue",
     components: {
@@ -53,39 +48,8 @@ document.addEventListener("turbolinks:load", () => {
       SpeedRunsLiveRaceList,
     },
   });
-});
-
+}
 // Using Google charts for admin dashboards for now (a script tag in app/views/layouts/admin/application.slim) because
 // Chartkick + Highcharts doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
 import Chartkick from "chartkick";
 window.Chartkick = Chartkick;
-
-import "bootstrap";
-
-import "./analytics.js";
-import "./collapse.js";
-import "./count.js";
-// import "./crisp.js"
-import "./dropdown.js";
-import "./highchart_theme.js";
-import "./chart_builder.js";
-import "./landing.js";
-import "./like.js";
-import "./race_attach.js";
-import "./run_claim.js";
-import "./run_delete.js";
-import "./run_disown.js";
-import "./run_export.js";
-import "./run_parse.js";
-import "./settings.js";
-import "./srdc.js";
-import "./stripe.js";
-import "./paypal.js";
-import "./survey.js";
-import "./timeline.js";
-import "./token.js";
-import "./tooltips.js";
-import "./twitch.js";
-import "./upload.js";
-import "./youtube.js";
-import "./youtube_timestamps.js";
