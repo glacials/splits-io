@@ -66,6 +66,7 @@
     "build:css": "sass ./app/assets/stylesheets/application.sass:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
   "devDependencies": {
+    "import-meta-loader": "^1.1.0",
     "vite": "^5.0.0",
     "vite-plugin-ruby": "^5.1.0"
   }

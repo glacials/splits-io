@@ -59,9 +59,11 @@ const upload = async function (file, options) {
 };
 
 // Reset the dropzone whenever we change pages, otherwise it will stay visible through Turbolinks.visits
-document.getElementById("dropzone-overlay").style.visibility = "hidden";
-document.getElementById("droplabel").textContent = "Waiting for drop";
-document.getElementById("multiupload").style.visibility = "hidden";
+document.addEventListener("turbolinks:load", function () {
+  document.getElementById("dropzone-overlay").style.visibility = "hidden";
+  document.getElementById("droplabel").textContent = "Waiting for drop";
+  document.getElementById("multiupload").style.visibility = "hidden";
+});
 
 const uploadAll = function (files) {
   document.getElementById("multiupload").style.visibility = "visible";
@@ -98,75 +100,81 @@ const uploadAll = function (files) {
   });
 };
 
-// Show dropzone-overlay when a file is dragged onto the page
-if (document.getElementById("dropzone") === null) {
-  return;
-}
-
-document
-  .getElementById("dropzone")
-  .addEventListener("dragenter", function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    document.getElementById("dropzone-overlay").style.visibility = "visible";
-  });
-
-// Hide dropzone-overlay when a file is dragged off of the page
-document
-  .getElementById("dropzone")
-  .addEventListener("dragleave", function (event) {
-    if (
-      event.pageX < 10 ||
-      event.pageY < 10 ||
-      window.innerWidth - event.pageX < 10 ||
-      window.innerHeight - event.pageY < 10
-    ) {
-      document.getElementById("dropzone-overlay").style.visibility = "hidden";
-    }
-  });
-
-document
-  .getElementById("dropzone")
-  .addEventListener("dragover", function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  });
-
-// Upload when a file is dropped onto the page
-document.getElementById("dropzone").addEventListener("drop", function (event) {
-  event.preventDefault();
-  event.stopPropagation();
-
-  const files = event.dataTransfer.files;
-  if (files.length > 1 && gon.user === null) {
-    document.getElementById("droplabel").textContent =
-      "Please sign in to bulk-upload runs";
+document.addEventListener("turbolinks:load", function () {
+  // Show dropzone-overlay when a file is dragged onto the page
+  if (document.getElementById("dropzone") === null) {
     return;
   }
 
-  document.getElementById("droplabel").textContent = "Uploading";
-  window.isUploading = true;
-  document.getElementById("upload-spinner").hidden = false;
+  document
+    .getElementById("dropzone")
+    .addEventListener("dragenter", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      document.getElementById("dropzone-overlay").style.visibility = "visible";
+    });
 
-  if (files.length > 1) {
-    uploadAll(_.toArray(files));
-  } else {
-    upload(files[0]);
-  }
-});
+  // Hide dropzone-overlay when a file is dragged off of the page
+  document
+    .getElementById("dropzone")
+    .addEventListener("dragleave", function (event) {
+      if (
+        event.pageX < 10 ||
+        event.pageY < 10 ||
+        window.innerWidth - event.pageX < 10 ||
+        window.innerHeight - event.pageY < 10
+      ) {
+        document.getElementById("dropzone-overlay").style.visibility = "hidden";
+      }
+    });
 
-// If we left dropzone-overlay open to show an error, dismiss it when clicked on
-document.getElementById("dropzone").addEventListener("click", function (event) {
-  if (!window.isUploading) {
-    document.getElementById("dropzone-overlay").style.visibility = "hidden";
-  }
-});
+  document
+    .getElementById("dropzone")
+    .addEventListener("dragover", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    });
 
-// If we left dropzone-overlay open to show an error, dismiss it when ESC is pressed
-document.addEventListener("keyup", function (event) {
-  if (event.keyCode === 27 && !window.isUploading) {
-    document.getElementById("dropzone-overlay").style.visibility = "hidden";
-  }
+  // Upload when a file is dropped onto the page
+  document
+    .getElementById("dropzone")
+    .addEventListener("drop", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const files = event.dataTransfer.files;
+      if (files.length > 1 && gon.user === null) {
+        document.getElementById("droplabel").textContent =
+          "Please sign in to bulk-upload runs";
+        return;
+      }
+
+      document.getElementById("droplabel").textContent = "Uploading";
+      window.isUploading = true;
+      document.getElementById("upload-spinner").hidden = false;
+
+      if (files.length > 1) {
+        uploadAll(_.toArray(files));
+      } else {
+        upload(files[0]);
+      }
+    });
+
+  // If we left dropzone-overlay open to show an error, dismiss it when clicked on
+  document
+    .getElementById("dropzone")
+    .addEventListener("click", function (event) {
+      if (!window.isUploading) {
+        document.getElementById("dropzone-overlay").style.visibility = "hidden";
+      }
+    });
+
+  // If we left dropzone-overlay open to show an error, dismiss it when ESC is pressed
+  document.addEventListener("keyup", function (event) {
+    if (event.keyCode === 27 && !window.isUploading) {
+      document.getElementById("dropzone-overlay").style.visibility = "hidden";
+    }
+  });
 });
 
 document.addEventListener("change", function (event) {

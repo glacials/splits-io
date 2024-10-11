@@ -1,4 +1,5 @@
 // In webpack.config.js
+const path = require("path");
 const { VueLoaderPlugin } = require("vue-loader");
 
 // Extracts CSS into .css file
@@ -23,7 +24,19 @@ module.exports = {
   },
   module: {
     rules: [
-      // Add CSS/SASS/SCSS rule with loaders
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: "import-meta-loader",
+            options: {
+              // isVite2: true,
+              // alias: {}
+            },
+          },
+        ],
+      },
       {
         test: /\.(?:sa|sc|c)ss$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
@@ -33,6 +46,9 @@ module.exports = {
         loader: "vue-loader",
       },
     ],
+  },
+  output: {
+    path: path.resolve(__dirname, "app/assets/build"),
   },
   resolve: {
     // Add additional file types
