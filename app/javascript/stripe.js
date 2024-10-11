@@ -6,7 +6,7 @@ document.addEventListener("click", async function (event) {
 
   event.preventDefault();
 
-  const stripe = Stripe(import.meta.env.STRIPE_PUBLISHABLE_KEY);
+  const stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY);
   const result = await stripe.redirectToCheckout({
     items: [{ plan: subscribeButton.dataset.planId, quantity: 1 }],
     successUrl: `${location.origin}/subscriptions/success?session_id={CHECKOUT_SESSION_ID}`,

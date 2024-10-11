@@ -30,7 +30,7 @@ const getAccessToken = function () {
 
 document.addEventListener("turbolinks:load", () => {
   // Protect dev modes that haven't set up a client yet
-  if (import.meta.env.SPLITSIO_CLIENT_ID === undefined) {
+  if (process.env.SPLITSIO_CLIENT_ID === undefined) {
     console.warn(
       "SPLITSIO_CLIENT_ID & SPLITSIO_CLIENT_SECRET not set in .envrc. Some features like races won't work."
     );
@@ -71,7 +71,7 @@ document.addEventListener("turbolinks:load", () => {
     response_type: "token",
     scope: "upload_run+manage_race",
     redirect_uri: `${window.location.origin}/auth/splitsio/callback`,
-    client_id: import.meta.env.SPLITSIO_CLIENT_ID,
+    client_id: process.env.SPLITSIO_CLIENT_ID,
   };
   iframe.src = `/oauth/authorize?${Object.keys(params)
     .map((k) => `${k}=${params[k]}`)

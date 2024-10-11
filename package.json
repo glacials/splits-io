@@ -7,6 +7,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@open-wc/webpack-import-meta-loader": "^0.4.7",
     "@paypal/paypal-js": "^2.0.0",
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^6.0.0",
@@ -66,8 +67,7 @@
     "build:css": "sass ./app/assets/stylesheets/application.sass:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   },
   "devDependencies": {
-    "import-meta-loader": "^1.1.0",
-    "vite": "^5.0.0",
+    "vite": "^5.4.8",
     "vite-plugin-ruby": "^5.1.0"
   }
 }

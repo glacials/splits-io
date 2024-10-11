@@ -19,8 +19,8 @@ x-server-environment:
   - S3_BUCKET=splits-io
   - S3_HOST=s3.localhost
   - SITE_TITLE=Splits.io (Local)
-  - SPLITSIO_CLIENT_SECRET
-  - SPLITSIO_CLIENT_ID
+  - SPLITSIO_CLIENT_ID=changeme
+  - SPLITSIO_CLIENT_SECRET=changeme
   - STRIPE_PLAN_ID_TIER1=plan_FmRDE979W782Zj
   - STRIPE_PLAN_ID_TIER2=plan_FmRDa9Hhf1lwMQ
   - STRIPE_PLAN_ID_TIER3=plan_GDlCHoXN5YCCUg
@@ -107,6 +107,8 @@ services:
     command: bash -c "bundle exec vite dev"
     environment: *server-environment
     logging: *default-logging
+    ports:
+      - 3036:3036
     volumes:
       - .:/app
       - ./bundle:/bundle

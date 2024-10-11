@@ -49,7 +49,7 @@ return if User.count > 0
   'Yoshi\'s Story',
   "Zeno Clash",
 ].each do |name|
-  SpeedrunDotComGame.create(
+  SpeedrunDotComGame.create!(
     game: Game.create(name: name),
     name: name,
     default_timing: "real",
@@ -60,17 +60,17 @@ return if User.count > 0
   )
 end
 
-User.create(
+u = User.create!(
   name: "Alice",
 )
 
-Doorkeeper::Application.create(
+Doorkeeper::Application.create!(
   name: "Splits.io",
   uid: ENV["SPLITSIO_CLIENT_ID"],
   secret: ENV["SPLITSIO_CLIENT_SECRET"],
   redirect_uri: "http://localhost:3000/auth/splitsio/callback",
   scopes: "",
-  owner_id: 2, # First user made after fresh build
+  owner_id: User.first.id,
   owner_type: "User",
   secret_generated_at: Time.now,
   confidential: true,

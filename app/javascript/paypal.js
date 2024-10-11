@@ -6,7 +6,7 @@ document.addEventListener("turbolinks:load", function () {
   }
 
   loadScript({
-    "client-id": import.meta.env.PAYPAL_CLIENT_ID,
+    "client-id": process.env.PAYPAL_CLIENT_ID,
     vault: "true",
     intent: "subscription",
     "disable-funding": "credit",
@@ -20,7 +20,7 @@ document.addEventListener("turbolinks:load", function () {
       },
       createSubscription: function (_, actions) {
         return actions.subscription.create({
-          plan_id: import.meta.env.PAYPAL_PLAN_ID,
+          plan_id: process.env.PAYPAL_PLAN_ID,
           application_context: {
             shipping_preference: "NO_SHIPPING",
           },

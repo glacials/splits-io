@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // Removes exported JavaScript files from CSS-only entries
 // in this example, entry.custom will create a corresponding empty custom.js file
 const RemoveEmptyScriptsPlugin = require("webpack-remove-empty-scripts");
+const { EnvironmentPlugin } = require("webpack");
 
 const mode =
   process.env.NODE_ENV === "development" ? "development" : "production";
@@ -25,19 +26,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: "import-meta-loader",
-            options: {
-              // isVite2: true,
-              // alias: {}
-            },
-          },
-        ],
-      },
-      {
         test: /\.(?:sa|sc|c)ss$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
@@ -55,9 +43,14 @@ module.exports = {
     extensions: [".js", ".jsx", ".scss", ".css", ".vue"],
   },
   plugins: [
-    // Include plugins
     new RemoveEmptyScriptsPlugin(),
     new MiniCssExtractPlugin(),
     new VueLoaderPlugin(),
+    new EnvironmentPlugin({
+      PAYPAL_CLIENT_ID: "",
+      PAYPAL_PLAN_ID: "",
+      SPLITSIO_CLIENT_ID: "",
+      STRIPE_PUBLISHABLE_KEY: "",
+    }),
   ],
 };

@@ -40,7 +40,7 @@ exports.handler = function (event, context, callback) {
   const inputArtifact = event["CodePipeline.job"].data.inputArtifacts[0];
 
   const params = {
-    access_token: import.meta.env.ROLLBAR_ACCESS_TOKEN,
+    access_token: process.env.ROLLBAR_ACCESS_TOKEN,
     environment: userParams.environment,
     revision: inputArtifact.revision,
     local_username: "glacials",
@@ -58,9 +58,7 @@ exports.handler = function (event, context, callback) {
       } else {
         response.text().then(function (body) {
           console.error(`Bad status: ${response.status}, ${body}`);
-          console.error(
-            `Access token is ${import.meta.env.ROLLBAR_ACCESS_TOKEN}`
-          );
+          console.error(`Access token is ${process.env.ROLLBAR_ACCESS_TOKEN}`);
           putJobFailure("failing codepipeline job");
         });
       }
