@@ -35,7 +35,7 @@
     "ms": "^2.1.2",
     "popper.js": "^1.16.0",
     "purecss": "^3.0.0",
-    "sass": "^1.79.4",
+    "sass": "^1.79.5",
     "sass-loader": "^16.0.2",
     "spin.js": "^4.0.0",
     "timesync": "^1.0.3",
@@ -56,6 +56,7 @@
     "webpack-remove-empty-scripts": "^1.0.4"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "build:css": "sass ./app/assets/stylesheets/application.sass:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

@@ -4,7 +4,6 @@ ruby "3.3.5" # also update docker-compose.yml & docker-compose-production.yml
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 group :test, :development do
-  gem "pry-byebug"
   gem "pry-rails"
   gem "rspec-rails", "~> 4.0.0"
 end
@@ -47,7 +46,6 @@ group :production do
 end
 
 # administration
-gem "administrate"
 gem "chartkick"
 gem "delayed_job_web"
 gem "groupdate"
@@ -115,12 +113,13 @@ gem "dalli"
 
 # views
 gem "bootstrap4-kaminari-views"
+gem "cssbundling-rails"
 gem "font-awesome-sass", "~> 5.9"
 gem "gon"
 gem "image_processing"
 gem "jsbundling-rails"
 gem "kaminari"
-gem "sassc-rails"
+gem "propshaft"
 gem "slim"
 
 # workers/jobs

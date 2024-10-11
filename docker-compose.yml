@@ -66,6 +66,16 @@ x-backend: &backend
     - redis
 
 services:
+  css:
+    <<: *app
+    command: bash -c "yarn build:css --watch"
+    environment: *server-environment
+    logging: *default-logging
+    volumes:
+      - .:/app
+      - ./bundle:/bundle
+      - packs:/app/public/packs
+      - rails_cache:/app/tmp/cache
   db:
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
@@ -74,14 +84,7 @@ services:
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/10-init.sql
       - db:/var/lib/postgresql/data
-  s3:
-    image: lphoward/fake-s3
-    logging: *default-logging
-    ports:
-      - 4569:4569
-    volumes:
-      - s3:/fakes3_root
-  webpack:
+  js:
     <<: *app
     command: bash -c "yarn build --watch"
     environment: *server-environment
@@ -93,6 +96,13 @@ services:
       - ./bundle:/bundle
       - packs:/app/public/packs
       - rails_cache:/app/tmp/cache
+  s3:
+    image: lphoward/fake-s3
+    logging: *default-logging
+    ports:
+      - 4569:4569
+    volumes:
+      - s3:/fakes3_root
   web:
     <<: *backend
     command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
