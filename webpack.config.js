@@ -7,7 +7,12 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // in this example, entry.custom will create a corresponding empty custom.js file
 const RemoveEmptyScriptsPlugin = require("webpack-remove-empty-scripts");
 
+const mode =
+  process.env.NODE_ENV === "development" ? "development" : "production";
+
 module.exports = {
+  mode,
+  optimization: { moduleIds: "deterministic" },
   entry: {
     // add your css or sass entries
     application: [

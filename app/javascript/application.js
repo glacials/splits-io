@@ -17,7 +17,7 @@ const momentDurationFormatSetup = require("moment-duration-format");
 
 momentDurationFormatSetup(moment);
 
-import Vue from "vue/dist/vue.esm";
+import Vue from "vue";
 
 import TurbolinksAdapter from "vue-turbolinks";
 import VueTippy, { TippyComponent } from "vue-tippy";

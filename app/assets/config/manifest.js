@@ -1,5 +1,11 @@
 //= link_tree ../../javascript .js
-//= link application.js
+//= link bootstrap.js
+//= link chartkick.js
+//= link jquery.js
+//= link @popperjs--core.js
+//= link vue.js
+//= link vue-tippy.js
+//= link vue-turbolinks.js
 
 //= link_tree ../images
 //= link favicon/site.webmanifest
@@ -9,4 +15,3 @@
 // admin
 //= link administrate/application.js
 //= link administrate/application.css
-//= link_tree ../builds
