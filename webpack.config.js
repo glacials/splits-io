@@ -41,6 +41,9 @@ module.exports = {
   resolve: {
     // Add additional file types
     extensions: [".js", ".jsx", ".scss", ".css", ".vue"],
+    alias: {
+      vue: "vue/dist/vue.js",
+    },
   },
   plugins: [
     new RemoveEmptyScriptsPlugin(),

@@ -17,6 +17,8 @@ const momentDurationFormatSetup = require("moment-duration-format");
 
 momentDurationFormatSetup(moment);
 
+import race from "./vue/race.js";
+
 import Vue from "vue";
 
 import TurbolinksAdapter from "vue-turbolinks";
@@ -35,9 +37,14 @@ Vue.use(VueTippy, {
     } // Makes null `content` hide the tooltip, not show a blank one
   },
 });
+
 Vue.component("tippy", TippyComponent);
 
-if (document.getElementById("vue")) {
+document.addEventListener("turbolinks:load", () => {
+  if (!document.getElementById("vue")) {
+    return;
+  }
+
   const app = new Vue({
     el: "#vue",
     components: {
@@ -48,7 +55,8 @@ if (document.getElementById("vue")) {
       SpeedRunsLiveRaceList,
     },
   });
-}
+});
+
 // Using Google charts for admin dashboards for now (a script tag in app/views/layouts/admin/application.slim) because
 // Chartkick + Highcharts doesn't seem to include axes, and tooltips don't include years (?) with no clear resolution
 import Chartkick from "chartkick";
