@@ -1,208 +1,201 @@
-'use strict'
-import Highcharts from 'highcharts'
-import {blue, purple, green, yellow, red, orange} from 'colors.js'
+"use strict";
+import Highcharts from "highcharts";
+import { blue, purple, green, yellow, red, orange } from "./colors.js";
 
-const defaultFontFamily = '"Helvetica Neue", Helvetica, Arial, sans-serif'
+const defaultFontFamily = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
 Highcharts.theme = {
-  colors: [
-    blue,
-    purple,
-    green,
-    yellow,
-    red,
-    orange
-  ],
+  colors: [blue, purple, green, yellow, red, orange],
   chart: {
-    backgroundColor: 'none',
+    backgroundColor: "none",
     style: {
-     fontFamily: defaultFontFamily
-   },
-   plotBorderColor: '#606063'
+      fontFamily: defaultFontFamily,
+    },
+    plotBorderColor: "#606063",
   },
 
   title: {
     style: {
-      color: '#FFFFFF',
+      color: "#FFFFFF",
       fontFamily: defaultFontFamily,
-      fontSize: '20px'
-    }
+      fontSize: "20px",
+    },
   },
   subtitle: {
     style: {
-      color: '#E0E0E3',
-      fontFamily: defaultFontFamily
-    }
+      color: "#E0E0E3",
+      fontFamily: defaultFontFamily,
+    },
   },
 
   xAxis: {
-    gridLineColor: '#707070',
+    gridLineColor: "#707070",
     labels: {
       style: {
-        color: '#FFFFFF'
-      }
+        color: "#FFFFFF",
+      },
     },
-    lineColor: '#707070',
-    minorGridLineColor: '#505050',
-    tickColor: '#707070',
+    lineColor: "#707070",
+    minorGridLineColor: "#505050",
+    tickColor: "#707070",
     title: {
       style: {
-        color: '#FFFFFF'
-      }
-    }
+        color: "#FFFFFF",
+      },
+    },
   },
   yAxis: {
-    gridLineColor: '#707070',
+    gridLineColor: "#707070",
     labels: {
       style: {
-        color: '#FFF',
-        fontFamily: defaultFontFamily
-      }
+        color: "#FFF",
+        fontFamily: defaultFontFamily,
+      },
     },
-    lineColor: '#707070',
-    minorGridLineColor: '#505053',
-    tickColor: '#707070',
+    lineColor: "#707070",
+    minorGridLineColor: "#505053",
+    tickColor: "#707070",
     tickWidth: 1,
     title: {
       style: {
-        color: '#FFFFFF',
-        fontFamily: defaultFontFamily
-      }
-    }
+        color: "#FFFFFF",
+        fontFamily: defaultFontFamily,
+      },
+    },
   },
 
   tooltip: {
-    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+    backgroundColor: "rgba(0, 0, 0, 0.85)",
     style: {
-      color: '#F0F0F0'
-    }
+      color: "#F0F0F0",
+    },
   },
 
   plotOptions: {
     series: {
       dataLabels: {
-        color: '#B0B0B3'
+        color: "#B0B0B3",
       },
       marker: {
-        lineColor: '#333'
-      }
+        lineColor: "#333",
+      },
     },
     boxplot: {
-      fillColor: '#505053'
+      fillColor: "#505053",
     },
     candlestick: {
-      lineColor: 'white'
+      lineColor: "white",
     },
     errorbar: {
-      color: 'white'
-    }
+      color: "white",
+    },
   },
 
   legend: {
     itemStyle: {
-      color: '#E0E0E3',
-      fontFamily: defaultFontFamily
+      color: "#E0E0E3",
+      fontFamily: defaultFontFamily,
     },
     itemHoverStyle: {
-      color: '#FFF'
+      color: "#FFF",
     },
     itemHiddenStyle: {
-      color: '#606063'
-    }
+      color: "#606063",
+    },
   },
 
   credits: {
-    enabled: false
+    enabled: false,
   },
 
   drilldown: {
     activeAxisLabelStyle: {
-      color: '#F0F0F3'
+      color: "#F0F0F3",
     },
     activeDataLabelStyle: {
-      color: '#F0F0F3'
-    }
+      color: "#F0F0F3",
+    },
   },
 
   navigation: {
     buttonOptions: {
-      symbolStroke: '#DDDDDD',
+      symbolStroke: "#DDDDDD",
       theme: {
-        fill: '#505053'
-      }
-    }
+        fill: "#505053",
+      },
+    },
   },
 
-   // scroll charts
+  // scroll charts
   rangeSelector: {
     buttonTheme: {
-      fill: '#505053',
-      stroke: '#000000',
+      fill: "#505053",
+      stroke: "#000000",
       style: {
-        color: '#CCC'
+        color: "#CCC",
       },
       states: {
         hover: {
-          fill: '#707073',
-          stroke: '#000000',
+          fill: "#707073",
+          stroke: "#000000",
           style: {
-            color: 'white'
-          }
+            color: "white",
+          },
         },
         select: {
-          fill: '#000003',
-          stroke: '#000000',
+          fill: "#000003",
+          stroke: "#000000",
           style: {
-            color: 'white'
-          }
-        }
-      }
+            color: "white",
+          },
+        },
+      },
     },
-    inputBoxBorderColor: '#505053',
+    inputBoxBorderColor: "#505053",
     inputStyle: {
-      backgroundColor: '#333',
-      color: 'silver'
+      backgroundColor: "#333",
+      color: "silver",
     },
     labelStyle: {
-      color: 'silver'
-    }
+      color: "silver",
+    },
   },
 
   navigator: {
     handles: {
-      backgroundColor: '#666',
-      borderColor: '#AAA'
+      backgroundColor: "#666",
+      borderColor: "#AAA",
     },
-    outlineColor: '#CCC',
-    maskFill: 'rgba(255,255,255,0.1)',
+    outlineColor: "#CCC",
+    maskFill: "rgba(255,255,255,0.1)",
     series: {
-      color: '#7798BF',
-      lineColor: '#A6C7ED'
+      color: "#7798BF",
+      lineColor: "#A6C7ED",
     },
     xAxis: {
-      gridLineColor: '#505053'
-    }
+      gridLineColor: "#505053",
+    },
   },
 
   scrollbar: {
-    barBackgroundColor: '#808083',
-    barBorderColor: '#808083',
-    buttonArrowColor: '#CCC',
-    buttonBackgroundColor: '#606063',
-    buttonBorderColor: '#606063',
-    rifleColor: '#FFF',
-    trackBackgroundColor: '#404043',
-    trackBorderColor: '#404043'
+    barBackgroundColor: "#808083",
+    barBorderColor: "#808083",
+    buttonArrowColor: "#CCC",
+    buttonBackgroundColor: "#606063",
+    buttonBorderColor: "#606063",
+    rifleColor: "#FFF",
+    trackBackgroundColor: "#404043",
+    trackBorderColor: "#404043",
   },
 
-   // special colors for some of the
-  legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
-  background2: '#505053',
-  dataLabelsColor: '#B0B0B3',
-  textColor: '#C0C0C0',
-  contrastTextColor: '#F0F0F3',
-  maskColor: 'rgba(255,255,255,0.3)'
-}
+  // special colors for some of the
+  legendBackgroundColor: "rgba(0, 0, 0, 0.5)",
+  background2: "#505053",
+  dataLabelsColor: "#B0B0B3",
+  textColor: "#C0C0C0",
+  contrastTextColor: "#F0F0F3",
+  maskColor: "rgba(255,255,255,0.3)",
+};
 
 // Apply the theme
-Highcharts.setOptions(Highcharts.theme)
+Highcharts.setOptions(Highcharts.theme);

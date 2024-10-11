@@ -1,4 +1,5 @@
 // In webpack.config.js
+const { VueLoaderPlugin } = require("vue-loader");
 
 // Extracts CSS into .css file
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -22,6 +23,10 @@ module.exports = {
         test: /\.(?:sa|sc|c)ss$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
+      },
     ],
   },
   resolve: {
@@ -32,5 +37,6 @@ module.exports = {
     // Include plugins
     new RemoveEmptyScriptsPlugin(),
     new MiniCssExtractPlugin(),
+    new VueLoaderPlugin(),
   ],
 };
