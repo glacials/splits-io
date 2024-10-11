@@ -30,5 +30,11 @@ module SplitsIO
     config.action_cable.mount_path = "/api/cable"
 
     config.active_storage.variant_processor = :vips
+
+    config.load_defaults 6.1
+    # TODO: Bump below (NOT above) to 7.0 after 6.1 is fully deployed to all boxes in prod once.
+    config.active_support.cache_format_version = 6.1
+
+    config.active_storage.variant_processor = :vips
   end
 end

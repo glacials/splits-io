@@ -105,7 +105,7 @@ gem "rack-mini-profiler"
 
 # server/environment
 gem "puma"
-gem "rails", "~> 6.0"
+gem "rails"
 # see https://github.com/faye/websocket-driver-ruby/issues/58#issuecomment-394611125
 gem "websocket-driver", github: "faye/websocket-driver-ruby", ref: "ee39af83d03ae3059c775583e4c4b291641257b8"
 
