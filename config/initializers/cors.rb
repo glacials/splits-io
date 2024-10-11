@@ -1,10 +1,10 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins '*'
-    resource '/api/*',
+    origins "*"
+    resource "/api/*",
       methods: :any,
       headers: :any,
-      expose: '*',
+      expose: "*",
       if: Proc.new { |env|
         req = Rack::Request.new(env)
 
