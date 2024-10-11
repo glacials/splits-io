@@ -74,7 +74,6 @@ services:
     volumes:
       - .:/app
       - ./bundle:/bundle
-      - packs:/app/public/packs
       - rails_cache:/app/tmp/cache
   db:
     environment:
@@ -94,7 +93,6 @@ services:
     volumes:
       - .:/app
       - ./bundle:/bundle
-      - packs:/app/public/packs
       - rails_cache:/app/tmp/cache
   s3:
     image: lphoward/fake-s3
