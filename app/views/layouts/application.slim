@@ -14,8 +14,6 @@ html lang='en'
     = javascript_include_tag('https://checkout.stripe.com/checkout.js', defer: true)
     script src='https://player.twitch.tv/js/embed/v1.js' defer='defer'
     = stylesheet_link_tag :application, media: :all, data: {turbolinks_track: 'reload'}
-    = stylesheet_link_tag('bootstrap')
-    = javascript_include_tag('bootstrap', data: {turbolinks_track: 'reload'}, defer: false)
     = csrf_meta_tag
     = render partial: 'application/favicon'
     = render partial: 'shared/twitter_card'

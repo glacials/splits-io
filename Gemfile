@@ -120,7 +120,6 @@ gem "gon"
 gem "image_processing"
 gem "jsbundling-rails"
 gem "kaminari"
-gem "purecss-rails", github: "glacials/purecss-rails"
 gem "sassc-rails"
 gem "slim"
 

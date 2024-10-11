@@ -81,7 +81,7 @@ services:
       - 4569:4569
     volumes:
       - s3:/fakes3_root
-  js:
+  webpack:
     <<: *app
     command: bash -c "yarn build --watch"
     environment: *server-environment
