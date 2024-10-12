@@ -129,11 +129,6 @@ html lang='en'
                   h5 Sign in
                 .modal-body.bg-dark
                   = render partial: 'sessions/sign_in'
-        article.pt-0#survey-container style='display: none'
-          div.text-right
-            small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
-          a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
-            ' Help us out by taking the Splits.io survey!
         - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
         - if entry.present? && request.path != race_path(entry.race)
           .p-1.col-md-6.mx-auto
@@ -141,15 +136,7 @@ html lang='en'
               => icon('fas', 'flag-checkered')
               | Return to race
         header#header.m-1.p-0 = yield(:header)
-        - if current_user && current_user.email.nil?
-          .alert.alert-warning
-            ' You don't have an email attached to your Splits.io account. If
-            ' you become locked out your account will be irrecoverable.
-            ' Please add an email address from the
-            a href=settings_path settings page
-            ' .
-        .row.mx-2: #alerts.w-100 data-turbolinks-temporary=true
-          = render partial: 'shared/alerts'
+        = render partial: 'shared/banners'
         = yield
         - unless on_landing_page?
           footer#footer

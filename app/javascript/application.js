@@ -63,6 +63,7 @@ import Chartkick from "chartkick";
 window.Chartkick = Chartkick;
 
 import "./analytics.js";
+import "./banner.js";
 import "./collapse.js";
 import "./count.js";
 import "./dropdown.js";

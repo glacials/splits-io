@@ -1,0 +1,29 @@
+article.pt-0.mb-3#survey-container style='display: none; max-width: 50em;'
+  div.text-right
+    small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
+  a#survey-button.btn.btn-secondary.btn-block.mb-0.text-center target='_blank' href=survey_url
+    ' Help us out by taking the Splits.io survey!
+- if current_user && current_user.email.nil?
+  .alert.alert-warning
+    ' You don't have an email attached to your Splits.io account. If
+    ' you become locked out your account will be irrecoverable.
+    ' Please add an email address from the
+    a href=settings_path settings page
+    ' .
+/ .banner.alert.alert-success.col-md-6.mx-auto#shutdown-saved-banner style="display: none"
+/   ' Thanks to help from
+/   a.alert-link target='_blank' href='https://gamesdonequick.com' Games Done Quick
+/   ', Splits.io's plans to shut down have been canceled!
+/   a.float-right.alert-link.banner-close style="cursor: pointer" X
+.m-2: .banner.alert.alert-success.col-md-12.col-lg-10.col-xl-8.mx-auto#gdq-test-banner style="display: none"
+  a.alert-link target='_blank' href='https://gamesdonequick.com' Awesome Games Done Quick
+  '< is happening right now!
+  - button_link = 'https://gamesdonequick.com'
+  .d-block.d-lg-none.mt-4
+    a.btn-sm.btn-success.mr-3.p-2 target='_blank' href='#{button_link}' Watch
+    a.alert-link.banner-close style="cursor: pointer" Dismiss
+  .float-right.d-none.d-lg-block
+    a.btn-sm.btn-success.mr-3.p-2 target='_blank' href='#{button_link}' See Schedule
+    a.alert-link.banner-close style="cursor: pointer" X
+.row.mx-2: #alerts.w-100 data-turbolinks-temporary=true
+  = render partial: 'shared/alerts'

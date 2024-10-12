@@ -21,7 +21,7 @@ class Duration
     return "-" if @duration.nil?
 
     format = ["%02d", ":%02d", ":%02d"]
-    components = [hours, minutes, seconds]
+    components = [hours || 0, minutes || 0, seconds || 0]
 
     if precise
       format << ".%02d"
