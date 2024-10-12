@@ -1,12 +1,20 @@
 #chart-holder
   .position-relative.overflow-hidden.p-3.p-md-5.m-md-3.text-center.bg-darkish
-    .col-md-5.p-lg-5.mx-auto.my-5.text-center
-      .display-4 Go faster
-      p.lead Statistical analysis for speedrunners. Let us replace your mindless grinding with hyper-targeted suggestions.
+    .col-md-5.p-lg-5.mx-auto.text-center
+      .display-4
+        img.d-inline src=asset_path('logo-imageonly.svg') height='75' style='margin-right: 0' alt='Splits.io image only logo'
+        img.d-sm-inline.d-md-none.d-xl-inline src=asset_path('logo-textonly.svg') height='75' style='margin-top: .1em' alt='Splits.io text only logo'
+      p.lead Statistical analysis & run sharing for speedrunners. Replace mindless grinding with targeted, hard data.
       a.btn.btn-lg.btn-primary href='#' data={toggle: :modal, target: '#signin'} Get started
-      b.text-secondary.d-block.mb-5
+      b.text-secondary.d-block.mt-3
         => icon('fas', 'upload')
         ' Or drag and drop splits at any time
+    .col-md-4.my-5.mx-auto.p2 style="filter: invert(100%)"
+      center
+        a href="https://gamesdonequick.com" alt="Games Done Quick" class="Header_eventLink_u0ZSZ"
+          div style="width: 10em; margin: auto;color:rgba(229, 184, 80, 0.9);"
+            = image_tag(asset_path('partners/gdq.svg'))
+        small.text-dark Supported by Games Done Quick.
     .d-md-flex.flex-md-equal.w-100.my-md-3.pl-md-3
       .bg-darkish.col-md-6.mr-md-3.pt-3.px-3.pt-md-5.px-md-5.text-center.text-white.overflow-hidden
         .my-3.py-3
@@ -99,6 +107,9 @@
           p.lead Automatically highlight PBs, compete with friends, and generate YouTube timestamps.
           .mr-2 style="height: 575px; background-image: url('#{asset_path('landing/youtube-timestamps.png')}'); background-size: cover; background-position: center"
             ' &nbsp;
+    .row.my-5.py-5: .col-md-12.text-center
+      a.btn.btn-primary href="https://splits.io/oqt"
+        big.d-block: b See an example run
     .row.my-5.py-5: .col-md-12.text-center
       button#scroll-up.btn.btn-outline-secondary.btn-lg aria-label='Scroll to top'
         = icon('fas', 'angle-double-up')

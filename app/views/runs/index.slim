@@ -54,5 +54,11 @@
                 h4.card-title Choose Manually
                 p.card-text Click "Upload" at the top of the page to choose a run using a file selector.
       = render 'shared/feed'
+    .col-md-4.my-5.mx-auto.p2 style="filter: invert(100%)"
+      center
+        a href="https://gamesdonequick.com" alt="Games Done Quick" class="Header_eventLink_u0ZSZ"
+          div style="width: 10em; margin: auto;color:rgba(229, 184, 80, 0.9);"
+            = image_tag(asset_path('partners/gdq.svg'))
+        small.text-dark Supported by Games Done Quick.
 - else
   = render 'landing'
