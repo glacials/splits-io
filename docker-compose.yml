@@ -1,6 +1,4 @@
-version: '3.7'
-x-server-environment:
-  &server-environment
+x-server-environment: &server-environment
   - AWS_REGION=local
   - AWS_ACCESS_KEY_ID=beep
   - AWS_SECRET_KEY=boop
@@ -34,8 +32,7 @@ x-server-environment:
   - PAYPAL_CLIENT_ID
   - PAYPAL_CLIENT_SECRET
   - PAYPAL_PLAN_ID=P-86R46997GH219170TL7DOHCA
-x-logging:
-  &default-logging
+x-logging: &default-logging
   driver: json-file
   options:
     max-size: 1m
@@ -45,7 +42,7 @@ x-app: &app
     context: .
     dockerfile: Dockerfile
     args:
-      RUBY_VERSION: "2.7.1" # also update docker-compose-production.yml & Gemfile
+      RUBY_VERSION: "2.7.1" # also update docker-compose-production.yml, Gemfile, & .rubocop.yml
   image: splitsio
   tmpfs:
     - /tmp
@@ -66,6 +63,7 @@ x-backend: &backend
     - s3
     - redis
 
+name: splitsio
 services:
   db:
     image: postgres:11.5
