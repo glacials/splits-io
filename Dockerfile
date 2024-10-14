@@ -1,4 +1,4 @@
-ARG RUBY_VERSION
+ARG RUBY_VERSION=latest # docker compose overrides this
 FROM ruby:$RUBY_VERSION
 
 RUN wget https://dl.yarnpkg.com/debian/pubkey.gpg

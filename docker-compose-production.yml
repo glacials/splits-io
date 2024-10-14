@@ -1,6 +1,5 @@
-version: '3.7'
-x-environment:
-  &server-environment
+version: "3.7"
+x-environment: &server-environment
   - ASSET_HOST
   - AWS_ACCESS_KEY_ID
   - AWS_REGION
@@ -42,8 +41,7 @@ x-environment:
   - PAYPAL_CLIENT_ID
   - PAYPAL_CLIENT_SECRET
   - PAYPAL_PLAN_ID=P-8X852520X76298909L7B74BY
-x-logging:
-  &default-logging
+x-logging: &default-logging
   driver: json-file
   options:
     max-size: 100m
@@ -56,7 +54,7 @@ x-app: &app
     cache_from:
       - "${REPOSITORY_URI:-splitsio}:latest"
     args:
-      RUBY_VERSION: "2.7.1" # also update docker-compose.yml & Gemfile
+      RUBY_VERSION: "2.7.8" # also update docker-compose.yml, Gemfile, and .rubocop.yml
   environment: *server-environment
   image: splitsio
   logging: *default-logging
