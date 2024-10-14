@@ -57,6 +57,7 @@ window.Chartkick = Chartkick
 import 'bootstrap'
 
 import "../analytics.js"
+import "../banner.js"
 import "../collapse.js"
 import "../count.js"
 // import "../crisp.js"
