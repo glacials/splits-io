@@ -22,6 +22,7 @@
 </p>
 
 ## About
+
 Splits.io is how speedrunners improve through data. It gives split-by-split
 analysis of individual runs, viewed through a lens of all runs. On Splits.io,
 speedrunners share more than their time—they share their entire history of
@@ -108,10 +109,12 @@ make build
 ```
 
 #### Further Setup
+
 These steps are not required for normal operation, but you may want to
 perform them for specific categories of work.
 
 ##### OAuth
+
 Some features are built on top of links with other platforms, like Twitch
 sign-in. If you want these features to work, you need to register developer
 applications with the appropriate services. Copy `.envrc.example` to `.envrc`

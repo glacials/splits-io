@@ -26,7 +26,7 @@ container ?= web
 
 build:
 	$(docker-compose) build web
-	$(docker-compose) run --rm web bash -c 'bundle install --jobs $$((`nproc` - 1)) && yarn install && rails db:migrate && skylight disable_dev_warning'
+	$(docker-compose) run --rm web bash -c 'gem install bundler:2.2.15 && bundle update --bundler && bundle install --jobs $$((`nproc` - 1)) && yarn install && rails db:migrate && skylight disable_dev_warning'
 	@[ -e tmp/seed ] || make seed
 	$(docker-compose) stop
 

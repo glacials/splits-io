@@ -102,6 +102,7 @@ gem "memory_profiler"
 gem "rack-mini-profiler"
 
 # server/environment
+gem "ffi"
 gem "puma"
 gem "rails", "~> 6.0"
 # see https://github.com/faye/websocket-driver-ruby/issues/58#issuecomment-394611125
