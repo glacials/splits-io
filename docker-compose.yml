@@ -64,7 +64,6 @@ x-backend: &backend
     - s3
     - redis
 
-name: splitsio
 services:
   db:
     environment:
