@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "2.7.8" # also update docker-compose.yml & docker-compose-production.yml
+ruby "3.0.7" # also update docker-compose.yml, docker-compose-production.yml, & .rubocop.yml
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -19,6 +19,12 @@ group :test do
 end
 
 group :development, :hot do
+  # coding
+  gem "syntax_suggest"
+
+  # filesystem
+  gem "listen"
+
   # errors+logging
   gem "better_errors"
   gem "binding_of_caller"
@@ -33,8 +39,6 @@ group :development, :hot do
 
   # views
   gem "rails_real_favicon"
-
-  gem "listen"
 end
 
 group :production do
@@ -84,7 +88,7 @@ gem "pg_search"
 gem "strong_migrations"
 
 # errors+logging
-gem "newrelic_rpm"
+gem "newrelic_rpm", "~> 6.12"
 gem "skylight", "~> 5.0.0.beta4"
 
 # external communication
@@ -104,7 +108,9 @@ gem "rack-mini-profiler"
 # server/environment
 gem "ffi"
 gem "puma"
-gem "rails", "~> 6.0"
+gem "rails", "~> 6.1"
+# see https://stackoverflow.com/questions/65617143/cannot-load-such-file-webrick-httputils
+gem "webrick"
 # see https://github.com/faye/websocket-driver-ruby/issues/58#issuecomment-394611125
 gem "websocket-driver", github: "faye/websocket-driver-ruby", ref: "ee39af83d03ae3059c775583e4c4b291641257b8"
 
