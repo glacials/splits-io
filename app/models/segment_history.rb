@@ -37,7 +37,7 @@ class SegmentHistory < ApplicationRecord
               OR segment_histories.realtime_duration_ms IS NULL))
         ) AS other_histories ON
           other_histories.attempt_number = segment_histories.attempt_number
-          AND other_histories.segment_number = segments_segment_histories.segment_number - 1}.squish, run_id: run.id])
+          AND other_histories.segment_number = segment.segment_number - 1}.squish, run_id: run.id])
     when Run::GAME
       joins(SegmentHistory.sanitize_sql_array [%Q{
         LEFT JOIN (
@@ -51,7 +51,7 @@ class SegmentHistory < ApplicationRecord
               OR segment_histories.gametime_duration_ms IS NULL))
         ) AS other_histories ON
           other_histories.attempt_number = segment_histories.attempt_number
-          AND other_histories.segment_number = segments_segment_histories.segment_number - 1}.squish, run_id: run.id])
+          AND other_histories.segment_number = segment.segment_number - 1}.squish, run_id: run.id])
     else
       raise 'Unsupported timing'
     end

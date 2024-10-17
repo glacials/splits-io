@@ -3,7 +3,7 @@ require: rubocop-rails
 Layout/LineLength:
   Max: 120
 AllCops:
-  TargetRubyVersion: "2.7.8" # Also update docker-compose.yml, docker-compose-production.yml, and Gemfile
+  TargetRubyVersion: "3.0.7" # Also update docker-compose.yml, docker-compose-production.yml, and Gemfile
   Include:
     - "**/*.rb"
     - Rakefile

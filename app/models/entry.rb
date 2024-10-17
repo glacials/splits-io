@@ -7,7 +7,7 @@ class Entry < ApplicationRecord
   # coentries can be called instead of entry.race.entries to avoid needing to join on races. It can also be used as a
   # join model to e.g. discover number of 1st/2nd/3rd places by user more cheaply as a Rails-friendly query. This
   # relation INCLUDES "myself", e.g. entry.coentries will include entry in returned values.
-  has_many :coentries, source: :entries, class_name: 'Entry', primary_key: 'race_id', foreign_key: 'race_id'
+  has_many :coentries, class_name: 'Entry', primary_key: 'race_id', foreign_key: 'race_id'
 
   validates_with EntryValidator
   # Validators are not called before destroy's, so manually hook and prevent if race is started

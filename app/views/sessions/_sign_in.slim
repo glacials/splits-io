@@ -20,7 +20,7 @@
             ' Sign up
       #signin-tabs-content.tab-content
         #signin-tab-content.tab-pane.show.active role='tabpanel' aria-labelledby='signin-tab'
-          = form_with(model: Authie::Session.new, scope: :session, url: sessions_path, local: true) do |f|
+          = form_with(model: nil, scope: :session, url: sessions_path, local: true) do |f|
             .form-group.mx-auto
               = f.text_field(:email, placeholder: 'Email', class: 'form-control')
             .form-group.mx-auto

@@ -9,6 +9,9 @@ class Duration
     end
 
     @duration = ActiveSupport::Duration.build(milliseconds / 1000.0)
+    ActiveSupport::Duration::PARTS.each do |part|
+      @duration.parts[part] = 0 if @duration.parts[part].nil?
+    end
   end
 
   # format accepts a number of milliseconds and returns a time like "HH:MM:SS". If precise is true, it returns a time
