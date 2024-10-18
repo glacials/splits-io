@@ -1,6 +1,6 @@
 # This file is used by Rack-based servers to start the application.
 
-require ::File.expand_path('../config/environment', __FILE__)
+require_relative "config/environment"
 
 if Rails.env.production?
   DelayedJobWeb.use Rack::Auth::Basic do |username, password|
@@ -13,3 +13,4 @@ if Rails.env.production?
 end
 
 run Rails.application
+Rails.application.load_server
