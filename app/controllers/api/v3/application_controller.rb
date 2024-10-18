@@ -1,8 +1,6 @@
 class Api::V3::ApplicationController < ActionController::Base
   include Rails::Pagination
 
-  skip_before_action :set_browser_id
-  skip_before_action :touch_auth_session
   before_action :read_only_mode, if: -> { ENV["READ_ONLY_MODE"] == "1" }
   before_action :track
 
