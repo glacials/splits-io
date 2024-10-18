@@ -4,7 +4,7 @@ describe Api::V4::ConvertsController do
   describe '#create' do
     context 'when passed a Llanfair file' do
       let(:file) do
-        fixture_file_upload('files/llanfair')
+        fixture_file_upload('llanfair')
       end
       context 'with a good format' do
         subject { post :create, params: {file: file, format: 'json', historic: '1'} }
@@ -54,7 +54,7 @@ describe Api::V4::ConvertsController do
 
     context 'with a malformed file' do
       let(:file) do
-        fixture_file_upload('files/malformed')
+        fixture_file_upload('malformed')
       end
       subject { post :create, params: {file: file, format: 'json'} }
       let(:body) { JSON.parse(subject.body) }

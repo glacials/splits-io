@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 group :test, :development do
   gem "pry-byebug"
   gem "pry-rails"
-  gem "rspec-rails", "~> 4.0.0"
+  gem "rspec-rails", "~> 6.0"
 end
 
 group :test do
@@ -14,7 +14,7 @@ group :test do
   gem "factory_bot_rails", require: false
   gem "json-schema"
   gem "json-schema-rspec"
-  gem "rails-controller-testing"
+  gem "rails-controller-testing", "~> 1.0.5"
   gem "simplecov", require: false
 end
 
