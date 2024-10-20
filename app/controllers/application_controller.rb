@@ -6,7 +6,6 @@ class ApplicationController < ActionController::Base
   before_action :sanitize_pagination_params
   before_action :read_only_mode, if: -> { ENV["READ_ONLY_MODE"] == "1" }
   before_action :authorize_rmp
-  before_action :track
 
   rescue_from Authie::Session::ValidityError, with: :auth_session_error
   rescue_from Authie::Session::InactiveSession, with: :auth_session_error
@@ -74,13 +73,5 @@ class ApplicationController < ActionController::Base
 
   def authorize_rmp
     Rack::MiniProfiler.authorize_request if current_user.try(:admin?)
-  end
-
-  def track
-    return if controller_name == "health"
-    TrackJob.perform_later(
-      category: controller_name,
-      action: action_name,
-    )
   end
 end

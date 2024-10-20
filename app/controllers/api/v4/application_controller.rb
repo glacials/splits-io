@@ -2,7 +2,6 @@ class Api::V4::ApplicationController < ActionController::Base
   include Rails::Pagination
 
   before_action :read_only_mode, if: -> { ENV["READ_ONLY_MODE"] == "1" }
-  before_action :track
 
   rescue_from ActionController::ParameterMissing do |e|
     render status: :bad_request, json: { status: 400, message: e.message }
@@ -120,12 +119,5 @@ class Api::V4::ApplicationController < ActionController::Base
     }
   rescue ActiveRecord::RecordNotFound
     render not_found(:race)
-  end
-
-  def track
-    TrackJob.perform_later(
-      category: controller_name,
-      action: action_name,
-    )
   end
 end

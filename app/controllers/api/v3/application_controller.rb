@@ -2,7 +2,6 @@ class Api::V3::ApplicationController < ActionController::Base
   include Rails::Pagination
 
   before_action :read_only_mode, if: -> { ENV["READ_ONLY_MODE"] == "1" }
-  before_action :track
 
   def options
     headers["Allow"] = "POST, PUT, DELETE, GET, OPTIONS"
@@ -14,12 +13,5 @@ class Api::V3::ApplicationController < ActionController::Base
     if write_actions.include?(action_name) || write_methods.include?(request.method)
       render template: "pages/read_only_mode"
     end
-  end
-
-  def track
-    TrackJob.perform_later(
-      category: controller_name,
-      action: action_name,
-    )
   end
 end
