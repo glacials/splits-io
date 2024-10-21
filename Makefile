@@ -65,7 +65,7 @@ srdc_sync:
 
 attach:
 	@echo Do not use ctrl + c to exit this session, use ctrl + p then ctrl + q
-	$(docker) attach $(shell $(docker) ps | grep splits-io_$(container)_ | awk '{print $$1}')
+	$(docker) attach $(shell $(docker) ps | grep splits-io-$(container)- | awk '{print $$1}')
 
 clean:
 	$(docker-compose) down
