@@ -19,6 +19,7 @@ x-server-environment: &server-environment
   - S3_BUCKET=splits-io
   - S3_HOST=s3.localhost
   - SITE_TITLE=Splits.io (Local)
+  - SKYLIGHT_DISABLE_DEV_WARNING=1
   - SPLITSIO_CLIENT_SECRET
   - SPLITSIO_CLIENT_ID
   - STRIPE_PLAN_ID_TIER1=plan_FmRDE979W782Zj
