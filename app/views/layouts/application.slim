@@ -120,7 +120,7 @@ html lang='en'
             small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
           a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
             ' Help us out by taking the Splits.io survey!
-        - entry = current_user.present? ? current_user.entries.nonghosts.active.first : nil
+        - entry = current_user&.entries.nonghosts.active.first
         - if entry.present? && request.path != race_path(entry.race)
           .p-1.col-md-6.mx-auto
             a.btn.btn-success.btn-block.mb-0.text-center.glow href=race_path(entry.race)
@@ -134,8 +134,8 @@ html lang='en'
             = yield(:footer)
             .row
               .col-md-6.d-none.d-xl-block
-                - patrons = User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200')
-                - unless patrons.blank?
+                - patrons = Rails.cache.fetch('patrons', expires_in: 1.day) { User.includes(:patreon, :twitch).joins(:patreon).where('patreon_users.pledge_cents >= 200').all }
+                - unless patrons.empty?
                   a> href=patreon_url
                     span Thanks to our patrons!
                   p

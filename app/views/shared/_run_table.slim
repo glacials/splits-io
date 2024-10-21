@@ -1,8 +1,8 @@
 - description ||= nil
 - cols ||= [:runner, :time, :name, :video, :rival, :uploaded]
-/ This allows us to blindly check the keys for items instead of wraping in `try`s
+/ This allows us to blindly check the keys for items instead of wrapping in `try`s
 - col_options = cols.to_h { |col| [col, []] }.merge(local_assigns.fetch(:col_options, {}))
-- runs = order_runs(runs).page(params[:page]).includes(:user, :game, :category, :video, :segments)
+- runs = order_runs(runs).page(params[:page]).includes(:user, :video, :segments, :category, game: [:srdc])
 - if runs.none?
   - if description.present?
     h5.card-header.text-white = description
