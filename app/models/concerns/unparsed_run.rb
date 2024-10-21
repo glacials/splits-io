@@ -217,7 +217,7 @@ module UnparsedRun
             name:           lsc_segment.name.presence
           )
           icon_ptr = Fiddle::Pointer.new(lsc_segment.icon_ptr)
-          if icon_ptr.present?
+          if icon_ptr.present? && lsc_segment.icon_len.positive?
             segment.icon.attach(
               io:       StringIO.new(icon_ptr[0, lsc_segment.icon_len]),
               filename: "#{id}_#{i}"
