@@ -7,13 +7,41 @@ class Race < ApplicationRecord
 
   belongs_to :user
 
-  belongs_to :game, optional: true
-  belongs_to :category, optional: true
+  # TODO: Race.unfinished uses a union query,
+  # which does not support calls to .includes.
+  # When we upgrade to Rails 7,
+  # update that method to override strict_loading
+  # (.strict_loading!(false))
+  # so we can remove the override from the entire association here.
+  belongs_to :game, optional: true, strict_loading: false
+  # TODO: Race.unfinished uses a union query,
+  # which does not support calls to .includes.
+  # When we upgrade to Rails 7,
+  # update that method to override strict_loading
+  # (.strict_loading!(false))
+  # so we can remove the override from the entire association here.
+  belongs_to :category, optional: true, strict_loading: false
 
   enum visibility: { public: 0, invite_only: 1, secret: 2 }, _suffix: true
 
-  belongs_to :owner, foreign_key: :user_id, class_name: "User"
-  has_many :entries, dependent: :destroy
+  # TODO: Race.unfinished uses a union query,
+  # which does not support calls to .includes.
+  # When we upgrade to Rails 7,
+  # update that method to override strict_loading
+  # (.strict_loading!(false))
+  # so we can remove the override from the entire association here.
+  belongs_to :owner, foreign_key: :user_id, class_name: "User", strict_loading: false
+
+  # TODO: RacesController#create renders the created race as JSON,
+  # but it is impossible
+  # (and nonsensical))
+  # to preload associations for a race just created.
+  # When we upgrade to Rails 7,
+  # update that method to override strict_loading
+  # (.strict_loading!(false))
+  # so we can remove the override from the entire association here.
+  has_many :entries, dependent: :destroy, strict_loading: false
+
   has_many :runners, through: :entries
   has_many :chat_messages, dependent: :destroy
 

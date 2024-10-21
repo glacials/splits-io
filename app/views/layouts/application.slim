@@ -120,7 +120,7 @@ html lang='en'
             small: #hide-survey-button.text-secondary style='cursor: pointer' no thanks
           a#survey-button.btn.btn-outline-warning.btn-block.mb-0.text-center href=survey_url
             ' Help us out by taking the Splits.io survey!
-        - entry = current_user&.entries&.nonghosts&.active&.first
+        - entry = current_user&.entries&.includes(:race)&.nonghosts&.active&.first
         - if entry.present? && request.path != race_path(entry.race)
           .p-1.col-md-6.mx-auto
             a.btn.btn-success.btn-block.mb-0.text-center.glow href=race_path(entry.race)

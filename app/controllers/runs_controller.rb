@@ -115,8 +115,8 @@ class RunsController < ApplicationController
   private
 
   def set_run
-    @run = Run.includes(segments: {icon_attachment: :blob}).find_by(id: params[:id].to_i(36)) ||
-           Run.includes(segments: {icon_attachment: :blob}).find_by!(nick: params[:id])
+    runs = Run.includes(:entry, :highlight_suggestion, :segments, :user, :video, category: [:srdc], game: [:srdc], segments: {icon_attachment: :blob})
+    @run = runs.find_by(id: params[:id].to_i(36)) || runs.find_by!(nick: params[:id])
     timing = params[:timing] || @run.default_timing
     unless [Run::REAL, Run::GAME].include?(timing)
       redirect_to request.path, alert: 'Timing can only be real or game.'

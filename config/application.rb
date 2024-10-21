@@ -38,5 +38,9 @@ module SplitsIO
     config.action_cable.mount_path = "/api/cable"
 
     config.active_storage.variant_processor = :vips
+
+    # Help detect n+1 queries,
+    # but get out of the way in the Rails console.
+    config.active_record.strict_loading_by_default = !Rails.const_defined?('Console')
   end
 end

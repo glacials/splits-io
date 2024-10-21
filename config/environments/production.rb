@@ -122,4 +122,8 @@ Rails.application.configure do
 
   config.stripe.secret_key = ENV['STRIPE_PUBLISHABLE_KEY']
   config.stripe.publishable_key = ENV['STRIPE_SECRET_KEY']
+
+  # For strict loading violations, don't error; only log.
+  # See config/application.rb for the config.active_record.strict_loading_by_default setting.
+  config.active_record.action_on_strict_loading_violation = :log
 end

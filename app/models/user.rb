@@ -4,6 +4,13 @@ class User < ApplicationRecord
   include RivalUser
   include RunnerUser
 
+  # current_user is controlled by Authie and is difficult to inject .includes calls into.
+  # Relevant issue: https://github.com/adamcooke/authie/issues/42
+  #
+  # Can also turn this off when upgrading to Rails 7,
+  # which allows calling .strict_loading!(false) to bypass the requirement on individual record objects.
+  self.strict_loading_by_default = false
+
   has_many :runs, dependent: :nullify
   has_many :categories, -> { distinct }, through: :runs
   has_many :games, -> { distinct }, through: :runs
@@ -81,9 +88,9 @@ class User < ApplicationRecord
   def pb_for(timing, category)
     case timing
     when Run::REAL
-      runs.where(category: category).order(realtime_duration_ms: :asc).first
+      runs.includes(:segments).where(category: category).order(realtime_duration_ms: :asc).first
     when Run::GAME
-      runs.where(category: category).order(gametime_duration_ms: :asc).first
+      runs.includes(:segments).where(category: category).order(gametime_duration_ms: :asc).first
     end
   end
 

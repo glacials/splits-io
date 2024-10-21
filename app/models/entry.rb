@@ -1,6 +1,15 @@
 class Entry < ApplicationRecord
   belongs_to :race, touch: true
-  belongs_to :runner, class_name: 'User', optional: true
+  # TODO: RacesController#set_race uses FriendlyUUID to find the record,
+  # which currently has a bug preventing it from being found when using .includes.
+  # We should either fix that bug,
+  # or at least when we upgrade to Rails 7,
+  # update that method to override strict_loading
+  # (.strict_loading!(false))
+  # so we can remove the override from the entire association here.
+  #
+  # See: https://github.com/glacials/friendly_uuid/issues/16
+  belongs_to :runner, class_name: 'User', optional: true, strict_loading: false
   belongs_to :creator, class_name: 'User'
   belongs_to :run, dependent: :destroy, optional: true
 

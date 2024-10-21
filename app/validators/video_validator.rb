@@ -17,7 +17,7 @@ class VideoValidator < ActiveModel::Validator
     end
 
     unless valid_domain?(record.url)
-      record.errors.add 'Your video URL must be a link to a Twitch or YouTube video.'
+      record.errors.add(:url, 'must be a link to a Twitch or YouTube video')
     end
 
     # Embeds break for URLs like https://www.twitch.tv/videos/29447340?filter=highlights&sort=time, which is what Twitch
@@ -26,7 +26,7 @@ class VideoValidator < ActiveModel::Validator
       record.url = URI(record.url).tap { |u| u.query = nil }.to_s
     end
   rescue URI::InvalidURIError
-    record.errors.add 'Your video URL must be a link to a Twitch or YouTube video.'
+    record.errors.add(:url, 'must be a link to a Twitch or YouTube video')
   end
 
   def valid_domain?(url)

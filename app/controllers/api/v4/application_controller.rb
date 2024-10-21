@@ -71,9 +71,9 @@ class Api::V4::ApplicationController < ActionController::Base
 
   def set_run
     @run = if params[:historic] == "1"
-        Run.includes(:game, :category, :user, :histories, segments: [:histories]).find36(params[:run])
+        Run.includes(:user, :histories, :video, category: [:srdc], game: [:srdc], segments: [:histories]).find36(params[:run])
       else
-        Run.includes(:game, :category, :user, :segments).find36(params[:run])
+        Run.includes(:user, :segments, :video, category: [:srdc], game: [:srdc]).find36(params[:run])
       end
   rescue ActiveRecord::RecordNotFound
     render not_found(:run)
@@ -110,7 +110,7 @@ class Api::V4::ApplicationController < ActionController::Base
   end
 
   def set_race(param: :race_id) # rubocop:disable Naming/AccessorMethodName
-    @race = Race.find(params[param])
+    @race = Race.includes(category: [:srdc], entries: [:creator], game: [:srdc]).find(params[param])
     return unless @race.secret_visibility? && !@race.joinable?(user: current_user, token: params[:join_token])
 
     render status: :forbidden, json: {

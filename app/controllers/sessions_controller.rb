@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by(email: session_params[:email])
+    @user = User.includes(:google, :twitch).find_by(email: session_params[:email])
     if @user.nil?
       redirect_back(
         alert: "No account exists with that email address.",
@@ -85,7 +85,7 @@ class SessionsController < ApplicationController
 
   def sign_in(user)
     create_auth_session(user)
-    auth_session.persist!
+    auth_session.persist
   end
 
   def redirect_path

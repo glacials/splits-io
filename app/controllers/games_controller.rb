@@ -22,8 +22,9 @@ class GamesController < ApplicationController
   end
 
   def set_game
-    @game = Game.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) ||
-            Game.includes(:srdc).find(id: params[:game])
+    games = Game.includes(:srdc, :srl)
+    @game = games.joins(:srdc).find_by(speedrun_dot_com_games: {shortname: params[:game]}) ||
+            games.find(id: params[:game])
 
     redirect_to game_path(@game) if @game.srdc.try(:shortname).present? && params[:game] == @game.id.to_s
   rescue ActiveRecord::RecordNotFound

@@ -112,7 +112,7 @@ class Api::V4::Races::EntriesController < Api::V4::ApplicationController
   end
 
   def set_entry(param: :id) # rubocop:disable Naming/AccessorMethodName
-    @entry = @race.entries.find(params[param])
+    @entry = @race.entries.includes(:creator).find(params[param])
     return if @entry.creator == current_user
 
     render status: :forbidden, json: {
