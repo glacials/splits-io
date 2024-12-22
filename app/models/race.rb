@@ -1,6 +1,4 @@
 class Race < ApplicationRecord
-  include FriendlyUUID
-
   validates_with RaceValidator
 
   ABANDON_TIME = 1.hour.freeze
