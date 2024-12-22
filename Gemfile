@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "3.0.7" # also update docker-compose.yml, docker-compose-production.yml, & .rubocop.yml
+ruby "3.1.0" # also update docker-compose.yml, docker-compose-production.yml, & .rubocop.yml
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -88,7 +88,7 @@ gem "pg_search"
 gem "strong_migrations"
 
 # errors+logging
-gem "newrelic_rpm", "~> 6.12"
+gem "newrelic_rpm"
 gem "skylight", "~> 5.0.0.beta4"
 
 # external communication
@@ -127,7 +127,7 @@ gem "kaminari"
 gem "purecss-rails", github: "glacials/purecss-rails"
 gem "sassc-rails"
 gem "slim"
-gem "webpacker", ">= 4.0.x"
+gem "webpacker"
 
 # workers/jobs
 gem "daemons"
