@@ -33,4 +33,14 @@ $s3_client_external = Aws::S3::Client.new(options_external)
 $s3_bucket_internal = Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: $s3_client_internal)
 $s3_bucket_external = Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: $s3_client_external)
 
+# This bucket holds some denormalized information from the database.
+# This helps us run Retriever (https://github.com/splitsio/retriever)
+# to fetch user runs by ID or username after the database goes offline permanently.
+#
+# Bucket file structure:
+# Key: <filename>          -> <file contents>
+#
+#      <run.id>            -> <run.s3_filename>
+#      users/<user.name>   -> <user.runs.pluck(:id).to_json>
+#      extensions/<run.id> -> <run.program.file_extension>
 $s3_shutdown_prep_bucket = Aws::S3::Bucket.new("splits.io-runid-to-s3filename", client: $s3_client_internal)
