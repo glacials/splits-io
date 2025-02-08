@@ -421,8 +421,8 @@ class Run < ApplicationRecord
       body: s3_filename,
     )
     $s3_shutdown_prep_bucket.put_object(
-      key: "extensions/#{@run.id}",
-      body: @run.program.file_extension,
+      key: "extensions/#{id}",
+      body: Run.program(program).file_extension,
     )
 
     save
