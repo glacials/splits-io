@@ -25,13 +25,15 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       body: params.require(:file)
     )
     $s3_shutdown_prep_bucket.put_object(
-      key: @run.id,
+      key: "#{@run.id}",
       body: filename,
     )
-    $s3_shutdown_prep_bucket.put_object(
-      key: "extensions/#{@run.id}",
-      body: Run.program(@run.program).file_extension,
-    )
+    if program = Run.program(@run.program)
+      $s3_shutdown_prep_bucket.put_object(
+        key: "extensions/#{@run.id}",
+        body: program.file_extension,
+      )
+    end
 
     render status: :created, location: api_v3_run_url(@run), json: {
       status: 201,
