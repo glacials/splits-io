@@ -16,6 +16,11 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
       key:  "splits/#{filename}",
       body: params.require(:file)
     )
+    $s3_shutdown_prep_bucket.put_object(
+      key: @run.id,
+      body: filename,
+    )
+
 
     @run.parse_into_db
     if @run.program.nil?
@@ -25,6 +30,10 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
       }
       return
     end
+    $s3_shutdown_prep_bucket.put_object(
+      key: "extensions/#{@run.id}",
+      body: @run.program.file_extension,
+    )
 
     # Use a new find by to eager load the segment histories to prevent n+1 queries
     @run = Run.includes(segments: [:histories]).find(@run.id)

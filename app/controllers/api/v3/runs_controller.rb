@@ -24,6 +24,14 @@ class Api::V3::RunsController < Api::V3::ApplicationController
       key:  "splits/#{filename}",
       body: params.require(:file)
     )
+    $s3_shutdown_prep_bucket.put_object(
+      key: @run.id,
+      body: filename,
+    )
+    $s3_shutdown_prep_bucket.put_object(
+      key: "extensions/#{@run.id}",
+      body: @run.program.file_extension,
+    )
 
     render status: :created, location: api_v3_run_url(@run), json: {
       status: 201,

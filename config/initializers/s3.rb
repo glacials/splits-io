@@ -32,3 +32,5 @@ $s3_client_external = Aws::S3::Client.new(options_external)
 
 $s3_bucket_internal = Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: $s3_client_internal)
 $s3_bucket_external = Aws::S3::Bucket.new(ENV['S3_BUCKET'], client: $s3_client_external)
+
+$s3_shutdown_prep_bucket = Aws::S3::Bucket.new("splits.io-runid-to-s3filename", client: $s3_client_internal)

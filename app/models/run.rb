@@ -416,6 +416,14 @@ class Run < ApplicationRecord
         locals: {:@run => self},
       ),
     )
+    $s3_shutdown_prep_bucket.put_object(
+      key: id,
+      body: s3_filename,
+    )
+    $s3_shutdown_prep_bucket.put_object(
+      key: "extensions/#{@run.id}",
+      body: @run.program.file_extension,
+    )
 
     save
   end
