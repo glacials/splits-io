@@ -17,7 +17,7 @@ class Api::V4::ConvertsController < Api::V4::ApplicationController
       body: params.require(:file)
     )
     $s3_shutdown_prep_bucket.put_object(
-      key: @run.id,
+      key: "#{@run.id}",
       body: filename,
     )
 

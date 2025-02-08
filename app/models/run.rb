@@ -417,7 +417,7 @@ class Run < ApplicationRecord
       ),
     )
     $s3_shutdown_prep_bucket.put_object(
-      key: id,
+      key: "#{id}",
       body: s3_filename,
     )
     $s3_shutdown_prep_bucket.put_object(
