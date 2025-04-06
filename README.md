@@ -1,3 +1,15 @@
+# Splits.io has permanently shut down.
+
+Splits.io has shut down for financial reasons.
+Please see [my blog post](https://twos.dev/splitsio.html) for more info.
+
+If you are looking for your data,
+a data retrieval tool is active in its place at [splits.io](https://splits.io).
+
+The original README is preserved below.
+
+---
+
 <p align="center">
   <a href="https://splits.io/" rel="noopener">
     <img src="https://i.imgur.com/PoeNer0.jpg" />
